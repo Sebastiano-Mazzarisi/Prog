@@ -1,3 +1,10 @@
+# Nome.py: PodPutignano.py
+# Data e ora ultima modifica: 08/03/2026 15:28
+# Descrizione: Script unico che assembla il podcast "Buongiorno Putignano", genera il testo e avvia la sintesi vocale.
+# File di input: RSS feed esterni
+# File di output: Lettura.txt, PodPutignano.mp3
+# Parametri: Nessuno
+
 # PodPutignano.py  v2
 # Script unico che assembla il podcast "Buongiorno Putignano".
 # Incorpora: MeteoNews, FarmacieNews, ItaliaNews, PutignanoNews, CuriositàNews, Putignano
@@ -30,7 +37,7 @@ except ImportError:
 # ============================================================
 
 SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))
-POD_DIR      = os.path.join(SCRIPT_DIR, "pod")
+POD_DIR      = SCRIPT_DIR
 HTTP_TIMEOUT = 12
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
@@ -1368,18 +1375,11 @@ if __name__ == "__main__":
     else:
         print("AVVISO: Podcast.py non trovato")
 
-    # ---- Copia in pod/PodPutignano.mp3 ----
+    # ---- Copia in PodPutignano.mp3 ----
     mp3_path = os.path.join(SCRIPT_DIR, "Lettura.mp3")
     pod_path = os.path.join(POD_DIR, "PodPutignano.mp3")
     if os.path.isfile(mp3_path):
         shutil.copy2(mp3_path, pod_path)
         print(f"PodPutignano.mp3 aggiornato")
-        try:
-            sistema = platform.system()
-            if sistema == "Windows":     os.startfile(mp3_path)
-            elif sistema == "Darwin":    subprocess.Popen(["open", mp3_path])
-            else:                        subprocess.Popen(["xdg-open", mp3_path])
-        except Exception:
-            pass
     else:
         print("AVVISO: Lettura.mp3 non trovato")

@@ -27,7 +27,7 @@ jobs:
 
       - name: Esegui Podcast.py
         working-directory: Pod
-        run: python Podcast.py
+        run: python Podcast.py v
 
       - name: Salva Lettura.mp3
         uses: actions/upload-artifact@v4

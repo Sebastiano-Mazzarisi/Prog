@@ -29,6 +29,10 @@ jobs:
         working-directory: Pod
         run: python Podcast.py v
 
+      - name: Debug - mostra file creati
+        working-directory: Pod
+        run: find . -name "*.mp3" -o -name "*.txt" | sort
+
       - name: Salva Lettura.mp3
         uses: actions/upload-artifact@v4
         with:

@@ -11,6 +11,10 @@ jobs:
     permissions:
       contents: write             # necessario per il git push
 
+    defaults:
+      run:
+        working-directory: Pod    # tutti gli step "run" partono da Prog/Pod/
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4

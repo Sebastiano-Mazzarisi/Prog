@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 12 e 47.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 12 e 51.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] C'è chi sostiene che il nome di Putignano nasconda un segreto legato agli dèi dell'Olimpo, Una teoria filologica dell'Ottocento lega infatti l'origine della città al culto di Apollo Pitico, Secondo questa ipotesi, in epoca pre-romana, ci sarebbe stato un tempio o un altare dedicato al dio del sole proprio dove oggi sorge il borgo antico.
+[T] [F] Il centro storico di Putignano non è un labirinto casuale, ma è costruito su tre anelli concentrici chiamati 'i tre giri', Un tempo rispondevano a rigide regole sociali e di difesa: nel giro più interno c'erano i palazzi del potere e le chiese, in quello mediano le abitazioni dei benestanti, e in quello esterno, a ridosso delle mura, le case del popolo.
 
 [T] [M] A risentirci a presto.

@@ -1,17 +1,21 @@
 name: Genera PodPutignano
 on:
   schedule:
-    - cron: '*/15 5-20 * * *'   # ogni 15 min, dalle 7 alle 22 ora italiana (UTC+2 = UTC 5-20)
-  workflow_dispatch:              # permette lancio manuale dal sito GitHub
+    # Ogni 30 minuti, dalle 5:00 alle 20:00 UTC
+    # = 7:00-22:00 ora legale italiana (UTC+2, apr-ott)
+    # = 6:00-21:00 ora solare italiana (UTC+1, nov-mar)
+    - cron: '0,30 5-20 * * *'
+  workflow_dispatch:
+
 jobs:
   genera:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: write             # necessario per il git push
+      contents: write
     defaults:
       run:
-        working-directory: Pod    # tutti gli step "run" partono da Prog/Pod/
+        working-directory: Pod
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4

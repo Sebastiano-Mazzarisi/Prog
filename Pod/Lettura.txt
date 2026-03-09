@@ -1,26 +1,26 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 14 in punto.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 15 e 11.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi nebbia, con temperature tra 7 e 12 gradi e qualche possibilità di pioggia. Per domani è previsto nebbia, con temperature tra 5 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi nebbia, con temperature tra 7 e 12 gradi. Per domani è previsto nebbia, con temperature tra 5 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
 [T] [F] Nessun turno farmacia per oggi a Putignano, prossimi turni: dal 14 al 15 marzo: Farmacia Rutigliano, poi dal 21 al 22 marzo: Farmacia Murat, poi dal 28 al 29 marzo: Farmacia Serio
 
-[T] [M] NOTIZIE DALL'ITALIA
+[T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Zelensky, '11 Paesi ci hanno chiesto aiuto contro i droni iraniani', "Undici paesi vicini dell'Iran, europei e americani" hanno chiesto aiuto all'Ucraina contro i droni iraniani, Lo afferma su Telegram il presidente ucraino Volodymyr Zelensky che ha presieduto il consiglio di sicurezza nazionale "Il Consiglio di Sicurezza Nazionale dell'Ucraina.
+[T] [F] Wall Street apre in calo, Dj -0,94%, Nasdaq -0,82%: Wall Street apre negativa, Il Dow Jones perde lo 0, il Nasdaq cede lo 0, 08 punti mentre lo S&P 500 lascia sul terreno lo 0, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] Le Borse di oggi, lunedì 9 marzo, Europa aspetta il G7 e limita i danni, Milano -1,5%: La guerra in Medio Oriente e il permanente blocco nello stretto di Hormuz portano in profondo rosso i mercati: petrolio oltre i 100 dollari, Le borse europee arrivano in ribasso a metà seduta anche se i listini hanno ridotto le perdite rispetto ai minimi dell'avvio.
 
-[T] [F] "In missione per conto di Dio"? È arrivato il momento di fermare questi pazzi fanatici: È arrivato il momento di fermare questi pazzi fanatici, questi fondamentalisti religiosi che opprimono le donne e i gay e uccidono centinaia di migliaia di innocenti, Non dico bombardarli, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] "Questa riforma non inciderà nella vita dei cittadini e non migliorerà la giustizia": Ficarra e Picone votano "NO" al Referendum sulla Giustizia: Anche Ficarra e Picone sono intervenuti nel dibattito sui Referendum per la Giustizia previsti per domenica 22 e lunedì 23 marzo, I due attori sono intervenuti con un pubblicato da Md – Magistratura Democratica per sostenere le ragioni del "NO".
 
 [T] [M] Drone Triton Usa dalla base di Sigonella al Golfo Persico: la missione tra Bushehr e l'isola di Kharg: Un drone MQ-4C Triton della Marina Usa, partito dalla base di Sigonella, e un Boeing P-8A Poseidon, hanno condotto una missione ISR (pattugliamento, monitoraggio e, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Sciopero generale 9 marzo, tutti i settori a rischio Sky TG24 "Lotto per la parità, siamo discriminate ovunque" FLC CGIL No, lunedì 9 marzo a Roma non c'è sciopero dei trasporti RomaToday Sciopero generale 9 marzo, un aggiornamento dal mondo dello sport italiano.
+[T] [F] Turbanti e lotte intestine: il figlio di Khamenei non piaceva ai "puristi", una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] A Putignano esiste un'istituzione decisamente insolita: l'Accademia delle Corna, Questo gruppo goliardico è l'anima del penultimo giovedì di Carnevale, dedicato agli uomini sposati, La mattina si inizia con il rito dell'ammasso delle corna in piazza, un momento di pura comicità che prepara la città al grande e goliardico taglio serale.
+[T] [F] L'ultimo respiro del Carnevale di Putignano ha il suono di una campana gigante, La 'Campana dei Maccheroni' è un'enorme opera di cartapesta che viene posizionata nella piazza principale la sera del Martedì Grasso, Quando inizia a suonare, segna gli ultimi momenti di festa prima che scocchi la mezzanotte e inizi il digiuno quaresimale.
 
 [T] [M] A risentirci a presto.

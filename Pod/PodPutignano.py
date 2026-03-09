@@ -45,6 +45,17 @@ HTTP_HEADERS = {
 }
 
 GIORNI_ITA = {0:"lunedì",1:"martedì",2:"mercoledì",3:"giovedì",4:"venerdì",5:"sabato",6:"domenica"}
+
+def _ora_italiana() -> datetime:
+    """Restituisce datetime corrente nel fuso orario Europe/Rome (gestisce ora legale)."""
+    try:
+        import zoneinfo
+        return datetime.now(zoneinfo.ZoneInfo("Europe/Rome"))
+    except ImportError:
+        # Fallback: UTC+1 invernale / UTC+2 estiva — usa offset fisso +1 e segnala
+        import time as _time
+        offset = 2 if _time.daylight else 1
+        return datetime.now(timezone.utc) + timedelta(hours=offset)
 MESI_ITA   = {1:"gennaio",2:"febbraio",3:"marzo",4:"aprile",5:"maggio",6:"giugno",
               7:"luglio",8:"agosto",9:"settembre",10:"ottobre",11:"novembre",12:"dicembre"}
 
@@ -715,7 +726,7 @@ def fetch_rss_generic(name, url, weight, cutoff, filter_fn=None):
 # ============================================================
 
 def get_onomastico() -> str:
-    chiave = datetime.now().strftime("%d/%m")
+    chiave = _ora_italiana().strftime("%d/%m")
     return ONOMASTICI_DB.get(chiave, "")
 
 # ============================================================
@@ -723,7 +734,7 @@ def get_onomastico() -> str:
 # ============================================================
 
 def get_intestazione() -> list:
-    oggi   = datetime.now()
+    oggi   = _ora_italiana()
     giorno = GIORNI_ITA[oggi.weekday()]
     data   = f"{oggi.day} {MESI_ITA[oggi.month]} {oggi.year}"
     ora    = f"Sono le {oggi.hour} e {oggi.minute:02d}." if oggi.minute != 0 else f"Sono le {oggi.hour} in punto."
@@ -789,7 +800,7 @@ def get_protezione_civile() -> str:
         print(f"[ProtCiv] Errore download: {ex}")
         return ""
 
-    oggi   = datetime.now().date()
+    oggi   = _ora_italiana().date()
     domani = oggi + timedelta(days=1)
 
     # ---- Cerca titoli degli articoli di allerta (metodo principale) ----
@@ -1031,7 +1042,7 @@ def get_meteo() -> str:
     except ImportError:
         zona = None
 
-    ora_now = datetime.now(timezone.utc).astimezone(zona) if zona else datetime.now()
+    ora_now = datetime.now(timezone.utc).astimezone(zona) if zona else _ora_italiana()
     ora_inizio = ora_now.replace(minute=0, second=0, microsecond=0)
 
     ore_data = {}
@@ -1078,7 +1089,7 @@ MONTHS_MAP_INV = {v: k for k, v in MONTHS_MAP.items()}
 def get_farmacie() -> str:
     if not HAS_REQUESTS:
         return f"Dati farmacie non disponibili, Guardia Medica: {GUARDIA_MEDICA}"
-    oggi = datetime.now().date()
+    oggi = _ora_italiana().date()
     try:
         r = requests.get(FARMACIE_URL, headers=HTTP_HEADERS, timeout=15)
         r.raise_for_status()

@@ -1,13 +1,13 @@
 # Nome.py: PodPutignano.py
-# Data e ora ultima modifica: 08/03/2026 15:28
+# Data e ora ultima modifica: 09/03/2026 12:00
 # Descrizione: Script unico che assembla il podcast "Buongiorno Putignano", genera il testo e avvia la sintesi vocale.
 # File di input: RSS feed esterni
 # File di output: Lettura.txt, PodPutignano.mp3
 # Parametri: Nessuno
 
-# PodPutignano.py  v2
+# PodPutignano.py  v4
 # Script unico che assembla il podcast "Buongiorno Putignano".
-# Incorpora: MeteoNews, FarmacieNews, ItaliaNews, PutignanoNews, CuriositàNews, Putignano
+# Incorpora: ProtezioneCivile, MeteoNews, FarmacieNews, ItaliaNews, PutignanoNews, CuriositàNews, Putignano
 # Dati incorporati: Onomastici (366), Curiosità (100) — nessun file esterno richiesto
 #
 # Uso:  python PodPutignano.py
@@ -738,6 +738,192 @@ def get_intestazione() -> list:
     ]
 
 # ============================================================
+# MODULO PROTEZIONE CIVILE
+# ============================================================
+#
+# Legge la homepage di https://putignano.infoalert365.it/
+# e cerca allerte attive per il giorno corrente o successivo.
+# In produzione si attiva solo per allerta ARANCIONE o ROSSA.
+# In modalità TEST si attiva anche per GIALLA (TEST_ALLERTA=True).
+#
+# Struttura attesa nel sito: tabelle con righe tipo:
+#   | Idrogeologico | <img alt="giallo"> | <img alt="arancione"> |
+# oppure testo tipo "livello di allerta: arancione"
+
+PROT_CIV_URL     = "https://putignano.infoalert365.it/"
+TEST_ALLERTA     = False  # ← True per prove (include gialla); False in produzione (solo arancione/rosso)
+
+LIVELLI_PRIORITA = {"verde": 0, "giallo": 1, "arancione": 2, "rosso": 3}
+LIVELLI_PRODUZIONE = {"arancione", "rosso"}          # soglia produzione
+LIVELLI_TEST       = {"giallo", "arancione", "rosso"} # soglia test
+
+def _estrai_livello(cella) -> str:
+    """Estrae il livello di allerta da una cella <td> della tabella."""
+    testo = cella.get_text(" ", strip=True).lower()
+    for liv in ("rosso", "arancione", "giallo", "verde"):
+        if liv in testo:
+            return liv
+    # cerca negli attributi alt/title delle immagini
+    for img in cella.find_all("img"):
+        alt = (img.get("alt","") + " " + img.get("title","")).lower()
+        for liv in ("rosso", "arancione", "giallo", "verde"):
+            if liv in alt:
+                return liv
+    return "verde"   # default: nessuna allerta
+
+def get_protezione_civile() -> str:
+    """
+    Restituisce il testo TTS per la sezione Protezione Civile,
+    oppure stringa vuota se non ci sono allerte rilevanti.
+    """
+    if not HAS_REQUESTS:
+        return ""
+
+    soglia_attiva = LIVELLI_TEST if TEST_ALLERTA else LIVELLI_PRODUZIONE
+
+    try:
+        r = requests.get(PROT_CIV_URL, headers=HTTP_HEADERS, timeout=HTTP_TIMEOUT)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+    except Exception as ex:
+        print(f"[ProtCiv] Errore download: {ex}")
+        return ""
+
+    oggi   = datetime.now().date()
+    domani = oggi + timedelta(days=1)
+
+    # ---- Cerca titoli degli articoli di allerta (metodo principale) ----
+    # Il sito pubblica post con titolo tipo:
+    #   "ALLERTA ARANCIONE per TEMPORALI per il 9 marzo 2026"
+    allerte_trovate = []   # lista di dict: {livello, rischio, giorno_label}
+
+    # Cerca tutti i titoli/link sulla homepage
+    for tag in soup.find_all(["h2","h3","h4","a","p"]):
+        testo_tag = tag.get_text(" ", strip=True)
+        testo_low = testo_tag.lower()
+
+        if "allert" not in testo_low:
+            continue
+
+        # Determina il livello
+        livello = None
+        for lv in ("rosso", "arancione", "giallo", "verde"):
+            if lv in testo_low:
+                livello = lv
+                break
+        if not livello or livello not in soglia_attiva:
+            continue
+
+        # Determina il giorno: cerca date nel testo
+        giorno_label = None
+        oggi_str  = f"{oggi.day} {MESI_ITA[oggi.month]}"
+        domani_str= f"{domani.day} {MESI_ITA[domani.month]}"
+        if oggi_str in testo_low or "oggi" in testo_low:
+            giorno_label = "oggi"
+        elif domani_str in testo_low or "domani" in testo_low:
+            giorno_label = "domani"
+        else:
+            # cerca numeri di giorno nel testo
+            for g_num, g_label in [(oggi.day, "oggi"), (domani.day, "domani")]:
+                pattern = rf"\b{g_num}\b"
+                if re.search(pattern, testo_low):
+                    giorno_label = g_label
+                    break
+
+        if not giorno_label:
+            continue   # allerta non riguarda oggi né domani
+
+        # Estrai tipo di rischio dal titolo
+        rischio_raw = testo_tag
+        # Pulizia del testo per TTS
+        rischio_raw = re.sub(r"(?i)allerta\s+(verde|gialla|arancione|rossa)\s+(per\s+)?", "", rischio_raw)
+        rischio_raw = re.sub(r"(?i)per\s+il\s+\d+\s+\w+\s+\d{4}", "", rischio_raw)
+        rischio_raw = re.sub(r"\s+", " ", rischio_raw).strip().rstrip(".")
+
+        allerte_trovate.append({
+            "livello":       livello,
+            "rischio":       rischio_raw if rischio_raw else "meteo-idrogeologica",
+            "giorno_label":  giorno_label,
+            "priorita":      LIVELLI_PRIORITA.get(livello, 0),
+        })
+
+    # ---- Fallback: leggi le tabelle di stato allerta ----
+    if not allerte_trovate:
+        for table in soup.find_all("table"):
+            righe = table.find_all("tr")
+            if len(righe) < 2:
+                continue
+            # Prima riga = intestazione con le date
+            intestazione = [td.get_text(" ", strip=True).lower() for td in righe[0].find_all(["th","td"])]
+            col_oggi   = None
+            col_domani = None
+            oggi_str_b   = f"{oggi.day:02d} {MESI_ITA[oggi.month][:3]}"
+            domani_str_b = f"{domani.day:02d} {MESI_ITA[domani.month][:3]}"
+            for ci, intestaz in enumerate(intestazione):
+                if (str(oggi.day) in intestaz and MESI_ITA[oggi.month][:3] in intestaz) or "oggi" in intestaz:
+                    col_oggi = ci
+                elif (str(domani.day) in intestaz and MESI_ITA[domani.month][:3] in intestaz) or "domani" in intestaz:
+                    col_domani = ci
+
+            for riga in righe[1:]:
+                celle = riga.find_all(["td","th"])
+                if not celle:
+                    continue
+                tipo_rischio = celle[0].get_text(" ", strip=True) if celle else ""
+
+                for col_idx, giorno_label in [(col_oggi, "oggi"), (col_domani, "domani")]:
+                    if col_idx is None or col_idx >= len(celle):
+                        continue
+                    livello = _estrai_livello(celle[col_idx])
+                    if livello in soglia_attiva:
+                        allerte_trovate.append({
+                            "livello":      livello,
+                            "rischio":      tipo_rischio,
+                            "giorno_label": giorno_label,
+                            "priorita":     LIVELLI_PRIORITA.get(livello, 0),
+                        })
+
+    if not allerte_trovate:
+        return ""   # nessuna allerta rilevante → sezione non inclusa
+
+    # ---- Costruisci il testo TTS ----
+    # Raggruppa per giorno e per livello massimo
+    allerte_trovate.sort(key=lambda x: (-x["priorita"], x["giorno_label"]))
+
+    # Deduplicazione: un solo elemento per (giorno, rischio simile)
+    visti = set()
+    dedup = []
+    for a in allerte_trovate:
+        chiave = (a["giorno_label"], a["rischio"][:30].lower())
+        if chiave not in visti:
+            visti.add(chiave)
+            dedup.append(a)
+
+    liv_nome = {"giallo": "gialla", "arancione": "arancione", "rosso": "rossa", "verde": "verde"}
+
+    frasi = []
+    for a in dedup:
+        lv  = liv_nome.get(a["livello"], a["livello"])
+        gj  = a["giorno_label"]
+        ris = a["rischio"].strip()
+        if ris:
+            frasi.append(f"allerta {lv} {gj} per {ris}")
+        else:
+            frasi.append(f"allerta {lv} per {gj}")
+
+    if not frasi:
+        return ""
+
+    if len(frasi) == 1:
+        tts = f"Attenzione: è in vigore {frasi[0]}."
+    else:
+        tts = "Attenzione: sono in vigore " + "; ".join(frasi[:-1]) + " e " + frasi[-1] + "."
+
+    tts += " Si raccomanda prudenza e di seguire le indicazioni della Protezione Civile comunale."
+    return tts
+
+
+# ============================================================
 # MODULO METEO  (da MeteoNews.py)
 # ============================================================
 
@@ -1277,6 +1463,7 @@ def assembla() -> list:
     Costruisce la lista di righe per Lettura.txt con i marker [T][M]/[F].
     Struttura:
       Intestazione
+      Protezione Civile  (solo se allerta arancione/rossa oggi o domani; gialla in TEST)
       Meteo
       Farmacie
       Notizie Italia  (5 notizie, voci alternate F/M)
@@ -1288,6 +1475,14 @@ def assembla() -> list:
 
     # ---- INTESTAZIONE ----
     out += get_intestazione()
+
+    # ---- PROTEZIONE CIVILE (solo se allerta arancione o rossa; gialla in modalità test) ----
+    prot_tts = get_protezione_civile()
+    if prot_tts:
+        out.append("[TX] [M] PROTEZIONE CIVILE")
+        out.append("")
+        out.append(f"[T] [F] {prot_tts}")
+        out.append("")
 
     # ---- METEO ----
     meteo_tts = get_meteo()
@@ -1361,25 +1556,95 @@ if __name__ == "__main__":
     elapsed = time.time() - t_start
     print(f"Lettura.txt pronto in {elapsed:.0f}s")
 
-    # ---- Lancia Podcast.py ----
-    podcast_script = os.path.join(SCRIPT_DIR, "Podcast.py")
-    if os.path.isfile(podcast_script):
-        try:
-            result = subprocess.run([sys.executable, podcast_script, "x", "v"], timeout=600)
-            if result.returncode != 0:
-                print(f"Podcast.py errore (rc={result.returncode})")
-        except subprocess.TimeoutExpired:
-            print("Podcast.py TIMEOUT (600s)")
-        except Exception as ex:
-            print(f"Podcast.py: {ex}")
+    # ---- TTS tramite Podcast.py (gestisce stacchetti Chitarra.mp3 / Allarme.mp3) ----
+    podcast_py = os.path.join(SCRIPT_DIR, "Podcast.py")
+    if os.path.isfile(podcast_py):
+        print("Avvio Podcast.py x v per generare Lettura.mp3 con stacchetti...")
+        result = subprocess.run(
+            [sys.executable, podcast_py, "x", "v"],
+            cwd=SCRIPT_DIR,
+            capture_output=False   # mostra output in tempo reale
+        )
+        if result.returncode != 0:
+            print(f"ERRORE: Podcast.py terminato con codice {result.returncode}")
     else:
-        print("AVVISO: Podcast.py non trovato")
+        # Fallback: edge-tts diretto senza stacchetti (es. GitHub Actions senza Podcast.py)
+        print("Podcast.py non trovato — fallback TTS diretto (senza stacchetti)...")
+        VOCE_F = "it-IT-ElsaNeural"
+        VOCE_M = "it-IT-DiegoNeural"
 
-    # ---- Copia in PodPutignano.mp3 ----
+        async def genera_mp3():
+            import tempfile
+            try:
+                import edge_tts
+            except ImportError:
+                print("ERRORE: edge-tts non installato. Esegui: pip install edge-tts")
+                return
+
+            segmenti = []
+            for riga in righe:
+                riga = riga.strip()
+                if not riga:
+                    continue
+                voce = VOCE_M if "[M]" in riga else VOCE_F
+                testo = re.sub(r"\[TX\]|\[T\]|\[F\]|\[M\]", "", riga).strip()
+                if testo:
+                    segmenti.append((voce, testo))
+
+            tmpdir = tempfile.mkdtemp()
+            tmp_files = []
+            print(f"TTS: {len(segmenti)} segmenti...")
+            for i, (voce, testo) in enumerate(segmenti):
+                tmp_path = os.path.join(tmpdir, f"seg_{i:04d}.mp3")
+                try:
+                    communicate = edge_tts.Communicate(testo, voce)
+                    await communicate.save(tmp_path)
+                    tmp_files.append(tmp_path)
+                except Exception as ex:
+                    print(f"  segmento {i} saltato: {ex}")
+                if (i + 1) % 10 == 0:
+                    print(f"  ... {i+1}/{len(segmenti)}")
+
+            if not tmp_files:
+                print("ERRORE: nessun segmento audio generato")
+                shutil.rmtree(tmpdir, ignore_errors=True)
+                return
+
+            lista_path = os.path.join(tmpdir, "lista.txt")
+            with open(lista_path, "w", encoding="utf-8") as lf:
+                for tp in tmp_files:
+                    lf.write(f"file '{tp}'\n")
+
+            mp3_out = os.path.join(SCRIPT_DIR, "Lettura.mp3")
+            result = subprocess.run(
+                ["ffmpeg", "-y", "-f", "concat", "-safe", "0",
+                 "-i", lista_path, "-acodec", "libmp3lame", "-q:a", "4", mp3_out],
+                capture_output=True, text=True
+            )
+            if result.returncode != 0:
+                print(f"ffmpeg ERRORE:\n{result.stderr[-400:]}")
+            else:
+                kb = os.path.getsize(mp3_out) // 1024
+                print(f"Lettura.mp3 generato ({kb} KB)")
+
+            shutil.rmtree(tmpdir, ignore_errors=True)
+
+        import asyncio as _asyncio
+        _asyncio.run(genera_mp3())
+
+    # ---- Copia in PodPutignano.mp3 (stessa cartella, POD_DIR = SCRIPT_DIR) ----
     mp3_path = os.path.join(SCRIPT_DIR, "Lettura.mp3")
     pod_path = os.path.join(POD_DIR, "PodPutignano.mp3")
     if os.path.isfile(mp3_path):
         shutil.copy2(mp3_path, pod_path)
-        print(f"PodPutignano.mp3 aggiornato")
+        kb = os.path.getsize(pod_path) // 1024
+        print(f"PodPutignano.mp3 aggiornato ({kb} KB)")
+        # Apri in locale (solo Windows/Mac, ignorato su Linux/GitHub)
+        try:
+            sistema = platform.system()
+            if sistema == "Windows":  os.startfile(mp3_path)
+            elif sistema == "Darwin": subprocess.Popen(["open", mp3_path])
+        except Exception:
+            pass
     else:
-        print("AVVISO: Lettura.mp3 non trovato")
+        print("AVVISO: Lettura.mp3 non trovato — TTS probabilmente fallito")

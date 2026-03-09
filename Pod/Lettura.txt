@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 18 e 03.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 19 e 09.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi nebbia, con temperature tra 7 e 13 gradi. Per domani è previsto parzialmente nuvoloso, con temperature tra 5 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi nebbia, con temperature tra 6 e 13 gradi. Per domani è previsto rovesci leggeri, con temperature tra 6 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Guerra all'Iran, altri 3 bombardieri B-52 Usa atterrati in base Gb: Altri tre B-52 americani, mastodontici bombardieri simbolo della Guerra Fredda, sono atterrati oggi nella base britannica della Raf di Fairford, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Trump, 'hanno commesso un errore con la guida suprema, non so se durerà': Donald Trump ribadisce il suo disappunto per la scelta della nuova guida suprema iraniana, Motjaba Khamenei "Penso che abbiano commesso un grosso errore, Non so se durerà", ha detto a Nbc, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Le Borse oggi 9 marzo, Tensioni sui prezzi per l’Iran, Giorgetti: "Stretta monetaria sarebbe grave": La guerra in Medio Oriente e il permanente blocco nello stretto di Hormuz porta in profondo rosso i mercati Asiatici, I listini europei hanno ridotto le perdite rispetto ai minimi dell'avvio.
+[T] [M] Guerra in Iran, le news di oggi, Trump: "Non contento di nomina Mojtaba, Ucciderlo? Non lo dico": Il figlio di Khamenei farà oggi il suo primo discorso, Turchia: "Intercettato missile Teheran entrato in nostro spazio aereo", La Nato in azione per difendere Ankara, Macron in visita a Cipro annuncia: "Un piano di autodifesa per riaprire lo stretto di Hormuz".
 
-[T] [F] "Che piacere rivederti mister": l’incontro tra Wanda Nara e Spalletti a Milano: Wanda Nara e Luciano Spalletti insieme, tra selfie e sorrisi, La showgirl argentina e il tecnico della Juventus si sono incontrati a Milano, Wanda era in città già da domenica e ha assistito al derby tra Milan e Inter, postando alcune su sfondo rossonero.
+[T] [F] Referendum, sul sorteggio dei giudici al Csm Marina Berlusconi supera perfino il padre Silvio, "L’argine all’influenza della politica all’interno del Csm è il sorteggio", ha scritto Marina Berlusconi nella lettera affidata a Repubblica, Ma certo non ha attribuito l’idea a suo padre, Sarebbe stato difficile visto che giusto nel 2010.
 
-[T] [M] Cagliari, sedicenne travolta sulle strisce pedonali all’uscita da scuola: è gravissima: Una ragazza di 16 anni Ã¨ stata investita mentre attraversava la strada sulle strisce pedonali in viale Marconi a Cagliari all'uscita di scuola, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Drone Triton Usa dalla base di Sigonella al Golfo Persico: la missione tra Bushehr e l'isola di Kharg: Un drone MQ-4C Triton della Marina Usa, partito dalla base di Sigonella, e un Boeing P-8A Poseidon, hanno condotto una missione ISR (pattugliamento, monitoraggio e, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Drone Triton Usa dalla base di Sigonella al Golfo Persico: la missione tra Bushehr e l'isola di Kharg: Un drone MQ-4C Triton della Marina Usa, partito dalla base di Sigonella, e un Boeing P-8A Poseidon, hanno condotto una missione ISR (pattugliamento, monitoraggio e, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Incidente sull'autostrada A4 a Monastier, scontro tra cisterne: una si ribalta e prende fuoco, grave l'autista Virgilio Camion carico di gas tampona una cisterna e si rovescia sull'A4: sentite forti esplosioni, fumo nero visibile a distanza Il Messaggero Incidente in autostrada, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Oggi ci passeggiano le automobili e i pedoni, ma un tempo c'era l'acqua e il pericolo, L'antica cittadella murata di Putignano era interamente circondata da un profondo fossato difensivo, Con l'espansione moderna, il fossato è stato colmato ed è diventato l'attuale 'Estramurale', l'ampia strada ad anello che abbraccia l'intero centro storico.
+[T] [F] Scendendo nella Grotta del Trullo non troverete rocce cupe e buie, ma uno spettacolo di colori, Le formazioni calcaree all'interno brillano di incredibili sfumature rossastre e rosate, Questo effetto magico è dovuto all'altissima presenza di ossido di ferro nella roccia locale, che 'arrugginisce' l'acqua creando stalattiti color corallo.
 
 [T] [M] A risentirci a presto.

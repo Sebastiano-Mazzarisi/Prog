@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 15 e 19.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 15 e 36.
 
-[TX] [M] PROTEZIONE CIVILE - ALLERTA ROSSA
+[TX] [M] PROTEZIONE CIVILE - ALLERTA ARANCIONE
 
-[T] [F] ATTENZIONE: è in vigore un'allerta ROSSA della Protezione Civile per il comune di Putignano e per la provincia di Bari. Si raccomanda massima prudenza e di seguire le indicazioni delle autorità locali.
+[T] [F] ATTENZIONE: è in vigore un'allerta ARANCIONE della Protezione Civile per il comune di Putignano e per la provincia di Bari. Si raccomanda massima prudenza e di seguire le indicazioni delle autorità locali.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -16,11 +16,11 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Wall Street apre in calo, Dj -0,94%, Nasdaq -0,82%: Wall Street apre negativa, Il Dow Jones perde lo 0, il Nasdaq cede lo 0, 08 punti mentre lo S&P 500 lascia sul terreno lo 0, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Chiara Mosca da oggi presidente vicario della Consob: Chiara Mosca, commissario con maggiore anzianità di istituto, assume da oggi l'incarico di presidente vicario, subentrando a Paolo Savona, il cui mandato settennale si è concluso l'8 marzo, Mosca, professore associato di diritto commerciale presso l'Università Bocconi di Milano.
 
 [T] [M] Le Borse di oggi, lunedì 9 marzo, Europa aspetta il G7 e limita i danni, Milano -1,5%: La guerra in Medio Oriente e il permanente blocco nello stretto di Hormuz portano in profondo rosso i mercati: petrolio oltre i 100 dollari, Le borse europee arrivano in ribasso a metà seduta anche se i listini hanno ridotto le perdite rispetto ai minimi dell'avvio.
 
-[T] [F] La maschera di Tony Pitony? Si può acquistare online ma il prezzo è folle: ecco a quanto è venduta su eBay: La partecipazione alla serata dei duetti del Festival di Sanremo ha portato a Tony Pitony una platea ben più ampia di quella che lo conosceca da che si esibiva nel circuito indie, Da quando è comparso all’Ariston per duettare con Ditonellapiaga.
+[T] [F] È morta Jennifer Runyon, ha conosciuto il successo con il film "Ghostbusters" e la sitcom "Babysitter": Cinema in lutto È morta Jennifer Runyon, che ha conquistato la popolarità grazie alle sue apparizioni nel film "Ghostbusters (Acchiappafantasmi") e nella sitcom "Babysitter", Il decesso è avvenuto venerdì 6 marzo all’età di 65 anni dopo una breve e improvvisa malattia tumorale.
 
 [T] [M] Guerra Iran, la Nato intercetta un nuovo missile sopra la Turchia: cosa è successo e perché si rischia l'escalation: Un nuovo missile iraniano è stato abbattuto dalla Nato nello spazio aereo turco, Lo ha annunciato in un comunicato il ministero della Difesa della Turchia "Un missile balistico.
 
@@ -36,6 +36,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Scendendo nella Grotta del Trullo non troverete rocce cupe e buie, ma uno spettacolo di colori, Le formazioni calcaree all'interno brillano di incredibili sfumature rossastre e rosate, Questo effetto magico è dovuto all'altissima presenza di ossido di ferro nella roccia locale, che 'arrugginisce' l'acqua creando stalattiti color corallo.
+[T] [F] I carri allegorici di Putignano non sono solo carri, sono capolavori riconosciuti a livello mondiale, Questa cittadina vanta un'eccellenza assoluta nella lavorazione della cartapesta, I maestri artigiani locali si tramandano di generazione in generazione segreti e tecniche per modellare la carta di giornale, trasformandola in sculture gigantesche e spettacolari.
 
 [T] [M] A risentirci a presto.

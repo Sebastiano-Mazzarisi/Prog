@@ -1560,7 +1560,7 @@ if __name__ == "__main__":
     # ---- Parametri simulazione allerta ----
     _sim_allerta = None
     for _arg in sys.argv[1:]:
-        if _arg.upper() == "--ROSSO":
+        if _arg.upper() in ("--ROSSA", "--ROSSO"):
             _sim_allerta = "rosso"
         elif _arg.upper() == "--ARANCIONE":
             _sim_allerta = "arancione"
@@ -1569,9 +1569,9 @@ if __name__ == "__main__":
 
     # ---- Inietta sezione allerta simulata prima del METEO ----
     if _sim_allerta:
-        _livello_upper = _sim_allerta.upper()
+        _livello_upper = "ROSSA" if _sim_allerta.lower() == "rosso" else _sim_allerta.upper()
         _tts_allerta = (
-            f"ATTENZIONE: è in vigore un'allerta {_sim_allerta} della Protezione Civile "
+            f"ATTENZIONE: è in vigore un'allerta {_livello_upper} della Protezione Civile "
             f"per il comune di Putignano e per la provincia di Bari. "
             f"Si raccomanda massima prudenza e di seguire le indicazioni delle autorità locali."
         )

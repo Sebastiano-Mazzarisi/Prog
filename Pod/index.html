@@ -272,10 +272,9 @@
     }
     .testo-overlay-body .sezione-allerta:first-child { margin-top: 4px; }
     /* Paragrafi notizie: maggiore distanza tra una notizia e l'altra */
-    .testo-overlay-body .para {
-      display: block;
-      margin-bottom: 14px;
-      line-height: 1.95;
+    .testo-overlay-body p.para {
+      margin: 0 0 18px 0;
+      line-height: 2.0;
     }
     .testo-overlay-body .para {
       display: block;
@@ -481,11 +480,11 @@
   // ── LEGGI TESTO ───────────────────────────────────────────
 
   // Parole chiave che identificano un titolo-sezione in Lettura.txt
-  const TITOLI_RE = /^(BUONGIORNO PUTIGNANO|PROTEZIONE CIVILE|METEO|FARMAC|NOTIZIE DALL'ITALIA E DAL MONDO|NOTIZIE DA PUTIGNANO|CURIOSIT|A RISENTIRCI)/i;
+  const TITOLI_RE = /^(BUONGIORNO PUTIGNANO|PROTEZIONE CIVILE|METEO|FARMAC|NOTIZIE DALL['’]ITALIA|NOTIZIE DA PUTIGNANO|CURIOSIT|A RISENTIRCI)/i;
 
   function applicaSfondoAllerta(raw) {
     document.body.classList.remove('allerta-rosso', 'allerta-arancione');
-    if (/PROTEZIONE CIVILE.*ALLERTA ROSSA/i.test(raw)) {
+    if (/PROTEZIONE CIVILE.*ALLERTA ROSS[AO]/i.test(raw)) {
       document.body.classList.add('allerta-rosso');
     } else if (/PROTEZIONE CIVILE.*ALLERTA ARANCIONE/i.test(raw)) {
       document.body.classList.add('allerta-arancione');
@@ -493,36 +492,23 @@
   }
 
   function formattaTesto(raw) {
-    // Rimuove marker [T] [F] [M] e spazi residui su riga
+    // Rimuove marker [T] [F] [M] [TX] e spazi residui su riga
     const righe = raw
       .split('\n')
       .map(r => r.replace(/\[TX\]|\[T\]|\[F\]|\[M\]/g, '').trim());
 
     let html = '';
-    let bufPara = '';
-
-    function flushPara() {
-      if (bufPara.trim()) {
-        html += `<span class="para">${bufPara.trim()}</span>`;
-        bufPara = '';
-      }
-    }
 
     for (const riga of righe) {
       if (!riga) continue;
       if (TITOLI_RE.test(riga)) {
-        flushPara();
         const cls = /PROTEZIONE CIVILE/i.test(riga) ? 'sezione-allerta' : 'sezione';
         html += `<span class="${cls}">${riga}</span>`;
       } else {
-        bufPara += (bufPara ? ' ' : '') + riga;
-        // Vai a capo se la riga termina con punto
-        if (/[.!?]$/.test(riga)) {
-          flushPara();
-        }
+        // Ogni riga = paragrafo separato → interlinea visibile tra notizie
+        html += `<p class="para">${riga}</p>`;
       }
     }
-    flushPara();
     return html;
   }
 

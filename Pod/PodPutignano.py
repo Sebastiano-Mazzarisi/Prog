@@ -1511,7 +1511,7 @@ def assembla() -> list:
 
     # ---- NOTIZIE ITALIA ----
     notizie_it = get_notizie_italia()
-    out.append("[T] [M] NOTIZIE DALL'ITALIA")
+    out.append("[T] [M] NOTIZIE DALL'ITALIA E DAL MONDO")
     out.append("")
     voci = ["[F]", "[M]"]
     for i, n in enumerate(notizie_it):
@@ -1557,7 +1557,37 @@ if __name__ == "__main__":
     import shutil
     t_start = time.time()
 
+    # ---- Parametri simulazione allerta ----
+    _sim_allerta = None
+    for _arg in sys.argv[1:]:
+        if _arg.upper() == "--ROSSO":
+            _sim_allerta = "rosso"
+        elif _arg.upper() == "--ARANCIONE":
+            _sim_allerta = "arancione"
+
     righe = assembla()
+
+    # ---- Inietta sezione allerta simulata prima del METEO ----
+    if _sim_allerta:
+        _livello_upper = _sim_allerta.upper()
+        _tts_allerta = (
+            f"ATTENZIONE: è in vigore un'allerta {_sim_allerta} della Protezione Civile "
+            f"per il comune di Putignano e per la provincia di Bari. "
+            f"Si raccomanda massima prudenza e di seguire le indicazioni delle autorità locali."
+        )
+        _sezione = [
+            f"[TX] [M] PROTEZIONE CIVILE - ALLERTA {_livello_upper}",
+            "",
+            f"[T] [F] {_tts_allerta}",
+            "",
+        ]
+        # Inserisci prima della prima riga non vuota dopo l'intestazione
+        try:
+            _idx = next(i for i, r in enumerate(righe) if r.startswith("[T] [M] METEO"))
+            for _j, _r in enumerate(_sezione):
+                righe.insert(_idx + _j, _r)
+        except StopIteration:
+            righe = _sezione + righe
 
     # Scrivi Lettura.txt nella root (usato dal fetch della pagina)
     out_path = os.path.join(SCRIPT_DIR, "Lettura.txt")

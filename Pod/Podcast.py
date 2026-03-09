@@ -24,6 +24,10 @@ _script_dir = os.path.dirname(os.path.abspath(__file__))
 STACCHETTO_MP3 = os.path.join(_script_dir, "Chitarra.mp3")
 if not os.path.exists(STACCHETTO_MP3):
     STACCHETTO_MP3 = r"C:\Dropbox\Prog\Buongiorno\Chitarra.mp3"
+
+STACCHETTO_ALLARME_MP3 = os.path.join(_script_dir, "Allarme.mp3")
+if not os.path.exists(STACCHETTO_ALLARME_MP3):
+    STACCHETTO_ALLARME_MP3 = r"C:\Dropbox\Prog\Buongiorno\Allarme.mp3"
 RETRY_DELAY    = 0.5      # Secondi tra un retry e l'altro (era 2.0+)
 MAX_RETRIES    = 6        # Tentativi per frase
 # ─────────────────────────────────────────────────────────────────────────────
@@ -41,7 +45,7 @@ def _get_semaphore():
 
 def _frase_valida(testo: str) -> bool:
     """Scarta frasi troppo corte o composte solo da punteggiatura/spazi."""
-    if testo == "__STACCHETTO__":
+    if testo in ("__STACCHETTO__", "__STACCHETTO_ALLARME__"):
         return True
     lettere = sum(1 for c in testo if c.isalpha())
     return lettere >= 3
@@ -128,8 +132,8 @@ async def generate_all_audio(frasi_con_parametri, voce_femminile, voce_maschile)
     Restituisce lista ordinata [(audio_bytes|None, pause), ...].
     """
     async def task(idx, frase, voce_mode, speed, pause, style):
-        if frase == "__STACCHETTO__":
-            return idx, "__STACCHETTO__", pause  # nessuna generazione TTS
+        if frase in ("__STACCHETTO__", "__STACCHETTO_ALLARME__"):
+            return idx, frase, pause  # nessuna generazione TTS
         if voce_mode == "X":
             voce = voce_femminile if idx % 2 == 1 else voce_maschile
         elif voce_mode == "M":
@@ -186,11 +190,16 @@ def assemble_mp3(results, output_file, temp_dir):
             continue
         audio, pause = item
         if audio == "__STACCHETTO__":
-            # Inserisce il file Chitarra.mp3 come stacchetto musicale
             if os.path.exists(STACCHETTO_MP3):
                 chunk_files.append(STACCHETTO_MP3)
             else:
-                print(f"AVVISO: stacchetto non trovato: {STACCHETTO_MP3}", file=sys.stderr)
+                print(f"AVVISO: Chitarra.mp3 non trovato: {STACCHETTO_MP3}", file=sys.stderr)
+            continue
+        if audio == "__STACCHETTO_ALLARME__":
+            if os.path.exists(STACCHETTO_ALLARME_MP3):
+                chunk_files.append(STACCHETTO_ALLARME_MP3)
+            else:
+                print(f"AVVISO: Allarme.mp3 non trovato: {STACCHETTO_ALLARME_MP3}", file=sys.stderr)
             continue
         fpath = os.path.join(temp_dir, f"f_{idx:05d}.mp3")
         with open(fpath, "wb") as f:
@@ -345,6 +354,8 @@ async def leggi_file_con_voci_optimized(nome_file, parametri):
                         frasi_con_parametri.append((frase_corrente.strip(), current_voice, current_speed, 0, current_style))
                         frase_corrente = ""
                     frasi_con_parametri.append(("__STACCHETTO__", current_voice, current_speed, 0, None))
+                elif marker == '[TX]':
+                    frasi_con_parametri.append(("__STACCHETTO_ALLARME__", current_voice, current_speed, 0, None))
                 else:
                     stile_match = re.match(r'\[S([A-Z]+)\]', marker)
                     if stile_match:

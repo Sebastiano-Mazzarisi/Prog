@@ -17,7 +17,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   <!-- Open Graph per WhatsApp, Telegram, social -->
   <meta property="og:title" content="PodPutignano">
-  <meta property="og:description" content="Il podcast quotidiano di Putignano — notizie, meteo e curiosità aggiornati ogni 15 minuti">
+  <meta property="og:description" content="Il podcast quotidiano di Putignano — notizie, meteo e curiosità aggiornati ogni 30 minuti">
   <meta property="og:image" content="https://sebastiano-mazzarisi.github.io/Prog/Pod/icon-512.png">
   <meta property="og:image:width" content="512">
   <meta property="og:image:height" content="512">
@@ -209,6 +209,7 @@
       position: sticky;
       top: 0;
       background: linear-gradient(135deg, #5dade2, #2980b9);
+      transition: background 0.4s ease;
       padding: 14px 20px;
       display: flex;
       align-items: center;
@@ -270,6 +271,12 @@
       border-radius: 6px;
     }
     .testo-overlay-body .sezione-allerta:first-child { margin-top: 4px; }
+    /* Paragrafi notizie: maggiore distanza tra una notizia e l'altra */
+    .testo-overlay-body .para {
+      display: block;
+      margin-bottom: 14px;
+      line-height: 1.95;
+    }
     .testo-overlay-body .para {
       display: block;
       margin-bottom: 10px;
@@ -279,6 +286,20 @@
     /* stili sezioni ora in .testo-overlay-body */
 
     audio { display: none; }
+    /* Sfondo allerta — viene applicato via JS quando Lettura.txt contiene allerta */
+    body.allerta-rosso {
+      background: linear-gradient(160deg, #fde8e8 0%, #f5b7b1 40%, #e57373 100%) !important;
+    }
+    body.allerta-arancione {
+      background: linear-gradient(160deg, #fef3e2 0%, #fad7a0 40%, #f0a500 100%) !important;
+    }
+    /* Barra header overlay allerta */
+    body.allerta-rosso .testo-overlay-header {
+      background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+    }
+    body.allerta-arancione .testo-overlay-header {
+      background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+    }
   </style>
 </head>
 <body>
@@ -331,7 +352,7 @@
   <div class="info-row">
     <span class="info-pill">
       <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-      Aggiornato ogni 15 min
+      Aggiornato ogni 30 min
     </span>
     <span class="info-pill">
       <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
@@ -460,7 +481,16 @@
   // ── LEGGI TESTO ───────────────────────────────────────────
 
   // Parole chiave che identificano un titolo-sezione in Lettura.txt
-  const TITOLI_RE = /^(BUONGIORNO PUTIGNANO|PROTEZIONE CIVILE|METEO|FARMAC|NOTIZIE DALL|NOTIZIE DA PUTIGNANO|CURIOSIT|A RISENTIRCI)/i;
+  const TITOLI_RE = /^(BUONGIORNO PUTIGNANO|PROTEZIONE CIVILE|METEO|FARMAC|NOTIZIE DALL'ITALIA E DAL MONDO|NOTIZIE DA PUTIGNANO|CURIOSIT|A RISENTIRCI)/i;
+
+  function applicaSfondoAllerta(raw) {
+    document.body.classList.remove('allerta-rosso', 'allerta-arancione');
+    if (/PROTEZIONE CIVILE.*ALLERTA ROSSA/i.test(raw)) {
+      document.body.classList.add('allerta-rosso');
+    } else if (/PROTEZIONE CIVILE.*ALLERTA ARANCIONE/i.test(raw)) {
+      document.body.classList.add('allerta-arancione');
+    }
+  }
 
   function formattaTesto(raw) {
     // Rimuove marker [T] [F] [M] e spazi residui su riga
@@ -523,6 +553,8 @@
         const raw = await r.text();
         if (!raw || raw.trim().length < 10) throw new Error('Vuoto');
         testoBody.innerHTML = formattaTesto(raw);
+        // Applica sfondo allerta se presente nel testo
+        applicaSfondoAllerta(raw);
         aggiornaOra(raw);
         caricato = true;
       } catch(e) {
@@ -535,6 +567,20 @@
     testoOverlay.classList.remove('aperto');
     document.body.classList.remove('testo-open');
   }
+
+  // Fetch silenzioso di Lettura.txt al caricamento — per applicare sfondo allerta
+  // senza dover aprire il pannello testo
+  (async function fetchSilenzioso() {
+    try {
+      const url = 'Lettura.txt?v=' + Date.now();
+      const r   = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) return;
+      const raw = await r.text();
+      if (!raw || raw.trim().length < 10) return;
+      applicaSfondoAllerta(raw);
+      aggiornaOra(raw);
+    } catch(e) { /* silenzioso */ }
+  })();
 
   // Service Worker PWA
   if ('serviceWorker' in navigator) {

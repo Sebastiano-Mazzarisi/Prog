@@ -4,6 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>PodPutignano</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2980b9">
@@ -405,28 +408,19 @@
     return m + ':' + String(sec).padStart(2,'0');
   }
 
-  // Cache-busting MP3
-  const ts = Date.now();
-  const MP3_URL = `PodPutignano.mp3?v=${ts}`;
-  player.src = MP3_URL;
+  // Cache-busting MP3 — timestamp sempre fresco
+  function freshMP3() { return 'PodPutignano.mp3?v=' + Date.now(); }
+  player.src = freshMP3();
 
   async function checkMP3() {
     try {
-      const r = await fetch(MP3_URL, { method:'HEAD', cache:'no-store' });
-      if (r.ok) {
-        const lm = r.headers.get('last-modified');
-        if (lm) {
-          const d   = new Date(lm);
-          const ora = d.toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Rome' });
-          stato.textContent = `Notizie aggiornate alle ore ${ora}`;
-        } else {
-          stato.textContent = 'Puntata disponibile';
-        }
-      } else {
+      const r = await fetch(freshMP3(), { method:'HEAD', cache:'no-store' });
+      if (!r.ok) {
         stato.textContent = 'Puntata non ancora disponibile';
         btnPlay.disabled = true;
         btnPlay.style.opacity = '0.5';
       }
+      // L'orario viene impostato SOLO da aggiornaOra() leggendo Lettura.txt
     } catch { stato.textContent = 'Verifica connessione'; }
   }
   checkMP3();
@@ -544,7 +538,11 @@
         aggiornaOra(raw);
         caricato = true;
       } catch(e) {
-        testoBody.innerHTML = '<span style="color:#c0392b;padding:20px;display:block">Testo non disponibile (' + e.message + '). Riprova tra qualche minuto.</span>';
+        const isLocal = location.protocol === 'file:';
+        const msg = isLocal
+          ? 'In locale apri con: <code>python -m http.server 8080</code> poi vai su <b>localhost:8080</b>'
+          : 'Testo non disponibile (' + e.message + '). Riprova tra qualche minuto.';
+        testoBody.innerHTML = '<span style="color:#c0392b;padding:20px;display:block">' + msg + '</span>';
       }
     }
   }
@@ -554,9 +552,9 @@
     document.body.classList.remove('testo-open');
   }
 
-  // Fetch silenzioso di Lettura.txt al caricamento — per applicare sfondo allerta
-  // senza dover aprire il pannello testo
-  (async function fetchSilenzioso() {
+  // Fetch Lettura.txt: al caricamento e poi ogni 30 secondi
+  // Aggiorna orario, sfondo allerta e (se overlay aperto) il testo
+  async function aggiornaContenuto() {
     try {
       const url = 'Lettura.txt?v=' + Date.now();
       const r   = await fetch(url, { cache: 'no-store' });
@@ -565,8 +563,28 @@
       if (!raw || raw.trim().length < 10) return;
       applicaSfondoAllerta(raw);
       aggiornaOra(raw);
+      // Se il pannello testo è aperto, aggiorna anche il testo visibile
+      if (testoOverlay.classList.contains('aperto')) {
+        testoBody.innerHTML = formattaTesto(raw);
+      }
+      // Aggiorna sorgente MP3 con nuovo timestamp anti-cache
+      if (!player.paused) return; // non interrompere la riproduzione
+      const nuovoSrc = freshMP3();
+      if (player.src !== nuovoSrc) {
+        player.src = nuovoSrc;
+        caricato = false; // forza ricarica testo al prossimo click
+      }
+      // Riabilita play se era disabilitato
+      if (btnPlay.disabled) {
+        btnPlay.disabled = false;
+        btnPlay.style.opacity = '1';
+      }
     } catch(e) { /* silenzioso */ }
-  })();
+  }
+
+  // Esegui subito e poi ogni 30 secondi
+  aggiornaContenuto();
+  setInterval(aggiornaContenuto, 30000);
 
   // Service Worker PWA
   if ('serviceWorker' in navigator) {

@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 10 e 26.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 10 e 33.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,9 +12,9 @@
 
 [T] [M] NOTIZIE DALL'ITALIA
 
-[T] [F] Femminicidi di Villa Pamphili, disposta perizia psichiatrica per Kaufmann: La Corte d'Assise di Roma ha accolto la richiesta di perizia psichiatrica per Francis Kaufmann, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Altro tram esce dai binari a Milano, terzo incidente in dieci giorni: La carrozza centrale di un tram della linea 15 è uscita dai binari stamani nel Comune di Rozzano, al confine con Milano, un aggiornamento dal mondo dello sport italiano.
 
-[T] [M] Guerra in Iran, le news di oggi, Più di 30 feriti in Bahrein, Esplosioni a Doha, Tensione Usa Israele sui raid, Teheran: "Bilancio di 1.255 morti e circa 12 mila feriti": È Mojtaba Khamenei la nuova Guida suprema dell’Iran, Trump: "Senza la nostra approvazione durerà poco", Israele: "Lo uccideremo".
+[T] [M] Guerra in Iran, le news di oggi, Esplosioni a Doha, Tensione Usa Israele sui raid, Teheran: "Bilancio di 1.255 morti e circa 12 mila feriti", Putin si congratula con Mojtaba: È Mojtaba Khamenei la nuova Guida suprema dell’Iran, Trump: "Senza la nostra approvazione durerà poco", Israele: "Lo uccideremo".
 
 [T] [F] "Prima di salire sull’aereo mi hanno fatto comprare un secondo biglietto a causa del mio peso È stato come ricevere uno schiaffo in faccia": lo sfogo è virale: A gennaio di quest’anno, Southwest Airlines ha aggiornato la sua politica "Customer of Size", modificando le modalità di prenotazione dei voli per alcuni passeggeri, Stando alle linee guida.
 
@@ -28,10 +28,10 @@
 
 [T] [M] Giornata internazionale della Donna 2026 Comune di Gioia del Colle.
 
-[T] [F] Pallamano: Conversano espugna Trieste (20-25), Risultati e Classifica aggiornata pugliain.net.
+[T] [F] SSC Bari, giovanili: la Primavera vince il derby con il Monopoli, Sconfitta per l'Under 17 contro il Lecce Telebari.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] La terra su cui sorge Putignano non è fatta di pianure sabbiose, ma di solida pietra, La città è adagiata sulle Murge, un vasto altopiano calcareo che domina la Puglia centrale, È un paesaggio brullo, affascinante, scolpito dall'acqua nel corso dei millenni, che regala alla città un'atmosfera sospesa e un clima fresco e asciutto.
+[T] [F] C'è un dolce, a Putignano, che profuma di mandorle e di feste di nozze, Si chiama 'Intorcinato', un biscotto tipico la cui forma ricorda una treccia, o meglio, due mani che si stringono, Nasce infatti come dolce legato ai matrimoni e alle grandi celebrazioni, preparato rigorosamente a mano e spesso accompagnato da un buon bicchiere di liquore dolce.
 
 [T] [M] A risentirci a presto.

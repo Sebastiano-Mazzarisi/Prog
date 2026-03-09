@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 9 e 52.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 10 e 08.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 8 e 12 gradi e probabilità di pioggia. Per domani è previsto nebbia, con temperature tra 5 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi nebbia, con temperature tra 8 e 12 gradi e probabilità di pioggia. Per domani è previsto nebbia, con temperature tra 5 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,13 +12,13 @@
 
 [T] [M] NOTIZIE DALL'ITALIA
 
-[T] [F] Nuovi attacchi da Usa e Israele su Teheran: Gli Stati Uniti e Israele hanno ripreso i loro attacchi sulla capitale Teheran, Si sentono rumori di esplosioni, rileva l'ANSA sul posto, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Borsa: Milano riduce il calo (-1,6%) con Prysmian, banche e Stellantis: Riduce il calo Piazza Affari dopo oltre un'ora di scambi, L'indice Ftse Mib cede l'1, 6% % a 43.470 punti, con gran parte paniere in territorio negativo ad esclusione di pochi titoli, Sale a 80 punti il differenziale tra Btp e Bund decennali tedeschi.
 
-[T] [M] Carburanti, prodotti più cari e tassi in rialzo: perché il petrolio a 100 dollari è un problema: Il rincaro di benzina e diesel rende i trasporti più cari, portando a rincari per i normali beni di consumo, Il rialzo dell’inflazione riduce il potere di acquisto e rallenta l’economia.
+[T] [M] Guerra in Iran, le news di oggi, Più di 30 feriti in Bahrein, Esplosioni a Doha, Tensione Usa Israele sui raid, Teheran: "Bilancio di 1.255 morti e circa 12 mila feriti": È Mojtaba Khamenei la nuova Guida suprema dell’Iran, Trump: "Senza la nostra approvazione durerà poco", Israele: "Lo uccideremo".
 
-[T] [F] "La gente vuole ridere, vuole ridere due ore, C’è da imparare tutto per lo spettacolo all’arena Santa Giulia": Andrea Pucci posta un (con qualche frecciatina?), "Andrea che stai facendo?", gli chiede una voce fuori campo "Ma come che sto facendo, il 31 ottobre è dopodomani, non vedi qui c’è tutto lo spettacolo nuovo, qui bisogna impararlo a memoria", Esce di scena Sanremo 2026.
+[T] [F] Francesco Gabbani mantiene la promessa e duetta con PierC di X Factor durante il suo concerto: Francesco Gabbani è un uomo di parola, Il cantautore e giudice di X Factor aveva promesso al suo "pupillo" del talent di Sky PierC che lo avrebbe coinvolto nelle tappe del suo tour nei palazzetti.
 
-[T] [M] Drone Triton Usa dalla base di Sigonella al Golfo Persico: la missione tra Bushehr e l'isola di Kharg: Un drone MQ-4C Triton della Marina Usa, partito dalla base di Sigonella, e un Boeing P-8A Poseidon, hanno condotto una missione ISR (pattugliamento, monitoraggio e, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Benzina e diesel, quanto scende il prezzo con il taglio delle accise: come funziona il meccanismo dell?extra-gettito Iva: Arriva l?intervento del governo sui carburanti, dalla benzina al diesel, passando per Gpl e metano, Martedì il Consiglio dei ministri dovrebbe approvare un decreto per attivare il.
 
 [T] [F] Sciopero generale 9 marzo, tutti i settori a rischio Sky TG24 Sciopero lunedì 9 marzo, chi si ferma oggi: cosa fanno i trasporti Adnkronos Scioperi, settimana nera per chi viaggia: il 9 marzo stop generale, un aggiornamento dal mondo dello sport italiano.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Se guardate Putignano dall'alto, vi sembrerà un normale paese collinare, Ma il vero spettacolo è sotto i vostri piedi, Il suolo di questa zona è un classico esempio di ambiente carsico: letteralmente costellato di doline, gravine e inghiottitoi profondissimi, Un vero e proprio colabrodo naturale che nasconde un mondo sotterraneo tutto da scoprire.
+[T] [F] Passeggiando nel centro storico di Putignano, potreste camminare sopra antiche fabbriche senza saperlo, Sotto molti palazzi nobiliari del borgo antico si celano ancora oggi vecchi frantoi ipogei, Erano enormi macine per l'olio d'oliva ricavate scavando direttamente nella roccia sotterranea, dove le temperature costanti favorivano la conservazione dell'oro verde.
 
 [T] [M] A risentirci a presto.

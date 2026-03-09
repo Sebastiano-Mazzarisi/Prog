@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="PodPutignano">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjMjk4MGI5Ii8+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik05NiAxMTBhMjYgMjYgMCAwMDI2LTI2VjUyYTI2IDI2IDAgMDAtNTIgMHYzMmEyNiAyNiAwIDAwMjYgMjZ6bTQyLTI2YTQyIDQyIDAgMDEtODQgMEgzOGE1OCA1OCAwIDAwMTEyIDBoLTEyem0tNDIgNTRhNTggNTggMCAwMS01NS00MGgtOGE2NiA2NiAwIDAwMTE5IDBoLThhNTggNTggMCAwMS00OCA0MHYxNEg5MnYxNGg2MHYtMTRoLTI2di0xNHoiLz48L3N2Zz4=">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 
@@ -59,6 +59,14 @@
       color: #1a5276;
       letter-spacing: -0.5px;
       margin-bottom: 4px;
+    }
+    .data-oggi {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #1a5276;
+      letter-spacing: -0.5px;
+      margin-bottom: 2px;
+      text-align: center;
     }
     .subtitle {
       font-size: 0.95rem;
@@ -269,6 +277,7 @@
   </div>
 
   <h1>PodPutignano</h1>
+  <div class="data-oggi" id="dataOggi"></div>
   <p class="subtitle">Il podcast quotidiano di Putignano</p>
 
   <div id="stato">Caricamento in corso…</div>
@@ -334,6 +343,15 @@
 
 <script>
   const player    = document.getElementById('player');
+
+  // Data di oggi in formato GG/MM/AAAA
+  (function() {
+    const oggi = new Date();
+    const gg   = String(oggi.getDate()).padStart(2, '0');
+    const mm   = String(oggi.getMonth() + 1).padStart(2, '0');
+    const aaaa = oggi.getFullYear();
+    document.getElementById('dataOggi').textContent = gg + '/' + mm + '/' + aaaa;
+  })();
   const btnPlay   = document.getElementById('btnPlay');
   const iconPlay  = document.getElementById('iconPlay');
   const labelPlay = document.getElementById('labelPlay');

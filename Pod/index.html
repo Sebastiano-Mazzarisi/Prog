@@ -162,85 +162,101 @@
     }
     .info-pill svg { width: 13px; height: 13px; fill: #7fb3d3; }
 
-    /* ── Contatori ── */
-    .contatori {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-    .contatore {
-      background: rgba(41,128,185,0.08);
-      border-radius: 12px;
-      padding: 8px 12px;
-      text-align: center;
-      min-width: 64px;
-    }
-    .contatore .num {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #2980b9;
-      line-height: 1.2;
-    }
-    .contatore .lbl {
-      font-size: 0.68rem;
-      color: #7fb3d3;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
 
-    /* ── Pannello testo ── */
+
+    /* ── Pannello testo (modalità fullscreen) ── */
     .testo-panel {
       display: none;
-      margin-top: 16px;
-      background: rgba(255,255,255,0.65);
-      border-radius: 16px;
-      padding: 16px 18px;
-      max-height: 380px;
-      overflow-y: auto;
-      text-align: left;
-      border: 1px solid rgba(41,128,185,0.15);
-      font-size: 0.87rem;
-      color: #1a3a4a;
-      line-height: 1.75;
     }
 
-    /* Titolo-sezione dentro il pannello */
-    .testo-panel .sezione {
+    /* Overlay fullscreen attivo */
+    body.testo-open {
+      overflow: hidden;
+    }
+    .testo-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.97);
+      z-index: 1000;
+      flex-direction: column;
+      padding: 0;
+    }
+    .testo-overlay.aperto {
+      display: flex;
+    }
+    .testo-overlay-header {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(135deg, #5dade2, #2980b9);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(41,128,185,0.2);
+      flex-shrink: 0;
+    }
+    .btn-nascondi {
+      background: white;
+      color: #2980b9;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 28px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: 'Lato', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .btn-nascondi svg { width: 16px; height: 16px; fill: #2980b9; }
+    .testo-overlay-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px 40px;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      font-size: 0.95rem;
+      color: #1a3a4a;
+      line-height: 1.85;
+    }
+    /* Titolo-sezione dentro l'overlay */
+    .testo-overlay-body .sezione {
       display: block;
-      margin: 18px 0 6px;
-      padding: 5px 12px;
+      margin: 22px 0 8px;
+      padding: 6px 14px;
       background: linear-gradient(90deg, #2980b9 0%, #5dade2 100%);
       color: white;
       font-weight: 700;
-      font-size: 0.80rem;
+      font-size: 0.82rem;
       letter-spacing: 1px;
       text-transform: uppercase;
       border-radius: 6px;
     }
-    .testo-panel .sezione:first-child { margin-top: 4px; }
-    /* Sezione Protezione Civile: sfondo arancione */
-    .testo-panel .sezione-allerta {
+    .testo-overlay-body .sezione:first-child { margin-top: 4px; }
+    .testo-overlay-body .sezione-allerta {
       display: block;
-      margin: 18px 0 6px;
-      padding: 5px 12px;
+      margin: 22px 0 8px;
+      padding: 6px 14px;
       background: linear-gradient(90deg, #e67e22 0%, #f39c12 100%);
       color: white;
       font-weight: 700;
-      font-size: 0.80rem;
+      font-size: 0.82rem;
       letter-spacing: 1px;
       text-transform: uppercase;
       border-radius: 6px;
     }
-    .testo-panel .sezione-allerta:first-child { margin-top: 4px; }
-
-    /* Paragrafo normale dentro il pannello */
-    .testo-panel .para {
+    .testo-overlay-body .sezione-allerta:first-child { margin-top: 4px; }
+    .testo-overlay-body .para {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       color: #1a3a4a;
     }
+
+    /* stili sezioni ora in .testo-overlay-body */
 
     audio { display: none; }
   </style>
@@ -270,9 +286,9 @@
   </a>
 
   <!-- LEGGI TESTO -->
-  <button class="btn-secondary" onclick="toggleTesto()">
+  <button class="btn-secondary" onclick="apriTesto()">
     <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
-    <span id="labelLeggi">Leggi il testo</span>
+    Leggi il testo
   </button>
 
   <!-- PROGRESS BAR -->
@@ -286,16 +302,8 @@
     </div>
   </div>
 
-  <!-- CONTATORI -->
-  <div class="contatori" id="contatori" style="display:none">
-    <div class="contatore"><div class="num" id="cntItalia">–</div><div class="lbl">Italia</div></div>
-    <div class="contatore"><div class="num" id="cntPutignano">–</div><div class="lbl">Putignano</div></div>
-    <div class="contatore"><div class="num" id="cntParole">–</div><div class="lbl">Parole</div></div>
-    <div class="contatore"><div class="num" id="cntMin">–</div><div class="lbl">Min ~</div></div>
-  </div>
 
-  <!-- PANNELLO TESTO -->
-  <div class="testo-panel" id="testoPanel"></div>
+
 
   <hr class="divider">
 
@@ -312,6 +320,17 @@
 </div>
 
 <audio id="player" preload="metadata"></audio>
+
+<!-- OVERLAY TESTO FULLSCREEN -->
+<div class="testo-overlay" id="testoOverlay">
+  <div class="testo-overlay-header">
+    <button class="btn-nascondi" onclick="chiudiTesto()">
+      <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      Nascondi testo
+    </button>
+  </div>
+  <div class="testo-overlay-body" id="testoBody"></div>
+</div>
 
 <script>
   const player    = document.getElementById('player');
@@ -409,10 +428,6 @@
   });
 
   // ── LEGGI TESTO ───────────────────────────────────────────
-  const testoPanel = document.getElementById('testoPanel');
-  const labelLeggi = document.getElementById('labelLeggi');
-  const contatori  = document.getElementById('contatori');
-  let   caricato   = false;
 
   // Parole chiave che identificano un titolo-sezione in Lettura.txt
   const TITOLI_RE = /^(BUONGIORNO PUTIGNANO|PROTEZIONE CIVILE|METEO|FARMAC|NOTIZIE DALL|NOTIZIE DA PUTIGNANO|CURIOSIT|A RISENTIRCI)/i;
@@ -451,59 +466,44 @@
     return html;
   }
 
-  function calcolaContatori(raw) {
-    const righe = raw.split('\n');
 
-    // Trova indici sezioni
-    const iItalia   = righe.findIndex(r => /NOTIZIE DALL.ITALIA/i.test(r));
-    const iPut      = righe.findIndex(r => /NOTIZIE DA PUTIGNANO/i.test(r));
-    const iCur      = righe.findIndex(r => /CURIOSIT/i.test(r));
+  const testoOverlay = document.getElementById('testoOverlay');
+  const testoBody    = document.getElementById('testoBody');
+  let   caricato     = false;
 
-    const bloccoIt  = iItalia > -1 && iPut  > -1 ? righe.slice(iItalia+1,  iPut)  : [];
-    const bloccoPut = iPut    > -1 && iCur  > -1 ? righe.slice(iPut+1,     iCur)  : [];
-
-    const cntIt  = bloccoIt.filter(r  => /\[T(?:X)?\]\s*\[(?:F|M)\]/.test(r)).length;
-    const cntPut = bloccoPut.filter(r => /\[T(?:X)?\]\s*\[(?:F|M)\]/.test(r)).length;
-
-    // Parole nel testo pulito
-    const pulito = raw.replace(/\[.*?\]/g, '').trim();
-    const parole = pulito.split(/\s+/).filter(Boolean).length;
-    const minEst = Math.round(parole / 130);
-
-    document.getElementById('cntItalia').textContent    = cntIt    || '–';
-    document.getElementById('cntPutignano').textContent = cntPut   || '–';
-    document.getElementById('cntParole').textContent    = parole   || '–';
-    document.getElementById('cntMin').textContent       = minEst   || '–';
-    contatori.style.display = 'flex';
+  // Legge l'ora direttamente dal testo del podcast (più affidabile di last-modified)
+  function aggiornaOra(raw) {
+    const m = raw.match(/Sono le (\d+) e (\d{2})|Sono le (\d+) in punto/);
+    if (m) {
+      const h   = m[1] || m[3];
+      const min = m[2] ? ':' + m[2] : ':00';
+      stato.textContent = 'Notizie aggiornate alle ore ' + h + min;
+    }
   }
 
-  async function toggleTesto() {
-    if (testoPanel.style.display === 'block') {
-      testoPanel.style.display = 'none';
-      contatori.style.display  = 'none';
-      labelLeggi.textContent   = 'Leggi il testo';
-      return;
-    }
-    testoPanel.style.display = 'block';
-    labelLeggi.textContent   = 'Nascondi testo';
-
+  async function apriTesto() {
+    testoOverlay.classList.add('aperto');
+    document.body.classList.add('testo-open');
     if (!caricato) {
-      testoPanel.innerHTML = '<span style="color:#5d8aa8">Caricamento…</span>';
+      testoBody.innerHTML = '<span style="color:#5d8aa8;padding:20px;display:block">Caricamento…</span>';
       try {
-        const url = `Lettura.txt?v=${Date.now()}`;
-        const r   = await fetch(url, { cache:'no-store' });
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const url = 'Lettura.txt?v=' + Date.now();
+        const r   = await fetch(url, { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
         const raw = await r.text();
         if (!raw || raw.trim().length < 10) throw new Error('Vuoto');
-        testoPanel.innerHTML = formattaTesto(raw);
-        calcolaContatori(raw);
+        testoBody.innerHTML = formattaTesto(raw);
+        aggiornaOra(raw);
         caricato = true;
       } catch(e) {
-        testoPanel.innerHTML = `<span style="color:#c0392b">Testo non disponibile (${e.message}). Riprova tra qualche minuto.</span>`;
+        testoBody.innerHTML = '<span style="color:#c0392b;padding:20px;display:block">Testo non disponibile (' + e.message + '). Riprova tra qualche minuto.</span>';
       }
-    } else {
-      contatori.style.display = 'flex';
     }
+  }
+
+  function chiudiTesto() {
+    testoOverlay.classList.remove('aperto');
+    document.body.classList.remove('testo-open');
   }
 
   // Service Worker PWA

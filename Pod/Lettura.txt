@@ -1,6 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 15 e 11.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 15 e 19.
+
+[TX] [M] PROTEZIONE CIVILE - ALLERTA ROSSA
+
+[T] [F] ATTENZIONE: è in vigore un'allerta ROSSA della Protezione Civile per il comune di Putignano e per la provincia di Bari. Si raccomanda massima prudenza e di seguire le indicazioni delle autorità locali.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -16,11 +20,11 @@
 
 [T] [M] Le Borse di oggi, lunedì 9 marzo, Europa aspetta il G7 e limita i danni, Milano -1,5%: La guerra in Medio Oriente e il permanente blocco nello stretto di Hormuz portano in profondo rosso i mercati: petrolio oltre i 100 dollari, Le borse europee arrivano in ribasso a metà seduta anche se i listini hanno ridotto le perdite rispetto ai minimi dell'avvio.
 
-[T] [F] "Questa riforma non inciderà nella vita dei cittadini e non migliorerà la giustizia": Ficarra e Picone votano "NO" al Referendum sulla Giustizia: Anche Ficarra e Picone sono intervenuti nel dibattito sui Referendum per la Giustizia previsti per domenica 22 e lunedì 23 marzo, I due attori sono intervenuti con un pubblicato da Md – Magistratura Democratica per sostenere le ragioni del "NO".
+[T] [F] La maschera di Tony Pitony? Si può acquistare online ma il prezzo è folle: ecco a quanto è venduta su eBay: La partecipazione alla serata dei duetti del Festival di Sanremo ha portato a Tony Pitony una platea ben più ampia di quella che lo conosceca da che si esibiva nel circuito indie, Da quando è comparso all’Ariston per duettare con Ditonellapiaga.
 
-[T] [M] Drone Triton Usa dalla base di Sigonella al Golfo Persico: la missione tra Bushehr e l'isola di Kharg: Un drone MQ-4C Triton della Marina Usa, partito dalla base di Sigonella, e un Boeing P-8A Poseidon, hanno condotto una missione ISR (pattugliamento, monitoraggio e, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Guerra Iran, la Nato intercetta un nuovo missile sopra la Turchia: cosa è successo e perché si rischia l'escalation: Un nuovo missile iraniano è stato abbattuto dalla Nato nello spazio aereo turco, Lo ha annunciato in un comunicato il ministero della Difesa della Turchia "Un missile balistico.
 
-[T] [F] Turbanti e lotte intestine: il figlio di Khamenei non piaceva ai "puristi", una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Referendum, Meloni posta un : "Basta bufale, andate a votare e votate sì, I giudici hanno perso autorevolezza" Il Sole 24 ORE Referendum Giustizia, Meloni posta un : "Serve chiarezza, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +36,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] L'ultimo respiro del Carnevale di Putignano ha il suono di una campana gigante, La 'Campana dei Maccheroni' è un'enorme opera di cartapesta che viene posizionata nella piazza principale la sera del Martedì Grasso, Quando inizia a suonare, segna gli ultimi momenti di festa prima che scocchi la mezzanotte e inizi il digiuno quaresimale.
+[T] [F] Scendendo nella Grotta del Trullo non troverete rocce cupe e buie, ma uno spettacolo di colori, Le formazioni calcaree all'interno brillano di incredibili sfumature rossastre e rosate, Questo effetto magico è dovuto all'altissima presenza di ossido di ferro nella roccia locale, che 'arrugginisce' l'acqua creando stalattiti color corallo.
 
 [T] [M] A risentirci a presto.

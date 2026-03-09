@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 16 e 33.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 18 e 03.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi nebbia, con temperature tra 7 e 12 gradi. Per domani è previsto nebbia, con temperature tra 5 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi nebbia, con temperature tra 7 e 13 gradi. Per domani è previsto parzialmente nuvoloso, con temperature tra 5 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,26 +12,26 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Lloyds list, navi cinesi annunciano nazionalità per transito a Hormuz: Alcune navi legate alla Cina stanno diffondendo la loro nazionalità al momento di transitare lo stretto di Hormuz sebbene i grandi operatori del Paese siano ancora cauti nel muovere le loro imbarcazioni nella regione.
+[T] [F] Guerra all'Iran, altri 3 bombardieri B-52 Usa atterrati in base Gb: Altri tre B-52 americani, mastodontici bombardieri simbolo della Guerra Fredda, sono atterrati oggi nella base britannica della Raf di Fairford, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Le Borse di oggi, lunedì 9 marzo, Europa aspetta il G7 e limita i danni, Milano -1,5%: La guerra in Medio Oriente e il permanente blocco nello stretto di Hormuz portano in profondo rosso i mercati: petrolio oltre i 100 dollari, Le borse europee arrivano in ribasso a metà seduta anche se i listini hanno ridotto le perdite rispetto ai minimi dell'avvio.
+[T] [M] Le Borse oggi 9 marzo, Tensioni sui prezzi per l’Iran, Giorgetti: "Stretta monetaria sarebbe grave": La guerra in Medio Oriente e il permanente blocco nello stretto di Hormuz porta in profondo rosso i mercati Asiatici, I listini europei hanno ridotto le perdite rispetto ai minimi dell'avvio.
 
-[T] [F] "Non potevi andare in Liguria come fanno tutti i Cuneesi? Così in tre ore eri da La Russa a cenare sotto il busto del Duce?": la letterina di Luciana Littizzetto a Crosetto: Crosetto a Dubai mentre gli Usa e Israele lanciavano i primi missili verso l’Iran? A ironizzare sulla situazione ci ha pensato Luciana Littizzetto che, nel consueto appuntamento con Che tempo che fa.
+[T] [F] "Che piacere rivederti mister": l’incontro tra Wanda Nara e Spalletti a Milano: Wanda Nara e Luciano Spalletti insieme, tra selfie e sorrisi, La showgirl argentina e il tecnico della Juventus si sono incontrati a Milano, Wanda era in città già da domenica e ha assistito al derby tra Milan e Inter, postando alcune su sfondo rossonero.
 
 [T] [M] Cagliari, sedicenne travolta sulle strisce pedonali all’uscita da scuola: è gravissima: Una ragazza di 16 anni Ã¨ stata investita mentre attraversava la strada sulle strisce pedonali in viale Marconi a Cagliari all'uscita di scuola, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Guerra Iran, la Nato intercetta un nuovo missile sopra la Turchia: cosa è successo e perché si rischia l'escalation: Un nuovo missile iraniano è stato abbattuto dalla Nato nello spazio aereo turco, Lo ha annunciato in un comunicato il ministero della Difesa della Turchia "Un missile balistico.
+[T] [F] Drone Triton Usa dalla base di Sigonella al Golfo Persico: la missione tra Bushehr e l'isola di Kharg: Un drone MQ-4C Triton della Marina Usa, partito dalla base di Sigonella, e un Boeing P-8A Poseidon, hanno condotto una missione ISR (pattugliamento, monitoraggio e, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
-[T] [F] A Castellana Grotte "Vox Saeculorum" - Musica sacra antica e moderna a confronto: Nel'ambito della quinta edizione della Rassegna organistica itinerante internazionale, organizzata dall'associazione Amici della musica di Castellana Grotte presieduta da Grazia Salvatori, con il Contributo del Ministero dei Beni e delle attività culturali del Turismo, nella Città delle Grotte, bella occasione di ascolto con "Vox Saeculorum".
+[T] [F] Lo spettacolo 'Jucatúre' in scena a Gioia del Colle e Acquaviva delle Fonti 12 e 13 marzo 2026 BariToday.
 
-[T] [M] Lo spettacolo 'Jucatúre' in scena a Gioia del Colle e Acquaviva delle Fonti 12 e 13 marzo 2026 BariToday.
+[T] [M] Stornaiolo e Baldassara a Polignano a Mare in "Spos(s)ati" 11 marzo 2026 BariToday.
 
-[T] [F] Stornaiolo e Baldassara a Polignano a Mare in "Spos(s)ati" 11 marzo 2026 BariToday.
+[T] [F] SSC Bari, giovanili: la Primavera vince il derby con il Monopoli, Sconfitta per l'Under 17 contro il Lecce Telebari.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Ogni città ha il suo 'cattivo' nei libri di storia, A Putignano questo ruolo spetta a Giovan Battista Carafa, signore della città nel sedicesimo secolo, Noto per i suoi pesanti soprusi e le tasse asfissianti, il Conte Carafa esasperò a tal punto i cittadini da scatenare violente rivolte popolari, dimostrando il carattere fiero e indomito dei putignanesi.
+[T] [F] Oggi ci passeggiano le automobili e i pedoni, ma un tempo c'era l'acqua e il pericolo, L'antica cittadella murata di Putignano era interamente circondata da un profondo fossato difensivo, Con l'espansione moderna, il fossato è stato colmato ed è diventato l'attuale 'Estramurale', l'ampia strada ad anello che abbraccia l'intero centro storico.
 
 [T] [M] A risentirci a presto.

@@ -6,6 +6,16 @@ on:
     # = 6:00-21:00 ora solare italiana (UTC+1, nov-mar)
     - cron: '0,30 5-20 * * *'
   workflow_dispatch:
+    inputs:
+      allerta:
+        description: 'Livello allerta (lascia vuoto per nessuna, oppure: ROSSA, ARANCIONE)'
+        required: false
+        default: ''
+        type: choice
+        options:
+          - ''
+          - ROSSA
+          - ARANCIONE
 
 jobs:
   genera:
@@ -42,7 +52,23 @@ jobs:
           [ -f Allarme.mp3  ] && echo "✅ Allarme.mp3 trovato"  || echo "⚠️  Allarme.mp3 MANCANTE"
 
       - name: Genera PodPutignano.mp3 e Lettura.txt
-        run: python PodPutignano.py
+        run: |
+          # Parametro allerta: da workflow_dispatch input OPPURE da allerta.txt nel repo
+          ALLERTA_INPUT="${{ github.event.inputs.allerta }}"
+          ALLERTA_FILE=""
+          if [ -f allerta.txt ]; then
+            ALLERTA_FILE=$(cat allerta.txt | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+          fi
+          ALLERTA="${ALLERTA_INPUT:-$ALLERTA_FILE}"
+          if [ "$ALLERTA" = "ROSSA" ]; then
+            echo "🔴 Allerta ROSSA attiva"
+            python PodPutignano.py --ROSSA
+          elif [ "$ALLERTA" = "ARANCIONE" ]; then
+            echo "🟠 Allerta ARANCIONE attiva"
+            python PodPutignano.py --ARANCIONE
+          else
+            python PodPutignano.py
+          fi
 
       - name: Salva file nel repo
         run: |

@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 12 e 51.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 14 in punto.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi nebbia, con temperature tra 8 e 12 gradi e probabilità di pioggia. Per domani è previsto nebbia, con temperature tra 5 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi nebbia, con temperature tra 7 e 12 gradi e qualche possibilità di pioggia. Per domani è previsto nebbia, con temperature tra 5 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,26 +12,26 @@
 
 [T] [M] NOTIZIE DALL'ITALIA
 
-[T] [F] Meloni, il voto è sulla giustizia, non mi dimetto se vince il NO, "Vi dicono andare a votare per mandare a casa il governo, non conta quello che dice la riforma dicono, Consiglio di non cadere nella trappola: usano lo scudo del governo perché non vogliono una riforma che considero sacrosanta.
+[T] [F] Zelensky, '11 Paesi ci hanno chiesto aiuto contro i droni iraniani', "Undici paesi vicini dell'Iran, europei e americani" hanno chiesto aiuto all'Ucraina contro i droni iraniani, Lo afferma su Telegram il presidente ucraino Volodymyr Zelensky che ha presieduto il consiglio di sicurezza nazionale "Il Consiglio di Sicurezza Nazionale dell'Ucraina.
 
-[T] [M] Guerra in Iran, le news di oggi, Tensione Usa Israele sui raid, Premier Libano: "Pronti a negoziato con Tel Aviv", Tv Iran: "Mojtaba Khamenei ferito nella guerra": È Mojtaba Khamenei la nuova Guida suprema dell’Iran, Trump: "Senza la nostra approvazione durerà poco", Israele: "Lo uccideremo".
+[T] [M] Le Borse di oggi, lunedì 9 marzo, Europa aspetta il G7 e limita i danni, Milano -1,5%: La guerra in Medio Oriente e il permanente blocco nello stretto di Hormuz portano in profondo rosso i mercati: petrolio oltre i 100 dollari, Le borse europee arrivano in ribasso a metà seduta anche se i listini hanno ridotto le perdite rispetto ai minimi dell'avvio.
 
-[T] [F] Luciana Littizzetto ‘ravana’ dentro la gonna: "Faccio come i maschi", Fabio Fazio: "Non sei Raf", La gag a Che tempo che fa: Dopo Raf, è Luciana Littizzetto a "ravanarsi" in tv, Nel corso della puntata di "Che tempo che fa" andata in onda domenica 8 marzo sul Nove, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] "In missione per conto di Dio"? È arrivato il momento di fermare questi pazzi fanatici: È arrivato il momento di fermare questi pazzi fanatici, questi fondamentalisti religiosi che opprimono le donne e i gay e uccidono centinaia di migliaia di innocenti, Non dico bombardarli, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Come proteggere il portafoglio dagli choc geopolitici: materie prime, oro e bond: Ora più che mai, in tempi di scosse geopolitiche, choc energetici e incertezza, va curata la resilienza del portafoglio, Con una raccomandazione: più diversificazione ma niente, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Drone Triton Usa dalla base di Sigonella al Golfo Persico: la missione tra Bushehr e l'isola di Kharg: Un drone MQ-4C Triton della Marina Usa, partito dalla base di Sigonella, e un Boeing P-8A Poseidon, hanno condotto una missione ISR (pattugliamento, monitoraggio e, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Sciopero generale 9 marzo, tutti i settori a rischio Sky TG24 La maestra del nido: "Non vado al lavoro ho scelto la lotta, Ecco le ragioni dello sciopero" la Repubblica No, lunedì 9 marzo a Roma non c'è sciopero dei trasporti RomaToday Sciopero generale 9 marzo, un aggiornamento dal mondo dello sport italiano.
+[T] [F] Sciopero generale 9 marzo, tutti i settori a rischio Sky TG24 "Lotto per la parità, siamo discriminate ovunque" FLC CGIL No, lunedì 9 marzo a Roma non c'è sciopero dei trasporti RomaToday Sciopero generale 9 marzo, un aggiornamento dal mondo dello sport italiano.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
 [T] [F] A Castellana Grotte "Vox Saeculorum" - Musica sacra antica e moderna a confronto: Nel'ambito della quinta edizione della Rassegna organistica itinerante internazionale, organizzata dall'associazione Amici della musica di Castellana Grotte presieduta da Grazia Salvatori, con il Contributo del Ministero dei Beni e delle attività culturali del Turismo, nella Città delle Grotte, bella occasione di ascolto con "Vox Saeculorum".
 
-[T] [M] Giornata internazionale della Donna 2026 Comune di Gioia del Colle.
+[T] [M] Lo spettacolo 'Jucatúre' in scena a Gioia del Colle e Acquaviva delle Fonti 12 e 13 marzo 2026 BariToday.
 
-[T] [F] SSC Bari, giovanili: la Primavera vince il derby con il Monopoli, Sconfitta per l'Under 17 contro il Lecce Telebari.
+[T] [F] Stornaiolo e Baldassara a Polignano a Mare in "Spos(s)ati" 11 marzo 2026 BariToday.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Il centro storico di Putignano non è un labirinto casuale, ma è costruito su tre anelli concentrici chiamati 'i tre giri', Un tempo rispondevano a rigide regole sociali e di difesa: nel giro più interno c'erano i palazzi del potere e le chiese, in quello mediano le abitazioni dei benestanti, e in quello esterno, a ridosso delle mura, le case del popolo.
+[T] [F] A Putignano esiste un'istituzione decisamente insolita: l'Accademia delle Corna, Questo gruppo goliardico è l'anima del penultimo giovedì di Carnevale, dedicato agli uomini sposati, La mattina si inizia con il rito dell'ammasso delle corna in piazza, un momento di pura comicità che prepara la città al grande e goliardico taglio serale.
 
 [T] [M] A risentirci a presto.

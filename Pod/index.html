@@ -220,6 +220,20 @@
       border-radius: 6px;
     }
     .testo-panel .sezione:first-child { margin-top: 4px; }
+    /* Sezione Protezione Civile: sfondo arancione */
+    .testo-panel .sezione-allerta {
+      display: block;
+      margin: 18px 0 6px;
+      padding: 5px 12px;
+      background: linear-gradient(90deg, #e67e22 0%, #f39c12 100%);
+      color: white;
+      font-weight: 700;
+      font-size: 0.80rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 6px;
+    }
+    .testo-panel .sezione-allerta:first-child { margin-top: 4px; }
 
     /* Paragrafo normale dentro il pannello */
     .testo-panel .para {
@@ -401,13 +415,13 @@
   let   caricato   = false;
 
   // Parole chiave che identificano un titolo-sezione in Lettura.txt
-  const TITOLI_RE = /^(BUONGIORNO PUTIGNANO|METEO|FARMAC|NOTIZIE DALL|NOTIZIE DA PUTIGNANO|CURIOSIT|A RISENTIRCI)/i;
+  const TITOLI_RE = /^(BUONGIORNO PUTIGNANO|PROTEZIONE CIVILE|METEO|FARMAC|NOTIZIE DALL|NOTIZIE DA PUTIGNANO|CURIOSIT|A RISENTIRCI)/i;
 
   function formattaTesto(raw) {
     // Rimuove marker [T] [F] [M] e spazi residui su riga
     const righe = raw
       .split('\n')
-      .map(r => r.replace(/\[T\]|\[F\]|\[M\]/g, '').trim());
+      .map(r => r.replace(/\[TX\]|\[T\]|\[F\]|\[M\]/g, '').trim());
 
     let html = '';
     let bufPara = '';
@@ -423,7 +437,8 @@
       if (!riga) continue;
       if (TITOLI_RE.test(riga)) {
         flushPara();
-        html += `<span class="sezione">${riga}</span>`;
+        const cls = /PROTEZIONE CIVILE/i.test(riga) ? 'sezione-allerta' : 'sezione';
+        html += `<span class="${cls}">${riga}</span>`;
       } else {
         bufPara += (bufPara ? ' ' : '') + riga;
         // Vai a capo se la riga termina con punto
@@ -447,8 +462,8 @@
     const bloccoIt  = iItalia > -1 && iPut  > -1 ? righe.slice(iItalia+1,  iPut)  : [];
     const bloccoPut = iPut    > -1 && iCur  > -1 ? righe.slice(iPut+1,     iCur)  : [];
 
-    const cntIt  = bloccoIt.filter(r  => /\[T\]\s*\[(?:F|M)\]/.test(r)).length;
-    const cntPut = bloccoPut.filter(r => /\[T\]\s*\[(?:F|M)\]/.test(r)).length;
+    const cntIt  = bloccoIt.filter(r  => /\[T(?:X)?\]\s*\[(?:F|M)\]/.test(r)).length;
+    const cntPut = bloccoPut.filter(r => /\[T(?:X)?\]\s*\[(?:F|M)\]/.test(r)).length;
 
     // Parole nel testo pulito
     const pulito = raw.replace(/\[.*?\]/g, '').trim();
@@ -475,13 +490,16 @@
     if (!caricato) {
       testoPanel.innerHTML = '<span style="color:#5d8aa8">Caricamento…</span>';
       try {
-        const r   = await fetch(`Lettura.txt?v=${Date.now()}`, { cache:'no-store' });
+        const url = `Lettura.txt?v=${Date.now()}`;
+        const r   = await fetch(url, { cache:'no-store' });
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const raw = await r.text();
+        if (!raw || raw.trim().length < 10) throw new Error('Vuoto');
         testoPanel.innerHTML = formattaTesto(raw);
         calcolaContatori(raw);
         caricato = true;
       } catch(e) {
-        testoPanel.innerHTML = '<span style="color:#c0392b">Impossibile caricare Lettura.txt</span>';
+        testoPanel.innerHTML = `<span style="color:#c0392b">Testo non disponibile (${e.message}). Riprova tra qualche minuto.</span>`;
       }
     } else {
       contatori.style.display = 'flex';

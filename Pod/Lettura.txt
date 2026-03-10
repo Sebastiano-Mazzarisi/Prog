@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 10 e 10.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 11 e 08.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi rovesci leggeri, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 7 e 16 gradi.
+[T] [F] Oggi cielo coperto, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 16 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,11 +12,11 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Intascava tangenti da boss, in carcere dirigente Regione siciliana: Avrebbe fatto avere lavori a una società di un mafioso in cambio di soldi: con l'accusa di corruzione aggravata dall'aver favorito Cosa nostra, e in particolare il boss di Favara (Ag) Carmelo Vetro, è stato arrestato Giancarlo Teresi.
+[T] [F] Staffetta, rallenta l'aumento dei prezzi dei carburanti alla pompa: Rallenta ma non si ferma l'aumento dei prezzi dei carburanti alla pompa: se infatti il petrolio ha chiuso in brusco calo (il Brent questa mattina quotato sotto i 90 dollari) dopo le parole del presidente Usa Trump sulla "guerra quasi finita".
 
-[T] [M] Le Borse oggi, 10 marzo, L’Europa rimbalza sulle parole di Trump, ripiegano petrolio e gas: MILANO – Le parole di Donald Trump, che ha indicato come vicina la fine della guerra, infondono fiducia sui mercati, Rimbalza l’Europa in avvio, con gli indici tutti in positivo, Dopo la pesante seduta di ieri i listini dell’estremo oriente si sono mossi tutti in rialzo.
+[T] [M] Sinner contro Fonseca negli ottavi a Indian Wells, Orario e dove vedere il match in tv: Primo confronto tra l'altoatesino e il 19enne brasiliano, considerato da tutti il probabile terzo incomodo di domani nella lotta al vertice mondiale, Appuntamento alle 2 della notte italiana tra martedì e mercoledì.
 
-[T] [F] Attenzione alla nuova truffa della falsa riunione di lavoro, Microsoft lancia l’allarme: "Non cliccate sui link di Teams, Zoom o Meet, servono per prendere il controllo del vostro dispositivo", "Siamo lieti di informarla che la sua azienda è stata selezionata per presentare una proposta e un preventivo per una prossima opportunità di progetto", Inizia quasi sempre così la nuova.
+[T] [F] Indagato per concorso esterno il direttore del Policlinico di Messina Iacolino, ex eurodeputato Pdl "Favori al boss di Favara": Salvatore Iacolino, direttore generale del Policlinico di Messina ed ex parlamentare europeo del PdL, è indagato per concorso esterno in associazione mafiosa e corruzione aggravata, Secondo i magistrati della Dda di Palermo, guidati dal procuratore Maurizio de Lucia.
 
 [T] [M] Supernave cinese nello Stretto di Hormuz, il nuovo tassello (simbolico e strategico) della crisi: Nel pieno della crisi nel Golfo Persico, una grande nave cinese è apparsa nello Stretto di Hormuz, uno dei punti più strategici per il traffico energetico, una delle notizie più seguite in Italia nelle ultime ore.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Immaginate una piazza gremita, una gigantesca campana di cartapesta e un conto alla rovescia fatto di rintocchi, La sera del Martedì Grasso a Putignano, la Campana dei Maccheroni suona esattamente 365 volte, Ogni rintocco rappresenta un giorno dell'anno, un lungo addio alla carne e ai festeggiamenti sfrenati.
+[T] [F] Abbiamo detto che il Carnevale inizia il 26 dicembre per celebrare Santo Stefano, Ma a Putignano, il Santo Patrono si festeggia in grande stile anche sotto il sole cocente! Il 3 agosto la città si ferma per la festa patronale estiva, un tripudio di luminarie, bande musicali e fuochi d'artificio che illumina a giorno le calde notti pugliesi.
 
 [T] [M] A risentirci a presto.

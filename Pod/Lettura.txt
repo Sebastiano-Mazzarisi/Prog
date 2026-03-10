@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 8 e 03.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 9 e 02.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Gruppo Renault, Provost annuncia 36 nuovi modelli entro il 2030, Rimane l'ibrido: Il Gruppo Renault presenterà 36 nuovi modelli entro il 2030, Lo ha detto il ceo del gruppo François Provost, presentando a Parigi il piano di prodotto dei prossimi cinque anni 'In Europa - ha spiegato Provost - arriveranno 22 nuovi modelli.
+[T] [F] Colombia, ex guerriglieri delle Farc fuori dal nuovo Congresso: In Colombia, il partito Comunes, creato da ex membri delle estinte Farc, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Essere Jayson Tatum: L'ipotesi del fuoriclasse che rompe il giocattolo: uno dei dilemmi più affascinanti dello sport, un aggiornamento dal mondo dello sport italiano.
+[T] [M] Guerra in Iran, le news di oggi, La Turchia dispiega i Patriot sulla base Nato di Malatya: Nuovo attacco dell'Iran agli Emirati arabi, Pasdaran: "Saremo noi a decidere la fine della guerra" Drone colpisce gruppo di oppositori iraniani nel Nordest di Erbil, Un morto e diversi feriti in una zona residenziale di Manama, in Bahrein.
 
-[T] [F] Riaperto il caso sulla morte di David Rossi: così si rafforza l’ipotesi dell’omicidio: David Rossi, l’ex capo comunicazione del Monte dei Paschi di Siena, una notizia che ha scosso l'opinione pubblica italiana.
+[T] [F] L’Idf ordina l’evacuazione del sud del Libano: imminenti raid sulle città di Tiro e Sidone, L’ambasciata Usa ai suoi cittadini: "Andate via": L'articolo L’Idf ordina l’evacuazione del sud del Libano: imminenti raid sulle città di Tiro e Sidone, L’ambasciata Usa ai suoi cittadini: "Andate via" proviene da Il Fatto Quotidiano.
 
-[T] [M] Cambiano gli importi dell'Assegno unico, da marzo si calcolano con il nuovo Isee, E arrivano gli arretrati: Marzo sarà il primo mese del 2026 con gli importi calibrati sul nuovo Isee per l'assegno unico, E con il pagamento del 19 e 20 marzo, arriveranno anche gli arretrati degli, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Il petrolio sale e poi crolla dopo le parole di Trump "Energia, serve il piano Ue": Quella di ieri doveva essere una giornata di fuoco sui mercati internazionali, iniziata con il petrolio oltre i 100 dollari al barile, il boom degli spread europei e la paura per un forte rialzo, un aggiornamento dalla scena economica italiana.
 
-[T] [F] Guerra in Iran, le ultime notizie in diretta | Trump: "Guerra quasi finita", E si consulta per un'ora con Putin, I Pasdaran: "Saremo noi a decidere quando il conflitto terminerà" Corriere della Sera Trump: 'L'Iran colpito 20 volte più forte se fermasse i flussi di petrolio', una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Energia, le tre cause che ci affossano: La guerra scatenata da Israele e Stati Uniti contro l’Iran si prolunga e si complica, La pur limitata capacità reattiva delle forze armate iraniane si sta ora indirizzando, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Come si scopre una grotta spettacolare? A volte, per puro caso! La Grotta del Trullo di Putignano fu trovata casualmente nel 1931, Gli operai stavano scavando nella roccia per realizzare i condotti del nuovo acquedotto e della rete fognaria, quando improvvisamente il terreno si aprì, svelando questo incredibile scrigno sotterraneo.
+[T] [F] Tutti conoscono le Grotte di Castellana, ma Putignano ha un primato assoluto in Puglia, Sapevate che la Grotta del Trullo è stata la primissima grotta pugliese ad essere aperta al pubblico? Fu resa accessibile e illuminata per i turisti ben prima delle sue vicine più famose, inaugurando di fatto il turismo speleologico nella regione.
 
 [T] [M] A risentirci a presto.

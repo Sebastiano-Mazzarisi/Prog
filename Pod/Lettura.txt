@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 14 e 22.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 15 e 26.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi temporale, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 16 gradi.
+[T] [F] Oggi rovesci leggeri, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 16 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Cdm alle 17, nell'ordine del giorno né accise mobili né Piano Casa: Il Consiglio dei ministri è convocato alle 17, Come era già stato ipotizzato alla vigilia, all'ordine del giorno non sono previsti provvedimenti riguardanti le accise mobili né il Piano casa, Tra i provvedimenti in esame, a quanto si apprende.
+[T] [F] Londra, 'Gb Italia-Germania lavorano a opzioni per proteggere navi a Hormuz', "Lavorare insieme a una serie di opzioni per proteggere le navi commerciali nello Stretto di Hormuz, in risposta alle crescenti minacce dell'Iran", E' quanto hanno concordato in telefonate separate i leader d'Italia, Regno Unito e Germania, Keir Starmer e Friedrich Merz.
 
-[T] [M] Guerra in Iran, le news di oggi, Hegset: "Oggi sarà il giorno degli attacchi più intensi in Iran": Media: Trump disponibile a parlare con l’Iran, Ma Teheran dopo le minacce del presidente Usa a Khamenei: "Attento a non essere cancellato tu" Raid Idf a Teheran, Nuovo attacco dell'Iran agli Emirati arabi, Teheran attacca von der Leyen: "Ipocrita.
+[T] [M] Rai2, ascolti in picchiata con la striscia di Cerno, L’Usigrai protesta: basta esterni: Debutto flop per la striscia meloniana che ha ottenuto il 5,4% di share, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] "Viviamo agli ultimi piani e c’è il suo drone sempre a un metro dalla finestra, Mia moglie è infastidita": Rodri denunciato dai vicini: Rodri è stato denunciato dai suoi vicini di casa, Il motivo? Un drone, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Referendum, Fratoianni: "Parole di Bartolozzi? Dovrebbe dimettersi seduta stante, Voglio delegittimare la magistratura, lo diciamo dall’inizio", "Le parole di Bartolozzi sono il miglior spot per il no perché finalmente dicono quello che pensano, Questa "controriforma" vuole delegittimare la magistratura, noi lo diciamo dall’inizio, Ogni volta che parlanosiamo oltre, Dovrebbe dimettersi o essere dimessa seduta stante".
 
 [T] [M] Pensione anticipata senza limiti di età: perché uscire dal lavoro con 40 anni di contributi può diventare più facile, cosa dice la Cassazione: Nel sistema previdenziale italiano esiste una via di uscita dal lavoro che non dipende dall?età anagrafica ma dalla durata della carriera contributiva È la pensione anticipata.
 
-[T] [F] Energia, le tre cause che ci affossano: La guerra scatenata da Israele e Stati Uniti contro l’Iran si prolunga e si complica, La pur limitata capacità reattiva delle forze armate iraniane si sta ora indirizzando, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Attacchi in Libano e sugli Emirati, la guerra del petrolio AGI Iran, Trump: "Operazioni vanno bene, guerra quasi finita, Ora mondo è più sicuro" Sky TG24 Trump, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] La Chiesa Madre di Putignano è un edificio con doppia personalità, Se vi fermate all'esterno, ammirerete un austero e massiccio portale di epoca romanica, Ma appena varcate la soglia, sorpresa! L'interno è stato pesantemente rimaneggiato nei secoli successivi e vi accoglierà con un trionfo di stucchi, marmi e decorazioni in puro stile barocco.
+[T] [F] Putignano si trova in collina, ma non troppo lontana dal mare, Situata a circa 372 metri sul livello del mare, gode di una posizione strategica che le permette di avere estati ventilate e inverni frizzanti, Questa altitudine perfetta ha reso la zona da sempre ideale per l'agricoltura e, fin dall'antichità, un rifugio sicuro dalle zanzare delle coste.
 
 [T] [M] A risentirci a presto.

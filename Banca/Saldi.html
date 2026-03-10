@@ -316,7 +316,7 @@
 
     <div class="card" id="cardNino" onclick="togglePannello('nino')">
       <div class="card-name">Nino</div>
-      <div class="card-val">€ 10.753</div>
+      <div class="card-val">€ 10.752</div>
     </div>
 
     <div class="card" id="cardMarica" onclick="togglePannello('marica')">
@@ -329,7 +329,7 @@
   <div class="card-total" id="cardTotale" onclick="togglePannello('totale')">
     <div class="total-top">
       <div class="total-label">Totale</div>
-      <div class="total-val">€ 15.588</div>
+      <div class="total-val">€ 15.587</div>
     </div>
     <div class="gauge-box">
       <div class="gauge-indicator"><div class="gauge-arrow"></div></div>
@@ -367,11 +367,6 @@
       <thead><tr><th>Data</th><th>Nino</th><th style="text-align:left;">Nota</th></tr></thead>
       <tbody>
         <tr>
-          <td class="dt">10/03/26</td>
-          <td class="num">€ 10.753</td>
-          <td class="nota-vuota">—</td>
-        </tr>
-        <tr>
           <td class="dt">08/03/26</td>
           <td class="num">€ 10.752</td>
           <td class="nota-vuota">—</td>
@@ -399,11 +394,6 @@
       <thead><tr><th>Data</th><th>Marica</th><th style="text-align:left;">Nota</th></tr></thead>
       <tbody>
         <tr>
-          <td class="dt">10/03/26</td>
-          <td class="num">€ 4.835</td>
-          <td class="nota-vuota">—</td>
-        </tr>
-        <tr>
           <td class="dt">08/03/26</td>
           <td class="num">€ 4.835</td>
           <td class="nota">Stipendio Marica (+)</td>
@@ -430,12 +420,6 @@
     <table>
       <thead><tr><th>Data</th><th>Nino</th><th>Marica</th><th>Totale</th></tr></thead>
       <tbody>
-        <tr>
-          <td class="dt">10/03/26</td>
-          <td class="num">€ 10.753</td>
-          <td class="num">€ 4.835</td>
-          <td class="tot">€ 15.588</td>
-        </tr>
         <tr>
           <td class="dt">08/03/26</td>
           <td class="num">€ 10.752</td>
@@ -475,10 +459,10 @@
 
 </div>
 
-<footer>Aggiornamento: 10 marzo 2026</footer>
+<footer>Aggiornamento: 8 marzo 2026</footer>
 
 <script>
-var TESTO_COPIA = 'Saldi al 10 marzo 2026\n..............................\nNino: € 10.753\nMarica: € 4.835\nTotale: € 15.588';
+var TESTO_COPIA = 'Saldi al 8 marzo 2026\n..............................\nNino: € 10.752\nMarica: € 4.835\nTotale: € 15.587';
 function copiaTesto() {
   navigator.clipboard.writeText(TESTO_COPIA).then(function() {
     var t = document.getElementById('toast');

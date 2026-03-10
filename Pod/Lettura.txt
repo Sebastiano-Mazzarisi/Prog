@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 21 e 01.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 22 in punto.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 14 gradi. Per domani è previsto nebbia, con temperature tra 6 e 16 gradi.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 14 gradi. Per domani è previsto nebbia, con temperature tra 6 e 16 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -14,13 +14,13 @@
 
 [T] [F] Schlein, Bartolozzi svela l'intenzione del governo, indebolire le toghe: Quelle di Giusi Bartolozzi "sono parole molto gravi, che svelano la vera intenzione del governo, Non è una sorpresa, è da settimane che ministri e premier delegittimano i magistrati, La riforma vuol fare questo.
 
-[T] [M] Guerra in Iran, news, Usa a Israele: "Fermare gli attacchi alle infrastrutture energetiche iraniane": Londra: "Lavoriamo con Roma e Berlino per proteggere le navi a Hormuz", Hegseth: "Oggi sarà il giorno degli attacchi più intensi in Iran", Media: Trump disponibile a parlare con l’Iran.
+[T] [M] Hoepli, bilancio sempre più in rosso e divisioni interne: così è finita una storia non solo milanese: I motivi che hanno portato alla decisione di liquidare la storica insegna: gli amministratori indicano nei primi sei mesi del 2025 una fase di "mercato depresso", la manualistica non tira più e pesa lo smart working.
 
-[T] [F] La Commissione Ue contro la presenza della Russia: minaccia di stop ai fondi, E i ministri di 22 Paesi scrivono a Buttafuoco: Il ritorno della Russia alla Biennale di Venezia fa insorgere la Commissione Europea e i ministri della Cultura e degli Esteri di 22 Paesi dell’Unione, Da un lato l’esecutivo Ue minaccia il taglio dei fondi all’esposizione internazionale d’arte.
+[T] [F] Svizzera, autobus a fuoco nel centro di Kerzers: "Ci sono diversi morti e feriti": Un autobus postale, un pullman adibito a servizio di linea, si è incendiato in Svizzera, Nel rogo diversi passeggeri sono morti mentre altri sono rimasti feriti, secondo quanto conferma la polizia cantonale, L’incidente è avvenuto nel tardo pomeriggio di martedì.
 
-[T] [M] Benzina, quali compagnie petrolifere stanno alzando più i prezzi nei distributori? La classifica dei rincari: Il prezzo dei carburanti in Italia continua a salire e il costo del pieno torna a incidere in modo significativo sui bilanci di famiglie e imprese, Le rilevazioni più recenti indicano che.
+[T] [M] Hormuz, ecco il piano di Italia, Gran Bretagna e Germania: "Così proteggiamo le navi nello Stretto": Le telefonate sono state fittissime, Perché lo Stretto di Hormuz è già diventato il centro della guerra a causa dei risvolti economici che comporta lo stop alla navigazione, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Famiglia nel bosco, il padre: "Voglio i bimbi a casa, ma stop a presìdi e proteste" Sky TG24 Famiglia nel bosco, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Trump: se l’Iran ha messo mine a Hormuz le rimuova o subirà conseguenze mai viste La Stampa La guerra in Medio Oriente, il 10 marzo - BLOG ANSA "Petroliera scortata a Hormuz", Tonfo del greggio, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Se camminate con il naso all'insù nel centro storico di Putignano, noterete tantissime 'edicole votive', Sono piccoli altari incastonati nei muri dei palazzi o agli angoli delle strade, che ospitano dipinti o statuette di santi, Un tempo, la fiammella della loro candela era l'unica vera illuminazione notturna per chi rincasava nel buio.
+[T] [F] C'è un pezzo di Putignano dall'altra parte dell'Oceano Atlantico, Tra la fine dell'Ottocento e i primi del Novecento, una fortissima ondata migratoria portò tantissimi putignanesi a cercare fortuna nelle Americhe, Moltissimi si stabilirono in Argentina, dove ancora oggi vivono intere comunità che tramandano il dialetto e le tradizioni della madrepatria.
 
 [T] [M] A risentirci a presto.

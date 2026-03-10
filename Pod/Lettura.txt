@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 9 marzo 2026, Santa Francesca Romana. Sono le 21 e 49.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 6 e 54.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi nebbia, con temperature tra 6 e 13 gradi. Per domani è previsto rovesci leggeri, con temperature tra 6 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 7 e 16 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,19 +12,19 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Australia, concesso asilo alle cinque calciatrici iraniane, (ANSA-AFP) - SYDNEY, 10 MAR - Le cinque calciatrici iraniane hanno ottenuto asilo in Australia, Lo ha detto il ministro degli Interni del Paese (ANSA-AFP), un aggiornamento dal fronte politico nazionale.
+[T] [F] Araghchi, 'Avanti con gli attacchi finché sarà necessario', (ANSA-AFP) - ROMA, 10 MAR - Il ministro degli Esteri iraniano Abbas Araghchi ha affermato che il Paese continuerà gli attacchi missilistici finché sarà necessario, un aggiornamento dal fronte politico nazionale.
 
-[T] [M] Le Borse oggi, Iran, tensioni sui prezzi, Giorgetti: "L’Ue adotti misure d’emergenza come nel 2022": La guerra in Medio Oriente e il permanente blocco nello stretto di Hormuz porta in profondo rosso i mercati Asiatici, I listini europei hanno ridotto le perdite rispetto ai minimi dell'avvio.
+[T] [M] Guerra in Iran, le news di oggi, Nuovo attacco dell'Iran agli Emirati arabi, Pasdaran: "Saremo noi a decidere la fine della guerra": Drone colpisce gruppo di oppositori iraniani nel Nordest di Erbil, Un morto e diversi feriti in una zona residenziale di Manama, in Bahrein, una notizia che ha scosso l'opinione pubblica italiana.
 
-[T] [F] Orsini: "Rido delle minacce di querela di Crosetto, Meloni? Comportamento tipico del presidente di uno Stato satellite della Casa Bianca", "Cosa vuole querelare Crosetto? Ad Accordi & Disaccordi ho spiegato che Giorgia Meloni, Antonio Tajani e Guido Crosetto, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Contro gli slogan ingannevoli del Sì, una guida di competenti scritta nel modo più semplice possibile: Anche se i sondaggi segnalano una continua crescita del NO, sono ancora tanti gli elettori indecisi o disinteressati che possono alla fine essere influenzati dalla massiccia campagna filogovernativa.
 
-[T] [M] Trump Putin, telefonata su Iran e Ucraina, Cremlino: "Avanzata russa in Donbass convinca Kiev a trattare, In Iran serve rapida soluzione": Al decimo giorno di guerra in Iran, squillano i telefoni di Donald Trump e Vladimir Putin, La lunga conversazione è stata incentrata sulla situazione in Iran e sui negoziati in.
+[T] [M] Il petrolio sale e poi crolla dopo le parole di Trump "Energia, serve il piano Ue": Quella di ieri doveva essere una giornata di fuoco sui mercati internazionali, iniziata con il petrolio oltre i 100 dollari al barile, il boom degli spread europei e la paura per un forte rialzo, un aggiornamento dalla scena economica italiana.
 
-[T] [F] Turbanti e lotte intestine: il figlio di Khamenei non piaceva ai "puristi", I pasdaran hanno vinto Corriere della Sera L'elezione di Mojtada Khamenei fa scivolare l'Iran nel solco delle monarchie ereditarie Avvenire Khamenei succede a Khamenei, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Energia, le tre cause che ci affossano: La guerra scatenata da Israele e Stati Uniti contro l’Iran si prolunga e si complica, La pur limitata capacità reattiva delle forze armate iraniane si sta ora indirizzando, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
-[T] [F] Lo spettacolo 'Jucatúre' in scena a Gioia del Colle e Acquaviva delle Fonti 12 e 13 marzo 2026 BariToday.
+[T] [F] Al Teatro comunale Rossini arriva la commedia "Jucatúre" Comune di Gioia del Colle.
 
 [T] [M] Stornaiolo e Baldassara a Polignano a Mare in "Spos(s)ati" 11 marzo 2026 BariToday.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Molto prima che i Romani costruissero le loro strade consolari, la terra di Putignano era già viva, Il territorio era infatti abitato dall'antica popolazione dei Peuceti, una tribù japigia che dominava la Puglia centrale, Scavi archeologici hanno riportato alla luce frammenti di ceramiche e antiche sepolture che testimoniano un passato glorioso e millenario.
+[T] [F] Immergersi nei vicoli di Putignano è come fare un salto nel passato, Lontano dalle vie dello shopping moderno, resistono ancora piccole botteghe artigiane dove il tempo sembra essersi fermato, Falegnami, calzolai e restauratori lavorano a porte aperte, lasciando che il rumore degli attrezzi e il profumo del legno invadano la strada.
 
 [T] [M] A risentirci a presto.

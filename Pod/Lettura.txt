@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 11 e 08.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 12 e 08.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 16 gradi.
+[T] [F] Oggi temporale, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 16 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Staffetta, rallenta l'aumento dei prezzi dei carburanti alla pompa: Rallenta ma non si ferma l'aumento dei prezzi dei carburanti alla pompa: se infatti il petrolio ha chiuso in brusco calo (il Brent questa mattina quotato sotto i 90 dollari) dopo le parole del presidente Usa Trump sulla "guerra quasi finita".
+[T] [F] Salvini, 'Mimit e Mef stanno lavorando sulle accise, non so se oggi in Cdm', "Oggi c'è Consiglio dei Ministri alle 17.00 e sulle accise ci stanno lavorando il Mimit e il Mef, non il ministro Salvini", Lo ha riferito Matteo Salvini, un aggiornamento dal fronte politico nazionale.
 
-[T] [M] Sinner contro Fonseca negli ottavi a Indian Wells, Orario e dove vedere il match in tv: Primo confronto tra l'altoatesino e il 19enne brasiliano, considerato da tutti il probabile terzo incomodo di domani nella lotta al vertice mondiale, Appuntamento alle 2 della notte italiana tra martedì e mercoledì.
+[T] [M] Guerra in Iran, le news di oggi, La Turchia dispiega i Patriot nella base Nato di Malatya: Nuovo attacco dell'Iran agli Emirati arabi, Pasdaran: "Saremo noi a decidere la fine della guerra", Teheran attacca von der Leyen: "Ipocrita, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Indagato per concorso esterno il direttore del Policlinico di Messina Iacolino, ex eurodeputato Pdl "Favori al boss di Favara": Salvatore Iacolino, direttore generale del Policlinico di Messina ed ex parlamentare europeo del PdL, è indagato per concorso esterno in associazione mafiosa e corruzione aggravata, Secondo i magistrati della Dda di Palermo, guidati dal procuratore Maurizio de Lucia.
+[T] [F] Cara Bartolozzi, i giovani se ne vanno dall’Italia per colpa della politica, non della magistratura, di Roberto Celante Ospite ad un programma tv sul referendum costituzionale del 22-23 marzo, il Capo di gabinetto del Ministro della Giustizia, Giusy Bartolozzi, ha sostenuto che, in caso di vittoria del Sì, i giovani emigrati italiani ritorneranno in Italia.
 
 [T] [M] Supernave cinese nello Stretto di Hormuz, il nuovo tassello (simbolico e strategico) della crisi: Nel pieno della crisi nel Golfo Persico, una grande nave cinese è apparsa nello Stretto di Hormuz, uno dei punti più strategici per il traffico energetico, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Energia, le tre cause che ci affossano: La guerra scatenata da Israele e Stati Uniti contro l’Iran si prolunga e si complica, La pur limitata capacità reattiva delle forze armate iraniane si sta ora indirizzando, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Guerra Ucraina, Putin a Trump: "Avanzata russa in Donbass convinca Kiev a trattare", Sky TG24 Trump, 'con Putin parlato di Ucraina, vuole essere d'aiuto in Medio Oriente' ANSA Ucraina - Russia, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Abbiamo detto che il Carnevale inizia il 26 dicembre per celebrare Santo Stefano, Ma a Putignano, il Santo Patrono si festeggia in grande stile anche sotto il sole cocente! Il 3 agosto la città si ferma per la festa patronale estiva, un tripudio di luminarie, bande musicali e fuochi d'artificio che illumina a giorno le calde notti pugliesi.
+[T] [F] A Putignano il Carnevale non si guarda, si vive, Sapevate che quasi tutta la popolazione cittadina fa parte di un'associazione o di un gruppo mascherato? Non esistono veri e propri spettatori: chiunque scenda in strada diventa parte integrante dello spettacolo, trasformando l'intero paese in un immenso e coloratissimo palcoscenico a cielo aperto.
 
 [T] [M] A risentirci a presto.

@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 9 e 02.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 10 e 10.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,13 +12,13 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Colombia, ex guerriglieri delle Farc fuori dal nuovo Congresso: In Colombia, il partito Comunes, creato da ex membri delle estinte Farc, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Intascava tangenti da boss, in carcere dirigente Regione siciliana: Avrebbe fatto avere lavori a una società di un mafioso in cambio di soldi: con l'accusa di corruzione aggravata dall'aver favorito Cosa nostra, e in particolare il boss di Favara (Ag) Carmelo Vetro, è stato arrestato Giancarlo Teresi.
 
-[T] [M] Guerra in Iran, le news di oggi, La Turchia dispiega i Patriot sulla base Nato di Malatya: Nuovo attacco dell'Iran agli Emirati arabi, Pasdaran: "Saremo noi a decidere la fine della guerra" Drone colpisce gruppo di oppositori iraniani nel Nordest di Erbil, Un morto e diversi feriti in una zona residenziale di Manama, in Bahrein.
+[T] [M] Le Borse oggi, 10 marzo, L’Europa rimbalza sulle parole di Trump, ripiegano petrolio e gas: MILANO – Le parole di Donald Trump, che ha indicato come vicina la fine della guerra, infondono fiducia sui mercati, Rimbalza l’Europa in avvio, con gli indici tutti in positivo, Dopo la pesante seduta di ieri i listini dell’estremo oriente si sono mossi tutti in rialzo.
 
-[T] [F] L’Idf ordina l’evacuazione del sud del Libano: imminenti raid sulle città di Tiro e Sidone, L’ambasciata Usa ai suoi cittadini: "Andate via": L'articolo L’Idf ordina l’evacuazione del sud del Libano: imminenti raid sulle città di Tiro e Sidone, L’ambasciata Usa ai suoi cittadini: "Andate via" proviene da Il Fatto Quotidiano.
+[T] [F] Attenzione alla nuova truffa della falsa riunione di lavoro, Microsoft lancia l’allarme: "Non cliccate sui link di Teams, Zoom o Meet, servono per prendere il controllo del vostro dispositivo", "Siamo lieti di informarla che la sua azienda è stata selezionata per presentare una proposta e un preventivo per una prossima opportunità di progetto", Inizia quasi sempre così la nuova.
 
-[T] [M] Il petrolio sale e poi crolla dopo le parole di Trump "Energia, serve il piano Ue": Quella di ieri doveva essere una giornata di fuoco sui mercati internazionali, iniziata con il petrolio oltre i 100 dollari al barile, il boom degli spread europei e la paura per un forte rialzo, un aggiornamento dalla scena economica italiana.
+[T] [M] Supernave cinese nello Stretto di Hormuz, il nuovo tassello (simbolico e strategico) della crisi: Nel pieno della crisi nel Golfo Persico, una grande nave cinese è apparsa nello Stretto di Hormuz, uno dei punti più strategici per il traffico energetico, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [F] Energia, le tre cause che ci affossano: La guerra scatenata da Israele e Stati Uniti contro l’Iran si prolunga e si complica, La pur limitata capacità reattiva delle forze armate iraniane si sta ora indirizzando, una delle notizie più seguite in Italia nelle ultime ore.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Tutti conoscono le Grotte di Castellana, ma Putignano ha un primato assoluto in Puglia, Sapevate che la Grotta del Trullo è stata la primissima grotta pugliese ad essere aperta al pubblico? Fu resa accessibile e illuminata per i turisti ben prima delle sue vicine più famose, inaugurando di fatto il turismo speleologico nella regione.
+[T] [F] Immaginate una piazza gremita, una gigantesca campana di cartapesta e un conto alla rovescia fatto di rintocchi, La sera del Martedì Grasso a Putignano, la Campana dei Maccheroni suona esattamente 365 volte, Ogni rintocco rappresenta un giorno dell'anno, un lungo addio alla carne e ai festeggiamenti sfrenati.
 
 [T] [M] A risentirci a presto.

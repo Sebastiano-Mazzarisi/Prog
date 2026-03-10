@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 6 e 54.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 8 e 03.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 7 e 16 gradi.
+[T] [F] Oggi rovesci leggeri, con temperature tra 5 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 7 e 16 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Araghchi, 'Avanti con gli attacchi finché sarà necessario', (ANSA-AFP) - ROMA, 10 MAR - Il ministro degli Esteri iraniano Abbas Araghchi ha affermato che il Paese continuerà gli attacchi missilistici finché sarà necessario, un aggiornamento dal fronte politico nazionale.
+[T] [F] Gruppo Renault, Provost annuncia 36 nuovi modelli entro il 2030, Rimane l'ibrido: Il Gruppo Renault presenterà 36 nuovi modelli entro il 2030, Lo ha detto il ceo del gruppo François Provost, presentando a Parigi il piano di prodotto dei prossimi cinque anni 'In Europa - ha spiegato Provost - arriveranno 22 nuovi modelli.
 
-[T] [M] Guerra in Iran, le news di oggi, Nuovo attacco dell'Iran agli Emirati arabi, Pasdaran: "Saremo noi a decidere la fine della guerra": Drone colpisce gruppo di oppositori iraniani nel Nordest di Erbil, Un morto e diversi feriti in una zona residenziale di Manama, in Bahrein, una notizia che ha scosso l'opinione pubblica italiana.
+[T] [M] Essere Jayson Tatum: L'ipotesi del fuoriclasse che rompe il giocattolo: uno dei dilemmi più affascinanti dello sport, un aggiornamento dal mondo dello sport italiano.
 
-[T] [F] Contro gli slogan ingannevoli del Sì, una guida di competenti scritta nel modo più semplice possibile: Anche se i sondaggi segnalano una continua crescita del NO, sono ancora tanti gli elettori indecisi o disinteressati che possono alla fine essere influenzati dalla massiccia campagna filogovernativa.
+[T] [F] Riaperto il caso sulla morte di David Rossi: così si rafforza l’ipotesi dell’omicidio: David Rossi, l’ex capo comunicazione del Monte dei Paschi di Siena, una notizia che ha scosso l'opinione pubblica italiana.
 
-[T] [M] Il petrolio sale e poi crolla dopo le parole di Trump "Energia, serve il piano Ue": Quella di ieri doveva essere una giornata di fuoco sui mercati internazionali, iniziata con il petrolio oltre i 100 dollari al barile, il boom degli spread europei e la paura per un forte rialzo, un aggiornamento dalla scena economica italiana.
+[T] [M] Cambiano gli importi dell'Assegno unico, da marzo si calcolano con il nuovo Isee, E arrivano gli arretrati: Marzo sarà il primo mese del 2026 con gli importi calibrati sul nuovo Isee per l'assegno unico, E con il pagamento del 19 e 20 marzo, arriveranno anche gli arretrati degli, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Energia, le tre cause che ci affossano: La guerra scatenata da Israele e Stati Uniti contro l’Iran si prolunga e si complica, La pur limitata capacità reattiva delle forze armate iraniane si sta ora indirizzando, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Guerra in Iran, le ultime notizie in diretta | Trump: "Guerra quasi finita", E si consulta per un'ora con Putin, I Pasdaran: "Saremo noi a decidere quando il conflitto terminerà" Corriere della Sera Trump: 'L'Iran colpito 20 volte più forte se fermasse i flussi di petrolio', una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Immergersi nei vicoli di Putignano è come fare un salto nel passato, Lontano dalle vie dello shopping moderno, resistono ancora piccole botteghe artigiane dove il tempo sembra essersi fermato, Falegnami, calzolai e restauratori lavorano a porte aperte, lasciando che il rumore degli attrezzi e il profumo del legno invadano la strada.
+[T] [F] Come si scopre una grotta spettacolare? A volte, per puro caso! La Grotta del Trullo di Putignano fu trovata casualmente nel 1931, Gli operai stavano scavando nella roccia per realizzare i condotti del nuovo acquedotto e della rete fognaria, quando improvvisamente il terreno si aprì, svelando questo incredibile scrigno sotterraneo.
 
 [T] [M] A risentirci a presto.

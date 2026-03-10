@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 16 e 38.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 18 e 02.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 5 e 14 gradi e qualche possibilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 16 gradi.
+[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 14 gradi. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 16 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,11 +12,11 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Iea convoca oggi riunione su crisi e rilascio riserve greggio: Il direttore geneale dell'Iea, l'agenzia internazionale per l'energia, Faith Birol ha annunciato, un aggiornamento dal mondo dello sport italiano.
+[T] [F] Borsa: l'Europa conclude in ampia crescita, bene Francoforte e Madrid: Mercati azionari del Vecchio continente tutti in ampio rialzo, il primo dall'avvio dei bombardamenti in Iran: sul raffreddamento dei prezzi di petrolio e gas, la Borsa migliore è stata quella di Madrid, che ha chiuso con un aumento del 2.
 
-[T] [M] Accise mobili e piano casa fuori dal Cdm, L’Ecofin frena: "Intervento con situazione più stabile": Palazzo Chigi non discuterà di interventi sui carburanti, Anche alla riunione dei ministri del Tesoro europei si respira cautela: "Il quadro è in continua evoluzione", un aggiornamento dal mondo dello sport italiano.
+[T] [M] Guerra in Iran, news, Hegseth: "Oggi sarà il giorno degli attacchi più intensi in Iran": Londra: "Regno Unito Italia-Germania lavorano a opzioni per proteggere le navi a Hormuz", Media: Trump disponibile a parlare con l’Iran, Ma Teheran dopo le minacce del presidente Usa a Khamenei: "Attento a non essere cancellato tu", Raid Idf a Teheran.
 
-[T] [F] Von der Leyen boccia la politica energetica Ue: "Sul ‘No’ al nucleare commesso un errore strategico", Salvini: "È uscita dalle nebbie": La presidente della Commissione europea, Ursula von der Leyen, boccia la strategia energetica che ha contribuito a disegnare per l’Unione europea, Lo fa non solo, come accaduto in passato e sta accadendo ancora.
+[T] [F] Dietro le proteste degli agricoltori c’è un disagio reale, Ma è tutta la filiera che va ripensata, di Yvan Sagnet e Simona Moscarelli Le proteste degli agricoltori che si sono svolte in questi giorni in diverse città europee hanno riportato al centro del dibattito pubblico la crisi del settore agricolo, Trattori nelle piazze e manifestazioni raccontano un disagio reale.
 
 [T] [M] Pensione anticipata senza limiti di età: perché uscire dal lavoro con 40 anni di contributi può diventare più facile, cosa dice la Cassazione: Nel sistema previdenziale italiano esiste una via di uscita dal lavoro che non dipende dall?età anagrafica ma dalla durata della carriera contributiva È la pensione anticipata.
 
@@ -26,12 +26,12 @@
 
 [T] [F] Al Teatro comunale Rossini arriva la commedia "Jucatúre" Comune di Gioia del Colle.
 
-[T] [M] Pallamano A/M Gold, Conversano espugna Trieste: aggancio in classifica Antenna Sud.
+[T] [M] Alberobello presenta l’almanacco dello sport: una memoria viva della città BariToday.
 
-[T] [F] Stornaiolo e Baldassara a Polignano a Mare in "Spos(s)ati" 11 marzo 2026 BariToday.
+[T] [F] Pallamano A/M Gold, Conversano espugna Trieste: aggancio in classifica Antenna Sud.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Oggi ci passeggiano le automobili e i pedoni, ma un tempo c'era l'acqua e il pericolo, L'antica cittadella murata di Putignano era interamente circondata da un profondo fossato difensivo, Con l'espansione moderna, il fossato è stato colmato ed è diventato l'attuale 'Estramurale', l'ampia strada ad anello che abbraccia l'intero centro storico.
+[T] [F] Dove nascono i giganti del Carnevale di Putignano? Le enormi opere in cartapesta prendono vita in giganteschi capannoni situati alla periferia del paese, Veri e propri hangar dove, per mesi, squadre di artigiani, saldatori e pittori lavorano giorno e notte, tra impalcature e profumo di colla, per preparare i carri per le sfilate.
 
 [T] [M] A risentirci a presto.

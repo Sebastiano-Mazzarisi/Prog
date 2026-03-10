@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 12 e 08.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 12 e 57.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Salvini, 'Mimit e Mef stanno lavorando sulle accise, non so se oggi in Cdm', "Oggi c'è Consiglio dei Ministri alle 17.00 e sulle accise ci stanno lavorando il Mimit e il Mef, non il ministro Salvini", Lo ha riferito Matteo Salvini, un aggiornamento dal fronte politico nazionale.
+[T] [F] Arrestato per riciclaggio, il Papa manda via il vescovo caldeo di San Diego: Via il vescovo caldeo dell'eparchia di Saint Peter the Apostle di San Diego dei Caldei negli Stati Uniti, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Guerra in Iran, le news di oggi, La Turchia dispiega i Patriot nella base Nato di Malatya: Nuovo attacco dell'Iran agli Emirati arabi, Pasdaran: "Saremo noi a decidere la fine della guerra", Teheran attacca von der Leyen: "Ipocrita, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Il Maffeo Barberini di Caravaggio acquistato dallo Stato: Trenta milioni di euro per il dipinto che era in una collezione privata, La trattativa andava avanti da mesi, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Cara Bartolozzi, i giovani se ne vanno dall’Italia per colpa della politica, non della magistratura, di Roberto Celante Ospite ad un programma tv sul referendum costituzionale del 22-23 marzo, il Capo di gabinetto del Ministro della Giustizia, Giusy Bartolozzi, ha sostenuto che, in caso di vittoria del Sì, i giovani emigrati italiani ritorneranno in Italia.
+[T] [F] Il cane Bruin conquista il Crufts 2026: chi è il Clumber Spaniel dallo "sguardo un po’ così": Si chiama Bruin, all’anagrafe Sh Ch Vanitonia Soloist, ed è un Clumber Spaniel di quattro anni: è sttao lui il protagonista assoluto del Crufts 2026, la più prestigiosa esposizione canina del Regno Unito, Guidato dal suo padrone Lee Cox.
 
 [T] [M] Supernave cinese nello Stretto di Hormuz, il nuovo tassello (simbolico e strategico) della crisi: Nel pieno della crisi nel Golfo Persico, una grande nave cinese è apparsa nello Stretto di Hormuz, uno dei punti più strategici per il traffico energetico, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Guerra Ucraina, Putin a Trump: "Avanzata russa in Donbass convinca Kiev a trattare", Sky TG24 Trump, 'con Putin parlato di Ucraina, vuole essere d'aiuto in Medio Oriente' ANSA Ucraina - Russia, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Guerra in Iran, le ultime notizie in diretta | Larijani a Trump: "Attento a non essere cancellato tu", Netanyahu: "Non abbiamo ancora finito", La Turchia schiera i Patriot nella base Nato di Malatya, Corriere della Sera Iran, Trump: "Operazioni vanno bene, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] A Putignano il Carnevale non si guarda, si vive, Sapevate che quasi tutta la popolazione cittadina fa parte di un'associazione o di un gruppo mascherato? Non esistono veri e propri spettatori: chiunque scenda in strada diventa parte integrante dello spettacolo, trasformando l'intero paese in un immenso e coloratissimo palcoscenico a cielo aperto.
+[T] [F] Essere eletti 'Gran Cornuto dell'anno' a Putignano non è un'offesa, ma un onore goliardico! Durante il Giovedì dei Cornuti, l'Accademia locale seleziona un personaggio pubblico, un politico o un cittadino illustre a cui conferire questo titolo satirico, Un modo per esorcizzare la gelosia e ridere delle debolezze umane.
 
 [T] [M] A risentirci a presto.

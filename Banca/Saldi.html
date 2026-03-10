@@ -246,6 +246,61 @@
     font-size: .7rem;
     letter-spacing: .08em;
   }
+
+  /* ── Bottoni azione ── */
+  .azioni {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .btn-copia, .btn-pdf {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 10px;
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: transform .15s ease, filter .15s ease;
+  }
+  .btn-copia { background: #d0d0e8; color: #1a1a2e; }
+  .btn-pdf   { background: #d0d0e8; color: #1a1a2e; }
+  .btn-copia:hover, .btn-pdf:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+
+  /* Toast "Copiato!" */
+  #toast {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 8px 22px;
+    border-radius: 20px;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    z-index: 9999;
+    pointer-events: none;
+    animation: fadeInOut 2s ease forwards;
+  }
+  @keyframes fadeInOut {
+    0%   { opacity: 0; }
+    10%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
 </style>
 </head>
 <body>
@@ -382,11 +437,39 @@
     </table>
   </div>
 
+  <!-- Bottoni azione -->
+  <div class="azioni">
+    <button class="btn-copia" onclick="copiaTesto()">
+      📋 Copia
+    </button>
+    <a class="btn-pdf" href="Saldi_riepilogo.pdf" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6zm2-5h8v1H8v-1zm0-3h8v1H8v-1z"/>
+      </svg>
+      Apri PDF
+    </a>
+  </div>
+
+  <!-- Toast feedback -->
+  <div id="toast">✅ Copiato!</div>
+
 </div>
 
 <footer>Aggiornamento: 8 marzo 2026</footer>
 
 <script>
+var TESTO_COPIA = 'Saldi al 8 marzo 2026\n..............................\nNino: € 10.753\nMarica: € 4.834\nTotale: € 15.587';
+function copiaTesto() {
+  navigator.clipboard.writeText(TESTO_COPIA).then(function() {
+    var t = document.getElementById('toast');
+    t.style.display = 'block';
+    // Riavvia animazione
+    t.style.animation = 'none';
+    t.offsetHeight; // reflow
+    t.style.animation = 'fadeInOut 2s ease forwards';
+    setTimeout(function() { t.style.display = 'none'; }, 2000);
+  });
+}
 var PANNELLI = {
   nino:   { pannello: 'pannelloNino',   card: 'cardNino'   },
   marica: { pannello: 'pannelloMarica', card: 'cardMarica' },

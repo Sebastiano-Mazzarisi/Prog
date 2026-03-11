@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 12 e 58.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 14 e 23.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e qualche possibilità di pioggia.
+[T] [F] Oggi cielo sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e qualche possibilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] L'Ue avanza nella procedura contro l'Italia sulla plastica monouso: La Commissione europea ha deciso di portare avanti l'iter d'infrazione contro l'Italia per non aver recepito in modo completo e corretto la direttiva sulla plastica monouso e per aver violato gli obblighi previsti dalla direttiva sulla trasparenza del mercato unico.
+[T] [F] Petrolio ancora in netto rialzo a New York a 87,74 dollari al barile: Il petrolio apre in rialzo a New York dove le quotazioni guadagnano il 5,14% a 87,74 dollari al barile, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Le Borse oggi, 11 marzo, Il rilascio delle riserve non basta, petrolio torna a correre, Europa giù: Secondo il WSJ, l’Aie sarebbe pronta a un intervento record sulle scorte, Atteso in giornata il dato sull’inflazione di febbraio degli Stati Uniti, Intanto lo stretto di Hormuz continua a rimanere bloccato.
+[T] [M] Le Borse oggi, 11 marzo, Il premier giapponese Takaichi sbloccherà le riserve di petrolio lunedì: Secondo il WSJ, l’Aie sarebbe pronta a un intervento record sulle scorte, Atteso in giornata il dato sull’inflazione di febbraio degli Stati Uniti, Intanto lo stretto di Hormuz continua a rimanere bloccato.
 
-[T] [F] "Lewis Hamilton è innamorato pazzo di Kim Kardashian, gli amici sono sicuri: ha trovato finalmente l’anima gemella", I rumors sulla coppia più invidiata: Sembra proprio che sia cosa fatta, Lewis Hamilton e Kim Kardashian sono sempre più vicini e innamorati, A riferirlo è Us Weekly che ha contattato una fonte vicino alla coppia: "Stanno andando alla grande e sono davvero felici.
+[T] [F] La nostra destra sovranista si trova a ricevere lezioni di autonomia da un socialista: mandatela a casa!, di Angelo Palazzolo Oggi al governo c’è una leader di destra che ama definirsi "donna, cristiana", Donna, ma al punto da voler essere chiamata "il presidente del Consiglio"; madre.
 
-[T] [M] "Mojtaba Khamenei è sano e salvo", svelato il mistero sulle condizioni di salute della nuova Guida Suprema: La nuova Guida Suprema dell'Iran, Mojtaba Khamenei, è "sano e salvo" nonostante le ferite, A riferirlo è Yousef Pezeshkian, figlio del presidente iraniano, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Marco Cappato, archiviate le accuse di istigazione al suicidio per 2 malati accompagnati in Svizzera: La gip di Milano Sara Cipolla, accogliendo la richiesta della Procura e sulla base di una recente sentenza della Consulta del 2025 sul fine vita, ha disposto l'archiviazione delle inchieste per aiuto al suicidio nei confronti di Marco Cappato.
 
-[T] [F] Iran, oggi le comunicazioni di Meloni a Senato e Camera: la linea della premier Adnkronos Iran, Meloni: 'Crisi complessa, non entreremo in guerra, Tasse per chi specula sui carburanti' ANSA Opposizioni divise, un aggiornamento dal fronte politico nazionale.
+[T] [F] Iran, calciatrice a cui è stato concesso asilo in Australia cambia idea e mette nei guai le sue compagne: Una scelta dettata dalla paura, che però ha messo a repentaglio l'incolumità di alcune compagne, Una delle sei giocatrici della nazionale di calcio iraniana a cui è stato, un aggiornamento dal mondo dello sport italiano.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Cosa succede quando un ex convento chiude le porte alla religione e le apre alla cultura? A Putignano, l'antico convento delle Carmelitane è stato sapientemente restaurato, Il suo elegante chiostro interno, un tempo regno del silenzio, oggi è una vivace piazza coperta utilizzata come centro culturale e sede della ricca biblioteca comunale.
+[T] [F] Tutti conoscono le Grotte di Castellana, ma Putignano ha un primato assoluto in Puglia, Sapevate che la Grotta del Trullo è stata la primissima grotta pugliese ad essere aperta al pubblico? Fu resa accessibile e illuminata per i turisti ben prima delle sue vicine più famose, inaugurando di fatto il turismo speleologico nella regione.
 
 [T] [M] A risentirci a presto.

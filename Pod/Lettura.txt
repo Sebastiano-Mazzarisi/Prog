@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 14 e 23.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 15 e 29.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Petrolio ancora in netto rialzo a New York a 87,74 dollari al barile: Il petrolio apre in rialzo a New York dove le quotazioni guadagnano il 5,14% a 87,74 dollari al barile, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Borsa: Milano riduce calo (-0,8%) con l'Europa dopo l'avvio di Wall Street: Riducono le perdite le Borse europee dopo l'apertura di Wall Street che prende atto di dati sull'inflazione Usa a febbraio in linea con le stime mentre gli acquisti premiano il Nasdaq, un aggiornamento dalla scena economica italiana.
 
-[T] [M] Le Borse oggi, 11 marzo, Il premier giapponese Takaichi sbloccherà le riserve di petrolio lunedì: Secondo il WSJ, l’Aie sarebbe pronta a un intervento record sulle scorte, Atteso in giornata il dato sull’inflazione di febbraio degli Stati Uniti, Intanto lo stretto di Hormuz continua a rimanere bloccato.
+[T] [M] Meloni: "Disponibile a tavolo con opposizioni", Pd, M5s e Avs: "No a uso basi americane in Italia": È il giorno delle comunicazioni della presidente del Consiglio, in vista del consiglio europeo del 19 e 20 marzo e sulla crisi in Medio Oriente, Prima al Senato e poi, alla Camera "Qui non c'è un governo complice di decisioni altrui, né tantomeno isolato in Europa.
 
-[T] [F] La nostra destra sovranista si trova a ricevere lezioni di autonomia da un socialista: mandatela a casa!, di Angelo Palazzolo Oggi al governo c’è una leader di destra che ama definirsi "donna, cristiana", Donna, ma al punto da voler essere chiamata "il presidente del Consiglio"; madre.
+[T] [F] Torna l’incubo nelle aziende della logistica di Stellantis: 232 licenziamenti: Non c’è verso di far cambiare idea a Trasnova e alle sue sub-appaltatrici Logitech e Teknoservice: le aziende che lavorano nell’indotto di Stellantis, scaduto il prolungamento di un anno della commessa.
 
-[T] [M] Marco Cappato, archiviate le accuse di istigazione al suicidio per 2 malati accompagnati in Svizzera: La gip di Milano Sara Cipolla, accogliendo la richiesta della Procura e sulla base di una recente sentenza della Consulta del 2025 sul fine vita, ha disposto l'archiviazione delle inchieste per aiuto al suicidio nei confronti di Marco Cappato.
+[T] [M] Stretto di Hormuz, le conseguenze di una chiusura totale, Ecco perché l'Iran metterebbe in ginocchio l'economia mondiale: Quali conseguenze ci sarebbero se lo Stretto di Hormuz chiudesse del tutto? Il canale di trasporto petrolifero più trafficato al mondo, dove passa il 20% circa del petrolio.
 
-[T] [F] Iran, calciatrice a cui è stato concesso asilo in Australia cambia idea e mette nei guai le sue compagne: Una scelta dettata dalla paura, che però ha messo a repentaglio l'incolumità di alcune compagne, Una delle sei giocatrici della nazionale di calcio iraniana a cui è stato, un aggiornamento dal mondo dello sport italiano.
+[T] [F] Iran, "Khamenei è ferito e si nasconde": la sorte della Guida Suprema è un mistero Adnkronos Iran, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Tutti conoscono le Grotte di Castellana, ma Putignano ha un primato assoluto in Puglia, Sapevate che la Grotta del Trullo è stata la primissima grotta pugliese ad essere aperta al pubblico? Fu resa accessibile e illuminata per i turisti ben prima delle sue vicine più famose, inaugurando di fatto il turismo speleologico nella regione.
+[T] [F] L'arte a Putignano non è solo cartapesta e non si ferma in centro, La città è diventata un museo a cielo aperto grazie a svariati progetti di 'Street Art', Artisti di fama internazionale hanno colorato interi quartieri periferici, come il rione San Pietro Piturno, trasformando grigi palazzi popolari in gigantesche tele ricche di messaggi sociali.
 
 [T] [M] A risentirci a presto.

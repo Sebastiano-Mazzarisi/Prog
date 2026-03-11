@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 12 e 08.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 12 e 58.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Riccardo Muti e Orchestra Giovanile Cherubini con gli studenti dei conservatori, "Ho sempre ritenuto fondamentale l'incontro tra giovani strumentisti - afferma Riccardo Muti -, Ho voluto che i musicisti della mia Orchestra Giovanile Luigi Cherubini lavorassero fianco a fianco con gli studenti dei Conservatori, senza distinzioni.
+[T] [F] L'Ue avanza nella procedura contro l'Italia sulla plastica monouso: La Commissione europea ha deciso di portare avanti l'iter d'infrazione contro l'Italia per non aver recepito in modo completo e corretto la direttiva sulla plastica monouso e per aver violato gli obblighi previsti dalla direttiva sulla trasparenza del mercato unico.
 
-[T] [M] Guerra in Iran, le news di oggi, La fregata missilistica italiana arrivata a Cipro: Il figlio di Pezeshkian: "Mojtaba Khamenei ferito ma salvo", Colpite tre navi nello stretto di Hormuz, Dubai, due droni vicino all’aeroporto: quattro feriti, L’Iran avverte: "Colpiremo banche e centri economici di Usa e Israele", Idf bombarda Beirut.
+[T] [M] Le Borse oggi, 11 marzo, Il rilascio delle riserve non basta, petrolio torna a correre, Europa giù: Secondo il WSJ, l’Aie sarebbe pronta a un intervento record sulle scorte, Atteso in giornata il dato sull’inflazione di febbraio degli Stati Uniti, Intanto lo stretto di Hormuz continua a rimanere bloccato.
 
-[T] [F] "La gente ama ancora il rito della lattina ghiacciata aperta con gli amici ma non vuole più l’alcol": George Clooney lancia la sua birra analcolica Crazy Mountains: George Clooney torna a vendere bevande, Il celebre interprete di ER ha lanciato sul mercato una birra non alcolica chiamata Crazy Mountains, Sulla lattina, figura un cowboy a cavallo pronto a lanciare il suo lazo, Nel 2017 il trio Clooney.
+[T] [F] "Lewis Hamilton è innamorato pazzo di Kim Kardashian, gli amici sono sicuri: ha trovato finalmente l’anima gemella", I rumors sulla coppia più invidiata: Sembra proprio che sia cosa fatta, Lewis Hamilton e Kim Kardashian sono sempre più vicini e innamorati, A riferirlo è Us Weekly che ha contattato una fonte vicino alla coppia: "Stanno andando alla grande e sono davvero felici.
 
-[T] [M] Voli cancellati, 43 mila saltati in 12 giorni: 7 milioni di persone a terra, Stop da Australia e Nuova Zelanda verso l'Europa: Oltre 43 mila voli sospesi e 7,5 milioni di persone sono rimaste a terra, Sono questi i dati che emergono dopo 12 giorni di conflitto in Medio Oriente e la conseguente.
+[T] [M] "Mojtaba Khamenei è sano e salvo", svelato il mistero sulle condizioni di salute della nuova Guida Suprema: La nuova Guida Suprema dell'Iran, Mojtaba Khamenei, è "sano e salvo" nonostante le ferite, A riferirlo è Yousef Pezeshkian, figlio del presidente iraniano, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Milano, tram 27 prende fuoco in via Marco Bruto con una ventina di passeggeri a bordo: "C'era fumo ovunque" Corriere Milano Milano, principio di incendio su un tram con i passeggeri a bordo in via Marco Bruto Sky TG24 Milano, una notizia che riguarda la sicurezza del territorio nazionale.
+[T] [F] Iran, oggi le comunicazioni di Meloni a Senato e Camera: la linea della premier Adnkronos Iran, Meloni: 'Crisi complessa, non entreremo in guerra, Tasse per chi specula sui carburanti' ANSA Opposizioni divise, un aggiornamento dal fronte politico nazionale.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Oggi ci passeggiano le automobili e i pedoni, ma un tempo c'era l'acqua e il pericolo, L'antica cittadella murata di Putignano era interamente circondata da un profondo fossato difensivo, Con l'espansione moderna, il fossato è stato colmato ed è diventato l'attuale 'Estramurale', l'ampia strada ad anello che abbraccia l'intero centro storico.
+[T] [F] Cosa succede quando un ex convento chiude le porte alla religione e le apre alla cultura? A Putignano, l'antico convento delle Carmelitane è stato sapientemente restaurato, Il suo elegante chiostro interno, un tempo regno del silenzio, oggi è una vivace piazza coperta utilizzata come centro culturale e sede della ricca biblioteca comunale.
 
 [T] [M] A risentirci a presto.

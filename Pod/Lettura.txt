@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 20 e 04.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 21 in punto.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 15 gradi e probabilità di pioggia.
+[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 15 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,26 +12,26 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Meloni al Pd, 'sì a Usa che ci liberano da nazifascismo ma no a intervento in Iran?, "Sappiamo che la tentazione di esportare la democrazia con la forza è da molti anni argomento di dibattito, Io non ne sono mai stata una fervida sostenitrice, Da una parte c'è il rischio di dar vita a un atto di arroganza tipica di una visione, eurocentrica del mondo.
+[T] [F] Conte, 'Meloni ha perso l'aplomb, spregiudicata e priva di scrupoli', "La presidente non ce l'ha fatta, ha perso l'aplomb in un momento così drammatico e ha cominciato a gettar fango, Lei ha detto bene, lei non è come me, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Meloni: "No a strabismo Pd, bombe Usa vanno bene solo con un governo dem?": Lunga maratona in aula, prima al Senato e poi alla Camera, per le comunicazioni della presidente del Consiglio, in vista del consiglio europeo del 19 e 20 marzo e sulla crisi in Medio Oriente "Qui non c'è un governo complice di decisioni altrui, né tantomeno isolato in Europa.
+[T] [M] Guerra Ucraina: Witkoff: "Segnali di svolta nei negoziati, le parti sono stanche" Il Cremlino accusa: "Specialisti britannici nel lancio di missili contro Bryansk", Zelensky: "Gli Usa propongono trilaterale per la prossima settimana", Kiev: "Due morti e 5 feriti in raid russo su Kharkiv".
 
-[T] [F] L’Ue impone nuove sanzioni all’Iran, ma dimentica l’attacco di Usa e Israele e i crimini a Gaza: Mentre chiede una de-escalation rapida del nuovo conflitto mediorientale scatenato dall’attacco di Stati Uniti e Israele all’Iran, l’Unione europea, già finita sotto accusa per l’appoggio esplicito all’azione di Washington e Tel Aviv.
+[T] [F] Paralimpiadi, l’Ucraina accusa: "Rimossa nostra bandiera", La replica: "Solo spostata nella loro area residenziale": È ancora polemica tra il Comitato paralimpico dell’Ucraina e il Comitato Paralimpico Internazionale in occasione dei Giochi Paralimpici di Milano Cortina, Dopo le proteste per l’ammissione degli atleti di Russia e Bielorussia con tanto di inno e bandiera.
 
-[T] [M] Pentagono, spesi 93 miliardi in un mese: sul conto anche aragoste, ciambelle, migliaia di iPhone e un pianoforte: Il Pentagono ha speso in soli 30 giorni un totale di 93 miliardi di dollari, la cifra mensile più alta dalla crisi finanziaria del 2008, con una buona parte del bilancio utilizzata per.
+[T] [M] "Fu un Tomahawk Usa a colpire la scuola iraniana", Chiusa l'indagine: 170 morti (la maggior parte bambine): Un missile da crociera Tomahawk lanciato dagli Stati Uniti avrebbe colpito per errore la scuola elementare femminile Shajareh Tayyebeh a Minab, nel sud dell?Iran, provocando almeno 175.
 
-[T] [F] Hormuz, il giallo della petroliera scortata fa crollare il greggio, Trump: se Teheran ha messo mine le rimuova Il Sole 24 ORE Teheran: 'Preparatevi al petrolio a 200 dollari', una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Guerra Iran, Trump: "Petroliere usino Hormuz, non ci sono mine", Teheran: "Pagherete il greggio fino a 200 dollari al barile" Il Messaggero Teheran: 'Preparatevi al petrolio a 200 dollari', una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
-[T] [F] Servizio Civile Universale: a Castellana Grotte due progetti per i giovani che vogliono costruire il futuro della comunità Comune di Castellana Grotte.
+[T] [F] "A casa di Freud": adolescenza in scena con il Liceo Majorana di Putignano: Chi e come sono gli adolescenti oggi? Fragili, ma sono anche la prima generazione capace di riconoscerlo, A raccontarlo è lo spettacolo "A casa di Freud", risultato finale del laboratorio teatrale di storie e filosofia del Liceo "Majorana Laterza" di Putignano, Lo spettacolo è andato in scena venerdì 27 febbraio presso il teatro Anchecinema di Bari, Continua a leggere L'articolo "A casa di Freud": adolescenza in scena con il Liceo Majorana di Putignano sembra essere il primo su Faxonline.it.
 
-[T] [M] NOWAR: a Polignano a Mare la resistenza dell’arte tra mimesi e materia Collezione da Tiffany.
+[T] [M] Servizio Civile Universale: a Castellana Grotte due progetti per i giovani che vogliono costruire il futuro della comunità Comune di Castellana Grotte.
 
-[T] [F] Alberobello presenta l’almanacco dello sport: una memoria viva della città BariToday.
+[T] [F] NOWAR: a Polignano a Mare la resistenza dell’arte tra mimesi e materia Collezione da Tiffany.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Cosa ci fa un pasto frugale da contadini nei menù dei ristoranti di lusso? La farinella di Putignano ha vissuto una vera e propria rinascita, Negli ultimi anni, questa polvere di legumi tostati è stata riscoperta da chef stellati e gastronomi, che la utilizzano per impanature croccanti, per addensare zuppe o per dare una nota affumicata ai piatti di alta cucina.
+[T] [F] Molto prima che i Romani costruissero le loro strade consolari, la terra di Putignano era già viva, Il territorio era infatti abitato dall'antica popolazione dei Peuceti, una tribù japigia che dominava la Puglia centrale, Scavi archeologici hanno riportato alla luce frammenti di ceramiche e antiche sepolture che testimoniano un passato glorioso e millenario.
 
 [T] [M] A risentirci a presto.

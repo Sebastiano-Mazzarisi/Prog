@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 15 e 29.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 16 e 27.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e qualche possibilità di pioggia.
+[T] [F] Oggi cielo sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,19 +12,19 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Borsa: Milano riduce calo (-0,8%) con l'Europa dopo l'avvio di Wall Street: Riducono le perdite le Borse europee dopo l'apertura di Wall Street che prende atto di dati sull'inflazione Usa a febbraio in linea con le stime mentre gli acquisti premiano il Nasdaq, un aggiornamento dalla scena economica italiana.
+[T] [F] Confesercenti, 'rischio stangata da 6,9 miliardi da carburanti e 7,1 dalle bollette': Con i rincari per carburanti, elettricità e gas il rischio è di una "stangata da 14 miliardi", 1 miliardi dalle bollette", una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Meloni: "Disponibile a tavolo con opposizioni", Pd, M5s e Avs: "No a uso basi americane in Italia": È il giorno delle comunicazioni della presidente del Consiglio, in vista del consiglio europeo del 19 e 20 marzo e sulla crisi in Medio Oriente, Prima al Senato e poi, alla Camera "Qui non c'è un governo complice di decisioni altrui, né tantomeno isolato in Europa.
+[T] [M] Guerra Ucraina: Il Cremlino accusa: "Specialisti britannici nel lancio di missili contro Bryansk", Zelensky: "Gli Usa propongono trilaterale per la prossima settimana", Kiev: "Due morti e 5 feriti in raid russo su Kharkiv", una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Torna l’incubo nelle aziende della logistica di Stellantis: 232 licenziamenti: Non c’è verso di far cambiare idea a Trasnova e alle sue sub-appaltatrici Logitech e Teknoservice: le aziende che lavorano nell’indotto di Stellantis, scaduto il prolungamento di un anno della commessa.
+[T] [F] La settimana del ‘NO’: dal Caffè Letterario al Teatro Italia, scopri tutti i nostri incontri: LA SETTIMANA DEL "NO": GLI INCONTRI E LA SERATA-EVENTO A pochi giorni dal voto sul referendum sulla giustizia e sulla separazione delle carriere, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Stretto di Hormuz, le conseguenze di una chiusura totale, Ecco perché l'Iran metterebbe in ginocchio l'economia mondiale: Quali conseguenze ci sarebbero se lo Stretto di Hormuz chiudesse del tutto? Il canale di trasporto petrolifero più trafficato al mondo, dove passa il 20% circa del petrolio.
+[T] [M] Petrolio, l'Aie sblocca 400 milioni di barili dalle riserve strategiche, Birol: "Difficoltà dei mercati senza precedenti, cruciale riaprire Hormuz": I 32 Paesi membri dell?Agenzia internazionale dell'energia (Aie) hanno deciso all?unanimità di immettere sul mercato 400 milioni di barili di petrolio provenienti dalle.
 
-[T] [F] Iran, "Khamenei è ferito e si nasconde": la sorte della Guida Suprema è un mistero Adnkronos Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Iran, Meloni al Senato: 'Crisi complessa, non entreremo in guerra' Sky TG24 Meloni: 'Non entreremo in guerra, Tasse per chi specula sui carburanti', Ok alla risoluzione di maggioranza ANSA Guerra in Iran, un aggiornamento dal fronte politico nazionale.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
-[T] [F] Servizio Civile Universale: a Castellana Grotte due progetti per i giovani che vogliono costruire il futuro della comunità Comune di Castellana Grotte.
+[T] [F] Fratelli d’Italia Castellana Grotte - Confronto con i cittadini sulle ragioni del Sì al referendum: Si è svolto domenica scorsa in Piazza Garibaldi il momento informativo organizzato dal coordinamento cittadino di Fratelli d’Italia Castellana Grotte, il gazebo dedicato al tema della riforma della giustizia e al referendum previsto per il 22 e 23 marzo, L’iniziativa ha rappresentato un importante momento di confronto con i cittadini.
 
 [T] [M] Gioia del Colle "Comune Plastic Free 2026": sabato 14 marzo la cerimonia di premiazione al Teatro Olimpico di Roma Comune di Gioia del Colle.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] L'arte a Putignano non è solo cartapesta e non si ferma in centro, La città è diventata un museo a cielo aperto grazie a svariati progetti di 'Street Art', Artisti di fama internazionale hanno colorato interi quartieri periferici, come il rione San Pietro Piturno, trasformando grigi palazzi popolari in gigantesche tele ricche di messaggi sociali.
+[T] [F] Oggi ci passeggiano le automobili e i pedoni, ma un tempo c'era l'acqua e il pericolo, L'antica cittadella murata di Putignano era interamente circondata da un profondo fossato difensivo, Con l'espansione moderna, il fossato è stato colmato ed è diventato l'attuale 'Estramurale', l'ampia strada ad anello che abbraccia l'intero centro storico.
 
 [T] [M] A risentirci a presto.

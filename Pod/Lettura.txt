@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 10 e 10.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 11 e 09.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e qualche possibilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Meloni, pronti ad aumentare tasse a chi specula sui carburanti, "Riguardo all'attuale aumento dei prezzi dei carburanti, il messaggio che voglio dare agli italiani ma anche a chi dovesse pensare di sfruttare questa situazione per arricchirsi sulla pelle dei cittadini e delle imprese è: consiglio prudenza.
+[T] [F] Von der Leyen, 'abbiamo bisogno dell'Ets, ma va modernizzato', "Senza l'Ets oggi consumeremmo 100 miliardi di metri cubi di gas in più, rendendoci ancora più vulnerabili e dipendenti, Abbiamo quindi bisogno dell'Ets, ma dobbiamo modernizzarlo", Lo ha detto la presidente della Commissione Ue, Ursula von der Leyen.
 
-[T] [M] Guerra in Iran, le news di oggi, Il figlio di Pezeshkian: "Mojtaba Khamenei ferito ma salvo": Dubai, due droni vicino all’aeroporto: quattro feriti, Von der Leyen: "10 giorni di guerra costati all'Ue 3 miliardi per energia", Teheran: "Il più vasto attacco contro obiettivi statunitensi e israeliani", Idf bombarda Beirut, Arabia Saudita neutralizza missili.
+[T] [M] Le Borse oggi, 11 marzo, Il rilascio delle riserve non basta, petrolio torna a correre, Europa giù: Secondo il WSJ, l’Aie sarebbe pronta a un intervento record sulle scorte, Atteso in giornata il dato sull’inflazione di febbraio degli Stati Uniti, Intanto lo stretto di Hormuz continua a rimanere bloccato.
 
-[T] [F] Trafficante di esseri umani arrestato a Caltanisetta: la sua organizzazione responsabile di 63 morti in mare: Arrestato a Caltanisetta un 41enne pakistano su cui pendeva un mandato internazionale da parte dell’Ufficio Interpol di Islamabad, L’accusa nei suoi confronti sarebbe di traffico di esseri umani, L’arresto è finalizzato all’estradizione.
+[T] [F] Principio di incendio su un tram a Milano: evacuati i passeggeri, nessun ferito: Ancora un episodio che riguarda un tram a Milano, il quarto negli ultimi giorni È stato registrato un principio d’incendio martedì mattina su un tram della linea 27, Il mezzo Atm si trovava in via Marco Bruto, in zona Forlanini.
 
-[T] [M] Voli cancellati, 43 mila saltati in 12 giorni: 3 milioni di persone a terra, Stop da Australia e Nuova Zelanda verso l'Europa: Oltre 43 mila voli sospesi e 7,5 milioni di persone sono rimaste a terra, Sono questi i dati che emergono dopo 12 giorni di conflitto in Medio Oriente e la conseguente.
+[T] [M] Voli cancellati, 43 mila saltati in 12 giorni: 7 milioni di persone a terra, Stop da Australia e Nuova Zelanda verso l'Europa: Oltre 43 mila voli sospesi e 7,5 milioni di persone sono rimaste a terra, Sono questi i dati che emergono dopo 12 giorni di conflitto in Medio Oriente e la conseguente.
 
-[T] [F] Iran, oggi le comunicazioni di Meloni a Senato e Camera: la linea della premier Adnkronos Iran: Meloni, crisi più complesse degli ultimi decenni, serve serietà ANSA Iran, le comunicazioni di Giorgia Meloni in Parlamento: segui la diretta Il Fatto Quotidiano Opposizioni divise, un aggiornamento dal fronte politico nazionale.
+[T] [F] Meloni al Senato: "Crisi complessa, Italia non vuole entrare in guerra" - Concluso intervento Meloni, applauso bipartisan su strage bambine in Iran RaiNews Iran, non vogliamo entrare in guerra, L'intervento di Usa e Israele fuori dal diritto' ANSA Opposizioni divise, una notizia che ha scosso l'opinione pubblica italiana.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] L'arte a Putignano non è solo cartapesta e non si ferma in centro, La città è diventata un museo a cielo aperto grazie a svariati progetti di 'Street Art', Artisti di fama internazionale hanno colorato interi quartieri periferici, come il rione San Pietro Piturno, trasformando grigi palazzi popolari in gigantesche tele ricche di messaggi sociali.
+[T] [F] I carri allegorici di Putignano non sono solo carri, sono capolavori riconosciuti a livello mondiale, Questa cittadina vanta un'eccellenza assoluta nella lavorazione della cartapesta, I maestri artigiani locali si tramandano di generazione in generazione segreti e tecniche per modellare la carta di giornale, trasformandola in sculture gigantesche e spettacolari.
 
 [T] [M] A risentirci a presto.

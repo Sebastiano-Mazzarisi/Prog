@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 6 e 56.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 8 e 07.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
+[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Indian Wells, Sinner batte Fonseca in due set e va ai quarti: Jannik Sinner ha sconfitto la stella nascente brasiliana Joao Fonseca per 7-6 (8/6), una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Compagnia Gb, 'colpite navi cargo nello Stretto di Hormuz', (ANSA-AFP) - DUBAI, 11 MAR - Un proiettile sconosciuto ha colpito una nave cargo nello Stretto di Hormuz, strategico al confine con l'Iran, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] L'Iran attacca basi militari statunitensi e israeliane: L'Iran sta lanciando attacchi nell'ambito contro la base statunitense di Erbil in Iraq, la base della Quinta Flotta della Marina statunitense in Bahrein e le vicinanze di Tel Aviv, secondo quanto comunicato dalla televisione di Stato iraniana, come riporta la Tass.
+[T] [M] Guerra in Iran, le news di oggi in diretta, Teheran: "Il più vasto attacco contro obiettivi statunitensi e israeliani", Idf bombarda Beirut, Arabia Saudita neutralizza missili: Oggi alle 15 videoconferenza dei paesi del G7 sulle conseguenze economiche della guerra in Medio Oriente, in particolare sulla situazione energetica e le misure per mitigarne l’impatto.
 
-[T] [F] Ricatti sessuali nelle redazioni: le storie di IrpiMedia mi hanno ricordato episodi che volevo dimenticare: C’è un’inchiesta coraggiosa su molestie, discriminazioni e violenze sessuali nelle redazioni dei media italiani, Se non verrà soffocata dal silenzio o respinta dai consueti muri di gomma.
+[T] [F] Futurare #0 | La rivoluzione sconosciuta: internet, dal 1986 ad oggi: Futurare, è il nuovo format de ilfattoquotidiano.it dedicato alla cultura dell’innovazione, In questa puntata inaugurale il vicedirettore Simone Ceriotti introduce il progetto e dialoga con Alessandro Cacciato, autore e conduttore del programma.
 
-[T] [M] Statali, nel nuovo contratto fino a 209 euro in più, Ecco gli aumenti in busta paga: Per i dipendenti statali in arrivo nuovi aumenti fino ad un massimo di quasi 209 euro lordi al mese, Il dato è contenuto nelle tabelle allegate alla bozza di contratto che atterrerà, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Indian Wells, Sinner batte Fonseca e vola ai quarti: Il tennista italiano affronterà ora un'altra giovane grande promessa, il ventenne americano Learner Tien, per un posto in semifinale, Paolini eliminata agli ottavi di finale, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] I cocci della guerra che non paga Trump: Il mondo sarebbe un posto migliore senza un Iran guidato dagli ayatollah, Ancor più il Medio Oriente, ancor più il popolo iraniano, Ma non sarà Donald Trump a sbarazzarsene, Il, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Daniela Zinnanti uccisa a coltellate a Messina, fermato l'ex compagno: era ai domiciliari e aveva il braccialetto elettronico: Una donna, Daniela Zinnanti, 50 anni compiuti a luglio, è stata uccisa con decine di coltellate ieri sera nella sua abitazione in via Lombardia, nel quartiere Lombardo a Messina, La polizia.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] A Putignano non c'è solo il Carnevale a richiamare migliaia di visitatori, Negli ultimi anni, il borgo si è trasformato in una meta imperdibile anche durante le feste invernali, grazie a un progetto chiamato 'Borgo Illuminato', Installazioni luminose, opere d'arte visiva e mercatini riempiono di magia i vicoli del centro storico aspettando il Capodanno.
+[T] [F] Tra tutti i Giovedì del Carnevale putignanese, quello 'dei Pazzi' è forse il più imprevedibile, In questa giornata la goliardia regna sovrana e le regole vengono sovvertite, Per strada è facile imbattersi in improvvisate bande di giovani che coinvolgono i passanti in scherzi e balli, celebrando la sana e pura follia liberatoria.
 
 [T] [M] A risentirci a presto.

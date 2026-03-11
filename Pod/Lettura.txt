@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 16 e 27.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 17 e 29.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
+[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Confesercenti, 'rischio stangata da 6,9 miliardi da carburanti e 7,1 dalle bollette': Con i rincari per carburanti, elettricità e gas il rischio è di una "stangata da 14 miliardi", 1 miliardi dalle bollette", una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Gratteri, 'so che significa essere un bersaglio, valuterò querela', "Prendo atto della ennesima polemica, Però io so bene cosa significa essere bersaglio di minacce, Il nostro ordinamento prevede 90 giorni di tempo per presentare una querela penale e cinque anni per l'azione civile.
 
-[T] [M] Guerra Ucraina: Il Cremlino accusa: "Specialisti britannici nel lancio di missili contro Bryansk", Zelensky: "Gli Usa propongono trilaterale per la prossima settimana", Kiev: "Due morti e 5 feriti in raid russo su Kharkiv", una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Meloni: "Disponibile a tavolo con opposizioni", Pd, M5s e Avs: "No a uso basi americane in Italia": È il giorno delle comunicazioni della presidente del Consiglio, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] La settimana del ‘NO’: dal Caffè Letterario al Teatro Italia, scopri tutti i nostri incontri: LA SETTIMANA DEL "NO": GLI INCONTRI E LA SERATA-EVENTO A pochi giorni dal voto sul referendum sulla giustizia e sulla separazione delle carriere, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Ricciardi (M5s) attacca Meloni: "Siete servi sciocchi della ‘coalizione Epstein'", "Abbiamo un gruppo di bianchi affamati di sangue, che possiamo definire ‘coalizione Epstein’, che nel Board of peace ha deciso di bombardare e precipitare nel caos una parte di mondo, Chi è che vela tutto questo di ipocrisia? Voi.
 
 [T] [M] Petrolio, l'Aie sblocca 400 milioni di barili dalle riserve strategiche, Birol: "Difficoltà dei mercati senza precedenti, cruciale riaprire Hormuz": I 32 Paesi membri dell?Agenzia internazionale dell'energia (Aie) hanno deciso all?unanimità di immettere sul mercato 400 milioni di barili di petrolio provenienti dalle.
 
-[T] [F] Iran, Meloni al Senato: 'Crisi complessa, non entreremo in guerra' Sky TG24 Meloni: 'Non entreremo in guerra, Tasse per chi specula sui carburanti', Ok alla risoluzione di maggioranza ANSA Guerra in Iran, un aggiornamento dal fronte politico nazionale.
+[T] [F] I cocci della guerra che non paga Trump: Il mondo sarebbe un posto migliore senza un Iran guidato dagli ayatollah, Ancor più il Medio Oriente, ancor più il popolo iraniano, Ma non sarà Donald Trump a sbarazzarsene, Il, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -28,10 +28,10 @@
 
 [T] [M] Gioia del Colle "Comune Plastic Free 2026": sabato 14 marzo la cerimonia di premiazione al Teatro Olimpico di Roma Comune di Gioia del Colle.
 
-[T] [F] Alberobello presenta l’almanacco dello sport: una memoria viva della città BariToday.
+[T] [F] NOWAR: a Polignano a Mare la resistenza dell’arte tra mimesi e materia Collezione da Tiffany.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Oggi ci passeggiano le automobili e i pedoni, ma un tempo c'era l'acqua e il pericolo, L'antica cittadella murata di Putignano era interamente circondata da un profondo fossato difensivo, Con l'espansione moderna, il fossato è stato colmato ed è diventato l'attuale 'Estramurale', l'ampia strada ad anello che abbraccia l'intero centro storico.
+[T] [F] Cosa succede a Putignano il giorno di Santo Stefano? Va in scena la 'Festa delle Propaggini', Attori dilettanti e poeti dialettali salgono sul palco vestiti con abiti tradizionali contadini, tenendo in mano un tralcio di vite, la cosiddetta 'propaggine', Da quel palco recitano versi satirici in rima, unendo la saggezza popolare alla presa in giro dei potenti.
 
 [T] [M] A risentirci a presto.

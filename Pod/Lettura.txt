@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 18 e 31.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 20 e 04.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 15 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Lo spread fra Btp e Bund conclude in aumento a 73,6 punti: Si è allargato lo spread fra Btp e e Bund, A fine giornata il differenziale si è portato a 73, 6 punti base punti base dai 69 della chiusura di martedì, In crescita i rendimenti: il decennale italiano è arrivato al 3, 52% della vigilia, quello tedesco è aumentato di 9.
+[T] [F] Meloni al Pd, 'sì a Usa che ci liberano da nazifascismo ma no a intervento in Iran?, "Sappiamo che la tentazione di esportare la democrazia con la forza è da molti anni argomento di dibattito, Io non ne sono mai stata una fervida sostenitrice, Da una parte c'è il rischio di dar vita a un atto di arroganza tipica di una visione, eurocentrica del mondo.
 
-[T] [M] Guerra Ucraina: Il Cremlino accusa: "Specialisti britannici nel lancio di missili contro Bryansk", Zelensky: "Gli Usa propongono trilaterale per la prossima settimana", Kiev: "Due morti e 5 feriti in raid russo su Kharkiv", una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Meloni: "No a strabismo Pd, bombe Usa vanno bene solo con un governo dem?": Lunga maratona in aula, prima al Senato e poi alla Camera, per le comunicazioni della presidente del Consiglio, in vista del consiglio europeo del 19 e 20 marzo e sulla crisi in Medio Oriente "Qui non c'è un governo complice di decisioni altrui, né tantomeno isolato in Europa.
 
-[T] [F] Epstein, i processi a Netanyahu e il ricatto a Trump: ecco cosa ci sarebbe dietro l’attacco all’Iran, di Eugenio Lanza "Edizione straordinaria: il mondo è ammalato! Ma per colpa di chi?", Questo gridava a squarciagola un contadino nel 1995, non nella vita reale, ma nell’intro di un popolare brano di Zucchero.
+[T] [F] L’Ue impone nuove sanzioni all’Iran, ma dimentica l’attacco di Usa e Israele e i crimini a Gaza: Mentre chiede una de-escalation rapida del nuovo conflitto mediorientale scatenato dall’attacco di Stati Uniti e Israele all’Iran, l’Unione europea, già finita sotto accusa per l’appoggio esplicito all’azione di Washington e Tel Aviv.
 
-[T] [M] Petrolio, l'Aie sblocca 400 milioni di barili dalle riserve strategiche, Birol: "Difficoltà dei mercati senza precedenti, cruciale riaprire Hormuz": I 32 Paesi membri dell?Agenzia internazionale dell'energia (Aie) hanno deciso all?unanimità di immettere sul mercato 400 milioni di barili di petrolio provenienti dalle.
+[T] [M] Pentagono, spesi 93 miliardi in un mese: sul conto anche aragoste, ciambelle, migliaia di iPhone e un pianoforte: Il Pentagono ha speso in soli 30 giorni un totale di 93 miliardi di dollari, la cifra mensile più alta dalla crisi finanziaria del 2008, con una buona parte del bilancio utilizzata per.
 
-[T] [F] Iran, Meloni al Senato: 'Crisi complessa, non entreremo in guerra' Sky TG24 Meloni: 'Non entreremo in guerra, Tasse per chi specula sui carburanti', un aggiornamento dal fronte politico nazionale.
+[T] [F] Hormuz, il giallo della petroliera scortata fa crollare il greggio, Trump: se Teheran ha messo mine le rimuova Il Sole 24 ORE Teheran: 'Preparatevi al petrolio a 200 dollari', una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] A Putignano c'è un trullo speciale che non serve per dormire, ma per scendere al centro della terra, È l'ingresso della 'Grotta del Trullo', l'attrazione naturale più celebre della città, Un mondo ipogeo fatto di stalattiti e stalagmiti millenarie, che si apre improvvisamente proprio alle porte del centro abitato.
+[T] [F] Cosa ci fa un pasto frugale da contadini nei menù dei ristoranti di lusso? La farinella di Putignano ha vissuto una vera e propria rinascita, Negli ultimi anni, questa polvere di legumi tostati è stata riscoperta da chef stellati e gastronomi, che la utilizzano per impanature croccanti, per addensare zuppe o per dare una nota affumicata ai piatti di alta cucina.
 
 [T] [M] A risentirci a presto.

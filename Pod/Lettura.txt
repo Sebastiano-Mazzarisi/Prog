@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 8 e 07.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 9 e 02.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Compagnia Gb, 'colpite navi cargo nello Stretto di Hormuz', (ANSA-AFP) - DUBAI, 11 MAR - Un proiettile sconosciuto ha colpito una nave cargo nello Stretto di Hormuz, strategico al confine con l'Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Lo spread tra Btp e Bund apre in rialzo a 71 punti: Avvio in rialzo per lo spread tra Btp e Bund, Il differenziale tra i due titoli di Stato apre la seduta a 71 punti dai 69 della vigilia, Il rendimento del decennale italiano sale al 3,58% dal 3,52% della chiusura di ieri, un aggiornamento dalla scena economica italiana.
 
-[T] [M] Guerra in Iran, le news di oggi in diretta, Teheran: "Il più vasto attacco contro obiettivi statunitensi e israeliani", Idf bombarda Beirut, Arabia Saudita neutralizza missili: Oggi alle 15 videoconferenza dei paesi del G7 sulle conseguenze economiche della guerra in Medio Oriente, in particolare sulla situazione energetica e le misure per mitigarne l’impatto.
+[T] [M] Guerra in Iran, le news di oggi in diretta, Figlio di Pezeshkian: Mojtaba Khamenei ferito ma salvo: Teheran: "Il più vasto attacco contro obiettivi statunitensi e israeliani", Idf bombarda Beirut, Arabia Saudita neutralizza missili, Oggi alle 15 videoconferenza dei paesi del G7 sulle conseguenze economiche della guerra in Medio Oriente.
 
-[T] [F] Futurare #0 | La rivoluzione sconosciuta: internet, dal 1986 ad oggi: Futurare, è il nuovo format de ilfattoquotidiano.it dedicato alla cultura dell’innovazione, In questa puntata inaugurale il vicedirettore Simone Ceriotti introduce il progetto e dialoga con Alessandro Cacciato, autore e conduttore del programma.
+[T] [F] "Assistiamo i nostri familiari h24 senza aiuti, Riconoscerci come lavoratori è una sfida culturale": l’appello di una caregiver a firmare la petizione su IoScelgo: In Italia chi assiste un proprio familiare convivente con grave disabilità, praticamente quasi senza sosta, sette giorni su sette, 365 giorni l’anno, non è riconosciuto come un lavoratore né sostenuto al livello giuridico.
 
-[T] [M] Indian Wells, Sinner batte Fonseca e vola ai quarti: Il tennista italiano affronterà ora un'altra giovane grande promessa, il ventenne americano Learner Tien, per un posto in semifinale, Paolini eliminata agli ottavi di finale, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Daniela Zinnanti uccisa a coltellate a Messina, confessa l'ex compagno: era ai domiciliari con il braccialetto elettronico: Una donna, Daniela Zinnanti, 50 anni compiuti a luglio, è stata uccisa con decine di coltellate ieri sera nella sua abitazione in via Lombardia, nel quartiere Lombardo a Messina, La polizia.
 
-[T] [F] Daniela Zinnanti uccisa a coltellate a Messina, fermato l'ex compagno: era ai domiciliari e aveva il braccialetto elettronico: Una donna, Daniela Zinnanti, 50 anni compiuti a luglio, è stata uccisa con decine di coltellate ieri sera nella sua abitazione in via Lombardia, nel quartiere Lombardo a Messina, La polizia.
+[T] [F] Perché serve un ministero dell’AI: L’intelligenza artificiale rappresenta oggi l’attuale, fase evolutiva di quella trasformazione digitale, cominciata più di 30 anni fa e della quale utilizziamo quotidianamente, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Tra tutti i Giovedì del Carnevale putignanese, quello 'dei Pazzi' è forse il più imprevedibile, In questa giornata la goliardia regna sovrana e le regole vengono sovvertite, Per strada è facile imbattersi in improvvisate bande di giovani che coinvolgono i passanti in scherzi e balli, celebrando la sana e pura follia liberatoria.
+[T] [F] Per entrare nella Putignano medievale non si poteva passare da dove si voleva, L'accesso al borgo fortificato era strettamente controllato e avveniva attraverso tre sole porte monumentali, Porta Barsento, Porta Nuova e Porta Grande, Ancora oggi, attraversare questi antichi varchi significa fare un vero e proprio viaggio indietro nel tempo.
 
 [T] [M] A risentirci a presto.

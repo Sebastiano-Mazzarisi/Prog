@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 9 e 02.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 10 e 10.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
+[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Lo spread tra Btp e Bund apre in rialzo a 71 punti: Avvio in rialzo per lo spread tra Btp e Bund, Il differenziale tra i due titoli di Stato apre la seduta a 71 punti dai 69 della vigilia, Il rendimento del decennale italiano sale al 3,58% dal 3,52% della chiusura di ieri, un aggiornamento dalla scena economica italiana.
+[T] [F] Meloni, pronti ad aumentare tasse a chi specula sui carburanti, "Riguardo all'attuale aumento dei prezzi dei carburanti, il messaggio che voglio dare agli italiani ma anche a chi dovesse pensare di sfruttare questa situazione per arricchirsi sulla pelle dei cittadini e delle imprese è: consiglio prudenza.
 
-[T] [M] Guerra in Iran, le news di oggi in diretta, Figlio di Pezeshkian: Mojtaba Khamenei ferito ma salvo: Teheran: "Il più vasto attacco contro obiettivi statunitensi e israeliani", Idf bombarda Beirut, Arabia Saudita neutralizza missili, Oggi alle 15 videoconferenza dei paesi del G7 sulle conseguenze economiche della guerra in Medio Oriente.
+[T] [M] Guerra in Iran, le news di oggi, Il figlio di Pezeshkian: "Mojtaba Khamenei ferito ma salvo": Dubai, due droni vicino all’aeroporto: quattro feriti, Von der Leyen: "10 giorni di guerra costati all'Ue 3 miliardi per energia", Teheran: "Il più vasto attacco contro obiettivi statunitensi e israeliani", Idf bombarda Beirut, Arabia Saudita neutralizza missili.
 
-[T] [F] "Assistiamo i nostri familiari h24 senza aiuti, Riconoscerci come lavoratori è una sfida culturale": l’appello di una caregiver a firmare la petizione su IoScelgo: In Italia chi assiste un proprio familiare convivente con grave disabilità, praticamente quasi senza sosta, sette giorni su sette, 365 giorni l’anno, non è riconosciuto come un lavoratore né sostenuto al livello giuridico.
+[T] [F] Trafficante di esseri umani arrestato a Caltanisetta: la sua organizzazione responsabile di 63 morti in mare: Arrestato a Caltanisetta un 41enne pakistano su cui pendeva un mandato internazionale da parte dell’Ufficio Interpol di Islamabad, L’accusa nei suoi confronti sarebbe di traffico di esseri umani, L’arresto è finalizzato all’estradizione.
 
-[T] [M] Daniela Zinnanti uccisa a coltellate a Messina, confessa l'ex compagno: era ai domiciliari con il braccialetto elettronico: Una donna, Daniela Zinnanti, 50 anni compiuti a luglio, è stata uccisa con decine di coltellate ieri sera nella sua abitazione in via Lombardia, nel quartiere Lombardo a Messina, La polizia.
+[T] [M] Voli cancellati, 43 mila saltati in 12 giorni: 3 milioni di persone a terra, Stop da Australia e Nuova Zelanda verso l'Europa: Oltre 43 mila voli sospesi e 7,5 milioni di persone sono rimaste a terra, Sono questi i dati che emergono dopo 12 giorni di conflitto in Medio Oriente e la conseguente.
 
-[T] [F] Perché serve un ministero dell’AI: L’intelligenza artificiale rappresenta oggi l’attuale, fase evolutiva di quella trasformazione digitale, cominciata più di 30 anni fa e della quale utilizziamo quotidianamente, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Iran, oggi le comunicazioni di Meloni a Senato e Camera: la linea della premier Adnkronos Iran: Meloni, crisi più complesse degli ultimi decenni, serve serietà ANSA Iran, le comunicazioni di Giorgia Meloni in Parlamento: segui la diretta Il Fatto Quotidiano Opposizioni divise, un aggiornamento dal fronte politico nazionale.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Per entrare nella Putignano medievale non si poteva passare da dove si voleva, L'accesso al borgo fortificato era strettamente controllato e avveniva attraverso tre sole porte monumentali, Porta Barsento, Porta Nuova e Porta Grande, Ancora oggi, attraversare questi antichi varchi significa fare un vero e proprio viaggio indietro nel tempo.
+[T] [F] L'arte a Putignano non è solo cartapesta e non si ferma in centro, La città è diventata un museo a cielo aperto grazie a svariati progetti di 'Street Art', Artisti di fama internazionale hanno colorato interi quartieri periferici, come il rione San Pietro Piturno, trasformando grigi palazzi popolari in gigantesche tele ricche di messaggi sociali.
 
 [T] [M] A risentirci a presto.

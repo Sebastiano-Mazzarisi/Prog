@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 10 marzo 2026, San Simplicio. Sono le 22 in punto.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 6 e 56.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 14 gradi. Per domani è previsto nebbia, con temperature tra 6 e 16 gradi.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 16 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Schlein, Bartolozzi svela l'intenzione del governo, indebolire le toghe: Quelle di Giusi Bartolozzi "sono parole molto gravi, che svelano la vera intenzione del governo, Non è una sorpresa, è da settimane che ministri e premier delegittimano i magistrati, La riforma vuol fare questo.
+[T] [F] Indian Wells, Sinner batte Fonseca in due set e va ai quarti: Jannik Sinner ha sconfitto la stella nascente brasiliana Joao Fonseca per 7-6 (8/6), una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Hoepli, bilancio sempre più in rosso e divisioni interne: così è finita una storia non solo milanese: I motivi che hanno portato alla decisione di liquidare la storica insegna: gli amministratori indicano nei primi sei mesi del 2025 una fase di "mercato depresso", la manualistica non tira più e pesa lo smart working.
+[T] [M] L'Iran attacca basi militari statunitensi e israeliane: L'Iran sta lanciando attacchi nell'ambito contro la base statunitense di Erbil in Iraq, la base della Quinta Flotta della Marina statunitense in Bahrein e le vicinanze di Tel Aviv, secondo quanto comunicato dalla televisione di Stato iraniana, come riporta la Tass.
 
-[T] [F] Svizzera, autobus a fuoco nel centro di Kerzers: "Ci sono diversi morti e feriti": Un autobus postale, un pullman adibito a servizio di linea, si è incendiato in Svizzera, Nel rogo diversi passeggeri sono morti mentre altri sono rimasti feriti, secondo quanto conferma la polizia cantonale, L’incidente è avvenuto nel tardo pomeriggio di martedì.
+[T] [F] Ricatti sessuali nelle redazioni: le storie di IrpiMedia mi hanno ricordato episodi che volevo dimenticare: C’è un’inchiesta coraggiosa su molestie, discriminazioni e violenze sessuali nelle redazioni dei media italiani, Se non verrà soffocata dal silenzio o respinta dai consueti muri di gomma.
 
-[T] [M] Hormuz, ecco il piano di Italia, Gran Bretagna e Germania: "Così proteggiamo le navi nello Stretto": Le telefonate sono state fittissime, Perché lo Stretto di Hormuz è già diventato il centro della guerra a causa dei risvolti economici che comporta lo stop alla navigazione, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Statali, nel nuovo contratto fino a 209 euro in più, Ecco gli aumenti in busta paga: Per i dipendenti statali in arrivo nuovi aumenti fino ad un massimo di quasi 209 euro lordi al mese, Il dato è contenuto nelle tabelle allegate alla bozza di contratto che atterrerà, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Trump: se l’Iran ha messo mine a Hormuz le rimuova o subirà conseguenze mai viste La Stampa La guerra in Medio Oriente, il 10 marzo - BLOG ANSA "Petroliera scortata a Hormuz", Tonfo del greggio, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] I cocci della guerra che non paga Trump: Il mondo sarebbe un posto migliore senza un Iran guidato dagli ayatollah, Ancor più il Medio Oriente, ancor più il popolo iraniano, Ma non sarà Donald Trump a sbarazzarsene, Il, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] C'è un pezzo di Putignano dall'altra parte dell'Oceano Atlantico, Tra la fine dell'Ottocento e i primi del Novecento, una fortissima ondata migratoria portò tantissimi putignanesi a cercare fortuna nelle Americhe, Moltissimi si stabilirono in Argentina, dove ancora oggi vivono intere comunità che tramandano il dialetto e le tradizioni della madrepatria.
+[T] [F] A Putignano non c'è solo il Carnevale a richiamare migliaia di visitatori, Negli ultimi anni, il borgo si è trasformato in una meta imperdibile anche durante le feste invernali, grazie a un progetto chiamato 'Borgo Illuminato', Installazioni luminose, opere d'arte visiva e mercatini riempiono di magia i vicoli del centro storico aspettando il Capodanno.
 
 [T] [M] A risentirci a presto.

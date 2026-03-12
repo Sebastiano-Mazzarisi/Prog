@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 8 e 09.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 9 e 03.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] ++ Leonardo: +15% l'utile 2025 a 1,3 miliardi, la cedola sale del 21% ++: Leonardo chiude il 2025 con un risultato netto di 1, 334 miliardi che include le plusvalenze rilevate a seguito della cessione del business Uas a Fincantieri e della cessione di parte delle azioni detenute in Avio, Nel confronto con l'anno precedente.
+[T] [F] Il gas parte in rialzo (+4%) a 52 euro al Megawattora: Prezzo del gas in aumento sul mercato di Amsterdam, di riferimento per l'Europa: il future sul metano con consegna ad aprile ha aperto in crescita del 4% a 52 euro al Megawattora, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Costantino della Gherardesca: "Vivo su un divano di velluto blu, Crisi di mezza età? Ci rido sopra": La buona televisione, i pochi amici ma veri, le passioni, Il conduttore torna alla guida di "Pechino express" (su Sky e Now) "È una magia che rende le scomodità piacevoli e fattibili".
+[T] [M] Sovraffollato e violento, viaggio nel carcere minorile di Casal del Marmo tra degrado e evasioni: Il report di Antigone: "Clima interno negativo", In un anno 17 tentati suicidi tra gli ospiti dell’istituto finito sottoindagine, un aggiornamento dal mondo dello sport italiano.
 
-[T] [F] Lino Aldrovandi: "Referendum? Voto ‘no’ anche per mio figlio Federico, Con la riforma non avrebbe avuto giustizia", "Ho deciso di votare ‘no‘ al Referendum anche per Federico, perché quando è stato ucciso, se ci fosse già stata la riforma della giustizia che vuole il Governo Meloni.
+[T] [F] DiCaprio, Chalamet e Jordan nella sfida più incerta degli ultimi anni, La gaffe di Timothée mette a rischio l’Oscar come miglior attore: Leo DiCaprio, Timothée Chalamet o Michael B, Jordan? Mai la categoria per il miglior attore agli Oscar è stata così contesa e chiacchierata come quest’anno, Intanto formalmente nella cinquina 2026 ci sarebbero anche Wagner Moura.
 
-[T] [M] Cosa sappiamo sull'attacco alla base italiana a Erbil: l'ombra delle milizie filo-iraniane e la nuova strategia di Teheran: Cresce la tensione nel Kurdistan iracheno dopo l?attacco missilistico che ha coinvolto il perimetro di Camp Singara, la base che ospita il contingente italiano presso l?aeroporto.
+[T] [M] Benzina e diesel, quali bonus si possono sfruttare? Dai fringe benefit all'ipotesi Social card 2026: ecco tutti gli strumenti: Negli ultimi giorni i prezzi di benzina e diesel sono tornati a correre, con rincari che hanno raggiunto anche i 20 centesimi al litro, Sulle autostrade, dove il servizio alla pompa è.
 
-[T] [F] Le bombe su Dubai e l’Eldorado perduto: Al sottoscritto, le città desertiche del Golfo come Dubai, Abu Dhabi e Doha sono sembrate, quando le ha visitate, l’equivalente terrestre più vicino alle colonie sulla Luna, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Guerra in Iran, le ultime notizie in diretta | Crosetto: "Un missile colpisce base italiana a Erbil, stanno tutti bene", Hormuz, 3 navi colpite da mine, Trump: "Non abbiamo finito" Corriere della Sera Guerra Iran, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] A Putignano c'è un trullo speciale che non serve per dormire, ma per scendere al centro della terra, È l'ingresso della 'Grotta del Trullo', l'attrazione naturale più celebre della città, Un mondo ipogeo fatto di stalattiti e stalagmiti millenarie, che si apre improvvisamente proprio alle porte del centro abitato.
+[T] [F] Cosa succede quando un ex convento chiude le porte alla religione e le apre alla cultura? A Putignano, l'antico convento delle Carmelitane è stato sapientemente restaurato, Il suo elegante chiostro interno, un tempo regno del silenzio, oggi è una vivace piazza coperta utilizzata come centro culturale e sede della ricca biblioteca comunale.
 
 [T] [M] A risentirci a presto.

@@ -72,20 +72,25 @@
   td.tot{color:#fff;font-weight:700;text-align:right}
   td.nota{color:#8888bb;font-size:.72rem;white-space:normal;max-width:160px}
   td.nota-vuota{color:#444466;font-size:.72rem;text-align:center}
+  /* riga totale cliccabile */
+  #tbodyTotale tr{cursor:pointer;transition:background .15s}
+  #tbodyTotale tr:hover{background:rgba(255,255,255,.06)}
+  #tbodyTotale tr.copiata{background:rgba(39,174,96,.15)}
   .mini-row{display:flex;align-items:center;gap:8px}
   .mini-gauge-wrap{flex:1;position:relative;height:13px;border-radius:6px;overflow:hidden;background:#111133}
   .mini-seg{position:absolute;top:0;bottom:0}
   .mini-seg-red{left:0;background:#c0392b} .mini-seg-yellow{background:#d68910} .mini-seg-green{background:#1e8449}
   .mini-k{color:#aaaacc;font-size:.7rem;white-space:nowrap;min-width:28px;text-align:right}
   .azioni{display:flex;gap:10px;margin-top:4px}
-  .btn-copia,.btn-pdf{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+  .btn-imp,.btn-pdf{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
     padding:13px 10px;border-radius:14px;font-family:inherit;font-size:.85rem;font-weight:700;
     letter-spacing:.06em;cursor:pointer;border:none;text-decoration:none;
     transition:transform .15s,filter .15s;background:#d0d0e8;color:#1a1a2e}
-  .btn-copia:hover,.btn-pdf:hover{transform:translateY(-2px);filter:brightness(1.1)}
+  .btn-imp:hover,.btn-pdf:hover{transform:translateY(-2px);filter:brightness(1.1)}
   #toast{display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
           background:#333;color:#fff;padding:8px 22px;border-radius:20px;font-size:.82rem;
-          font-weight:600;z-index:9999;pointer-events:none;animation:fadeInOut 2s ease forwards}
+          font-weight:600;z-index:9999;pointer-events:none}
+  .toast-show{animation:fadeInOut 2s ease forwards}
   @keyframes fadeInOut{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
   footer{margin-top:14px;color:#aaaacc;font-size:.7rem;letter-spacing:.08em}
 </style>
@@ -103,6 +108,7 @@
       <div class="card-val" id="valMarica"></div>
     </div>
   </div>
+
   <div class="card-total" id="cardTotale">
     <div class="total-top" onclick="togglePannello('totale')">
       <div class="total-label">Totale</div>
@@ -123,7 +129,10 @@
       </div>
     </div>
   </div>
+
   <div class="click-hint">▲ clicca su un box per i dettagli</div>
+
+  <!-- Pannello Nino -->
   <div class="pannello" id="pannelloNino">
     <div class="pannello-header">
       <span class="pannello-title">📊 Nino — storico</span>
@@ -132,6 +141,8 @@
     <table><thead><tr><th>Data</th><th>Nino</th><th style="text-align:left">Nota</th></tr></thead>
     <tbody id="tbodyNino"></tbody></table>
   </div>
+
+  <!-- Pannello Marica -->
   <div class="pannello" id="pannelloMarica">
     <div class="pannello-header">
       <span class="pannello-title">📊 Marica — storico</span>
@@ -140,14 +151,18 @@
     <table><thead><tr><th>Data</th><th>Marica</th><th style="text-align:left">Nota</th></tr></thead>
     <tbody id="tbodyMarica"></tbody></table>
   </div>
+
+  <!-- Pannello Totale — click su riga = copia -->
   <div class="pannello" id="pannelloTotale">
     <div class="pannello-header">
-      <span class="pannello-title">📊 Totale — storico</span>
+      <span class="pannello-title">📊 Totale — clicca una riga per copiare</span>
       <button class="btn-chiudi" onclick="chiudiPannello('totale')">✖ chiudi</button>
     </div>
     <table><thead><tr><th>Data</th><th>Nino</th><th>Marica</th><th>Totale</th></tr></thead>
     <tbody id="tbodyTotale"></tbody></table>
   </div>
+
+  <!-- Pannello Gauge -->
   <div class="pannello" id="pannelloGauge">
     <div class="pannello-header">
       <span class="pannello-title">📊 Storico</span>
@@ -156,16 +171,27 @@
     <table><thead><tr><th style="text-align:left">Data</th><th></th></tr></thead>
     <tbody id="tbodyGauge"></tbody></table>
   </div>
+
+  <!-- Pannello Imprevisti -->
+  <div class="pannello" id="pannelloImp">
+    <div class="pannello-header">
+      <span class="pannello-title">⚠️ Imprevisti</span>
+      <button class="btn-chiudi" onclick="chiudiPannello('imp')">✖ chiudi</button>
+    </div>
+    <table><thead><tr><th style="text-align:left">Imprevisti</th><th>Importo</th></tr></thead>
+    <tbody id="tbodyImp"></tbody></table>
+  </div>
+
   <div class="azioni">
-    <button class="btn-copia" onclick="copiaTesto()">📋 Copia</button>
+    <button class="btn-imp" onclick="togglePannello('imp')">⚠️ Imprevisti</button>
     <a class="btn-pdf" href="Saldi.pdf" target="_blank">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6zm2-5h8v1H8v-1zm0-3h8v1H8v-1z"/>
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
       </svg>
       Apri PDF
     </a>
   </div>
-  <div id="toast">✅ Copiato!</div>
+  <div id="toast">📋 Copiato!</div>
 </div>
 <footer id="footer"></footer>
 
@@ -177,6 +203,10 @@ var DATI=[
   {data:'08/03/26',nino:10753,marica:4835,notaN:'',notaM:'Stipendio Marica (+)'},
   {data:'07/03/26',nino:10753,marica:3640,notaN:'Interessi bancari (-)',notaM:''},
   {data:'27/02/26',nino:16471,marica:4835,notaN:'',notaM:''},
+];
+var IMP=[
+  {desc:'Riparazione Renault',importo:1400},
+  {desc:'Restauro organo',importo:1700},
 ];
 
 function fmt(n){
@@ -221,11 +251,14 @@ function init(){
   });
   document.getElementById('tbodyMarica').innerHTML=h;
 
-  // Tabella Totale
+  // Tabella Totale — ogni riga è cliccabile per copiare
   h='';
-  DATI.forEach(function(b){
+  DATI.forEach(function(b,idx){
     var t=b.nino+b.marica;
-    h+='<tr><td class="dt">'+b.data+'</td><td class="num">'+fmt(b.nino)+'</td>'+
+    var testo='Saldi al '+dataLunga(b.data)+'\n..............................\n'+
+              'Nino: '+fmt(b.nino)+'\nMarica: '+fmt(b.marica)+'\nTotale: '+fmt(t);
+    h+='<tr data-testo="'+encodeURIComponent(testo)+'" onclick="copiaRiga(this)">'+
+       '<td class="dt">'+b.data+'</td><td class="num">'+fmt(b.nino)+'</td>'+
        '<td class="num">'+fmt(b.marica)+'</td><td class="tot">'+fmt(t)+'</td></tr>';
   });
   document.getElementById('tbodyTotale').innerHTML=h;
@@ -250,34 +283,61 @@ function init(){
        '</div></td></tr>';
   });
   document.getElementById('tbodyGauge').innerHTML=h;
+
+  // Tabella Imprevisti
+  h='';
+  if(IMP.length===0){
+    h='<tr><td colspan="2" class="nota-vuota" style="text-align:center;padding:16px">Nessun imprevisto</td></tr>';
+  }else{
+    IMP.forEach(function(i){
+      h+='<tr><td class="dt" style="white-space:normal">'+i.desc+'</td><td class="num">'+fmt(i.importo)+'</td></tr>';
+    });
+  }
+  document.getElementById('tbodyImp').innerHTML=h;
 }
 
 init();
 
-var copiaText=(function(){
-  var b=DATI[0],tot=b.nino+b.marica;
-  return 'Saldi al '+dataLunga(b.data)+'\n..............................\n'+
-         'Nino: '+fmt(b.nino)+'\nMarica: '+fmt(b.marica)+'\nTotale: '+fmt(tot);
-})();
-
-function copiaTesto(){
-  navigator.clipboard.writeText(copiaText).then(function(){
+function copiaRiga(tr){
+  var testo=decodeURIComponent(tr.dataset.testo);
+  navigator.clipboard.writeText(testo).then(function(){
+    // flash verde sulla riga
+    tr.classList.add('copiata');
+    setTimeout(function(){tr.classList.remove('copiata');},1000);
+    // toast
     var t=document.getElementById('toast');
-    t.style.display='block';t.style.animation='none';t.offsetHeight;
-    t.style.animation='fadeInOut 2s ease forwards';
+    t.style.display='block';
+    t.classList.remove('toast-show');
+    void t.offsetWidth;
+    t.classList.add('toast-show');
     setTimeout(function(){t.style.display='none';},2000);
   });
 }
+
 var PANNELLI={
   nino:  {pannello:'pannelloNino',  card:'cardNino'},
   marica:{pannello:'pannelloMarica',card:'cardMarica'},
   totale:{pannello:'pannelloTotale',card:'cardTotale'},
-  gauge: {pannello:'pannelloGauge', card:'cardTotale'}
+  gauge: {pannello:'pannelloGauge', card:'cardTotale'},
+  imp:   {pannello:'pannelloImp',   card:null}
 };
 var aperto=null;
-function togglePannello(id){if(aperto===id)chiudiPannello(id);else{if(aperto)chiudiPannello(aperto);apriPannello(id);}}
-function apriPannello(id){var c=PANNELLI[id];document.getElementById(c.pannello).classList.add('aperto');document.getElementById(c.card).classList.add('attiva');aperto=id;}
-function chiudiPannello(id){var c=PANNELLI[id];document.getElementById(c.pannello).classList.remove('aperto');document.getElementById(c.card).classList.remove('attiva');if(aperto===id)aperto=null;}
+function togglePannello(id){
+  if(aperto===id)chiudiPannello(id);
+  else{if(aperto)chiudiPannello(aperto);apriPannello(id);}
+}
+function apriPannello(id){
+  var c=PANNELLI[id];
+  document.getElementById(c.pannello).classList.add('aperto');
+  if(c.card)document.getElementById(c.card).classList.add('attiva');
+  aperto=id;
+}
+function chiudiPannello(id){
+  var c=PANNELLI[id];
+  document.getElementById(c.pannello).classList.remove('aperto');
+  if(c.card)document.getElementById(c.card).classList.remove('attiva');
+  if(aperto===id)aperto=null;
+}
 </script>
 </body>
 </html>

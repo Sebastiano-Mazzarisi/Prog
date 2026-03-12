@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 10 e 11.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 11 e 09.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 7 e 15 gradi e probabilità di pioggia. Per domani è previsto rovesci leggeri, con temperature tra 7 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 7 e 15 gradi e probabilità di pioggia. Per domani è previsto cielo coperto, con temperature tra 7 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Schlein, Meloni sta facendo tutto da sola, Noi ci siamo ma posi clava, "Meloni sta facendo tutto da sola, Lo abbiamo detto ieri: noi ci siamo come ci siamo sempre stati, A giugno io per prima chiamai la presidente del Consiglio, Ora deve posare la clava, Gli italiani non meritano questo spettacolo", Lo ha detto la segretaria dem, Elly Schlein.
+[T] [F] Urso, Jindal ha presentanto manifestazione di interesse per l'ex Ilva, 'Con un piano industriale ambizioso e piena decarbonizzazione', un aggiornamento dal mondo dello sport italiano.
 
-[T] [M] Guerra in Iran, le news, Raid di Israele su Beirut: otto vittime, Nyt: "Una settimana di guerra è costata 11,3 miliardi": Comandante Erbil: "Siamo ancora nei bunker, danni ma nessun ferito", Attaccate due petroliere in Iraq: 25 membri dell'equipaggio evacuati, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Referendum, il vizio d'origine della riforma e il Parlamento ridotto a santificare le feste, un aggiornamento dal fronte politico nazionale.
 
-[T] [F] Nuovo amore per Michelle Hunziker: "Si è fidanzata con Giulio Berruti, l’ex di Maria Elena Boschi, La scintilla è scatta a Roma": Nuova pagina sentimentale per Michelle Hunziker, La conduttrice svizzera, uno dei volti più noti della tv italiana, sarebbe tornata a sorridere grazie a una conoscenza recente ma già molto intensa: quella con l’attore Giulio Berruti.
+[T] [F] Conte contro Meloni: "Infamia su Arcuri e le mascherine, se vuole occuparsi di truffe Covid pensi alla sua Santanché": Meloni "oggi ha detto un’infamia e lo ha fatto da quello scranno" quello "della presidenza del Consiglio, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Enrica Bonaccorti, morta la conduttrice televisiva: aveva 76 anni e lottava da tempo contro un tumore: È morta Enrica Bonaccorti, La nota conduttrice televisiva e radiofonica italiana, stava affrontando una battaglia contro tumore al pancreas, come lei stessa ha dichiarato in, una notizia che ha scosso l'opinione pubblica italiana.
+[T] [M] Erbil, missile sulla base italiana: non ci sono feriti, Tajani: "Inaccettabile, decidiamo atti da compiere": Troppo vicino al confine, troppo vicino al covo dei vecchi jihadisti che nel nord dell'Iraq si mescolano a quelle milizie sempre pronte a dare man forte ai pasdaran ea quelle che invece.
 
-[T] [F] Iraq, missile colpisce base italiana a Erbil: cosa è successo Sky TG24 L’attacco alla base di Erbil, cosa sappiamo finora e perché è strategica RaiNews Schlein: 'Preoccupati per quanto accaduto a Erbil, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] È morta Enrica Bonaccorti, aveva 76 anni: era malata di tumore al pancreas Fanpage È morta Enrica Bonaccorti, attrice e icona tv anni '80: da "Pronto, chi gioca?" a "Non è la Rai" RaiNews Addio a Enrica Bonaccorti, la conduttrice aveva 76 anni Sky TG24 Morta Enrica Bonaccorti, una notizia che ha scosso l'opinione pubblica italiana.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] C'è chi sostiene che il nome di Putignano nasconda un segreto legato agli dèi dell'Olimpo, Una teoria filologica dell'Ottocento lega infatti l'origine della città al culto di Apollo Pitico, Secondo questa ipotesi, in epoca pre-romana, ci sarebbe stato un tempio o un altare dedicato al dio del sole proprio dove oggi sorge il borgo antico.
+[T] [F] Un filo invisibile e colorato unisce Putignano al resto d'Europa, Essendo il Carnevale più antico del continente, la città pugliese ha stretto forti legami e gemellaggi ufficiali con altre capitali europee del Carnevale, Uno scambio di tradizioni, maschere e maestranze che rende questa festa un vero e proprio patrimonio culturale senza confini.
 
 [T] [M] A risentirci a presto.

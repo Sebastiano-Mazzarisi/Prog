@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 18 e 05.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 19 e 11.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 7 e 15 gradi. Per domani è previsto nebbia, con temperature tra 7 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 7 e 15 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Borsa: l'Europa chiude negativa con guerra in Iran, Parigi -0,71: Le Borse europee chiudono ancora in negativo mentre la lente è sempre di più sullo stretto di Hormuz con l'Iran che intende tenerlo chiuso, Francoforte cede lo 0, 21% con il Dax a 23.589 punti, Parigi perde lo 0, 71% con il Cac 40 a 7.984 punti, Londra lascia lo 0.
+[T] [F] Frammenti di missile su scuola elementare della Custodia a Gerusalemme, "Anche la Città Vecchia di Gerusalemme è stata ferita dalla violenza che sta stringendo in una morsa tutto il Medio Oriente, Frammenti di un missile hanno colpito la nostra Scuola elementare della Custodia di Terra Santa alla porta di Jaffa.
 
-[T] [M] Guerra in Iran, le news, Il messaggio di Khamenei: "Basi Usa nella regione vanno chiuse": Raid Idf su Beirut: 8 vittime, Colpito impianto nucleare a sud di Teheran, Israele attacca la Repubblica islamica e minaccia il Libano: "Se non ferma Hezbollah prenderemo il suo territorio", Attaccate due petroliere in Iraq: 25 membri dell'equipaggio evacuati.
+[T] [M] Meloni sul referendum: "Non abbiate paura di preferire il popolo alle caste", "Sono giornate di grande attenzione, di enorme lavoro per evitare un ulteriore allargamento della crisi sulle risposte alle possibili ripercussioni" ma "dall'altra noi non vogliamo rinunciare" a dare "la giusta attenzione al traguardo epocale di riuscire finalmente a riformare.
 
-[T] [F] Referendum, Meloni contestata a Milano: "Ennesima passerella, si dimetta", "Governo Meloni dimissioni" È il grido della ventina di persone scese in via Botta a Milano per protestare contro "l’ennesima passerella della premier", un aggiornamento dal fronte politico nazionale.
+[T] [F] Sparatoria in una sinagoga (con scuola) del Michigan: "Assalitore ferito, ma è riuscito a fuggire": Una sparatoria in una sinagoga a West Bloomfield, in Michigan, Lo riferisce la Cnn, La polizia è sul posto, Nel complesso del Temple of Israel c’è anche una scuola, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Voli, aumentano i prezzi per il caro-carburante: da Air France a Klm, ecco tutte le nuove tariffe (e da quando entreranno in vigore): Addio viaggi low-cost, Per far fronte all'aumento del prezzo dei carburanti provocato dalla guerra in Medio Oriente, diverse compagnie aeree rivedranno i costi dei biglietti, alzando.
+[T] [M] Iran, gli obiettivi (non casuali) dei contrattacchi: colpite le basi di Palmahim, Ovbeda e la sede dello Shin Bet: In una delle fasi più calde del conflitto che sta ridisegnando il Medio Oriente nel 2026, l?Agenzia di stampa iraniana Tasnim ha diffuso un comunicato del Corpo delle Guardie della.
 
-[T] [F] Brutale rapina in villa ieri sera, dentista malmenato, Arrestato uno dei banditi TrevisoToday Visualizza la copertura completa su Google News, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Chi guiderà l'Iran, dopo la morte della Guida suprema Corriere della Sera La prima volta da Guida Suprema: debutto sui social e discorso (letto) in tv di Khamenei il Giovane RaiNews Il miracolo di Trump: sostituire Khamenei con un altro Khamenei Valigia Blu Mojtaba Khamenei, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Nella piazza principale del borgo antico di Putignano sorge un edificio piccolo ma denso di storia: il Sedile, Questa elegante struttura, di fronte al Palazzo del Balì, era l'antico municipio cittadino, Era il luogo dove i rappresentanti del popolo si riunivano per prendere le decisioni importanti per la vita della comunità.
+[T] [F] Ogni anno, a Putignano, la fantasia ha una regola da rispettare, L'organizzazione del Carnevale sceglie infatti un tema centrale, come 'la satira politica', 'i miti', 'i mostri' o 'la fiaba', Tutti i maestri cartapestai sono chiamati a ideare le loro opere colossali ruotando attorno a questo singolo concetto, creando una sfilata armoniosa ma ricca di interpretazioni uniche.
 
 [T] [M] A risentirci a presto.

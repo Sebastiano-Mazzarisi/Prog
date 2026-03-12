@@ -19,4 +19,7 @@ Data: 27/02/26
 Nino: € 16.471
 Marica: € 4.835
 
+# Imprevisti
+Riparazione Renault: € 1.400
+Restauro organo: € 1.700
 

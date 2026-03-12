@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 12 e 52.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 14 e 21.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 7 e 15 gradi e probabilità di pioggia. Per domani è previsto cielo coperto, con temperature tra 7 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 7 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Onu, la guerra ha provocato tre milioni di sfollati in Iran: Fino a 3, 2 milioni di persone sono sfollate in Iran da quando è scoppiata la guerra quasi due settimane fa, Lo ha dichiarato l'Unhcr, l'agenzia delle Nazioni Unite per i rifugiati "Secondo le valutazioni preliminari, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Wright, ora non pronti a scortare navi, probabile entro fine mese: L'esercito statunitense attualmente "non è pronto" a scortare le petroliere attraverso lo Stretto di Hormuz, un'area critica, perché tutti i suoi mezzi sono concentrati sull'attacco all'Iran, Lo ha dichiarato il Segretario all'Energia Chris Wright "Accadrà relativamente presto.
 
-[T] [M] Guerra in Iran, le news, Raid Idf su Beirut: 8 vittime, Colpito impianto nucleare a sud di Teheran: Israele attacca la Repubblica islamica e minaccia il Libano: "Se non ferma Hezbollah prenderemo il suo territorio", Attaccate due petroliere in Iraq: 25 membri dell'equipaggio evacuati, Nyt: "Una settimana di guerra è costata 11,3 miliardi".
+[T] [M] Le Borse di oggi 12 marzo, Europa in calo, il petrolio resta sotto i 100 dollari: Secondo il New York Times il Pentagono ha comunicato al Congresso che la prima settimana di guerra con l'Iran è costata più di 11,3 miliardi di dollari, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Enrica Bonaccorti: "La lontananza è nata in hotel con Modugno impazzito, Ha iniziato a saltare sul letto, Spero rimanga anche dopo la mia morte": Forse non a tutti è cosa nota, ma Enrica Bonaccorti – morta oggi 12 marzo a causa di un tumore – era anche autrice dei testi di alcune famose canzoni, Un esempio? "La lontananza" (1970) e "Amara terra mia" (1971), tra i grandi successi di Domenico Modugno.
+[T] [F] Il rientro di Francesco Totti alla Roma diventa un caso: lo stallo dopo la nuova proposta dei Friedkin: Era tutto fatto per il rientro alla Roma di Francesco Totti, ma ora il futuro dell’ex bandiera della squadra della Capitale appare in bilico, Dietro lo stallo, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] "Sto bene, scrivere mi riempie la vita, Non sono stata una mamma perfetta", Un mese fa l'ultima volta in tv di Enrica Bonaccorti: È passato solo un mese dall'ultima intervista di Enrica Bonaccorti in televisione, ambiente che la regina dei quiz negli anni aveva reso una seconda casa, Il 12 febbraio, ospite di.
+[T] [M] Paralimpiadi, ancora una medaglia per Chiara Mazzel: è argento nello slalom gigante: La trentina ancora protagonista nello sci alpino vision impaired: ha conquistato la quarta medaglia in altrettante gare di questi Giochi, Italia a quota dieci, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Le bombe su Dubai e l’Eldorado perduto: Al sottoscritto, le città desertiche del Golfo come Dubai, Abu Dhabi e Doha sono sembrate, quando le ha visitate, l’equivalente terrestre più vicino alle colonie sulla Luna, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Enrica Bonaccorti e il tumore al pancreas, la stessa malattia di Eleonora Giorgi: dalle difficoltà iniziali all?evoluzione raccontata in tv: Enrica Bonaccorti è morta all?età di 76 anni dopo una malattia contro la quale combatteva da tempo, Nel 2025 le era stato diagnosticato un tumore al pancreas, che inizialmente.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Non solo grano e ulivi, Le campagne attorno a Putignano, insieme a quelle della vicina Turi, sono rinomate in tutta Italia per una delizia rossa e succosa: la 'Ciliegia Ferrovia', Questa varietà, grande, croccante e dolcissima, è il vanto dell'agricoltura locale e colora i mercati del sud tra maggio e giugno.
+[T] [F] Putignano ha un doppio fondo, Sotto l'asfalto e i palazzi del centro storico si estende un vero e proprio labirinto, È un reticolo intricato di antichi canali sotterranei, cisterne per l'acqua piovana e immense cantine private interamente scavate a mano nella viva roccia, Una città ombra, silenziosa e affascinante.
 
 [T] [M] A risentirci a presto.

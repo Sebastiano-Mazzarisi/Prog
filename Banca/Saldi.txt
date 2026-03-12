@@ -1,0 +1,22 @@
+Minimo: € 0
+Massimo: € 20.000
+Rosso: € 5.000
+Giallo: € 10.000
+
+Data: 12/03/26
+Nino: € 10.725
+Marica: € 4.835
+
+Data: 08/03/26
+Nino: € 10.753
+Marica: € 4.835; Stipendio Marica (+)
+
+Data: 07/03/26
+Nino: € 10.753; Interessi bancari (-)
+Marica: € 3.640
+
+Data: 27/02/26
+Nino: € 16.471
+Marica: € 4.835
+
+

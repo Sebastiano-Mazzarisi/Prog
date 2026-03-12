@@ -1,6 +1,6 @@
 # Parametri grafico
 Minimo: € 0
-Massimo: € 25.000
+Massimo: € 22.000
 Rosso: € 5.000
 Giallo: € 10.000
 

@@ -163,6 +163,27 @@
   .tick-giallo { left: 50.00%; }
   .tick-max    { left: 100%; }
 
+
+  /* ── Mini-gauge nelle righe tabella ── */
+  .mini-gauge-wrap {
+    position: relative; height: 12px;
+    border-radius: 6px; overflow: hidden;
+    background: #111133; min-width: 120px;
+  }
+  .mini-seg { position: absolute; top: 0; bottom: 0; }
+  .mini-seg-red    { left: 0; background: #c0392b; }
+  .mini-seg-yellow { background: #d68910; }
+  .mini-seg-green  { background: #1e8449; }
+  .mini-arrow {
+    position: absolute; top: -5px;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 9px solid #d0d0e8;
+    pointer-events: none;
+  }
+  .mini-gauge-wrap { margin: 2px 0; }
   /* ── Hint e footer: stesso colore ── */
   .click-hint {
     text-align: center;
@@ -325,12 +346,12 @@
 
   </div>
 
-  <div class="card-total" id="cardTotale" onclick="togglePannello('totale')">
-    <div class="total-top">
+  <div class="card-total" id="cardTotale">
+    <div class="total-top" onclick="togglePannello('totale')" style="cursor:pointer">
       <div class="total-label">Totale</div>
       <div class="total-val">€ 15.560</div>
     </div>
-    <div class="gauge-box">
+    <div class="gauge-box" onclick="togglePannello('gauge')" style="cursor:pointer">
       <div class="gauge-indicator"><div class="gauge-arrow"></div></div>
       <div class="gauge-bar-wrap">
         <div class="gauge-seg seg-red"></div>
@@ -456,6 +477,62 @@
     </table>
   </div>
 
+  <!-- Pannello GAUGE -->
+  <div class="pannello" id="pannelloGauge">
+    <div class="pannello-header">
+      <span class="pannello-title">📊 Storico — gauge</span>
+      <button class="btn-chiudi" onclick="chiudiPannello('gauge')">✖ chiudi</button>
+    </div>
+    <table>
+      <thead><tr><th>Data</th><th>Totale</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="dt">12/03/26</td>
+          <td>
+            <div class="mini-gauge-wrap">
+              <div class="mini-seg mini-seg-red"    style="width:25.00%"></div>
+              <div class="mini-seg mini-seg-yellow" style="left:25.00%; width:25.00%"></div>
+              <div class="mini-seg mini-seg-green"  style="left:50.00%; width:27.80%"></div>
+              <div class="mini-arrow" style="left:77.80%"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="dt">08/03/26</td>
+          <td>
+            <div class="mini-gauge-wrap">
+              <div class="mini-seg mini-seg-red"    style="width:25.00%"></div>
+              <div class="mini-seg mini-seg-yellow" style="left:25.00%; width:25.00%"></div>
+              <div class="mini-seg mini-seg-green"  style="left:50.00%; width:27.94%"></div>
+              <div class="mini-arrow" style="left:77.94%"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="dt">07/03/26</td>
+          <td>
+            <div class="mini-gauge-wrap">
+              <div class="mini-seg mini-seg-red"    style="width:25.00%"></div>
+              <div class="mini-seg mini-seg-yellow" style="left:25.00%; width:25.00%"></div>
+              <div class="mini-seg mini-seg-green"  style="left:50.00%; width:21.97%"></div>
+              <div class="mini-arrow" style="left:71.97%"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="dt">27/02/26</td>
+          <td>
+            <div class="mini-gauge-wrap">
+              <div class="mini-seg mini-seg-red"    style="width:25.00%"></div>
+              <div class="mini-seg mini-seg-yellow" style="left:25.00%; width:25.00%"></div>
+              <div class="mini-seg mini-seg-green"  style="left:50.00%; width:50.00%"></div>
+              <div class="mini-arrow" style="left:100.00%"></div>
+            </div>
+          </td>
+        </tr></tbody>
+    </table>
+  </div>
+
   <!-- Bottoni azione -->
   <div class="azioni">
     <button class="btn-copia" onclick="copiaTesto()">
@@ -492,7 +569,8 @@ function copiaTesto() {
 var PANNELLI = {
   nino:   { pannello: 'pannelloNino',   card: 'cardNino'   },
   marica: { pannello: 'pannelloMarica', card: 'cardMarica' },
-  totale: { pannello: 'pannelloTotale', card: 'cardTotale' }
+  totale: { pannello: 'pannelloTotale', card: 'cardTotale' },
+  gauge:  { pannello: 'pannelloGauge',  card: 'cardTotale'  }
 };
 var aperto = null;
 function togglePannello(id) {
@@ -512,6 +590,96 @@ function chiudiPannello(id) {
   if (aperto === id) aperto = null;
 }
 
+// Auto-refresh: legge Saldi.txt raw da GitHub ogni 30 secondi
+(function() {
+  var RAW_URL = 'https://raw.githubusercontent.com/Sebastiano-Mazzarisi/Prog/refs/heads/main/Banca/Saldi.txt';
+  var MINIMO  = 0;
+  var MASSIMO = 20000;
+  var ROSSO   = 5000;
+  var GIALLO  = 10000;
+
+  function fmtEuro(n) {
+    return '€ ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function mesiIT(m) {
+    return ['','gennaio','febbraio','marzo','aprile','maggio','giugno',
+            'luglio','agosto','settembre','ottobre','novembre','dicembre'][m];
+  }
+
+  function dataLunga(s) {
+    // formato gg/mm/aa
+    var p = s.split('/');
+    if (p.length !== 3) return s;
+    var d = parseInt(p[0], 10);
+    var m = parseInt(p[1], 10);
+    var y = 2000 + parseInt(p[2], 10);
+    return d + ' ' + mesiIT(m) + ' ' + y;
+  }
+
+  function parseTxt(testo) {
+    // Cerca l'ultimo blocco Data:
+    var blocchi = testo.split(/\n(?=Data:)/);
+    var ultimo = null;
+    for (var i = 0; i < blocchi.length; i++) {
+      if (/^Data:/.test(blocchi[i].trim())) ultimo = blocchi[i];
+    }
+    if (!ultimo) return null;
+    var mD = ultimo.match(/Data:\s*(\S+)/);
+    var mN = ultimo.match(/Nino:\s*\u20ac\s*([\d.]+)(?:;\s*(.+))?/);
+    var mM = ultimo.match(/Marica:\s*\u20ac\s*([\d.]+)(?:;\s*(.+))?/);
+    if (!mD || !mN || !mM) return null;
+    return {
+      data:   mD[1],
+      nino:   parseInt(mN[1].replace(/[.]/g,''), 10),
+      marica: parseInt(mM[1].replace(/[.]/g,''), 10),
+    };
+  }
+
+  function pct(v) {
+    return Math.max(0, Math.min(100, (v - MINIMO) / (MASSIMO - MINIMO) * 100));
+  }
+
+  function colTotale(tot) {
+    if (tot < ROSSO)  return '#e74c3c';
+    if (tot < GIALLO) return '#d68910';
+    return '#27ae60';
+  }
+
+  function aggiorna(r) {
+    var tot = r.nino + r.marica;
+    var col = colTotale(tot);
+    var pTot = pct(tot);
+
+    // valori card
+    document.querySelector('#cardNino .card-val').textContent   = fmtEuro(r.nino);
+    document.querySelector('#cardMarica .card-val').textContent = fmtEuro(r.marica);
+    document.querySelector('.total-val').textContent            = fmtEuro(tot);
+
+    // colore bordo totale e valore
+    var ct = document.getElementById('cardTotale');
+    ct.style.borderColor = col;
+    document.querySelector('.total-val').style.color = col;
+
+    // freccia gauge
+    document.querySelector('.gauge-arrow').style.left = pTot.toFixed(2) + '%';
+
+    // footer
+    var dl = dataLunga(r.data);
+    var footer = document.querySelector('footer');
+    if (footer) footer.textContent = 'Aggiornamento: ' + dl;
+  }
+
+  setInterval(function() {
+    fetch(RAW_URL + '?t=' + Date.now(), {cache: 'no-store'})
+      .then(function(res) { return res.text(); })
+      .then(function(testo) {
+        var r = parseTxt(testo);
+        if (r) aggiorna(r);
+      })
+      .catch(function() {});
+  }, 30000);
+})();
 </script>
 
 </body>

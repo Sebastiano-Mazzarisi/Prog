@@ -164,26 +164,33 @@
   .tick-max    { left: 100%; }
 
 
-  /* ── Mini-gauge nelle righe tabella ── */
+  /* ── Mini-gauge storico ── */
+  .mini-row {
+    display: flex; align-items: center; gap: 8px;
+  }
   .mini-gauge-wrap {
-    position: relative; height: 12px;
+    flex: 1; position: relative; height: 13px;
     border-radius: 6px; overflow: hidden;
-    background: #111133; min-width: 120px;
+    background: #111133;
   }
   .mini-seg { position: absolute; top: 0; bottom: 0; }
-  .mini-seg-red    { left: 0; background: #c0392b; }
+  .mini-seg-red    { left: 0;              background: #c0392b; }
   .mini-seg-yellow { background: #d68910; }
   .mini-seg-green  { background: #1e8449; }
+
   .mini-arrow {
-    position: absolute; top: -5px;
+    position: absolute; top: -4px;
     transform: translateX(-50%);
     width: 0; height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 9px solid #d0d0e8;
-    pointer-events: none;
+    pointer-events: none; z-index: 2;
   }
-  .mini-gauge-wrap { margin: 2px 0; }
+  .mini-k {
+    color: #aaaacc; font-size: .7rem;
+    white-space: nowrap; min-width: 28px; text-align: right;
+  }
   /* ── Hint e footer: stesso colore ── */
   .click-hint {
     text-align: center;
@@ -480,53 +487,65 @@
   <!-- Pannello GAUGE -->
   <div class="pannello" id="pannelloGauge">
     <div class="pannello-header">
-      <span class="pannello-title">📊 Storico — gauge</span>
+      <span class="pannello-title">📊 Storico</span>
       <button class="btn-chiudi" onclick="chiudiPannello('gauge')">✖ chiudi</button>
     </div>
     <table>
-      <thead><tr><th>Data</th><th>Totale</th></tr></thead>
+      <thead><tr><th style="text-align:left">Data</th><th></th></tr></thead>
       <tbody>
         <tr>
-          <td class="dt">12/03/26</td>
-          <td>
-            <div class="mini-gauge-wrap">
-              <div class="mini-seg mini-seg-red"    style="width:25.00%"></div>
-              <div class="mini-seg mini-seg-yellow" style="left:25.00%; width:25.00%"></div>
-              <div class="mini-seg mini-seg-green"  style="left:50.00%; width:27.80%"></div>
-              <div class="mini-arrow" style="left:77.80%"></div>
+          <td class="dt" style="white-space:nowrap;width:1%;padding-right:10px">12/03/26</td>
+          <td style="width:100%">
+            <div class="mini-row">
+              <div class="mini-gauge-wrap">
+                <div class="mini-seg mini-seg-red"    style="width:25.00%;"></div>
+                <div class="mini-seg mini-seg-yellow" style="left:25.00%;width:25.00%;"></div>
+                <div class="mini-seg mini-seg-green"  style="left:50.00%;width:27.80%;border-radius:0 6px 6px 0"></div>
+                <div class="mini-arrow" style="left:77.80%"></div>
+              </div>
+              <span class="mini-k">16k</span>
             </div>
           </td>
         </tr>
         <tr>
-          <td class="dt">08/03/26</td>
-          <td>
-            <div class="mini-gauge-wrap">
-              <div class="mini-seg mini-seg-red"    style="width:25.00%"></div>
-              <div class="mini-seg mini-seg-yellow" style="left:25.00%; width:25.00%"></div>
-              <div class="mini-seg mini-seg-green"  style="left:50.00%; width:27.94%"></div>
-              <div class="mini-arrow" style="left:77.94%"></div>
+          <td class="dt" style="white-space:nowrap;width:1%;padding-right:10px">08/03/26</td>
+          <td style="width:100%">
+            <div class="mini-row">
+              <div class="mini-gauge-wrap">
+                <div class="mini-seg mini-seg-red"    style="width:25.00%;"></div>
+                <div class="mini-seg mini-seg-yellow" style="left:25.00%;width:25.00%;"></div>
+                <div class="mini-seg mini-seg-green"  style="left:50.00%;width:27.94%;border-radius:0 6px 6px 0"></div>
+                <div class="mini-arrow" style="left:77.94%"></div>
+              </div>
+              <span class="mini-k">16k</span>
             </div>
           </td>
         </tr>
         <tr>
-          <td class="dt">07/03/26</td>
-          <td>
-            <div class="mini-gauge-wrap">
-              <div class="mini-seg mini-seg-red"    style="width:25.00%"></div>
-              <div class="mini-seg mini-seg-yellow" style="left:25.00%; width:25.00%"></div>
-              <div class="mini-seg mini-seg-green"  style="left:50.00%; width:21.97%"></div>
-              <div class="mini-arrow" style="left:71.97%"></div>
+          <td class="dt" style="white-space:nowrap;width:1%;padding-right:10px">07/03/26</td>
+          <td style="width:100%">
+            <div class="mini-row">
+              <div class="mini-gauge-wrap">
+                <div class="mini-seg mini-seg-red"    style="width:25.00%;"></div>
+                <div class="mini-seg mini-seg-yellow" style="left:25.00%;width:25.00%;"></div>
+                <div class="mini-seg mini-seg-green"  style="left:50.00%;width:21.97%;border-radius:0 6px 6px 0"></div>
+                <div class="mini-arrow" style="left:71.97%"></div>
+              </div>
+              <span class="mini-k">14k</span>
             </div>
           </td>
         </tr>
         <tr>
-          <td class="dt">27/02/26</td>
-          <td>
-            <div class="mini-gauge-wrap">
-              <div class="mini-seg mini-seg-red"    style="width:25.00%"></div>
-              <div class="mini-seg mini-seg-yellow" style="left:25.00%; width:25.00%"></div>
-              <div class="mini-seg mini-seg-green"  style="left:50.00%; width:50.00%"></div>
-              <div class="mini-arrow" style="left:100.00%"></div>
+          <td class="dt" style="white-space:nowrap;width:1%;padding-right:10px">27/02/26</td>
+          <td style="width:100%">
+            <div class="mini-row">
+              <div class="mini-gauge-wrap">
+                <div class="mini-seg mini-seg-red"    style="width:25.00%;"></div>
+                <div class="mini-seg mini-seg-yellow" style="left:25.00%;width:25.00%;"></div>
+                <div class="mini-seg mini-seg-green"  style="left:50.00%;width:50.00%;border-radius:0 6px 6px 0"></div>
+                <div class="mini-arrow" style="left:100.00%"></div>
+              </div>
+              <span class="mini-k">21k</span>
             </div>
           </td>
         </tr></tbody>

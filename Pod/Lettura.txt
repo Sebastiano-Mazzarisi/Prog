@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 16 e 36.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 18 e 05.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 7 e 14 gradi e probabilità di pioggia. Per domani è previsto parzialmente nuvoloso, con temperature tra 6 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 7 e 15 gradi. Per domani è previsto nebbia, con temperature tra 7 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Guerra in Iran, le news, Il messaggio di Khamenei: "Basi Usa nella regione vanno chiuse": Raid Idf su Beirut: 8 vittime, Colpito impianto nucleare a sud di Teheran, Israele attacca la Repubblica islamica e minaccia il Libano: "Se non ferma Hezbollah prenderemo il suo territorio", Attaccate due petroliere in Iraq: 25 membri dell'equipaggio evacuati.
+[T] [F] Borsa: l'Europa chiude negativa con guerra in Iran, Parigi -0,71: Le Borse europee chiudono ancora in negativo mentre la lente è sempre di più sullo stretto di Hormuz con l'Iran che intende tenerlo chiuso, Francoforte cede lo 0, 21% con il Dax a 23.589 punti, Parigi perde lo 0, 71% con il Cac 40 a 7.984 punti, Londra lascia lo 0.
 
-[T] [M] Khamenei, 'non ci ritireremo mai, vendicheremo tutti i nostri morti', "Noi non ci ritireremo mai, Vendicheremo il sangue dei nostri martiri, vendicheremo il sangue di tutti i nostri cittadini, I nostri nemici pagheranno il prezzo, perché ci sarà una vendetta", Lo ha detto Mojtaba Khamenei nel suo primo intervento pubblico.
+[T] [M] Guerra in Iran, le news, Il messaggio di Khamenei: "Basi Usa nella regione vanno chiuse": Raid Idf su Beirut: 8 vittime, Colpito impianto nucleare a sud di Teheran, Israele attacca la Repubblica islamica e minaccia il Libano: "Se non ferma Hezbollah prenderemo il suo territorio", Attaccate due petroliere in Iraq: 25 membri dell'equipaggio evacuati.
 
-[T] [F] "Lucio Dalla mi vide con una birra e per un po’ per lui ero ‘il tossico’, Vasco Rossi ha colpito con un martello di gomma me e Patty Pravo": i ricordi di Samuele Bersani, "Sono figlio unico: mio padre musicista, mia madre maestra, I miei genitori stanno insieme dal 1966 ed è una cosa straordinaria, Li considero dei rivoluzionari per come va il mondo oggi", Parola di Samuele Bersani.
+[T] [F] Referendum, Meloni contestata a Milano: "Ennesima passerella, si dimetta", "Governo Meloni dimissioni" È il grido della ventina di persone scese in via Botta a Milano per protestare contro "l’ennesima passerella della premier", un aggiornamento dal fronte politico nazionale.
 
-[T] [M] Erbil, missile sulla base italiana: non ci sono feriti, Tajani: "Inaccettabile, decidiamo atti da compiere": Troppo vicino al confine, troppo vicino al covo dei vecchi jihadisti che nel nord dell'Iraq si mescolano a quelle milizie sempre pronte a dare man forte ai pasdaran ea quelle che invece.
+[T] [M] Voli, aumentano i prezzi per il caro-carburante: da Air France a Klm, ecco tutte le nuove tariffe (e da quando entreranno in vigore): Addio viaggi low-cost, Per far fronte all'aumento del prezzo dei carburanti provocato dalla guerra in Medio Oriente, diverse compagnie aeree rivedranno i costi dei biglietti, alzando.
 
-[T] [F] Bomba d'acqua su Roma, scatta l'allerta meteo per temporali e venti forti: quanto durerà il maltempo? Il Messaggero Maltempo: infiltrazioni all'aeroporto di Fiumicino, Acqua ai terminal 1 e 3 RomaToday Allerta meteo su Lazio e Umbria, una notizia che riguarda la sicurezza del territorio nazionale.
+[T] [F] Brutale rapina in villa ieri sera, dentista malmenato, Arrestato uno dei banditi TrevisoToday Visualizza la copertura completa su Google News, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Putignano si trova in collina, ma non troppo lontana dal mare, Situata a circa 372 metri sul livello del mare, gode di una posizione strategica che le permette di avere estati ventilate e inverni frizzanti, Questa altitudine perfetta ha reso la zona da sempre ideale per l'agricoltura e, fin dall'antichità, un rifugio sicuro dalle zanzare delle coste.
+[T] [F] Nella piazza principale del borgo antico di Putignano sorge un edificio piccolo ma denso di storia: il Sedile, Questa elegante struttura, di fronte al Palazzo del Balì, era l'antico municipio cittadino, Era il luogo dove i rappresentanti del popolo si riunivano per prendere le decisioni importanti per la vita della comunità.
 
 [T] [M] A risentirci a presto.

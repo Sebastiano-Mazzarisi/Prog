@@ -521,7 +521,14 @@ function chiudiPannello(id) {
   var GIALLO  = 10000;
 
   function fmtEuro(n) {
-    return '€ ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    // formatta numero italiano senza regex problematiche
+    var s = String(n);
+    var result = '';
+    for (var i = 0; i < s.length; i++) {
+      if (i > 0 && (s.length - i) % 3 === 0) result += '.';
+      result += s[i];
+    }
+    return '€ ' + result;
   }
 
   function mesiIT(m) {
@@ -530,25 +537,21 @@ function chiudiPannello(id) {
   }
 
   function dataLunga(s) {
-    // formato gg/mm/aa
     var p = s.split('/');
     if (p.length !== 3) return s;
-    var d = parseInt(p[0], 10);
-    var m = parseInt(p[1], 10);
-    var y = 2000 + parseInt(p[2], 10);
-    return d + ' ' + mesiIT(m) + ' ' + y;
+    return parseInt(p[0],10) + ' ' + mesiIT(parseInt(p[1],10)) + ' ' + (2000+parseInt(p[2],10));
   }
 
   function parseTxt(testo) {
-    // Normalizza line endings e cerca il primo blocco Data:
-    var righe = testo.replace(//g, '').split('
+    var righe = testo.replace(/
+/g, '').split('
 ');
     var dati = { data: null, nino: null, marica: null };
     var inBlocco = false;
     for (var i = 0; i < righe.length; i++) {
       var r = righe[i].trim();
       if (r.indexOf('Data:') === 0) {
-        if (inBlocco && dati.nino !== null && dati.marica !== null) break; // primo blocco completo
+        if (inBlocco && dati.nino !== null && dati.marica !== null) break;
         inBlocco = true;
         dati.data = r.replace('Data:', '').trim();
         dati.nino = null; dati.marica = null;
@@ -577,25 +580,29 @@ function chiudiPannello(id) {
   function aggiorna(r) {
     var tot = r.nino + r.marica;
     var col = colTotale(tot);
-    var pTot = pct(tot);
-
     // valori card
     document.querySelector('#cardNino .card-val').textContent   = fmtEuro(r.nino);
     document.querySelector('#cardMarica .card-val').textContent = fmtEuro(r.marica);
     document.querySelector('.total-val').textContent            = fmtEuro(tot);
-
-    // colore bordo totale e valore
+    // aggiorna anche il testo da copiare
+    TESTO_COPIA = 'Saldi al ' + dataLunga(r.data) + '
+' +
+                  '..............................
+' +
+                  'Nino: ' + fmtEuro(r.nino) + '
+' +
+                  'Marica: ' + fmtEuro(r.marica) + '
+' +
+                  'Totale: ' + fmtEuro(tot);
+    // colore bordo totale
     var ct = document.getElementById('cardTotale');
     ct.style.borderColor = col;
     document.querySelector('.total-val').style.color = col;
-
     // freccia gauge
-    document.querySelector('.gauge-arrow').style.left = pTot.toFixed(2) + '%';
-
+    document.querySelector('.gauge-arrow').style.left = pct(tot).toFixed(2) + '%';
     // footer
-    var dl = dataLunga(r.data);
     var footer = document.querySelector('footer');
-    if (footer) footer.textContent = 'Aggiornamento: ' + dl;
+    if (footer) footer.textContent = 'Aggiornamento: ' + dataLunga(r.data);
   }
 
   setInterval(function() {

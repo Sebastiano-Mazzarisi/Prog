@@ -540,22 +540,28 @@ function chiudiPannello(id) {
   }
 
   function parseTxt(testo) {
-    // Cerca l'ultimo blocco Data:
-    var blocchi = testo.split(/\n(?=Data:)/);
-    var ultimo = null;
-    for (var i = 0; i < blocchi.length; i++) {
-      if (/^Data:/.test(blocchi[i].trim())) ultimo = blocchi[i];
+    // Normalizza line endings e cerca il primo blocco Data:
+    var righe = testo.replace(//g, '').split('
+');
+    var dati = { data: null, nino: null, marica: null };
+    var inBlocco = false;
+    for (var i = 0; i < righe.length; i++) {
+      var r = righe[i].trim();
+      if (r.indexOf('Data:') === 0) {
+        if (inBlocco && dati.nino !== null && dati.marica !== null) break; // primo blocco completo
+        inBlocco = true;
+        dati.data = r.replace('Data:', '').trim();
+        dati.nino = null; dati.marica = null;
+      } else if (inBlocco && r.indexOf('Nino:') === 0) {
+        var v = r.replace('Nino:', '').replace(/[^0-9]/g, '');
+        dati.nino = parseInt(v, 10);
+      } else if (inBlocco && r.indexOf('Marica:') === 0) {
+        var v = r.replace('Marica:', '').replace(/[^0-9]/g, '');
+        dati.marica = parseInt(v, 10);
+      }
     }
-    if (!ultimo) return null;
-    var mD = ultimo.match(/Data:\s*(\S+)/);
-    var mN = ultimo.match(/Nino:\s*\u20ac\s*([\d.]+)(?:;\s*(.+))?/);
-    var mM = ultimo.match(/Marica:\s*\u20ac\s*([\d.]+)(?:;\s*(.+))?/);
-    if (!mD || !mN || !mM) return null;
-    return {
-      data:   mD[1],
-      nino:   parseInt(mN[1].replace(/[.]/g,''), 10),
-      marica: parseInt(mM[1].replace(/[.]/g,''), 10),
-    };
+    if (!dati.data || dati.nino === null || dati.marica === null) return null;
+    return dati;
   }
 
   function pct(v) {

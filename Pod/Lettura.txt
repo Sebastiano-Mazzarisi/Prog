@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è mercoledì 11 marzo 2026, San Costantino. Sono le 21 e 47.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è giovedì 12 marzo 2026, San Massimiliano. Sono le 6 e 58.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi prevalentemente sereno, con temperature tra 5 e 16 gradi. Per domani è previsto cielo coperto, con temperature tra 6 e 15 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 6 e 15 gradi e probabilità di pioggia. Per domani è previsto rovesci leggeri, con temperature tra 7 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Via libera Camera a risoluzione di maggioranza su Iran e Consiglio Ue: Via libera dell'Aula della Camera alla risoluzione di maggioranza sulle comunicazioni della premier Giorgia Meloni in Aula su Iran e Consiglio Ue, I sì sono stati 196, 122 i no e 3 gli astenuti, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Costantino della Gherardesca: "Vivo su un divano di velluto blu, Crisi di mezza età? Ci rido sopra": La buona televisione, i pochi amici ma veri, le passioni, Il conduttore torna alla guida di "Pechino express" (su Sky e Now) "È una magia che rende le scomodità piacevoli e fattibili".
 
-[T] [M] Parma, due assessori del Pd indagati per il corteo a sostegno della Flotilla: Il 1° ottobre scorso furono occupati i binari: i reati sono interruzione di pubblico servizio e blocco ferroviario, Il sindaco Guerra: "Chiariranno la loro posizione e nel frattempo continueranno a lavorare per il Comune".
+[T] [M] Beirut, '8 morti nei raid israeliani nell'est del Paese': Il ministero della Salute libanese afferma che in serata 8 persone sono morte dopo gli attacchi israeliani nell'est del paese, L'attacco nel distretto di Baalbek "ha ucciso otto persone e ferito altre tre", una notizia che ha scosso l'opinione pubblica italiana.
 
-[T] [F] Paralimpiadi, l’Ucraina accusa: "Rimossa nostra bandiera", La replica: "Solo spostata nella loro area residenziale": È ancora polemica tra il Comitato paralimpico dell’Ucraina e il Comitato Paralimpico Internazionale in occasione dei Giochi Paralimpici di Milano Cortina, Dopo le proteste per l’ammissione degli atleti di Russia e Bielorussia con tanto di inno e bandiera.
+[T] [F] Petrolio, cosa succede ora? In campo le scorte: subito 400 milioni di barili per frenare la speculazione: Mentre le tensioni in Medio Oriente continuano ad alimentare l?incertezza sui mercati, l?Agenzia Internazionale per l?Energia (Aie) e il G7 si muovono con una manovra coordinata.
 
-[T] [M] Droni Shahed, così hanno cambiato la guerra: la rivoluzione tra economia low-cost e la dottrina della saturazione difensiva: Un?arma da 25.000 euro ha cambiato il corso della Storia, spostando l'asse della potenza militare dai laboratori della Silicon Valley alle officine della Repubblica Islamica, Quindici.
+[T] [M] Le bombe su Dubai e l’Eldorado perduto: Al sottoscritto, le città desertiche del Golfo come Dubai, Abu Dhabi e Doha sono sembrate, quando le ha visitate, l’equivalente terrestre più vicino alle colonie sulla Luna, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Toninelli torna in campo: "Meloni ha ragione, voto Sì" il Giornale Meloni in campo per riforma Giustizia, bufera su Bartolozzi, Opposizioni: "Nordio venga in Aula" RaiNews Battute, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] "Ripetete con me: dalla parte dell’Italia": il nuovo tormentone di Montaruli (Fdi) nell’intervento alla Camera, "Da che parte sta il governo dalla parte del diritto internazionale o dalla parte di Trump e Netanyahu?", un aggiornamento dal fronte politico nazionale.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -28,10 +28,10 @@
 
 [T] [M] Fratelli d’Italia Castellana Grotte - Confronto con i cittadini sulle ragioni del Sì al referendum: Si è svolto domenica scorsa in Piazza Garibaldi il momento informativo organizzato dal coordinamento cittadino di Fratelli d’Italia Castellana Grotte, il gazebo dedicato al tema della riforma della giustizia e al referendum previsto per il 22 e 23 marzo, L’iniziativa ha rappresentato un importante momento di confronto con i cittadini.
 
-[T] [F] NOWAR: a Polignano a Mare la resistenza dell’arte tra mimesi e materia Collezione da Tiffany.
+[T] [F] Presentato il progetto "Noci: Radici di Cultura, Germogli di Lettura" NOCI24.it.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Sei secoli di Carnevale non passano inosservati, Questo rito ha forgiato in modo indelebile il carattere dei putignanesi, I cittadini sono famosi in tutta la regione per la loro ospitalità, la battuta sempre pronta e, soprattutto, una sana e feroce autoironia, A Putignano prendersi in giro non è un'offesa, è un'arte.
+[T] [F] Sapevate che Putignano non è solo la città del Carnevale, ma anche quella dell'amore? A partire dal secondo dopoguerra, questo borgo pugliese si è trasformato in un polo di eccellenza internazionale per l'industria degli abiti da sposa, Una vera e propria 'capitale del wedding', dove l'alta sartoria locale ha vestito i sogni di migliaia di spose in tutto il mondo.
 
 [T] [M] A risentirci a presto.

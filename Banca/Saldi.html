@@ -38,16 +38,16 @@
                 border-right:7px solid transparent;border-top:12px solid #d0d0e8}
   .gauge-bar-wrap{height:13px;background:#111133;border-radius:7px;overflow:hidden;position:relative}
   .gauge-seg{position:absolute;top:0;bottom:0}
-  .seg-red   {left:0;                     width:20.00%;background:#c0392b}
-  .seg-yellow{left:20.00%;      width:20.00%;background:#d68910}
-  .seg-green {left:40.00%;     width:60.00%;background:#1e8449}
+  .seg-red   {left:0;                     width:22.73%;background:#c0392b}
+  .seg-yellow{left:22.73%;      width:22.73%;background:#d68910}
+  .seg-green {left:45.45%;     width:54.55%;background:#1e8449}
   .gauge-ticks{margin-top:6px;position:relative;height:22px}
   .tick{display:flex;flex-direction:column;align-items:center;gap:2px;position:absolute;transform:translateX(-50%)}
   .tick-line{width:1px;height:6px;background:#888}
   .tick-label{color:#aaaacc;font-size:.62rem;white-space:nowrap}
   .tick-0     {left:0%}
-  .tick-rosso {left:20.00%}
-  .tick-giallo{left:40.00%}
+  .tick-rosso {left:22.73%}
+  .tick-giallo{left:45.45%}
   .tick-max   {left:100%}
   .click-hint{text-align:center;color:#aaaacc;font-size:.65rem;letter-spacing:.1em;margin-top:-6px}
   .pannello{display:none;background:#16213e;border:2px solid #aaaacc44;border-radius:18px;
@@ -126,7 +126,7 @@
         <div class="tick tick-0"><div class="tick-line"></div><div class="tick-label">0</div></div>
         <div class="tick tick-rosso"><div class="tick-line"></div><div class="tick-label">5k</div></div>
         <div class="tick tick-giallo"><div class="tick-line"></div><div class="tick-label">10k</div></div>
-        <div class="tick tick-max"><div class="tick-line"></div><div class="tick-label">25k</div></div>
+        <div class="tick tick-max"><div class="tick-line"></div><div class="tick-label">22k</div></div>
       </div>
     </div>
   </div>
@@ -197,8 +197,8 @@
 <footer id="footer"></footer>
 
 <script>
-var MINIMO=0, MASSIMO=25000, ROSSO=5000, GIALLO=10000;
-var PR=20.0000, PG=40.0000;
+var MINIMO=0, MASSIMO=22000, ROSSO=5000, GIALLO=10000;
+var PR=22.7273, PG=45.4545;
 var DATI=[
   {data:'12/03/26',nino:10725,marica:4835,notaN:'',notaM:''},
   {data:'08/03/26',nino:10753,marica:4835,notaN:'',notaM:'Stipendio Marica (+)'},

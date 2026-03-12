@@ -137,7 +137,7 @@
   .gauge-arrow {
     position: absolute; top: 0;
     transform: translateX(-50%);
-    left: 77.94%;
+    left: 77.80%;
     width: 0; height: 0;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
@@ -315,7 +315,7 @@
 
     <div class="card" id="cardNino" onclick="togglePannello('nino')">
       <div class="card-name">Nino</div>
-      <div class="card-val">€ 10.753</div>
+      <div class="card-val">€ 10.725</div>
     </div>
 
     <div class="card" id="cardMarica" onclick="togglePannello('marica')">
@@ -328,7 +328,7 @@
   <div class="card-total" id="cardTotale" onclick="togglePannello('totale')">
     <div class="total-top">
       <div class="total-label">Totale</div>
-      <div class="total-val">€ 15.588</div>
+      <div class="total-val">€ 15.560</div>
     </div>
     <div class="gauge-box">
       <div class="gauge-indicator"><div class="gauge-arrow"></div></div>
@@ -366,6 +366,11 @@
       <thead><tr><th>Data</th><th>Nino</th><th style="text-align:left;">Nota</th></tr></thead>
       <tbody>
         <tr>
+          <td class="dt">12/03/26</td>
+          <td class="num">€ 10.725</td>
+          <td class="nota-vuota">—</td>
+        </tr>
+        <tr>
           <td class="dt">08/03/26</td>
           <td class="num">€ 10.753</td>
           <td class="nota-vuota">—</td>
@@ -393,6 +398,11 @@
       <thead><tr><th>Data</th><th>Marica</th><th style="text-align:left;">Nota</th></tr></thead>
       <tbody>
         <tr>
+          <td class="dt">12/03/26</td>
+          <td class="num">€ 4.835</td>
+          <td class="nota-vuota">—</td>
+        </tr>
+        <tr>
           <td class="dt">08/03/26</td>
           <td class="num">€ 4.835</td>
           <td class="nota">Stipendio Marica (+)</td>
@@ -419,6 +429,12 @@
     <table>
       <thead><tr><th>Data</th><th>Nino</th><th>Marica</th><th>Totale</th></tr></thead>
       <tbody>
+        <tr>
+          <td class="dt">12/03/26</td>
+          <td class="num">€ 10.725</td>
+          <td class="num">€ 4.835</td>
+          <td class="tot">€ 15.560</td>
+        </tr>
         <tr>
           <td class="dt">08/03/26</td>
           <td class="num">€ 10.753</td>
@@ -458,10 +474,10 @@
 
 </div>
 
-<footer>Aggiornamento: 8 marzo 2026</footer>
+<footer>Aggiornamento: 12 marzo 2026</footer>
 
 <script>
-var TESTO_COPIA = 'Saldi al 8 marzo 2026\n..............................\nNino: € 10.753\nMarica: € 4.835\nTotale: € 15.588';
+var TESTO_COPIA = 'Saldi al 12 marzo 2026\n..............................\nNino: € 10.725\nMarica: € 4.835\nTotale: € 15.560';
 function copiaTesto() {
   navigator.clipboard.writeText(TESTO_COPIA).then(function() {
     var t = document.getElementById('toast');
@@ -496,32 +512,95 @@ function chiudiPannello(id) {
   if (aperto === id) aperto = null;
 }
 
-// Auto-refresh silenzioso ogni 10 secondi
+// Auto-refresh: legge Saldi.txt raw da GitHub ogni 30 secondi
 (function() {
-  var REFRESH_URL = window.location.href.split('?')[0];
+  var RAW_URL = 'https://raw.githubusercontent.com/Sebastiano-Mazzarisi/Prog/refs/heads/main/Banca/Saldi.txt';
+  var MINIMO  = 0;
+  var MASSIMO = 20000;
+  var ROSSO   = 5000;
+  var GIALLO  = 10000;
+
+  function fmtEuro(n) {
+    return '€ ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function mesiIT(m) {
+    return ['','gennaio','febbraio','marzo','aprile','maggio','giugno',
+            'luglio','agosto','settembre','ottobre','novembre','dicembre'][m];
+  }
+
+  function dataLunga(s) {
+    // formato gg/mm/aa
+    var p = s.split('/');
+    if (p.length !== 3) return s;
+    var d = parseInt(p[0], 10);
+    var m = parseInt(p[1], 10);
+    var y = 2000 + parseInt(p[2], 10);
+    return d + ' ' + mesiIT(m) + ' ' + y;
+  }
+
+  function parseTxt(testo) {
+    // Cerca l'ultimo blocco Data:
+    var blocchi = testo.split(/\n(?=Data:)/);
+    var ultimo = null;
+    for (var i = 0; i < blocchi.length; i++) {
+      if (/^Data:/.test(blocchi[i].trim())) ultimo = blocchi[i];
+    }
+    if (!ultimo) return null;
+    var mD = ultimo.match(/Data:\s*(\S+)/);
+    var mN = ultimo.match(/Nino:\s*\u20ac\s*([\d.]+)(?:;\s*(.+))?/);
+    var mM = ultimo.match(/Marica:\s*\u20ac\s*([\d.]+)(?:;\s*(.+))?/);
+    if (!mD || !mN || !mM) return null;
+    return {
+      data:   mD[1],
+      nino:   parseInt(mN[1].replace(/[.]/g,''), 10),
+      marica: parseInt(mM[1].replace(/[.]/g,''), 10),
+    };
+  }
+
+  function pct(v) {
+    return Math.max(0, Math.min(100, (v - MINIMO) / (MASSIMO - MINIMO) * 100));
+  }
+
+  function colTotale(tot) {
+    if (tot < ROSSO)  return '#e74c3c';
+    if (tot < GIALLO) return '#d68910';
+    return '#27ae60';
+  }
+
+  function aggiorna(r) {
+    var tot = r.nino + r.marica;
+    var col = colTotale(tot);
+    var pTot = pct(tot);
+
+    // valori card
+    document.querySelector('#cardNino .card-val').textContent   = fmtEuro(r.nino);
+    document.querySelector('#cardMarica .card-val').textContent = fmtEuro(r.marica);
+    document.querySelector('.total-val').textContent            = fmtEuro(tot);
+
+    // colore bordo totale e valore
+    var ct = document.getElementById('cardTotale');
+    ct.style.borderColor = col;
+    document.querySelector('.total-val').style.color = col;
+
+    // freccia gauge
+    document.querySelector('.gauge-arrow').style.left = pTot.toFixed(2) + '%';
+
+    // footer
+    var dl = dataLunga(r.data);
+    var footer = document.querySelector('footer');
+    if (footer) footer.textContent = 'Aggiornamento: ' + dl;
+  }
+
   setInterval(function() {
-    fetch(REFRESH_URL + '?t=' + Date.now(), {cache: 'no-store'})
-      .then(function(r) { return r.text(); })
-      .then(function(html) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(html, 'text/html');
-        // Aggiorna solo i valori delle card e il footer
-        var ids = ['cardNino', 'cardMarica', 'cardTotale', 'pannelloNino', 'pannelloMarica', 'pannelloTotale'];
-        ids.forEach(function(id) {
-          var el = document.getElementById(id);
-          var nuovo = doc.getElementById(id);
-          if (el && nuovo) el.innerHTML = nuovo.innerHTML;
-        });
-        var footer = document.querySelector('footer');
-        var nuovoFooter = doc.querySelector('footer');
-        if (footer && nuovoFooter) footer.innerHTML = nuovoFooter.innerHTML;
-        // Aggiorna gauge arrow
-        var arrow = document.querySelector('.gauge-arrow');
-        var nuovaArrow = doc.querySelector('.gauge-arrow');
-        if (arrow && nuovaArrow) arrow.style.cssText = nuovaArrow.style.cssText;
+    fetch(RAW_URL + '?t=' + Date.now(), {cache: 'no-store'})
+      .then(function(res) { return res.text(); })
+      .then(function(testo) {
+        var r = parseTxt(testo);
+        if (r) aggiorna(r);
       })
       .catch(function() {});
-  }, 10000);
+  }, 30000);
 })();
 </script>
 

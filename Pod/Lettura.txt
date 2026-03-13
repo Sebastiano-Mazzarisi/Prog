@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 12 e 06.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 12 e 55.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -14,13 +14,13 @@
 
 [T] [F] Beirut, '8 morti in un raid israeliano nel sud', (ANSA-AFP) - BEIRUT, 13 MAR - Le autorità libanesi annunciano che otto persone sono state uccise in un raid israeliano nel sud del paese (ANSA-AFP), una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Jacopo Luchini oro nello snowboard alle Paralimpiadi: l’Italia sale a quota 11 medaglie: Il pratese, trionfa nel banked slalom, categoria upper limb, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Regione Lombardia, un premio per Bastoni: "Ha ammesso il suo errore, è un esempio positivo": In Consiglio regionale arriva la proposta bipartisan di premiare il difensore dell’Inter con la Rosa Camuna, per avere ammesso le proprie responsabilità nella simulazione che ha portato all’espulsione di Kalulu nella gara contro la Juve, Bussolati.
 
-[T] [F] Alta Velocità Roma Firenze: circolazione sospesa tra l’11 e il 12 aprile e offerta ridotta anche lunedì 13: L’attivazione del più avanzato sistema europeo per il controllo della marcia dei treni porterà alla stop della circolazione sulla linea Roma Firenze nel week end dell’11 e 12 aprile.
+[T] [F] Paralimpiadi, Jacopo Luchini vince la medaglia d’oro nello snowboard: nuovo record per l’Italia: Jacopo Luchini ha vinto la medaglia d’oro nella gara di snowboard banked slalom SB-UL alle Paralimpiadi di Milano Cortina, Per l’Italia è il quarto oro a questa edizione delle Paralimpiadi invernali.
 
-[T] [M] Thaad, il sistema antimissile Usa dalla Corea del Sud al Medio Oriente? I timori di Seul: Gli Stati Uniti starebbero preparando il trasferimento di intercettori del sistema di difesa antimissile Thaad dalla Corea del Sud verso il Medio Oriente, La notizia, riportata dall?agenzia, un aggiornamento dal mondo dello sport italiano.
+[T] [M] Iran, Crosetto: "Niente navi da guerra nello Stretto, Serve una linea europea condivisa", "La situazione? Di giorno è abbastanza tranquilla, è di notte che arrivano i problemi", Il giorno dopo l?attacco alla base di Erbil, per Guido Crosetto, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Guerra in Medio Oriente: abbattuto missile nello spazio aereo turco Euronews.com Guerra in Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Giustizia, Meloni incapace di abbassare i toni: Il finale rovina l’operazione, Perché, fino agli ultimi cinque minuti, non si era mai vista una Giorgia Meloni svestire così i panni del capopopolo, non cercare l’applauso osannante e, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Tra tutti i Giovedì del Carnevale putignanese, quello 'dei Pazzi' è forse il più imprevedibile, In questa giornata la goliardia regna sovrana e le regole vengono sovvertite, Per strada è facile imbattersi in improvvisate bande di giovani che coinvolgono i passanti in scherzi e balli, celebrando la sana e pura follia liberatoria.
+[T] [F] C'è un dolce, a Putignano, che profuma di mandorle e di feste di nozze, Si chiama 'Intorcinato', un biscotto tipico la cui forma ricorda una treccia, o meglio, due mani che si stringono, Nasce infatti come dolce legato ai matrimoni e alle grandi celebrazioni, preparato rigorosamente a mano e spesso accompagnato da un buon bicchiere di liquore dolce.
 
 [T] [M] A risentirci a presto.

@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 17 e 05.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 18 e 08.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] In arrivo la EU Inc., società europea in 48 ore, costo massimo 100 euro: Costituzione di una società entro 48 ore con un costo massimo di 100 euro, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Tutti morti i 6 militari su aereo cisterna Usa schiantatosi in Iraq, "È stata confermata la morte di tutti e sei i membri dell'equipaggio a bordo di un aereo cisterna C-135, precipitato nell'Iraq occidentale", Lo scrive sui social media il Comando centrale Usa precisando che "le circostanze dell'incidente sono oggetto di indagine, Tuttavia.
 
-[T] [M] Il giallo dello scontro tra due cisterne volanti nei cieli dell’Iraq: morti tutti e 6 i militari Usa: Uno dei velivoli si è schiantato al suolo, l’altro è rientrato in Israele, La tragedia testimonia la frenesia della campagna aerea statunitense contro l’Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Le medaglie vinte dall’Italia alle Paralimpiadi di Milano Cortina 2026: Ecco tutte le medaglie vinte dall’Italia alle Paralimpiadi di Milano Cortina 2026, Con le quattro di oggi, venerdì, un aggiornamento dal mondo dello sport italiano.
 
-[T] [F] Buttafuoco gioca la carta della Biennale del dissenso: vien da dire ‘tutto sbagliato, tutto da rifare’: Invece di prendere il toro per le corna, ovvero di affrontare lo snodo chiave dell’ambiguità del ruolo culturale delle istituzioni pubbliche, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Seif e il contributo straordinario all’editoria per la stampa dei giornali: La Società Editoriale Il Fatto comunica che nel dicembre scorso, in presenza del decreto che prevede un contributo straordinario all’editoria per la stampa dei giornali cartacei nella misura di 10 centesimi per ogni copia venduta.
 
-[T] [M] Russia, quanto sta guadagnando dalla guerra in Iran (grazie alla svolta sul petrolio), "La Russia è la grande vincitrice della guerra in Medio Oriente", Analisti ed esperti concordano: il conflitto tra l'Iran e Usa Israele ha offerto a Mosca, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Trump sblocca gli acquisti di petrolio russo: la "boccata di ossigeno" per Putin, l'ira Ue e le conseguenze per i mercati, "La Russia è la grande vincitrice della guerra in Medio Oriente", Analisti ed esperti concordano: il conflitto in Medio Oriente tra Iran e asse Usa Israele sta offrendo a.
 
-[T] [F] Ft: Roma e Parigi dialogano sullo Stretto, Trump: "Le navi passino Hormuz e tirino fuori le p" La Stampa Guerra in Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Giustizia, Meloni incapace di abbassare i toni: Il finale rovina l’operazione, Perché, fino agli ultimi cinque minuti, non si era mai vista una Giorgia Meloni svestire così i panni del capopopolo, non cercare l’applauso osannante e, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Perché si chiama 'Campana dei Maccheroni'? A Putignano, i rintocchi di questa campana di cartapesta, l'ultima sera di Carnevale, segnano le ultime ore in cui è concesso mangiare carne, La tradizione vuole che i cittadini festeggino in piazza mangiando maccheroni al sugo di carne, l'ultimo pasto ricco prima del periodo di rinunce della Quaresima.
+[T] [F] La sera del Giovedì dei Cornuti, a Putignano, va in scena un rituale esilarante: il 'taglio delle corna', I membri dell'Accademia, muniti di enormi cesoie, procedono al taglio simbolico delle corna del prescelto dell'anno, È una cerimonia teatrale e liberatoria che attira centinaia di curiosi nel centro storico della città.
 
 [T] [M] A risentirci a presto.

@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 20 e 57.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 21 e 49.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,9 +12,9 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Fonti Flacks, 'all'ex Ilva con il piano di Jindal 6 mila posti in meno': Il piano di Jindal per l'ex Ilva di Taranto rischierebbe di portare in tempi relativamente brevi alla chiusura della produzione a caldo a Taranto, con la perdita fino a circa 6 mila posti di lavoro È affermano all'ANSA fonti vicine al gruppo Flacks.
+[T] [F] Giudice federale blocca accuse penali contro presidente Fed Powell: Un giudice federale ha bloccato le citazioni contro la Federal Reserve nell'ambito dell'indagine penale a carico del suo presidente Jerome Powell, condotta nell'ambito dell'azione dell'ufficio dell'Us Attorney di Washington.
 
-[T] [M] Guerra Ucraina: Il leader ucraino a Parigi ha incontrato Macron, Il francese: "Mosca sbaglia se pensa di avere respiro per la guerra in Iran", Mosca accusa: "Missili occidentali su Bryansk", E convoca gli ambasciatori di Francia e Regno Unito, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Elena Rebeca Burcioiu trovata a Firenze: era scomparsa a Foggia 12 giorni fa, Sta bene: Della 21enne non si avevano notizie dal 2 marzo, A ritrovare la ragazza gli agenti della polizia, in zona stadio, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [F] Epstein files, spunta una di Mandelson e l’ex principe Andrea in accappatoio col finanziere: Spunta una nuova dal mega archivio americano su Jeffrey Epstein e questa volta a essere immortalati con il finanziere pedofilo, morto in carcere a New York nel 2019, sono l’ex principe Andrea e l’ex ambasciatore britannico negli Usa.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Putignano ha un doppio fondo, Sotto l'asfalto e i palazzi del centro storico si estende un vero e proprio labirinto, È un reticolo intricato di antichi canali sotterranei, cisterne per l'acqua piovana e immense cantine private interamente scavate a mano nella viva roccia, Una città ombra, silenziosa e affascinante.
+[T] [F] Ogni anno, a Putignano, la fantasia ha una regola da rispettare, L'organizzazione del Carnevale sceglie infatti un tema centrale, come 'la satira politica', 'i miti', 'i mostri' o 'la fiaba', Tutti i maestri cartapestai sono chiamati a ideare le loro opere colossali ruotando attorno a questo singolo concetto, creando una sfilata armoniosa ma ricca di interpretazioni uniche.
 
 [T] [M] A risentirci a presto.

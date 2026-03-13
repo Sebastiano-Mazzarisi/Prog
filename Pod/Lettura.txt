@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 16 e 11.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 17 e 05.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 13 gradi e qualche possibilità di pioggia. Per domani è previsto prevalentemente sereno, con temperature tra 5 e 14 gradi.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 13 gradi. Per domani è previsto parzialmente nuvoloso, con temperature tra 5 e 15 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Neonati sepolti, la Procura chiede 26 anni per Chiara: La Procura di Parma ha chiesto la condanna di Chiara Petrolini a 26 anni di reclusione, una notizia dal fronte giudiziario italiano.
+[T] [F] In arrivo la EU Inc., società europea in 48 ore, costo massimo 100 euro: Costituzione di una società entro 48 ore con un costo massimo di 100 euro, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Guerra Ucraina: Il leader ucraino a Parigi ha incontrato Macron, Il francese: "Mosca sbaglia se pensa di avere respiro per la guerra in Iran", Mosca accusa: "Missili occidentali su Bryansk", E convoca gli ambasciatori di Francia e Regno Unito, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Il giallo dello scontro tra due cisterne volanti nei cieli dell’Iraq: morti tutti e 6 i militari Usa: Uno dei velivoli si è schiantato al suolo, l’altro è rientrato in Israele, La tragedia testimonia la frenesia della campagna aerea statunitense contro l’Iran, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Lombardia, Alessandro Bastoni riceve il premio ‘Rosa Camuna’, E scoppia la polemica dentro FdI in Regione: Il difensore dell’Inter e della Nazionale Alessandro Bastoni tra i premiati con la "Rosa Camuna", un aggiornamento dal mondo dello sport italiano.
+[T] [F] Buttafuoco gioca la carta della Biennale del dissenso: vien da dire ‘tutto sbagliato, tutto da rifare’: Invece di prendere il toro per le corna, ovvero di affrontare lo snodo chiave dell’ambiguità del ruolo culturale delle istituzioni pubbliche, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Formula Uno, la guerra cancella i Gran Premi del Bahrein e dell'Arabia Saudita: Il Gran Premio del Bahrein e quelllo dell'Arabia Saudita sono stati cancellati dal calendario del Mondiale di Formula Uno a seguito della guerra in Iran e della situazione in Medioriente, Lo, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Russia, quanto sta guadagnando dalla guerra in Iran (grazie alla svolta sul petrolio), "La Russia è la grande vincitrice della guerra in Medio Oriente", Analisti ed esperti concordano: il conflitto tra l'Iran e Usa Israele ha offerto a Mosca, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] "Tutti morti i 6 militari Usa precipitati in Iraq", Escluso l'attacco di un fuoco nemico, indagini sulle cause dell'impatto: Tutti i sei membri a bordo dell'aereo cisterna americano precipitato ieri in Iraq sono morti, portando il bilancio complessivo delle vittime americane nel conflitto in corso a 13, Lo ha.
+[T] [F] Ft: Roma e Parigi dialogano sullo Stretto, Trump: "Le navi passino Hormuz e tirino fuori le p" La Stampa Guerra in Iran, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Avete in mente l'abito a losanghe del celebre Arlecchino? Ebbene, la maschera putignanese di Farinella gli somiglia molto, ma con un tocco tutto meridionale, Il suo creatore, negli anni '50, immaginò una figura a metà tra il jolly delle carte da gioco e un giullare di corte, vestendolo con un abito a toppe multicolori che rappresenta l'allegria e l'arte di arrangiarsi.
+[T] [F] Perché si chiama 'Campana dei Maccheroni'? A Putignano, i rintocchi di questa campana di cartapesta, l'ultima sera di Carnevale, segnano le ultime ore in cui è concesso mangiare carne, La tradizione vuole che i cittadini festeggino in piazza mangiando maccheroni al sugo di carne, l'ultimo pasto ricco prima del periodo di rinunce della Quaresima.
 
 [T] [M] A risentirci a presto.

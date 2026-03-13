@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 14 e 19.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è venerdì 13 marzo 2026, Sant'Arrigo. Sono le 15 e 12.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 13 gradi e probabilità di pioggia. Per domani è previsto prevalentemente sereno, con temperature tra 5 e 14 gradi.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 5 e 13 gradi e qualche possibilità di pioggia. Per domani è previsto prevalentemente sereno, con temperature tra 5 e 14 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Salvini convoca le compagnie petrolifere mercoledì prossimo a Milano: Il ministro delle Infrastrutture e dei Trasporti Matteo Salvini "invierà a breve" le lettere di convocazione alle compagnie petrolifere per incontrarle mercoledì prossimo a Milano, Così una nota del Mit, un aggiornamento dal fronte politico nazionale.
+[T] [F] Mosca protesta con Londra e Parigi per attacco ucraino con missili Gb/Francia, u Gli ambasciatori britannico e francese in Russia sono stati convocati oggi al ministero degli Esteri, che ha presentato loro una protesta per un bombardamento delle forze ucraine sulla regione russa di Bryansk compiuto con missili franco-britannici Storm Shadow/Scalp.
 
-[T] [M] Le Borse di oggi, 13 marzo, Europa migliora con le parole di Trump, petrolio Brent sotto 100 dollari: Il presidente garantisce che gli Stati Uniti scorteranno le navi fuori dallo stretto di Hormuz "se necessario", Secondo una ricostruzione del sito americano Axios, il tycoon avrebbe dichiarato che l’Iran sarebbe vicino alla resa.
+[T] [M] Borse oggi, 13 marzo, L’Europa sale dopo le parole di Trump, Wall Street in rialzo, Cala il petrolio: Il presidente garantisce che gli Stati Uniti scorteranno le navi fuori dallo stretto di Hormuz "se necessario", Secondo una ricostruzione del sito americano Axios, il tycoon avrebbe dichiarato che l’Iran sarebbe vicino alla resa.
 
-[T] [F] Tra Epstein e l’Anticristo "L’anima nera" Thiel sbarca a Roma, La rassegna stampa ragionata di Daniela Ranieri: Alle 18 torna "Cambiare Musica", la rassegna stampa settimanale di Daniela Ranieri che oggi propone una lettura approfondita di articoli che ruotano attorno al ruolo di Peter Thiel: "Tra Epstein e l’Anticristo "L’anima nera" Thiel sbarca a Roma".
+[T] [F] Laboratori culinari e sfide tra chef nei reparti degli ospedali: così Special Cook rende più umani i reparti: L’idea è semplice e per diversi aspetti anche "geniale", portare alcuni tra i migliori giovani chef professionisti e food blogger nei reparti degli ospedali per preparare piatti sani e gustosi per i pazienti e le persone con disabilità, Si tratta di Special Cook.
 
-[T] [M] "Dubai è deserta, attacchi spaventosi", Spiagge e ristoranti vuoti nell'ex paradiso (ora città fantasma): Esplosioni che fanno tremare i palazzi, droni sugli edifici (uno che ospitava truppe statunitensi è stato evacuato ieri 12 marzo), La situazione si complica e a Dubai gli aperitivi e le.
+[T] [M] "Dubai è deserta, attacchi spaventosi", Spiagge e ristoranti vuoti nell'ex paradiso (ora città fantasma), Influencer in silenzio: Esplosioni che fanno tremare i palazzi, droni sugli edifici (uno che ospitava truppe statunitensi è stato evacuato ieri 12 marzo), La situazione si complica e a Dubai gli aperitivi e le.
 
-[T] [F] Guerra in Iran, le ultime notizie in diretta | Hegseth: "Mojtaba ferito e spaventato, Leader iraniani sottoterra come topi", Trump: "Iran sta per arrendersi, la prossima settimana colpiremo duramente", Aereo cisterna Usa cade in Iraq: 4 morti Corriere della Sera Iraq, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] In diretta, Medio Oriente, Consiglio supremo di difesa: l’Italia non partecipa e non prenderà parte alla guerra Euronews.com Il Consiglio Supremo di Difesa: 'Grave preoccupazione per lo scenario di crisi in Medio Oriente' ANSA Mattarella sul conflitto Iran Israele: "Gravi, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Nelle campagne di Putignano cresce un albero speciale: il 'fragno', Questa maestosa quercia è un vero e proprio mistero botanico, In Italia, infatti, cresce quasi esclusivamente in questa piccola porzione di Puglia, mentre è comunissima dall'altra parte del mare, nei Balcani, Un ponte verde che unisce le due sponde dell'Adriatico.
+[T] [F] Cosa succede quando un ex convento chiude le porte alla religione e le apre alla cultura? A Putignano, l'antico convento delle Carmelitane è stato sapientemente restaurato, Il suo elegante chiostro interno, un tempo regno del silenzio, oggi è una vivace piazza coperta utilizzata come centro culturale e sede della ricca biblioteca comunale.
 
 [T] [M] A risentirci a presto.

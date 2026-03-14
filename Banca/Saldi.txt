@@ -32,7 +32,7 @@ Marica: € 4.835
 
 # Imprevisti
 Porta Mary: € 1.000
-Idraulico Mary: € 100
+Idraulico Mary: € 200
 Matrimonio Onofrio: € 15.000
 Verde Mary e Ony: € 2.000
 Restauro organo: € 1.700

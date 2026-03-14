@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 20 e 35.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 21 e 38.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Sei Nazioni: l'Italia chiude con sconfitta, il Galles vince 31-17: L'Italrugby chiude il Sei Nazioni con una sconfitta, Nell'ultima giornata del torneo gli azzurri vengono battuti nettamente a Cardiff dal Galles 31-17, Gli azzurri di Quesada mancano così l'obiettivo di chiudere il torneo per la prima volta con tre successi.
+[T] [F] Parigi, nessun piano francese per la pace in Libano: La diplomazia francese ha dichiarato che non esiste "alcun piano francese" per tentare di porre fine alla guerra in Libano tra Israele e il movimento filo-iraniano Hezbollah, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Guerra in Iran, Media: Parigi propone il riconoscimento di Israele da parte di Beirut: Teheran agli Emirati: porti obiettivi legittimi, L’esercito iraniano avverte gli abitanti di tenersi lontani dalle infrastrutture dopo l’attacco americano, Macron propone negoziati tra Stato ebraico del Libano per scongiurare l’invasione.
+[T] [M] Daniela Zinnanti uccisa con trenta coltellate: il referto dell’autopsia: E' stata colpita con una trentina di fendenti Daniela Zinnanti, la donna di 50 anni vittima di femminicidio a Messina, I primi riscontri arrivano dall'autopsia eseguita nella camera mortuaria dell'ospedale Papardo dal medico legale Alessio Asmundo.
 
 [T] [F] Paura in Napoli Lecce: Banda si accascia e viene portato via in ambulanza, ma è cosciente, Di Francesco: "Si è spaventato": Paura nei minuti finali della sfida tra Napoli e Lecce, nell’anticipo delle 18 in Serie A, Con il risultato sul 2-1 in favore degli azzurri, all’87esimo Lameck Banda – esterno zambiano del Lecce – si è all’improvviso accasciato a terra.
 
-[T] [M] I 5mila marines, gli F-35B e non solo: così gli Usa si preparano a "liberare" lo Stretto di Hormuz, La strategia: La guerra in Iran potrebbe durare più di quanto previsto e annunciato da Donald Trump? Nonostante pubblicamente il commander-in-chief e il capo del Pentagono continuino a.
+[T] [M] Guerra in Iran e caro energia, rincari da 350 euro a famiglia: da Roma a Milano, ecco le città italiane più colpite: Energia elettrica, alluminio e carburanti È questa la classifica dei rincari a due settimane dall'inizio del conflitto in Iran, A quindici giorni, un aggiornamento dal mondo dello sport italiano.
 
-[T] [F] È morto Jürgen Habermas Il Post Morto il filosofo Jürgen Habermas, erede della Scuola di Francoforte Corriere della Sera Giacomo Marramao, Il ricordo di Jürgen Habermas "Un gigante, araldo della modernità incompiuta Avvenire, una notizia che ha scosso l'opinione pubblica italiana.
+[T] [F] Raid Usa in Iran sull'isola di Kharg, L'avvertimento di Trump AGI Perché l'isola di Kharg è importante in questa guerra e perché gli Usa hanno deciso di attaccarla Corriere della Sera USA rafforzano la presenza militare: 2.500 Marines verso il Medio Oriente Il Fatto Quotidiano, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Se camminate con il naso all'insù nel centro storico di Putignano, noterete tantissime 'edicole votive', Sono piccoli altari incastonati nei muri dei palazzi o agli angoli delle strade, che ospitano dipinti o statuette di santi, Un tempo, la fiammella della loro candela era l'unica vera illuminazione notturna per chi rincasava nel buio.
+[T] [F] C'è una chiesa a Putignano che custodisce il tesoro più importante della città, È la chiesa di Santa Maria la Greca, un gioiello di eleganza, Al suo interno, in un prezioso reliquiario, è conservato un frammento del cranio di Santo Stefano Protomartire, Proprio la reliquia che, secoli fa, ha dato origine alla festa del Carnevale.
 
 [T] [M] A risentirci a presto.

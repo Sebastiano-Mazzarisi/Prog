@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 9 e 49.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 10 e 42.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi prevalentemente sereno, con temperature tra 6 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,26 +12,26 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Con l'auto precipita in una scarpata per 200 metri, morta coppia: Due fidanzati hanno perso la vita in un incidente stradale avvenuto nella tarda serata di ieri in località Ripe Rosse, nel territorio di Montecorice, una notizia che ha scosso l'opinione pubblica italiana.
+[T] [F] Sima, contro caro-energia ridurre consumi edifici per 6,2 miliardi l'anno: Una riduzione generalizzata del 10% dei consumi energetici negli edifici pubblici e privati determinerebbe risparmi diretti e indiretti per la collettività fino a 6,2 miliardi di euro annui e aiuterebbe a contrastare gli effetti negativi dell'impennata dei prezzi dell'energia.
 
-[T] [M] Guerra in Iran, le news di oggi, Trump: "Raid aerei sull'isola iraniana di Kharg, Hormuz libero o colpirò infrastrutture petrolifere": Proiettili israeliani hanno colpito un quartier generale dei caschi blu nel sud del Libano, Forti esplosioni a Doha e il ministero dell’Interno del Qatar dichiara di aver sventato un attacco missilistico iraniano, Gli Usa inviano 5mila marines, Iraq.
+[T] [M] Kimi Antonelli, fantastica pole in Cina: è il più giovane di sempre, Le Ferrari in seconda fila: Il pilota bolognese approfitta dei problemi del compagno in Mercedes Russell, comunque secondo in griglia e vincitore della Sprint e, segna un record nella storia della Formula Uno, un aggiornamento dalla scena economica italiana.
 
-[T] [F] "Il cinema non mi rendeva più felice, ero insoddisfatto, Con mio padre nessun rapporto, la sua mancanza è stata riempita da mio nonno": così Nicolas Vaporidis, "A un certo punto ho capito che il sistema mi stava stretto, Le persone spesso cambiano radicalmente quando la loro vita non le soddisfa più", Nicolas Vaporidis si racconta a Ciao maschio nella puntata in onda sabato 14 marzo alle 17.05 su Rai 1, Tra i temi principali.
+[T] [F] "Ho sorpreso due ladri in casa, li ho presi a pugni e minacciati con un’ascia: ‘Se ve ciapo ve copo’": notte di paura per l’ex vincitore del Grande Fratello Mauro Marin: Sorprende due ladri in casa ma riesce a farli scappare minacciandoli con un’ascia È successo a Mauro Marin, vincitore del Grande Fratello nel 2010, La vicenda viene riportata dal Corriere del Veneto "Giovedì sono tornato a casa – il 45enne abita a Poisolo.
 
 [T] [M] Petrolio, chi ci perde? Chi ci guadagna? Cina e Russia tra i beneficiari, Europa e Emirati no: In questa nuova crisi energetica le grandi potenze sembrano muoversi come personaggi in cerca di equilibrio: Russia, Cina ed Europa partecipano a un gioco strategico in cui, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Gp in Cina, storico Antonelli, Un italiano in pole dopo 17 anni, il più giovane di sempre: Kimi davanti a Russell e Hamilton, a 19 anni e 6 mesi battuto il record di Vettel: "Sono felicissimo, non vedo l’ora della gara", George: "Sono fiero di lui", Lewis davanti a Leclerc e più vicino alle Mercedes: "Ringrazio il team".
+[T] [F] Guerra Iran, attacco all'ambasciata Usa a Baghdad, Colpita isola di Kharg, Sky TG24 Kharg, parte il raid Usa sull'isola del tesoro iraniano: "Pronti a colpire il greggio" Corriere della Sera Iran, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
-[T] [F] Movimento 5 Stelle - Si torna in piazza per il No alla riforma Nordio: Sabato 14 marzo alle 10:00 il Gruppo Territoriale Movimento 5 Stelle Castellana Grotte Alberobello torna in piazza Garibaldi per spiegare ai cittadini le ragioni del no alla riforma Nordio, L’apertura delle urne, domenica 22 e lunedì 23 marzo, si avvicina e la rappresentanza locale dei 5S intensifica gli eventi informativi con la presenza di diversi rappresentanti istituzionali, All’incontro mattutino con un titolo molto chiaro "La risposta è no", interverranno due parlamentari, l'onorevole Patty L'Abbate e l'onorevole Gianmauro Dell’Olio.
+[T] [F] Putignano | Tessiture musicali, reti e territori tra simboli e impronte del fare il Tacco di Bacco.
 
-[T] [M] Putignano | Tessiture musicali, reti e territori tra simboli e impronte del fare il Tacco di Bacco.
+[T] [M] Il comune di Gioia del Colle aderisce alla campagna di sensibilizzazione FIAB "Tutti a scuola a piedi o in bici" Comune di Gioia del Colle.
 
-[T] [F] Il comune di Gioia del Colle aderisce alla campagna di sensibilizzazione FIAB "Tutti a scuola a piedi o in bici" Comune di Gioia del Colle.
+[T] [F] Primo appuntamento di "Noci: Radici di Cultura, Germogli di Lettura", Formazione sui Silent Books e inaugurazione mostra Comune di Noci.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] A Putignano il Carnevale non si guarda, si vive, Sapevate che quasi tutta la popolazione cittadina fa parte di un'associazione o di un gruppo mascherato? Non esistono veri e propri spettatori: chiunque scenda in strada diventa parte integrante dello spettacolo, trasformando l'intero paese in un immenso e coloratissimo palcoscenico a cielo aperto.
+[T] [F] A Putignano, la storia si respira nei palazzi, Il 'Palazzo del Balì' è uno degli edifici più imponenti e affascinanti del borgo antico, Per secoli non è stato una semplice casa, ma la sfarzosa residenza ufficiale del Governatore dei Cavalieri di Malta, Un vero e proprio palazzo del potere, con stanze affrescate e ampi cortili.
 
 [T] [M] A risentirci a presto.

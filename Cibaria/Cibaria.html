@@ -13,7 +13,40 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
 <body style="text-align: center; font-family: sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
-    <h2>Menu del giorno 14/03/2026</h2>
-    <img src="Cibaria.jpg" alt="Menu del Giorno" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0,0,0,0.2);">
+    <h2 id="titolo">Menu del giorno 14/03/2026</h2>
+    <img id="menuImg" src="Cibaria.jpg?v=2026-03-14" alt="Menu del Giorno" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0,0,0,0.2);">
+<script>
+// Aggiornamento silenzioso ogni 10 secondi: legge Cibaria.txt,
+// se la firma (data+orario) è cambiata aggiorna solo immagine e titolo
+(function() {
+  var INTERVALLO = 10000;
+  var firma = "2026-03-14\n10-57";
+  var MESI = ['','gennaio','febbraio','marzo','aprile','maggio','giugno',
+              'luglio','agosto','settembre','ottobre','novembre','dicembre'];
+  function isoToIt(iso) {
+    var p = iso.split('-');
+    return parseInt(p[2],10) + ' ' + MESI[parseInt(p[1],10)] + ' ' + p[0];
+  }
+  function controlla() {
+    fetch('Cibaria.txt?v=' + Date.now(), {cache:'no-store'})
+      .then(function(r) { return r.text(); })
+      .then(function(testo) {
+        testo = testo.trim();
+        if (testo !== firma) {
+          firma = testo;
+          var righe = testo.split('\n');
+          var nuovaIso = righe[0] ? righe[0].trim() : '';
+          if (nuovaIso) {
+            document.getElementById('titolo').textContent = 'Menu del giorno ' + isoToIt(nuovaIso);
+            document.getElementById('menuImg').src = 'Cibaria.jpg?v=' + Date.now();
+          }
+        }
+      })
+      .catch(function() {})
+      .finally(function() { setTimeout(controlla, INTERVALLO); });
+  }
+  setTimeout(controlla, INTERVALLO);
+})();
+</script>
 </body>
 </html>

@@ -4,10 +4,14 @@ Massimo: € 22.000
 Rosso: € 5.000
 Giallo: € 10.000
 
+Data: 13/03/26
+Nino: € 10.709
+Marica: € 4.835
+
 # Aggiornamenti saldo
 
 Data: 13/03/26
-Nino: € 9.284; Riparazione Renault
+Nino: € 9.284; Riparazione Renault (-)
 Marica: € 4.835
 
 Data: 12/03/26
@@ -27,5 +31,8 @@ Nino: € 16.471
 Marica: € 4.835
 
 # Imprevisti
+Porta Mary: € 1.000
+Idraulico Mary: € 100
+Matrimonio Onofrio: € 15.000
+Verde Mary e Ony: € 2.000
 Restauro organo: € 1.700
-

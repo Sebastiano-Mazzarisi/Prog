@@ -7,6 +7,9 @@
 <meta name="apple-mobile-web-app-title" content="Saldi">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -310,6 +313,16 @@ function init(){
 }
 
 init();
+
+// ── Auto-reload ogni 10 secondi (svuota cache su mobile) ──────────────────────
+(function(){
+  var INTERVALLO = 10000; // ms
+  function ricarica(){
+    var url = window.location.href.split('?')[0];
+    window.location.replace(url + '?v=' + Date.now());
+  }
+  setTimeout(ricarica, INTERVALLO);
+})();
 
 function copiaRiga(tr){
   var testo=decodeURIComponent(tr.dataset.testo);

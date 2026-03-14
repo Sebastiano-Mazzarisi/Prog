@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 15 e 01.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 15 e 56.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Cgil, i rider in piazza 'turni fino a 10 ore al giorno, 2-4 euro a consegna': Oggi i rider di Glovo e Deliveroo scendono in oltre 30 piazze con una mobilitazione nazionale promossa dalla Cgil, da Roma a Napoli, Milano e Firenze, per chiedere salari dignitosi, un aggiornamento dal mondo dello sport italiano.
+[T] [F] E' morto il filosofo tedesco Jurgen Habermas, (ANSA-AFP) - BERLINO, 14 MAR - E' morto a 96 anni il filosofo e sociologo tedesco Jurgen Habermas, Lo studioso si è spento oggi a Starnberg, nel sud della Germania, secondo quanto comunicato dalla sua casa editrice, Suhrkamp, Professore universitario.
 
-[T] [M] Guerra in Iran, news, Raid Usa sull'isola di Kharg, Teheran agli Emirati: porti obiettivi legittimi: L’esercito iraniano avverte gli abitanti di tenersi lontani dalle infrastrutture dopo l’attacco americano, Macron propone negoziati Israele Libano a Parigi, Media: Israele pianifica una grossa operazione di terra in Libano.
+[T] [M] Enrica Bonaccorti, i funerali, L’omelia con le parole di Renato Zero: "Sorella, amica, complice": Roma e il mondo dello spettacolo salutano Enrica Bonaccorti, Lâautrice e conduttrice televisiva si Ã¨ spenta allâalba di giovedÃ¬ 12 marzo in una clinica romana, Nel settembre 2025 aveva dichiarato pubblicamente di avere un tumore al pancreas.
 
-[T] [F] "C’è un solo modo per raggiungere l’Inter e vincere il campionato": Allegri torna sulla rimonta scudetto, "Non è una questione di provarci, noi dobbiamo fare il nostro, perché con 60 punti non si va da nessuna parte, Dobbiamo fare il massimo sapendo che davanti c’è una squadra che ha 7 punti di vantaggio", Così Massimiliano Allegri sullo scudetto.
+[T] [F] Ordigno esploso davanti a una scuola ebraica di Amsterdam, Un movimento islamico rivendica, Il governo: "Attacco vile": Nella prime ore di questa mattina, un ordigno è esploso davanti a una scuola ebraica ad Amsterdam, Già ieri la polizia aveva arrestato quattro uomini con l’accusa di aver innescato una esplosione di fronte a una sinagoga di Rotterdam.
 
-[T] [M] I 5mila marines, gli F-35B e non solo: così gli Usa si preparano a "liberare" lo Stretto di Hormuz: La guerra in Iran potrebbe durare più di quanto previsto e annunciato da Donald Trump? Nonostante pubblicamente il commander-in-chief e il capo del Pentagono continuino a, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Petrolio, chi ci perde? Chi ci guadagna? Cina e Russia tra i beneficiari, Europa e Emirati no: In questa nuova crisi energetica le grandi potenze sembrano muoversi come personaggi in cerca di equilibrio: Russia, Cina ed Europa partecipano a un gioco strategico in cui, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Qual è il vero rischio di annodare due crisi: La decisione americana di consentire la vendita del petrolio russo rimasto bloccato in mare fa emergere una tensione strategica nuova, Per contenere lo choc energetico provocato dalla crisi di, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Guerra Iran, raid Usa su Kharg, Teheran agli Emirati: "Porti obiettivi legittimi", una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] La terra su cui sorge Putignano non è fatta di pianure sabbiose, ma di solida pietra, La città è adagiata sulle Murge, un vasto altopiano calcareo che domina la Puglia centrale, È un paesaggio brullo, affascinante, scolpito dall'acqua nel corso dei millenni, che regala alla città un'atmosfera sospesa e un clima fresco e asciutto.
+[T] [F] C'è chi sostiene che il nome di Putignano nasconda un segreto legato agli dèi dell'Olimpo, Una teoria filologica dell'Ottocento lega infatti l'origine della città al culto di Apollo Pitico, Secondo questa ipotesi, in epoca pre-romana, ci sarebbe stato un tempio o un altare dedicato al dio del sole proprio dove oggi sorge il borgo antico.
 
 [T] [M] A risentirci a presto.

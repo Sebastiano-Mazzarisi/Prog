@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 12 e 32.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 14 e 10.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi prevalentemente sereno, con temperature tra 6 e 15 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 15 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Mimit, prezzo medio benzina a 1,83 euro al litro, gasolio a 2,06 euro: Il ministero delle Imprese e del Made in Italy rende noto che, in base agli ultimi dati rilevati dall'Osservatorio sui prezzi dei carburanti del Mimit, in data odierna - sabato 14 marzo 2026 - il prezzo medio dei carburanti lungo la rete stradale nazionale è pari a 1.
+[T] [F] Cgil, i rider in piazza 'turni fino a 10 ore al giorno, 2-4 euro a consegna': Oggi i rider di Glovo e Deliveroo scendono in oltre 30 piazze con una mobilitazione nazionale promossa dalla Cgil, da Roma a Napoli, Milano e Firenze, per chiedere salari dignitosi, un aggiornamento dal mondo dello sport italiano.
 
-[T] [M] Paganin: "L’Inter dovrebbe fare disastri con l’Atalanta per perdere il titolo, Ma occhio alla Dea": L’ex calciatore delle due squadre nerazzurre, oggi commentatore a Mediaset, presenta la partita delle 15 a San Siro, un aggiornamento dal mondo dello sport italiano.
+[T] [M] Guerra in Iran, news, Raid Usa sull'isola di Kharg, Teheran agli Emirati: porti obiettivi legittimi: L’esercito iraniano avverte gli abitanti di tenersi lontani dalle infrastrutture dopo l’attacco americano, Macron propone negoziati Israele Libano a Parigi, Media: Israele pianifica una grossa operazione di terra in Libano.
 
-[T] [F] "Dopo il successo mi sono perso, pensavo solo alle macchine e ad avere più donne, Le dicerie sulla sfortuna? Ho sbagliato a ignorarle": così Marco Masini, "A mia madre, quando stava morendo, avevo promesso che avrei portato fino in fondo una missione: la musica", Promessa mantenuta.
+[T] [F] Indian Wells, per Sinner la sfida più dura: affronta Zverev per andare in finale | Quando gioca e dove vederla in tv e streaming: Servivano risposte e Jannik Sinner le ha date nel corso di questa settimana a Indian Wells, Prima battendo la giovanissima promessa Joao Fonseca, poi Learner Tien.
 
-[T] [M] Petrolio russo, ok Usa agli acquisti, Putin: noi irrinunciabili: La strategia della Casa Bianca in Iran si evolve di ora in ora, come hanno più volte ripetuto sia Donald Trump che il segretario alla Difesa Pete Hegseth, ma è chiaro ormai a tutti, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] I 5mila marines, gli F-35B e non solo: così gli Usa si preparano a "liberare" lo Stretto di Hormuz: La guerra in Iran potrebbe durare più di quanto previsto e annunciato da Donald Trump? Nonostante pubblicamente il commander-in-chief e il capo del Pentagono continuino a, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Guerra in Iran, le ultime notizie in diretta | Wsj: "Trump avvertito rischio Hormuz ma puntava su resa", Il presidente Usa: "Ho ordinato raid aerei sull'isola di Kharg, annientati tutti gli obiettivi militari" Corriere della Sera Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Qual è il vero rischio di annodare due crisi: La decisione americana di consentire la vendita del petrolio russo rimasto bloccato in mare fa emergere una tensione strategica nuova, Per contenere lo choc energetico provocato dalla crisi di, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] A Putignano, la storia si respira nei palazzi, Il 'Palazzo del Balì' è uno degli edifici più imponenti e affascinanti del borgo antico, Per secoli non è stato una semplice casa, ma la sfarzosa residenza ufficiale del Governatore dei Cavalieri di Malta, Un vero e proprio palazzo del potere, con stanze affrescate e ampi cortili.
+[T] [F] A pochi chilometri dal centro di Putignano si erge una collina verdeggiante chiamata Monte Laureto, Ma non è la cima ad attirare i visitatori, bensì il suo cuore di roccia, Qui si nasconde la Grotta di San Michele, un'altra incredibile cavità naturale che, fin da tempi antichissimi, è avvolta da un'aura di profonda spiritualità.
 
 [T] [M] A risentirci a presto.

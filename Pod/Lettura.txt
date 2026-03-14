@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 6 e 54.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 8 e 01.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 15 gradi. Per domani è previsto cielo coperto, con temperature tra 10 e 14 gradi.
+[T] [F] Oggi prevalentemente sereno, con temperature tra 6 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,13 +12,13 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] F1: Cina, Russel vince la gara sprint davanti alle Ferrari: George Russell (Mercedes) ha vinto la gara sprint del Gran Premio di Cina davanti alle Ferrari di Charles Leclerc e Lewis Hamilton, La gara è stata condizionata dall'ingresso della safety car a pochi chilometri dal termine.
+[T] [F] Trump, l'Iran è stato completamente sconfitto, "L'Iran è completamente sconfitto e vuole un accordo - ma non un accordo che io accetterò", Lo annuncia il presidente degli Stati Uniti, Donald Trump, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Mine e barchini su tutta la costa iraniana, la fortezza invincibile dei pasdaran: Da trent’anni il regime si prepara con bunker e depositi sulle spiagge, Per batterli non basterebbero 7.500 truppe di terra, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Benzina, biglietti aerei, frutta e verdura: quanto ci sono costate due settimane di guerra: Il blocco dello stretto di Hormuz, la chiusura degli spazi aerei, il conflitto che sembra lontano dalla conclusione: la crisi internazionale si scarica sui prezzi di carburanti e ortofrutta.
 
-[T] [F] Attacco Usa all'isola di Kharg, Trump: "L'Iran liberi Hormuz o distruggeremo le infrastrutture petrolifere", "Pochi istanti fa, il Comando Centrale degli Stati Uniti ha eseguito uno dei più potenti raid aerei nella storia del Medio Oriente, annientando totalmente ogni, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] La nave russa alla deriva, Italia pronta ad intervenire, I timori per petrolio e gas: Una nave alla deriva - col suo carico di gas liquefatto, gasolio e olio pesante - l?ennesimo cruccio in giorni in cui si fa fatica anche solo a restare a galla, La petroliera battente, un aggiornamento dal mondo dello sport italiano.
 
-[T] [M] Giudice federale Usa blocca la citazione contro il presidente della Fed Powell: "Nessuna prova, solo quella di aver scontentato Trump": Un giudice federale ha bloccato la citazione contro la Federal Reserve nel contesto dell’indagine nei confronti dell’ex presidente inviso a Trump.
+[T] [M] Guerra in Iran, le ultime notizie in diretta | Trump: "Ho dato ordine di raid aerei sull'isola iraniana di Kharg, annientati tutti gli obiettivi militari" Corriere della Sera Iran, Trump e i marines per l'assalto al petrolio: il piano e l''isola del tesoro' Adnkronos Trump, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [F] Qual è il vero rischio di annodare due crisi: La decisione americana di consentire la vendita del petrolio russo rimasto bloccato in mare fa emergere una tensione strategica nuova, Per contenere lo choc energetico provocato dalla crisi di, una delle notizie più seguite in Italia nelle ultime ore.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] L'arte a Putignano non è solo cartapesta e non si ferma in centro, La città è diventata un museo a cielo aperto grazie a svariati progetti di 'Street Art', Artisti di fama internazionale hanno colorato interi quartieri periferici, come il rione San Pietro Piturno, trasformando grigi palazzi popolari in gigantesche tele ricche di messaggi sociali.
+[T] [F] Scendendo nella Grotta del Trullo non troverete rocce cupe e buie, ma uno spettacolo di colori, Le formazioni calcaree all'interno brillano di incredibili sfumature rossastre e rosate, Questo effetto magico è dovuto all'altissima presenza di ossido di ferro nella roccia locale, che 'arrugginisce' l'acqua creando stalattiti color corallo.
 
 [T] [M] A risentirci a presto.

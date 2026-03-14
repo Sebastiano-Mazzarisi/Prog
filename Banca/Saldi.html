@@ -340,31 +340,33 @@ function chiudiPannello(id){
 
 init();
 
-// ── Ripristino stato dopo reload ───────────────────────────────────────────────
-(function(){
-  try {
-    var stato = JSON.parse(sessionStorage.getItem('saldi_stato') || 'null');
-    if (stato) {
-      if (stato.aperto && PANNELLI[stato.aperto]) apriPannello(stato.aperto);
-      if (stato.scrollY) setTimeout(function(){ window.scrollTo(0, stato.scrollY); }, 0);
-      sessionStorage.removeItem('saldi_stato');
-    }
-  } catch(e) {}
-})();
-
-// ── Auto-reload ogni 10 secondi (svuota cache su mobile) ──────────────────────
+// ── Aggiornamento silenzioso ogni 10 secondi (senza reload, senza lampeggio) ───
 (function(){
   var INTERVALLO = 10000;
-  setTimeout(function(){
-    try {
-      sessionStorage.setItem('saldi_stato', JSON.stringify({
-        aperto: aperto,
-        scrollY: window.scrollY || window.pageYOffset
-      }));
-    } catch(e) {}
-    var url = window.location.href.split('?')[0];
-    window.location.replace(url + '?v=' + Date.now());
-  }, INTERVALLO);
+
+  function aggiorna(){
+    var url = window.location.href.split('?')[0] + '?v=' + Date.now();
+    fetch(url, {cache:'no-store'})
+      .then(function(r){ return r.text(); })
+      .then(function(html){
+        var mDati = html.match(/var DATI=(\[[\s\S]*?\]);/);
+        var mImp  = html.match(/var IMP=(\[[\s\S]*?\]);/);
+        if (!mDati) return;
+        try {
+          var nuoviDati = (new Function('return ' + mDati[1]))();
+          var nuoviImp  = mImp ? (new Function('return ' + mImp[1]))() : IMP;
+          DATI = nuoviDati;
+          IMP  = nuoviImp;
+          init();
+        } catch(e) {}
+      })
+      .catch(function(){})
+      .finally(function(){
+        setTimeout(aggiorna, INTERVALLO);
+      });
+  }
+
+  setTimeout(aggiorna, INTERVALLO);
 })();
 
 function copiaRiga(tr){

@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 10 e 42.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 12 e 32.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
+[T] [F] Oggi prevalentemente sereno, con temperature tra 6 e 15 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Sima, contro caro-energia ridurre consumi edifici per 6,2 miliardi l'anno: Una riduzione generalizzata del 10% dei consumi energetici negli edifici pubblici e privati determinerebbe risparmi diretti e indiretti per la collettività fino a 6,2 miliardi di euro annui e aiuterebbe a contrastare gli effetti negativi dell'impennata dei prezzi dell'energia.
+[T] [F] Mimit, prezzo medio benzina a 1,83 euro al litro, gasolio a 2,06 euro: Il ministero delle Imprese e del Made in Italy rende noto che, in base agli ultimi dati rilevati dall'Osservatorio sui prezzi dei carburanti del Mimit, in data odierna - sabato 14 marzo 2026 - il prezzo medio dei carburanti lungo la rete stradale nazionale è pari a 1.
 
-[T] [M] Kimi Antonelli, fantastica pole in Cina: è il più giovane di sempre, Le Ferrari in seconda fila: Il pilota bolognese approfitta dei problemi del compagno in Mercedes Russell, comunque secondo in griglia e vincitore della Sprint e, segna un record nella storia della Formula Uno, un aggiornamento dalla scena economica italiana.
+[T] [M] Paganin: "L’Inter dovrebbe fare disastri con l’Atalanta per perdere il titolo, Ma occhio alla Dea": L’ex calciatore delle due squadre nerazzurre, oggi commentatore a Mediaset, presenta la partita delle 15 a San Siro, un aggiornamento dal mondo dello sport italiano.
 
-[T] [F] "Ho sorpreso due ladri in casa, li ho presi a pugni e minacciati con un’ascia: ‘Se ve ciapo ve copo’": notte di paura per l’ex vincitore del Grande Fratello Mauro Marin: Sorprende due ladri in casa ma riesce a farli scappare minacciandoli con un’ascia È successo a Mauro Marin, vincitore del Grande Fratello nel 2010, La vicenda viene riportata dal Corriere del Veneto "Giovedì sono tornato a casa – il 45enne abita a Poisolo.
+[T] [F] "Dopo il successo mi sono perso, pensavo solo alle macchine e ad avere più donne, Le dicerie sulla sfortuna? Ho sbagliato a ignorarle": così Marco Masini, "A mia madre, quando stava morendo, avevo promesso che avrei portato fino in fondo una missione: la musica", Promessa mantenuta.
 
-[T] [M] Petrolio, chi ci perde? Chi ci guadagna? Cina e Russia tra i beneficiari, Europa e Emirati no: In questa nuova crisi energetica le grandi potenze sembrano muoversi come personaggi in cerca di equilibrio: Russia, Cina ed Europa partecipano a un gioco strategico in cui, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Petrolio russo, ok Usa agli acquisti, Putin: noi irrinunciabili: La strategia della Casa Bianca in Iran si evolve di ora in ora, come hanno più volte ripetuto sia Donald Trump che il segretario alla Difesa Pete Hegseth, ma è chiaro ormai a tutti, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Guerra Iran, attacco all'ambasciata Usa a Baghdad, Colpita isola di Kharg, Sky TG24 Kharg, parte il raid Usa sull'isola del tesoro iraniano: "Pronti a colpire il greggio" Corriere della Sera Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Guerra in Iran, le ultime notizie in diretta | Wsj: "Trump avvertito rischio Hormuz ma puntava su resa", Il presidente Usa: "Ho ordinato raid aerei sull'isola di Kharg, annientati tutti gli obiettivi militari" Corriere della Sera Iran, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 

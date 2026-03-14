@@ -8,10 +8,6 @@ Data: 14/03/26
 Nino: € 9.309
 Marica: € 4.835
 
-Data: 13/03/26
-Nino: € 10.709
-Marica: € 4.835
-
 # Aggiornamenti saldo
 
 Data: 13/03/26

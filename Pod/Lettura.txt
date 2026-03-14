@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 16 e 37.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 17 e 42.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 15 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,13 +12,13 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] E' morto il filosofo tedesco Jurgen Habermas, (ANSA-AFP) - BERLINO, 14 MAR - E' morto a 96 anni il filosofo e sociologo tedesco Jurgen Habermas, Lo studioso si è spento oggi a Starnberg, nel sud della Germania, secondo quanto comunicato dalla sua casa editrice, Suhrkamp, Professore universitario.
+[T] [F] Corteo a Roma, bruciato cartellone con Meloni e Nordio: Bruciati con i fumogeni due cartelloni con la presidente del consiglio Giorgia Meloni, in uno insieme al ministro Nordio, nel corso del corteo a Roma, un aggiornamento dal fronte politico nazionale.
 
-[T] [M] Enrica Bonaccorti, i funerali, L’omelia con le parole di Renato Zero: "Sorella, amica, complice": Roma e il mondo dello spettacolo hanno salutato Enrica Bonaccorti, Lâautrice e conduttrice televisiva si Ã¨ spenta allâalba di giovedÃ¬ 12 marzo in una clinica romana, Nel settembre 2025 aveva dichiarato pubblicamente di avere un tumore al pancreas.
+[T] [M] Guerra in Iran, raid Usa sull'isola di Kharg.Trump: "Altri Paesi mandino navi per liberare Hormuz": Teheran agli Emirati: porti obiettivi legittimi, L’esercito iraniano avverte gli abitanti di tenersi lontani dalle infrastrutture dopo l’attacco americano, Macron propone negoziati Israele Libano a Parigi, Media: Israele pianifica una grossa operazione di terra in Libano.
 
-[T] [F] Referendum, Bindi a La7: "Bartolozzi è ancora al suo posto, Chi è il vero ministro della Giustizia? Lei non è meno potente di Nordio", "Caso Bartolozzi? Tutto quello che ha detto la capo di gabinetto del Ministro della Giustizia è di una gravità inaudita, Come mai è ancora al suo posto? Io vorrei capire chi è il ministro in via Arenula È una domanda seria la mia.
+[T] [F] L’Inter frena contro l’Atalanta tra le polemiche arbitrali: a San Siro finisce 1-1, Ma i nerazzurri si infuriano con Manganiello: Doveva essere la partita del riscatto post derby per l’Inter di Cristian Chivu, ma i nerazzurri frenano anche contro l’Atalanta, A San Siro finisce 1-1 tra i nerazzurri milanesi e quelli bergamaschi: al gol di Pio Esposito nel primo tempo ha risposto Nikola Krstovic all’83esimo.
 
-[T] [M] Guerra in Iran e caro energia, rincari da 350 euro a famiglia: da Roma a Milano, ecco le città italiane più colpite: Energia elettrica, alluminio e carburanti È questa la classifica dei rincari a due settimane dall'inizio del conflitto in Iran, A quindici giorni, un aggiornamento dal mondo dello sport italiano.
+[T] [M] "Abbiamo perso un bambino, Il nostro è stato un grande amore", Chi è Arnaldo Del Piave, ex marito di Enrica Bonaccorti: Tra i tanti paggi presenti al funerale della star televisiva Enrica Bonaccorti, anche l'ex marito Arnaldo Del Piave che la ricorda così: "Abbiamo vissuto cinque anni insieme, Oggi.
 
 [T] [F] Anziana truffata, l'impiegato di banca la salva chiamando i Carabinieri Primocanale Finto comandante chiama un anziano: la truffatrice trova ad aspettarla i veri carabinieri Alto Adige Raggiro sventato in banca a Bogliasco, una delle notizie più seguite in Italia nelle ultime ore.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Non tutte le grotte sono accoglienti, Nelle campagne putignanesi si apre una ferita nella terra conosciuta come 'Pozzo di San Nicola', Si tratta di un gigantesco e profondo inghiottitoio naturale, un pozzo nero che per secoli ha spaventato e affascinato i contadini, alimentando storie di spiriti e leggende rurali.
+[T] [F] C'è un dolce, a Putignano, che profuma di mandorle e di feste di nozze, Si chiama 'Intorcinato', un biscotto tipico la cui forma ricorda una treccia, o meglio, due mani che si stringono, Nasce infatti come dolce legato ai matrimoni e alle grandi celebrazioni, preparato rigorosamente a mano e spesso accompagnato da un buon bicchiere di liquore dolce.
 
 [T] [M] A risentirci a presto.

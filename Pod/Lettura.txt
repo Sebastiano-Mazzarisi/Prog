@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 9 e 01.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 10 e 03.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Pasdaran, 'braccheremo e uccideremo Netanyahu', "L'incertezza sul destino del criminale Primo Ministro sionista e la possibilità della sua morte o della sua fuga con la famiglia dai territori occupati rivelano la crisi e l'instabilità degli sionisti, Se questo criminale assassino di bambini è ancora vivo.
+[T] [F] Francesi alle urne per i sindaci, a Parigi favorito l'erede di Hidalgo: Si sta votando in Francia dalle 8 per il primo turno delle municipali, con gli occhi puntati su Parigi - dove la sfida è fra Emmanuel Grégoire, erede dei 12 anni di governo della sindaca socialista Anne Hidalgo.
 
-[T] [M] I bonus per la casa del 2026: tutto quello che c’è da sapere su aliquote, spese e massimali: Intestazione delle fatture, bonifici tracciabili, superamento dei limiti e cumulo di diversi strumenti: gli errori più comuni a cui prestare attenzione per evitare contestazioni, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Candidati Oscar 2026: film, attori, registi in nomination e cosa c'è da sapere: Ultimo ripasso per arrivare preparati alla notte delle stelle, I dieci film in corsa per miglior film e tutte le candidature, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] "Il governo decida su che reati indagare": quando Bartolozzi proponeva una legge per controllare i pm riscrivendo la Carta: Stabilire le priorità delle indagini sarà una delle prime cose che farà il governo se vince il Sì al referendum, un aggiornamento dal fronte politico nazionale.
+[T] [F] "Un calice di vino riduce davvero il rischio di infarto o ictus?": l’esperto spiega la verità dietro il nuovo studio: Il vino fa bene al cuore? Dipende da come si leggono gli studi, E soprattutto da come vengono tradotti nei titoli dei giornali, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] GP Cina, la diretta: Antonelli sempre leader, Russell supera Leclerc per il secondo posto, Hamilton quarto, 32° giro di 56 - La situazione: Antonelli Russell Leclerc Hamilton Bearman Verstappen Gasly Colapinto Hulkenberg Lawson Hadjar Sainz Lindblad Ocon Bottas Perez Alonso, Ritirato Stroll, Non.
+[T] [M] Antonelli conquista a 19 anni il suo primo GP di F1 vincendo a Shanghai, Secondo Russell, terzo Hamilton: L'ultimo italiano a vincere un Gran Premio di F1 è stato il romano Giancarlo Fisichella che esattamente 20 anni, precisamente il 19 marzo del 2006, tagliava per primo il traguardo del.
 
-[T] [F] La trappola di Hormuz: ora Trump chiede aiuto, Israele colpisce il Libano, 14 morti La Stampa Guerra Iran, attacchi su Kuwait, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Da Mosca a Venezia gli sgambetti di Salvini: Ci mancava solo la vicenda della Biennale a dividere la maggioranza tra pro e contro Putin, Per molto tempo, lo spettro dello Zar ha aleggiato in occasione del decreto sugli, un aggiornamento dal fronte politico nazionale.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Avete in mente l'abito a losanghe del celebre Arlecchino? Ebbene, la maschera putignanese di Farinella gli somiglia molto, ma con un tocco tutto meridionale, Il suo creatore, negli anni '50, immaginò una figura a metà tra il jolly delle carte da gioco e un giullare di corte, vestendolo con un abito a toppe multicolori che rappresenta l'allegria e l'arte di arrangiarsi.
+[T] [F] I carri allegorici di Putignano non sono solo carri, sono capolavori riconosciuti a livello mondiale, Questa cittadina vanta un'eccellenza assoluta nella lavorazione della cartapesta, I maestri artigiani locali si tramandano di generazione in generazione segreti e tecniche per modellare la carta di giornale, trasformandola in sculture gigantesche e spettacolari.
 
 [T] [M] A risentirci a presto.

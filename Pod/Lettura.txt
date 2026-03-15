@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 16 e 39.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 17 e 42.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 10 e 15 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto pioggia leggera, con temperature tra 10 e 12 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -16,11 +16,11 @@
 
 [T] [M] Guerra in Iran, Domani discussione ministri Ue sull’estensione della missione Aspides: Un drone colpisce una base italiana in Kuwait: nessun ferito, Il presidente Usa: "Una coalizione per lo Stretto", L’Idf: "Almeno altre tre settimane di conflitto", una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Il caso della figlia della ministra israeliana trovata morta in casa, Nei mesi scorsi aveva denunciato "abusi rituali" dei genitori: Shoshana Strock, la figlia della ministra degli Insediamenti di Israele Orit Strock, una notizia che ha scosso l'opinione pubblica italiana.
+[T] [F] La capitana della nazionale femminile di calcio iraniana, ha ritirato la sua richiesta di asilo: è la quinta componente della delegazione che ha preso parte alla Coppa d’Asia in Australia a cambiare idea, Lo rende noto l’agenzia di stampa iraniana Irna, un aggiornamento dal mondo dello sport italiano.
 
-[T] [M] Luca Cordero di Montezemolo: "Abu Dhabi come casa mia È un Paese modello e paga un prezzo ingiusto", "Non vedo l?ora di volare a Abu Dhabi, un modello di pace, sviluppo e sicurezza ora ingiustamente sotto attacco, Questione di ore È la mia seconda casa", Altro che fuga, un aggiornamento dal settore della sanità nazionale.
+[T] [M] Como Roma: formazioni ufficiali, orario, dove vederla (in tv e streaming) e classifica Serie A: Un weekend che può rivelarsi decisivo per il cammino di Como e Roma che si sfidano al Sinigaglia nel big match della 29esima giornata con in palio un posto in Champions, Entrambe quarte a.
 
-[T] [F] Schianto sulla Rivoltana a Caravaggio, ci sono vittime Prima Treviglio Tragedia a Caravaggio, scontro tra quattro auto: due morti e diversi feriti L'Eco di Bergamo Caravaggio, gravissimo incidente sulla Rivoltana: due morti Bergamonews Caravaggio, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Pedopornografia, minorenne trova sue intime e dei suoi cuginetti nel computer della mamma Vanity Fair Italia Pedopornografia, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] La Chiesa Madre di Putignano è un edificio con doppia personalità, Se vi fermate all'esterno, ammirerete un austero e massiccio portale di epoca romanica, Ma appena varcate la soglia, sorpresa! L'interno è stato pesantemente rimaneggiato nei secoli successivi e vi accoglierà con un trionfo di stucchi, marmi e decorazioni in puro stile barocco.
+[T] [F] Guardate bene la maschera di Farinella: il suo cappello da giullare ha esattamente tre punte, ognuna decorata con un campanellino, Non è un caso! Quelle tre punte sono un omaggio geografico: rappresentano idealmente i tre colli su cui originariamente sorgeva l'antico abitato di Putignano, Un pezzo di storia della città da indossare in testa.
 
 [T] [M] A risentirci a presto.

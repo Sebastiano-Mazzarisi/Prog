@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 10 e 03.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 10 e 59.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto pioggia leggera, con temperature tra 10 e 12 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 10 e 13 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Francesi alle urne per i sindaci, a Parigi favorito l'erede di Hidalgo: Si sta votando in Francia dalle 8 per il primo turno delle municipali, con gli occhi puntati su Parigi - dove la sfida è fra Emmanuel Grégoire, erede dei 12 anni di governo della sindaca socialista Anne Hidalgo.
+[T] [F] Urso, 'mi auguro al prossimo Cdm interventi sul caro-carburanti': Contro il caro-carburanti ci saranno "Interventi compensativi mirati e quindi più efficaci a favore delle famiglie meno abbienti, un aggiornamento dal mondo dello sport italiano.
 
-[T] [M] Candidati Oscar 2026: film, attori, registi in nomination e cosa c'è da sapere: Ultimo ripasso per arrivare preparati alla notte delle stelle, I dieci film in corsa per miglior film e tutte le candidature, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Guerra in Iran, le news di oggi, Forti esplosioni in Bahrein, Trump: "Diversi paesi impegnati per la sicurezza di Hormuz": Trump: "Li abbiamo sconfitti, ora coalizione per Hormuz", I Gran Premi di Formula 1 del Bahrein e di Jeddah, in Arabia Saudita, previsti per metà aprile, sono stati cancellati a causa della guerra.
 
-[T] [F] "Un calice di vino riduce davvero il rischio di infarto o ictus?": l’esperto spiega la verità dietro il nuovo studio: Il vino fa bene al cuore? Dipende da come si leggono gli studi, E soprattutto da come vengono tradotti nei titoli dei giornali, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] "Ho tentato il suicidio con 13 boccette di Xanax, Mi chiedevo: ‘Perché sono nato se mi è successo tutto questo?’ Sono salvo per 4 minuti": il racconto choc di GionnyScandal, "La musica mi ha salvato", Lo dice GionnyScandal a Verissimo nella puntata in onda sabato 14 marzo su Canale 5, Una storia intensa e dolorosa la sua.
 
-[T] [M] Antonelli conquista a 19 anni il suo primo GP di F1 vincendo a Shanghai, Secondo Russell, terzo Hamilton: L'ultimo italiano a vincere un Gran Premio di F1 è stato il romano Giancarlo Fisichella che esattamente 20 anni, precisamente il 19 marzo del 2006, tagliava per primo il traguardo del.
+[T] [M] Iran, oltre 2mila Marines Usa inviati in Medio Oriente: pronto l'assalto all'isola di Kharg? Cosa sta succedendo: Gli Stati Uniti si preparano a conquistare l'isola di Kharg? Mentre i raid sull'Iran non accennano a placarsi, circa 2.200 soldati della 31esima Unità di Spedizione, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Da Mosca a Venezia gli sgambetti di Salvini: Ci mancava solo la vicenda della Biennale a dividere la maggioranza tra pro e contro Putin, Per molto tempo, lo spettro dello Zar ha aleggiato in occasione del decreto sugli, un aggiornamento dal fronte politico nazionale.
+[T] [F] F1 Gp Cina, la gara in diretta: Antonelli vince davanti a Russell, primo italiano dopo vent'anni, Hamilton 3°poi Leclerc, Si ritirano Norris, Verstappen Corriere della Sera Kimi, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] I carri allegorici di Putignano non sono solo carri, sono capolavori riconosciuti a livello mondiale, Questa cittadina vanta un'eccellenza assoluta nella lavorazione della cartapesta, I maestri artigiani locali si tramandano di generazione in generazione segreti e tecniche per modellare la carta di giornale, trasformandola in sculture gigantesche e spettacolari.
+[T] [F] Nel Medioevo, Putignano non era governata da re o principi, ma da potenti uomini di fede, Il borgo fu per molto tempo un feudo gestito dai monaci Benedettini della vicina Abbazia di Santo Stefano di Monopoli, I monaci bonificarono le terre, costruirono chiese e diedero a Putignano una struttura sociale e agricola che l'ha arricchita per secoli.
 
 [T] [M] A risentirci a presto.

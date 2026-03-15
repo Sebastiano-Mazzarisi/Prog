@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 19 e 53.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 20 e 36.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Vannacci, oltre 12.000 iscritti a Futuro Nazionale in solo quindici giorni, "Ad oggi, abbiamo superato i 12.000 iscritti, le iscrizioni le abbiamo aperte per ora solo on line e con pagamento digitale il 1 marzo, sono quasi 1.000 iscritti il giorno", Lo ha detto Roberto Vannacci, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Exit poll per Parigi, in testa l'erede di Hidalgo contro Rachida Dati: Secondo i primi exit poll delle municipali francesi, a Parigi il candidato della sinistra unita, Emmanuel Grégoire, erede della sindaca uscente, è in testa contro la sfidante Rachida Dati, della destra Républicains, Secondo l'istituto Elabe.
 
-[T] [M] Guerra in Iran, Domani discussione ministri Ue sull’estensione della missione Aspides: Un drone colpisce una base italiana in Kuwait: nessun ferito, Tajani: "Non ci facciamo intimidere", Il presidente Usa: "Una coalizione per lo Stretto", L’Idf: "Almeno altre tre settimane di conflitto".
+[T] [M] Como Roma, Wesley espulso con due gialli: ma il secondo fallo non è suo e il Var non interviene: Gasperini che urla in panchina, rosso in volto, Wesley perplesso che dice: non ho fatto nulla, Altro giro, altra polemica, E il Var sempre al centro, E’ il 63’ di Como Roma, la squadra di Fabregas va in contropiede.
 
-[T] [F] Identificati tre manifestanti che hanno dato fuoco alle immagini di Meloni e Nordio durante il corteo per il ‘No’ al referendum: La Digos di Roma, in collaborazione con quelle di altre città italiane, ha individuato i primi tre manifestanti sospettati di aver dato alle fiamme, nel corso del corteo per il ‘No’ al referendum tenutosi sabato nella capitale, le immagini della presidente del Consiglio.
+[T] [F] Iran, Schlein: "Gli italiani non vogliono pagare le guerre illegali di Trump e Netanyahu", "Ho apprezzato l’apertura della presidente Meloni sulla nostra proposta sulle accise mobili che abbiamo avanzato, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Sinner Medvedev, orario finale Indian Wells: quando gioca, dove vederla (anche in chiaro) in tv e streaming: Ci aveva abituato troppo bene e ogni sconfitta era una notizia, Oggi Sinner è in crescita e l'azzurro, dopo aver liquidato in due set Zverev, è approdato alla sua prima finale.
+[T] [M] Lazio Milan: formazioni ufficiali, dove vederla (in tv e streaming), orario del big match di Serie A: La domenica di Serie A si conclude allo stadio Olimpico di Roma, teatro del big match tra Lazio e Milan, Le due formazioni scenderanno in campo davanti a 50mila tifosi che, per l'occasione.
 
-[T] [F] Percorsi sostegno Indire, lezioni dal 7 aprile tutti i pomeriggi e full immersion nei weekend, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Nella base italiana di Ali al Salem in Kuwait colpito un drone "Predator": valeva 35 milioni ed era fondamentale per raccogliere informazioni Corriere della Sera Drone colpisce una base italiana in Kuwait, distrutto un velivolo, Resta solo il personale essenziale ANSA Kuwait, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Perché si chiama 'Campana dei Maccheroni'? A Putignano, i rintocchi di questa campana di cartapesta, l'ultima sera di Carnevale, segnano le ultime ore in cui è concesso mangiare carne, La tradizione vuole che i cittadini festeggino in piazza mangiando maccheroni al sugo di carne, l'ultimo pasto ricco prima del periodo di rinunce della Quaresima.
+[T] [F] L'arte a Putignano non è solo cartapesta e non si ferma in centro, La città è diventata un museo a cielo aperto grazie a svariati progetti di 'Street Art', Artisti di fama internazionale hanno colorato interi quartieri periferici, come il rione San Pietro Piturno, trasformando grigi palazzi popolari in gigantesche tele ricche di messaggi sociali.
 
 [T] [M] A risentirci a presto.

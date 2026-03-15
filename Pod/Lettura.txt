@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 17 e 42.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 18 e 37.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Per le uova di Pasqua ancora rincari, fino a +10%: Codacons, nella grande distribuzione va dai 7 fino ai 22 euro, Artigianale fino a 40 euro, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] ++ Valditara agli Uffici scolastici, verificare par condicio su Referendum ++: Il ministro dell'Istruzione Giuseppe Valditara ha dato mandato agli Uffici scolastici regionali di effettuare i dovuti riscontri nel caso in cui arrivino segnalazioni di mancato rispetto della par condicio negli incontri che si stanno tenendo nelle scuole sul referendum sulla.
 
-[T] [M] Guerra in Iran, Domani discussione ministri Ue sull’estensione della missione Aspides: Un drone colpisce una base italiana in Kuwait: nessun ferito, Il presidente Usa: "Una coalizione per lo Stretto", L’Idf: "Almeno altre tre settimane di conflitto", una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Guerra in Iran, Domani discussione ministri Ue sull’estensione della missione Aspides: Un drone colpisce una base italiana in Kuwait: nessun ferito, Tajani: "Non ci facciamo intimidere", Il presidente Usa: "Una coalizione per lo Stretto", L’Idf: "Almeno altre tre settimane di conflitto".
 
-[T] [F] La capitana della nazionale femminile di calcio iraniana, ha ritirato la sua richiesta di asilo: è la quinta componente della delegazione che ha preso parte alla Coppa d’Asia in Australia a cambiare idea, Lo rende noto l’agenzia di stampa iraniana Irna, un aggiornamento dal mondo dello sport italiano.
+[T] [F] "Huaweigate", indagato Andrea Maellare: è un altro assistente parlamentare del forzista Martusciello, Martedì l’interrogatorio: La Procura federale del Belgio scrive un altro capitolo nel cosiddetto scandalo Huaweigate, un aggiornamento dal mondo dello sport italiano.
 
-[T] [M] Como Roma: formazioni ufficiali, orario, dove vederla (in tv e streaming) e classifica Serie A: Un weekend che può rivelarsi decisivo per il cammino di Como e Roma che si sfidano al Sinigaglia nel big match della 29esima giornata con in palio un posto in Champions, Entrambe quarte a.
+[T] [M] Sinner Medvedev, orario finale Indian Wells: quando gioca, dove vederla (anche in chiaro) in tv e streaming: Ci aveva abituato troppo bene e ogni sconfitta era una notizia, Oggi Sinner è in crescita e l'azzurro, dopo aver liquidato in due set Zverev, è approdato alla sua prima finale.
 
-[T] [F] Pedopornografia, minorenne trova sue intime e dei suoi cuginetti nel computer della mamma Vanity Fair Italia Pedopornografia, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Scontro tra 4 auto nel Bergamasco, due morti e diversi feriti Sky TG24 Incidente a Caravaggio, due morti L'Eco di Bergamo Caravaggio, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Guardate bene la maschera di Farinella: il suo cappello da giullare ha esattamente tre punte, ognuna decorata con un campanellino, Non è un caso! Quelle tre punte sono un omaggio geografico: rappresentano idealmente i tre colli su cui originariamente sorgeva l'antico abitato di Putignano, Un pezzo di storia della città da indossare in testa.
+[T] [F] Immaginate di preparare il pane a casa, ma di non avere il forno per cuocerlo, Fino a pochi decenni fa, a Putignano era la normalità, Le donne preparavano gli impasti di pane e focacce nelle proprie cucine e poi li portavano nei grandi forni a legna di quartiere, incidendo le proprie iniziali sulla pasta per non confonderli con quelli dei vicini.
 
 [T] [M] A risentirci a presto.

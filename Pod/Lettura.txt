@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 18 e 37.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 19 e 53.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto pioggia leggera, con temperature tra 10 e 12 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 10 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,26 +12,26 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] ++ Valditara agli Uffici scolastici, verificare par condicio su Referendum ++: Il ministro dell'Istruzione Giuseppe Valditara ha dato mandato agli Uffici scolastici regionali di effettuare i dovuti riscontri nel caso in cui arrivino segnalazioni di mancato rispetto della par condicio negli incontri che si stanno tenendo nelle scuole sul referendum sulla.
+[T] [F] Vannacci, oltre 12.000 iscritti a Futuro Nazionale in solo quindici giorni, "Ad oggi, abbiamo superato i 12.000 iscritti, le iscrizioni le abbiamo aperte per ora solo on line e con pagamento digitale il 1 marzo, sono quasi 1.000 iscritti il giorno", Lo ha detto Roberto Vannacci, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] Guerra in Iran, Domani discussione ministri Ue sull’estensione della missione Aspides: Un drone colpisce una base italiana in Kuwait: nessun ferito, Tajani: "Non ci facciamo intimidere", Il presidente Usa: "Una coalizione per lo Stretto", L’Idf: "Almeno altre tre settimane di conflitto".
 
-[T] [F] "Huaweigate", indagato Andrea Maellare: è un altro assistente parlamentare del forzista Martusciello, Martedì l’interrogatorio: La Procura federale del Belgio scrive un altro capitolo nel cosiddetto scandalo Huaweigate, un aggiornamento dal mondo dello sport italiano.
+[T] [F] Identificati tre manifestanti che hanno dato fuoco alle immagini di Meloni e Nordio durante il corteo per il ‘No’ al referendum: La Digos di Roma, in collaborazione con quelle di altre città italiane, ha individuato i primi tre manifestanti sospettati di aver dato alle fiamme, nel corso del corteo per il ‘No’ al referendum tenutosi sabato nella capitale, le immagini della presidente del Consiglio.
 
 [T] [M] Sinner Medvedev, orario finale Indian Wells: quando gioca, dove vederla (anche in chiaro) in tv e streaming: Ci aveva abituato troppo bene e ogni sconfitta era una notizia, Oggi Sinner è in crescita e l'azzurro, dopo aver liquidato in due set Zverev, è approdato alla sua prima finale.
 
-[T] [F] Scontro tra 4 auto nel Bergamasco, due morti e diversi feriti Sky TG24 Incidente a Caravaggio, due morti L'Eco di Bergamo Caravaggio, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Percorsi sostegno Indire, lezioni dal 7 aprile tutti i pomeriggi e full immersion nei weekend, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
 [T] [F] Il Torneo delle Regioni di calcio a 11 arriva a Noci: il "De Luca Resta" tra gli stadi della 61ª edizione Comune di Noci.
 
-[T] [M] Pallamano A/M Gold, la capolista Cassano Magnago passa a Conversano Antenna Sud.
+[T] [M] Lavinia Group Trani espugna Gioia del Colle: vittoria importante al termine di una vera battaglia sportiva Virgilio.
 
-[T] [F] Il comune di Gioia del Colle aderisce alla campagna di sensibilizzazione FIAB "Tutti a scuola a piedi o in bici" Comune di Gioia del Colle.
+[T] [F] Pallamano A/M Gold, la capolista Cassano Magnago passa a Conversano Antenna Sud.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Immaginate di preparare il pane a casa, ma di non avere il forno per cuocerlo, Fino a pochi decenni fa, a Putignano era la normalità, Le donne preparavano gli impasti di pane e focacce nelle proprie cucine e poi li portavano nei grandi forni a legna di quartiere, incidendo le proprie iniziali sulla pasta per non confonderli con quelli dei vicini.
+[T] [F] Perché si chiama 'Campana dei Maccheroni'? A Putignano, i rintocchi di questa campana di cartapesta, l'ultima sera di Carnevale, segnano le ultime ore in cui è concesso mangiare carne, La tradizione vuole che i cittadini festeggino in piazza mangiando maccheroni al sugo di carne, l'ultimo pasto ricco prima del periodo di rinunce della Quaresima.
 
 [T] [M] A risentirci a presto.

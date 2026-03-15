@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 12 e 34.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 14 e 11.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 10 e 13 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 10 e 15 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,11 +12,11 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] I voli per Pasqua già sopra i 400 euro, treni cari: Caro-voli anche quest'anno per le festività di Pasqua, con i prezzi minimi dei biglietti da nord a sud Italia che, se acquistati oggi, arrivano su alcune tratte a superare i 400 euro tra andata e ritorno, Lo denuncia Assoutenti, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Domani incontro tra Tajani e Rutte a Bruxelles: Domani mattina, a quanto apprende l'ANSA, il ministro degli Esteri Antonio Tajani avrà un bilaterale con il segretario generale della Nato Mark Rutte a Bruxelles, un aggiornamento dal fronte politico nazionale.
 
-[T] [M] L’Ucraina boicotta la cerimonia di chiusura delle Paralimpiadi: CORTINA – Nonostante le tante medaglie vinte, l’Ucraina non parteciperà alla cerimonia di chiusura delle Paralimpiadi, Il presidente del Comitato nazionale paralimpico di Kiev, Valeriy Sushkevych, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] La cerimonia di chiusura delle Paralimpiadi a Cortina: ci sarà anche Giorgia Meloni, Il programma: CORTINA – Siamo alla fine del viaggio, Un mese – con una breve interruzione nel mezzo – di Olimpiadi e Paralimpiadi si chiude stasera allo Stadio Olimpico del Ghiaccio di Cortina, sede della cerimonia di chiusura "Italian Souvenir" è il titolo dello spettacolo: musica.
 
-[T] [F] "Attendo la morte con gioia, è ora di andare fuori dai co***oni, Ho mentito al prete che abusò di me e che in punto di morte mi chiese ‘Mi vuoi bene?'": parla Diego Dalla Palma, "Quando ho parlato della morte si è scatenato un plotone di esecuzione" Diego Dalla Palma torna sulle parole pronunciate in tempi recenti a proposito della sua morte "programmata".
+[T] [F] Cittadini italiani all’estero: come votare correttamente per il referendum sulla Giustizia del 22 e 23 marzo: Con l’avvicinarsi delle date del 22 e 23 marzo 2026, giorni in cui i cittadini italiani saranno chiamati a esprimersi per il referendum sulla giustizia, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] Andrea Kimi Antonelli: età, il significato del secondo nome, carriera, Tutto sul "predestinato" della F1: Quando Gwen Lagrue, talent scout francese per la Mercedes, vide il piccolo Andrea Kimi Antonelli in azione sulle piste italiane del karting, non ci pensò due volte a informare Toto Wolff.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] C'è un pezzo di Putignano dall'altra parte dell'Oceano Atlantico, Tra la fine dell'Ottocento e i primi del Novecento, una fortissima ondata migratoria portò tantissimi putignanesi a cercare fortuna nelle Americhe, Moltissimi si stabilirono in Argentina, dove ancora oggi vivono intere comunità che tramandano il dialetto e le tradizioni della madrepatria.
+[T] [F] Immaginate di entrare in una caverna e trovarvi improvvisamente in una chiesa, All'interno della Grotta di San Michele a Putignano si trova un vero e proprio santuario rupestre, Altari, affreschi e statue dedicati all'Arcangelo guerriero sono incastonati direttamente tra le stalattiti, in un'atmosfera di silenzio e devozione che fa venire i brividi.
 
 [T] [M] A risentirci a presto.

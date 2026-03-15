@@ -1,26 +1,26 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è sabato 14 marzo 2026, Santa Matilde. Sono le 21 e 38.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 7 e 08.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi parzialmente nuvoloso, con temperature tra 6 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 9 e 14 gradi.
+[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto pioggia leggera, con temperature tra 10 e 12 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
-[T] [F] Farmacia di turno a Putignano: dal 14 al 15 marzo: Farmacia Rutigliano, poi dal 21 al 22 marzo: Farmacia Murat, poi dal 28 al 29 marzo: Farmacia Serio
+[T] [F] Farmacia di turno a Putignano: il 15 marzo: Farmacia Rutigliano, poi dal 21 al 22 marzo: Farmacia Murat, poi dal 28 al 29 marzo: Farmacia Serio
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Parigi, nessun piano francese per la pace in Libano: La diplomazia francese ha dichiarato che non esiste "alcun piano francese" per tentare di porre fine alla guerra in Libano tra Israele e il movimento filo-iraniano Hezbollah, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Pasdaran, 'braccheremo e uccideremo Netanyahu', "L'incertezza sul destino del criminale Primo Ministro sionista e la possibilità della sua morte o della sua fuga con la famiglia dai territori occupati rivelano la crisi e l'instabilità degli sionisti, Se questo criminale assassino di bambini è ancora vivo.
 
-[T] [M] Daniela Zinnanti uccisa con trenta coltellate: il referto dell’autopsia: E' stata colpita con una trentina di fendenti Daniela Zinnanti, la donna di 50 anni vittima di femminicidio a Messina, I primi riscontri arrivano dall'autopsia eseguita nella camera mortuaria dell'ospedale Papardo dal medico legale Alessio Asmundo.
+[T] [M] I bonus per la casa del 2026: tutto quello che c’è da sapere su aliquote, spese e massimali: Intestazione delle fatture, bonifici tracciabili, superamento dei limiti e cumulo di diversi strumenti: gli errori più comuni a cui prestare attenzione per evitare contestazioni, una delle notizie più seguite in Italia nelle ultime ore.
+
+[T] [F] Kharg, la battaglia per l'isola centrale per il petrolio, Trump agli alleati: "Navi da guerra a Hormuz": A due settimane dall?inizio dei bombardamenti, la strategia di Donald Trump con l?Iran non sembra ancora chiara, Ma due elementi appaiono certi, Il primo è che il presidente, una delle notizie più seguite in Italia nelle ultime ore.
+
+[T] [M] Il costo dell’energia fa tremare l’Italia, "In caso di un rialzo del costo dell’energia significativo e duraturo, sono a rischio il potere d’acquisto delle famiglie e la competitività delle imprese" ha spiegato il, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [F] Paura in Napoli Lecce: Banda si accascia e viene portato via in ambulanza, ma è cosciente, Di Francesco: "Si è spaventato": Paura nei minuti finali della sfida tra Napoli e Lecce, nell’anticipo delle 18 in Serie A, Con il risultato sul 2-1 in favore degli azzurri, all’87esimo Lameck Banda – esterno zambiano del Lecce – si è all’improvviso accasciato a terra.
-
-[T] [M] Guerra in Iran e caro energia, rincari da 350 euro a famiglia: da Roma a Milano, ecco le città italiane più colpite: Energia elettrica, alluminio e carburanti È questa la classifica dei rincari a due settimane dall'inizio del conflitto in Iran, A quindici giorni, un aggiornamento dal mondo dello sport italiano.
-
-[T] [F] Raid Usa in Iran sull'isola di Kharg, L'avvertimento di Trump AGI Perché l'isola di Kharg è importante in questa guerra e perché gli Usa hanno deciso di attaccarla Corriere della Sera USA rafforzano la presenza militare: 2.500 Marines verso il Medio Oriente Il Fatto Quotidiano, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -28,10 +28,10 @@
 
 [T] [M] Ampliato il potenziamento della rete nelle aree rurali Comune di Noci.
 
-[T] [F] Il comune di Gioia del Colle aderisce alla campagna di sensibilizzazione FIAB "Tutti a scuola a piedi o in bici" Comune di Gioia del Colle.
+[T] [F] Pallamano A/M Gold, la capolista Cassano Magnago passa a Conversano Antenna Sud.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] C'è una chiesa a Putignano che custodisce il tesoro più importante della città, È la chiesa di Santa Maria la Greca, un gioiello di eleganza, Al suo interno, in un prezioso reliquiario, è conservato un frammento del cranio di Santo Stefano Protomartire, Proprio la reliquia che, secoli fa, ha dato origine alla festa del Carnevale.
+[T] [F] Putignano ha un doppio fondo, Sotto l'asfalto e i palazzi del centro storico si estende un vero e proprio labirinto, È un reticolo intricato di antichi canali sotterranei, cisterne per l'acqua piovana e immense cantine private interamente scavate a mano nella viva roccia, Una città ombra, silenziosa e affascinante.
 
 [T] [M] A risentirci a presto.

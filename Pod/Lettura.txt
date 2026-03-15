@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 20 e 36.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è domenica 15 marzo 2026, Santa Luisa. Sono le 21 e 39.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 9 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 10 e 14 gradi e probabilità di pioggia.
+[T] [F] Oggi parzialmente nuvoloso, con temperature tra 9 e 14 gradi. Per domani è previsto cielo coperto, con temperature tra 10 e 14 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Exit poll per Parigi, in testa l'erede di Hidalgo contro Rachida Dati: Secondo i primi exit poll delle municipali francesi, a Parigi il candidato della sinistra unita, Emmanuel Grégoire, erede della sindaca uscente, è in testa contro la sfidante Rachida Dati, della destra Républicains, Secondo l'istituto Elabe.
+[T] [F] Teheran, contattati da diversi Paesi per un passaggio sicuro a Hormuz: Il ministro degli Esteri iraniano Abbas Araghchi ha affermato che diversi Paesi hanno contattato l'Iran per ottenere un passaggio sicuro per le proprie navi attraverso lo Stretto di Hormuz "Non posso citare alcun Paese in particolare".
 
-[T] [M] Como Roma, Wesley espulso con due gialli: ma il secondo fallo non è suo e il Var non interviene: Gasperini che urla in panchina, rosso in volto, Wesley perplesso che dice: non ho fatto nulla, Altro giro, altra polemica, E il Var sempre al centro, E’ il 63’ di Como Roma, la squadra di Fabregas va in contropiede.
+[T] [M] Guerra Ucraina: L’Ue proroga di altri 6 mesi le sanzioni individuali alla Russia: "Continueranno ad applicarsi a circa 2.600 persone fisiche ed entità, colpite in risposta alla continua aggressione militare di Mosca contro l'Ucraina, considerata ingiustificata e non provocata", una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Iran, Schlein: "Gli italiani non vogliono pagare le guerre illegali di Trump e Netanyahu", "Ho apprezzato l’apertura della presidente Meloni sulla nostra proposta sulle accise mobili che abbiamo avanzato, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] "Utilizzate anche il solito sistema clientelare": la campagna per il Sì del deputato di Fratelli d’Italia, "Affrontiamo questa settimana di campagna elettorale, avete gli argomenti per poter discutere ma se non dovesse servire, utilizzate anche il solito sistema clientelare: non ci credi, beh fammi questo favore, Perché tu sei mio cugino.
 
-[T] [M] Lazio Milan: formazioni ufficiali, dove vederla (in tv e streaming), orario del big match di Serie A: La domenica di Serie A si conclude allo stadio Olimpico di Roma, teatro del big match tra Lazio e Milan, Le due formazioni scenderanno in campo davanti a 50mila tifosi che, per l'occasione.
+[T] [M] Como Roma 2-1, le pagelle: Malen (5,5) non basta, Wesley (5) espulso, Rensch (4) fatica, Diao (7) imprendibile: Seconda sconfitta consecutiva per la Roma di Gasperini che, dopo essere passata in vantaggio grazie al rigore trasformato da Malen, ha subito la rimonta dei padroni di casa che con Douvikas prima.
 
-[T] [F] Nella base italiana di Ali al Salem in Kuwait colpito un drone "Predator": valeva 35 milioni ed era fondamentale per raccogliere informazioni Corriere della Sera Drone colpisce una base italiana in Kuwait, distrutto un velivolo, Resta solo il personale essenziale ANSA Kuwait, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Nella base italiana di Ali al Salem in Kuwait colpito un drone "Predator": valeva 35 milioni ed era fondamentale per raccogliere informazioni Corriere della Sera Drone colpisce una base italiana in Kuwait, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] L'arte a Putignano non è solo cartapesta e non si ferma in centro, La città è diventata un museo a cielo aperto grazie a svariati progetti di 'Street Art', Artisti di fama internazionale hanno colorato interi quartieri periferici, come il rione San Pietro Piturno, trasformando grigi palazzi popolari in gigantesche tele ricche di messaggi sociali.
+[T] [F] Molto prima che i Romani costruissero le loro strade consolari, la terra di Putignano era già viva, Il territorio era infatti abitato dall'antica popolazione dei Peuceti, una tribù japigia che dominava la Puglia centrale, Scavi archeologici hanno riportato alla luce frammenti di ceramiche e antiche sepolture che testimoniano un passato glorioso e millenario.
 
 [T] [M] A risentirci a presto.

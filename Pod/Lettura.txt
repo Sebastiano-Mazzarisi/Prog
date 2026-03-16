@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 10 e 09.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 11 e 36.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi pioggia leggera, con temperature tra 10 e 13 gradi e probabilità di pioggia. Per domani è previsto pioggia leggera, con temperature tra 7 e 9 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 10 e 13 gradi e probabilità di pioggia. Per domani è previsto pioggia leggera, con temperature tra 8 e 10 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Kallas, 'a Hormuz ipotesi iniziativa Onu come nel Mar Nero sul grano', "Nel fine settimana ho parlato con il segretario generale dell'Onu Antonio Guterres per capire se è possibile avere un'iniziativa a Hormuz come quella sul Mar Nero per il grano dell'Ucraina", Lo ha detto l'alto rappresentante Ue Kaja Kallas arrivando al consiglio affari esteri.
+[T] [F] Cento anni fa il lancio del razzo che aprì l'era spaziale: Cento anni fa, il 16 marzo 1926, un piccolo razzo alto poco più di tre metri e pesante appena 4, 5 chili si alzava in volo per una manciata di secondi sopra un campo di cavoli del Massachusetts, segnando l'inizio dell'era spaziale: era 'Nell'.
 
-[T] [M] Guerra in Iran, le news di oggi, Trump: "Stiamo parlando, ma Iran non è pronto per l’accordo", Compagnie petrolifere Usa al presidente: "Probabile che la crisi peggiori": L'esercito israeliano ha annunciato di aver avviato una nuova ondata di attacchi "su vasta scala" contro Teheran "Le Forze di Difesa Israeliane (IDF) hanno dato inizio a un'ondata di attacchi su vasta scala contro le infrastrutture del regime terroristico iraniano a Teheran".
+[T] [M] Famiglia nel bosco, La Russa riceverà Nathan e Catherine in Senato: Incontro atteso per mercoledì, a pochi giorni dal referendum sulla giustizia, Domani gli ispettori di Nordio al Tribunale per i minorenni dell’Aquila, un aggiornamento dal fronte politico nazionale.
 
-[T] [F] "Che stupidi i clienti che pagano cifre folli per l’Area Vip! Quasi mi sento in colpa ad approfittarmene": le chat interne di Nation nel processo per i prezzi dei concerti: Il processo antitrust contro Nation e Ticketmaster è entrato nel vivo e riprenderà proprio oggi 16 marzo dopo l’adesione di altri 7 Stati all’accordo con il Dipartimento di Giustizia.
+[T] [F] "Ma come mi è venuto in mente di darti il mio unico fazzoletto": Gerry Scotti in lacrime per il gesto di Valerio a ‘Chi vuol essere milionario’: La puntata di "Chi vuol essere milionario" in onda domenica 15 marzo 2026 su Canale 5 ha regalato uno dei momenti più emozionanti della stagione, Protagonista è stato Valerio, receptionist di Taranto.
 
-[T] [M] Visite fiscali, stretta sulle assenze da malattia: i rischi per i lavoratori, Controlli oltre quota 400 mila: come difendersi: Stretta dell'Inps contro l'assenteismo, I numeri resi noti nel più recente Osservatorio statistico dedicato al Polo unico per la tutela della malattia evidenziano che, nella seconda.
+[T] [M] Tamponamento tra due tram a Roma, paura sulla Prenestina: feriti alcuni passeggeri, 10 portati in ospedale: Attimi di paura a Roma, Un tamponamento tra due tram è avvenuto stamattina, poco prima delle ore 8, in via Prenestina, all'altezza di via Erasmo Gattamelata, Sul posto sono intervenute.
 
-[T] [F] Capire il Referendum sul Csm, Le 3 modifiche costituzionali, Ecco i motivi del Sì e del No Corriere della Sera Come votare al referendum sulla giustizia del 22 e 23 marzo: guida completa Partito democratico Il comitato delle bugie il Giornale Una campagna avvelenata, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Iran, Trump avverte la Nato: 'Ci aiuti ad aprire lo Stretto di Hormuz' Sky TG24 'Trump pronto ad annunciare coalizione per Hormuz', una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Ogni città del sud che si rispetti ha una fortissima devozione mariana, A Putignano, l'amata co-patrona è Maria Santissima del Pozzo, A lei è dedicata una festa sentitissima alla fine di agosto, e la sua figura è strettamente legata all'elemento più prezioso e raro di questo territorio carsico: l'acqua dolce.
+[T] [F] Se pensate che il Carnevale duri solo un paio di settimane a febbraio, a Putignano vi faranno cambiare idea, Quello putignanese è uno dei carnevali più lunghi del mondo, I festeggiamenti, infatti, iniziano ufficialmente subito dopo Natale, precisamente il 26 dicembre, e si concludono solo il giorno del Martedì Grasso, regalando alla città mesi di satira, maschere e tradizioni.
 
 [T] [M] A risentirci a presto.

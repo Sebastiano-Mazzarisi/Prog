@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 7 e 22.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 8 e 56.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi pioggia leggera, con temperature tra 10 e 13 gradi e probabilità di pioggia. Per domani è previsto pioggia leggera, con temperature tra 7 e 9 gradi e probabilità di pioggia.
+[T] [F] Oggi cielo coperto, con temperature tra 10 e 13 gradi e probabilità di pioggia. Per domani è previsto pioggia leggera, con temperature tra 7 e 9 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Oscar 2026: Miglior film "Una battaglia dopo l’altra", Attori: Michael B, Jordan e Jessie Buckley: Cerimonia veloce, battute di O’Brien e Kimmel contro Trump, gli Epstein files e per la libertà di stampa, Momenti emozionanti con Barbra Streisand per Robert Redford e Billy Crystal per Rob Reiner.
+[T] [F] Lo spread tra Btp e Bund apre in lieve rialzo a 81 punti dagli 80,9 della vigilia, Il rendimento del decennale italiano è stabile al 3,78 per cento, un aggiornamento dalla scena economica italiana.
 
-[T] [M] Teheran, 'un ecocidio gli attacchi Idf sui depositi di carburante, (ANSA-AFP) - TEHERAN, 16 MAR - Il ministro degli Esteri iraniano ha dichiarato che gli attacchi israeliani contro i depositi di carburante di Teheran costituiscono un "ecocidio" a causa dei rischi a lungo termine per la salute dei residenti.
+[T] [M] Gli immobiliaristi israeliani mettono le mani sulla Grecia: investimenti raddoppiati in un anno, E "si comprano" anche il quartiere anarchico e pro-Pal: La piazza di Exarchia, cuore del quartiere storicamente anarchico di Atene, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] La feroce tenerezza di Mirko Gualerzi, tormentato e dimenticato pittore del ‘900: Finalmente è uscito nelle librerie Gual, una feroce tenerezza, il libro di mio fratello Roberto Farina sulla figura tormentata di Mirko Gualerzi, pittore e scultore, un colosso del Novecento, un colosso dimenticato.
+[T] [F] Il fast food di Arda Güler, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] "Sean Penn non è qui perché non ha potuto o non ha voluto": perché l'attore (che ha vinto il suo terzo Oscar) ha disertato la cerimonia: Ogni attore sogna la notte degli Oscar, Eppure ce n'è uno che, nonostante abbia vinto la sua terza statuetta, ha disertato la premiazione, Dopo aver già saltato due.
+[T] [M] Unicredit, Opa per superare il 30% di Commerzbank: Unicredit ha annunciato il lancio di un'offerta pubblica volontaria su Commerzbank, L'offerta, spiega una nota, Ã¨ finalizzata a superare la soglia del 30% prevista dalla normativa tedesca in materia di offerta pubblica di acquisto nonchÃ© a favorire, nelle prossime settimane.
 
-[T] [F] La guerra all’Iran e quell’alleanza tra Israele e Stati Uniti: Tra le perle da bar dello sport che gli esperti di geopolitica del momento snocciolano con disinvoltura sconcertante ce n’è una particolarmente interessante, La guerra, un aggiornamento dal mondo dello sport italiano.
+[T] [F] Oscar 2026, chi ha vinto? Dai migliori attori al miglior film fino alla miglior regia, tutti i premi, "Una battaglia dopo l'altra" batte "Sinners-I peccatori": questo il responso dopo la notte degli Oscar, Al termine di una corsa apertissima durata mesi, il film di Paul, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -28,10 +28,10 @@
 
 [T] [M] Putignano (BA) – 45^ Marcialonga di San Giuseppe, vincono Catalano e Pastore Podisti.Net.
 
-[T] [F] Il Torneo delle Regioni di calcio a 11 arriva a Noci: il "De Luca Resta" tra gli stadi della 61ª edizione Comune di Noci.
+[T] [F] Incidente sulla statale 100, traffico bloccato verso Bari a Gioia del Colle Buonasera24.it.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Sei secoli di Carnevale non passano inosservati, Questo rito ha forgiato in modo indelebile il carattere dei putignanesi, I cittadini sono famosi in tutta la regione per la loro ospitalità, la battuta sempre pronta e, soprattutto, una sana e feroce autoironia, A Putignano prendersi in giro non è un'offesa, è un'arte.
+[T] [F] Essere eletti 'Gran Cornuto dell'anno' a Putignano non è un'offesa, ma un onore goliardico! Durante il Giovedì dei Cornuti, l'Accademia locale seleziona un personaggio pubblico, un politico o un cittadino illustre a cui conferire questo titolo satirico, Un modo per esorcizzare la gelosia e ridere delle debolezze umane.
 
 [T] [M] A risentirci a presto.

@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 17 e 39.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 19 e 03.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,13 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Borsa: Milano chiude in marginale rialzo, Ftse Mib +0,07%: Seduta in frazionale crescita per la Borsa di Milano: l'indice Ftse Mib ha concluso in aumento dello 0,07% a 44.347 punti, un aggiornamento dalla scena economica italiana.
+[T] [F] Mattarella, i suicidi in carcere sono una sconfitta dello Stato, "Vi sono tanti problemi, il primo dei quali è la piaga dei suicidi che non si attenua: ciascuno di questi casi è una sconfitta dello Stato a cui sono affidate le vite dei detenuti", Lo ha detto il presidente della Repubblica, Sergio Mattarella.
 
-[T] [M] "Votare è un mio diritto, ma posso esercitarlo solo se ho i soldi": la protesta di una studentessa fuori dal ministero della Giustizia: Questa mattina Veronica, studentessa di 23 anni dell’Università La Sapienza, è in protesta davanti al ministero della Giustizia di via Arenula, Ha con sé un cartello con scritto "sono una studentessa fuorisede e vorrei votare", Veronica, che studia Cooperazione internazionale.
+[T] [M] Guerra in Iran, le news, Trump: "Credo che la Francia aiuterà con Hormuz", No di Londra e Berlino: Il presidente Usa critica gli alleati e su Teheran: "Vuole un accordo, stanno parlando con i nostri", Tajani: "Favorevoli a rafforzare Aspides, ma cambiare il mandato è complesso", Compagnie petrolifere Usa al presidente: "Probabile che la crisi peggiori".
 
-[T] [F] Pensioni, ecco a che età si andrà dal 2027: la tabella ufficiale dei requisiti Inps: Pensioni, L'Inps, di concerto con il ministero del Lavoro, rende ufficiali le età di uscita dal lavoro con gli incrementi previsti dall'ultima legge di bilancio, Pensioni, un aggiornamento dal fronte politico nazionale.
+[T] [F] Il caso delle calciatrici iraniane, portate via dall’Australia dopo il ritiro della richiesta d’asilo: "Minacciate le loro famiglie": La storia delle calciatrici iraniane che avevano chiesto asilo in Australia dopo essere scappate dall’hotel in cui alloggiava la Nazionale si sta chiudendo nel modo più inquietante, Una dopo l’altra.
 
-[T] [M] Donna accoltellata al volto in strada nel Vicentino: l’aggressore la colpisce e poi fugge Fanpage Donna accoltellata alla testa e al volto da uno sconosciuto: la 30enne trasportata in ospedale nel cuore della notte Il Gazzettino Caldogno, un aggiornamento dal mondo dello sport italiano.
+[T] [M] Bonus da 1.200 euro (ex Renzi), chi può beneficiarne e cosa cambia nel 2026: Tra le misure fiscali che negli ultimi anni hanno inciso direttamente sugli stipendi dei lavoratori dipendenti, il cosiddetto ?bonus Renzi? resta una delle più conosciute, Anche, una delle notizie più seguite in Italia nelle ultime ore.
+
+[T] [F] Pensioni, ecco a che età si andrà dal 2027: la tabella ufficiale dei requisiti Inps Il Messaggero Riforma delle pensioni: che succede alla legge Fornero dal 2027 Investireoggi - Legge di Bilancio 2026: Novità Pensioni e Novità INPS Circolare 19 MySolution Quando si va in, un aggiornamento dal fronte politico nazionale.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -30,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Pensate che i trulli siano solo le piccole casette di Alberobello? Sbagliato! Le campagne di Putignano offrono complessi agricoli unici e imponenti: le 'masserie a trullo', Si tratta di vere e proprie aziende agricole fortificate, circondate da muretti a secco e formate da decine di trulli giganti collegati tra loro, Un'architettura rurale maestosa.
+[T] [F] Passeggiando per le strette viuzze del centro storico di Putignano, potreste essere rapiti da un profumo irresistibile, Il borgo conserva infatti antichi forni a legna in pietra, alcuni risalenti a secoli fa e ancora in piena attività, È qui che ogni mattina viene sfornata la classica focaccia barese, unta, croccante e ricoperta di pomodorini.
 
 [T] [M] A risentirci a presto.

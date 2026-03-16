@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 8 e 56.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 10 e 09.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi cielo coperto, con temperature tra 10 e 13 gradi e probabilità di pioggia. Per domani è previsto pioggia leggera, con temperature tra 7 e 9 gradi e probabilità di pioggia.
+[T] [F] Oggi pioggia leggera, con temperature tra 10 e 13 gradi e probabilità di pioggia. Per domani è previsto pioggia leggera, con temperature tra 7 e 9 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Lo spread tra Btp e Bund apre in lieve rialzo a 81 punti dagli 80,9 della vigilia, Il rendimento del decennale italiano è stabile al 3,78 per cento, un aggiornamento dalla scena economica italiana.
+[T] [F] Kallas, 'a Hormuz ipotesi iniziativa Onu come nel Mar Nero sul grano', "Nel fine settimana ho parlato con il segretario generale dell'Onu Antonio Guterres per capire se è possibile avere un'iniziativa a Hormuz come quella sul Mar Nero per il grano dell'Ucraina", Lo ha detto l'alto rappresentante Ue Kaja Kallas arrivando al consiglio affari esteri.
 
-[T] [M] Gli immobiliaristi israeliani mettono le mani sulla Grecia: investimenti raddoppiati in un anno, E "si comprano" anche il quartiere anarchico e pro-Pal: La piazza di Exarchia, cuore del quartiere storicamente anarchico di Atene, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Guerra in Iran, le news di oggi, Trump: "Stiamo parlando, ma Iran non è pronto per l’accordo", Compagnie petrolifere Usa al presidente: "Probabile che la crisi peggiori": L'esercito israeliano ha annunciato di aver avviato una nuova ondata di attacchi "su vasta scala" contro Teheran "Le Forze di Difesa Israeliane (IDF) hanno dato inizio a un'ondata di attacchi su vasta scala contro le infrastrutture del regime terroristico iraniano a Teheran".
 
-[T] [F] Il fast food di Arda Güler, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] "Che stupidi i clienti che pagano cifre folli per l’Area Vip! Quasi mi sento in colpa ad approfittarmene": le chat interne di Nation nel processo per i prezzi dei concerti: Il processo antitrust contro Nation e Ticketmaster è entrato nel vivo e riprenderà proprio oggi 16 marzo dopo l’adesione di altri 7 Stati all’accordo con il Dipartimento di Giustizia.
 
-[T] [M] Unicredit, Opa per superare il 30% di Commerzbank: Unicredit ha annunciato il lancio di un'offerta pubblica volontaria su Commerzbank, L'offerta, spiega una nota, Ã¨ finalizzata a superare la soglia del 30% prevista dalla normativa tedesca in materia di offerta pubblica di acquisto nonchÃ© a favorire, nelle prossime settimane.
+[T] [M] Visite fiscali, stretta sulle assenze da malattia: i rischi per i lavoratori, Controlli oltre quota 400 mila: come difendersi: Stretta dell'Inps contro l'assenteismo, I numeri resi noti nel più recente Osservatorio statistico dedicato al Polo unico per la tutela della malattia evidenziano che, nella seconda.
 
-[T] [F] Oscar 2026, chi ha vinto? Dai migliori attori al miglior film fino alla miglior regia, tutti i premi, "Una battaglia dopo l'altra" batte "Sinners-I peccatori": questo il responso dopo la notte degli Oscar, Al termine di una corsa apertissima durata mesi, il film di Paul, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Capire il Referendum sul Csm, Le 3 modifiche costituzionali, Ecco i motivi del Sì e del No Corriere della Sera Come votare al referendum sulla giustizia del 22 e 23 marzo: guida completa Partito democratico Il comitato delle bugie il Giornale Una campagna avvelenata, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -28,10 +28,10 @@
 
 [T] [M] Putignano (BA) – 45^ Marcialonga di San Giuseppe, vincono Catalano e Pastore Podisti.Net.
 
-[T] [F] Incidente sulla statale 100, traffico bloccato verso Bari a Gioia del Colle Buonasera24.it.
+[T] [F] Camion di traverso sulla statale 100 a Gioia del Colle: carreggiata chiusa e traffico in tilt verso Bari BariToday.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Essere eletti 'Gran Cornuto dell'anno' a Putignano non è un'offesa, ma un onore goliardico! Durante il Giovedì dei Cornuti, l'Accademia locale seleziona un personaggio pubblico, un politico o un cittadino illustre a cui conferire questo titolo satirico, Un modo per esorcizzare la gelosia e ridere delle debolezze umane.
+[T] [F] Ogni città del sud che si rispetti ha una fortissima devozione mariana, A Putignano, l'amata co-patrona è Maria Santissima del Pozzo, A lei è dedicata una festa sentitissima alla fine di agosto, e la sua figura è strettamente legata all'elemento più prezioso e raro di questo territorio carsico: l'acqua dolce.
 
 [T] [M] A risentirci a presto.

@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 19 e 03.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 20 e 35.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Mattarella, i suicidi in carcere sono una sconfitta dello Stato, "Vi sono tanti problemi, il primo dei quali è la piaga dei suicidi che non si attenua: ciascuno di questi casi è una sconfitta dello Stato a cui sono affidate le vite dei detenuti", Lo ha detto il presidente della Repubblica, Sergio Mattarella.
+[T] [F] Pezeshkian, 'ho sentito Macron, uso delle basi Usa nella regione deve cessare': Il presidente iraniano Masoud Pezeshkian ha annunciato sui social di avere avuto una telefonata con Emmanuel Macron, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Guerra in Iran, le news, Trump: "Credo che la Francia aiuterà con Hormuz", No di Londra e Berlino: Il presidente Usa critica gli alleati e su Teheran: "Vuole un accordo, stanno parlando con i nostri", Tajani: "Favorevoli a rafforzare Aspides, ma cambiare il mandato è complesso", Compagnie petrolifere Usa al presidente: "Probabile che la crisi peggiori".
+[T] [M] Monaldi, Fico: criticità ancora più gravi, ora ispezioni straordinarie all’Aorn dei Colli: Il programma di trapianto cardiaco pediatrico non riprenderà "fino a quando non saranno integralmente ricostituite le condizioni di sicurezza necessarie" annuncia il documento della Regione.
 
-[T] [F] Il caso delle calciatrici iraniane, portate via dall’Australia dopo il ritiro della richiesta d’asilo: "Minacciate le loro famiglie": La storia delle calciatrici iraniane che avevano chiesto asilo in Australia dopo essere scappate dall’hotel in cui alloggiava la Nazionale si sta chiudendo nel modo più inquietante, Una dopo l’altra.
+[T] [F] RadioRai, Annalisa Chirico nella bufera, Il Comitato di redazione: "Militante per il Sì al Referendum": Una vicenda "preoccupante" che segna "l’ennesimo grave episodio" in una Rai che "sta diventando una sorta di Radio del regime di tele Meloni" È l’accusa dei parlamentari del Pd della Commissione di Vigilanza Rai nei confronti dei "comportamenti" di Annalisa Chirico.
 
-[T] [M] Bonus da 1.200 euro (ex Renzi), chi può beneficiarne e cosa cambia nel 2026: Tra le misure fiscali che negli ultimi anni hanno inciso direttamente sugli stipendi dei lavoratori dipendenti, il cosiddetto ?bonus Renzi? resta una delle più conosciute, Anche, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Pensioni, ecco a che età si andrà dal 2027: la tabella ufficiale dei requisiti Inps: Pensioni, L'Inps, di concerto con il ministero del Lavoro, rende ufficiali le età di uscita dal lavoro con gli incrementi previsti dall'ultima legge di bilancio, Pensioni, un aggiornamento dal fronte politico nazionale.
 
-[T] [F] Pensioni, ecco a che età si andrà dal 2027: la tabella ufficiale dei requisiti Inps Il Messaggero Riforma delle pensioni: che succede alla legge Fornero dal 2027 Investireoggi - Legge di Bilancio 2026: Novità Pensioni e Novità INPS Circolare 19 MySolution Quando si va in, un aggiornamento dal fronte politico nazionale.
+[T] [F] L'America sarebbe capace di "liberare" Hormuz? Reagan ci riuscì, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Passeggiando per le strette viuzze del centro storico di Putignano, potreste essere rapiti da un profumo irresistibile, Il borgo conserva infatti antichi forni a legna in pietra, alcuni risalenti a secoli fa e ancora in piena attività, È qui che ogni mattina viene sfornata la classica focaccia barese, unta, croccante e ricoperta di pomodorini.
+[T] [F] Come si fa a mantenere in vita il Carnevale più antico d'Europa? Semplice: lo si insegna ai bambini, A Putignano la lavorazione della cartapesta è una cosa seria, tanto che spesso vengono organizzati veri e propri laboratori didattici nelle scuole, I maestri artigiani svelano i segreti di colla e carta di giornale, formando le generazioni del futuro.
 
 [T] [M] A risentirci a presto.

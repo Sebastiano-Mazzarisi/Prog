@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 16 e 11.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 17 e 39.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,13 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Tajani, su pm e giudici ora c'è il sistema introdotto da Mussolini, "Entriamo nel merito della riforma della giustizia, Diciamo basta a bugie e mistificazioni, Diciamo SÌ ad una magistratura finalmente libera, indipendente e imparziale", Lo scrive sui social il ministro degli Esteri e segretario di Fi Antonio Tajani.
+[T] [F] Borsa: Milano chiude in marginale rialzo, Ftse Mib +0,07%: Seduta in frazionale crescita per la Borsa di Milano: l'indice Ftse Mib ha concluso in aumento dello 0,07% a 44.347 punti, un aggiornamento dalla scena economica italiana.
 
-[T] [M] RadioRai, polemica su Annalisa Chirico, Il Cdr: "Troppo schierata per il sì, perché le è concesso?": La nota del sindacato del Gr sulla giornalista collaboratrice esterna: "Lei può esprimere opinioni politiche sul referendum", Pd: "Il direttore spieghi i comportamenti", FdI: "Solito doppiopesismo di sinistra".
+[T] [M] "Votare è un mio diritto, ma posso esercitarlo solo se ho i soldi": la protesta di una studentessa fuori dal ministero della Giustizia: Questa mattina Veronica, studentessa di 23 anni dell’Università La Sapienza, è in protesta davanti al ministero della Giustizia di via Arenula, Ha con sé un cartello con scritto "sono una studentessa fuorisede e vorrei votare", Veronica, che studia Cooperazione internazionale.
 
-[T] [F] Radaman e Quaresima, a Milano cristiani e musulmani rompono insieme il digiuno: l’Iftar come segno di pace: Pregare insieme e poi sedersi allo stesso tavolo, Domenica 15 marzo, nella chiesa di San Bernardino in via Lanzone a Milano, cristiani e musulmani hanno condiviso l’Iftar, un aggiornamento dal mondo dello sport italiano.
+[T] [F] Pensioni, ecco a che età si andrà dal 2027: la tabella ufficiale dei requisiti Inps: Pensioni, L'Inps, di concerto con il ministero del Lavoro, rende ufficiali le età di uscita dal lavoro con gli incrementi previsti dall'ultima legge di bilancio, Pensioni, un aggiornamento dal fronte politico nazionale.
 
-[T] [M] Navi da guerra italiane, la mappa: Martinengo a Cipro, Luigi Rizzo con Aspides, E Andrea Doria torna in anticipo dall'Artico: Sei fregate attualmente dispiegate, almeno secondo i dati open-source disponibili, Perché, come è ovvio che sia, ci sono altre unità della Marina Militare italiana in.
-
-[T] [F] Trump vuole trascinare la Nato in guerra: "Se non ci supporta nello Stretto di Hormuz avrà un futuro molto negativo" Il Fatto Quotidiano Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Donna accoltellata al volto in strada nel Vicentino: l’aggressore la colpisce e poi fugge Fanpage Donna accoltellata alla testa e al volto da uno sconosciuto: la 30enne trasportata in ospedale nel cuore della notte Il Gazzettino Caldogno, un aggiornamento dal mondo dello sport italiano.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +30,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Nel Medioevo, Putignano non era governata da re o principi, ma da potenti uomini di fede, Il borgo fu per molto tempo un feudo gestito dai monaci Benedettini della vicina Abbazia di Santo Stefano di Monopoli, I monaci bonificarono le terre, costruirono chiese e diedero a Putignano una struttura sociale e agricola che l'ha arricchita per secoli.
+[T] [F] Pensate che i trulli siano solo le piccole casette di Alberobello? Sbagliato! Le campagne di Putignano offrono complessi agricoli unici e imponenti: le 'masserie a trullo', Si tratta di vere e proprie aziende agricole fortificate, circondate da muretti a secco e formate da decine di trulli giganti collegati tra loro, Un'architettura rurale maestosa.
 
 [T] [M] A risentirci a presto.

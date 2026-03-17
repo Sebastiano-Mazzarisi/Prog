@@ -1,0 +1,32 @@
+# Nome.py: Fantasia-iOS.yml
+# Data e ora ultima modifica: 17/03/2026 14:52
+# Descrizione: Workflow per l'esecuzione manuale dello script tramite comando da app GitHub su iOS
+# File di input: N/D
+# File di output: Log di esecuzione / Aggiornamento repository
+# Parametri: workflow_dispatch
+
+name: Esecuzione Fantasia iOS
+
+on:
+  workflow_dispatch: # Abilita il pulsante "Run workflow" nell'app GitHub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del codice
+        uses: actions/checkout@v4
+
+      - name: Configurazione Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Installazione dipendenze
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Esecuzione dello script
+        run: python Scansiona.py # Assicurati che il nome del file .py sia corretto

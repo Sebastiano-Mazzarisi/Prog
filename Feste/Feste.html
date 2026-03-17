@@ -388,7 +388,7 @@
         function openPrintModal() { document.getElementById('print-modal').classList.add('open'); }
         function closePrintModal(e) { if(e) e.preventDefault(); document.getElementById('print-modal').classList.remove('open'); }
 
-        function updateFilters() { calculateEvents(); renderHome(); const si = document.getElementById('search-input'); renderRubrica(si ? si.value : ''); renderStats(); }
+        function updateFilters() { const si = document.getElementById('search-input'); const v = si ? si.value : ''; calculateEvents(); renderHome(); renderRubrica(v); renderStats(); }
 
         function getSelectedGroups() {
             const selected = [];
@@ -1091,13 +1091,12 @@
             } else {
                 searchBar.style.display = 'flex';
                 sinput.placeholder = tabId === 'home' ? 'Cerca evento...' : 'Cerca persona...';
-                sinput.value = '';
-                document.getElementById('search-clear').style.display = 'none';
             }
             // Ricalcola tutto ad ogni cambio tab
+            const currentVal = sinput ? sinput.value : '';
             calculateEvents();
             renderHome();
-            renderRubrica('');
+            renderRubrica(currentVal);
             renderStats();
             
             // 3. LOGICA DI RIPRISTINO SCROLL
@@ -1138,7 +1137,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            calculateEvents(); renderHome(); renderRubrica(); renderStats(); document.getElementById('count-val').innerText = events.length;
+            calculateEvents();
             document.getElementById('app-container').classList.add('bg-yellow-mode');
             
             // Trigger iniziale per posizionare la Home su Oggi

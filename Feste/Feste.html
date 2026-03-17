@@ -69,7 +69,7 @@
         .header {
             background-color: var(--primary); 
             color: white;                     
-            padding: 1.5rem;
+            padding: 0.8rem 1rem 0.7rem 1rem;
             position: sticky;
             top: 0;
             z-index: 50;
@@ -77,8 +77,14 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         .header-content { position: relative; max-width: 100%; }
-        .header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; }
-        .header p { font-size: 0.95rem; opacity: 0.9; margin-top: 5px; font-weight: 400; }
+        .header h1 { font-size: 1.3rem; font-weight: 800; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; }
+        .header-search { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 0 40px; }
+        .header-search .search-box { background: rgba(255,255,255,0.95); border: none; border-radius: 10px; padding: 7px 32px 7px 12px; font-size: 1rem; color: var(--text-main); outline: none; flex: 1; }
+        .header-search .search-box::placeholder { color: #94a3b8; }
+        .header-search .search-clear { background: rgba(0,0,0,0.15); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: bold; cursor: pointer; display: none; align-items: center; justify-content: center; flex-shrink: 0; }
+        .header-search .result-count { background: white; color: var(--primary); min-width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0; }
+        .search-container { position: relative; flex: 1; display: flex; align-items: center; }
+        .search-container .search-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); }
         
         .header-btn {
             position: absolute;
@@ -216,19 +222,6 @@
 
         #focus-target { scroll-margin-top: 45vh; } /* Per centrare l'elemento */
 
-        /* STICKY SEARCH BAR */
-        .sticky-search {
-            position: sticky;
-            top: 0;
-            z-index: 49;
-            background: var(--bg-body);
-            padding: 10px 1rem 8px 1rem;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-            transition: background-color 0.3s;
-        }
-        .app-container.bg-yellow-mode .sticky-search { background: var(--bg-yellowish); }
-        .sticky-search .search-wrapper { margin-bottom: 0; }
 
     </style>
 </head>
@@ -304,24 +297,15 @@
         
         <div class="header">
             <div class="header-content">
-                <button class="header-btn filter-btn" onclick="openFilterModal()" title="Elenco da spuntare">
+                <button class="header-btn filter-btn" onclick="openFilterModal()" title="Filtra">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                 </button>
-
                 <h1>EVENTI E FESTE</h1>
-                <p>17/03/2026 - 21:49:32</p>
-                <button id="btn-update" onclick="forceReload()" style="background:transparent; border:1px solid rgba(255,255,255,0.5); color:white; border-radius:20px; padding:4px 12px; font-size:0.8rem; margin-top:5px; cursor:pointer;">
-                    ↻ Aggiorna ora
-                </button>
-                
                 <button class="header-btn print-btn" onclick="openPrintModal()" title="Stampa PDF">
                     🖨️
                 </button>
             </div>
-        </div>
-
-        <div class="sticky-search" id="sticky-search">
-            <div class="search-wrapper">
+            <div class="header-search">
                 <div class="search-container">
                     <input type="text" id="search-input" class="search-box" placeholder="Cerca..." oninput="handleSearchInput()">
                     <button id="search-clear" class="search-clear" onclick="clearSearch()">✕</button>
@@ -399,7 +383,7 @@
         function openPrintModal() { document.getElementById('print-modal').classList.add('open'); }
         function closePrintModal(e) { if(e) e.preventDefault(); document.getElementById('print-modal').classList.remove('open'); }
 
-        function updateFilters() { calculateEvents(); renderHome(); renderRubrica(document.getElementById('search-input').value); renderStats(); if(activeTabId === 'home') updateHomeCounter(); }
+        function updateFilters() { calculateEvents(); renderHome(); renderRubrica(document.getElementById('search-input').value); renderStats(); if(activeTabId === 'home') updateSearchCounter(); }
 
         function getSelectedGroups() {
             const selected = [];
@@ -631,12 +615,20 @@
             return people;
         }
         
-        function updateHomeCounter() {
+        function updateSearchCounter() {
             const val = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').toLowerCase();
-            const filtered = events.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(val));
-            document.getElementById('count-val').innerText = filtered.length;
             const clearBtn = document.getElementById('search-clear');
             if (val.length > 0) clearBtn.style.display = 'flex'; else clearBtn.style.display = 'none';
+            if (activeTabId === 'rubrica') {
+                // count filtered people in rubrica
+                const people = getGroupedPeople ? getGroupedPeople() : {};
+                const sortedPeople = Object.values(people).sort((a,b) => a.c.localeCompare(b.c));
+                const filtered = sortedPeople.filter(p => p.n.toLowerCase().includes(val) || p.c.toLowerCase().includes(val));
+                document.getElementById('count-val').innerText = filtered.length;
+            } else {
+                const filtered = val ? events.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(val)) : events;
+                document.getElementById('count-val').innerText = filtered.length;
+            }
         }
 
         function handleSearchInput() {
@@ -645,11 +637,11 @@
                 renderRubrica(val);
             } else if (activeTabId === 'home') {
                 renderHome();
-                updateHomeCounter();
+                updateSearchCounter();
             }
         }
 
-        function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); if (activeTabId === 'rubrica') { renderRubrica(''); } else { renderHome(); updateHomeCounter(); } }
+        function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); if (activeTabId === 'rubrica') { renderRubrica(''); } else { renderHome(); updateSearchCounter(); } }
         
         // --- FUNZIONI DI STATISTICA E MODALI (STATS) ---
         function openStatsModal(type, value, title) {
@@ -1098,16 +1090,8 @@
             if (tabId === 'home' || tabId === 'stats') { appContainer.classList.add('bg-yellow-mode'); } 
             else { appContainer.classList.remove('bg-yellow-mode'); }
 
-            // Aggiorna placeholder in base al tab
-            if (tabId === 'home') {
-                document.getElementById('search-input').placeholder = 'Cerca evento...';
-                updateHomeCounter();
-            } else if (tabId === 'rubrica') {
-                document.getElementById('search-input').placeholder = 'Cerca persona...';
-                renderRubrica(document.getElementById('search-input').value);
-            } else if (tabId === 'stats') {
-                updateHomeCounter();
-            }
+            // Aggiorna contatore dopo cambio tab
+            updateSearchCounter();
             
             // 3. LOGICA DI RIPRISTINO SCROLL
             if (tabId === 'home' && isFirstHomeLoad) {
@@ -1147,7 +1131,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            calculateEvents(); renderHome(); renderRubrica(); renderStats(); updateHomeCounter();
+            calculateEvents(); renderHome(); renderRubrica(); renderStats(); updateSearchCounter();
             document.getElementById('app-container').classList.add('bg-yellow-mode');
             
             // Trigger iniziale per posizionare la Home su Oggi

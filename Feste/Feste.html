@@ -156,6 +156,13 @@
         .modal-actions { display: flex; justify-content: center; margin-top:15px; }
         .modal-btn { background: var(--primary); color: white; border: none; padding: 10px 30px; font-size: 1rem; font-weight: 700; border-radius: 30px; cursor: pointer; width: 100%; }
 
+        .search-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+        .search-container { position: relative; flex-grow: 1; }
+        .search-box { width: 100%; padding: 12px 40px 12px 14px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; outline: none; transition: border-color 0.2s; }
+        .search-box:focus { border-color: var(--primary); }
+        .search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #e2e8f0; border: none; color: #64748b; width: 24px; height: 24px; border-radius: 50%; font-size: 14px; font-weight: bold; cursor: pointer; display: none; align-items: center; justify-content: center; padding-bottom: 2px; }
+        .result-count { background: var(--primary); color: white; min-width: 50px; height: 50px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; font-size: 1.4rem; line-height: 1; flex-shrink: 0; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
+
         /* --- TABS --- */
         .tab-content { display: none; padding: 1rem; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
@@ -303,10 +310,28 @@
         </div>
 
         <div id="tab-home" class="tab-content active">
+            <div class="search-wrapper">
+                <div class="search-container">
+                    <input type="text" id="search-input-home" class="search-box" placeholder="Cerca evento..." oninput="handleHomeSearchInput()">
+                    <button id="search-clear-home" class="search-clear" onclick="clearHomeSearch()">✕</button>
+                </div>
+                <div class="result-count" id="search-counter-home">
+                    <div id="count-val-home">0</div>
+                </div>
+            </div>
             <div id="upcoming-list"></div>
         </div>
 
         <div id="tab-rubrica" class="tab-content">
+            <div class="search-wrapper">
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-box" placeholder="Cerca..." oninput="handleSearchInput()">
+                    <button id="search-clear" class="search-clear" onclick="clearSearch()">✕</button>
+                </div>
+                <div class="result-count" id="search-counter">
+                    <div id="count-val">0</div>
+                </div>
+            </div>
             <div id="rubrica-list"></div>
         </div>
 
@@ -369,7 +394,7 @@
         function openPrintModal() { document.getElementById('print-modal').classList.add('open'); }
         function closePrintModal(e) { if(e) e.preventDefault(); document.getElementById('print-modal').classList.remove('open'); }
 
-        function updateFilters() { calculateEvents(); renderHome(); renderRubrica(document.getElementById('search-input').value); renderStats(); if(activeTabId === 'home') updateSearchCounter(); }
+        function updateFilters() { calculateEvents(); renderHome(); const si = document.getElementById('search-input'); renderRubrica(si ? si.value : ''); renderStats(); }
 
         function getSelectedGroups() {
             const selected = [];
@@ -490,7 +515,8 @@
 
         function renderHome() {
             const container = document.getElementById('upcoming-list');
-            const searchVal = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').toLowerCase();
+            const sinput = document.getElementById('search-input-home');
+            const searchVal = sinput ? sinput.value.toLowerCase() : '';
             
             // Ordina per Mese e Giorno (1 Gen -> 31 Dic)
             let sortedEvents = [...events].sort((a, b) => {
@@ -501,6 +527,12 @@
             if (searchVal) {
                 sortedEvents = sortedEvents.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(searchVal));
             }
+
+            // Aggiorna contatore home
+            const countEl = document.getElementById('count-val-home');
+            const clearBtn = document.getElementById('search-clear-home');
+            if (countEl) countEl.innerText = sortedEvents.length;
+            if (clearBtn) clearBtn.style.display = searchVal ? 'flex' : 'none';
 
             if (sortedEvents.length === 0) { container.innerHTML = '<div style="text-align:center; padding:2rem; font-size:1rem; color:var(--text-muted)">Nessun evento per i gruppi selezionati</div>'; return; }
             
@@ -601,33 +633,16 @@
             return people;
         }
         
-        function updateSearchCounter() {
-            const val = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').toLowerCase();
-            const clearBtn = document.getElementById('search-clear');
-            if (val.length > 0) clearBtn.style.display = 'flex'; else clearBtn.style.display = 'none';
-            if (activeTabId === 'rubrica') {
-                // count filtered people in rubrica
-                const people = getGroupedPeople ? getGroupedPeople() : {};
-                const sortedPeople = Object.values(people).sort((a,b) => a.c.localeCompare(b.c));
-                const filtered = sortedPeople.filter(p => p.n.toLowerCase().includes(val) || p.c.toLowerCase().includes(val));
-                document.getElementById('count-val').innerText = filtered.length;
-            } else {
-                const filtered = val ? events.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(val)) : events;
-                document.getElementById('count-val').innerText = filtered.length;
-            }
-        }
+
 
         function handleSearchInput() {
             const val = document.getElementById('search-input').value;
-            if (activeTabId === 'rubrica') {
-                renderRubrica(val);
-            } else if (activeTabId === 'home') {
-                renderHome();
-                updateSearchCounter();
-            }
+            renderRubrica(val);
         }
+        function handleHomeSearchInput() { renderHome(); }
+        function clearHomeSearch() { const i = document.getElementById('search-input-home'); i.value = ''; i.focus(); renderHome(); }
 
-        function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); if (activeTabId === 'rubrica') { renderRubrica(''); } else { renderHome(); updateSearchCounter(); } }
+        function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); renderRubrica(''); }
         
         // --- FUNZIONI DI STATISTICA E MODALI (STATS) ---
         function openStatsModal(type, value, title) {
@@ -1077,12 +1092,11 @@
             else { appContainer.classList.remove('bg-yellow-mode'); }
 
             // Ricalcola tutto ad ogni cambio tab
-            const val = document.getElementById('search-input').value;
             calculateEvents();
             renderHome();
-            renderRubrica(val);
+            const sinput = document.getElementById('search-input');
+            renderRubrica(sinput ? sinput.value : '');
             renderStats();
-            updateSearchCounter();
             
             // 3. LOGICA DI RIPRISTINO SCROLL
             if (tabId === 'home' && isFirstHomeLoad) {
@@ -1122,7 +1136,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            calculateEvents(); renderHome(); renderRubrica(); renderStats(); updateSearchCounter();
+            calculateEvents(); renderHome(); renderRubrica(); renderStats();
             document.getElementById('app-container').classList.add('bg-yellow-mode');
             
             // Trigger iniziale per posizionare la Home su Oggi

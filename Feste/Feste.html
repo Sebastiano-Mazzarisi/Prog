@@ -295,7 +295,7 @@
                 </button>
 
                 <h1>EVENTI E FESTE</h1>
-                <p>17/03/2026 - 21:31:33</p>
+                <p>17/03/2026 - 21:40:51</p>
                 <button id="btn-update" onclick="forceReload()" style="background:transparent; border:1px solid rgba(255,255,255,0.5); color:white; border-radius:20px; padding:4px 12px; font-size:0.8rem; margin-top:5px; cursor:pointer;">
                     ↻ Aggiorna ora
                 </button>
@@ -566,7 +566,10 @@
                     }
                 }).join('');
                 
-                return `<div class="${cardClass}" ${divId} style="display:flex; gap:15px; ${borderStyle} align-items:stretch;"><div class="cal-date"><div style="font-weight:800; font-size:1.5rem; line-height:1;">${refEvent.pDate.day}</div><div style="font-size:0.75rem; text-transform:uppercase; font-weight:600;">${shortMonths[refEvent.pDate.month-1]}</div></div><div style="flex:1; display:flex; flex-direction:column; justify-content:center; position: relative;">${badgeHtml}${eventsHtml}</div></div>`;
+                const shortDays = ['DOM','LUN','MAR','MER','GIO','VEN','SAB'];
+                const eventDow = new Date(new Date(REF_DATE).getFullYear(), refEvent.pDate.month - 1, refEvent.pDate.day).getDay();
+                const dowLabel = shortDays[eventDow];
+                return `<div class="${cardClass}" ${divId} style="display:flex; gap:15px; ${borderStyle} align-items:stretch;"><div class="cal-date"><div style="font-size:0.7rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:1px;">${dowLabel}</div><div style="font-weight:800; font-size:1.5rem; line-height:1;">${refEvent.pDate.day}</div><div style="font-size:0.75rem; text-transform:uppercase; font-weight:600;">${shortMonths[refEvent.pDate.month-1]}</div></div><div style="flex:1; display:flex; flex-direction:column; justify-content:center; position: relative;">${badgeHtml}${eventsHtml}</div></div>`;
             }).join('');
         }
 

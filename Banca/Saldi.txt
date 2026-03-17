@@ -1,0 +1,42 @@
+# Parametri grafico
+Minimo: € 0
+Massimo: € 22.000
+Rosso: € 5.000
+Giallo: € 10.000
+
+Data: 16/03/26
+Nino: € 8.194
+Marica: € 4.835
+
+Data: 14/03/26
+Nino: € 9.309
+Marica: € 4.835
+
+# Aggiornamenti saldo
+
+Data: 13/03/26
+Nino: € 9.284; Riparazione Renault (-)
+Marica: € 4.835
+
+Data: 12/03/26
+Nino: € 10.725
+Marica: € 4.835
+
+Data: 08/03/26
+Nino: € 10.753
+Marica: € 4.835; Stipendio Marica (+)
+
+Data: 07/03/26
+Nino: € 10.753; Interessi bancari (-)
+Marica: € 3.640
+
+Data: 27/02/26
+Nino: € 16.471
+Marica: € 4.835
+
+# Imprevisti
+Porta Mary: € 1.000
+Idraulico Mary: € 200
+Matrimonio Onofrio: € 15.000
+Verde Mary e Ony: € 2.000
+Restauro organo: € 1.700

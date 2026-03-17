@@ -78,10 +78,10 @@
         }
         .header-content { position: relative; max-width: 100%; }
         .header h1 { font-size: 1.3rem; font-weight: 800; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; }
-        .header-search-input { width: 100%; padding: 7px 30px 7px 12px; border: none; border-radius: 10px; font-size: 1rem; background: rgba(255,255,255,0.95); color: var(--text-main); outline: none; }
+        .header-search-input { width: 100%; padding: 5px 28px 5px 10px; border: none; border-radius: 8px; font-size: 0.9rem; background: rgba(255,255,255,0.95); color: var(--text-main); outline: none; }
         .header-search-input::placeholder { color: #94a3b8; }
         .header-search-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.15); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: bold; cursor: pointer; display: none; align-items: center; justify-content: center; }
-        .header-search-counter { background: white; color: var(--primary); min-width: 42px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0; }
+        .header-search-counter { background: white; color: var(--primary); min-width: 36px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; }
 
         
         .header-btn {
@@ -310,7 +310,7 @@
                     🖨️
                 </button>
             </div>
-            <div id="header-search-bar" style="display:flex; align-items:center; gap:8px; padding:8px 1rem 6px 1rem;">
+            <div id="header-search-bar" style="display:flex; align-items:center; gap:8px; padding:6px 1rem 5px 1rem;">
                 <div style="position:relative; flex:1;">
                     <input type="text" id="search-input" class="header-search-input" placeholder="Cerca evento..." oninput="handleSearchInput()">
                     <button id="search-clear" class="header-search-clear" onclick="clearSearch()">✕</button>
@@ -388,7 +388,7 @@
         function openPrintModal() { document.getElementById('print-modal').classList.add('open'); }
         function closePrintModal(e) { if(e) e.preventDefault(); document.getElementById('print-modal').classList.remove('open'); }
 
-        function updateFilters() { const si = document.getElementById('search-input'); const v = si ? si.value : ''; calculateEvents(); renderHome(); renderRubrica(v); renderStats(); }
+        function updateFilters() { calculateEvents(); renderHome(); renderRubrica(getSearchVal()); renderStats(); }
 
         function getSelectedGroups() {
             const selected = [];
@@ -509,18 +509,11 @@
 
         function renderHome() {
             const container = document.getElementById('upcoming-list');
-            const sinput = document.getElementById('search-input');
-            const searchVal = (sinput && activeTabId === 'home') ? sinput.value.toLowerCase() : '';
-            
-            // Ordina per Mese e Giorno (1 Gen -> 31 Dic)
-            let sortedEvents = [...events].sort((a, b) => {
+            // Ordina per Mese e Giorno (1 Gen -> 31 Dic), applicando filtro testo
+            let sortedEvents = [...getFilteredEvents()].sort((a, b) => {
                 if (a.pDate.month !== b.pDate.month) return a.pDate.month - b.pDate.month;
                 return a.pDate.day - b.pDate.day;
             });
-
-            if (searchVal) {
-                sortedEvents = sortedEvents.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(searchVal));
-            }
 
             // Aggiorna contatore
             const countEl = document.getElementById('count-val');
@@ -619,9 +612,17 @@
             }).join('');
         }
         
+        function getSearchVal() {
+            const si = document.getElementById('search-input');
+            return si ? si.value.toLowerCase() : '';
+        }
+        function getFilteredEvents() {
+            const sval = getSearchVal();
+            return sval ? events.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(sval)) : events;
+        }
         function getGroupedPeople() {
             const people = {};
-            events.forEach(e => { const key = e.Cognome + ' ' + e.Nome; if (!people[key]) people[key] = { c: e.Cognome, n: e.Nome, i: [] }; people[key].i.push(e); });
+            getFilteredEvents().forEach(e => { const key = e.Cognome + ' ' + e.Nome; if (!people[key]) people[key] = { c: e.Cognome, n: e.Nome, i: [] }; people[key].i.push(e); });
             return people;
         }
         
@@ -632,6 +633,7 @@
             document.getElementById('search-clear').style.display = val ? 'flex' : 'none';
             if (activeTabId === 'home') { renderHome(); }
             else if (activeTabId === 'rubrica') { renderRubrica(val); }
+            renderStats();
         }
 
         function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); document.getElementById('search-clear').style.display = 'none'; if (activeTabId === 'home') { renderHome(); } else { renderRubrica(''); } }
@@ -670,8 +672,7 @@
         function closeStatsModal(e) { if(e) e.preventDefault(); document.getElementById('stats-modal').classList.remove('open'); }
 
         function renderStats() {
-            const sval = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').toLowerCase();
-            const statsEvents = sval ? events.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(sval)) : events;
+            const statsEvents = getFilteredEvents();
             const mSets = Array.from({length: 12}, () => new Set());
             statsEvents.forEach(e => { const k = e.Cognome + '|' + e.Nome; mSets[e.pDate.month - 1].add(k); });
             const mCount = mSets.map(s => s.size);
@@ -847,7 +848,7 @@
             for (let m = 0; m < 12; m++) {
                 if (m > 0) doc.addPage();
                 
-                const monthlyEvents = events.filter(e => e.pDate.month === (m + 1));
+                const monthlyEvents = getFilteredEvents().filter(e => e.pDate.month === (m + 1));
                 
                 doc.setFont("helvetica", "bold"); doc.setFontSize(20); doc.setTextColor(0,0,0);
                 doc.text(`${months[m]} ${year} (${monthlyEvents.length})`, pageWidth/2, 15, {align: "center"});
@@ -929,7 +930,7 @@
             let totalYearEvents = 0;
             
             for (let m = 0; m < 12; m++) {
-                const monthlyEvents = events.filter(e => e.pDate.month === (m + 1));
+                const monthlyEvents = getFilteredEvents().filter(e => e.pDate.month === (m + 1));
                 if (monthlyEvents.length > 0) {
                     totalYearEvents += monthlyEvents.length;
                     printQueue.push({ type: 'header', text: `${months[m]} (${monthlyEvents.length})`, height: 10 });
@@ -1095,10 +1096,9 @@
                 sinput.placeholder = tabId === 'home' ? 'Cerca evento...' : 'Cerca persona...';
             }
             // Ricalcola tutto ad ogni cambio tab
-            const currentVal = sinput ? sinput.value : '';
             calculateEvents();
             renderHome();
-            renderRubrica(currentVal);
+            renderRubrica(getSearchVal());
             renderStats();
             
             // 3. LOGICA DI RIPRISTINO SCROLL

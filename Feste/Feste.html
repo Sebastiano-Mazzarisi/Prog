@@ -216,6 +216,20 @@
 
         #focus-target { scroll-margin-top: 45vh; } /* Per centrare l'elemento */
 
+        /* STICKY SEARCH BAR */
+        .sticky-search {
+            position: sticky;
+            top: 0;
+            z-index: 49;
+            background: var(--bg-body);
+            padding: 10px 1rem 8px 1rem;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            transition: background-color 0.3s;
+        }
+        .app-container.bg-yellow-mode .sticky-search { background: var(--bg-yellowish); }
+        .sticky-search .search-wrapper { margin-bottom: 0; }
+
     </style>
 </head>
 <body>
@@ -295,7 +309,7 @@
                 </button>
 
                 <h1>EVENTI E FESTE</h1>
-                <p>17/03/2026 - 21:40:51</p>
+                <p>17/03/2026 - 21:46:06</p>
                 <button id="btn-update" onclick="forceReload()" style="background:transparent; border:1px solid rgba(255,255,255,0.5); color:white; border-radius:20px; padding:4px 12px; font-size:0.8rem; margin-top:5px; cursor:pointer;">
                     ↻ Aggiorna ora
                 </button>
@@ -306,11 +320,7 @@
             </div>
         </div>
 
-        <div id="tab-home" class="tab-content active">
-            <div id="upcoming-list"></div>
-        </div>
-
-        <div id="tab-rubrica" class="tab-content">
+        <div class="sticky-search" id="sticky-search">
             <div class="search-wrapper">
                 <div class="search-container">
                     <input type="text" id="search-input" class="search-box" placeholder="Cerca..." oninput="handleSearchInput()">
@@ -320,6 +330,13 @@
                     <div id="count-val">0</div>
                 </div>
             </div>
+        </div>
+
+        <div id="tab-home" class="tab-content active">
+            <div id="upcoming-list"></div>
+        </div>
+
+        <div id="tab-rubrica" class="tab-content">
             <div id="rubrica-list"></div>
         </div>
 
@@ -382,7 +399,7 @@
         function openPrintModal() { document.getElementById('print-modal').classList.add('open'); }
         function closePrintModal(e) { if(e) e.preventDefault(); document.getElementById('print-modal').classList.remove('open'); }
 
-        function updateFilters() { calculateEvents(); renderHome(); renderRubrica(document.getElementById('search-input').value); renderStats(); }
+        function updateFilters() { calculateEvents(); renderHome(); renderRubrica(document.getElementById('search-input').value); renderStats(); if(activeTabId === 'home') updateHomeCounter(); }
 
         function getSelectedGroups() {
             const selected = [];
@@ -503,12 +520,17 @@
 
         function renderHome() {
             const container = document.getElementById('upcoming-list');
+            const searchVal = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').toLowerCase();
             
             // Ordina per Mese e Giorno (1 Gen -> 31 Dic)
-            const sortedEvents = [...events].sort((a, b) => {
+            let sortedEvents = [...events].sort((a, b) => {
                 if (a.pDate.month !== b.pDate.month) return a.pDate.month - b.pDate.month;
                 return a.pDate.day - b.pDate.day;
             });
+
+            if (searchVal) {
+                sortedEvents = sortedEvents.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(searchVal));
+            }
 
             if (sortedEvents.length === 0) { container.innerHTML = '<div style="text-align:center; padding:2rem; font-size:1rem; color:var(--text-muted)">Nessun evento per i gruppi selezionati</div>'; return; }
             
@@ -609,12 +631,25 @@
             return people;
         }
         
-        function handleSearchInput() {
-            const val = document.getElementById('search-input').value;
-            renderRubrica(val);
+        function updateHomeCounter() {
+            const val = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').toLowerCase();
+            const filtered = events.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(val));
+            document.getElementById('count-val').innerText = filtered.length;
+            const clearBtn = document.getElementById('search-clear');
+            if (val.length > 0) clearBtn.style.display = 'flex'; else clearBtn.style.display = 'none';
         }
 
-        function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); renderRubrica(''); }
+        function handleSearchInput() {
+            const val = document.getElementById('search-input').value;
+            if (activeTabId === 'rubrica') {
+                renderRubrica(val);
+            } else if (activeTabId === 'home') {
+                renderHome();
+                updateHomeCounter();
+            }
+        }
+
+        function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); if (activeTabId === 'rubrica') { renderRubrica(''); } else { renderHome(); updateHomeCounter(); } }
         
         // --- FUNZIONI DI STATISTICA E MODALI (STATS) ---
         function openStatsModal(type, value, title) {
@@ -1062,6 +1097,20 @@
             const appContainer = document.getElementById('app-container');
             if (tabId === 'home' || tabId === 'stats') { appContainer.classList.add('bg-yellow-mode'); } 
             else { appContainer.classList.remove('bg-yellow-mode'); }
+
+            // Mostra/nascondi search bar e aggiorna placeholder/contatore
+            const stickySearch = document.getElementById('sticky-search');
+            if (tabId === 'stats') {
+                stickySearch.style.display = 'none';
+            } else {
+                stickySearch.style.display = 'block';
+                if (tabId === 'home') {
+                    document.getElementById('search-input').placeholder = 'Cerca evento...';
+                    updateHomeCounter();
+                } else {
+                    document.getElementById('search-input').placeholder = 'Cerca persona...';
+                }
+            }
             
             // 3. LOGICA DI RIPRISTINO SCROLL
             if (tabId === 'home' && isFirstHomeLoad) {
@@ -1101,7 +1150,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            calculateEvents(); renderHome(); renderRubrica(); renderStats();
+            calculateEvents(); renderHome(); renderRubrica(); renderStats(); updateHomeCounter();
             document.getElementById('app-container').classList.add('bg-yellow-mode');
             
             // Trigger iniziale per posizionare la Home su Oggi

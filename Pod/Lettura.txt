@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 7 e 04.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 8 e 37.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,11 +12,11 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Nigeria, 23 morti e oltre 100 feriti in più attentati suicidi: Diverse esplosioni, presumibilmente causate da attentatori suicidi, hanno scosso la città di Maiduguri, nel nord-est della Nigeria, uccidendo almeno 23 persone e ferendone più di 100, Lo riferisce la polizia, Le esplosioni, avvenute ieri sera.
+[T] [F] Il prezzo del gas apre in rialzo a 52,14 euro al megawattora: Avvio in rialzo per il prezzo del gas, mentre prosegue la guerra in Medio Oriente e le tensioni nello stretto di Hormuz, Ad Amsterdam le quotazioni registrano un aumento del 2, 14 euro al megawattora, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] Carta Docente, platea allargata ai precari e più spese possibili, Le novità del 2026: Le risorse sono state accreditate lo scorso 9 marzo, La misura ora coinvolge oltre un milione di docenti, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Dissento col Fatto! Che virtù c’è nel rinunciare a qualcosa cui si ha diritto?: Non abbiamo tutti le stesse idee e gli stessi pregiudizi, qui nella ridotta del Fatto quotidiano: e meno male, Né, gli stessi sensi di colpa, L’altro giorno Seif, la società editrice del Fatto, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] La pista da bob di Cortina d’Ampezzo ingoia altri due milioni di spesa, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] Iraq, attacco all'hotel degli italiani: nessun ferito, E in Libano colpita la base Unifil: Libano e Iraq, Due attacchi agli italiani in poche ore, In tarda serata un drone ha colpito un hotel a Baghdad dove alloggiava anche personale italiano, che si trovava comunque in, una delle notizie più seguite in Italia nelle ultime ore.
 
@@ -24,14 +24,14 @@
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
-[T] [F] Camion si ribalta sulla SS 100 a Gioia del Colle: traffico in tilt direzione Bari: Un camion si ribalta sulla SS 100 a Gioia del Colle, creando disagi e code verso Bari.
+[T] [F] Schola Cantorum "don Vincenzo Vitti": animazione delle stazioni della Via Crucis a Noci: La corale castellanese in trasferta, nella vicina Noci, Domenica scorsa, nella chiesa matrice di Noci dedicata a Maria SS, della Natività, alla presenza del vescovo della Diocesi di Conversano Monopoli monsignor Giuseppe Favale, le voci virili della Schola Cantorum "don Vincenzo Vitti" hanno animato le quattordici stazioni della Via Crucis eseguendo i mottetti di Francesco Tavoni.Accompagnati all''organo dal maestro Carlo Maria Clemente e diretti da Vittorio Petruzzi, i cantori si esibiranno ancora.
 
-[T] [M] Schola Cantorum "don Vincenzo Vitti": animazione delle stazioni della Via Crucis a Noci: La corale castellanese in trasferta, nella vicina Noci, Domenica scorsa, nella chiesa matrice di Noci dedicata a Maria SS, della Natività, alla presenza del vescovo della Diocesi di Conversano Monopoli monsignor Giuseppe Favale, le voci virili della Schola Cantorum "don Vincenzo Vitti" hanno animato le quattordici stazioni della Via Crucis eseguendo i mottetti di Francesco Tavoni.Accompagnati all''organo dal maestro Carlo Maria Clemente e diretti da Vittorio Petruzzi, i cantori si esibiranno ancora.
+[T] [M] Putignano (BA) – 45^ Marcialonga di San Giuseppe, vincono Catalano e Pastore Podisti.Net.
 
-[T] [F] Putignano (BA) – 45^ Marcialonga di San Giuseppe, vincono Catalano e Pastore Podisti.Net.
+[T] [F] Il comune di Gioia del Colle insignito dei titoli "Comune Riciclone 2025" e "Comune Plastic Free 2026" Comune di Gioia del Colle.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Perché si chiama 'Campana dei Maccheroni'? A Putignano, i rintocchi di questa campana di cartapesta, l'ultima sera di Carnevale, segnano le ultime ore in cui è concesso mangiare carne, La tradizione vuole che i cittadini festeggino in piazza mangiando maccheroni al sugo di carne, l'ultimo pasto ricco prima del periodo di rinunce della Quaresima.
+[T] [F] Nessuno è al sicuro durante le 'Propaggini' di Putignano, In questa festa del 26 dicembre che apre il Carnevale, i poeti dialettali recitano versi pungenti che prendono di mira esclusivamente i politici, gli amministratori e le personalità locali di spicco, È un momento di pura catarsi collettiva, dove il popolo, per un giorno, ha il diritto di sbeffeggiare chi comanda.
 
 [T] [M] A risentirci a presto.

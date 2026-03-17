@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è lunedì 16 marzo 2026, Sant'Eriberto. Sono le 21 e 50.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 7 e 04.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi pioggia leggera, con temperature tra 10 e 12 gradi e probabilità di pioggia. Per domani è previsto pioggia leggera, con temperature tra 8 e 10 gradi e probabilità di pioggia.
+[T] [F] Oggi pioggia leggera, con temperature tra 8 e 10 gradi e probabilità di pioggia. Per domani è previsto cielo coperto, con temperature tra 5 e 10 gradi e qualche possibilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,13 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Emirati, 'incendio dopo raid di droni su un importante campo petrolifero': Un attacco di droni avvenuto lunedì ha provocato un incendio in un importante campo petrolifero negli Emirati Arabi Uniti, secondo quanto riferito dalle autorità, una notizia che riguarda la sicurezza del territorio nazionale.
+[T] [F] Nigeria, 23 morti e oltre 100 feriti in più attentati suicidi: Diverse esplosioni, presumibilmente causate da attentatori suicidi, hanno scosso la città di Maiduguri, nel nord-est della Nigeria, uccidendo almeno 23 persone e ferendone più di 100, Lo riferisce la polizia, Le esplosioni, avvenute ieri sera.
 
-[T] [M] Cuore bruciato, la Regione dispone ispezione nell’azienda ospedaliera: "Quadro di gravi criticità": La Regione Campania ha disposto un’ispezione nell’azienda ospedaliera dei Colli, da cui dipende l’ospedale Monaldi, un aggiornamento dal settore della sanità nazionale.
+[T] [M] Carta Docente, platea allargata ai precari e più spese possibili, Le novità del 2026: Le risorse sono state accreditate lo scorso 9 marzo, La misura ora coinvolge oltre un milione di docenti, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Pensioni, ecco a che età si andrà dal 2027: la tabella ufficiale dei requisiti Inps: Pensioni, L'Inps, di concerto con il ministero del Lavoro, rende ufficiali le età di uscita dal lavoro con gli incrementi previsti dall'ultima legge di bilancio, Pensioni, un aggiornamento dal fronte politico nazionale.
+[T] [F] Dissento col Fatto! Che virtù c’è nel rinunciare a qualcosa cui si ha diritto?: Non abbiamo tutti le stesse idee e gli stessi pregiudizi, qui nella ridotta del Fatto quotidiano: e meno male, Né, gli stessi sensi di colpa, L’altro giorno Seif, la società editrice del Fatto, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] L'America sarebbe capace di "liberare" Hormuz? Reagan ci riuscì, 39 anni fa Corriere della Sera Non è la nostra guerra, Gli alleati Nato respingono il comando di Trump su Hormuz HuffPost Italia Crisi Iran, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Iraq, attacco all'hotel degli italiani: nessun ferito, E in Libano colpita la base Unifil: Libano e Iraq, Due attacchi agli italiani in poche ore, In tarda serata un drone ha colpito un hotel a Baghdad dove alloggiava anche personale italiano, che si trovava comunque in, una delle notizie più seguite in Italia nelle ultime ore.
+
+[T] [F] La Giustizia e il voto oltre gli slogan: A favore della Casta, Contro la Casta, Per una magistratura più autonoma e indipendente, Per evitare che la magistratura perda autonomia e indipendenza, Scorrendo gli slogan della, una delle notizie più seguite in Italia nelle ultime ore.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -30,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Oltre ai colossali carri di cartapesta, c'è un altro spettacolo che anima le strade di Putignano: le maschere di carattere, Si tratta di gruppi organizzati che non si limitano a sfilare, ma mettono in scena delle vere e proprie coreografie e sketch teatrali itineranti, Un teatro di strada puro, che interagisce direttamente con il pubblico dietro le transenne.
+[T] [F] Perché si chiama 'Campana dei Maccheroni'? A Putignano, i rintocchi di questa campana di cartapesta, l'ultima sera di Carnevale, segnano le ultime ore in cui è concesso mangiare carne, La tradizione vuole che i cittadini festeggino in piazza mangiando maccheroni al sugo di carne, l'ultimo pasto ricco prima del periodo di rinunce della Quaresima.
 
 [T] [M] A risentirci a presto.

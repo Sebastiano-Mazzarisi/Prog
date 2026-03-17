@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 11 e 27.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 12 e 26.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,11 +12,11 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Istat rivede al ribasso stime inflazione, prezzi a febbraio +1,5%: L'Istat rivede al ribasso le stime dell'inflazione registrata a febbraio, L'indice nazionale dei prezzi al consumo per l'intera collettività (Nic), al lordo dei tabacchi, segna quindi una variazione del +0, 7% su base mensile e del +1, 5% su base annua (da +1.
+[T] [F] Indagato per caporalato il cognato del presidente della Lombardia: Andrea Dini, cognato del presidente della Lombardia Attilio Fontana, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Unità d’Italia, Mattarella: "Costituzione presidio di diritti, le egemonie turbano equilibri mondo": Il messaggio di Mattarella in occasione del 165esimo anniversario: "Richiama elementi fondanti dell'identità della Repubblica: indipendenza, sovranità popolare, giustizia e pace", una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Svetlana Zakharova del Bolshoi non sarà al Gala di danza a Roma, ritirato l'invito: Svetlana Zakharova, lâÃ©toile del Teatro Bolshoi di Mosca, non parteciperÃ al gala internazionale di danza Les Ãtoiles, un aggiornamento dal mondo dello sport italiano.
 
-[T] [F] "Sofia Loren viene dal nulla, se c’è riuscita lei posso farcela anch’io", In un’intervista a programma Da noi a ruota libera la 23enne attrice partenopea, originaria dei Quartieri Spagnoli, un aggiornamento dal mondo dello sport italiano.
+[T] [F] "Nel momento in cui stavo per farla finita, un barbone ha cercato di aggredirmi e io mi sono ripreso e ho capito che dovevo riprendermi": parla Marco Baldini: Marco Baldini è stato ospite nella puntata di ieri, de "La Volta Buona" di Caterina Balivo, Il conduttore e speaker radiofonico ha condiviso ancora una volta i momenti difficili della sua vita contrassegnati da molti bassi e problemi sia di salute che finanziari.
 
 [T] [M] El Aynaoui rapinato in villa, il giocatore della Roma e la sua famiglia sequestrati e minacciati "Erano 6 uomini con pistole vestiti di nero": Sorpresi nel sonno, strattonati e poi chiusi in una stanza "Dovete stare zitti" la minaccia che il centrocampista della As Roma Neil El Aynaoui e sua moglie si sono sentiti.
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Molto prima che i Romani costruissero le loro strade consolari, la terra di Putignano era già viva, Il territorio era infatti abitato dall'antica popolazione dei Peuceti, una tribù japigia che dominava la Puglia centrale, Scavi archeologici hanno riportato alla luce frammenti di ceramiche e antiche sepolture che testimoniano un passato glorioso e millenario.
+[T] [F] La terra su cui sorge Putignano non è fatta di pianure sabbiose, ma di solida pietra, La città è adagiata sulle Murge, un vasto altopiano calcareo che domina la Puglia centrale, È un paesaggio brullo, affascinante, scolpito dall'acqua nel corso dei millenni, che regala alla città un'atmosfera sospesa e un clima fresco e asciutto.
 
 [T] [M] A risentirci a presto.

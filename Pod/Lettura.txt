@@ -1,6 +1,6 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 8 e 37.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 10 e 02.
 
 [T] [M] METEO A PUTIGNANO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Il prezzo del gas apre in rialzo a 52,14 euro al megawattora: Avvio in rialzo per il prezzo del gas, mentre prosegue la guerra in Medio Oriente e le tensioni nello stretto di Hormuz, Ad Amsterdam le quotazioni registrano un aumento del 2, 14 euro al megawattora, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Idf, ucciso in Iran il capo dei Basij Gholamreza Soleimani, "L'aeronautica Militare israeliana, agendo sulla base delle informazioni di intelligence, ha preso di mira ed eliminato Gholamreza Soleimani, che da sei anni operava come comandante dell'unità Basij, una notizia che ha scosso l'opinione pubblica italiana.
 
-[T] [M] Carta Docente, platea allargata ai precari e più spese possibili, Le novità del 2026: Le risorse sono state accreditate lo scorso 9 marzo, La misura ora coinvolge oltre un milione di docenti, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Non solo Raffaella Carrà, Da Modugno a Ranieri: eredità nascoste e figli segreti: Dalle truffe contro Lollobrigida alla sorella di Sordi, dal caso Guttuso alla lite tra i fratelli Delon, Storie, amori e lotte dietro le luci della ribalta, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] La pista da bob di Cortina d’Ampezzo ingoia altri due milioni di spesa, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] Attentati suicidi in Nigeria: 23 morti e oltre cento feriti, L’ombra degli islamisti di Boko Haram: Un attacco che è tra i più sanguinosi nella storia recente di Maiduguri, nel nord-est della Nigeria, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [M] Iraq, attacco all'hotel degli italiani: nessun ferito, E in Libano colpita la base Unifil: Libano e Iraq, Due attacchi agli italiani in poche ore, In tarda serata un drone ha colpito un hotel a Baghdad dove alloggiava anche personale italiano, che si trovava comunque in, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Benzina e diesel, dall'inizio della guerra prezzi in Italia su fino al 10%, ma è molto meno rispetto agli altri Paesi Ue: Con l?esplosione del conflitto in Iran, il prezzo di benzina e diesel ha subito un?impennata in tutta Europa, In Italia, l?aumento resta tra i più contenuti, una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] La Giustizia e il voto oltre gli slogan: A favore della Casta, Contro la Casta, Per una magistratura più autonoma e indipendente, Per evitare che la magistratura perda autonomia e indipendenza, Scorrendo gli slogan della, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] La legge della giungla che guida la guerra: Se il battito d’ali di una farfalla provoca un uragano dall’altra parte del mondo, viene da chiedersi cosa accada quando a sbatterle è uno struzzo, O magari un tacchino isterico con un arsenale, un aggiornamento dal fronte politico nazionale.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Nessuno è al sicuro durante le 'Propaggini' di Putignano, In questa festa del 26 dicembre che apre il Carnevale, i poeti dialettali recitano versi pungenti che prendono di mira esclusivamente i politici, gli amministratori e le personalità locali di spicco, È un momento di pura catarsi collettiva, dove il popolo, per un giorno, ha il diritto di sbeffeggiare chi comanda.
+[T] [F] C'è un dolce, a Putignano, che profuma di mandorle e di feste di nozze, Si chiama 'Intorcinato', un biscotto tipico la cui forma ricorda una treccia, o meglio, due mani che si stringono, Nasce infatti come dolce legato ai matrimoni e alle grandi celebrazioni, preparato rigorosamente a mano e spesso accompagnato da un buon bicchiere di liquore dolce.
 
 [T] [M] A risentirci a presto.

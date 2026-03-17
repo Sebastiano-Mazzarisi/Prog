@@ -361,7 +361,7 @@ def genera_html(dati, fake_today=None):
         .header {{
             background-color: var(--primary); 
             color: white;                     
-            padding: 1.5rem;
+            padding: 0.8rem 1rem 0.7rem 1rem;
             position: sticky;
             top: 0;
             z-index: 50;
@@ -369,8 +369,12 @@ def genera_html(dati, fake_today=None):
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }}
         .header-content {{ position: relative; max-width: 100%; }}
-        .header h1 {{ font-size: 1.6rem; font-weight: 800; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; }}
-        .header p {{ font-size: 0.95rem; opacity: 0.9; margin-top: 5px; font-weight: 400; }}
+        .header h1 {{ font-size: 1.3rem; font-weight: 800; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; }}
+        .header-search-input {{ width: 100%; padding: 5px 28px 5px 10px; border: none; border-radius: 8px; font-size: 0.9rem; background: rgba(255,255,255,0.95); color: var(--text-main); outline: none; }}
+        .header-search-input::placeholder {{ color: #94a3b8; }}
+        .header-search-clear {{ position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.15); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: bold; cursor: pointer; display: none; align-items: center; justify-content: center; }}
+        .header-search-counter {{ background: white; color: var(--primary); min-width: 36px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; }}
+
         
         .header-btn {{
             position: absolute;
@@ -435,13 +439,25 @@ def genera_html(dati, fake_today=None):
         .clickable-stat {{ cursor: pointer; transition: opacity 0.2s; }}
         .clickable-stat:hover {{ opacity: 0.7; }}
 
+        .filter-section {{ border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; }}
+        .filter-section-title {{ font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 8px; }}
         .checkbox-container {{ display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }}
+        .checkbox-container.compact {{ gap: 4px; margin-bottom: 0; }}
         .checkbox-item {{ display: flex; align-items: center; font-size: 1.1rem; color: var(--text-main); cursor: pointer; padding: 8px; border-radius: 8px; transition: background 0.2s; }}
+        .checkbox-container.compact .checkbox-item {{ font-size: 1rem; padding: 5px 6px; }}
         .checkbox-item:hover {{ background: var(--bg-body); }}
         .checkbox-item input[type="checkbox"] {{ width: 22px; height: 22px; margin-right: 15px; accent-color: var(--primary); cursor: pointer; }}
+        .checkbox-container.compact .checkbox-item input[type="checkbox"] {{ width: 19px; height: 19px; margin-right: 12px; }}
 
         .modal-actions {{ display: flex; justify-content: center; margin-top:15px; }}
         .modal-btn {{ background: var(--primary); color: white; border: none; padding: 10px 30px; font-size: 1rem; font-weight: 700; border-radius: 30px; cursor: pointer; width: 100%; }}
+
+        .search-wrapper {{ display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }}
+        .search-container {{ position: relative; flex-grow: 1; }}
+        .search-box {{ width: 100%; padding: 12px 40px 12px 14px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; outline: none; transition: border-color 0.2s; }}
+        .search-box:focus {{ border-color: var(--primary); }}
+        .search-clear {{ position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #e2e8f0; border: none; color: #64748b; width: 24px; height: 24px; border-radius: 50%; font-size: 14px; font-weight: bold; cursor: pointer; display: none; align-items: center; justify-content: center; padding-bottom: 2px; }}
+        .result-count {{ background: var(--primary); color: white; min-width: 50px; height: 50px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; font-size: 1.4rem; line-height: 1; flex-shrink: 0; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }}
 
         /* --- TABS --- */
         .tab-content {{ display: none; padding: 1rem; animation: fadeIn 0.3s ease; }}
@@ -463,7 +479,7 @@ def genera_html(dati, fake_today=None):
         .is-today {{ background-color: var(--today-bg) !important; border-left-color: var(--today-border) !important; }}
         .is-today .days-label {{ color: var(--today-border) !important; font-weight: 900; }}
 
-        .cal-date {{ width: 60px; text-align: center; font-weight: 800; font-size: 1.3rem; color: var(--primary); line-height: 1.1; margin-right: 15px; display: flex; flex-direction: column; justify-content: center; }}
+        .cal-date {{ width: 44px; text-align: center; font-weight: 800; font-size: 1.3rem; color: var(--primary); line-height: 1.1; margin-right: 8px; display: flex; flex-direction: column; justify-content: center; }}
         .cal-date small {{ display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-top: 2px; }}
         
         .event-row {{ margin-bottom: 12px; position: relative; }}
@@ -503,6 +519,7 @@ def genera_html(dati, fake_today=None):
 
         #focus-target {{ scroll-margin-top: 45vh; }} /* Per centrare l'elemento */
 
+
     </style>
 </head>
 <body>
@@ -511,15 +528,29 @@ def genera_html(dati, fake_today=None):
 
     <div id="filter-modal" class="modal-overlay" onclick="closeFilterModal(event)">
         <div class="modal-box" onclick="event.stopPropagation()">
-            <div class="modal-title">Filtra Gruppi</div>
-            <div class="checkbox-container">
-                <label class="checkbox-item"><input type="checkbox" id="chk-amici" value="A" checked onchange="updateFilters()"><span>Amici</span></label>
-                <label class="checkbox-item"><input type="checkbox" id="chk-mazzarisi" value="M" checked onchange="updateFilters()"><span>Mazzarisi</span></label>
-                <label class="checkbox-item"><input type="checkbox" id="chk-pricci" value="P" checked onchange="updateFilters()"><span>Pricci</span></label>
-                <label class="checkbox-item"><input type="checkbox" id="chk-famiglia" value="F" checked onchange="updateFilters()"><span>Famiglia</span></label>
-                <label class="checkbox-item"><input type="checkbox" id="chk-geometri" value="G" checked onchange="updateFilters()"><span>Geometri</span></label>
-                <label class="checkbox-item"><input type="checkbox" id="chk-febbre" value="S" checked onchange="updateFilters()"><span>Febbre del sabato</span></label>
+            <div class="modal-title">Filtra</div>
+
+            <div class="filter-section">
+                <div class="filter-section-title">Tipo Evento</div>
+                <div class="checkbox-container compact">
+                    <label class="checkbox-item"><input type="checkbox" id="chk-compleanni" checked onchange="updateFilters()"><span>Compleanni</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="chk-onomastici" checked onchange="updateFilters()"><span>Onomastici</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="chk-anniversari" checked onchange="updateFilters()"><span>Anniversari</span></label>
+                </div>
             </div>
+
+            <div class="filter-section">
+                <div class="filter-section-title">Gruppi</div>
+                <div class="checkbox-container compact">
+                    <label class="checkbox-item"><input type="checkbox" id="chk-amici" value="A" checked onchange="updateFilters()"><span>Amici</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="chk-mazzarisi" value="M" checked onchange="updateFilters()"><span>Mazzarisi</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="chk-pricci" value="P" checked onchange="updateFilters()"><span>Pricci</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="chk-famiglia" value="F" checked onchange="updateFilters()"><span>Famiglia</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="chk-geometri" value="G" checked onchange="updateFilters()"><span>Geometri</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="chk-febbre" value="S" checked onchange="updateFilters()"><span>Febbre del sabato</span></label>
+                </div>
+            </div>
+
             <div class="modal-actions">
                 <button class="modal-btn" onclick="closeFilterModal(event)">Chiudi</button>
             </div>
@@ -563,19 +594,22 @@ def genera_html(dati, fake_today=None):
         
         <div class="header">
             <div class="header-content">
-                <button class="header-btn filter-btn" onclick="openFilterModal()" title="Elenco da spuntare">
+                <button class="header-btn filter-btn" onclick="openFilterModal()" title="Filtra">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                 </button>
-
                 <h1>EVENTI E FESTE</h1>
-                <p>{timestamp_str}</p>
-                <button id="btn-update" onclick="forceReload()" style="background:transparent; border:1px solid rgba(255,255,255,0.5); color:white; border-radius:20px; padding:4px 12px; font-size:0.8rem; margin-top:5px; cursor:pointer;">
-                    ↻ Aggiorna ora
-                </button>
-                
                 <button class="header-btn print-btn" onclick="openPrintModal()" title="Stampa PDF">
                     🖨️
                 </button>
+            </div>
+            <div id="header-search-bar" style="display:flex; align-items:center; gap:8px; padding:6px 1rem 5px 1rem; width:80%; margin:0 auto;">
+                <div style="position:relative; flex:1;">
+                    <input type="text" id="search-input" class="header-search-input" placeholder="Cerca evento..." oninput="handleSearchInput()">
+                    <button id="search-clear" class="header-search-clear" onclick="clearSearch()">✕</button>
+                </div>
+                <div id="search-counter" class="header-search-counter">
+                    <div id="count-val">0</div>
+                </div>
             </div>
         </div>
 
@@ -584,15 +618,6 @@ def genera_html(dati, fake_today=None):
         </div>
 
         <div id="tab-rubrica" class="tab-content">
-            <div class="search-wrapper">
-                <div class="search-container">
-                    <input type="text" id="search-input" class="search-box" placeholder="Cerca..." oninput="handleSearchInput()">
-                    <button id="search-clear" class="search-clear" onclick="clearSearch()">✕</button>
-                </div>
-                <div class="result-count" id="search-counter">
-                    <div id="count-val">0</div>
-                </div>
-            </div>
             <div id="rubrica-list"></div>
         </div>
 
@@ -655,7 +680,7 @@ def genera_html(dati, fake_today=None):
         function openPrintModal() {{ document.getElementById('print-modal').classList.add('open'); }}
         function closePrintModal(e) {{ if(e) e.preventDefault(); document.getElementById('print-modal').classList.remove('open'); }}
 
-        function updateFilters() {{ calculateEvents(); renderHome(); renderRubrica(document.getElementById('search-input').value); renderStats(); }}
+        function updateFilters() {{ calculateEvents(); renderHome(); renderRubrica(getSearchVal()); renderStats(); }}
 
         function getSelectedGroups() {{
             const selected = [];
@@ -697,11 +722,23 @@ def genera_html(dati, fake_today=None):
             return {{ daysUntil, actuallyPastThisYear }};
         }}
 
+        function getSelectedTipi() {{
+            const tipi = [];
+            if(document.getElementById('chk-compleanni').checked) tipi.push('Compleanno');
+            if(document.getElementById('chk-onomastici').checked) tipi.push('Onomastico');
+            if(document.getElementById('chk-anniversari').checked) tipi.push('Anniversario');
+            return tipi;
+        }}
+
         function calculateEvents() {{
             const allowedGroups = getSelectedGroups();
+            const allowedTipi = getSelectedTipi();
             events = rawData.filter(item => {{
                 const grp = (item.Gruppo || '').trim().toUpperCase();
-                return allowedGroups.some(selected => grp.includes(selected));
+                if (!allowedGroups.some(selected => grp.includes(selected))) return false;
+                let tipo = item.Festa;
+                if (tipo !== 'Compleanno' && tipo !== 'Onomastico') tipo = 'Anniversario';
+                return allowedTipi.includes(tipo);
             }}).map(item => {{
                 const pDate = parseDate(item.Data);
                 if (!pDate) return null;
@@ -764,12 +801,19 @@ def genera_html(dati, fake_today=None):
 
         function renderHome() {{
             const container = document.getElementById('upcoming-list');
-            
-            // Ordina per Mese e Giorno (1 Gen -> 31 Dic)
-            const sortedEvents = [...events].sort((a, b) => {{
+            // Ordina per Mese e Giorno (1 Gen -> 31 Dic), applicando filtro testo
+            let sortedEvents = [...getFilteredEvents()].sort((a, b) => {{
                 if (a.pDate.month !== b.pDate.month) return a.pDate.month - b.pDate.month;
                 return a.pDate.day - b.pDate.day;
             }});
+
+            // Aggiorna contatore home
+            if (activeTabId === 'home') {{
+                const countEl = document.getElementById('count-val');
+                const clearBtn = document.getElementById('search-clear');
+                if (countEl) countEl.innerText = sortedEvents.length;
+                if (clearBtn) clearBtn.style.display = getSearchVal() ? 'flex' : 'none';
+            }}
 
             if (sortedEvents.length === 0) {{ container.innerHTML = '<div style="text-align:center; padding:2rem; font-size:1rem; color:var(--text-muted)">Nessun evento per i gruppi selezionati</div>'; return; }}
             
@@ -827,20 +871,25 @@ def genera_html(dati, fake_today=None):
                     }}
                 }}).join('');
                 
-                return `<div class="${{cardClass}}" ${{divId}} style="display:flex; gap:15px; ${{borderStyle}} align-items:stretch;"><div class="cal-date"><div style="font-weight:800; font-size:1.5rem; line-height:1;">${{refEvent.pDate.day}}</div><div style="font-size:0.75rem; text-transform:uppercase; font-weight:600;">${{shortMonths[refEvent.pDate.month-1]}}</div></div><div style="flex:1; display:flex; flex-direction:column; justify-content:center; position: relative;">${{badgeHtml}}${{eventsHtml}}</div></div>`;
+                const shortDays = ['DOM','LUN','MAR','MER','GIO','VEN','SAB'];
+                const eventDow = new Date(new Date(REF_DATE).getFullYear(), refEvent.pDate.month - 1, refEvent.pDate.day).getDay();
+                const dowLabel = shortDays[eventDow];
+                return `<div class="${{cardClass}}" ${{divId}} style="display:flex; gap:8px; ${{borderStyle}} align-items:stretch;"><div class="cal-date"><div style="font-size:0.65rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); letter-spacing:0.3px; margin-bottom:1px;">${{dowLabel}}</div><div style="font-weight:800; font-size:1.3rem; line-height:1;">${{refEvent.pDate.day}}</div><div style="font-size:0.65rem; text-transform:uppercase; font-weight:600;">${{shortMonths[refEvent.pDate.month-1]}}</div></div><div style="flex:1; display:flex; flex-direction:column; justify-content:center; position: relative;">${{badgeHtml}}${{eventsHtml}}</div></div>`;
             }}).join('');
         }}
 
         function renderRubrica(filterText = '') {{
             const container = document.getElementById('rubrica-list');
-            const countEl = document.getElementById('count-val');
-            const clearBtn = document.getElementById('search-clear');
             const txt = filterText.toLowerCase();
-            if (txt.length > 0) clearBtn.style.display = 'flex'; else clearBtn.style.display = 'none';
             const people = getGroupedPeople();
             const sortedPeople = Object.values(people).sort((a,b) => a.c.localeCompare(b.c));
             const filtered = sortedPeople.filter(p => p.n.toLowerCase().includes(txt) || p.c.toLowerCase().includes(txt));
-            countEl.innerText = filtered.length;
+            if (activeTabId === 'rubrica') {{
+                const countEl = document.getElementById('count-val');
+                const clearBtn = document.getElementById('search-clear');
+                if (countEl) countEl.innerText = filtered.length;
+                if (clearBtn) clearBtn.style.display = txt.length > 0 ? 'flex' : 'none';
+            }}
             if (filtered.length === 0) {{ container.innerHTML = '<p style="text-align:center; padding:2rem; color:var(--text-muted); font-size:1rem;">Nessun risultato</p>'; return; }}
             container.innerHTML = filtered.map(p => {{
                 const typePriority = {{ 'Compleanno': 1, 'Onomastico': 2, 'Anniversario': 3 }};
@@ -861,18 +910,31 @@ def genera_html(dati, fake_today=None):
             }}).join('');
         }}
         
+        function getSearchVal() {{
+            const si = document.getElementById('search-input');
+            return si ? si.value.toLowerCase() : '';
+        }}
+        function getFilteredEvents() {{
+            const sval = getSearchVal();
+            return sval ? events.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(sval)) : events;
+        }}
         function getGroupedPeople() {{
             const people = {{}};
-            events.forEach(e => {{ const key = e.Cognome + ' ' + e.Nome; if (!people[key]) people[key] = {{ c: e.Cognome, n: e.Nome, i: [] }}; people[key].i.push(e); }});
+            getFilteredEvents().forEach(e => {{ const key = e.Cognome + ' ' + e.Nome; if (!people[key]) people[key] = {{ c: e.Cognome, n: e.Nome, i: [] }}; people[key].i.push(e); }});
             return people;
         }}
         
+
+
         function handleSearchInput() {{
             const val = document.getElementById('search-input').value;
-            renderRubrica(val);
+            document.getElementById('search-clear').style.display = val ? 'flex' : 'none';
+            if (activeTabId === 'home') {{ renderHome(); }}
+            else if (activeTabId === 'rubrica') {{ renderRubrica(val); }}
+            renderStats();
         }}
 
-        function clearSearch() {{ const input = document.getElementById('search-input'); input.value = ''; input.focus(); renderRubrica(''); }}
+        function clearSearch() {{ const input = document.getElementById('search-input'); input.value = ''; input.focus(); document.getElementById('search-clear').style.display = 'none'; if (activeTabId === 'home') {{ renderHome(); }} else {{ renderRubrica(''); }} }}
         
         // --- FUNZIONI DI STATISTICA E MODALI (STATS) ---
         function openStatsModal(type, value, title) {{
@@ -908,8 +970,9 @@ def genera_html(dati, fake_today=None):
         function closeStatsModal(e) {{ if(e) e.preventDefault(); document.getElementById('stats-modal').classList.remove('open'); }}
 
         function renderStats() {{
+            const statsEvents = getFilteredEvents();
             const mSets = Array.from({{length: 12}}, () => new Set());
-            events.forEach(e => {{ const k = e.Cognome + '|' + e.Nome; mSets[e.pDate.month - 1].add(k); }});
+            statsEvents.forEach(e => {{ const k = e.Cognome + '|' + e.Nome; mSets[e.pDate.month - 1].add(k); }});
             const mCount = mSets.map(s => s.size);
             const maxM = Math.max(...mCount) || 1;
             document.getElementById('stats-months').innerHTML = months.map((m, i) => {{
@@ -917,7 +980,7 @@ def genera_html(dati, fake_today=None):
                 return `<div class="clickable-stat" onclick="openStatsModal('month', ${{i}}, 'Nati a ${{m}}')" style="display:flex;align-items:center;margin-bottom:10px;font-size:0.9rem;"><div style="width:100px;">${{m}}</div><div style="flex:1;height:10px;background:#f1f5f9;border-radius:6px;margin:0 10px;"><div style="height:100%;width:${{w}}%;background:var(--primary);border-radius:6px;"></div></div><div style="font-weight:bold;">${{mCount[i]}}</div></div>`;
             }}).join('');
             const tSets = {{ 'Compleanno': new Set(), 'Onomastico': new Set(), 'Anniversario': new Set() }};
-            events.forEach(e => {{ const k = e.Cognome + '|' + e.Nome; if (tSets[e.tipoDisplay]) tSets[e.tipoDisplay].add(k); else tSets['Anniversario'].add(k); }});
+            statsEvents.forEach(e => {{ const k = e.Cognome + '|' + e.Nome; if (tSets[e.tipoDisplay]) tSets[e.tipoDisplay].add(k); else tSets['Anniversario'].add(k); }});
             const tCount = {{}}; for(let key in tSets) tCount[key] = tSets[key].size;
             const maxT = Math.max(...Object.values(tCount)) || 1;
             document.getElementById('stats-types').innerHTML = Object.entries(tCount).map(([k, v]) => {{
@@ -925,7 +988,7 @@ def genera_html(dati, fake_today=None):
                 return `<div class="clickable-stat" onclick="openStatsModal('type', '${{k}}', '${{k}}')" style="display:flex;align-items:center;margin-bottom:10px;font-size:0.9rem;"><div style="width:100px;">${{k}}</div><div style="flex:1;height:10px;background:#f1f5f9;border-radius:6px;margin:0 10px;"><div style="height:100%;width:${{w}}%;background:#ec4899;border-radius:6px;"></div></div><div style="font-weight:bold;">${{v}}</div></div>`;
             }}).join('');
             const gSets = {{ 'M': new Set(), 'F': new Set() }};
-            events.forEach(e => {{ const k = e.Cognome + '|' + e.Nome; let g = e.Genere ? e.Genere.toUpperCase().trim() : 'M'; if (!gSets[g]) g = 'M'; gSets[g].add(k); }});
+            statsEvents.forEach(e => {{ const k = e.Cognome + '|' + e.Nome; let g = e.Genere ? e.Genere.toUpperCase().trim() : 'M'; if (!gSets[g]) g = 'M'; gSets[g].add(k); }});
             const peopleGender = {{ 'M': gSets['M'].size, 'F': gSets['F'].size }};
             const maxG = Math.max(peopleGender['M'], peopleGender['F']) || 1;
             document.getElementById('stats-gender').innerHTML = [{{ label: 'Maschile', code: 'M', count: peopleGender['M'], color: 'var(--primary)' }}, {{ label: 'Femminile', code: 'F', count: peopleGender['F'], color: '#ec4899' }}].map(item => {{
@@ -934,7 +997,7 @@ def genera_html(dati, fake_today=None):
             }}).join('');
             const grSets = {{ 'Amici': new Set(), 'Mazzarisi': new Set(), 'Pricci': new Set(), 'Famiglia': new Set(), 'Geometri': new Set(), 'Febbre del sabato': new Set() }};
             const groupCodes = {{ 'Amici': 'A', 'Mazzarisi': 'M', 'Pricci': 'P', 'Famiglia': 'F', 'Geometri': 'G', 'Febbre del sabato': 'S' }};
-            events.forEach(e => {{
+            statsEvents.forEach(e => {{
                 const k = e.Cognome + '|' + e.Nome; const gStr = (e.Gruppo || '').toUpperCase();
                 if (gStr.includes('A')) grSets['Amici'].add(k); if (gStr.includes('M')) grSets['Mazzarisi'].add(k);
                 if (gStr.includes('P')) grSets['Pricci'].add(k); if (gStr.includes('F')) grSets['Famiglia'].add(k);
@@ -1083,7 +1146,7 @@ def genera_html(dati, fake_today=None):
             for (let m = 0; m < 12; m++) {{
                 if (m > 0) doc.addPage();
                 
-                const monthlyEvents = events.filter(e => e.pDate.month === (m + 1));
+                const monthlyEvents = getFilteredEvents().filter(e => e.pDate.month === (m + 1));
                 
                 doc.setFont("helvetica", "bold"); doc.setFontSize(20); doc.setTextColor(0,0,0);
                 doc.text(`${{months[m]}} ${{year}} (${{monthlyEvents.length}})`, pageWidth/2, 15, {{align: "center"}});
@@ -1165,7 +1228,7 @@ def genera_html(dati, fake_today=None):
             let totalYearEvents = 0;
             
             for (let m = 0; m < 12; m++) {{
-                const monthlyEvents = events.filter(e => e.pDate.month === (m + 1));
+                const monthlyEvents = getFilteredEvents().filter(e => e.pDate.month === (m + 1));
                 if (monthlyEvents.length > 0) {{
                     totalYearEvents += monthlyEvents.length;
                     printQueue.push({{ type: 'header', text: `${{months[m]}} (${{monthlyEvents.length}})`, height: 10 }});
@@ -1320,6 +1383,21 @@ def genera_html(dati, fake_today=None):
             const appContainer = document.getElementById('app-container');
             if (tabId === 'home' || tabId === 'stats') {{ appContainer.classList.add('bg-yellow-mode'); }} 
             else {{ appContainer.classList.remove('bg-yellow-mode'); }}
+
+            // Mostra/nascondi barra ricerca
+            const searchBar = document.getElementById('header-search-bar');
+            const sinput = document.getElementById('search-input');
+            if (tabId === 'stats') {{
+                searchBar.style.display = 'none';
+            }} else {{
+                searchBar.style.display = 'flex';
+                sinput.placeholder = tabId === 'home' ? 'Cerca evento...' : 'Cerca persona...';
+            }}
+            // Ricalcola tutto ad ogni cambio tab
+            calculateEvents();
+            renderHome();
+            renderRubrica(getSearchVal());
+            renderStats();
             
             // 3. LOGICA DI RIPRISTINO SCROLL
             if (tabId === 'home' && isFirstHomeLoad) {{
@@ -1359,7 +1437,7 @@ def genera_html(dati, fake_today=None):
         }});
 
         document.addEventListener('DOMContentLoaded', () => {{
-            calculateEvents(); renderHome(); renderRubrica(); renderStats();
+            calculateEvents();
             document.getElementById('app-container').classList.add('bg-yellow-mode');
             
             // Trigger iniziale per posizionare la Home su Oggi
@@ -1396,13 +1474,10 @@ if __name__ == "__main__":
         print("--------------------------------------------------")
         print("✅ Elaborazione completata e file caricati su GitHub.")
         
-        # --- FIX: EVITA INPUT BLOCCANTE SU GITHUB ACTIONS ---
+        # Apri il browser automaticamente (solo in locale)
         if os.getenv("GITHUB_ACTIONS") == "true":
-             print("🤖 Esecuzione su GitHub rilevata: Salto apertura browser e input manuale.")
+            print("🤖 Esecuzione su GitHub rilevata: Salto apertura browser.")
         else:
-            # Aspetta l'input dell'utente prima di aprire il file
-            input("⌨️  Premi INVIO per aprire il calendario nel browser e terminare...")
-
             try:
                 file_path = os.path.abspath(OUTPUT_FILE)
                 webbrowser.open(f'file://{file_path}')

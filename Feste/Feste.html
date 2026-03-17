@@ -309,7 +309,7 @@
                 </button>
 
                 <h1>EVENTI E FESTE</h1>
-                <p>17/03/2026 - 21:46:06</p>
+                <p>17/03/2026 - 21:49:32</p>
                 <button id="btn-update" onclick="forceReload()" style="background:transparent; border:1px solid rgba(255,255,255,0.5); color:white; border-radius:20px; padding:4px 12px; font-size:0.8rem; margin-top:5px; cursor:pointer;">
                     ↻ Aggiorna ora
                 </button>
@@ -1098,18 +1098,15 @@
             if (tabId === 'home' || tabId === 'stats') { appContainer.classList.add('bg-yellow-mode'); } 
             else { appContainer.classList.remove('bg-yellow-mode'); }
 
-            // Mostra/nascondi search bar e aggiorna placeholder/contatore
-            const stickySearch = document.getElementById('sticky-search');
-            if (tabId === 'stats') {
-                stickySearch.style.display = 'none';
-            } else {
-                stickySearch.style.display = 'block';
-                if (tabId === 'home') {
-                    document.getElementById('search-input').placeholder = 'Cerca evento...';
-                    updateHomeCounter();
-                } else {
-                    document.getElementById('search-input').placeholder = 'Cerca persona...';
-                }
+            // Aggiorna placeholder in base al tab
+            if (tabId === 'home') {
+                document.getElementById('search-input').placeholder = 'Cerca evento...';
+                updateHomeCounter();
+            } else if (tabId === 'rubrica') {
+                document.getElementById('search-input').placeholder = 'Cerca persona...';
+                renderRubrica(document.getElementById('search-input').value);
+            } else if (tabId === 'stats') {
+                updateHomeCounter();
             }
             
             // 3. LOGICA DI RIPRISTINO SCROLL

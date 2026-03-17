@@ -182,7 +182,7 @@
         .is-today { background-color: var(--today-bg) !important; border-left-color: var(--today-border) !important; }
         .is-today .days-label { color: var(--today-border) !important; font-weight: 900; }
 
-        .cal-date { width: 60px; text-align: center; font-weight: 800; font-size: 1.3rem; color: var(--primary); line-height: 1.1; margin-right: 15px; display: flex; flex-direction: column; justify-content: center; }
+        .cal-date { width: 44px; text-align: center; font-weight: 800; font-size: 1.3rem; color: var(--primary); line-height: 1.1; margin-right: 8px; display: flex; flex-direction: column; justify-content: center; }
         .cal-date small { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-top: 2px; }
         
         .event-row { margin-bottom: 12px; position: relative; }
@@ -575,7 +575,7 @@
                 const shortDays = ['DOM','LUN','MAR','MER','GIO','VEN','SAB'];
                 const eventDow = new Date(new Date(REF_DATE).getFullYear(), refEvent.pDate.month - 1, refEvent.pDate.day).getDay();
                 const dowLabel = shortDays[eventDow];
-                return `<div class="${cardClass}" ${divId} style="display:flex; gap:15px; ${borderStyle} align-items:stretch;"><div class="cal-date"><div style="font-size:0.7rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:1px;">${dowLabel}</div><div style="font-weight:800; font-size:1.5rem; line-height:1;">${refEvent.pDate.day}</div><div style="font-size:0.75rem; text-transform:uppercase; font-weight:600;">${shortMonths[refEvent.pDate.month-1]}</div></div><div style="flex:1; display:flex; flex-direction:column; justify-content:center; position: relative;">${badgeHtml}${eventsHtml}</div></div>`;
+                return `<div class="${cardClass}" ${divId} style="display:flex; gap:8px; ${borderStyle} align-items:stretch;"><div class="cal-date"><div style="font-size:0.65rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); letter-spacing:0.3px; margin-bottom:1px;">${dowLabel}</div><div style="font-weight:800; font-size:1.3rem; line-height:1;">${refEvent.pDate.day}</div><div style="font-size:0.65rem; text-transform:uppercase; font-weight:600;">${shortMonths[refEvent.pDate.month-1]}</div></div><div style="flex:1; display:flex; flex-direction:column; justify-content:center; position: relative;">${badgeHtml}${eventsHtml}</div></div>`;
             }).join('');
         }
 

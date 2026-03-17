@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 16 e 12.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 17 e 42.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi pioggia moderata, con temperature tra 7 e 10 gradi e probabilità di pioggia. Per domani è previsto cielo coperto, con temperature tra 5 e 7 gradi e probabilità di pioggia.
+[T] [F] Oggi pioggia leggera, con temperature tra 7 e 10 gradi e probabilità di pioggia. Per domani è previsto pioggia leggera, con temperature tra 4 e 7 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,26 +12,26 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Macron, dalla Francia niente operazioni a Hormuz nell'attuale contesto, "Nell'attuale contesto'', la Francia non è pronta ad operazioni di apertura dello stretto di Hormuz: lo ha detto il presidente francese, Emmanuel Macron, Parigi potrà partecipare a missioni di "scorta" delle navi nello stretto di Hormuz quando la situazione sarà "più calma".
+[T] [F] Ita Airways estende stop voli per Tel Aviv al 9 aprile, per Dubai al 28 marzo: Alla luce dell'attuale situazione in Medio Oriente, Ita Airways ha esteso la sospensione dei voli da e per Tel Aviv fino al 9 aprile (incluso il volo AZ809 del 10 aprile), La compagnia "è stata costretta.
 
 [T] [M] Guerra Ucraina, "A seguito dei rinnovati attacchi russi del 27 gennaio contro l'oleodotto Druzhba, che hanno causato l'interruzione delle forniture di petrolio greggio a Ungheria e Slovacchia, un aggiornamento dal mondo dello sport italiano.
 
-[T] [F] "Mi sono fatto un cu*o nero, ho mangiato un sacco di m**a e non c’era spazio per noi, I Maneskin occasione persa per tutti, L’autotune ha rotto il ca**o in una maniera mai vista": parla Manuel Agnelli: Manuel Agnelli, lo scorso 13 marzo.
+[T] [F] Dopo il caso Bastoni, gli arbitri giustificano la simulazione di Diao: "Da campo, per dinamica, quello di Wesley è un giallo sostenibile": Altra settimana, altre polemiche arbitrali, alimentate ulteriormente da "Open Var", trasmissione su Dazn in cui gli arbitri spiegano le scelte del weekend, E se per Inter–Atalanta le dichiarazioni seguono la narrazione di questi giorni ("Dumfries si lascia cadere.
 
-[T] [M] Processo Becciu da rifare, colpo di scena della Corte d'Appello vaticana: "Rinnovare il dibattimento", Si ricomincia (quasi) da zero: Nuovo colpo di scena, Il famoso processo Becciu è da rifare e si riparte (quasi) da zero, Dopo poco meno di due mesi di silenzio i giudici della Corte d'Appello del Vaticano si sono.
+[T] [M] Guerra Usa Iran, Trump: "Soldati americani in Iran? Non temo altro Vietnam, L'Inghilterra ha fatto grande errore a non sostenerci", "Non ho paura di un altro Vietnam", Lo ha detto Donal Trump alla Casa Bianca rispondendo ad una domanda sull'eventualità che le truppe americane siano dispiegate.
 
-[T] [F] Chi era Ali Larijani, il capo iraniano ucciso da Israele: "Era lui a governare davvero il Paese, è stato falciato il regime al livello più alto" Corriere della Sera Medio Oriente, raid israeliani in Iran, una notizia che ha scosso l'opinione pubblica italiana.
+[T] [F] Chi era Ali Larijani, il capo iraniano ucciso da Israele: "Era lui a governare davvero il Paese, una notizia che ha scosso l'opinione pubblica italiana.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
 [T] [F] Schola Cantorum "don Vincenzo Vitti": animazione delle stazioni della Via Crucis a Noci: La corale castellanese in trasferta, nella vicina Noci, Domenica scorsa, nella chiesa matrice di Noci dedicata a Maria SS, della Natività, alla presenza del vescovo della Diocesi di Conversano Monopoli monsignor Giuseppe Favale, le voci virili della Schola Cantorum "don Vincenzo Vitti" hanno animato le quattordici stazioni della Via Crucis eseguendo i mottetti di Francesco Tavoni.Accompagnati all''organo dal maestro Carlo Maria Clemente e diretti da Vittorio Petruzzi, i cantori si esibiranno ancora.
 
-[T] [M] Putignano (BA) – 45^ Marcialonga di San Giuseppe, vincono Catalano e Pastore Podisti.Net.
+[T] [M] Disciplina della circolazione stradale in occasione della manifestazione "Le Fanòve d’Sciò" Comune di Gioia del Colle.
 
-[T] [F] Grande attesa a Gioia del Colle per la quarta edizione dell'evento "Le Fanòve d'Sciò" Comune di Gioia del Colle.
+[T] [F] Putignano (BA) – 45^ Marcialonga di San Giuseppe, vincono Catalano e Pastore Podisti.Net.
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] Guardate bene la maschera di Farinella: il suo cappello da giullare ha esattamente tre punte, ognuna decorata con un campanellino, Non è un caso! Quelle tre punte sono un omaggio geografico: rappresentano idealmente i tre colli su cui originariamente sorgeva l'antico abitato di Putignano, Un pezzo di storia della città da indossare in testa.
+[T] [F] Se pensate che il Carnevale duri solo un paio di settimane a febbraio, a Putignano vi faranno cambiare idea, Quello putignanese è uno dei carnevali più lunghi del mondo, I festeggiamenti, infatti, iniziano ufficialmente subito dopo Natale, precisamente il 26 dicembre, e si concludono solo il giorno del Martedì Grasso, regalando alla città mesi di satira, maschere e tradizioni.
 
 [T] [M] A risentirci a presto.

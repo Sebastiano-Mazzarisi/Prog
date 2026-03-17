@@ -78,6 +78,10 @@
         }
         .header-content { position: relative; max-width: 100%; }
         .header h1 { font-size: 1.3rem; font-weight: 800; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; }
+        .header-search-input { width: 100%; padding: 7px 30px 7px 12px; border: none; border-radius: 10px; font-size: 1rem; background: rgba(255,255,255,0.95); color: var(--text-main); outline: none; }
+        .header-search-input::placeholder { color: #94a3b8; }
+        .header-search-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.15); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: bold; cursor: pointer; display: none; align-items: center; justify-content: center; }
+        .header-search-counter { background: white; color: var(--primary); min-width: 42px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0; }
 
         
         .header-btn {
@@ -306,32 +310,22 @@
                     🖨️
                 </button>
             </div>
-
+            <div id="header-search-bar" style="display:flex; align-items:center; gap:8px; padding:8px 1rem 6px 1rem;">
+                <div style="position:relative; flex:1;">
+                    <input type="text" id="search-input" class="header-search-input" placeholder="Cerca evento..." oninput="handleSearchInput()">
+                    <button id="search-clear" class="header-search-clear" onclick="clearSearch()">✕</button>
+                </div>
+                <div id="search-counter" class="header-search-counter">
+                    <div id="count-val">0</div>
+                </div>
+            </div>
         </div>
 
         <div id="tab-home" class="tab-content active">
-            <div class="search-wrapper">
-                <div class="search-container">
-                    <input type="text" id="search-input-home" class="search-box" placeholder="Cerca evento..." oninput="handleHomeSearchInput()">
-                    <button id="search-clear-home" class="search-clear" onclick="clearHomeSearch()">✕</button>
-                </div>
-                <div class="result-count" id="search-counter-home">
-                    <div id="count-val-home">0</div>
-                </div>
-            </div>
             <div id="upcoming-list"></div>
         </div>
 
         <div id="tab-rubrica" class="tab-content">
-            <div class="search-wrapper">
-                <div class="search-container">
-                    <input type="text" id="search-input" class="search-box" placeholder="Cerca..." oninput="handleSearchInput()">
-                    <button id="search-clear" class="search-clear" onclick="clearSearch()">✕</button>
-                </div>
-                <div class="result-count" id="search-counter">
-                    <div id="count-val">0</div>
-                </div>
-            </div>
             <div id="rubrica-list"></div>
         </div>
 
@@ -515,8 +509,8 @@
 
         function renderHome() {
             const container = document.getElementById('upcoming-list');
-            const sinput = document.getElementById('search-input-home');
-            const searchVal = sinput ? sinput.value.toLowerCase() : '';
+            const sinput = document.getElementById('search-input');
+            const searchVal = (sinput && activeTabId === 'home') ? sinput.value.toLowerCase() : '';
             
             // Ordina per Mese e Giorno (1 Gen -> 31 Dic)
             let sortedEvents = [...events].sort((a, b) => {
@@ -528,11 +522,9 @@
                 sortedEvents = sortedEvents.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(searchVal));
             }
 
-            // Aggiorna contatore home
-            const countEl = document.getElementById('count-val-home');
-            const clearBtn = document.getElementById('search-clear-home');
-            if (countEl) countEl.innerText = sortedEvents.length;
-            if (clearBtn) clearBtn.style.display = searchVal ? 'flex' : 'none';
+            // Aggiorna contatore
+            const countEl = document.getElementById('count-val');
+            if (countEl && activeTabId === 'home') countEl.innerText = sortedEvents.length;
 
             if (sortedEvents.length === 0) { container.innerHTML = '<div style="text-align:center; padding:2rem; font-size:1rem; color:var(--text-muted)">Nessun evento per i gruppi selezionati</div>'; return; }
             
@@ -637,12 +629,12 @@
 
         function handleSearchInput() {
             const val = document.getElementById('search-input').value;
-            renderRubrica(val);
+            document.getElementById('search-clear').style.display = val ? 'flex' : 'none';
+            if (activeTabId === 'home') { renderHome(); }
+            else { renderRubrica(val); }
         }
-        function handleHomeSearchInput() { renderHome(); }
-        function clearHomeSearch() { const i = document.getElementById('search-input-home'); i.value = ''; i.focus(); renderHome(); }
 
-        function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); renderRubrica(''); }
+        function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); document.getElementById('search-clear').style.display = 'none'; if (activeTabId === 'home') { renderHome(); } else { renderRubrica(''); } }
         
         // --- FUNZIONI DI STATISTICA E MODALI (STATS) ---
         function openStatsModal(type, value, title) {
@@ -1091,11 +1083,21 @@
             if (tabId === 'home' || tabId === 'stats') { appContainer.classList.add('bg-yellow-mode'); } 
             else { appContainer.classList.remove('bg-yellow-mode'); }
 
+            // Mostra/nascondi barra ricerca
+            const searchBar = document.getElementById('header-search-bar');
+            const sinput = document.getElementById('search-input');
+            if (tabId === 'stats') {
+                searchBar.style.display = 'none';
+            } else {
+                searchBar.style.display = 'flex';
+                sinput.placeholder = tabId === 'home' ? 'Cerca evento...' : 'Cerca persona...';
+                sinput.value = '';
+                document.getElementById('search-clear').style.display = 'none';
+            }
             // Ricalcola tutto ad ogni cambio tab
             calculateEvents();
             renderHome();
-            const sinput = document.getElementById('search-input');
-            renderRubrica(sinput ? sinput.value : '');
+            renderRubrica('');
             renderStats();
             
             // 3. LOGICA DI RIPRISTINO SCROLL
@@ -1136,7 +1138,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            calculateEvents(); renderHome(); renderRubrica(); renderStats();
+            calculateEvents(); renderHome(); renderRubrica(); renderStats(); document.getElementById('count-val').innerText = events.length;
             document.getElementById('app-container').classList.add('bg-yellow-mode');
             
             // Trigger iniziale per posizionare la Home su Oggi

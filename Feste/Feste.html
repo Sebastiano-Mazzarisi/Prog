@@ -78,13 +78,7 @@
         }
         .header-content { position: relative; max-width: 100%; }
         .header h1 { font-size: 1.3rem; font-weight: 800; margin: 0; letter-spacing: 0.5px; text-transform: uppercase; }
-        .header-search { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 0 40px; }
-        .header-search .search-box { background: rgba(255,255,255,0.95); border: none; border-radius: 10px; padding: 7px 32px 7px 12px; font-size: 1rem; color: var(--text-main); outline: none; flex: 1; }
-        .header-search .search-box::placeholder { color: #94a3b8; }
-        .header-search .search-clear { background: rgba(0,0,0,0.15); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: bold; cursor: pointer; display: none; align-items: center; justify-content: center; flex-shrink: 0; }
-        .header-search .result-count { background: white; color: var(--primary); min-width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0; }
-        .search-container { position: relative; flex: 1; display: flex; align-items: center; }
-        .search-container .search-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); }
+
         
         .header-btn {
             position: absolute;
@@ -305,15 +299,7 @@
                     🖨️
                 </button>
             </div>
-            <div class="header-search">
-                <div class="search-container">
-                    <input type="text" id="search-input" class="search-box" placeholder="Cerca..." oninput="handleSearchInput()">
-                    <button id="search-clear" class="search-clear" onclick="clearSearch()">✕</button>
-                </div>
-                <div class="result-count" id="search-counter">
-                    <div id="count-val">0</div>
-                </div>
-            </div>
+
         </div>
 
         <div id="tab-home" class="tab-content active">

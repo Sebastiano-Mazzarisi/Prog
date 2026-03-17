@@ -1,10 +1,10 @@
 [T] [M] Buongiorno Putignano.
 
-[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 10 e 02.
+[T] [F] Benvenuti nel nostro podcast quotidiano. Oggi è martedì 17 marzo 2026, San Patrizio. Sono le 11 e 27.
 
 [T] [M] METEO A PUTIGNANO
 
-[T] [F] Oggi pioggia leggera, con temperature tra 8 e 10 gradi e probabilità di pioggia. Per domani è previsto cielo coperto, con temperature tra 5 e 10 gradi e qualche possibilità di pioggia.
+[T] [F] Oggi pioggia leggera, con temperature tra 7 e 10 gradi e probabilità di pioggia. Per domani è previsto cielo coperto, con temperature tra 5 e 7 gradi e probabilità di pioggia.
 
 [T] [M] FARMACIE DI TURNO
 
@@ -12,15 +12,15 @@
 
 [T] [M] NOTIZIE DALL'ITALIA E DAL MONDO
 
-[T] [F] Idf, ucciso in Iran il capo dei Basij Gholamreza Soleimani, "L'aeronautica Militare israeliana, agendo sulla base delle informazioni di intelligence, ha preso di mira ed eliminato Gholamreza Soleimani, che da sei anni operava come comandante dell'unità Basij, una notizia che ha scosso l'opinione pubblica italiana.
+[T] [F] Istat rivede al ribasso stime inflazione, prezzi a febbraio +1,5%: L'Istat rivede al ribasso le stime dell'inflazione registrata a febbraio, L'indice nazionale dei prezzi al consumo per l'intera collettività (Nic), al lordo dei tabacchi, segna quindi una variazione del +0, 7% su base mensile e del +1, 5% su base annua (da +1.
 
-[T] [M] Non solo Raffaella Carrà, Da Modugno a Ranieri: eredità nascoste e figli segreti: Dalle truffe contro Lollobrigida alla sorella di Sordi, dal caso Guttuso alla lite tra i fratelli Delon, Storie, amori e lotte dietro le luci della ribalta, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] Unità d’Italia, Mattarella: "Costituzione presidio di diritti, le egemonie turbano equilibri mondo": Il messaggio di Mattarella in occasione del 165esimo anniversario: "Richiama elementi fondanti dell'identità della Repubblica: indipendenza, sovranità popolare, giustizia e pace", una delle notizie più seguite in Italia nelle ultime ore.
 
-[T] [F] Attentati suicidi in Nigeria: 23 morti e oltre cento feriti, L’ombra degli islamisti di Boko Haram: Un attacco che è tra i più sanguinosi nella storia recente di Maiduguri, nel nord-est della Nigeria, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [F] "Sofia Loren viene dal nulla, se c’è riuscita lei posso farcela anch’io", In un’intervista a programma Da noi a ruota libera la 23enne attrice partenopea, originaria dei Quartieri Spagnoli, un aggiornamento dal mondo dello sport italiano.
 
-[T] [M] Benzina e diesel, dall'inizio della guerra prezzi in Italia su fino al 10%, ma è molto meno rispetto agli altri Paesi Ue: Con l?esplosione del conflitto in Iran, il prezzo di benzina e diesel ha subito un?impennata in tutta Europa, In Italia, l?aumento resta tra i più contenuti, una delle notizie più seguite in Italia nelle ultime ore.
+[T] [M] El Aynaoui rapinato in villa, il giocatore della Roma e la sua famiglia sequestrati e minacciati "Erano 6 uomini con pistole vestiti di nero": Sorpresi nel sonno, strattonati e poi chiusi in una stanza "Dovete stare zitti" la minaccia che il centrocampista della As Roma Neil El Aynaoui e sua moglie si sono sentiti.
 
-[T] [F] La legge della giungla che guida la guerra: Se il battito d’ali di una farfalla provoca un uragano dall’altra parte del mondo, viene da chiedersi cosa accada quando a sbatterle è uno struzzo, O magari un tacchino isterico con un arsenale, un aggiornamento dal fronte politico nazionale.
+[T] [F] L'America sarebbe capace di "liberare" Hormuz? Reagan ci riuscì, 39 anni fa Corriere della Sera Guerra Iran, Meloni: "Intervenire a Hormuz sarebbe un passo verso il coinvolgimento" Sky TG24 Bombardamenti su Teheran, Idf: "Ucciso comandante dei Basij, una notizia che ha scosso l'opinione pubblica italiana.
 
 [T] [M] NOTIZIE DA PUTIGNANO E D'INTORNI
 
@@ -32,6 +32,6 @@
 
 [T] [M] CURIOSITÀ SU PUTIGNANO
 
-[T] [F] C'è un dolce, a Putignano, che profuma di mandorle e di feste di nozze, Si chiama 'Intorcinato', un biscotto tipico la cui forma ricorda una treccia, o meglio, due mani che si stringono, Nasce infatti come dolce legato ai matrimoni e alle grandi celebrazioni, preparato rigorosamente a mano e spesso accompagnato da un buon bicchiere di liquore dolce.
+[T] [F] Molto prima che i Romani costruissero le loro strade consolari, la terra di Putignano era già viva, Il territorio era infatti abitato dall'antica popolazione dei Peuceti, una tribù japigia che dominava la Puglia centrale, Scavi archeologici hanno riportato alla luce frammenti di ceramiche e antiche sepolture che testimoniano un passato glorioso e millenario.
 
 [T] [M] A risentirci a presto.

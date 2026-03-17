@@ -310,7 +310,7 @@
                     🖨️
                 </button>
             </div>
-            <div id="header-search-bar" style="display:flex; align-items:center; gap:8px; padding:6px 1rem 5px 1rem;">
+            <div id="header-search-bar" style="display:flex; align-items:center; gap:8px; padding:6px 1rem 5px 2.8rem;">
                 <div style="position:relative; flex:1;">
                     <input type="text" id="search-input" class="header-search-input" placeholder="Cerca evento..." oninput="handleSearchInput()">
                     <button id="search-clear" class="header-search-clear" onclick="clearSearch()">✕</button>
@@ -515,9 +515,13 @@
                 return a.pDate.day - b.pDate.day;
             });
 
-            // Aggiorna contatore
-            const countEl = document.getElementById('count-val');
-            if (countEl && activeTabId === 'home') countEl.innerText = sortedEvents.length;
+            // Aggiorna contatore home
+            if (activeTabId === 'home') {
+                const countEl = document.getElementById('count-val');
+                const clearBtn = document.getElementById('search-clear');
+                if (countEl) countEl.innerText = sortedEvents.length;
+                if (clearBtn) clearBtn.style.display = getSearchVal() ? 'flex' : 'none';
+            }
 
             if (sortedEvents.length === 0) { container.innerHTML = '<div style="text-align:center; padding:2rem; font-size:1rem; color:var(--text-muted)">Nessun evento per i gruppi selezionati</div>'; return; }
             
@@ -584,14 +588,16 @@
 
         function renderRubrica(filterText = '') {
             const container = document.getElementById('rubrica-list');
-            const countEl = document.getElementById('count-val');
-            const clearBtn = document.getElementById('search-clear');
             const txt = filterText.toLowerCase();
-            if (txt.length > 0) clearBtn.style.display = 'flex'; else clearBtn.style.display = 'none';
             const people = getGroupedPeople();
             const sortedPeople = Object.values(people).sort((a,b) => a.c.localeCompare(b.c));
             const filtered = sortedPeople.filter(p => p.n.toLowerCase().includes(txt) || p.c.toLowerCase().includes(txt));
-            countEl.innerText = filtered.length;
+            if (activeTabId === 'rubrica') {
+                const countEl = document.getElementById('count-val');
+                const clearBtn = document.getElementById('search-clear');
+                if (countEl) countEl.innerText = filtered.length;
+                if (clearBtn) clearBtn.style.display = txt.length > 0 ? 'flex' : 'none';
+            }
             if (filtered.length === 0) { container.innerHTML = '<p style="text-align:center; padding:2rem; color:var(--text-muted); font-size:1rem;">Nessun risultato</p>'; return; }
             container.innerHTML = filtered.map(p => {
                 const typePriority = { 'Compleanno': 1, 'Onomastico': 2, 'Anniversario': 3 };

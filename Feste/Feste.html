@@ -1090,7 +1090,12 @@
             if (tabId === 'home' || tabId === 'stats') { appContainer.classList.add('bg-yellow-mode'); } 
             else { appContainer.classList.remove('bg-yellow-mode'); }
 
-            // Aggiorna contatore dopo cambio tab
+            // Ricalcola tutto ad ogni cambio tab
+            const val = document.getElementById('search-input').value;
+            calculateEvents();
+            renderHome();
+            renderRubrica(val);
+            renderStats();
             updateSearchCounter();
             
             // 3. LOGICA DI RIPRISTINO SCROLL

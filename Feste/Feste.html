@@ -631,7 +631,7 @@
             const val = document.getElementById('search-input').value;
             document.getElementById('search-clear').style.display = val ? 'flex' : 'none';
             if (activeTabId === 'home') { renderHome(); }
-            else { renderRubrica(val); }
+            else if (activeTabId === 'rubrica') { renderRubrica(val); }
         }
 
         function clearSearch() { const input = document.getElementById('search-input'); input.value = ''; input.focus(); document.getElementById('search-clear').style.display = 'none'; if (activeTabId === 'home') { renderHome(); } else { renderRubrica(''); } }
@@ -670,8 +670,10 @@
         function closeStatsModal(e) { if(e) e.preventDefault(); document.getElementById('stats-modal').classList.remove('open'); }
 
         function renderStats() {
+            const sval = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').toLowerCase();
+            const statsEvents = sval ? events.filter(e => (e.Nome + ' ' + e.Cognome).toLowerCase().includes(sval)) : events;
             const mSets = Array.from({length: 12}, () => new Set());
-            events.forEach(e => { const k = e.Cognome + '|' + e.Nome; mSets[e.pDate.month - 1].add(k); });
+            statsEvents.forEach(e => { const k = e.Cognome + '|' + e.Nome; mSets[e.pDate.month - 1].add(k); });
             const mCount = mSets.map(s => s.size);
             const maxM = Math.max(...mCount) || 1;
             document.getElementById('stats-months').innerHTML = months.map((m, i) => {
@@ -679,7 +681,7 @@
                 return `<div class="clickable-stat" onclick="openStatsModal('month', ${i}, 'Nati a ${m}')" style="display:flex;align-items:center;margin-bottom:10px;font-size:0.9rem;"><div style="width:100px;">${m}</div><div style="flex:1;height:10px;background:#f1f5f9;border-radius:6px;margin:0 10px;"><div style="height:100%;width:${w}%;background:var(--primary);border-radius:6px;"></div></div><div style="font-weight:bold;">${mCount[i]}</div></div>`;
             }).join('');
             const tSets = { 'Compleanno': new Set(), 'Onomastico': new Set(), 'Anniversario': new Set() };
-            events.forEach(e => { const k = e.Cognome + '|' + e.Nome; if (tSets[e.tipoDisplay]) tSets[e.tipoDisplay].add(k); else tSets['Anniversario'].add(k); });
+            statsEvents.forEach(e => { const k = e.Cognome + '|' + e.Nome; if (tSets[e.tipoDisplay]) tSets[e.tipoDisplay].add(k); else tSets['Anniversario'].add(k); });
             const tCount = {}; for(let key in tSets) tCount[key] = tSets[key].size;
             const maxT = Math.max(...Object.values(tCount)) || 1;
             document.getElementById('stats-types').innerHTML = Object.entries(tCount).map(([k, v]) => {
@@ -687,7 +689,7 @@
                 return `<div class="clickable-stat" onclick="openStatsModal('type', '${k}', '${k}')" style="display:flex;align-items:center;margin-bottom:10px;font-size:0.9rem;"><div style="width:100px;">${k}</div><div style="flex:1;height:10px;background:#f1f5f9;border-radius:6px;margin:0 10px;"><div style="height:100%;width:${w}%;background:#ec4899;border-radius:6px;"></div></div><div style="font-weight:bold;">${v}</div></div>`;
             }).join('');
             const gSets = { 'M': new Set(), 'F': new Set() };
-            events.forEach(e => { const k = e.Cognome + '|' + e.Nome; let g = e.Genere ? e.Genere.toUpperCase().trim() : 'M'; if (!gSets[g]) g = 'M'; gSets[g].add(k); });
+            statsEvents.forEach(e => { const k = e.Cognome + '|' + e.Nome; let g = e.Genere ? e.Genere.toUpperCase().trim() : 'M'; if (!gSets[g]) g = 'M'; gSets[g].add(k); });
             const peopleGender = { 'M': gSets['M'].size, 'F': gSets['F'].size };
             const maxG = Math.max(peopleGender['M'], peopleGender['F']) || 1;
             document.getElementById('stats-gender').innerHTML = [{ label: 'Maschile', code: 'M', count: peopleGender['M'], color: 'var(--primary)' }, { label: 'Femminile', code: 'F', count: peopleGender['F'], color: '#ec4899' }].map(item => {
@@ -696,7 +698,7 @@
             }).join('');
             const grSets = { 'Amici': new Set(), 'Mazzarisi': new Set(), 'Pricci': new Set(), 'Famiglia': new Set(), 'Geometri': new Set(), 'Febbre del sabato': new Set() };
             const groupCodes = { 'Amici': 'A', 'Mazzarisi': 'M', 'Pricci': 'P', 'Famiglia': 'F', 'Geometri': 'G', 'Febbre del sabato': 'S' };
-            events.forEach(e => {
+            statsEvents.forEach(e => {
                 const k = e.Cognome + '|' + e.Nome; const gStr = (e.Gruppo || '').toUpperCase();
                 if (gStr.includes('A')) grSets['Amici'].add(k); if (gStr.includes('M')) grSets['Mazzarisi'].add(k);
                 if (gStr.includes('P')) grSets['Pricci'].add(k); if (gStr.includes('F')) grSets['Famiglia'].add(k);

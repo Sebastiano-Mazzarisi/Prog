@@ -386,23 +386,21 @@
 
   /* PANNELLO SPOSI */
   .sposi-kpi {
-    display: flex;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
   }
   .kpi-box {
-    flex: 1;
-    min-width: 80px;
     background: var(--cream);
     border: 1.5px solid var(--border);
     border-radius: 12px;
-    padding: 14px 10px;
+    padding: 16px 10px;
     text-align: center;
   }
   .kpi-num {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
+    font-size: 38px;
     font-weight: 400;
     color: var(--gold-dark);
     line-height: 1;
@@ -414,30 +412,71 @@
     color: var(--text-light);
     margin-top: 4px;
   }
-  .sposi-tbl {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-  .sposi-tbl th {
+
+  /* Card per ogni risposta */
+  .risposta-card {
     background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .risposta-nome {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
     color: var(--text);
-    font-weight: 500;
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 2px solid var(--border);
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  .risposta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5px 0;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(224,212,192,0.4);
+  }
+  .risposta-row:last-child { border-bottom: none; }
+  .risposta-label {
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
+    color: var(--text-light);
+    min-width: 90px;
+    padding-top: 1px;
   }
-  .sposi-tbl td {
-    padding: 10px 10px;
-    border-bottom: 1px solid var(--border);
+  .risposta-val {
     color: var(--text);
-    vertical-align: top;
+    text-align: right;
+    flex: 1;
+    font-weight: 400;
   }
-  .sposi-tbl tr:last-child td { border-bottom: none; }
-  .sposi-tbl tr:hover td { background: rgba(201,169,110,0.05); }
+  .risposta-val.allergia { color: #a83230; font-weight: 500; }
+  .risposta-data {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 8px;
+    text-align: right;
+  }
+  .badge-veg {
+    background: #dff0e6;
+    color: #2d6040;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .badge-carne {
+    background: rgba(201,169,110,0.15);
+    color: var(--gold-dark);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
 </style>
 </head>
 <body>
@@ -590,36 +629,53 @@
           box.innerHTML = '<p style="text-align:center;padding:20px;color:var(--text-light)">Nessuna risposta ancora.</p>';
           return;
         }
-        // Contatori
         let totPersone = 0, totVeg = 0, totCarne = 0;
         data.rows.forEach(r => {
           totPersone += parseInt(r.persone) || 0;
           if (r.secondo === 'Vegetariano') totVeg++;
           else if (r.secondo === 'Carne') totCarne++;
         });
-        let html = `
-          <div class="sposi-kpi">
-            <div class="kpi-box"><div class="kpi-num">${data.rows.length}</div><div class="kpi-label">Risposte</div></div>
-            <div class="kpi-box"><div class="kpi-num">${totPersone}</div><div class="kpi-label">Persone totali</div></div>
-            <div class="kpi-box"><div class="kpi-num">${totVeg}</div><div class="kpi-label">Vegetariani</div></div>
-            <div class="kpi-box"><div class="kpi-num">${totCarne}</div><div class="kpi-label">Carne</div></div>
-          </div>
-          <table class="sposi-tbl">
-            <thead><tr><th>Nome</th><th>Persone</th><th>Secondo</th><th>Allergie</th><th>Note</th><th>Data</th></tr></thead>
-            <tbody>`;
+
+        let html = `<div class="sposi-kpi">
+          <div class="kpi-box"><div class="kpi-num">${data.rows.length}</div><div class="kpi-label">Risposte</div></div>
+          <div class="kpi-box"><div class="kpi-num">${totPersone}</div><div class="kpi-label">Persone</div></div>
+          <div class="kpi-box"><div class="kpi-num">${totVeg}</div><div class="kpi-label">Vegetariani</div></div>
+          <div class="kpi-box"><div class="kpi-num">${totCarne}</div><div class="kpi-label">Carne</div></div>
+        </div>`;
+
         data.rows.forEach(r => {
-          const allergie = r.allergie || '<span style="color:#aaa">Nessuna</span>';
-          const note = r.note || '<span style="color:#aaa">—</span>';
-          html += `<tr>
-            <td><strong>${r.nome}</strong></td>
-            <td style="text-align:center">${r.persone}</td>
-            <td>${r.secondo}</td>
-            <td>${allergie}</td>
-            <td>${note}</td>
-            <td style="font-size:11px;color:var(--text-light)">${r.data}</td>
-          </tr>`;
+          const badgeSecondo = r.secondo === 'Vegetariano'
+            ? `<span class="badge-veg">🌿 Vegetariano</span>`
+            : `<span class="badge-carne">🥩 Carne</span>`;
+          const allergie = r.allergie
+            ? `<span class="risposta-val allergia">${r.allergie}</span>`
+            : `<span class="risposta-val" style="color:#aaa">Nessuna</span>`;
+          const note = r.note
+            ? `<span class="risposta-val">${r.note}</span>`
+            : `<span class="risposta-val" style="color:#aaa">—</span>`;
+
+          html += `<div class="risposta-card">
+            <div class="risposta-nome">${r.nome}</div>
+            <div class="risposta-row">
+              <span class="risposta-label">Persone</span>
+              <span class="risposta-val">${r.persone}</span>
+            </div>
+            <div class="risposta-row">
+              <span class="risposta-label">Secondo</span>
+              <span class="risposta-val">${badgeSecondo}</span>
+            </div>
+            <div class="risposta-row">
+              <span class="risposta-label">Allergie</span>
+              ${allergie}
+            </div>
+            <div class="risposta-row">
+              <span class="risposta-label">Note</span>
+              ${note}
+            </div>
+            <div class="risposta-data">${r.data}</div>
+          </div>`;
         });
-        html += '</tbody></table>';
+
         box.innerHTML = html;
       })
       .catch(() => {

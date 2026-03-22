@@ -17,7 +17,7 @@
 <meta property="og:image:height" content="315">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Matrimonio.html">
-<rect width='100' height='100' rx='20' fill='%23f5ede0'/><circle cx='50' cy='46' r='24' fill='none' stroke='%23b8893a' stroke-width='10'/><circle cx='50' cy='46' r='24' fill='none' stroke='%23d4b07a' stroke-width='3'/><polygon points='50,16 43,26 50,30 57,26' fill='%23c9d8e8'/><polygon points='43,26 50,30 57,26 50,26' fill='%238aa8c8'/></svg>">
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -81,6 +81,7 @@
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 16px;
+    font-weight: 700;
   }
 
   .header .description {
@@ -562,7 +563,8 @@
     }
 
     setTimeout(() => {
-      window.open('https://wa.me/393356276262?text=' + encodeURIComponent(testo), '_blank');
+      const waTab = window.open('https://wa.me/393356276262?text=' + encodeURIComponent(testo), '_blank');
+      setTimeout(() => { try { waTab.close(); } catch(e) {} }, 2000);
     }, 300);
   }
 

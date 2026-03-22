@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lista Sposi – Giulia & Onofrio</title>
+<title>Lista Invitati – Giulia &amp; Onofrio</title>
 <link rel="apple-touch-icon" href="Lista.png">
 <link rel="icon" type="image/png" href="Lista.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Lista Sposi">
+<meta name="apple-mobile-web-app-title" content="Lista Invitati">
 <meta name="mobile-web-app-capable" content="yes">
-<meta property="og:title" content="Matrimonio Giulia &amp; Onofrio – Lista Sposi">
-<meta property="og:description" content="Pannello per monitorare le conferme e le preferenze degli ospiti.">
+<meta property="og:title" content="Lista Invitati – Giulia &amp; Onofrio">
+<meta property="og:description" content="Lista Invitati">
 <meta property="og:image" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Lista.png">
 <meta property="og:image:width" content="180">
 <meta property="og:image:height" content="180">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Lista.html">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #f5ede0;
@@ -25,20 +25,22 @@
     --gold: #b8893a;
     --gold-light: #d4b07a;
     --gold-dark: #8a5e1e;
-    --text: #1a1008;
-    --text-light: #5a4a35;
+    --text: #000000;
+    --text-light: #000000;
     --border: #7a5c3a;
     --green: #2d6040;
     --green-light: #dff0e6;
     --red: #a83230;
+    --blue: #2f5c9a;
+    --blue-light: #e3eefb;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    background: #dee5cd; /* Verde oliva chiaro */
+    background: #dee5cd;
     font-family: 'Jost', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     color: var(--text);
     min-height: 100vh;
     background-image:
@@ -52,7 +54,6 @@
     padding: 40px 20px 60px;
   }
 
-  /* HEADER */
   .header { text-align: center; margin-bottom: 40px; }
 
   .header-ornament {
@@ -67,23 +68,22 @@
   .header h1 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 38px;
-    font-weight: 300;
+    font-weight: 600;
     font-style: italic;
-    color: var(--text);
+    color: #000000;
     line-height: 1.2;
     margin-bottom: 8px;
   }
 
   .header .subtitle {
-    font-size: 13px;
-    letter-spacing: 3px;
+    font-size: 22px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 16px;
     font-weight: 700;
   }
 
-  /* CARD */
   .card {
     background: var(--warm-white);
     border: 1.5px solid var(--border);
@@ -94,17 +94,16 @@
     transition: box-shadow 0.2s;
   }
 
-  /* SUBMIT */
   .btn-submit {
     width: 100%;
     padding: 16px;
     background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-    color: white;
+    color: #000000;
     border: none;
     border-radius: 12px;
     font-family: 'Jost', sans-serif;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     cursor: pointer;
@@ -115,10 +114,9 @@
   .btn-submit:hover  { opacity: 0.92; transform: translateY(-1px); }
   .btn-submit:active { transform: translateY(0); }
 
-  /* PANNELLO SPOSI */
   .sposi-kpi {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     margin-bottom: 20px;
   }
@@ -131,8 +129,8 @@
   }
   .kpi-num {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 38px;
-    font-weight: 400;
+    font-size: 34px;
+    font-weight: 600;
     color: var(--gold-dark);
     line-height: 1;
   }
@@ -140,11 +138,11 @@
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--text-light);
+    color: var(--text);
     margin-top: 4px;
+    font-weight: 500;
   }
 
-  /* Card per ogni risposta */
   .risposta-card {
     background: var(--cream);
     border: 1.5px solid var(--border);
@@ -154,8 +152,8 @@
   }
   .risposta-nome {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 22px;
+    font-weight: 600;
     color: var(--text);
     margin-bottom: 10px;
     border-bottom: 1px solid var(--border);
@@ -165,7 +163,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 5px 0;
+    gap: 12px;
+    padding: 6px 0;
     font-size: 14px;
     border-bottom: 1px solid rgba(224,212,192,0.4);
   }
@@ -174,9 +173,10 @@
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--text-light);
+    color: var(--text);
     min-width: 90px;
-    padding-top: 1px;
+    padding-top: 2px;
+    font-weight: 600;
   }
   .risposta-val {
     color: var(--text);
@@ -187,25 +187,42 @@
   .risposta-val.allergia { color: #a83230; font-weight: 500; }
   .risposta-data {
     font-size: 11px;
-    color: var(--text-light);
+    color: var(--text);
     margin-top: 8px;
     text-align: right;
+    opacity: 0.7;
   }
-  .badge-veg {
-    background: #dff0e6;
-    color: #2d6040;
+
+  .badge {
+    display: inline-block;
     border-radius: 20px;
     padding: 2px 10px;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
+    white-space: nowrap;
   }
-  .badge-carne {
-    background: rgba(201,169,110,0.15);
-    color: var(--gold-dark);
-    border-radius: 20px;
-    padding: 2px 10px;
-    font-size: 12px;
-    font-weight: 500;
+  .badge-presente { background: var(--green-light); color: var(--green); }
+  .badge-assente  { background: #fdecea; color: var(--red); }
+  .badge-veg      { background: var(--green-light); color: var(--green); }
+  .badge-carne    { background: rgba(201,169,110,0.15); color: var(--gold-dark); }
+  .badge-pesce    { background: var(--blue-light); color: var(--blue); }
+  .muted          { color: #888; }
+
+  .delete-btn {
+    float:right;
+    background:none;
+    border:1px solid #c0504d;
+    color:#c0504d;
+    border-radius:6px;
+    padding:2px 10px;
+    font-size:11px;
+    cursor:pointer;
+    margin-top:2px;
+  }
+
+  @media (max-width: 520px) {
+    .sposi-kpi { grid-template-columns: repeat(2, 1fr); }
+    .header .subtitle { font-size: 18px; letter-spacing: 3px; }
   }
 </style>
 </head>
@@ -215,7 +232,7 @@
 <div class="page-wrapper">
   <div class="header">
     <div class="header-ornament">✦ ✦ ✦</div>
-    <h1>Pannello Sposi</h1>
+    <h1>Lista Invitati</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
   </div>
   <div class="card">
@@ -232,53 +249,112 @@
     caricaRisposte();
   });
 
+  function normalizeText(value) {
+    return (value || '')
+      .toString()
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  function isAbsent(value) {
+    const s = normalizeText(value);
+    return s.includes('non potro esserci') || s.includes('no podre asistir') || s === 'no' || s.includes('assente');
+  }
+
+  function isPresent(value) {
+    const s = normalizeText(value);
+    return s.includes('saro dei vostri') || s.includes('estare con vosotros') || s === 'si' || s === 'yes' || s.includes('presente');
+  }
+
+  function detectSecondo(value) {
+    const s = normalizeText(value);
+    if (s.includes('veget')) return 'veg';
+    if (s.includes('carne')) return 'carne';
+    if (s.includes('pesce') || s.includes('pescado') || s.includes('fish')) return 'pesce';
+    return '';
+  }
+
+  function secondBadge(secondo, presence) {
+    if (isAbsent(presence)) return '<span class="muted">—</span>';
+    const tipo = detectSecondo(secondo);
+    if (tipo === 'veg') return '<span class="badge badge-veg">🌿 Vegetariano</span>';
+    if (tipo === 'carne') return '<span class="badge badge-carne">🥩 Carne</span>';
+    if (tipo === 'pesce') return '<span class="badge badge-pesce">🐟 Pesce</span>';
+    return '<span class="muted">—</span>';
+  }
+
+  function presenzaBadge(presenza) {
+    if (isAbsent(presenza)) return '<span class="badge badge-assente">😔 Non potrà esserci</span>';
+    if (isPresent(presenza)) return '<span class="badge badge-presente">😊 Sarà dei vostri</span>';
+    return `<span>${presenza || '—'}</span>`;
+  }
+
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     box.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:20px">Caricamento...</p>';
+
     fetch(SCRIPT_URL + '?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
-        if (!data.ok || data.rows.length === 0) {
+        if (!data.ok || !data.rows || data.rows.length === 0) {
           box.innerHTML = '<p style="text-align:center;padding:20px;color:var(--text-light)">Nessuna risposta ancora.</p>';
           return;
         }
-        let totPersone = 0, totVeg = 0, totCarne = 0;
+
+        let totPersone = 0, totAssenti = 0, totVeg = 0, totCarne = 0, totPesce = 0;
+
         data.rows.forEach(r => {
-          totPersone += parseInt(r.persone) || 0;
-          if (r.secondo === 'Vegetariano') totVeg++;
-          else if (r.secondo === 'Carne') totCarne++;
+          const presenza = r.presenza || '';
+          const secondo = r.secondo || '';
+          const persone = parseInt(r.persone, 10) || 0;
+          if (isAbsent(presenza)) totAssenti++;
+          totPersone += persone;
+
+          const tipo = detectSecondo(secondo);
+          if (tipo === 'veg') totVeg++;
+          else if (tipo === 'carne') totCarne++;
+          else if (tipo === 'pesce') totPesce++;
         });
 
         let html = `<div class="sposi-kpi">
-          <div class="kpi-box"><div class="kpi-num">${data.rows.length}</div><div class="kpi-label">Risposte</div></div>
+          <div class="kpi-box"><div class="kpi-num">${data.rows.length}</div><div class="kpi-label">Schede</div></div>
           <div class="kpi-box"><div class="kpi-num">${totPersone}</div><div class="kpi-label">Persone</div></div>
+          <div class="kpi-box"><div class="kpi-num">${totAssenti}</div><div class="kpi-label">Assenti</div></div>
           <div class="kpi-box"><div class="kpi-num">${totVeg}</div><div class="kpi-label">Vegetariani</div></div>
           <div class="kpi-box"><div class="kpi-num">${totCarne}</div><div class="kpi-label">Carne</div></div>
+          <div class="kpi-box"><div class="kpi-num">${totPesce}</div><div class="kpi-label">Pesce</div></div>
         </div>`;
 
         data.rows.forEach((r, i) => {
-          const riga = i + 2; 
-          const badgeSecondo = r.secondo === 'Vegetariano'
-            ? `<span class="badge-veg">🌿 Vegetariano</span>`
-            : `<span class="badge-carne">🥩 Carne</span>`;
+          const riga = i + 2;
+          const presenza = r.presenza || '';
           const allergie = r.allergie
             ? `<span class="risposta-val allergia">${r.allergie}</span>`
-            : `<span class="risposta-val" style="color:#aaa">Nessuna</span>`;
+            : `<span class="risposta-val muted">Nessuna</span>`;
           const note = r.note
             ? `<span class="risposta-val">${r.note}</span>`
-            : `<span class="risposta-val" style="color:#aaa">—</span>`;
+            : `<span class="risposta-val muted">—</span>`;
+          const persone = (parseInt(r.persone, 10) || 0) > 0
+            ? `<span class="risposta-val">${parseInt(r.persone, 10)}</span>`
+            : `<span class="risposta-val muted">—</span>`;
 
           html += `<div class="risposta-card" id="card-${riga}">
-            <div class="risposta-nome">${r.nome}
-              <button onclick="eliminaRiga(${riga})" style="float:right;background:none;border:1px solid #c0504d;color:#c0504d;border-radius:6px;padding:2px 10px;font-size:11px;cursor:pointer;margin-top:2px">✕ Elimina</button>
+            <div class="risposta-nome">${r.nome || 'Senza nome'}
+              <button onclick="eliminaRiga(${riga})" class="delete-btn">✕ Elimina</button>
+            </div>
+            <div class="risposta-row">
+              <span class="risposta-label">Presenza</span>
+              <span class="risposta-val">${presenzaBadge(presenza)}</span>
             </div>
             <div class="risposta-row">
               <span class="risposta-label">Persone</span>
-              <span class="risposta-val">${r.persone}</span>
+              ${persone}
             </div>
             <div class="risposta-row">
               <span class="risposta-label">Secondo</span>
-              <span class="risposta-val">${badgeSecondo}</span>
+              <span class="risposta-val">${secondBadge(r.secondo, presenza)}</span>
             </div>
             <div class="risposta-row">
               <span class="risposta-label">Allergie</span>
@@ -288,7 +364,7 @@
               <span class="risposta-label">Note</span>
               ${note}
             </div>
-            <div class="risposta-data">${r.data}</div>
+            <div class="risposta-data">${r.data || ''}</div>
           </div>`;
         });
 
@@ -303,6 +379,7 @@
     if (!confirm('Eliminare questa scheda?')) return;
     const card = document.getElementById('card-' + riga);
     if (card) card.style.opacity = '0.4';
+
     fetch(SCRIPT_URL + '?elimina=' + riga + '&t=' + Date.now())
       .then(r => r.json())
       .then(data => {

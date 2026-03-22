@@ -121,6 +121,23 @@
     margin: 0 auto;
   }
 
+  .hero-photo {
+    margin: 22px auto 26px;
+    text-align: center;
+  }
+
+  .hero-photo img {
+    width: 100%;
+    max-width: 420px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 18px;
+    border: 1.5px solid var(--border);
+    box-shadow: 0 6px 24px rgba(44,36,24,0.08);
+    object-fit: cover;
+    background: var(--warm-white);
+  }
+
   .divider {
     display: flex;
     align-items: center;
@@ -169,18 +186,19 @@
     line-height: 1.3;
   }
 
-  .card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 14px;
+  .first-card {
+    position: relative;
   }
 
-  .card-top .card-title {
-    margin-bottom: 0;
+  .first-card .card-title {
+    margin-bottom: 16px;
+    padding-right: 110px;
   }
 
   .exit-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
     border: 1.5px solid var(--border);
     background: var(--cream);
     color: #000000;
@@ -409,23 +427,25 @@
     <p class="description" id="main-desc">DOMENICA 21 GIUGNO 2026</p>
   </div>
 
-  <div class="card">
+  <div class="hero-photo">
+    <img src="Foto.jpeg" alt="Giulia e Onofrio">
+  </div>
+
+  <div class="card first-card">
+    <button type="button" class="exit-btn" id="btn-exit" onclick="closeHtmlPage()">Esci</button>
     <div class="card-label">01</div>
-    <div class="card-top">
-      <div class="card-title" id="nome-title">Il tuo nome<span class="req">*</span></div>
-      <button type="button" class="exit-btn" id="btn-exit" onclick="closeHtmlPage()">Esci</button>
-    </div>
+    <div class="card-title" id="nome-title">Il tuo nome<span class="req">*</span></div>
     <input type="text" id="nome" placeholder="Nome e cognome" autocomplete="name">
     <div class="response-buttons">
-      <button type="button" class="choice-btn" id="btn-attend" onclick="setAttendance('yes')">Sarò dei vostri</button>
-      <button type="button" class="choice-btn" id="btn-decline" onclick="setAttendance('no')">Non potrò esserci</button>
+      <button type="button" class="choice-btn" id="btn-attend" onclick="setAttendance('yes')">😊 Sarò dei vostri</button>
+      <button type="button" class="choice-btn" id="btn-decline" onclick="setAttendance('no')">😔 Non potrò esserci</button>
     </div>
     <div class="send-feedback" id="send-feedback">Risposta registrata.</div>
   </div>
 
   <div class="card hidden-section" id="card-2">
     <div class="card-label">02</div>
-    <div class="card-title" id="secondo-title">Preferenza per il secondo piatto</div>
+    <div class="card-title" id="secondo-title">Preferenze per il secondo piatto</div>
     <div class="options-group" id="secondo-group">
       <label class="option-item selected-green" id="option-veg" onclick="selectRadio(this, 'secondo-group', 'green')">
         <input type="radio" name="secondo" value="vegetariano" checked>
@@ -440,6 +460,13 @@
         <span class="custom-dot"></span>
         <span>
           <div class="option-text" id="carne-text">🥩 Carne</div>
+        </span>
+      </label>
+      <label class="option-item" id="option-pesce" onclick="selectRadio(this, 'secondo-group', 'gold')">
+        <input type="radio" name="secondo" value="pesce">
+        <span class="custom-dot"></span>
+        <span>
+          <div class="option-text" id="pesce-text">🐟 Pesce</div>
         </span>
       </label>
     </div>
@@ -493,16 +520,17 @@
       mainDesc: 'DOMENICA 21 GIUGNO 2026',
       nomeTitle: 'Il tuo nome<span class="req">*</span>',
       nomePlaceholder: 'Nome e cognome',
-      attendBtn: 'Sarò dei vostri',
-      declineBtn: 'Non potrò esserci',
+      attendBtn: '😊 Sarò dei vostri',
+      declineBtn: '😔 Non potrò esserci',
       exitBtn: 'Esci',
       sendFeedback: 'Risposta registrata.',
       presenzaSi: 'Sarò dei vostri',
       presenzaNo: 'Non potrò esserci',
-      secondoTitle: 'Preferenza per il secondo piatto',
+      secondoTitle: 'Preferenze per il secondo piatto',
       vegText: '🌿 Vegetariano',
       vegSubtext: 'Opzione senza carne',
       carneText: '🥩 Carne',
+      pesceText: '🐟 Pesce',
       allergieTitle: 'Allergie o intolleranze alimentari',
       allergieNote: 'Tocca per selezionare. Puoi scegliere più voci.',
       chips: {
@@ -527,16 +555,17 @@
       mainDesc: 'DOMINGO 21 JUNIO 2026',
       nomeTitle: 'Tu nombre<span class="req">*</span>',
       nomePlaceholder: 'Nombre y apellido',
-      attendBtn: 'Estaré con vosotros',
-      declineBtn: 'No podré asistir',
+      attendBtn: '😊 Estaré con vosotros',
+      declineBtn: '😔 No podré asistir',
       exitBtn: 'Salir',
       sendFeedback: 'Respuesta registrada.',
       presenzaSi: 'Estaré con vosotros',
       presenzaNo: 'No podré asistir',
-      secondoTitle: 'Preferencia para el segundo plato',
+      secondoTitle: 'Preferencias para el segundo plato',
       vegText: '🌿 Vegetariano',
       vegSubtext: 'Opción sin carne',
       carneText: '🥩 Carne',
+      pesceText: '🐟 Pescado',
       allergieTitle: 'Alergias o intolerancias alimentarias',
       allergieNote: 'Tocca para seleccionar. Puedes elegir varias opciones.',
       chips: {
@@ -725,7 +754,7 @@
     if (attendanceStatus === 'yes') {
       const secondoRadio = document.querySelector('input[name="secondo"]:checked');
       const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';
-      const secondoLabel = { 'vegetariano': labelsT.vegText, 'carne': labelsT.carneText };
+      const secondoLabel = { 'vegetariano': labelsT.vegText, 'carne': labelsT.carneText, 'pesce': labelsT.pesceText };
       const allergieAttive = [...document.querySelectorAll('#allergie-grid .chip.active')]
         .map(c => c.getAttribute('data-value'));
       const allergiaAltra = document.getElementById('allergia-altra').value.trim();

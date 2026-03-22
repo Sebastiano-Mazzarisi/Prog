@@ -121,14 +121,16 @@
     margin: 0 auto;
   }
 
-  .hero-photo {
-    margin: 22px auto 26px;
-    text-align: center;
-  }
-
-  .hero-photo img {
+  .hero-toggle {
     width: 100%;
     max-width: 420px;
+    margin: 22px auto 26px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .hero-toggle img {
+    width: 100%;
     display: block;
     margin: 0 auto;
     border-radius: 18px;
@@ -136,6 +138,34 @@
     box-shadow: 0 6px 24px rgba(44,36,24,0.08);
     object-fit: cover;
     background: var(--warm-white);
+  }
+
+  .hero-details {
+    background: var(--warm-white);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(44,36,24,0.08);
+    padding: 22px 20px;
+    text-align: center;
+  }
+
+  .hero-details-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+
+  .hero-details-line {
+    font-size: 15px;
+    color: #000000;
+    line-height: 1.6;
+  }
+
+  .hero-details-line + .hero-details-line {
+    margin-top: 8px;
   }
 
   .divider {
@@ -313,8 +343,8 @@
     user-select: none;
   }
   .option-item:hover { background: rgba(201,169,110,0.06); border-color: var(--gold-light); }
-  .option-item.selected-green { background: var(--green-light); border-color: var(--green); }
-  .option-item.selected-gold  { background: rgba(201,169,110,0.1); border-color: var(--gold); }
+  .option-item.selected-green,
+  .option-item.selected-gold { background: rgba(201,169,110,0.1); border-color: var(--gold); }
 
   .option-item input[type="radio"] { display: none; }
 
@@ -329,8 +359,8 @@
     justify-content: center;
     transition: border-color 0.15s;
   }
-  .option-item.selected-green .custom-dot { border-color: var(--green); background: var(--green); }
-  .option-item.selected-gold  .custom-dot { border-color: var(--gold);  background: var(--gold); }
+  .option-item.selected-green .custom-dot,
+  .option-item.selected-gold .custom-dot { border-color: var(--gold); background: var(--gold); }
   .custom-dot::after {
     content: '';
     width: 8px;
@@ -427,8 +457,13 @@
     <p class="description" id="main-desc">DOMENICA 21 GIUGNO 2026</p>
   </div>
 
-  <div class="hero-photo">
-    <img src="Foto.jpeg" alt="Giulia e Onofrio">
+  <div class="hero-toggle" id="hero-toggle" onclick="toggleHeroInfo()">
+    <img id="hero-image" src="Foto.jpeg" alt="Giulia e Onofrio">
+    <div class="hero-details" id="hero-details" style="display:none">
+      <div class="hero-details-date" id="hero-details-date">Domenica 21 giugno 2026</div>
+      <div class="hero-details-line" id="hero-line-1">16:00 Cerimonia presso il Comune di Putignano</div>
+      <div class="hero-details-line" id="hero-line-2">18:00 Serata presso Barsentum</div>
+    </div>
   </div>
 
   <div class="card first-card">
@@ -447,12 +482,11 @@
     <div class="card-label">02</div>
     <div class="card-title" id="secondo-title">Preferenze per il secondo piatto</div>
     <div class="options-group" id="secondo-group">
-      <label class="option-item selected-green" id="option-veg" onclick="selectRadio(this, 'secondo-group', 'green')">
+      <label class="option-item selected-gold" id="option-veg" onclick="selectRadio(this, 'secondo-group', 'gold')">
         <input type="radio" name="secondo" value="vegetariano" checked>
         <span class="custom-dot"></span>
         <span>
           <div class="option-text" id="veg-text">🌿 Vegetariano</div>
-          <div class="option-subtext" id="veg-subtext">Opzione senza carne</div>
         </span>
       </label>
       <label class="option-item" id="option-carne" onclick="selectRadio(this, 'secondo-group', 'gold')">
@@ -476,6 +510,7 @@
     <div class="card-label">03</div>
     <div class="card-title" id="allergie-title">Allergie o intolleranze alimentari</div>
     <div class="allergie-grid" id="allergie-grid">
+      <div class="chip" data-value="Formaggi"     onclick="toggleChip(this)"><span class="chip-icon">🧀</span> <span class="chip-label">Formaggi</span></div>
       <div class="chip" data-value="Glutine"      onclick="toggleChip(this)"><span class="chip-icon">🌾</span> <span class="chip-label">Glutine</span></div>
       <div class="chip" data-value="Lattosio"     onclick="toggleChip(this)"><span class="chip-icon">🥛</span> <span class="chip-label">Lattosio</span></div>
       <div class="chip" data-value="Frutta secca" onclick="toggleChip(this)"><span class="chip-icon">🥜</span> <span class="chip-label">Frutta secca</span></div>
@@ -528,13 +563,15 @@
       presenzaNo: 'Non potrò esserci',
       secondoTitle: 'Preferenze per il secondo piatto',
       vegText: '🌿 Vegetariano',
-      vegSubtext: 'Opzione senza carne',
       carneText: '🥩 Carne',
       pesceText: '🐟 Pesce',
       allergieTitle: 'Allergie o intolleranze alimentari',
       allergieNote: 'Tocca per selezionare. Puoi scegliere più voci.',
+      heroDate: 'Domenica 21 giugno 2026',
+      heroLine1: '16:00 Cerimonia presso il Comune di Putignano',
+      heroLine2: '18:00 Serata presso Barsentum',
       chips: {
-        'Glutine': 'Glutine', 'Lattosio': 'Lattosio', 'Frutta secca': 'Frutta secca',
+        'Formaggi': 'Formaggi', 'Glutine': 'Glutine', 'Lattosio': 'Lattosio', 'Frutta secca': 'Frutta secca',
         'Uova': 'Uova', 'Crostacei': 'Crostacei', 'Soia': 'Soia', 'Pesce': 'Pesce', 'Sedano': 'Sedano'
       },
       allergiaAltraPlaceholder: 'Altre allergie o intolleranze…',
@@ -563,13 +600,15 @@
       presenzaNo: 'No podré asistir',
       secondoTitle: 'Preferencias para el segundo plato',
       vegText: '🌿 Vegetariano',
-      vegSubtext: 'Opción sin carne',
       carneText: '🥩 Carne',
       pesceText: '🐟 Pescado',
       allergieTitle: 'Alergias o intolerancias alimentarias',
       allergieNote: 'Tocca para seleccionar. Puedes elegir varias opciones.',
+      heroDate: 'Domingo 21 junio 2026',
+      heroLine1: '16:00 Ceremonia en el Ayuntamiento de Putignano',
+      heroLine2: '18:00 Velada en Barsentum',
       chips: {
-        'Glutine': 'Gluten', 'Lattosio': 'Lactosa', 'Frutta secca': 'Frutos secos',
+        'Formaggi': 'Quesos', 'Glutine': 'Gluten', 'Lattosio': 'Lactosa', 'Frutta secca': 'Frutos secos',
         'Uova': 'Huevos', 'Crostacei': 'Crustáceos', 'Soia': 'Soja', 'Pesce': 'Pescado', 'Sedano': 'Apio'
       },
       allergiaAltraPlaceholder: 'Otras alergias o intolerancias…',
@@ -609,8 +648,11 @@
 
     document.getElementById('secondo-title').textContent = t.secondoTitle;
     document.getElementById('veg-text').textContent = t.vegText;
-    document.getElementById('veg-subtext').textContent = t.vegSubtext;
     document.getElementById('carne-text').textContent = t.carneText;
+    document.getElementById('pesce-text').textContent = t.pesceText;
+    document.getElementById('hero-details-date').textContent = t.heroDate;
+    document.getElementById('hero-line-1').textContent = t.heroLine1;
+    document.getElementById('hero-line-2').textContent = t.heroLine2;
     
     document.getElementById('allergie-title').textContent = t.allergieTitle;
     document.getElementById('allergie-note').textContent = t.allergieNote;
@@ -632,6 +674,14 @@
   // --- LOGICA DEL FORM ---
 
   let attendanceStatus = '';
+
+  let heroInfoVisible = false;
+
+  function toggleHeroInfo() {
+    heroInfoVisible = !heroInfoVisible;
+    document.getElementById('hero-image').style.display = heroInfoVisible ? 'none' : 'block';
+    document.getElementById('hero-details').style.display = heroInfoVisible ? 'block' : 'none';
+  }
 
   function showSavedFeedback() {
     const box = document.getElementById('send-feedback');
@@ -655,7 +705,7 @@
       item.classList.remove('selected-green', 'selected-gold');
     });
     const defaultOption = document.getElementById('option-veg');
-    defaultOption.classList.add('selected-green');
+    defaultOption.classList.add('selected-gold');
     const defaultRadio = defaultOption.querySelector('input[type="radio"]');
     if (defaultRadio) defaultRadio.checked = true;
 

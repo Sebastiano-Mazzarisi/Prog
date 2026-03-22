@@ -383,9 +383,66 @@
     letter-spacing: 1px;
   }
   .footer span { color: var(--gold); }
+
+  /* PANNELLO SPOSI */
+  .sposi-kpi {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .kpi-box {
+    flex: 1;
+    min-width: 80px;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .kpi-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--gold-dark);
+    line-height: 1;
+  }
+  .kpi-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+  .sposi-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .sposi-tbl th {
+    background: var(--cream);
+    color: var(--text);
+    font-weight: 500;
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .sposi-tbl td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .sposi-tbl tr:last-child td { border-bottom: none; }
+  .sposi-tbl tr:hover td { background: rgba(201,169,110,0.05); }
 </style>
 </head>
 <body>
+<!-- SEZIONE FORM (ospiti) -->
+<div id="form-section">
 <div class="page-wrapper">
 
   <!-- HEADER -->
@@ -467,31 +524,109 @@
     <textarea id="note" rows="3" placeholder="Eventuali richieste speciali, diete particolari…"></textarea>
   </div>
 
-  <button class="btn-submit" onclick="generaRiepilogo()">
-    ✓ Conferma e prepara il messaggio
+  <button class="btn-submit" id="btn-invia" onclick="generaRiepilogo()">
+    ✓ Conferma e invia
   </button>
-
-  <!-- RIEPILOGO -->
-  <div class="result-box" id="result-box">
-    <div class="result-title">Il tuo messaggio è pronto ✦</div>
-    <div class="result-text" id="result-text"></div>
-    <button class="btn-copy" onclick="copiaEInvia()">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-      Copia e apri WhatsApp
-    </button>
-    <div class="copy-confirm" id="copy-confirm"></div>
-  </div>
 
   <div class="divider"><span>✦</span></div>
   <div class="footer">
-    Compilando questo modulo accetti che le tue preferenze<br>
-    vengano utilizzate esclusivamente per organizzare il banchetto.<br><br>
+    Le tue preferenze verranno utilizzate esclusivamente per organizzare il banchetto.<br><br>
     <span>Con amore ♥</span>
   </div>
 
 </div>
+</div>
+
+<!-- SEZIONE GRAZIE (dopo invio) -->
+<div id="grazie-section" style="display:none">
+<div class="page-wrapper">
+  <div class="header">
+    <div class="header-ornament">✦ ✦ ✦</div>
+    <h1>Grazie!</h1>
+    <div class="subtitle">Giulia &amp; Onofrio</div>
+    <p class="description" style="margin-top:20px;font-size:16px;color:var(--text)">
+      Le tue preferenze sono state registrate.<br>Ci vediamo al matrimonio! 💍
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- SEZIONE SPOSI (con ?c=21062026) -->
+<div id="sposi-section" style="display:none">
+<div class="page-wrapper">
+  <div class="header">
+    <div class="header-ornament">✦ ✦ ✦</div>
+    <h1>Pannello Sposi</h1>
+    <div class="subtitle">Giulia &amp; Onofrio</div>
+  </div>
+  <div class="card">
+    <div id="sposi-table"><p style="text-align:center;padding:20px">Caricamento...</p></div>
+    <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:16px">↻ Aggiorna</button>
+  </div>
+</div>
+</div>
 
 <script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6hJ9hW9B-Gkj1k8XJrYdjHUdgeHdGmgxuQsZ8zfCOuGPSeKoch9YZ6AwMcy2ETsmn-Q/exec';
+  const CODICE_SPOSI = '21062026';
+
+  // Mostra pannello sposi se ?c=21062026
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('c') === CODICE_SPOSI) {
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('sposi-section').style.display = 'block';
+      caricaRisposte();
+    }
+  });
+
+  function caricaRisposte() {
+    const box = document.getElementById('sposi-table');
+    box.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:20px">Caricamento...</p>';
+    fetch(SCRIPT_URL)
+      .then(r => r.json())
+      .then(data => {
+        if (!data.ok || data.rows.length === 0) {
+          box.innerHTML = '<p style="text-align:center;padding:20px;color:var(--text-light)">Nessuna risposta ancora.</p>';
+          return;
+        }
+        // Contatori
+        let totPersone = 0, totVeg = 0, totCarne = 0;
+        data.rows.forEach(r => {
+          totPersone += parseInt(r.persone) || 0;
+          if (r.secondo === 'Vegetariano') totVeg++;
+          else if (r.secondo === 'Carne') totCarne++;
+        });
+        let html = `
+          <div class="sposi-kpi">
+            <div class="kpi-box"><div class="kpi-num">${data.rows.length}</div><div class="kpi-label">Risposte</div></div>
+            <div class="kpi-box"><div class="kpi-num">${totPersone}</div><div class="kpi-label">Persone totali</div></div>
+            <div class="kpi-box"><div class="kpi-num">${totVeg}</div><div class="kpi-label">Vegetariani</div></div>
+            <div class="kpi-box"><div class="kpi-num">${totCarne}</div><div class="kpi-label">Carne</div></div>
+          </div>
+          <table class="sposi-tbl">
+            <thead><tr><th>Nome</th><th>Persone</th><th>Secondo</th><th>Allergie</th><th>Note</th><th>Data</th></tr></thead>
+            <tbody>`;
+        data.rows.forEach(r => {
+          const allergie = r.allergie || '<span style="color:#aaa">Nessuna</span>';
+          const note = r.note || '<span style="color:#aaa">—</span>';
+          html += `<tr>
+            <td><strong>${r.nome}</strong></td>
+            <td style="text-align:center">${r.persone}</td>
+            <td>${r.secondo}</td>
+            <td>${allergie}</td>
+            <td>${note}</td>
+            <td style="font-size:11px;color:var(--text-light)">${r.data}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+        box.innerHTML = html;
+      })
+      .catch(() => {
+        box.innerHTML = '<p style="color:red;text-align:center;padding:20px">Errore nel caricamento.</p>';
+      });
+  }
+
   function selectRadio(el, groupId, colorClass) {
     document.querySelectorAll('#' + groupId + ' .option-item').forEach(item => {
       item.classList.remove('selected-green', 'selected-gold');
@@ -513,66 +648,43 @@
       setTimeout(() => inp.style.borderColor = '', 2000);
       return;
     }
-
     const numPersone = document.getElementById('num-persone').value;
     const secondoRadio = document.querySelector('input[name="secondo"]:checked');
     const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';
     const secondoLabel = { 'vegetariano': 'Vegetariano', 'carne': 'Carne' };
-
     const allergieAttive = [...document.querySelectorAll('#allergie-grid .chip.active')]
       .map(c => c.dataset.value);
     const allergiaAltra = document.getElementById('allergia-altra').value.trim();
     if (allergiaAltra) allergieAttive.push(allergiaAltra);
-
     const note = document.getElementById('note').value.trim();
-    const personeLabel = numPersone === '1' ? '1 persona' : numPersone + ' persone';
 
-    let righe = [];
-    righe.push('*Matrimonio Giulia & Onofrio*');
-    righe.push('*Nome:* ' + nome);
-    righe.push('*Persone:* ' + personeLabel);
-    righe.push('*Secondo:* ' + secondoLabel[secondo]);
-    if (allergieAttive.length > 0) {
-      righe.push('*Allergie/Intolleranze:* ' + allergieAttive.join(', '));
-    } else {
-      righe.push('*Allergie/Intolleranze:* Nessuna');
-    }
-    if (note) righe.push('*Note:* ' + note);
+    const payload = {
+      nome,
+      persone: numPersone,
+      secondo: secondoLabel[secondo] || secondo,
+      allergie: allergieAttive.join(', '),
+      note
+    };
 
-    document.getElementById('result-text').textContent = righe.join('\n');
-    const box = document.getElementById('result-box');
-    box.classList.add('visible');
-    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+    const btn = document.getElementById('btn-invia');
+    btn.disabled = true;
+    btn.textContent = 'Invio in corso...';
 
-  function copiaEInvia() {
-    const testo = document.getElementById('result-text').textContent;
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(testo).then(() => mostraConferma());
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = testo;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      mostraConferma();
-    }
-
-    setTimeout(() => {
-      // whatsapp:// apre l'app direttamente senza aprire tab browser
-      window.location.href = 'whatsapp://send?phone=393356276262&text=' + encodeURIComponent(testo);
-    }, 300);
-  }
-
-  function mostraConferma() {
-    const el = document.getElementById('copy-confirm');
-    el.textContent = '✓ Testo copiato negli appunti!';
-    el.style.opacity = '1';
-    setTimeout(() => { el.style.opacity = '0'; }, 3000);
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('grazie-section').style.display = 'block';
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = '✓ Conferma e invia';
+      alert('Errore di rete. Riprova.');
+    });
   }
 </script>
 </body>

@@ -169,6 +169,51 @@
     line-height: 1.3;
   }
 
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .card-top .card-title {
+    margin-bottom: 0;
+  }
+
+  .exit-btn {
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+    color: #000000;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+
+  .exit-btn:hover {
+    background: rgba(201,169,110,0.08);
+    border-color: var(--gold);
+  }
+
+  .exit-btn:active {
+    transform: translateY(1px);
+  }
+
+  .send-feedback {
+    display: none;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--green);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
   /* INPUT / TEXTAREA */
   input[type="text"], textarea {
     width: 100%;
@@ -366,12 +411,16 @@
 
   <div class="card">
     <div class="card-label">01</div>
-    <div class="card-title" id="nome-title">Il tuo nome<span class="req">*</span></div>
+    <div class="card-top">
+      <div class="card-title" id="nome-title">Il tuo nome<span class="req">*</span></div>
+      <button type="button" class="exit-btn" id="btn-exit" onclick="closeHtmlPage()">Esci</button>
+    </div>
     <input type="text" id="nome" placeholder="Nome e cognome" autocomplete="name">
     <div class="response-buttons">
       <button type="button" class="choice-btn" id="btn-attend" onclick="setAttendance('yes')">Sarò dei vostri</button>
       <button type="button" class="choice-btn" id="btn-decline" onclick="setAttendance('no')">Non potrò esserci</button>
     </div>
+    <div class="send-feedback" id="send-feedback">Risposta registrata.</div>
   </div>
 
   <div class="card hidden-section" id="card-2">
@@ -427,18 +476,6 @@
 </div>
 </div>
 
-<div id="grazie-section" style="display:none">
-<div class="page-wrapper">
-  <div class="header">
-    <div class="header-ornament">✦ ✦ ✦</div>
-    <h1 id="thanks-title">Grazie!</h1>
-    <div class="subtitle">Giulia &amp; Onofrio</div>
-    <p class="description" style="margin-top:20px;font-size:16px;color:#000000 !important" id="thanks-desc">
-      La tua risposta è stata registrata.
-    </p>
-  </div>
-</div>
-</div>
 
 <script>
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
@@ -458,6 +495,8 @@
       nomePlaceholder: 'Nome e cognome',
       attendBtn: 'Sarò dei vostri',
       declineBtn: 'Non potrò esserci',
+      exitBtn: 'Esci',
+      sendFeedback: 'Risposta registrata.',
       presenzaSi: 'Sarò dei vostri',
       presenzaNo: 'Non potrò esserci',
       secondoTitle: 'Preferenza per il secondo piatto',
@@ -490,6 +529,8 @@
       nomePlaceholder: 'Nombre y apellido',
       attendBtn: 'Estaré con vosotros',
       declineBtn: 'No podré asistir',
+      exitBtn: 'Salir',
+      sendFeedback: 'Respuesta registrada.',
       presenzaSi: 'Estaré con vosotros',
       presenzaNo: 'No podré asistir',
       secondoTitle: 'Preferencia para el segundo plato',
@@ -534,6 +575,8 @@
     document.getElementById('nome').placeholder = t.nomePlaceholder;
     document.getElementById('btn-attend').textContent = t.attendBtn;
     document.getElementById('btn-decline').textContent = t.declineBtn;
+    document.getElementById('btn-exit').textContent = t.exitBtn;
+    document.getElementById('send-feedback').textContent = t.sendFeedback;
 
     document.getElementById('secondo-title').textContent = t.secondoTitle;
     document.getElementById('veg-text').textContent = t.vegText;
@@ -555,18 +598,57 @@
     msgInvioInCorso = t.msgInvioInCorso;
     msgErroreRete = t.msgErroreRete;
 
-    document.getElementById('thanks-title').textContent = t.thanksTitle;
-    updateThanksMessage();
   }
 
   // --- LOGICA DEL FORM ---
 
   let attendanceStatus = '';
 
-  function updateThanksMessage() {
-    const t = translations[currentLanguage];
-    const msg = attendanceStatus === 'no' ? t.thanksDescNo : t.thanksDescYes;
-    document.getElementById('thanks-desc').innerHTML = msg;
+  function showSavedFeedback() {
+    const box = document.getElementById('send-feedback');
+    box.style.display = 'block';
+    clearTimeout(showSavedFeedback._timer);
+    showSavedFeedback._timer = setTimeout(() => {
+      box.style.display = 'none';
+    }, 2500);
+  }
+
+  function resetFormToStart() {
+    attendanceStatus = '';
+    document.getElementById('nome').value = '';
+    document.getElementById('allergia-altra').value = '';
+    document.getElementById('note').value = '';
+    document.getElementById('btn-attend').classList.remove('active-choice');
+    document.getElementById('btn-decline').classList.remove('active-choice');
+    document.querySelectorAll('#allergie-grid .chip.active').forEach(chip => chip.classList.remove('active'));
+
+    document.querySelectorAll('#secondo-group .option-item').forEach(item => {
+      item.classList.remove('selected-green', 'selected-gold');
+    });
+    const defaultOption = document.getElementById('option-veg');
+    defaultOption.classList.add('selected-green');
+    const defaultRadio = defaultOption.querySelector('input[type="radio"]');
+    if (defaultRadio) defaultRadio.checked = true;
+
+    const btn = document.getElementById('btn-invia');
+    btn.disabled = false;
+    btn.textContent = translations[currentLanguage].btnInvia;
+
+    updateFormVisibility();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      document.getElementById('nome').focus();
+    }, 150);
+  }
+
+  function closeHtmlPage() {
+    window.open('', '_self');
+    window.close();
+    setTimeout(() => {
+      if (!window.closed) {
+        location.href = 'about:blank';
+      }
+    }, 120);
   }
 
   function updateFormVisibility() {
@@ -591,12 +673,16 @@
     }
 
     attendanceStatus = status;
+    document.getElementById('send-feedback').style.display = 'none';
     document.getElementById('btn-attend').classList.toggle('active-choice', status === 'yes');
     document.getElementById('btn-decline').classList.toggle('active-choice', status === 'no');
     updateFormVisibility();
   }
 
-  document.getElementById('nome').addEventListener('input', updateFormVisibility);
+  document.getElementById('nome').addEventListener('input', () => {
+    document.getElementById('send-feedback').style.display = 'none';
+    updateFormVisibility();
+  });
 
   function selectRadio(el, groupId, colorClass) {
 
@@ -662,9 +748,8 @@
       body: JSON.stringify(payload)
     })
     .then(() => {
-      updateThanksMessage();
-      document.getElementById('form-section').style.display = 'none';
-      document.getElementById('grazie-section').style.display = 'block';
+      showSavedFeedback();
+      resetFormToStart();
     })
     .catch(() => {
       btn.disabled = false;

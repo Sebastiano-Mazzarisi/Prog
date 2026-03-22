@@ -622,7 +622,8 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     box.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:20px">Caricamento...</p>';
-    fetch(SCRIPT_URL)
+    // Anti-cache: aggiunge timestamp all'URL
+    fetch(SCRIPT_URL + '?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
         if (!data.ok || data.rows.length === 0) {
@@ -643,7 +644,8 @@
           <div class="kpi-box"><div class="kpi-num">${totCarne}</div><div class="kpi-label">Carne</div></div>
         </div>`;
 
-        data.rows.forEach(r => {
+        data.rows.forEach((r, i) => {
+          const riga = i + 2; // riga nel foglio (1=intestazione, 2=prima riga dati)
           const badgeSecondo = r.secondo === 'Vegetariano'
             ? `<span class="badge-veg">🌿 Vegetariano</span>`
             : `<span class="badge-carne">🥩 Carne</span>`;
@@ -654,8 +656,10 @@
             ? `<span class="risposta-val">${r.note}</span>`
             : `<span class="risposta-val" style="color:#aaa">—</span>`;
 
-          html += `<div class="risposta-card">
-            <div class="risposta-nome">${r.nome}</div>
+          html += `<div class="risposta-card" id="card-${riga}">
+            <div class="risposta-nome">${r.nome}
+              <button onclick="eliminaRiga(${riga})" style="float:right;background:none;border:1px solid #c0504d;color:#c0504d;border-radius:6px;padding:2px 10px;font-size:11px;cursor:pointer;margin-top:2px">✕ Elimina</button>
+            </div>
             <div class="risposta-row">
               <span class="risposta-label">Persone</span>
               <span class="risposta-val">${r.persone}</span>
@@ -680,6 +684,26 @@
       })
       .catch(() => {
         box.innerHTML = '<p style="color:red;text-align:center;padding:20px">Errore nel caricamento.</p>';
+      });
+  }
+
+  function eliminaRiga(riga) {
+    if (!confirm('Eliminare questa scheda?')) return;
+    const card = document.getElementById('card-' + riga);
+    if (card) card.style.opacity = '0.4';
+    fetch(SCRIPT_URL + '?elimina=' + riga + '&t=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok) {
+          setTimeout(() => caricaRisposte(), 500);
+        } else {
+          alert('Errore nella cancellazione.');
+          if (card) card.style.opacity = '1';
+        }
+      })
+      .catch(() => {
+        alert('Errore di rete.');
+        if (card) card.style.opacity = '1';
       });
   }
 

@@ -17,7 +17,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Matrimonio.html">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #f5ede0;
@@ -25,8 +25,8 @@
     --gold: #b8893a;
     --gold-light: #d4b07a;
     --gold-dark: #8a5e1e;
-    --text: #1a1008;
-    --text-light: #5a4a35;
+    --text: #000000;       /* Modificato in nero puro */
+    --text-light: #000000; /* Modificato in nero puro */
     --border: #7a5c3a;
     --green: #2d6040;
     --green-light: #dff0e6;
@@ -36,9 +36,9 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    background: #dee5cd; /* Verde oliva chiaro */
+    background: #dee5cd; 
     font-family: 'Jost', sans-serif;
-    font-weight: 300;
+    font-weight: 400; /* Aumentato da 300 a 400 per migliorare la leggibilità col nero */
     color: var(--text);
     min-height: 100vh;
     background-image:
@@ -68,20 +68,21 @@
     background: none;
     border: 1px solid var(--border);
     border-radius: 20px;
-    color: var(--text-light);
+    color: #000000;
     font-family: 'Jost', sans-serif;
     font-size: 13px;
     letter-spacing: 1px;
     padding: 6px 16px;
     cursor: pointer;
     transition: all 0.2s;
+    font-weight: 500;
   }
   .lang-btn:hover { background: rgba(184, 137, 58, 0.08); }
   .lang-btn.active-lang {
     background: var(--gold);
-    color: white;
+    color: #000000; /* Testo nero sul bottone attivo */
     border-color: var(--gold);
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .header-ornament {
@@ -96,9 +97,9 @@
   .header h1 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 38px;
-    font-weight: 300;
+    font-weight: 600; /* Leggermente più marcato */
     font-style: italic;
-    color: var(--text);
+    color: #000000;
     line-height: 1.2;
     margin-bottom: 8px;
   }
@@ -107,14 +108,14 @@
     font-size: 13px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--gold);
+    color: #000000; /* Modificato in nero */
     margin-bottom: 16px;
     font-weight: 700;
   }
 
   .header .description {
     font-size: 14.5px;
-    color: var(--text-light);
+    color: #000000;
     line-height: 1.7;
     max-width: 380px;
     margin: 0 auto;
@@ -154,15 +155,16 @@
     font-size: 11px;
     letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: #1a1008;
+    color: #000000;
     margin-bottom: 6px;
+    font-weight: 600;
   }
 
   .card-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px;
-    font-weight: 400;
-    color: #1a1008;
+    font-weight: 600;
+    color: #000000;
     margin-bottom: 16px;
     line-height: 1.3;
   }
@@ -175,8 +177,8 @@
     padding: 12px 14px;
     font-family: 'Jost', sans-serif;
     font-size: 15px;
-    font-weight: 300;
-    color: var(--text);
+    font-weight: 400;
+    color: #000000;
     background: var(--cream);
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -188,8 +190,8 @@
     background: #fffefa;
   }
   input[type="text"]::placeholder, textarea::placeholder {
-    color: var(--text-light);
-    opacity: 0.6;
+    color: #000000;
+    opacity: 0.7; /* Opacità per distinguere dal testo inserito, ma base nera */
   }
 
   /* SELECT numero persone */
@@ -202,8 +204,9 @@
     font-size: 12px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: #1a1008;
+    color: #000000;
     margin-bottom: 6px;
+    font-weight: 500;
   }
   select {
     width: 100%;
@@ -212,8 +215,8 @@
     padding: 12px 38px 12px 14px;
     font-family: 'Jost', sans-serif;
     font-size: 15px;
-    font-weight: 300;
-    color: var(--text);
+    font-weight: 400;
+    color: #000000;
     background: var(--cream);
     outline: none;
     appearance: none;
@@ -231,7 +234,7 @@
     right: 14px;
     top: 50%;
     pointer-events: none;
-    color: var(--gold);
+    color: #000000;
     font-size: 12px;
   }
 
@@ -283,8 +286,8 @@
   .option-item.selected-green .custom-dot::after,
   .option-item.selected-gold  .custom-dot::after { display: block; }
 
-  .option-text    { font-size: 15px; color: #1a1008; line-height: 1.3; }
-  .option-subtext { font-size: 12px; color: #3a2a18; margin-top: 1px; }
+  .option-text    { font-size: 15px; color: #000000; line-height: 1.3; font-weight: 500; }
+  .option-subtext { font-size: 12px; color: #000000; margin-top: 1px; opacity: 0.8; }
 
   /* ALLERGIE CHIPS */
   .allergie-grid {
@@ -306,9 +309,10 @@
     transition: all 0.15s;
     user-select: none;
     background: var(--cream);
+    color: #000000;
   }
   .chip:hover { border-color: var(--gold-light); background: rgba(201,169,110,0.06); }
-  .chip.active  { background: #fdecea; border-color: var(--red); color: var(--red); }
+  .chip.active  { background: #fdecea; border-color: #000000; color: #000000; font-weight: 600; }
   .chip-icon    { font-size: 16px; }
 
   /* SUBMIT */
@@ -316,12 +320,12 @@
     width: 100%;
     padding: 16px;
     background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-    color: white;
+    color: #000000; /* Testo nero sul bottone */
     border: none;
     border-radius: 12px;
     font-family: 'Jost', sans-serif;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     cursor: pointer;
@@ -332,23 +336,24 @@
   .btn-submit:hover  { opacity: 0.92; transform: translateY(-1px); }
   .btn-submit:active { transform: translateY(0); }
 
-  .req { color: var(--red); margin-left: 2px; }
+  .req { color: #000000; margin-left: 2px; font-weight: bold; }
 
   .field-note {
     font-size: 12px;
-    color: #3a2a18;
+    color: #000000;
     margin-top: 8px;
     line-height: 1.5;
+    opacity: 0.8;
   }
 
   .footer {
     text-align: center;
     margin-top: 40px;
     font-size: 12px;
-    color: var(--text-light);
+    color: #000000;
     letter-spacing: 1px;
   }
-  .footer span { color: var(--gold); }
+  .footer span { color: #000000; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -452,7 +457,7 @@
     <div class="header-ornament">✦ ✦ ✦</div>
     <h1 id="thanks-title">Grazie!</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
-    <p class="description" style="margin-top:20px;font-size:16px;color:var(--text)" id="thanks-desc">
+    <p class="description" style="margin-top:20px;font-size:16px;color:#000000 !important" id="thanks-desc">
       Le tue preferenze sono state registrate.<br>Ci vediamo al matrimonio! 💍
     </p>
   </div>

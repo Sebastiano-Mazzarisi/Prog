@@ -194,48 +194,41 @@
     opacity: 0.7; /* Opacità per distinguere dal testo inserito, ma base nera */
   }
 
-  /* SELECT numero persone */
-  .select-wrapper {
-    position: relative;
+  /* SCELTA PRESENZA */
+  .response-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
     margin-top: 14px;
   }
-  .select-label {
-    display: block;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #000000;
-    margin-bottom: 6px;
-    font-weight: 500;
-  }
-  select {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 38px 12px 14px;
+
+  .choice-btn {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 12px;
     font-family: 'Jost', sans-serif;
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 600;
     color: #000000;
     background: var(--cream);
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
     cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.15s;
   }
-  select:focus {
+  .choice-btn:hover {
     border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(201,169,110,0.12);
-    background: #fffefa;
+    background: rgba(201,169,110,0.08);
   }
-  .select-arrow {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    pointer-events: none;
-    color: #000000;
-    font-size: 12px;
+  .choice-btn:active {
+    transform: translateY(1px);
+  }
+  .choice-btn.active-choice {
+    background: rgba(201,169,110,0.14);
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,169,110,0.10);
+  }
+
+  .hidden-section {
+    display: none;
   }
 
   /* RADIO custom */
@@ -375,25 +368,13 @@
     <div class="card-label">01</div>
     <div class="card-title" id="nome-title">Il tuo nome<span class="req">*</span></div>
     <input type="text" id="nome" placeholder="Nome e cognome" autocomplete="name">
-    <div class="select-wrapper">
-      <span class="select-label" id="label-num-persone">Numero persone</span>
-      <select id="num-persone">
-        <option value="1">1 persona</option>
-        <option value="2">2 persone</option>
-        <option value="3">3 persone</option>
-        <option value="4">4 persone</option>
-        <option value="5">5 persone</option>
-        <option value="6">6 persone</option>
-        <option value="7">7 persone</option>
-        <option value="8">8 persone</option>
-        <option value="9">9 persone</option>
-        <option value="10">10 persone</option>
-      </select>
-      <span class="select-arrow">▼</span>
+    <div class="response-buttons">
+      <button type="button" class="choice-btn" id="btn-attend" onclick="setAttendance('yes')">Sarò dei vostri</button>
+      <button type="button" class="choice-btn" id="btn-decline" onclick="setAttendance('no')">Non potrò esserci</button>
     </div>
   </div>
 
-  <div class="card">
+  <div class="card hidden-section" id="card-2">
     <div class="card-label">02</div>
     <div class="card-title" id="secondo-title">Preferenza per il secondo piatto</div>
     <div class="options-group" id="secondo-group">
@@ -415,7 +396,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card hidden-section" id="card-3">
     <div class="card-label">03</div>
     <div class="card-title" id="allergie-title">Allergie o intolleranze alimentari</div>
     <div class="allergie-grid" id="allergie-grid">
@@ -432,21 +413,16 @@
     <p class="field-note" id="allergie-note">Tocca per selezionare. Puoi scegliere più voci.</p>
   </div>
 
-  <div class="card">
+  <div class="card hidden-section" id="card-4">
     <div class="card-label">04</div>
     <div class="card-title" id="note-title">Note aggiuntive</div>
     <textarea id="note" rows="3" placeholder="Eventuali richieste speciali, diete particolari…"></textarea>
   </div>
 
-  <button class="btn-submit" id="btn-invia" onclick="generaRiepilogo()">
+  <button class="btn-submit hidden-section" id="btn-invia" onclick="generaRiepilogo()">
     ✓ Conferma e invia
   </button>
 
-  <div class="divider"><span>✦</span></div>
-  <div class="footer" id="footer-text">
-    Le tue preferenze verranno utilizzate esclusivamente per organizzare il banchetto.<br><br>
-    <span id="footer-love">Con amore ♥</span>
-  </div>
 
 </div>
 </div>
@@ -458,7 +434,7 @@
     <h1 id="thanks-title">Grazie!</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
     <p class="description" style="margin-top:20px;font-size:16px;color:#000000 !important" id="thanks-desc">
-      Le tue preferenze sono state registrate.<br>Ci vediamo al matrimonio! 💍
+      La tua risposta è stata registrata.
     </p>
   </div>
 </div>
@@ -475,16 +451,15 @@
     it: {
       docTitle: 'Cena di Matrimonio – Giulia & Onofrio',
       ogTitle: 'Matrimonio Giulia & Onofrio – Preferenze Cena',
-      ogDesc: 'Compila il questionario per la cena di matrimonio: allergie, preferenze e numero di persone.',
+      ogDesc: 'Compila il questionario per la cena di matrimonio: presenza, allergie e preferenze.',
       mainTitle: 'Cena di Matrimonio',
       mainDesc: 'DOMENICA 21 GIUGNO 2026',
       nomeTitle: 'Il tuo nome<span class="req">*</span>',
       nomePlaceholder: 'Nome e cognome',
-      labelNumPersone: 'Numero persone',
-      personOptions: [
-        '1 persona', '2 persone', '3 persone', '4 persone', '5 persone',
-        '6 persone', '7 persone', '8 persone', '9 persone', '10 persone'
-      ],
+      attendBtn: 'Sarò dei vostri',
+      declineBtn: 'Non potrò esserci',
+      presenzaSi: 'Sarò dei vostri',
+      presenzaNo: 'Non potrò esserci',
       secondoTitle: 'Preferenza per il secondo piatto',
       vegText: '🌿 Vegetariano',
       vegSubtext: 'Opzione senza carne',
@@ -501,24 +476,22 @@
       btnInvia: '✓ Conferma e invia',
       msgInvioInCorso: 'Invio in corso...',
       msgErroreRete: 'Errore di rete. Riprova.',
-      footerText: 'Le tue preferenze verranno utilizzate esclusivamente per organizzare il banchetto.<br><br>',
-      footerLove: 'Con amore ♥',
       thanksTitle: 'Grazie!',
-      thanksDesc: 'Le tue preferenze sono state registrate.<br>Ci vediamo al matrimonio! 💍'
+      thanksDescYes: 'La tua risposta è stata registrata.<br>Ci vediamo al matrimonio! 💍',
+      thanksDescNo: 'La tua risposta è stata registrata.<br>Grazie per averci avvisato.'
     },
     es: {
       docTitle: 'Cena de Boda – Giulia & Onofrio',
       ogTitle: 'Boda de Giulia & Onofrio – Preferencias de Cena',
-      ogDesc: 'Rellena el cuestionario para la cena de boda: alergias, preferencias y número de personas.',
+      ogDesc: 'Rellena el cuestionario para la cena de boda: asistencia, alergias y preferencias.',
       mainTitle: 'Cena de Boda',
       mainDesc: 'DOMINGO 21 JUNIO 2026',
       nomeTitle: 'Tu nombre<span class="req">*</span>',
       nomePlaceholder: 'Nombre y apellido',
-      labelNumPersone: 'Número de personas',
-      personOptions: [
-        '1 persona', '2 personas', '3 personas', '4 personas', '5 personas',
-        '6 personas', '7 personas', '8 personas', '9 personas', '10 personas'
-      ],
+      attendBtn: 'Estaré con vosotros',
+      declineBtn: 'No podré asistir',
+      presenzaSi: 'Estaré con vosotros',
+      presenzaNo: 'No podré asistir',
       secondoTitle: 'Preferencia para el segundo plato',
       vegText: '🌿 Vegetariano',
       vegSubtext: 'Opción sin carne',
@@ -534,11 +507,10 @@
       notePlaceholder: 'Cualquier solicitud especial, dietas particulares…',
       btnInvia: '✓ Confirmar y enviar',
       msgInvioInCorso: 'Envío en curso...',
-      msgErroreRete: 'Errore de red. Inténtalo de nuevo.',
-      footerText: 'Tus preferencias se utilizarán exclusivamente para organizar el banquete.<br><br>',
-      footerLove: 'Con amor ♥',
+      msgErroreRete: 'Error de red. Inténtalo de nuevo.',
       thanksTitle: '¡Gracias!',
-      thanksDesc: 'Tus preferencias han sido registradas.<br>¡Nos vemos en la boda! 💍'
+      thanksDescYes: 'Tu respuesta ha sido registrada.<br>¡Nos vemos en la boda! 💍',
+      thanksDescNo: 'Tu respuesta ha sido registrada.<br>Gracias por avisarnos.'
     }
   };
 
@@ -560,16 +532,8 @@
     document.getElementById('main-desc').textContent = t.mainDesc;
     document.getElementById('nome-title').innerHTML = t.nomeTitle;
     document.getElementById('nome').placeholder = t.nomePlaceholder;
-    document.getElementById('label-num-persone').textContent = t.labelNumPersone;
-    
-    const select = document.getElementById('num-persone');
-    select.innerHTML = '';
-    t.personOptions.forEach((opt, idx) => {
-      const option = document.createElement('option');
-      option.value = (idx + 1).toString();
-      option.textContent = opt;
-      select.appendChild(option);
-    });
+    document.getElementById('btn-attend').textContent = t.attendBtn;
+    document.getElementById('btn-decline').textContent = t.declineBtn;
 
     document.getElementById('secondo-title').textContent = t.secondoTitle;
     document.getElementById('veg-text').textContent = t.vegText;
@@ -591,17 +555,51 @@
     msgInvioInCorso = t.msgInvioInCorso;
     msgErroreRete = t.msgErroreRete;
 
-    document.getElementById('footer-love').textContent = t.footerLove;
-    const footerLoveSpan = document.getElementById('footer-love');
-    document.getElementById('footer-text').innerHTML = t.footerText + footerLoveSpan.outerHTML;
-
     document.getElementById('thanks-title').textContent = t.thanksTitle;
-    document.getElementById('thanks-desc').innerHTML = t.thanksDesc;
+    updateThanksMessage();
   }
 
-  // --- LOGICA DEL FORM ORIGINALE ---
+  // --- LOGICA DEL FORM ---
+
+  let attendanceStatus = '';
+
+  function updateThanksMessage() {
+    const t = translations[currentLanguage];
+    const msg = attendanceStatus === 'no' ? t.thanksDescNo : t.thanksDescYes;
+    document.getElementById('thanks-desc').innerHTML = msg;
+  }
+
+  function updateFormVisibility() {
+    const hasName = document.getElementById('nome').value.trim() !== '';
+    const showExtra = hasName && attendanceStatus === 'yes';
+    const showSubmit = hasName && (attendanceStatus === 'yes' || attendanceStatus === 'no');
+
+    document.getElementById('card-2').style.display = showExtra ? 'block' : 'none';
+    document.getElementById('card-3').style.display = showExtra ? 'block' : 'none';
+    document.getElementById('card-4').style.display = showExtra ? 'block' : 'none';
+    document.getElementById('btn-invia').style.display = showSubmit ? 'block' : 'none';
+  }
+
+  function setAttendance(status) {
+    const inp = document.getElementById('nome');
+    const nome = inp.value.trim();
+    if (!nome) {
+      inp.focus();
+      inp.style.borderColor = '#c0504d';
+      setTimeout(() => inp.style.borderColor = '', 2000);
+      return;
+    }
+
+    attendanceStatus = status;
+    document.getElementById('btn-attend').classList.toggle('active-choice', status === 'yes');
+    document.getElementById('btn-decline').classList.toggle('active-choice', status === 'no');
+    updateFormVisibility();
+  }
+
+  document.getElementById('nome').addEventListener('input', updateFormVisibility);
 
   function selectRadio(el, groupId, colorClass) {
+
     document.querySelectorAll('#' + groupId + ' .option-item').forEach(item => {
       item.classList.remove('selected-green', 'selected-gold');
     });
@@ -622,27 +620,36 @@
       setTimeout(() => inp.style.borderColor = '', 2000);
       return;
     }
-    const numPersone = document.getElementById('num-persone').value;
-    const secondoRadio = document.querySelector('input[name="secondo"]:checked');
-    const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';
-    
-    // Usa le etichette per il database basate sulla lingua corrente
-    const labelsT = translations[currentLanguage];
-    const secondoLabel = { 'vegetariano': labelsT.vegText, 'carne': labelsT.carneText };
-    
-    const allergieAttive = [...document.querySelectorAll('#allergie-grid .chip.active')]
-      .map(c => c.getAttribute('data-value')); // Mantiene il valore tecnico per il db
-    const allergiaAltra = document.getElementById('allergia-altra').value.trim();
-    if (allergiaAltra) allergieAttive.push(allergiaAltra);
-    const note = document.getElementById('note').value.trim();
+    if (!attendanceStatus) {
+      return;
+    }
 
-    const payload = {
+    const labelsT = translations[currentLanguage];
+    const presenzaLabel = attendanceStatus === 'yes' ? labelsT.presenzaSi : labelsT.presenzaNo;
+
+    let payload = {
       nome,
-      persone: numPersone,
-      secondo: secondoLabel[secondo] || secondo,
-      allergie: allergieAttive.join(', '),
-      note
+      presenza: presenzaLabel,
+      persone: attendanceStatus === 'yes' ? '1' : '0',
+      secondo: '',
+      allergie: '',
+      note: ''
     };
+
+    if (attendanceStatus === 'yes') {
+      const secondoRadio = document.querySelector('input[name="secondo"]:checked');
+      const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';
+      const secondoLabel = { 'vegetariano': labelsT.vegText, 'carne': labelsT.carneText };
+      const allergieAttive = [...document.querySelectorAll('#allergie-grid .chip.active')]
+        .map(c => c.getAttribute('data-value'));
+      const allergiaAltra = document.getElementById('allergia-altra').value.trim();
+      if (allergiaAltra) allergieAttive.push(allergiaAltra);
+      const note = document.getElementById('note').value.trim();
+
+      payload.secondo = secondoLabel[secondo] || secondo;
+      payload.allergie = allergieAttive.join(', ');
+      payload.note = note;
+    }
 
     const btn = document.getElementById('btn-invia');
     btn.disabled = true;
@@ -655,6 +662,7 @@
       body: JSON.stringify(payload)
     })
     .then(() => {
+      updateThanksMessage();
       document.getElementById('form-section').style.display = 'none';
       document.getElementById('grazie-section').style.display = 'block';
     })

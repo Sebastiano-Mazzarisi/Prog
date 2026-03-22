@@ -563,8 +563,8 @@
     }
 
     setTimeout(() => {
-      const waTab = window.open('https://wa.me/393356276262?text=' + encodeURIComponent(testo), '_blank');
-      setTimeout(() => { try { waTab.close(); } catch(e) {} }, 2000);
+      // whatsapp:// apre l'app direttamente senza aprire tab browser
+      window.location.href = 'whatsapp://send?phone=393356276262&text=' + encodeURIComponent(testo);
     }, 300);
   }
 

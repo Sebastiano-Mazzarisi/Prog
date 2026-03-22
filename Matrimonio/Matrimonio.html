@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cena di Matrimonio – Giulia & Onofrio</title>
+<title id="doc-title">Cena di Matrimonio – Giulia & Onofrio</title>
 <link rel="apple-touch-icon" href="Sposi.png">
 <link rel="icon" type="image/png" href="Sposi.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Matrimonio G&O">
 <meta name="mobile-web-app-capable" content="yes">
-<meta property="og:title" content="Matrimonio Giulia &amp; Onofrio – Preferenze Cena">
-<meta property="og:description" content="Compila il questionario per la cena di matrimonio: allergie, preferenze e numero di persone.">
+<meta id="og-title" property="og:title" content="Matrimonio Giulia &amp; Onofrio – Preferenze Cena">
+<meta id="og-desc" property="og:description" content="Compila il questionario per la cena di matrimonio: allergie, preferenze e numero di persone.">
 <meta property="og:image" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Sposi.png">
 <meta property="og:image:width" content="180">
 <meta property="og:image:height" content="180">
@@ -55,13 +55,42 @@
   /* HEADER */
   .header { text-align: center; margin-bottom: 40px; }
 
+  /* Selettore Lingua */
+  .lang-switcher {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-light);
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-btn:hover { background: rgba(184, 137, 58, 0.08); }
+  .lang-btn.active-lang {
+    background: var(--gold);
+    color: white;
+    border-color: var(--gold);
+    font-weight: 500;
+  }
+
   .header-ornament {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
+    font-size: 20px;
     color: var(--gold);
     letter-spacing: 6px;
-    margin-bottom: 6px;
     opacity: 0.7;
+    flex-shrink: 0;
   }
 
   .header h1 {
@@ -327,18 +356,22 @@
 <div class="page-wrapper">
 
   <div class="header">
-    <div class="header-ornament">✦ ✦ ✦</div>
-    <h1>Cena di Matrimonio</h1>
+    <div class="lang-switcher">
+      <button class="lang-btn active-lang" id="lang-it" onclick="setLanguage('it')">Italiano</button>
+      <div class="header-ornament">✦ ✦ ✦</div>
+      <button class="lang-btn" id="lang-es" onclick="setLanguage('es')">Español</button>
+    </div>
+    <h1 id="main-title">Cena di Matrimonio</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
-    <p class="description">Aiutaci a rendere la serata perfetta per te. Rispondi alle poche domande qui sotto.</p>
+    <p class="description" id="main-desc">Aiutaci a rendere la serata perfetta per te. Rispondi alle poche domande qui sotto.</p>
   </div>
 
   <div class="card">
     <div class="card-label">01</div>
-    <div class="card-title">Il tuo nome<span class="req">*</span></div>
+    <div class="card-title" id="nome-title">Il tuo nome<span class="req">*</span></div>
     <input type="text" id="nome" placeholder="Nome e cognome" autocomplete="name">
     <div class="select-wrapper">
-      <span class="select-label">Numero persone</span>
+      <span class="select-label" id="label-num-persone">Numero persone</span>
       <select id="num-persone">
         <option value="1">1 persona</option>
         <option value="2">2 persone</option>
@@ -357,21 +390,21 @@
 
   <div class="card">
     <div class="card-label">02</div>
-    <div class="card-title">Preferenza per il secondo piatto</div>
+    <div class="card-title" id="secondo-title">Preferenza per il secondo piatto</div>
     <div class="options-group" id="secondo-group">
-      <label class="option-item selected-green" onclick="selectRadio(this, 'secondo-group', 'green')">
+      <label class="option-item selected-green" id="option-veg" onclick="selectRadio(this, 'secondo-group', 'green')">
         <input type="radio" name="secondo" value="vegetariano" checked>
         <span class="custom-dot"></span>
         <span>
-          <div class="option-text">🌿 Vegetariano</div>
-          <div class="option-subtext">Opzione senza carne</div>
+          <div class="option-text" id="veg-text">🌿 Vegetariano</div>
+          <div class="option-subtext" id="veg-subtext">Opzione senza carne</div>
         </span>
       </label>
-      <label class="option-item" onclick="selectRadio(this, 'secondo-group', 'gold')">
+      <label class="option-item" id="option-carne" onclick="selectRadio(this, 'secondo-group', 'gold')">
         <input type="radio" name="secondo" value="carne">
         <span class="custom-dot"></span>
         <span>
-          <div class="option-text">🥩 Carne</div>
+          <div class="option-text" id="carne-text">🥩 Carne</div>
         </span>
       </label>
     </div>
@@ -379,24 +412,24 @@
 
   <div class="card">
     <div class="card-label">03</div>
-    <div class="card-title">Allergie o intolleranze alimentari</div>
+    <div class="card-title" id="allergie-title">Allergie o intolleranze alimentari</div>
     <div class="allergie-grid" id="allergie-grid">
-      <div class="chip" data-value="Glutine"      onclick="toggleChip(this)"><span class="chip-icon">🌾</span> Glutine</div>
-      <div class="chip" data-value="Lattosio"     onclick="toggleChip(this)"><span class="chip-icon">🥛</span> Lattosio</div>
-      <div class="chip" data-value="Frutta secca" onclick="toggleChip(this)"><span class="chip-icon">🥜</span> Frutta secca</div>
-      <div class="chip" data-value="Uova"         onclick="toggleChip(this)"><span class="chip-icon">🥚</span> Uova</div>
-      <div class="chip" data-value="Crostacei"    onclick="toggleChip(this)"><span class="chip-icon">🦐</span> Crostacei</div>
-      <div class="chip" data-value="Soia"         onclick="toggleChip(this)"><span class="chip-icon">🫘</span> Soia</div>
-      <div class="chip" data-value="Pesce"        onclick="toggleChip(this)"><span class="chip-icon">🐟</span> Pesce</div>
-      <div class="chip" data-value="Sedano"       onclick="toggleChip(this)"><span class="chip-icon">🥦</span> Sedano</div>
+      <div class="chip" data-value="Glutine"      onclick="toggleChip(this)"><span class="chip-icon">🌾</span> <span class="chip-label">Glutine</span></div>
+      <div class="chip" data-value="Lattosio"     onclick="toggleChip(this)"><span class="chip-icon">🥛</span> <span class="chip-label">Lattosio</span></div>
+      <div class="chip" data-value="Frutta secca" onclick="toggleChip(this)"><span class="chip-icon">🥜</span> <span class="chip-label">Frutta secca</span></div>
+      <div class="chip" data-value="Uova"         onclick="toggleChip(this)"><span class="chip-icon">🥚</span> <span class="chip-label">Uova</span></div>
+      <div class="chip" data-value="Crostacei"    onclick="toggleChip(this)"><span class="chip-icon">🦐</span> <span class="chip-label">Crostacei</span></div>
+      <div class="chip" data-value="Soia"         onclick="toggleChip(this)"><span class="chip-icon">🫘</span> <span class="chip-label">Soia</span></div>
+      <div class="chip" data-value="Pesce"        onclick="toggleChip(this)"><span class="chip-icon">🐟</span> <span class="chip-label">Pesce</span></div>
+      <div class="chip" data-value="Sedano"       onclick="toggleChip(this)"><span class="chip-icon">🥦</span> <span class="chip-label">Sedano</span></div>
     </div>
     <input type="text" id="allergia-altra" placeholder="Altre allergie o intolleranze…">
-    <p class="field-note">Tocca per selezionare. Puoi scegliere più voci.</p>
+    <p class="field-note" id="allergie-note">Tocca per selezionare. Puoi scegliere più voci.</p>
   </div>
 
   <div class="card">
     <div class="card-label">04</div>
-    <div class="card-title">Note aggiuntive</div>
+    <div class="card-title" id="note-title">Note aggiuntive</div>
     <textarea id="note" rows="3" placeholder="Eventuali richieste speciali, diete particolari…"></textarea>
   </div>
 
@@ -405,9 +438,9 @@
   </button>
 
   <div class="divider"><span>✦</span></div>
-  <div class="footer">
+  <div class="footer" id="footer-text">
     Le tue preferenze verranno utilizzate esclusivamente per organizzare il banchetto.<br><br>
-    <span>Con amore ♥</span>
+    <span id="footer-love">Con amore ♥</span>
   </div>
 
 </div>
@@ -417,9 +450,9 @@
 <div class="page-wrapper">
   <div class="header">
     <div class="header-ornament">✦ ✦ ✦</div>
-    <h1>Grazie!</h1>
+    <h1 id="thanks-title">Grazie!</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
-    <p class="description" style="margin-top:20px;font-size:16px;color:var(--text)">
+    <p class="description" style="margin-top:20px;font-size:16px;color:var(--text)" id="thanks-desc">
       Le tue preferenze sono state registrate.<br>Ci vediamo al matrimonio! 💍
     </p>
   </div>
@@ -428,6 +461,140 @@
 
 <script>
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
+  let currentLanguage = 'it';
+  let msgInvioInCorso = 'Invio in corso...';
+  let msgErroreRete = 'Errore di rete. Riprova.';
+
+  // OGGETTO CON LE TRADUZIONI
+  const translations = {
+    it: {
+      docTitle: 'Cena di Matrimonio – Giulia & Onofrio',
+      ogTitle: 'Matrimonio Giulia & Onofrio – Preferenze Cena',
+      ogDesc: 'Compila il questionario per la cena di matrimonio: allergie, preferenze e numero di persone.',
+      mainTitle: 'Cena di Matrimonio',
+      mainDesc: 'Aiutaci a rendere la serata perfetta per te. Rispondi alle poche domande qui sotto.',
+      nomeTitle: 'Il tuo nome<span class="req">*</span>',
+      nomePlaceholder: 'Nome e cognome',
+      labelNumPersone: 'Numero persone',
+      personOptions: [
+        '1 persona', '2 persone', '3 persone', '4 persone', '5 persone',
+        '6 persone', '7 persone', '8 persone', '9 persone', '10 persone'
+      ],
+      secondoTitle: 'Preferenza per il secondo piatto',
+      vegText: '🌿 Vegetariano',
+      vegSubtext: 'Opzione senza carne',
+      carneText: '🥩 Carne',
+      allergieTitle: 'Allergie o intolleranze alimentari',
+      allergieNote: 'Tocca per selezionare. Puoi scegliere più voci.',
+      chips: {
+        'Glutine': 'Glutine', 'Lattosio': 'Lattosio', 'Frutta secca': 'Frutta secca',
+        'Uova': 'Uova', 'Crostacei': 'Crostacei', 'Soia': 'Soia', 'Pesce': 'Pesce', 'Sedano': 'Sedano'
+      },
+      allergiaAltraPlaceholder: 'Altre allergie o intolleranze…',
+      noteTitle: 'Note aggiuntive',
+      notePlaceholder: 'Eventuali richieste speciali, diete particolari…',
+      btnInvia: '✓ Conferma e invia',
+      msgInvioInCorso: 'Invio in corso...',
+      msgErroreRete: 'Errore di rete. Riprova.',
+      footerText: 'Le tue preferenze verranno utilizzate esclusivamente per organizzare il banchetto.<br><br>',
+      footerLove: 'Con amore ♥',
+      thanksTitle: 'Grazie!',
+      thanksDesc: 'Le tue preferenze sono state registrate.<br>Ci vediamo al matrimonio! 💍'
+    },
+    es: {
+      docTitle: 'Cena de Boda – Giulia & Onofrio',
+      ogTitle: 'Boda de Giulia & Onofrio – Preferencias de Cena',
+      ogDesc: 'Rellena el cuestionario para la cena de boda: alergias, preferencias y número de personas.',
+      mainTitle: 'Cena de Boda',
+      mainDesc: 'Ayúdanos a hacer que la velada sea perfecta para ti. Responde a las pocas preguntas de abajo.',
+      nomeTitle: 'Tu nombre<span class="req">*</span>',
+      nomePlaceholder: 'Nombre y apellido',
+      labelNumPersone: 'Número de personas',
+      personOptions: [
+        '1 persona', '2 personas', '3 personas', '4 personas', '5 personas',
+        '6 personas', '7 personas', '8 personas', '9 personas', '10 personas'
+      ],
+      secondoTitle: 'Preferencia para el segundo plato',
+      vegText: '🌿 Vegetariano',
+      vegSubtext: 'Opción sin carne',
+      carneText: '🥩 Carne',
+      allergieTitle: 'Alergias o intolerancias alimentarias',
+      allergieNote: 'Tocca para seleccionar. Puedes elegir varias opciones.',
+      chips: {
+        'Glutine': 'Gluten', 'Lattosio': 'Lactosa', 'Frutta secca': 'Frutos secos',
+        'Uova': 'Huevos', 'Crostacei': 'Crustáceos', 'Soia': 'Soja', 'Pesce': 'Pescado', 'Sedano': 'Apio'
+      },
+      allergiaAltraPlaceholder: 'Otras alergias o intolerancias…',
+      noteTitle: 'Notas adicionales',
+      notePlaceholder: 'Cualquier solicitud especial, dietas particulares…',
+      btnInvia: '✓ Confirmar y enviar',
+      msgInvioInCorso: 'Envío en curso...',
+      msgErroreRete: 'Errore de red. Inténtalo de nuevo.',
+      footerText: 'Tus preferencias se utilizarán exclusivamente para organizar el banquete.<br><br>',
+      footerLove: 'Con amor ♥',
+      thanksTitle: '¡Gracias!',
+      thanksDesc: 'Tus preferencias han sido registradas.<br>¡Nos vemos en la boda! 💍'
+    }
+  };
+
+  // FUNZIONE PER CAMBIARE LA LINGUA DINAMICAMENTE
+  function setLanguage(lang) {
+    currentLanguage = lang;
+    
+    // Aggiorna lo stato dei bottoni
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active-lang'));
+    document.getElementById('lang-' + lang).classList.add('active-lang');
+    
+    // Aggiorna tutti i testi della pagina
+    const t = translations[lang];
+    document.getElementById('doc-title').textContent = t.docTitle;
+    document.getElementById('og-title').content = t.ogTitle;
+    document.getElementById('og-desc').content = t.ogDesc;
+    
+    document.getElementById('main-title').innerHTML = t.mainTitle;
+    document.getElementById('main-desc').textContent = t.mainDesc;
+    document.getElementById('nome-title').innerHTML = t.nomeTitle;
+    document.getElementById('nome').placeholder = t.nomePlaceholder;
+    document.getElementById('label-num-persone').textContent = t.labelNumPersone;
+    
+    const select = document.getElementById('num-persone');
+    select.innerHTML = '';
+    t.personOptions.forEach((opt, idx) => {
+      const option = document.createElement('option');
+      option.value = (idx + 1).toString();
+      option.textContent = opt;
+      select.appendChild(option);
+    });
+
+    document.getElementById('secondo-title').textContent = t.secondoTitle;
+    document.getElementById('veg-text').textContent = t.vegText;
+    document.getElementById('veg-subtext').textContent = t.vegSubtext;
+    document.getElementById('carne-text').textContent = t.carneText;
+    
+    document.getElementById('allergie-title').textContent = t.allergieTitle;
+    document.getElementById('allergie-note').textContent = t.allergieNote;
+    document.getElementById('allergia-altra').placeholder = t.allergiaAltraPlaceholder;
+    
+    document.querySelectorAll('#allergie-grid .chip').forEach(chip => {
+      const val = chip.getAttribute('data-value');
+      chip.querySelector('.chip-label').textContent = t.chips[val] || val;
+    });
+
+    document.getElementById('note-title').textContent = t.noteTitle;
+    document.getElementById('note').placeholder = t.notePlaceholder;
+    document.getElementById('btn-invia').textContent = t.btnInvia;
+    msgInvioInCorso = t.msgInvioInCorso;
+    msgErroreRete = t.msgErroreRete;
+
+    document.getElementById('footer-love').textContent = t.footerLove;
+    const footer LoveSpan = document.getElementById('footer-love');
+    document.getElementById('footer-text').innerHTML = t.footerText + footerLoveSpan.outerHTML;
+
+    document.getElementById('thanks-title').textContent = t.thanksTitle;
+    document.getElementById('thanks-desc').innerHTML = t.thanksDesc;
+  }
+
+  // --- LOGICA DEL FORM ORIGINALE ---
 
   function selectRadio(el, groupId, colorClass) {
     document.querySelectorAll('#' + groupId + ' .option-item').forEach(item => {
@@ -453,9 +620,13 @@
     const numPersone = document.getElementById('num-persone').value;
     const secondoRadio = document.querySelector('input[name="secondo"]:checked');
     const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';
-    const secondoLabel = { 'vegetariano': 'Vegetariano', 'carne': 'Carne' };
+    
+    // Usa le etichette per il database basate sulla lingua corrente
+    const labelsT = translations[currentLanguage];
+    const secondoLabel = { 'vegetariano': labelsT.vegText, 'carne': labelsT.carneText };
+    
     const allergieAttive = [...document.querySelectorAll('#allergie-grid .chip.active')]
-      .map(c => c.dataset.value);
+      .map(c => c.getAttribute('data-value')); // Mantiene il valore tecnico per il db
     const allergiaAltra = document.getElementById('allergia-altra').value.trim();
     if (allergiaAltra) allergieAttive.push(allergiaAltra);
     const note = document.getElementById('note').value.trim();
@@ -470,7 +641,7 @@
 
     const btn = document.getElementById('btn-invia');
     btn.disabled = true;
-    btn.textContent = 'Invio in corso...';
+    btn.textContent = msgInvioInCorso;
 
     fetch(SCRIPT_URL, {
       method: 'POST',
@@ -484,8 +655,8 @@
     })
     .catch(() => {
       btn.disabled = false;
-      btn.textContent = '✓ Conferma e invia';
-      alert('Errore di rete. Riprova.');
+      btn.textContent = translations[currentLanguage].btnInvia;
+      alert(msgErroreRete);
     });
   }
 </script>

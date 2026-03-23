@@ -454,7 +454,7 @@
     </div>
     <h1 id="main-title">Cena di Matrimonio</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
-    <p class="description" id="main-desc">DOMENICA 21 GIUGNO 2026</p>
+    <p class="description" id="main-desc"></p>
   </div>
 
   <div class="hero-toggle" id="hero-toggle" onclick="toggleHeroInfo()">
@@ -527,7 +527,7 @@
   <div class="card hidden-section" id="card-4">
     <div class="card-label">04</div>
     <div class="card-title" id="note-title">Note aggiuntive</div>
-    <textarea id="note" rows="3" placeholder="Eventuali richieste speciali, diete particolari…"></textarea>
+    <textarea id="note" rows="3" placeholder=""></textarea>
   </div>
 
   <button class="btn-submit hidden-section" id="btn-invia" onclick="generaRiepilogo()">
@@ -545,6 +545,14 @@
   let msgInvioInCorso = 'Invio in corso...';
   let msgErroreRete = 'Errore di rete. Riprova.';
 
+  // CALCOLO GIORNI MANCANTI ALL'EVENTO
+  const dataEvento = new Date('2026-06-21T00:00:00');
+  const dataOggi = new Date();
+  dataOggi.setHours(0, 0, 0, 0); // Azzera l'orario per un conteggio esatto dei giorni
+  const diffTime = dataEvento - dataOggi;
+  const giorniMancanti = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const strGiorni = giorniMancanti > 0 ? ` (${giorniMancanti})` : '';
+
   // OGGETTO CON LE TRADUZIONI
   const translations = {
     it: {
@@ -552,7 +560,7 @@
       ogTitle: 'Matrimonio Giulia & Onofrio – Preferenze Cena',
       ogDesc: 'Compila il questionario per la cena di matrimonio: presenza, allergie e preferenze.',
       mainTitle: 'Cena di Matrimonio',
-      mainDesc: 'DOMENICA 21 GIUGNO 2026',
+      mainDesc: 'DOMENICA 21 GIUGNO 2026' + strGiorni,
       nomeTitle: 'Il tuo nome<span class="req">*</span>',
       nomePlaceholder: 'Nome e cognome',
       attendBtn: '😊 Sarò dei vostri',
@@ -589,7 +597,7 @@
       ogTitle: 'Boda de Giulia & Onofrio – Preferencias de Cena',
       ogDesc: 'Rellena el cuestionario para la cena de boda: asistencia, alergias y preferencias.',
       mainTitle: 'Cena de Boda',
-      mainDesc: 'DOMINGO 21 JUNIO 2026',
+      mainDesc: 'DOMINGO 21 JUNIO 2026' + strGiorni,
       nomeTitle: 'Tu nombre<span class="req">*</span>',
       nomePlaceholder: 'Nombre y apellido',
       attendBtn: '😊 Estaré con vosotros',
@@ -622,6 +630,11 @@
       thanksDescNo: 'Tu respuesta ha sido registrada.<br>Gracias por avisarnos.'
     }
   };
+
+  // Carica i testi all'apertura in base alla lingua
+  window.addEventListener('DOMContentLoaded', () => {
+    setLanguage('it');
+  });
 
   // FUNZIONE PER CAMBIARE LA LINGUA DINAMICAMENTE
   function setLanguage(lang) {
@@ -664,10 +677,12 @@
     });
 
     document.getElementById('note-title').textContent = t.noteTitle;
-    document.getElementById('note').placeholder = t.notePlaceholder;
     document.getElementById('btn-invia').textContent = t.btnInvia;
     msgInvioInCorso = t.msgInvioInCorso;
     msgErroreRete = t.msgErroreRete;
+
+    // Aggiorna il placeholder delle note a seconda se è presente o assente
+    document.getElementById('note').placeholder = (attendanceStatus === 'no') ? '' : t.notePlaceholder;
   }
 
   // --- LOGICA DEL FORM ---
@@ -740,10 +755,16 @@
     document.getElementById('card-4').style.display = showSubmit ? 'block' : 'none';
     document.getElementById('btn-invia').style.display = showSubmit ? 'block' : 'none';
 
-    // Se assente, aggiorna dinamicamente l'etichetta del passo "Note" da "04" a "02" per non avere buchi
+    // Gestione testo placeholder e numero step
     const labelNote = document.querySelector('#card-4 .card-label');
-    if (labelNote) {
-      labelNote.textContent = attendanceStatus === 'no' ? '02' : '04';
+    const noteTextarea = document.getElementById('note');
+    
+    if (attendanceStatus === 'no') {
+      if (labelNote) labelNote.textContent = '02';
+      noteTextarea.placeholder = '';
+    } else {
+      if (labelNote) labelNote.textContent = '04';
+      noteTextarea.placeholder = translations[currentLanguage].notePlaceholder;
     }
   }
 
@@ -803,10 +824,9 @@
       persone: attendanceStatus === 'yes' ? '1' : '0',
       secondo: '',
       allergie: '',
-      note: document.getElementById('note').value.trim() // <-- Raccogliamo sempre le note!
+      note: document.getElementById('note').value.trim() 
     };
 
-    // Dettagli raccolti solo se presenti
     if (attendanceStatus === 'yes') {
       const secondoRadio = document.querySelector('input[name="secondo"]:checked');
       const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';

@@ -677,27 +677,27 @@
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 25px;">Giulia & Onofrio</h2>
       
       <div style="display: flex; gap: 8px; margin-bottom: 30px;">
-        <div style="flex: 1; background: #f5ede0; border: 0.1mm solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPresenti}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiPresenti}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 0.1mm solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAssenti}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiAssenti}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 0.1mm solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAllergie}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiAllergie}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 0.1mm solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totVeg}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiVeg}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 0.1mm solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totCarne}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiCarne}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 0.1mm solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPesce}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiPesce}</div>
         </div>
@@ -711,8 +711,8 @@
         <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 25px;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 6px; border: 0.1mm solid #000000; width: 40%;">${testi.pdfNome}</th>
-              <th style="padding: 6px; border: 0.1mm solid #000000;">${testi.lblNote}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000; width: 40%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -720,8 +720,8 @@
       assentiRows.forEach(r => {
         htmlPDF += `
           <tr>
-            <td style="padding: 4px 6px; border: 0.1mm solid #000000; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px; border: 0.1mm solid #000000;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000;">${r.note ? r.note : '-'}</td>
           </tr>
         `;
       });
@@ -735,10 +735,10 @@
         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 6px; border: 0.1mm solid #000000; width: 30%;">${testi.pdfNome}</th>
-              <th style="padding: 6px; border: 0.1mm solid #000000;">${testi.lblSecondo}</th>
-              <th style="padding: 6px; border: 0.1mm solid #000000;">${testi.lblAllergie}</th>
-              <th style="padding: 6px; border: 0.1mm solid #000000;">${testi.lblNote}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000; width: 30%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000;">${testi.lblSecondo}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000;">${testi.lblAllergie}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -754,10 +754,10 @@
 
         htmlPDF += `
           <tr>
-            <td style="padding: 4px 6px; border: 0.1mm solid #000000; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px; border: 0.1mm solid #000000;">${secondoStr}</td>
-            <td style="padding: 4px 6px; border: 0.1mm solid #000000; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
-            <td style="padding: 4px 6px; border: 0.1mm solid #000000;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000;">${secondoStr}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000;">${r.note ? r.note : '-'}</td>
           </tr>
         `;
       });
@@ -788,7 +788,7 @@
         });
 
         if (index < gruppiInvitati.length - 1) {
-          htmlPDF += `<div style="border-bottom: 0.1mm solid #000000; margin-top: 8px; margin-bottom: 6px;"></div>`;
+          htmlPDF += `<div style="border-bottom: 0.5px solid #000000; margin-top: 8px; margin-bottom: 6px;"></div>`;
         }
         
         htmlPDF += `</div>`;

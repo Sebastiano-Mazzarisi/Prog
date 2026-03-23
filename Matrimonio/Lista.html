@@ -781,8 +781,7 @@
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
       htmlPDF += `
-        <div style="page-break-before: always;"></div>
-        <h3 style="font-size: 16px; margin-top: 10px; margin-bottom: 15px; color: #8a5e1e; font-weight: 600;">${testi.titoloInvitati} (${totInvitatiCsv})</h3>
+        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 15px; color: #8a5e1e; font-weight: 600; page-break-before: always; padding-top: 10px;">${testi.titoloInvitati} (${totInvitatiCsv})</h3>
         <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
       `;
 

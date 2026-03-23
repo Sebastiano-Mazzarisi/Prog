@@ -189,6 +189,13 @@
     padding: 16px;
     margin-bottom: 12px;
   }
+  .risposta-card.cat-assenti {
+    background: #fdecea;
+    border-color: #e8b4b0;
+  }
+  .risposta-card.cat-assenti .risposta-nome {
+    color: #a03030;
+  }
   .risposta-nome {
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
@@ -199,10 +206,20 @@
     justify-content: space-between;
     align-items: center;
   }
-  .risposta-nome::after {
-    content: '▼';
-    font-size: 14px;
+  .risposta-nome .freccia {
+    font-size: 13px;
     color: var(--gold-dark);
+    flex-shrink: 0;
+  }
+  .risposta-nome .freccia.allergia-alert {
+    color: #8b1a1a;
+    font-weight: 900;
+  }
+  .risposta-nome .icona-secondo {
+    font-size: 16px;
+    margin-left: 6px;
+    margin-right: auto;
+    padding-left: 8px;
   }
   
   .dettagli-scheda {
@@ -581,8 +598,12 @@
       const note = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
       const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
 
+      const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : '');
+      const haAllergia = hasAllergy(r.allergie);
+      const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
+
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
-        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}</div>
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="${classFreccia}">▼</span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">${testi.lblPresenza}</span>

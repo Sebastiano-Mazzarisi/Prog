@@ -285,22 +285,38 @@
       .replace(/[\u0300-\u036f]/g, '');
   }
 
-  function isAbsent(value) {
+  function detectSecondo(value) {
     const s = normalizeText(value);
-    return s.includes('non potro esserci') || s.includes('no podre asistir') || s === 'no' || s.includes('assente') || s === '0';
+    if (s.includes('veget') || s.includes('vegan')) return 'veg';
+    if (s.includes('carne') || s.includes('meat')) return 'carne';
+    if (s.includes('pesce') || s.includes('pescado') || s.includes('fish')) return 'pesce';
+    return '';
+  }
+
+  function isAbsent(presenza, secondo) {
+    const p = normalizeText(presenza);
+    
+    // Consideriamo assente chi ha palesemente un valore negativo o nullo
+    if (p === '0' || p === 'false' || p === 'no' || p.includes('non') || p.includes('assente') || p === '') {
+        // Unica eccezione: se non c'è scritta la presenza ma HA scelto il menù, diamolo per presente!
+        if (p === '' && detectSecondo(secondo) !== '') {
+            return false;
+        }
+        return true;
+    }
+    return false;
   }
 
   function hasAllergy(value) {
     const s = normalizeText(value);
-    return s !== '' && !s.includes('nessun') && s !== 'no' && s !== '-';
-  }
-
-  function detectSecondo(value) {
-    const s = normalizeText(value);
-    if (s.includes('veget')) return 'veg';
-    if (s.includes('carne')) return 'carne';
-    if (s.includes('pesce') || s.includes('pescado') || s.includes('fish')) return 'pesce';
-    return '';
+    if (!s) return false;
+    
+    // Escludiamo tutte le frasi comuni per chi NON ha allergie
+    if (s === 'no' || s === '-' || s === '0' || s === 'false') return false;
+    if (s.includes('nessun') || s.includes('niente') || s.includes('nulla')) return false;
+    
+    // Qualsiasi altra indicazione (anche una singola parola) viene contata come allergia
+    return true; 
   }
 
   function secondBadge(secondo, assente) {
@@ -371,7 +387,7 @@
           const secondo = r.secondo || '';
           const allergie = r.allergie || '';
           
-          const assente = isAbsent(presenza);
+          const assente = isAbsent(presenza, secondo);
           
           if (assente) {
             totAssenti++;
@@ -399,7 +415,7 @@
         righeMappate.forEach(r => {
           const riga = r.indiceOriginale;
           const presenza = r.presenza || '';
-          const assente = isAbsent(presenza);
+          const assente = isAbsent(presenza, r.secondo);
           
           let classiFiltro = [];
           

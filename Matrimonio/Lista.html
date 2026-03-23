@@ -223,24 +223,27 @@
     font-weight: 600;
     white-space: nowrap;
   }
-  .badge-presente { background: var(--green-light); color: var(--green); }
-  .badge-assente  { background: #fdecea; color: var(--red); }
   .badge-veg      { background: var(--green-light); color: var(--green); }
   .badge-carne    { background: rgba(201,169,110,0.15); color: var(--gold-dark); }
   .badge-pesce    { background: var(--blue-light); color: var(--blue); }
   .muted          { color: #888; }
 
   .delete-btn {
-    background:none;
-    border:1px solid #c0504d;
-    color:#c0504d;
-    border-radius:6px;
-    padding:4px 12px;
-    font-size:12px;
-    cursor:pointer;
-    margin-bottom: 10px;
+    background: #c0504d;
+    border: none;
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
     width: 100%;
     text-align: center;
+    transition: background 0.2s;
+  }
+  .delete-btn:hover {
+    background: #a3413e;
   }
 
   @media (max-width: 520px) {
@@ -260,7 +263,7 @@
   </div>
   <div class="card">
     <div id="sposi-table"><p style="text-align:center;padding:20px">Caricamento...</p></div>
-    <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:16px">↻ Aggiorna</button>
+    <button id="btn-aggiorna" class="btn-submit" onclick="caricaRisposte()" style="margin-top:16px; display:none;">↻ Aggiorna</button>
   </div>
 </div>
 </div>
@@ -314,12 +317,6 @@
     return '<span class="muted">—</span>';
   }
 
-  function presenzaBadge(presenza) {
-    if (isAbsent(presenza)) return '<span class="badge badge-assente">😔 Non potrà esserci</span>';
-    if (isPresent(presenza)) return '<span class="badge badge-presente">😊 Sarà dei vostri</span>';
-    return `<span>${presenza || '—'}</span>`;
-  }
-
   function toggleDettagli(id) {
     const element = document.getElementById('dettagli-' + id);
     if (element.style.display === 'block') {
@@ -336,13 +333,11 @@
       activeFilter = categoria;
     }
 
-    // Aggiorna stile bottoni
     document.querySelectorAll('.kpi-box').forEach(el => el.classList.remove('active-filter'));
     if (activeFilter) {
       document.getElementById('btn-' + activeFilter).classList.add('active-filter');
     }
 
-    // Filtra schede
     document.querySelectorAll('.risposta-card').forEach(card => {
       if (!activeFilter || card.classList.contains('cat-' + activeFilter)) {
         card.style.display = 'block';
@@ -354,12 +349,18 @@
 
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
+    const btnAggiorna = document.getElementById('btn-aggiorna');
+    
     box.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:20px">Caricamento...</p>';
+    if (btnAggiorna) btnAggiorna.style.display = 'none';
+    
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
       .then(r => r.json())
       .then(data => {
+        if (btnAggiorna) btnAggiorna.style.display = 'block';
+        
         if (!data.ok || !data.rows || data.rows.length === 0) {
           box.innerHTML = '<p style="text-align:center;padding:20px;color:var(--text-light)">Nessuna risposta ancora.</p>';
           return;
@@ -367,7 +368,6 @@
 
         let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
 
-        // Aggiungiamo l'indice originale per permettere l'eliminazione corretta, poi ordiniamo alfabeticamente
         let righeMappate = data.rows.map((r, i) => ({ ...r, indiceOriginale: i + 2 }));
         righeMappate.sort((a, b) => (a.nome || 'Zenza nome').localeCompare(b.nome || 'Zenza nome'));
 
@@ -411,14 +411,13 @@
           if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
           if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
 
+          const valPresenza = isPresent(presenza) ? '1' : '0';
+
           const allergieHtml = hasAllergy(r.allergie)
             ? `<span class="risposta-val allergia">${r.allergie}</span>`
             : `<span class="risposta-val muted">Nessuna</span>`;
           const note = r.note
             ? `<span class="risposta-val">${r.note}</span>`
-            : `<span class="risposta-val muted">—</span>`;
-          const persone = (parseInt(r.persone, 10) || 0) > 0
-            ? `<span class="risposta-val">${parseInt(r.persone, 10)}</span>`
             : `<span class="risposta-val muted">—</span>`;
 
           html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}">
@@ -427,11 +426,7 @@
             <div class="dettagli-scheda" id="dettagli-${riga}">
               <div class="risposta-row">
                 <span class="risposta-label">Presenza</span>
-                <span class="risposta-val">${presenzaBadge(presenza)}</span>
-              </div>
-              <div class="risposta-row">
-                <span class="risposta-label">Persone</span>
-                ${persone}
+                <span class="risposta-val" style="font-weight: 600;">${valPresenza}</span>
               </div>
               <div class="risposta-row">
                 <span class="risposta-label">Secondo</span>
@@ -446,7 +441,7 @@
                 ${note}
               </div>
               <div class="risposta-data">${r.data || ''}</div>
-              <button onclick="eliminaRiga(${riga})" class="delete-btn" style="margin-top: 12px;">✕ Elimina questa scheda</button>
+              <button onclick="eliminaRiga(${riga})" class="delete-btn">✕ Elimina questa scheda</button>
             </div>
           </div>`;
         });
@@ -455,6 +450,7 @@
         box.innerHTML = html;
       })
       .catch(() => {
+        if (btnAggiorna) btnAggiorna.style.display = 'block';
         box.innerHTML = '<p style="color:red;text-align:center;padding:20px">Errore nel caricamento.</p>';
       });
   }

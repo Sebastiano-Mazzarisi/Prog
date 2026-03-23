@@ -465,6 +465,33 @@
     return true; 
   }
 
+  function iconaAllergie(value) {
+    if (!hasAllergy(value)) return '';
+    // Mappa esatta dei valori usati in Matrimonio.html
+    const mappa = {
+      'formaggi':     '🧀',
+      'glutine':      '🌾',
+      'lattosio':     '🥛',
+      'frutta secca': '🥜',
+      'uova':         '🥚',
+      'crostacei':    '🦐',
+      'soia':         '🫘',
+      'pesce':        '🐟',
+      'sedano':       '🥦',
+    };
+    const voci = value.split(',').map(v => v.trim().toLowerCase());
+    const icone = [];
+    voci.forEach(v => {
+      if (mappa[v]) {
+        if (!icone.includes(mappa[v])) icone.push(mappa[v]);
+      } else {
+        // Voce libera non in mappa: icona generica se non già presente
+        if (!icone.includes('⚠️')) icone.push('⚠️');
+      }
+    });
+    return icone.join('');
+  }
+
   function secondBadge(secondo, assente) {
     if (assente) return '<span class="muted">—</span>';
     const tipo = detectSecondo(secondo);
@@ -610,9 +637,10 @@
       const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : '');
       const haAllergia = hasAllergy(r.allergie);
       const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
+      const iconeAllergie = iconaAllergie(r.allergie);
 
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
-        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="${classFreccia}">▼</span></div>
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}${iconeAllergie ? `<span class="icona-secondo">${iconeAllergie}</span>` : ''}<span class="${classFreccia}">▼</span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">${testi.lblPresenza}</span>

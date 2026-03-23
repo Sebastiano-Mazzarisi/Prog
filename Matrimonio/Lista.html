@@ -53,8 +53,23 @@
   .page-wrapper {
     max-width: 540px;
     margin: 0 auto;
-    padding: 40px 20px 60px;
+    padding: 20px 20px 60px;
   }
+
+  .lang-selector {
+    text-align: right;
+    margin-bottom: 10px;
+  }
+  .lang-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    padding: 0 4px;
+  }
+  .lang-btn.active { opacity: 1; }
 
   .header { text-align: center; margin-bottom: 40px; }
 
@@ -256,13 +271,17 @@
 
 <div id="sposi-section">
 <div class="page-wrapper">
+  <div class="lang-selector">
+    <button id="btn-it" class="lang-btn active" onclick="cambiaLingua('it')">🇮🇹</button>
+    <button id="btn-es" class="lang-btn" onclick="cambiaLingua('es')">🇪🇸</button>
+  </div>
   <div class="header">
     <div class="header-ornament">✦ ✦ ✦</div>
-    <h1>Lista Invitati</h1>
+    <h1 id="titolo-pagina">Lista Invitati</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
   </div>
   <div class="card">
-    <div id="sposi-table"><p style="text-align:center;padding:20px">Caricamento...</p></div>
+    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px">Caricamento...</p></div>
   </div>
 </div>
 </div>
@@ -271,10 +290,89 @@
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
   let activeFilter = null;
   window.datiInvitati = [];
+  
+  // Gestione multilingua
+  let currentLang = 'it';
+  const dizionario = {
+    it: {
+      titolo: "Lista Invitati",
+      caricamento: "Caricamento...",
+      nessunaRisposta: "Nessuna risposta ancora.",
+      aggiorna: "↻ Aggiorna",
+      riprova: "↻ Riprova",
+      pdf: "📄 PDF",
+      kpiPresenti: "Presenti",
+      kpiAssenti: "Assenti",
+      kpiAllergie: "Allergie",
+      kpiVeg: "Vegetariani",
+      kpiCarne: "Carne",
+      kpiPesce: "Pesce",
+      lblPresenza: "Presenza",
+      lblSecondo: "Secondo",
+      lblAllergie: "Allergie",
+      lblNote: "Note",
+      lblNessuna: "Nessuna",
+      btnElimina: "✕ Elimina questa scheda",
+      msgConferma: "Eliminare questa scheda?",
+      msgErrCanc: "Errore nella cancellazione.",
+      msgErrRete: "Errore di rete.",
+      msgNessunDato: "Nessun dato da stampare.",
+      pdfNome: "Nome",
+      pdfPres: "Pres.",
+      badgeVeg: "🌿 Vegetariano",
+      badgeCarne: "🥩 Carne",
+      badgePesce: "🐟 Pesce"
+    },
+    es: {
+      titolo: "Lista de Invitados",
+      caricamento: "Cargando...",
+      nessunaRisposta: "Ninguna respuesta todavía.",
+      aggiorna: "↻ Actualizar",
+      riprova: "↻ Reintentar",
+      pdf: "📄 PDF",
+      kpiPresenti: "Presentes",
+      kpiAssenti: "Ausentes",
+      kpiAllergie: "Alergias",
+      kpiVeg: "Vegetarianos",
+      kpiCarne: "Carne",
+      kpiPesce: "Pescado",
+      lblPresenza: "Asistencia",
+      lblSecondo: "Segundo",
+      lblAllergie: "Alergias",
+      lblNote: "Notas",
+      lblNessuna: "Ninguna",
+      btnElimina: "✕ Eliminar esta tarjeta",
+      msgConferma: "¿Eliminar esta tarjeta?",
+      msgErrCanc: "Error al eliminar.",
+      msgErrRete: "Error de red.",
+      msgNessunDato: "No hay datos para imprimir.",
+      pdfNome: "Nombre",
+      pdfPres: "Asist.",
+      badgeVeg: "🌿 Vegetariano",
+      badgeCarne: "🥩 Carne",
+      badgePesce: "🐟 Pescado"
+    }
+  };
 
   window.addEventListener('DOMContentLoaded', () => {
     caricaRisposte();
   });
+
+  function cambiaLingua(lang) {
+    currentLang = lang;
+    document.getElementById('btn-it').classList.toggle('active', lang === 'it');
+    document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+    document.getElementById('titolo-pagina').innerText = dizionario[lang].titolo;
+    
+    // Se c'è un messaggio di caricamento, aggiornalo
+    const txtCaricamento = document.getElementById('txt-caricamento');
+    if (txtCaricamento) txtCaricamento.innerText = dizionario[lang].caricamento;
+
+    // Se i dati sono già caricati, renderizza di nuovo l'HTML con la nuova lingua senza riscaricare
+    if (window.datiInvitati && window.datiInvitati.length > 0) {
+      renderizzaDati();
+    }
+  }
 
   function normalizeText(value) {
     return (value || '')
@@ -323,9 +421,11 @@
   function secondBadge(secondo, assente) {
     if (assente) return '<span class="muted">—</span>';
     const tipo = detectSecondo(secondo);
-    if (tipo === 'veg') return '<span class="badge badge-veg">🌿 Vegetariano</span>';
-    if (tipo === 'carne') return '<span class="badge badge-carne">🥩 Carne</span>';
-    if (tipo === 'pesce') return '<span class="badge badge-pesce">🐟 Pesce</span>';
+    const testi = dizionario[currentLang];
+    
+    if (tipo === 'veg') return `<span class="badge badge-veg">${testi.badgeVeg}</span>`;
+    if (tipo === 'carne') return `<span class="badge badge-carne">${testi.badgeCarne}</span>`;
+    if (tipo === 'pesce') return `<span class="badge badge-pesce">${testi.badgePesce}</span>`;
     return '<span class="muted">—</span>';
   }
 
@@ -361,8 +461,8 @@
 
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
-    
-    box.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:20px">Caricamento...</p>';
+    const testi = dizionario[currentLang];
+    box.innerHTML = `<p id="txt-caricamento" style="color:var(--text-light);text-align:center;padding:20px">${testi.caricamento}</p>`;
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -370,124 +470,132 @@
       .then(data => {
         if (!data.ok || !data.rows || data.rows.length === 0) {
           box.innerHTML = `
-            <p style="text-align:center;padding:20px;color:var(--text-light)">Nessuna risposta ancora.</p>
-            <button class="btn-submit" onclick="caricaRisposte()">↻ Aggiorna</button>
+            <p style="text-align:center;padding:20px;color:var(--text-light)">${testi.nessunaRisposta}</p>
+            <button class="btn-submit" onclick="caricaRisposte()">↻ ${testi.aggiorna}</button>
           `;
+          window.datiInvitati = [];
           return;
         }
-
-        let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
 
         let righeMappate = data.rows.map((r, i) => ({ ...r, indiceOriginale: i + 2 }));
         righeMappate.sort((a, b) => (a.nome || '~Senza nome').localeCompare(b.nome || '~Senza nome'));
         
-        // Salviamo i dati per il PDF
         window.datiInvitati = righeMappate;
-
-        righeMappate.forEach(r => {
-          const presenza = r.presenza || '';
-          const secondo = r.secondo || '';
-          const allergie = r.allergie || '';
-          
-          const assente = isAbsent(presenza, secondo);
-          
-          if (assente) {
-            totAssenti++;
-          } else {
-            totPresenti++;
-            if (hasAllergy(allergie)) totAllergie++;
-
-            const tipo = detectSecondo(secondo);
-            if (tipo === 'veg') totVeg++;
-            else if (tipo === 'carne') totCarne++;
-            else if (tipo === 'pesce') totPesce++;
-          }
-        });
-
-        let html = `<div class="sposi-kpi" style="margin-bottom: 12px;">
-          <div class="kpi-box" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-num">${totPresenti}</div><div class="kpi-label">Presenti</div></div>
-          <div class="kpi-box" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-num">${totAssenti}</div><div class="kpi-label">Assenti</div></div>
-          <div class="kpi-box" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-num">${totAllergie}</div><div class="kpi-label">Allergie</div></div>
-          <div class="kpi-box" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-num">${totVeg}</div><div class="kpi-label">Vegetariani</div></div>
-          <div class="kpi-box" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-num">${totCarne}</div><div class="kpi-label">Carne</div></div>
-          <div class="kpi-box" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-num">${totPesce}</div><div class="kpi-label">Pesce</div></div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-          <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">↻ Aggiorna</button>
-          <button class="btn-submit" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2f5c9a, #4a7cbd); color: #ffffff;">📄 PDF</button>
-        </div>
-        
-        <div id="lista-invitati">`;
-
-        righeMappate.forEach(r => {
-          const riga = r.indiceOriginale;
-          const presenza = r.presenza || '';
-          const assente = isAbsent(presenza, r.secondo);
-          
-          let classiFiltro = [];
-          
-          if (assente) {
-            classiFiltro.push('cat-assenti');
-          } else {
-            classiFiltro.push('cat-presenti');
-            if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
-            
-            const tipoSecondo = detectSecondo(r.secondo);
-            if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
-            if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
-            if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
-          }
-
-          const valPresenza = assente ? '0' : '1';
-
-          const allergieHtml = hasAllergy(r.allergie)
-            ? `<span class="risposta-val allergia">${r.allergie}</span>`
-            : `<span class="risposta-val muted">Nessuna</span>`;
-          const note = r.note
-            ? `<span class="risposta-val">${r.note}</span>`
-            : `<span class="risposta-val muted">—</span>`;
-
-          html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}">
-            <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}</div>
-            
-            <div class="dettagli-scheda" id="dettagli-${riga}">
-              <div class="risposta-row">
-                <span class="risposta-label">Presenza</span>
-                <span class="risposta-val" style="font-weight: 600;">${valPresenza}</span>
-              </div>
-              <div class="risposta-row">
-                <span class="risposta-label">Secondo</span>
-                <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
-              </div>
-              <div class="risposta-row">
-                <span class="risposta-label">Allergie</span>
-                ${allergieHtml}
-              </div>
-              <div class="risposta-row">
-                <span class="risposta-label">Note</span>
-                ${note}
-              </div>
-              <div class="risposta-data">${r.data || ''}</div>
-              <button onclick="eliminaRiga(${riga})" class="delete-btn">✕ Elimina questa scheda</button>
-            </div>
-          </div>`;
-        });
-
-        html += `</div>`;
-        box.innerHTML = html;
+        renderizzaDati();
       })
       .catch(() => {
         box.innerHTML = `
-          <p style="color:red;text-align:center;padding:20px">Errore nel caricamento.</p>
-          <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">↻ Riprova</button>
+          <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}</p>
+          <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${dizionario[currentLang].riprova}</button>
         `;
       });
   }
 
+  function renderizzaDati() {
+    const box = document.getElementById('sposi-table');
+    const testi = dizionario[currentLang];
+    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
+
+    window.datiInvitati.forEach(r => {
+      const presenza = r.presenza || '';
+      const secondo = r.secondo || '';
+      const allergie = r.allergie || '';
+      const assente = isAbsent(presenza, secondo);
+      
+      if (assente) {
+        totAssenti++;
+      } else {
+        totPresenti++;
+        if (hasAllergy(allergie)) totAllergie++;
+
+        const tipo = detectSecondo(secondo);
+        if (tipo === 'veg') totVeg++;
+        else if (tipo === 'carne') totCarne++;
+        else if (tipo === 'pesce') totPesce++;
+      }
+    });
+
+    let html = `<div class="sposi-kpi" style="margin-bottom: 12px;">
+      <div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-num">${totPresenti}</div><div class="kpi-label">${testi.kpiPresenti}</div></div>
+      <div class="kpi-box ${activeFilter==='assenti'?'active-filter':''}" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-num">${totAssenti}</div><div class="kpi-label">${testi.kpiAssenti}</div></div>
+      <div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-num">${totAllergie}</div><div class="kpi-label">${testi.kpiAllergie}</div></div>
+      <div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-num">${totVeg}</div><div class="kpi-label">${testi.kpiVeg}</div></div>
+      <div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-num">${totCarne}</div><div class="kpi-label">${testi.kpiCarne}</div></div>
+      <div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-num">${totPesce}</div><div class="kpi-label">${testi.kpiPesce}</div></div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${testi.aggiorna}</button>
+      <button class="btn-submit" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2f5c9a, #4a7cbd); color: #ffffff;">${testi.pdf}</button>
+    </div>
+    
+    <div id="lista-invitati">`;
+
+    window.datiInvitati.forEach(r => {
+      const riga = r.indiceOriginale;
+      const presenza = r.presenza || '';
+      const assente = isAbsent(presenza, r.secondo);
+      
+      let classiFiltro = [];
+      
+      if (assente) {
+        classiFiltro.push('cat-assenti');
+      } else {
+        classiFiltro.push('cat-presenti');
+        if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
+        
+        const tipoSecondo = detectSecondo(r.secondo);
+        if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
+        if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
+        if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
+      }
+
+      const valPresenza = assente ? '0' : '1';
+
+      const allergieHtml = hasAllergy(r.allergie)
+        ? `<span class="risposta-val allergia">${r.allergie}</span>`
+        : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
+      const note = r.note
+        ? `<span class="risposta-val">${r.note}</span>`
+        : `<span class="risposta-val muted">—</span>`;
+
+      // Nascondiamo i non conformi al filtro attuale se già attivo
+      const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
+
+      html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}</div>
+        
+        <div class="dettagli-scheda" id="dettagli-${riga}">
+          <div class="risposta-row">
+            <span class="risposta-label">${testi.lblPresenza}</span>
+            <span class="risposta-val" style="font-weight: 600;">${valPresenza}</span>
+          </div>
+          <div class="risposta-row">
+            <span class="risposta-label">${testi.lblSecondo}</span>
+            <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
+          </div>
+          <div class="risposta-row">
+            <span class="risposta-label">${testi.lblAllergie}</span>
+            ${allergieHtml}
+          </div>
+          <div class="risposta-row">
+            <span class="risposta-label">${testi.lblNote}</span>
+            ${note}
+          </div>
+          <div class="risposta-data">${r.data || ''}</div>
+          <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
+        </div>
+      </div>`;
+    });
+
+    html += `</div>`;
+    box.innerHTML = html;
+  }
+
   function generaPDF() {
+    const testi = dizionario[currentLang];
     if (!window.datiInvitati || window.datiInvitati.length === 0) {
-      alert('Nessun dato da stampare.');
+      alert(testi.msgNessunDato);
       return;
     }
 
@@ -497,16 +605,16 @@
     container.style.color = "#000";
     
     let htmlPDF = `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 5px;">Lista Invitati</h1>
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 5px;">${testi.titolo}</h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 20px;">Giulia & Onofrio</h2>
       <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
         <thead>
           <tr style="background-color: #f5ede0; text-align: left;">
-            <th style="padding: 8px; border: 1px solid #7a5c3a;">Nome</th>
-            <th style="padding: 8px; border: 1px solid #7a5c3a; text-align: center;">Pres.</th>
-            <th style="padding: 8px; border: 1px solid #7a5c3a;">Secondo</th>
-            <th style="padding: 8px; border: 1px solid #7a5c3a;">Allergie</th>
-            <th style="padding: 8px; border: 1px solid #7a5c3a;">Note</th>
+            <th style="padding: 8px; border: 1px solid #7a5c3a;">${testi.pdfNome}</th>
+            <th style="padding: 8px; border: 1px solid #7a5c3a; text-align: center;">${testi.pdfPres}</th>
+            <th style="padding: 8px; border: 1px solid #7a5c3a;">${testi.lblSecondo}</th>
+            <th style="padding: 8px; border: 1px solid #7a5c3a;">${testi.lblAllergie}</th>
+            <th style="padding: 8px; border: 1px solid #7a5c3a;">${testi.lblNote}</th>
           </tr>
         </thead>
         <tbody>
@@ -518,9 +626,9 @@
       
       let secondoStr = detectSecondo(r.secondo);
       if (assente) secondoStr = '-';
-      else if (secondoStr === 'veg') secondoStr = 'Veg';
-      else if (secondoStr === 'carne') secondoStr = 'Carne';
-      else if (secondoStr === 'pesce') secondoStr = 'Pesce';
+      else if (secondoStr === 'veg') secondoStr = testi.kpiVeg;
+      else if (secondoStr === 'carne') secondoStr = testi.kpiCarne;
+      else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
       else secondoStr = '-';
 
       const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
@@ -546,7 +654,7 @@
 
     const opt = {
       margin:       10,
-      filename:     'Lista_Invitati_Giulia_Onofrio.pdf',
+      filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -556,7 +664,7 @@
   }
 
   function eliminaRiga(riga) {
-    if (!confirm('Eliminare questa scheda?')) return;
+    if (!confirm(dizionario[currentLang].msgConferma)) return;
     const card = document.getElementById('card-' + riga);
     if (card) card.style.opacity = '0.4';
 
@@ -566,12 +674,12 @@
         if (data.ok) {
           setTimeout(() => caricaRisposte(), 500);
         } else {
-          alert('Errore nella cancellazione.');
+          alert(dizionario[currentLang].msgErrCanc);
           if (card) card.style.opacity = '1';
         }
       })
       .catch(() => {
-        alert('Errore di rete.');
+        alert(dizionario[currentLang].msgErrRete);
         if (card) card.style.opacity = '1';
       });
   }

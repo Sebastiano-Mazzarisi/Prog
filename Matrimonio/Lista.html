@@ -832,22 +832,66 @@
   function eliminaRiga(riga) {
     if (!confirm(dizionario[currentLang].msgConferma)) return;
     const card = document.getElementById('card-' + riga);
-    if (card) card.style.opacity = '0.4';
 
+    // Optimistic update: rimuove subito la card e aggiorna i KPI
+    if (card) {
+      card.style.transition = 'opacity 0.2s';
+      card.style.opacity = '0';
+      setTimeout(() => {
+        card.remove();
+        // Aggiorna window.datiInvitati e ricalcola KPI senza ricaricare dal server
+        window.datiInvitati = window.datiInvitati.filter(r => r.indiceOriginale !== riga);
+        renderizzaDati_soloKPI();
+      }, 200);
+    }
+
+    // Chiama il server in background senza bloccare l'UI
     fetch(SCRIPT_URL + '?elimina=' + riga + '&t=' + Date.now())
       .then(r => r.json())
       .then(data => {
-        if (data.ok) {
-          setTimeout(() => caricaRisposte(), 500);
-        } else {
+        if (!data.ok) {
+          // Rollback: ricarica dal server se qualcosa è andato storto
           alert(dizionario[currentLang].msgErrCanc);
-          if (card) card.style.opacity = '1';
+          caricaRisposte();
         }
+        // Se ok: niente da fare, UI già aggiornata
       })
       .catch(() => {
         alert(dizionario[currentLang].msgErrRete);
-        if (card) card.style.opacity = '1';
+        caricaRisposte(); // Rollback
       });
+  }
+
+  function renderizzaDati_soloKPI() {
+    // Ricalcola solo i numeri KPI senza rifare tutto il DOM
+    const testi = dizionario[currentLang];
+    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
+    window.datiInvitati.forEach(r => {
+      const presenza = r.presenza || '';
+      const secondo = r.secondo || '';
+      const allergie = r.allergie || '';
+      const assente = isAbsent(presenza, secondo);
+      if (assente) {
+        totAssenti++;
+      } else {
+        totPresenti++;
+        if (hasAllergy(allergie)) totAllergie++;
+        const tipo = detectSecondo(secondo);
+        if (tipo === 'veg') totVeg++;
+        else if (tipo === 'carne') totCarne++;
+        else if (tipo === 'pesce') totPesce++;
+      }
+    });
+    // Aggiorna solo i numeri nei box KPI già esistenti
+    const kpiMap = {
+      'btn-presenti': totPresenti, 'btn-assenti': totAssenti,
+      'btn-allergie': totAllergie, 'btn-veg': totVeg,
+      'btn-carne': totCarne, 'btn-pesce': totPesce
+    };
+    Object.entries(kpiMap).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.querySelector('.kpi-num').textContent = val;
+    });
   }
 </script>
 </body>

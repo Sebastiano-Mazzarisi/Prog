@@ -504,14 +504,17 @@
     });
   }
 
-  function caricaRisposte() {
+  function caricaRisposte(tentativo = 1) {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
     box.innerHTML = `<p id="txt-caricamento" style="color:var(--text-light);text-align:center;padding:20px">${testi.caricamento}</p>`;
     activeFilter = null;
 
-    fetch(SCRIPT_URL + '?t=' + Date.now())
-      .then(r => r.json())
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 28000); // 28s timeout
+
+    fetch(SCRIPT_URL + '?t=' + Date.now(), { signal: controller.signal })
+      .then(r => { clearTimeout(timeout); return r.json(); })
       .then(data => {
         if (!data.ok || !data.rows || data.rows.length === 0) {
           box.innerHTML = `
@@ -528,10 +531,18 @@
         renderizzaDati();
       })
       .catch(() => {
-        box.innerHTML = `
-          <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}</p>
-          <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${dizionario[currentLang].riprova}</button>
-        `;
+        clearTimeout(timeout);
+        if (tentativo < 3) {
+          // Retry automatico silenzioso (cold start Google)
+          const attesa = tentativo * 2000;
+          box.innerHTML = `<p id="txt-caricamento" style="color:var(--text-light);text-align:center;padding:20px">${testi.caricamento}</p>`;
+          setTimeout(() => caricaRisposte(tentativo + 1), attesa);
+        } else {
+          box.innerHTML = `
+            <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}</p>
+            <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${dizionario[currentLang].riprova}</button>
+          `;
+        }
       });
   }
 

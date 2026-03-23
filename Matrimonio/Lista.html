@@ -56,30 +56,45 @@
     padding: 20px 20px 60px;
   }
 
-  .lang-selector {
-    text-align: right;
-    margin-bottom: 10px;
+  /* Selettore Lingua stile Matrimonio */
+  .lang-switcher {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
   }
+
   .lang-btn {
     background: none;
-    border: none;
-    font-size: 22px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: #000000;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 6px 16px;
     cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-    padding: 0 4px;
+    transition: all 0.2s;
+    font-weight: 500;
   }
-  .lang-btn.active { opacity: 1; }
+  .lang-btn:hover { background: rgba(184, 137, 58, 0.08); }
+  .lang-btn.active-lang {
+    background: var(--gold);
+    color: #000000;
+    border-color: var(--gold);
+    font-weight: 600;
+  }
 
   .header { text-align: center; margin-bottom: 40px; }
 
   .header-ornament {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
+    font-size: 20px;
     color: var(--gold);
     letter-spacing: 6px;
-    margin-bottom: 6px;
     opacity: 0.7;
+    flex-shrink: 0;
   }
 
   .header h1 {
@@ -271,15 +286,17 @@
 
 <div id="sposi-section">
 <div class="page-wrapper">
-  <div class="lang-selector">
-    <button id="btn-it" class="lang-btn active" onclick="cambiaLingua('it')">🇮🇹</button>
-    <button id="btn-es" class="lang-btn" onclick="cambiaLingua('es')">🇪🇸</button>
-  </div>
+  
   <div class="header">
-    <div class="header-ornament">✦ ✦ ✦</div>
+    <div class="lang-switcher">
+      <button class="lang-btn active-lang" id="btn-it" onclick="cambiaLingua('it')">Italiano</button>
+      <div class="header-ornament">✦ ✦ ✦</div>
+      <button class="lang-btn" id="btn-es" onclick="cambiaLingua('es')">Español</button>
+    </div>
     <h1 id="titolo-pagina">Lista Invitati</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
   </div>
+
   <div class="card">
     <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px">Caricamento...</p></div>
   </div>
@@ -291,7 +308,6 @@
   let activeFilter = null;
   window.datiInvitati = [];
   
-  // Gestione multilingua
   let currentLang = 'it';
   const dizionario = {
     it: {
@@ -318,10 +334,11 @@
       msgErrRete: "Errore di rete.",
       msgNessunDato: "Nessun dato da stampare.",
       pdfNome: "Nome",
-      pdfPres: "Pres.",
       badgeVeg: "🌿 Vegetariano",
       badgeCarne: "🥩 Carne",
-      badgePesce: "🐟 Pesce"
+      badgePesce: "🐟 Pesce",
+      titoloPresenti: "Parteciperanno",
+      titoloAssenti: "Non parteciperanno"
     },
     es: {
       titolo: "Lista de Invitados",
@@ -347,10 +364,11 @@
       msgErrRete: "Error de red.",
       msgNessunDato: "No hay datos para imprimir.",
       pdfNome: "Nombre",
-      pdfPres: "Asist.",
       badgeVeg: "🌿 Vegetariano",
       badgeCarne: "🥩 Carne",
-      badgePesce: "🐟 Pescado"
+      badgePesce: "🐟 Pescado",
+      titoloPresenti: "Asistirán",
+      titoloAssenti: "No asistirán"
     }
   };
 
@@ -360,15 +378,13 @@
 
   function cambiaLingua(lang) {
     currentLang = lang;
-    document.getElementById('btn-it').classList.toggle('active', lang === 'it');
-    document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+    document.getElementById('btn-it').classList.toggle('active-lang', lang === 'it');
+    document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');
     document.getElementById('titolo-pagina').innerText = dizionario[lang].titolo;
     
-    // Se c'è un messaggio di caricamento, aggiornalo
     const txtCaricamento = document.getElementById('txt-caricamento');
     if (txtCaricamento) txtCaricamento.innerText = dizionario[lang].caricamento;
 
-    // Se i dati sono già caricati, renderizza di nuovo l'HTML con la nuova lingua senza riscaricare
     if (window.datiInvitati && window.datiInvitati.length > 0) {
       renderizzaDati();
     }
@@ -404,16 +420,13 @@
 
   function hasAllergy(value) {
     if (!value) return false;
-    
     const s = normalizeText(value).replace(/[^\w\s]/gi, '').replace(/\s+/g, ' ').trim();
     if (!s) return false; 
-
     const falsiPositivi = [
       'no', 'nessuna', 'nessuno', 'nessun', 'niente', 'nulla', 'nd', 
       '0', 'false', 'nessuna allergia', 'no allergie', 'nessuna in particolare',
       'no grazie', 'nessuna grazie'
     ];
-
     if (falsiPositivi.includes(s)) return false;
     return true; 
   }
@@ -444,12 +457,10 @@
     } else {
       activeFilter = categoria;
     }
-
     document.querySelectorAll('.kpi-box').forEach(el => el.classList.remove('active-filter'));
     if (activeFilter) {
       document.getElementById('btn-' + activeFilter).classList.add('active-filter');
     }
-
     document.querySelectorAll('.risposta-card').forEach(card => {
       if (!activeFilter || card.classList.contains('cat-' + activeFilter)) {
         card.style.display = 'block';
@@ -479,7 +490,6 @@
 
         let righeMappate = data.rows.map((r, i) => ({ ...r, indiceOriginale: i + 2 }));
         righeMappate.sort((a, b) => (a.nome || '~Senza nome').localeCompare(b.nome || '~Senza nome'));
-        
         window.datiInvitati = righeMappate;
         renderizzaDati();
       })
@@ -543,7 +553,6 @@
       } else {
         classiFiltro.push('cat-presenti');
         if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
-        
         const tipoSecondo = detectSecondo(r.secondo);
         if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
         if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
@@ -551,20 +560,12 @@
       }
 
       const valPresenza = assente ? '0' : '1';
-
-      const allergieHtml = hasAllergy(r.allergie)
-        ? `<span class="risposta-val allergia">${r.allergie}</span>`
-        : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
-      const note = r.note
-        ? `<span class="risposta-val">${r.note}</span>`
-        : `<span class="risposta-val muted">—</span>`;
-
-      // Nascondiamo i non conformi al filtro attuale se già attivo
+      const allergieHtml = hasAllergy(r.allergie) ? `<span class="risposta-val allergia">${r.allergie}</span>` : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
+      const note = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
       const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
 
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
         <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}</div>
-        
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">${testi.lblPresenza}</span>
@@ -599,6 +600,26 @@
       return;
     }
 
+    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
+    let assentiRows = [];
+    let presentiRows = [];
+
+    window.datiInvitati.forEach(r => {
+      const assente = isAbsent(r.presenza, r.secondo);
+      if (assente) {
+        totAssenti++;
+        assentiRows.push(r);
+      } else {
+        totPresenti++;
+        presentiRows.push(r);
+        if (hasAllergy(r.allergie)) totAllergie++;
+        const tipo = detectSecondo(r.secondo);
+        if (tipo === 'veg') totVeg++;
+        else if (tipo === 'carne') totCarne++;
+        else if (tipo === 'pesce') totPesce++;
+      }
+    });
+
     const container = document.createElement('div');
     container.style.padding = '20px';
     container.style.fontFamily = "'Jost', sans-serif";
@@ -606,49 +627,95 @@
     
     let htmlPDF = `
       <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 5px;">${testi.titolo}</h1>
-      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 20px;">Giulia & Onofrio</h2>
-      <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-        <thead>
-          <tr style="background-color: #f5ede0; text-align: left;">
-            <th style="padding: 8px; border: 1px solid #7a5c3a;">${testi.pdfNome}</th>
-            <th style="padding: 8px; border: 1px solid #7a5c3a; text-align: center;">${testi.pdfPres}</th>
-            <th style="padding: 8px; border: 1px solid #7a5c3a;">${testi.lblSecondo}</th>
-            <th style="padding: 8px; border: 1px solid #7a5c3a;">${testi.lblAllergie}</th>
-            <th style="padding: 8px; border: 1px solid #7a5c3a;">${testi.lblNote}</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-
-    window.datiInvitati.forEach(r => {
-      const assente = isAbsent(r.presenza, r.secondo);
-      const presVal = assente ? '0' : '1';
+      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 25px;">Giulia & Onofrio</h2>
       
-      let secondoStr = detectSecondo(r.secondo);
-      if (assente) secondoStr = '-';
-      else if (secondoStr === 'veg') secondoStr = testi.kpiVeg;
-      else if (secondoStr === 'carne') secondoStr = testi.kpiCarne;
-      else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
-      else secondoStr = '-';
-
-      const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
-      const note = r.note ? r.note : '-';
-
-      htmlPDF += `
-        <tr>
-          <td style="padding: 6px 8px; border: 1px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-          <td style="padding: 6px 8px; border: 1px solid #7a5c3a; text-align: center;">${presVal}</td>
-          <td style="padding: 6px 8px; border: 1px solid #7a5c3a;">${secondoStr}</td>
-          <td style="padding: 6px 8px; border: 1px solid #7a5c3a; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
-          <td style="padding: 6px 8px; border: 1px solid #7a5c3a;">${note}</td>
-        </tr>
-      `;
-    });
-
-    htmlPDF += `
-        </tbody>
-      </table>
+      <div style="display: flex; gap: 8px; margin-bottom: 30px;">
+        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPresenti}</div>
+          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiPresenti}</div>
+        </div>
+        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAssenti}</div>
+          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiAssenti}</div>
+        </div>
+        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAllergie}</div>
+          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiAllergie}</div>
+        </div>
+        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totVeg}</div>
+          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiVeg}</div>
+        </div>
+        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totCarne}</div>
+          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiCarne}</div>
+        </div>
+        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPesce}</div>
+          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiPesce}</div>
+        </div>
+      </div>
     `;
+
+    // Tabella Assenti
+    if (assentiRows.length > 0) {
+      htmlPDF += `
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti}</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 25px;">
+          <thead>
+            <tr style="background-color: #f5ede0; text-align: left;">
+              <th style="padding: 6px; border: 1px solid #7a5c3a; width: 40%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; border: 1px solid #7a5c3a;">${testi.lblNote}</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      assentiRows.forEach(r => {
+        htmlPDF += `
+          <tr>
+            <td style="padding: 4px 6px; border: 1px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px; border: 1px solid #7a5c3a;">${r.note ? r.note : '-'}</td>
+          </tr>
+        `;
+      });
+      htmlPDF += `</tbody></table>`;
+    }
+
+    // Tabella Presenti
+    if (presentiRows.length > 0) {
+      htmlPDF += `
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti}</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+          <thead>
+            <tr style="background-color: #f5ede0; text-align: left;">
+              <th style="padding: 6px; border: 1px solid #7a5c3a; width: 30%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; border: 1px solid #7a5c3a;">${testi.lblSecondo}</th>
+              <th style="padding: 6px; border: 1px solid #7a5c3a;">${testi.lblAllergie}</th>
+              <th style="padding: 6px; border: 1px solid #7a5c3a;">${testi.lblNote}</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      presentiRows.forEach(r => {
+        let secondoStr = detectSecondo(r.secondo);
+        if (secondoStr === 'veg') secondoStr = testi.kpiVeg;
+        else if (secondoStr === 'carne') secondoStr = testi.kpiCarne;
+        else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
+        else secondoStr = '-';
+
+        const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
+
+        htmlPDF += `
+          <tr>
+            <td style="padding: 4px 6px; border: 1px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px; border: 1px solid #7a5c3a;">${secondoStr}</td>
+            <td style="padding: 4px 6px; border: 1px solid #7a5c3a; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
+            <td style="padding: 4px 6px; border: 1px solid #7a5c3a;">${r.note ? r.note : '-'}</td>
+          </tr>
+        `;
+      });
+      htmlPDF += `</tbody></table>`;
+    }
     
     container.innerHTML = htmlPDF;
 

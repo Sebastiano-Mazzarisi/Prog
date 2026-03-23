@@ -510,11 +510,8 @@
     box.innerHTML = `<p id="txt-caricamento" style="color:var(--text-light);text-align:center;padding:20px">${testi.caricamento}</p>`;
     activeFilter = null;
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 28000); // 28s timeout
-
-    fetch(SCRIPT_URL + '?t=' + Date.now(), { signal: controller.signal })
-      .then(r => { clearTimeout(timeout); return r.json(); })
+    fetch(SCRIPT_URL + '?t=' + Date.now())
+      .then(r => r.json())
       .then(data => {
         if (!data.ok || !data.rows || data.rows.length === 0) {
           box.innerHTML = `
@@ -531,7 +528,6 @@
         renderizzaDati();
       })
       .catch(() => {
-        clearTimeout(timeout);
         if (tentativo < 3) {
           // Retry automatico silenzioso (cold start Google)
           const attesa = tentativo * 2000;

@@ -844,20 +844,20 @@
     btn.disabled = true;
     btn.textContent = msgInvioInCorso;
 
+    // Feedback immediato senza aspettare Google
+    showSavedFeedback();
+    resetFormToStart();
+
+    // Invio al server in background (no-cors: non possiamo leggere la risposta)
     fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
-    })
-    .then(() => {
-      showSavedFeedback();
-      resetFormToStart();
-    })
-    .catch(() => {
-      btn.disabled = false;
-      btn.textContent = translations[currentLanguage].btnInvia;
-      alert(msgErroreRete);
+    }).catch(() => {
+      // Silenzioso: il dato potrebbe non essere arrivato,
+      // ma non disturbiamo l'utente che ha già visto il feedback
+      console.warn('Invio fallito, dato potrebbe non essere salvato.');
     });
   }
 </script>

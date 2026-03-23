@@ -126,6 +126,14 @@
     border-radius: 12px;
     padding: 16px 10px;
     text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+  }
+  .kpi-box:hover { background: #efe3ce; }
+  .kpi-box:active { transform: scale(0.98); }
+  .kpi-box.active-filter {
+    background: var(--gold-light);
+    border-color: var(--gold-dark);
   }
   .kpi-num {
     font-family: 'Cormorant Garamond', serif;
@@ -155,10 +163,24 @@
     font-size: 22px;
     font-weight: 600;
     color: var(--text);
-    margin-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
+  .risposta-nome::after {
+    content: '▼';
+    font-size: 14px;
+    color: var(--gold-dark);
+  }
+  
+  .dettagli-scheda {
+    display: none;
+    margin-top: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+
   .risposta-row {
     display: flex;
     justify-content: space-between;
@@ -209,15 +231,16 @@
   .muted          { color: #888; }
 
   .delete-btn {
-    float:right;
     background:none;
     border:1px solid #c0504d;
     color:#c0504d;
     border-radius:6px;
-    padding:2px 10px;
-    font-size:11px;
+    padding:4px 12px;
+    font-size:12px;
     cursor:pointer;
-    margin-top:2px;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
   }
 
   @media (max-width: 520px) {
@@ -244,6 +267,7 @@
 
 <script>
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
+  let activeFilter = null;
 
   window.addEventListener('DOMContentLoaded', () => {
     caricaRisposte();
@@ -266,6 +290,11 @@
   function isPresent(value) {
     const s = normalizeText(value);
     return s.includes('saro dei vostri') || s.includes('estare con vosotros') || s === 'si' || s === 'yes' || s.includes('presente');
+  }
+
+  function hasAllergy(value) {
+    const s = normalizeText(value);
+    return s !== '' && !s.includes('nessun') && s !== 'no' && s !== '-';
   }
 
   function detectSecondo(value) {
@@ -291,9 +320,42 @@
     return `<span>${presenza || '—'}</span>`;
   }
 
+  function toggleDettagli(id) {
+    const element = document.getElementById('dettagli-' + id);
+    if (element.style.display === 'block') {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'block';
+    }
+  }
+
+  function filtraLista(categoria) {
+    if (activeFilter === categoria) {
+      activeFilter = null;
+    } else {
+      activeFilter = categoria;
+    }
+
+    // Aggiorna stile bottoni
+    document.querySelectorAll('.kpi-box').forEach(el => el.classList.remove('active-filter'));
+    if (activeFilter) {
+      document.getElementById('btn-' + activeFilter).classList.add('active-filter');
+    }
+
+    // Filtra schede
+    document.querySelectorAll('.risposta-card').forEach(card => {
+      if (!activeFilter || card.classList.contains('cat-' + activeFilter)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     box.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:20px">Caricamento...</p>';
+    activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
       .then(r => r.json())
@@ -303,14 +365,21 @@
           return;
         }
 
-        let totPersone = 0, totAssenti = 0, totVeg = 0, totCarne = 0, totPesce = 0;
+        let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
 
-        data.rows.forEach(r => {
+        // Aggiungiamo l'indice originale per permettere l'eliminazione corretta, poi ordiniamo alfabeticamente
+        let righeMappate = data.rows.map((r, i) => ({ ...r, indiceOriginale: i + 2 }));
+        righeMappate.sort((a, b) => (a.nome || 'Zenza nome').localeCompare(b.nome || 'Zenza nome'));
+
+        righeMappate.forEach(r => {
           const presenza = r.presenza || '';
           const secondo = r.secondo || '';
-          const persone = parseInt(r.persone, 10) || 0;
+          const allergie = r.allergie || '';
+          
           if (isAbsent(presenza)) totAssenti++;
-          totPersone += persone;
+          else if (isPresent(presenza)) totPresenti++;
+
+          if (hasAllergy(allergie)) totAllergie++;
 
           const tipo = detectSecondo(secondo);
           if (tipo === 'veg') totVeg++;
@@ -319,18 +388,30 @@
         });
 
         let html = `<div class="sposi-kpi">
-          <div class="kpi-box"><div class="kpi-num">${data.rows.length}</div><div class="kpi-label">Schede</div></div>
-          <div class="kpi-box"><div class="kpi-num">${totPersone}</div><div class="kpi-label">Persone</div></div>
-          <div class="kpi-box"><div class="kpi-num">${totAssenti}</div><div class="kpi-label">Assenti</div></div>
-          <div class="kpi-box"><div class="kpi-num">${totVeg}</div><div class="kpi-label">Vegetariani</div></div>
-          <div class="kpi-box"><div class="kpi-num">${totCarne}</div><div class="kpi-label">Carne</div></div>
-          <div class="kpi-box"><div class="kpi-num">${totPesce}</div><div class="kpi-label">Pesce</div></div>
-        </div>`;
+          <div class="kpi-box" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-num">${totPresenti}</div><div class="kpi-label">Presenti</div></div>
+          <div class="kpi-box" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-num">${totAssenti}</div><div class="kpi-label">Assenti</div></div>
+          <div class="kpi-box" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-num">${totAllergie}</div><div class="kpi-label">Allergie</div></div>
+          <div class="kpi-box" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-num">${totVeg}</div><div class="kpi-label">Vegetariani</div></div>
+          <div class="kpi-box" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-num">${totCarne}</div><div class="kpi-label">Carne</div></div>
+          <div class="kpi-box" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-num">${totPesce}</div><div class="kpi-label">Pesce</div></div>
+        </div>
+        <div id="lista-invitati">`;
 
-        data.rows.forEach((r, i) => {
-          const riga = i + 2;
+        righeMappate.forEach(r => {
+          const riga = r.indiceOriginale;
           const presenza = r.presenza || '';
-          const allergie = r.allergie
+          
+          let classiFiltro = [];
+          if (isPresent(presenza)) classiFiltro.push('cat-presenti');
+          if (isAbsent(presenza)) classiFiltro.push('cat-assenti');
+          if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
+          
+          const tipoSecondo = detectSecondo(r.secondo);
+          if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
+          if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
+          if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
+
+          const allergieHtml = hasAllergy(r.allergie)
             ? `<span class="risposta-val allergia">${r.allergie}</span>`
             : `<span class="risposta-val muted">Nessuna</span>`;
           const note = r.note
@@ -340,34 +421,37 @@
             ? `<span class="risposta-val">${parseInt(r.persone, 10)}</span>`
             : `<span class="risposta-val muted">—</span>`;
 
-          html += `<div class="risposta-card" id="card-${riga}">
-            <div class="risposta-nome">${r.nome || 'Senza nome'}
-              <button onclick="eliminaRiga(${riga})" class="delete-btn">✕ Elimina</button>
+          html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}">
+            <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}</div>
+            
+            <div class="dettagli-scheda" id="dettagli-${riga}">
+              <div class="risposta-row">
+                <span class="risposta-label">Presenza</span>
+                <span class="risposta-val">${presenzaBadge(presenza)}</span>
+              </div>
+              <div class="risposta-row">
+                <span class="risposta-label">Persone</span>
+                ${persone}
+              </div>
+              <div class="risposta-row">
+                <span class="risposta-label">Secondo</span>
+                <span class="risposta-val">${secondBadge(r.secondo, presenza)}</span>
+              </div>
+              <div class="risposta-row">
+                <span class="risposta-label">Allergie</span>
+                ${allergieHtml}
+              </div>
+              <div class="risposta-row">
+                <span class="risposta-label">Note</span>
+                ${note}
+              </div>
+              <div class="risposta-data">${r.data || ''}</div>
+              <button onclick="eliminaRiga(${riga})" class="delete-btn" style="margin-top: 12px;">✕ Elimina questa scheda</button>
             </div>
-            <div class="risposta-row">
-              <span class="risposta-label">Presenza</span>
-              <span class="risposta-val">${presenzaBadge(presenza)}</span>
-            </div>
-            <div class="risposta-row">
-              <span class="risposta-label">Persone</span>
-              ${persone}
-            </div>
-            <div class="risposta-row">
-              <span class="risposta-label">Secondo</span>
-              <span class="risposta-val">${secondBadge(r.secondo, presenza)}</span>
-            </div>
-            <div class="risposta-row">
-              <span class="risposta-label">Allergie</span>
-              ${allergie}
-            </div>
-            <div class="risposta-row">
-              <span class="risposta-label">Note</span>
-              ${note}
-            </div>
-            <div class="risposta-data">${r.data || ''}</div>
           </div>`;
         });
 
+        html += `</div>`;
         box.innerHTML = html;
       })
       .catch(() => {

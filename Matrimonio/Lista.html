@@ -338,7 +338,8 @@
       badgeCarne: "🥩 Carne",
       badgePesce: "🐟 Pesce",
       titoloPresenti: "Parteciperanno",
-      titoloAssenti: "Non parteciperanno"
+      titoloAssenti: "Non parteciperanno",
+      titoloInvitati: "Invitati"
     },
     es: {
       titolo: "Lista de Invitados",
@@ -368,7 +369,8 @@
       badgeCarne: "🥩 Carne",
       badgePesce: "🐟 Pescado",
       titoloPresenti: "Asistirán",
-      titoloAssenti: "No asistirán"
+      titoloAssenti: "No asistirán",
+      titoloInvitati: "Invitados"
     }
   };
 
@@ -717,6 +719,33 @@
       htmlPDF += `</tbody></table>`;
     }
     
+    // Terza Tabella: Invitati a 3 colonne
+    if (presentiRows.length > 0) {
+      htmlPDF += `
+        <h3 style="font-size: 16px; margin-top: 25px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloInvitati} (${totPresenti})</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+          <tbody>
+      `;
+      const cols = 3;
+      for (let i = 0; i < presentiRows.length; i += cols) {
+        htmlPDF += `<tr>`;
+        for (let j = 0; j < cols; j++) {
+          const idx = i + j;
+          if (idx < presentiRows.length) {
+            const r = presentiRows[idx];
+            // Estrazione flessibile del campo data di nascita (se presente nello sheet) o data generica
+            const dataVal = r['data.di.nascita'] || r.data_di_nascita || r.dataNascita || r['data di nascita'] || r.data || '';
+            const cellText = `<span style="font-weight: 600;">${r.nome || 'Senza nome'}</span> <span style="font-weight: 400;">${dataVal ? '(' + dataVal + ')' : ''}</span>`;
+            htmlPDF += `<td style="padding: 6px; border: 1px solid #7a5c3a; width: 33.33%;">${cellText}</td>`;
+          } else {
+            htmlPDF += `<td style="padding: 6px; border: 1px solid #7a5c3a; width: 33.33%;"></td>`;
+          }
+        }
+        htmlPDF += `</tr>`;
+      }
+      htmlPDF += `</tbody></table>`;
+    }
+
     container.innerHTML = htmlPDF;
 
     const opt = {

@@ -56,7 +56,6 @@
     padding: 20px 20px 60px;
   }
 
-  /* Selettore Lingua stile Matrimonio */
   .lang-switcher {
     display: flex;
     justify-content: center;
@@ -629,25 +628,41 @@
       }
     });
 
-    // FETCH Elenco completo Invitati (CSV locale su GitHub)
-    let invitatiCsv = [];
+    // FETCH Elenco completo Invitati e raggruppamento (CSV locale su GitHub)
+    let gruppiInvitati = [];
+    let totInvitatiCsv = 0;
     try {
       const resp = await fetch('Invitati.csv?t=' + Date.now());
       if (resp.ok) {
         const text = await resp.text();
-        const righe = text.split(/\r?\n/).map(r => r.trim()).filter(r => r);
+        const righe = text.split(/\r?\n/).map(r => r.trim()); // non filtra i righi vuoti
         const sep = text.includes(';') ? ';' : ',';
         
         let startIndex = 0;
         if (righe.length > 0 && righe[0].toLowerCase().includes('nom')) startIndex = 1;
         
+        let gruppoCorrente = [];
         for (let i = startIndex; i < righe.length; i++) {
           let cols = righe[i].split(sep);
           let nome = cols[0] ? cols[0].replace(/['"]/g, '').trim() : '';
           let dataNascita = cols[1] ? cols[1].replace(/['"]/g, '').trim() : '';
-          if (nome) invitatiCsv.push({ nome, dataNascita });
+          
+          if (!nome) {
+            // Rigo vuoto trovato: chiudo il gruppo corrente (se contiene dati)
+            if (gruppoCorrente.length > 0) {
+              gruppiInvitati.push(gruppoCorrente);
+              totInvitatiCsv += gruppoCorrente.length;
+              gruppoCorrente = [];
+            }
+          } else {
+            gruppoCorrente.push({ nome, dataNascita });
+          }
         }
-        invitatiCsv.sort((a, b) => a.nome.localeCompare(b.nome));
+        // Inserisco l'ultimo gruppo in caso il file non termini con un rigo vuoto
+        if (gruppoCorrente.length > 0) {
+          gruppiInvitati.push(gruppoCorrente);
+          totInvitatiCsv += gruppoCorrente.length;
+        }
       }
     } catch (err) {
       console.log('File Invitati.csv non trovato o errore di caricamento.', err);
@@ -663,27 +678,27 @@
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 25px;">Giulia & Onofrio</h2>
       
       <div style="display: flex; gap: 8px; margin-bottom: 30px;">
-        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPresenti}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiPresenti}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAssenti}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiAssenti}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAllergie}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiAllergie}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totVeg}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiVeg}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totCarne}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiCarne}</div>
         </div>
-        <div style="flex: 1; background: #f5ede0; border: 1.5px solid #7a5c3a; border-radius: 8px; padding: 12px 6px; text-align: center;">
+        <div style="flex: 1; background: #f5ede0; border: 0.5px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPesce}</div>
           <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiPesce}</div>
         </div>
@@ -697,8 +712,8 @@
         <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 25px;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 6px; border: 0.5px solid #7a5c3a; width: 40%;">${testi.pdfNome}</th>
-              <th style="padding: 6px; border: 0.5px solid #7a5c3a;">${testi.lblNote}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000; width: 40%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -706,8 +721,8 @@
       assentiRows.forEach(r => {
         htmlPDF += `
           <tr>
-            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000;">${r.note ? r.note : '-'}</td>
           </tr>
         `;
       });
@@ -721,10 +736,10 @@
         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 6px; border: 0.5px solid #7a5c3a; width: 30%;">${testi.pdfNome}</th>
-              <th style="padding: 6px; border: 0.5px solid #7a5c3a;">${testi.lblSecondo}</th>
-              <th style="padding: 6px; border: 0.5px solid #7a5c3a;">${testi.lblAllergie}</th>
-              <th style="padding: 6px; border: 0.5px solid #7a5c3a;">${testi.lblNote}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000; width: 30%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000;">${testi.lblSecondo}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000;">${testi.lblAllergie}</th>
+              <th style="padding: 6px; border: 0.5px solid #000000;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -740,41 +755,49 @@
 
         htmlPDF += `
           <tr>
-            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a;">${secondoStr}</td>
-            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
-            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000;">${secondoStr}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #000000;">${r.note ? r.note : '-'}</td>
           </tr>
         `;
       });
       htmlPDF += `</tbody></table>`;
     }
     
-    // Tabella: Invitati a 3 colonne da CSV su Nuova Pagina
-    if (invitatiCsv.length > 0) {
+    // Sezione: Invitati a 3 colonne, divisa per gruppi (mantiene il CSV order)
+    if (gruppiInvitati.length > 0) {
       htmlPDF += `
         <div style="page-break-before: always;"></div>
-        <h3 style="font-size: 16px; margin-top: 10px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloInvitati} (${invitatiCsv.length})</h3>
-        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
-          <tbody>
+        <h3 style="font-size: 16px; margin-top: 10px; margin-bottom: 15px; color: #8a5e1e; font-weight: 600;">${testi.titoloInvitati} (${totInvitatiCsv})</h3>
+        <div style="column-count: 3; column-gap: 20px; font-size: 11px; width: 100%;">
       `;
-      const cols = 3;
-      for (let i = 0; i < invitatiCsv.length; i += cols) {
-        htmlPDF += `<tr>`;
-        for (let j = 0; j < cols; j++) {
-          const idx = i + j;
-          if (idx < invitatiCsv.length) {
-            const inv = invitatiCsv[idx];
-            const dataVal = inv.dataNascita;
-            const cellText = `<span style="font-weight: 600;">${inv.nome}</span> <span style="font-weight: 400;">${dataVal ? '(' + dataVal + ')' : ''}</span>`;
-            htmlPDF += `<td style="padding: 6px; border: 0.5px solid #7a5c3a; width: 33.33%;">${cellText}</td>`;
-          } else {
-            htmlPDF += `<td style="padding: 6px; border: 0.5px solid #7a5c3a; width: 33.33%;"></td>`;
+
+      gruppiInvitati.forEach((gruppo, index) => {
+        // 'break-inside: avoid-column' evita che il nucleo familiare si spezzi tra le colonne/pagine
+        htmlPDF += `<div style="break-inside: avoid-column; page-break-inside: avoid; -webkit-column-break-inside: avoid; margin-bottom: 8px;">`;
+        
+        gruppo.forEach(inv => {
+          let anno = "";
+          if (inv.dataNascita) {
+            const match = inv.dataNascita.match(/\d{4}/);
+            anno = match ? match[0] : inv.dataNascita;
           }
+          htmlPDF += `<div style="margin-bottom: 4px; line-height: 1.2;">
+            <span style="font-weight: 600;">${inv.nome}</span> 
+            <span style="font-weight: 400;">${anno ? '(' + anno + ')' : ''}</span>
+          </div>`;
+        });
+
+        // Aggiunge la linea orizzontale separatrice (salvo dopo l'ultimo gruppo in assoluto)
+        if (index < gruppiInvitati.length - 1) {
+          htmlPDF += `<div style="border-bottom: 0.5px solid #000000; margin-top: 6px; margin-bottom: 4px;"></div>`;
         }
-        htmlPDF += `</tr>`;
-      }
-      htmlPDF += `</tbody></table>`;
+        
+        htmlPDF += `</div>`;
+      });
+
+      htmlPDF += `</div>`;
     }
 
     container.innerHTML = htmlPDF;

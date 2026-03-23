@@ -504,7 +504,7 @@
     });
   }
 
-  function caricaRisposte(tentativo = 1) {
+  function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
     box.innerHTML = `<p id="txt-caricamento" style="color:var(--text-light);text-align:center;padding:20px">${testi.caricamento}</p>`;
@@ -528,17 +528,10 @@
         renderizzaDati();
       })
       .catch(() => {
-        if (tentativo < 3) {
-          // Retry automatico silenzioso (cold start Google)
-          const attesa = tentativo * 2000;
-          box.innerHTML = `<p id="txt-caricamento" style="color:var(--text-light);text-align:center;padding:20px">${testi.caricamento}</p>`;
-          setTimeout(() => caricaRisposte(tentativo + 1), attesa);
-        } else {
-          box.innerHTML = `
-            <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}</p>
-            <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${dizionario[currentLang].riprova}</button>
-          `;
-        }
+        box.innerHTML = `
+          <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}</p>
+          <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${dizionario[currentLang].riprova}</button>
+        `;
       });
   }
 

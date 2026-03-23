@@ -287,12 +287,7 @@
 
   function isAbsent(value) {
     const s = normalizeText(value);
-    return s.includes('non potro esserci') || s.includes('no podre asistir') || s === 'no' || s.includes('assente');
-  }
-
-  function isPresent(value) {
-    const s = normalizeText(value);
-    return s.includes('saro dei vostri') || s.includes('estare con vosotros') || s === 'si' || s === 'yes' || s.includes('presente');
+    return s.includes('non potro esserci') || s.includes('no podre asistir') || s === 'no' || s.includes('assente') || s === '0';
   }
 
   function hasAllergy(value) {
@@ -308,8 +303,8 @@
     return '';
   }
 
-  function secondBadge(secondo, presence) {
-    if (isAbsent(presence)) return '<span class="muted">—</span>';
+  function secondBadge(secondo, assente) {
+    if (assente) return '<span class="muted">—</span>';
     const tipo = detectSecondo(secondo);
     if (tipo === 'veg') return '<span class="badge badge-veg">🌿 Vegetariano</span>';
     if (tipo === 'carne') return '<span class="badge badge-carne">🥩 Carne</span>';
@@ -369,22 +364,26 @@
         let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
 
         let righeMappate = data.rows.map((r, i) => ({ ...r, indiceOriginale: i + 2 }));
-        righeMappate.sort((a, b) => (a.nome || 'Zenza nome').localeCompare(b.nome || 'Zenza nome'));
+        righeMappate.sort((a, b) => (a.nome || '~Senza nome').localeCompare(b.nome || '~Senza nome'));
 
         righeMappate.forEach(r => {
           const presenza = r.presenza || '';
           const secondo = r.secondo || '';
           const allergie = r.allergie || '';
           
-          if (isAbsent(presenza)) totAssenti++;
-          else if (isPresent(presenza)) totPresenti++;
+          const assente = isAbsent(presenza);
+          
+          if (assente) {
+            totAssenti++;
+          } else {
+            totPresenti++;
+            if (hasAllergy(allergie)) totAllergie++;
 
-          if (hasAllergy(allergie)) totAllergie++;
-
-          const tipo = detectSecondo(secondo);
-          if (tipo === 'veg') totVeg++;
-          else if (tipo === 'carne') totCarne++;
-          else if (tipo === 'pesce') totPesce++;
+            const tipo = detectSecondo(secondo);
+            if (tipo === 'veg') totVeg++;
+            else if (tipo === 'carne') totCarne++;
+            else if (tipo === 'pesce') totPesce++;
+          }
         });
 
         let html = `<div class="sposi-kpi">
@@ -400,18 +399,23 @@
         righeMappate.forEach(r => {
           const riga = r.indiceOriginale;
           const presenza = r.presenza || '';
+          const assente = isAbsent(presenza);
           
           let classiFiltro = [];
-          if (isPresent(presenza)) classiFiltro.push('cat-presenti');
-          if (isAbsent(presenza)) classiFiltro.push('cat-assenti');
-          if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
           
-          const tipoSecondo = detectSecondo(r.secondo);
-          if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
-          if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
-          if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
+          if (assente) {
+            classiFiltro.push('cat-assenti');
+          } else {
+            classiFiltro.push('cat-presenti');
+            if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
+            
+            const tipoSecondo = detectSecondo(r.secondo);
+            if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
+            if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
+            if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
+          }
 
-          const valPresenza = isPresent(presenza) ? '1' : '0';
+          const valPresenza = assente ? '0' : '1';
 
           const allergieHtml = hasAllergy(r.allergie)
             ? `<span class="risposta-val allergia">${r.allergie}</span>`
@@ -430,7 +434,7 @@
               </div>
               <div class="risposta-row">
                 <span class="risposta-label">Secondo</span>
-                <span class="risposta-val">${secondBadge(r.secondo, presenza)}</span>
+                <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
               </div>
               <div class="risposta-row">
                 <span class="risposta-label">Allergie</span>

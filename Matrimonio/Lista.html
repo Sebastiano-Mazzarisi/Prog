@@ -338,8 +338,8 @@
       badgeVeg: "🌿 Vegetariano",
       badgeCarne: "🥩 Carne",
       badgePesce: "🐟 Pesce",
-      titoloPresenti: "Parteciperanno",
-      titoloAssenti: "Non parteciperanno",
+      titoloPresenti: "Presenti",
+      titoloAssenti: "Assenti",
       titoloInvitati: "Invitati"
     },
     es: {
@@ -369,8 +369,8 @@
       badgeVeg: "🌿 Vegetariano",
       badgeCarne: "🥩 Carne",
       badgePesce: "🐟 Pescado",
-      titoloPresenti: "Asistirán",
-      titoloAssenti: "No asistirán",
+      titoloPresenti: "Presentes",
+      titoloAssenti: "Ausentes",
       titoloInvitati: "Invitados"
     }
   };
@@ -693,12 +693,12 @@
     // Tabella Assenti
     if (assentiRows.length > 0) {
       htmlPDF += `
-        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti}</h3>
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti} (${totAssenti})</h3>
         <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 25px;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 6px; border: 1px solid #7a5c3a; width: 40%;">${testi.pdfNome}</th>
-              <th style="padding: 6px; border: 1px solid #7a5c3a;">${testi.lblNote}</th>
+              <th style="padding: 6px; border: 0.5px solid #7a5c3a; width: 40%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; border: 0.5px solid #7a5c3a;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -706,8 +706,8 @@
       assentiRows.forEach(r => {
         htmlPDF += `
           <tr>
-            <td style="padding: 4px 6px; border: 1px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px; border: 1px solid #7a5c3a;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a;">${r.note ? r.note : '-'}</td>
           </tr>
         `;
       });
@@ -717,14 +717,14 @@
     // Tabella Presenti
     if (presentiRows.length > 0) {
       htmlPDF += `
-        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti}</h3>
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>
         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 6px; border: 1px solid #7a5c3a; width: 30%;">${testi.pdfNome}</th>
-              <th style="padding: 6px; border: 1px solid #7a5c3a;">${testi.lblSecondo}</th>
-              <th style="padding: 6px; border: 1px solid #7a5c3a;">${testi.lblAllergie}</th>
-              <th style="padding: 6px; border: 1px solid #7a5c3a;">${testi.lblNote}</th>
+              <th style="padding: 6px; border: 0.5px solid #7a5c3a; width: 30%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; border: 0.5px solid #7a5c3a;">${testi.lblSecondo}</th>
+              <th style="padding: 6px; border: 0.5px solid #7a5c3a;">${testi.lblAllergie}</th>
+              <th style="padding: 6px; border: 0.5px solid #7a5c3a;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -740,20 +740,21 @@
 
         htmlPDF += `
           <tr>
-            <td style="padding: 4px 6px; border: 1px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px; border: 1px solid #7a5c3a;">${secondoStr}</td>
-            <td style="padding: 4px 6px; border: 1px solid #7a5c3a; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
-            <td style="padding: 4px 6px; border: 1px solid #7a5c3a;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a;">${secondoStr}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
+            <td style="padding: 4px 6px; border: 0.5px solid #7a5c3a;">${r.note ? r.note : '-'}</td>
           </tr>
         `;
       });
       htmlPDF += `</tbody></table>`;
     }
     
-    // Tabella: Invitati a 3 colonne da CSV
+    // Tabella: Invitati a 3 colonne da CSV su Nuova Pagina
     if (invitatiCsv.length > 0) {
       htmlPDF += `
-        <h3 style="font-size: 16px; margin-top: 25px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloInvitati} (${invitatiCsv.length})</h3>
+        <div style="page-break-before: always;"></div>
+        <h3 style="font-size: 16px; margin-top: 10px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloInvitati} (${invitatiCsv.length})</h3>
         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
           <tbody>
       `;
@@ -766,9 +767,9 @@
             const inv = invitatiCsv[idx];
             const dataVal = inv.dataNascita;
             const cellText = `<span style="font-weight: 600;">${inv.nome}</span> <span style="font-weight: 400;">${dataVal ? '(' + dataVal + ')' : ''}</span>`;
-            htmlPDF += `<td style="padding: 6px; border: 1px solid #7a5c3a; width: 33.33%;">${cellText}</td>`;
+            htmlPDF += `<td style="padding: 6px; border: 0.5px solid #7a5c3a; width: 33.33%;">${cellText}</td>`;
           } else {
-            htmlPDF += `<td style="padding: 6px; border: 1px solid #7a5c3a; width: 33.33%;"></td>`;
+            htmlPDF += `<td style="padding: 6px; border: 0.5px solid #7a5c3a; width: 33.33%;"></td>`;
           }
         }
         htmlPDF += `</tr>`;

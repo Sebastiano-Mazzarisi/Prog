@@ -511,7 +511,11 @@
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok && r.status !== 0) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(txt => JSON.parse(txt))
       .then(data => {
         if (!data.ok || !data.rows || data.rows.length === 0) {
           box.innerHTML = `
@@ -522,7 +526,11 @@
           return;
         }
 
-        let righeMappate = data.rows.map((r, i) => ({ ...r, indiceOriginale: i + 2 }));
+        let righeMappate = data.rows.map((r, i) => ({
+          ...r,
+          presenza: r.presenza !== undefined ? r.presenza : String(r.persone ?? ''),
+          indiceOriginale: i + 2
+        }));
         righeMappate.sort((a, b) => (a.nome || '~Senza nome').localeCompare(b.nome || '~Senza nome'));
         window.datiInvitati = righeMappate;
         renderizzaDati();

@@ -591,12 +591,12 @@
       
       let classiFiltro = [];
       
+      const tipoSecondo = detectSecondo(r.secondo);
       if (assente) {
         classiFiltro.push('cat-assenti');
       } else {
         classiFiltro.push('cat-presenti');
         if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
-        const tipoSecondo = detectSecondo(r.secondo);
         if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
         if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
         if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');

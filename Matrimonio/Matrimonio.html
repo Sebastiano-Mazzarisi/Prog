@@ -475,6 +475,10 @@
       <button type="button" class="choice-btn" id="btn-attend" onclick="setAttendance('yes')">😊 Sarò dei vostri</button>
       <button type="button" class="choice-btn" id="btn-decline" onclick="setAttendance('no')">😔 Non potrò esserci</button>
     </div>
+    <div class="response-buttons" id="menu-buttons" style="display:none;">
+      <button type="button" class="choice-btn" id="btn-menu-normale" onclick="setMenuType('normale')">🍽️ Menu normale</button>
+      <button type="button" class="choice-btn" id="btn-menu-baby" onclick="setMenuType('baby')">🍼 Menu baby</button>
+    </div>
     <div class="send-feedback" id="send-feedback">Risposta registrata.</div>
   </div>
 
@@ -688,6 +692,7 @@
   // --- LOGICA DEL FORM ---
 
   let attendanceStatus = '';
+  let menuType = ''; // '' | 'normale' | 'baby'
   let heroInfoVisible = false;
 
   function toggleHeroInfo() {
@@ -712,6 +717,12 @@
     document.getElementById('note').value = '';
     document.getElementById('btn-attend').classList.remove('active-choice');
     document.getElementById('btn-decline').classList.remove('active-choice');
+    menuType = '';
+    document.getElementById('menu-buttons').style.display = 'none';
+    const _rb = document.querySelector('.first-card .response-buttons');
+    if (_rb) _rb.style.display = '';
+    document.getElementById('btn-menu-normale').classList.remove('active-choice');
+    document.getElementById('btn-menu-baby').classList.remove('active-choice');
     document.querySelectorAll('#allergie-grid .chip.active').forEach(chip => chip.classList.remove('active'));
 
     document.querySelectorAll('#secondo-group .option-item').forEach(item => {
@@ -745,23 +756,33 @@
 
   function updateFormVisibility() {
     const hasName = document.getElementById('nome').value.trim() !== '';
-    const showExtra = hasName && attendanceStatus === 'yes';
-    const showSubmit = hasName && (attendanceStatus === 'yes' || attendanceStatus === 'no');
+    const isBaby = attendanceStatus === 'yes' && menuType === 'baby';
+    const isNormale = attendanceStatus === 'yes' && menuType === 'normale';
+    const isNo = attendanceStatus === 'no';
 
-    document.getElementById('card-2').style.display = showExtra ? 'block' : 'none';
-    document.getElementById('card-3').style.display = showExtra ? 'block' : 'none';
-    
-    // Mostra il campo note per entrambi (Presenti e Assenti)
+    // Sezioni 02 e 03: solo menu normale
+    document.getElementById('card-2').style.display = (hasName && isNormale) ? 'block' : 'none';
+    document.getElementById('card-3').style.display = (hasName && isNormale) ? 'block' : 'none';
+
+    // Sezione 04 (note) e bottone invia:
+    // - Menu normale: sempre visibile
+    // - Menu baby: visibile
+    // - Assente: visibile
+    // - "Sarò dei vostri" ma non ancora scelto menu: non visibile
+    const showSubmit = hasName && (isNormale || isBaby || isNo);
     document.getElementById('card-4').style.display = showSubmit ? 'block' : 'none';
     document.getElementById('btn-invia').style.display = showSubmit ? 'block' : 'none';
 
     // Gestione testo placeholder e numero step
     const labelNote = document.querySelector('#card-4 .card-label');
     const noteTextarea = document.getElementById('note');
-    
-    if (attendanceStatus === 'no') {
+
+    if (isNo) {
       if (labelNote) labelNote.textContent = '02';
       noteTextarea.placeholder = '';
+    } else if (isBaby) {
+      if (labelNote) labelNote.textContent = '02';
+      noteTextarea.placeholder = translations[currentLanguage].notePlaceholder;
     } else {
       if (labelNote) labelNote.textContent = '04';
       noteTextarea.placeholder = translations[currentLanguage].notePlaceholder;
@@ -779,9 +800,31 @@
     }
 
     attendanceStatus = status;
+    menuType = '';
     document.getElementById('send-feedback').style.display = 'none';
     document.getElementById('btn-attend').classList.toggle('active-choice', status === 'yes');
     document.getElementById('btn-decline').classList.toggle('active-choice', status === 'no');
+
+    if (status === 'yes') {
+      // Mostra i bottoni menu, nascondi i bottoni presenza
+      const respButtons = document.querySelector('.first-card .response-buttons');
+      if (respButtons) respButtons.style.display = 'none';
+      document.getElementById('menu-buttons').style.display = 'flex';
+      document.getElementById('btn-menu-normale').classList.remove('active-choice');
+      document.getElementById('btn-menu-baby').classList.remove('active-choice');
+    } else {
+      // "Non potrò esserci": comportamento normale
+      const respButtons = document.querySelector('.first-card .response-buttons');
+      if (respButtons) respButtons.style.display = '';
+      document.getElementById('menu-buttons').style.display = 'none';
+    }
+    updateFormVisibility();
+  }
+
+  function setMenuType(tipo) {
+    menuType = tipo;
+    document.getElementById('btn-menu-normale').classList.toggle('active-choice', tipo === 'normale');
+    document.getElementById('btn-menu-baby').classList.toggle('active-choice', tipo === 'baby');
     updateFormVisibility();
   }
 
@@ -828,16 +871,20 @@
     };
 
     if (attendanceStatus === 'yes') {
-      const secondoRadio = document.querySelector('input[name="secondo"]:checked');
-      const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';
-      const secondoLabel = { 'vegetariano': labelsT.vegText, 'carne': labelsT.carneText, 'pesce': labelsT.pesceText };
-      const allergieAttive = [...document.querySelectorAll('#allergie-grid .chip.active')]
-        .map(c => c.getAttribute('data-value'));
-      const allergiaAltra = document.getElementById('allergia-altra').value.trim();
-      if (allergiaAltra) allergieAttive.push(allergiaAltra);
+      if (menuType === 'baby') {
+        payload.secondo = '4';
+      } else {
+        const secondoRadio = document.querySelector('input[name="secondo"]:checked');
+        const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';
+        const secondoLabel = { 'vegetariano': labelsT.vegText, 'carne': labelsT.carneText, 'pesce': labelsT.pesceText };
+        const allergieAttive = [...document.querySelectorAll('#allergie-grid .chip.active')]
+          .map(c => c.getAttribute('data-value'));
+        const allergiaAltra = document.getElementById('allergia-altra').value.trim();
+        if (allergiaAltra) allergieAttive.push(allergiaAltra);
 
-      payload.secondo = secondoLabel[secondo] || secondo;
-      payload.allergie = allergieAttive.join(', ');
+        payload.secondo = secondoLabel[secondo] || secondo;
+        payload.allergie = allergieAttive.join(', ');
+      }
     }
 
     const btn = document.getElementById('btn-invia');

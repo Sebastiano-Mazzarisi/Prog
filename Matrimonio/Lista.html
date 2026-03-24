@@ -344,7 +344,7 @@
   </div>
 
   <div class="card">
-    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px">Caricamento...<br><small id="ora-generazione" style="color:#888;font-size:11px"></small></p></div>
+    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px">Caricamento...<br><small style="color:#888;font-size:11px">23:28:13</small></p></div>
   </div>
 </div>
 </div>
@@ -425,8 +425,6 @@
   };
 
   window.addEventListener('DOMContentLoaded', () => {
-    const oraEl = document.getElementById('ora-generazione');
-    if (oraEl) oraEl.innerText = new Date().toLocaleTimeString('it-IT');
     caricaRisposte();
   });
 
@@ -556,7 +554,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = `<p id="txt-caricamento" style="color:var(--text-light);text-align:center;padding:20px">${testi.caricamento}<br><small style="color:#888;font-size:11px">${new Date().toLocaleTimeString('it-IT')}</small></p>`;
+    box.innerHTML = '<p id="txt-caricamento" style="color:var(--text-light,#555);text-align:center;padding:20px">' + testi.caricamento + '<br><small style="color:#888;font-size:11px">23:28:13</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -778,12 +776,12 @@
     }
 
     const container = document.createElement('div');
-    container.style.padding = '20px';
+    container.style.padding = '0';
     container.style.fontFamily = "'Jost', sans-serif";
     container.style.color = "#000";
     
     let htmlPDF = `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 5px;">${testi.titolo}</h1>
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-top: 0; margin-bottom: 5px;">${testi.titolo}</h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 25px;">Giulia & Onofrio</h2>
       
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
@@ -994,6 +992,10 @@
               nomeStyle = "font-weight:700;color:#a83230";
             } else {
               nomeStyle = "font-weight:700;color:#1a4fa0";
+              const tipoP = detectSecondo(m.secondo || "");
+              if (tipoP === 'carne') nomeExtra = ' <span style="font-weight:400;color:#1a4fa0">[C]</span>';
+              else if (tipoP === 'pesce') nomeExtra = ' <span style="font-weight:400;color:#1a4fa0">[P]</span>';
+              else if (tipoP === 'veg') nomeExtra = ' <span style="font-weight:400;color:#1a4fa0">[V]</span>';
             }
           }
           htmlPDF += '<div style="margin-bottom:5px;line-height:1.3">'

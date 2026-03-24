@@ -777,6 +777,8 @@
 
     const container = document.createElement('div');
     container.style.padding = '0';
+    container.style.width = '794px';
+    container.style.boxSizing = 'border-box';
     container.style.fontFamily = "'Jost', sans-serif";
     container.style.color = "#000";
     
@@ -966,7 +968,7 @@
             }
           }
           htmlPDF += "<div style='margin-bottom: 5px; line-height: 1.3;'>"
-            + '<span style="' + nomeStI + '">' + inv.nome + '</span>'
+            + '<span style="' + nomeStI + '">' + (nomeStI ? "☑ " : "") + inv.nome + '</span>'
             + (eta ? " <span style='font-weight: 400;'>(" + eta + ")</span>" : "")
             + '</div>';
         });
@@ -984,10 +986,10 @@
     container.innerHTML = htmlPDF;
 
     const opt = {
-      margin:       10,
+      margin:       [10, 10, 10, 10],
       filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
+      html2canvas:  { scale: 2, useCORS: true, width: 794 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 

@@ -843,8 +843,35 @@
     
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
+      // Calcola numero bambini (< 11 anni) per il titolo
+      let totBambini = 0;
+      const matrimonioCnt = new Date(2026, 5, 21);
+      gruppiInvitati.forEach(gruppo => {
+        gruppo.forEach(inv => {
+          if (inv.dataNascita) {
+            let nascitaCnt = null;
+            const dCnt = inv.dataNascita.trim();
+            const dmYc = dCnt.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+            const Ymdc = dCnt.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+            const soloAnnoc = dCnt.match(/^(\d{4})$/);
+            if (dmYc) nascitaCnt = new Date(parseInt(dmYc[3]), parseInt(dmYc[2])-1, parseInt(dmYc[1]));
+            else if (Ymdc) nascitaCnt = new Date(parseInt(Ymdc[1]), parseInt(Ymdc[2])-1, parseInt(Ymdc[3]));
+            else if (soloAnnoc) nascitaCnt = new Date(parseInt(soloAnnoc[1]), 0, 1);
+            if (nascitaCnt) {
+              let anniCnt = matrimonioCnt.getFullYear() - nascitaCnt.getFullYear();
+              const cpCnt = (nascitaCnt.getMonth() < matrimonioCnt.getMonth()) ||
+                (nascitaCnt.getMonth() === matrimonioCnt.getMonth() && nascitaCnt.getDate() <= matrimonioCnt.getDate());
+              if (!cpCnt) anniCnt--;
+              if (anniCnt < 11) totBambini++;
+            }
+          }
+        });
+      });
+      const totAdultiCsv = totInvitatiCsv - totBambini;
+      const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
+
       htmlPDF += `
-        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 15px; color: #8a5e1e; font-weight: 600; page-break-before: always; padding-top: 10px;">${testi.titoloInvitati} (${totInvitatiCsv})</h3>
+        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 15px; color: #8a5e1e; font-weight: 600; page-break-before: always; padding-top: 10px;">${testi.titoloInvitati} (${totInvitatiCsv})${titoloBambini}</h3>
         <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
       `;
 
@@ -853,6 +880,7 @@
         
         gruppo.forEach(inv => {
           let eta = "";
+          let isBambino = false;
           if (inv.dataNascita) {
             // Supporta formati: DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD, YYYY
             const matrimonio = new Date(2026, 5, 21); // 21 giugno 2026
@@ -874,11 +902,12 @@
                 (nascita.getMonth() === matrimonio.getMonth() && nascita.getDate() <= matrimonio.getDate());
               if (!compleannoPassed) anni--;
               eta = String(anni);
+              if (anni < 11) isBambino = true;
             }
           }
           htmlPDF += `<div style="margin-bottom: 5px; line-height: 1.3;">
             <span style="font-weight: 600;">${inv.nome}</span> 
-            <span style="font-weight: 400;">${eta ? '(' + eta + ')' : ''}</span>
+            <span style="font-weight: 400;">${eta ? '(' + eta + ')' : ''}${isBambino ? ' *' : ''}</span>
           </div>`;
         });
 

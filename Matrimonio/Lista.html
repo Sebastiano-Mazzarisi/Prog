@@ -147,9 +147,12 @@
   .btn-submit:disabled { opacity: 0.5; cursor: wait; }
 
   .sposi-kpi {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+  }
+  .sposi-kpi td {
+    padding: 0;
   }
   .kpi-box {
     background: var(--cream);
@@ -300,7 +303,7 @@
   }
 
   @media (max-width: 520px) {
-    .sposi-kpi { grid-template-columns: repeat(2, 1fr); }
+    /* sposi-kpi è già una tabella, nessun override necessario */
     .header .subtitle { font-size: 18px; letter-spacing: 3px; }
   }
 
@@ -360,6 +363,8 @@
       kpiVeg: "Vegetariano",
       kpiCarne: "Carne",
       kpiPesce: "Pesce",
+      kpiBaby: "Baby",
+      kpiSegnaposto: "Segnaposto",
       lblPresenza: "Presenza",
       lblSecondo: "Secondo",
       lblAllergie: "Allergie",
@@ -391,6 +396,8 @@
       kpiVeg: "Vegetarianos",
       kpiCarne: "Carne",
       kpiPesce: "Pescado",
+      kpiBaby: "Baby",
+      kpiSegnaposto: "Segnaposto",
       lblPresenza: "Asistencia",
       lblSecondo: "Segundo",
       lblAllergie: "Alergias",
@@ -440,6 +447,8 @@
 
   function detectSecondo(value) {
     const s = normalizeText(value);
+    if (s === '4') return 'baby';
+    if (s === '5') return 'segnaposto';
     if (s.includes('veget') || s.includes('vegan')) return 'veg';
     if (s.includes('carne') || s.includes('meat')) return 'carne';
     if (s.includes('pesce') || s.includes('pescado') || s.includes('fish')) return 'pesce';
@@ -579,7 +588,7 @@
   function renderizzaDati() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
+    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0, totBaby = 0, totSegnaposto = 0;
 
     window.datiInvitati.forEach(r => {
       const presenza = r.presenza || '';
@@ -597,17 +606,29 @@
         if (tipo === 'veg') totVeg++;
         else if (tipo === 'carne') totCarne++;
         else if (tipo === 'pesce') totPesce++;
+        else if (tipo === 'baby') totBaby++;
+        else if (tipo === 'segnaposto') totSegnaposto++;
       }
     });
 
-    let html = `<div class="sposi-kpi" style="margin-bottom: 12px;">
-      <div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-num">${totPresenti}</div><div class="kpi-label">${testi.kpiPresenti}</div></div>
-      <div class="kpi-box ${activeFilter==='assenti'?'active-filter':''}" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-num">${totAssenti}</div><div class="kpi-label">${testi.kpiAssenti}</div></div>
-      <div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-num">${totAllergie}</div><div class="kpi-label">${testi.kpiAllergie}</div></div>
-      <div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-num">${totVeg}</div><div class="kpi-label">${testi.kpiVeg}</div></div>
-      <div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-num">${totCarne}</div><div class="kpi-label">${testi.kpiCarne}</div></div>
-      <div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-num">${totPesce}</div><div class="kpi-label">${testi.kpiPesce}</div></div>
-    </div>
+    let html = `<table class="sposi-kpi">
+      <tr>
+        <td><div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-num">${totPresenti}</div><div class="kpi-label">${testi.kpiPresenti}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-num">${totVeg}</div><div class="kpi-label">${testi.kpiVeg}</div></div></td>
+      </tr>
+      <tr>
+        <td><div class="kpi-box ${activeFilter==='assenti'?'active-filter':''}" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-num">${totAssenti}</div><div class="kpi-label">${testi.kpiAssenti}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-num">${totCarne}</div><div class="kpi-label">${testi.kpiCarne}</div></div></td>
+      </tr>
+      <tr>
+        <td><div class="kpi-box ${activeFilter==='baby'?'active-filter':''}" id="btn-baby" onclick="filtraLista('baby')"><div class="kpi-num">${totBaby}</div><div class="kpi-label">${testi.kpiBaby}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-num">${totPesce}</div><div class="kpi-label">${testi.kpiPesce}</div></div></td>
+      </tr>
+      <tr>
+        <td><div class="kpi-box ${activeFilter==='segnaposto'?'active-filter':''}" id="btn-segnaposto" onclick="filtraLista('segnaposto')"><div class="kpi-num">${totSegnaposto}</div><div class="kpi-label">${testi.kpiSegnaposto}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-num">${totAllergie}</div><div class="kpi-label">${testi.kpiAllergie}</div></div></td>
+      </tr>
+    </table>
     
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
       <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${testi.aggiorna}</button>
@@ -632,6 +653,8 @@
         if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
         if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
         if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
+        if (tipoSecondo === 'baby') classiFiltro.push('cat-baby');
+        if (tipoSecondo === 'segnaposto') classiFiltro.push('cat-segnaposto');
       }
 
       const valPresenza = assente ? '0' : '1';
@@ -686,7 +709,7 @@
       btnPdf.disabled = true;
     }
 
-    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
+    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0, totBaby = 0, totSegnaposto = 0;
     let assentiRows = [];
     let presentiRows = [];
 
@@ -703,6 +726,8 @@
         if (tipo === 'veg') totVeg++;
         else if (tipo === 'carne') totCarne++;
         else if (tipo === 'pesce') totPesce++;
+        else if (tipo === 'baby') totBaby++;
+        else if (tipo === 'segnaposto') totSegnaposto++;
       }
     });
 
@@ -753,32 +778,64 @@
       <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 5px;">${testi.titolo}</h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 25px;">Giulia & Onofrio</h2>
       
-      <div style="display: flex; gap: 8px; margin-bottom: 30px;">
-        <div style="flex: 1; background: #f5ede0; border: 1px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPresenti}</div>
-          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiPresenti}</div>
-        </div>
-        <div style="flex: 1; background: #f5ede0; border: 1px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAssenti}</div>
-          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiAssenti}</div>
-        </div>
-        <div style="flex: 1; background: #f5ede0; border: 1px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAllergie}</div>
-          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiAllergie}</div>
-        </div>
-        <div style="flex: 1; background: #f5ede0; border: 1px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totVeg}</div>
-          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiVeg}</div>
-        </div>
-        <div style="flex: 1; background: #f5ede0; border: 1px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totCarne}</div>
-          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiCarne}</div>
-        </div>
-        <div style="flex: 1; background: #f5ede0; border: 1px solid #000000; border-radius: 8px; padding: 12px 6px; text-align: center;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPesce}</div>
-          <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 4px; font-weight: 600;">${testi.kpiPesce}</div>
-        </div>
-      </div>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+        <tr>
+          <td style="width: 50%; padding: 3px 4px 3px 0;">
+            <div style="background: #f5ede0; border: 1px solid #000; border-radius: 8px; padding: 10px 6px; text-align: center;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPresenti}</div>
+              <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 3px; font-weight: 600;">${testi.kpiPresenti}</div>
+            </div>
+          </td>
+          <td style="width: 50%; padding: 3px 0 3px 4px;">
+            <div style="background: #f5ede0; border: 1px solid #000; border-radius: 8px; padding: 10px 6px; text-align: center;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totVeg}</div>
+              <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 3px; font-weight: 600;">${testi.kpiVeg}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 3px 4px 3px 0;">
+            <div style="background: #f5ede0; border: 1px solid #000; border-radius: 8px; padding: 10px 6px; text-align: center;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAssenti}</div>
+              <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 3px; font-weight: 600;">${testi.kpiAssenti}</div>
+            </div>
+          </td>
+          <td style="padding: 3px 0 3px 4px;">
+            <div style="background: #f5ede0; border: 1px solid #000; border-radius: 8px; padding: 10px 6px; text-align: center;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totCarne}</div>
+              <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 3px; font-weight: 600;">${testi.kpiCarne}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 3px 4px 3px 0;">
+            <div style="background: #f5ede0; border: 1px solid #000; border-radius: 8px; padding: 10px 6px; text-align: center;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totBaby}</div>
+              <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 3px; font-weight: 600;">${testi.kpiBaby}</div>
+            </div>
+          </td>
+          <td style="padding: 3px 0 3px 4px;">
+            <div style="background: #f5ede0; border: 1px solid #000; border-radius: 8px; padding: 10px 6px; text-align: center;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totPesce}</div>
+              <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 3px; font-weight: 600;">${testi.kpiPesce}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 3px 4px 3px 0;">
+            <div style="background: #f5ede0; border: 1px solid #000; border-radius: 8px; padding: 10px 6px; text-align: center;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totSegnaposto}</div>
+              <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 3px; font-weight: 600;">${testi.kpiSegnaposto}</div>
+            </div>
+          </td>
+          <td style="padding: 3px 0 3px 4px;">
+            <div style="background: #f5ede0; border: 1px solid #000; border-radius: 8px; padding: 10px 6px; text-align: center;">
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #8a5e1e; line-height: 1;">${totAllergie}</div>
+              <div style="font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #000; margin-top: 3px; font-weight: 600;">${testi.kpiAllergie}</div>
+            </div>
+          </td>
+        </tr>
+      </table>
     `;
 
     // Tabella Assenti

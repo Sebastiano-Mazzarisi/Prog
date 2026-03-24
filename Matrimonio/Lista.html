@@ -894,22 +894,19 @@
         else secondoStr = '-';
 
         const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
-        const noteCell = isSegnaposto
-          ? \`<span style="color: #a83230; font-weight: 600;">\${testi.kpiSegnaposto}</span>\`
-          : isBaby
-            ? \`<span style="color: #a83230; font-weight: 600;">\${testi.kpiBaby}</span>\`
-            : (r.note ? r.note : '-');
+        let noteCell;
+        if (isSegnaposto) noteCell = '<span style="color: #a83230; font-weight: 600;">' + testi.kpiSegnaposto + '</span>';
+        else if (isBaby) noteCell = '<span style="color: #a83230; font-weight: 600;">' + testi.kpiBaby + '</span>';
+        else noteCell = r.note ? r.note : '-';
 
-        htmlPDF += \`
-          <tr>
-            <td style="padding: 4px 6px; font-weight: 600;">\${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px;">\${secondoStr}</td>
-            <td style="padding: 4px 6px; \${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">\${allergie}</td>
-            <td style="padding: 4px 6px;">\${noteCell}</td>
-          </tr>
-        \`;
+        htmlPDF += '<tr>'
+          + '<td style="padding: 4px 6px; font-weight: 600;">' + (r.nome || 'Senza nome') + '</td>'
+          + '<td style="padding: 4px 6px;">' + secondoStr + '</td>'
+          + '<td style="padding: 4px 6px;' + (hasAllergy(r.allergie) ? ' color: #a83230; font-weight: 600;' : '') + '">' + allergie + '</td>'
+          + '<td style="padding: 4px 6px;">' + noteCell + '</td>'
+          + '</tr>';
       });
-      htmlPDF += `</tbody></table>`;
+      htmlPDF += '</tbody></table>';
     }
     
     // Sezione: Invitati a 2 colonne con font più grande

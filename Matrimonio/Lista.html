@@ -836,15 +836,18 @@
     if (gruppiInvitati.length > 0) {
       h += '<div style="page-break-before:always;padding-top:1px">';
       h += '<h3 style="font-size:18px;margin:0 0 15px;color:#8a5e1e;font-weight:600">'+testi.titoloInvitati+' ('+totInvitatiCsv+')</h3>';
-      h += '<div style="column-count:2;column-gap:30px;font-size:14px">';
 
-      gruppiInvitati.forEach(function(gruppo, index) {
+      // Costruiamo due array di colonne bilanciati
+      var gruppiValidi = gruppiInvitati.filter(function(g){
+        return g.filter(function(inv){ return !nomiBaby.has(normN(inv.nome)); }).length > 0;
+      });
+
+      // Raccogliamo tutti i blocchi HTML
+      var blocchi = [];
+      gruppiValidi.forEach(function(gruppo, index) {
         var gruppoFiltrato = gruppo.filter(function(inv){ return !nomiBaby.has(normN(inv.nome)); });
-        if (gruppoFiltrato.length===0) return;
-
-        h += '<div style="break-inside:avoid-column;page-break-inside:avoid;margin-bottom:10px">';
+        var bHTML = '';
         gruppoFiltrato.forEach(function(inv) {
-          // Calcola età
           var eta = '';
           if (inv.dataNascita) {
             var matr = new Date(2026,5,21);
@@ -863,24 +866,25 @@
               eta = String(anni);
             }
           }
-          // Colore in base alla risposta
           var vn = varN(inv.nome);
           var stato = vn.reduce(function(a,v){return a||mapaR.get(v);}, undefined);
-          var stile = stato==='presente' ? 'font-weight:700;color:#1a4fa0'
-                    : stato==='assente'  ? 'font-weight:700;color:#a83230' : '';
+          var stile = stato==='presente' ? 'font-weight:700;color:#1a4fa0' : stato==='assente' ? 'font-weight:700;color:#a83230' : '';
           var spunta = stato ? '&#9745; ' : '';
-          h += '<div style="margin-bottom:5px;line-height:1.3">'
-            + '<span style="'+stile+'">'+spunta+inv.nome+'</span>'
-            + (eta ? ' <span style="font-weight:400">('+eta+')</span>' : '')
-            + '</div>';
+          bHTML += '<div style="margin-bottom:4px;line-height:1.3"><span style="'+stile+'">'+spunta+inv.nome+'</span>'+(eta?' <span style="font-weight:400">('+eta+')</span>':'')+'</div>';
         });
-        if (index < gruppiInvitati.length-1) {
-          h += '<div style="border-bottom:1px solid #000;margin:8px 0 6px"></div>';
-        }
-        h += '</div>';
+        if (index < gruppiValidi.length-1) bHTML += '<div style="border-bottom:1px solid #000;margin:6px 0 5px"></div>';
+        blocchi.push(bHTML);
       });
 
-      h += '</div></div>';
+      // Distribuzione: metà blocchi a sinistra, metà a destra
+      var meta = Math.ceil(blocchi.length/2);
+      var col1 = blocchi.slice(0, meta).join('');
+      var col2 = blocchi.slice(meta).join('');
+
+      h += '<table style="width:100%;border-collapse:collapse;font-size:14px"><tr>'
+        + '<td style="width:50%;vertical-align:top;padding-right:15px">'+col1+'</td>'
+        + '<td style="width:50%;vertical-align:top;padding-left:15px">'+col2+'</td>'
+        + '</tr></table></div>';
     }
 
     // ── Genera PDF ──────────────────────────────────────────────────────────

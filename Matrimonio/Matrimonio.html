@@ -319,6 +319,13 @@
     border-color: var(--gold);
     box-shadow: 0 0 0 3px rgba(201,169,110,0.10);
   }
+  .choice-btn.active-menu {
+    background: rgba(255,230,0,0.12);
+    border: 3px solid #f5c800;
+    outline: 2px solid #f5c800;
+    outline-offset: 2px;
+    font-weight: 700;
+  }
 
   .hidden-section {
     display: none;
@@ -758,7 +765,8 @@
 
   function updateFormVisibility() {
     const hasName = document.getElementById('nome').value.trim() !== '';
-    const isBaby = attendanceStatus === 'yes' && (menuType === 'baby' || menuType === 'segnaposto');
+    const isBaby = attendanceStatus === 'yes' && menuType === 'baby';
+    const isSegnaposto = attendanceStatus === 'yes' && menuType === 'segnaposto';
     const isNormale = attendanceStatus === 'yes' && menuType === 'normale';
     const isNo = attendanceStatus === 'no';
 
@@ -771,8 +779,9 @@
     // - Menu baby: visibile
     // - Assente: visibile
     // - "Sarò dei vostri" ma non ancora scelto menu: non visibile
-    const showSubmit = hasName && (isNormale || isBaby || isNo);
-    document.getElementById('card-4').style.display = showSubmit ? 'block' : 'none';
+    const showSubmit = hasName && (isNormale || isBaby || isSegnaposto || isNo);
+    // Segnaposto: nascondi card-4 (note), mostra solo il bottone invia
+    document.getElementById('card-4').style.display = (showSubmit && !isSegnaposto) ? 'block' : 'none';
     document.getElementById('btn-invia').style.display = showSubmit ? 'block' : 'none';
 
     // Gestione testo placeholder e numero step
@@ -826,9 +835,10 @@
 
   function setMenuType(tipo) {
     menuType = tipo;
-    document.getElementById('btn-menu-normale').classList.toggle('active-choice', tipo === 'normale');
-    document.getElementById('btn-menu-baby').classList.toggle('active-choice', tipo === 'baby');
-    document.getElementById('btn-menu-segnaposto').classList.toggle('active-choice', tipo === 'segnaposto');
+    ['btn-menu-normale','btn-menu-baby','btn-menu-segnaposto'].forEach(id => {
+      document.getElementById(id).classList.remove('active-choice', 'active-menu');
+    });
+    document.getElementById('btn-menu-' + tipo).classList.add('active-menu');
     updateFormVisibility();
   }
 

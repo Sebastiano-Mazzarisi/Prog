@@ -982,20 +982,23 @@
           if (matches.length === 1) {
             const m = matches[0];
             const tipoM = detectSecondo(m.secondo || "");
+            function badge(lettera, colore) {
+              return ' <span style="display:inline-block;width:16px;height:16px;border-radius:50%;background:' + colore + ';color:#fff;font-size:10px;font-weight:700;text-align:center;line-height:16px;vertical-align:middle;font-family:Arial,sans-serif">' + lettera + '</span>';
+            }
             if (tipoM === 'segnaposto') {
               nomeStyle = "font-weight:700;color:#8a6000";
-              nomeExtra = ' <span style="font-weight:400;color:#8a6000">[Segnaposto]</span>';
+              nomeExtra = badge('S', '#8a6000');
             } else if (tipoM === 'baby') {
               nomeStyle = "font-weight:700;color:#2d6040";
-              nomeExtra = ' <span style="font-weight:400;color:#2d6040">[Baby]</span>';
+              nomeExtra = badge('B', '#2d6040');
             } else if (isAbsent(m.presenza||"", m.secondo||"")) {
               nomeStyle = "font-weight:700;color:#a83230";
+              nomeExtra = badge('A', '#a83230');
             } else {
               nomeStyle = "font-weight:700;color:#1a4fa0";
-              const tipoP = detectSecondo(m.secondo || "");
-              if (tipoP === 'carne') nomeExtra = ' <span style="font-weight:400;color:#1a4fa0">[C]</span>';
-              else if (tipoP === 'pesce') nomeExtra = ' <span style="font-weight:400;color:#1a4fa0">[P]</span>';
-              else if (tipoP === 'veg') nomeExtra = ' <span style="font-weight:400;color:#1a4fa0">[V]</span>';
+              if (tipoM === 'carne') nomeExtra = badge('C', '#1a4fa0');
+              else if (tipoM === 'pesce') nomeExtra = badge('P', '#1a4fa0');
+              else if (tipoM === 'veg') nomeExtra = badge('V', '#1a4fa0');
             }
           }
           htmlPDF += '<div style="margin-bottom:5px;line-height:1.3">'

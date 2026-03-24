@@ -705,202 +705,189 @@
   async function generaPDF() {
     const testi = dizionario[currentLang];
     if (!window.datiInvitati || window.datiInvitati.length === 0) {
-      alert(testi.msgNessunDato);
-      return;
+      alert(testi.msgNessunDato); return;
     }
     const btnPdf = document.getElementById('btn-pdf-gen');
     if (btnPdf) { btnPdf.innerText = '⏳...'; btnPdf.disabled = true; }
 
-    // ── Contatori ───────────────────────────────────────────────────────────
-    let totPresenti=0, totAssenti=0, totAllergie=0, totVeg=0, totCarne=0, totPesce=0, totBaby=0, totSeg=0;
-    let assentiRows=[], presentiRows=[];
-    window.datiInvitati.forEach(function(r) {
-      var assente = isAbsent(r.presenza, r.secondo);
-      if (assente) { totAssenti++; assentiRows.push(r); }
-      else {
-        totPresenti++; presentiRows.push(r);
-        if (hasAllergy(r.allergie)) totAllergie++;
-        var t = detectSecondo(r.secondo);
-        if (t==='veg') totVeg++;
-        else if (t==='carne') totCarne++;
-        else if (t==='pesce') totPesce++;
-        else if (t==='baby') totBaby++;
-        else if (t==='segnaposto') totSeg++;
+    // Contatori
+    var totPresenti=0,totAssenti=0,totAllergie=0,totVeg=0,totCarne=0,totPesce=0,totBaby=0,totSeg=0;
+    var assentiRows=[],presentiRows=[];
+    window.datiInvitati.forEach(function(r){
+      var ass=isAbsent(r.presenza,r.secondo);
+      if(ass){totAssenti++;assentiRows.push(r);}
+      else{
+        totPresenti++;presentiRows.push(r);
+        if(hasAllergy(r.allergie))totAllergie++;
+        var t=detectSecondo(r.secondo);
+        if(t==='veg')totVeg++;
+        else if(t==='carne')totCarne++;
+        else if(t==='pesce')totPesce++;
+        else if(t==='baby')totBaby++;
+        else if(t==='segnaposto')totSeg++;
       }
     });
 
-    // ── Fetch Invitati.csv ──────────────────────────────────────────────────
-    var gruppiInvitati=[], totInvitatiCsv=0;
-    try {
-      var resp = await fetch('Invitati.csv?t=' + Date.now());
-      if (resp.ok) {
-        var text = await resp.text();
-        var righe = text.split(/\r?\n/).map(function(r){return r.trim();});
-        var sep = text.includes(';') ? ';' : ',';
-        var startIndex = (righe.length>0 && righe[0].toLowerCase().includes('nom')) ? 1 : 0;
-        var gruppoCorrente = null;
-        for (var ri=startIndex; ri<righe.length; ri++) {
-          var riga = righe[ri];
-          if (!riga) continue;
-          var parti = riga.split(sep).map(function(p){return p.trim().replace(/^"|"$/g,'');});
-          var nome = parti[0] || '';
-          var dataNascita = parti[1] || '';
-          if (!nome) continue;
-          if (!dataNascita) {
-            if (gruppoCorrente) gruppiInvitati.push(gruppoCorrente);
-            gruppoCorrente = [];
-            totInvitatiCsv = 0;
-          }
-          if (gruppoCorrente !== null) {
-            gruppoCorrente.push({nome: nome, dataNascita: dataNascita});
-            totInvitatiCsv++;
-          }
+    // Fetch Invitati.csv
+    var gruppiInvitati=[],totInvitatiCsv=0;
+    try{
+      var resp=await fetch('Invitati.csv?t='+Date.now());
+      if(resp.ok){
+        var text=await resp.text();
+        var righe=text.split(/\r?\n/).map(function(r){return r.trim();});
+        var sep=text.includes(';')?';':',';
+        var si=(righe.length>0&&righe[0].toLowerCase().includes('nom'))?1:0;
+        var gc=null;
+        for(var ri=si;ri<righe.length;ri++){
+          var riga=righe[ri]; if(!riga)continue;
+          var p=riga.split(sep).map(function(x){return x.trim().replace(/^"|"$/g,'');});
+          var nome=p[0]||'',dn=p[1]||'';
+          if(!nome)continue;
+          if(!dn){if(gc&&gc.length)gruppiInvitati.push(gc);gc=[];continue;}
+          if(gc!==null){gc.push({nome:nome,dataNascita:dn});totInvitatiCsv++;}
         }
-        if (gruppoCorrente && gruppoCorrente.length>0) {
-          gruppiInvitati.push(gruppoCorrente);
-          totInvitatiCsv += gruppoCorrente.length;
-        }
+        if(gc&&gc.length){gruppiInvitati.push(gc);}
       }
-    } catch(e) { console.log('Invitati.csv non trovato', e); }
+    }catch(e){console.log('csv err',e);}
 
-    // ── Mappa risposte per colori pagina 2 ──────────────────────────────────
-    function normN(n) { return (n||'').trim().toLowerCase().replace(/\s+/g,' '); }
-    function varN(n) {
-      var p = normN(n).split(' ');
-      return p.length===2 ? [p[0]+' '+p[1], p[1]+' '+p[0]] : [normN(n)];
-    }
-    var mapaR = new Map();
-    window.datiInvitati.forEach(function(r) {
-      var stato = isAbsent(r.presenza, r.secondo) ? 'assente' : 'presente';
-      varN(r.nome).forEach(function(v){ mapaR.set(v, stato); });
+    // Mappa risposte per colori pag.2
+    function normN(n){return(n||'').trim().toLowerCase().replace(/\s+/g,' ');}
+    function varN(n){var p=normN(n).split(' ');return p.length===2?[p[0]+' '+p[1],p[1]+' '+p[0]]:[normN(n)];}
+    var mapaR=new Map();
+    window.datiInvitati.forEach(function(r){
+      var st=isAbsent(r.presenza,r.secondo)?'assente':'presente';
+      varN(r.nome).forEach(function(v){mapaR.set(v,st);});
     });
+    var nomiBaby=new Set(window.datiInvitati
+      .filter(function(r){return detectSecondo(r.secondo)==='baby';})
+      .map(function(r){return normN(r.nome);}));
 
-    // ── Nomi baby da escludere da pag.2 ────────────────────────────────────
-    var nomiBaby = new Set(
-      window.datiInvitati
-        .filter(function(r){ return detectSecondo(r.secondo)==='baby'; })
-        .map(function(r){ return normN(r.nome); })
-    );
-
-    // ── Costruisci HTML ─────────────────────────────────────────────────────
-    function kpiBox(label, num) {
-      return '<td style="padding:3px 4px 3px 0;width:50%"><div style="background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;">'
-        + '<div style="font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;flex-grow:1">'+label+'</div>'
-        + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:700;color:#3a5a18;flex-shrink:0">'+num+'</div>'
-        + '</div></td>';
+    // Helper KPI box
+    function kBox(label,num){
+      return '<td style="padding:3px 4px 3px 0">'
+        +'<div style="background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;padding:8px 10px;'
+        +'display:flex;align-items:center;justify-content:space-between">'
+        +'<span style="font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:#2a3a18;font-weight:600">'+label+'</span>'
+        +'<span style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:700;color:#3a5a18">'+num+'</span>'
+        +'</div></td>';
     }
 
-    var h = '';
-    h += '<h1 style="text-align:center;font-family:\'Cormorant Garamond\',serif;font-size:32px;margin:0 0 5px">'+testi.titolo+'</h1>';
-    h += '<h2 style="text-align:center;font-family:\'Cormorant Garamond\',serif;font-size:20px;color:#8a5e1e;margin:0 0 20px">Giulia & Onofrio</h2>';
-
-    // Tabella KPI
-    h += '<table style="width:100%;border-collapse:collapse;margin-bottom:20px">';
-    h += '<tr>'+kpiBox(testi.kpiPresenti,totPresenti)+kpiBox(testi.kpiVeg,totVeg)+'</tr>';
-    h += '<tr>'+kpiBox(testi.kpiAssenti,totAssenti)+kpiBox(testi.kpiCarne,totCarne)+'</tr>';
-    h += '<tr>'+kpiBox(testi.kpiBaby,totBaby)+kpiBox(testi.kpiPesce,totPesce)+'</tr>';
-    h += '<tr>'+kpiBox(testi.kpiSegnaposto,totSeg)+kpiBox(testi.kpiAllergie,totAllergie)+'</tr>';
-    h += '</table>';
+    var h='';
+    h+='<h1 style="text-align:center;font-family:\'Cormorant Garamond\',serif;font-size:32px;margin:0 0 4px">'+testi.titolo+'</h1>';
+    h+='<h2 style="text-align:center;font-family:\'Cormorant Garamond\',serif;font-size:20px;color:#8a5e1e;margin:0 0 20px">Giulia & Onofrio</h2>';
+    h+='<table style="width:100%;border-collapse:collapse;margin-bottom:20px">';
+    h+='<tr>'+kBox(testi.kpiPresenti,totPresenti)+kBox(testi.kpiVeg,totVeg)+'</tr>';
+    h+='<tr>'+kBox(testi.kpiAssenti,totAssenti)+kBox(testi.kpiCarne,totCarne)+'</tr>';
+    h+='<tr>'+kBox(testi.kpiBaby,totBaby)+kBox(testi.kpiPesce,totPesce)+'</tr>';
+    h+='<tr>'+kBox(testi.kpiSegnaposto,totSeg)+kBox(testi.kpiAllergie,totAllergie)+'</tr>';
+    h+='</table>';
 
     // Tabella Assenti
-    if (assentiRows.length > 0) {
-      h += '<h3 style="font-size:16px;margin:0 0 8px;color:#8a5e1e;font-weight:600">'+testi.titoloAssenti+' ('+totAssenti+')</h3>';
-      h += '<table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">';
-      h += '<thead><tr style="background:#f5ede0;text-align:left"><th style="padding:6px;width:40%">'+testi.pdfNome+'</th><th style="padding:6px">'+testi.lblNote+'</th></tr></thead><tbody>';
-      assentiRows.forEach(function(r) {
-        h += '<tr><td style="padding:4px 6px;font-weight:600">'+(r.nome||'Senza nome')+'</td><td style="padding:4px 6px">'+(r.note||'-')+'</td></tr>';
+    if(assentiRows.length>0){
+      h+='<h3 style="font-size:16px;margin:0 0 8px;color:#8a5e1e;font-weight:600">'+testi.titoloAssenti+' ('+totAssenti+')</h3>';
+      h+='<table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">';
+      h+='<thead><tr style="background:#f5ede0;text-align:left"><th style="padding:6px;width:40%">'+testi.pdfNome+'</th><th style="padding:6px">'+testi.lblNote+'</th></tr></thead><tbody>';
+      assentiRows.forEach(function(r){
+        h+='<tr><td style="padding:4px 6px;font-weight:600">'+(r.nome||'Senza nome')+'</td><td style="padding:4px 6px">'+(r.note||'-')+'</td></tr>';
       });
-      h += '</tbody></table>';
+      h+='</tbody></table>';
     }
 
     // Tabella Presenti
-    if (presentiRows.length > 0) {
-      h += '<h3 style="font-size:16px;margin:0 0 8px;color:#8a5e1e;font-weight:600">'+testi.titoloPresenti+' ('+totPresenti+')</h3>';
-      h += '<table style="width:100%;border-collapse:collapse;font-size:14px">';
-      h += '<thead><tr style="background:#f5ede0;text-align:left"><th style="padding:6px;width:35%">'+testi.pdfNome+'</th><th style="padding:6px;width:15%">'+testi.lblSecondo+'</th><th style="padding:6px;width:20%">'+testi.kpiAllergie+'</th><th style="padding:6px">'+testi.lblNote+'</th></tr></thead><tbody>';
-      presentiRows.forEach(function(r) {
-        var t = detectSecondo(r.secondo);
-        var isBaby = t==='baby', isSeg = t==='segnaposto';
-        var sec = t==='veg' ? testi.kpiVeg : t==='carne' ? testi.kpiCarne : t==='pesce' ? testi.kpiPesce : '-';
-        var all = hasAllergy(r.allergie) ? r.allergie : '-';
-        var allStyle = hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : '';
-        var noteCell = isSeg ? '<span style="color:#a83230;font-weight:600">'+testi.kpiSegnaposto+'</span>'
-                     : isBaby ? '<span style="color:#a83230;font-weight:600">'+testi.kpiBaby+'</span>'
-                     : (r.note||'-');
-        h += '<tr><td style="padding:4px 6px;font-weight:600">'+(r.nome||'Senza nome')+'</td><td style="padding:4px 6px">'+sec+'</td><td style="padding:4px 6px;'+allStyle+'">'+all+'</td><td style="padding:4px 6px">'+noteCell+'</td></tr>';
+    if(presentiRows.length>0){
+      h+='<h3 style="font-size:16px;margin:0 0 8px;color:#8a5e1e;font-weight:600">'+testi.titoloPresenti+' ('+totPresenti+')</h3>';
+      h+='<table style="width:100%;border-collapse:collapse;font-size:14px">';
+      h+='<thead><tr style="background:#f5ede0;text-align:left">'
+        +'<th style="padding:6px;width:35%">'+testi.pdfNome+'</th>'
+        +'<th style="padding:6px;width:15%">'+testi.lblSecondo+'</th>'
+        +'<th style="padding:6px;width:20%">'+testi.kpiAllergie+'</th>'
+        +'<th style="padding:6px">'+testi.lblNote+'</th>'
+        +'</tr></thead><tbody>';
+      presentiRows.forEach(function(r){
+        var t=detectSecondo(r.secondo);
+        var sec=t==='veg'?testi.kpiVeg:t==='carne'?testi.kpiCarne:t==='pesce'?testi.kpiPesce:'-';
+        var all=hasAllergy(r.allergie)?r.allergie:'-';
+        var allSt=hasAllergy(r.allergie)?'color:#a83230;font-weight:600':'';
+        var nota=t==='segnaposto'?'<span style="color:#a83230;font-weight:600">'+testi.kpiSegnaposto+'</span>'
+                :t==='baby'?'<span style="color:#a83230;font-weight:600">'+testi.kpiBaby+'</span>'
+                :(r.note||'-');
+        h+='<tr>'
+          +'<td style="padding:4px 6px;font-weight:600">'+(r.nome||'Senza nome')+'</td>'
+          +'<td style="padding:4px 6px">'+sec+'</td>'
+          +'<td style="padding:4px 6px;'+allSt+'">'+all+'</td>'
+          +'<td style="padding:4px 6px">'+nota+'</td>'
+          +'</tr>';
       });
-      h += '</tbody></table>';
+      h+='</tbody></table>';
     }
 
-    // ── Pagina 2: Elenco Invitati ───────────────────────────────────────────
-    if (gruppiInvitati.length > 0) {
-      h += '<div style="page-break-before:always;padding-top:1px">';
-      h += '<h3 style="font-size:18px;margin:0 0 15px;color:#8a5e1e;font-weight:600">'+testi.titoloInvitati+' ('+totInvitatiCsv+')</h3>';
+    // Pagina 2: Invitati — layout a 2 colonne con tabella HTML
+    if(gruppiInvitati.length>0){
+      h+='<div style="page-break-before:always">';
+      h+='<h3 style="font-size:18px;margin:0 0 15px;color:#8a5e1e;font-weight:600">'+testi.titoloInvitati+' ('+totInvitatiCsv+')</h3>';
 
-      // Costruiamo due array di colonne bilanciati
-      var gruppiValidi = gruppiInvitati.filter(function(g){
-        return g.filter(function(inv){ return !nomiBaby.has(normN(inv.nome)); }).length > 0;
+      // Calcola HTML di ogni gruppo (filtrando i baby)
+      function calcEta(dataNascita){
+        if(!dataNascita)return'';
+        var matr=new Date(2026,5,21),nascita=null,d=dataNascita.trim();
+        var m1=d.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+        var m2=d.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+        var m3=d.match(/^(\d{4})$/);
+        if(m1)nascita=new Date(+m1[3],+m1[2]-1,+m1[1]);
+        else if(m2)nascita=new Date(+m2[1],+m2[2]-1,+m2[3]);
+        else if(m3)nascita=new Date(+m3[1],0,1);
+        if(!nascita)return'';
+        var a=matr.getFullYear()-nascita.getFullYear();
+        var cp=(nascita.getMonth()<matr.getMonth())||(nascita.getMonth()===matr.getMonth()&&nascita.getDate()<=matr.getDate());
+        if(!cp)a--;
+        return String(a);
+      }
+
+      var colSx='',colDx='';
+      var gruppiValidi=[];
+      gruppiInvitati.forEach(function(g){
+        var gf=g.filter(function(inv){return!nomiBaby.has(normN(inv.nome));});
+        if(gf.length>0)gruppiValidi.push(gf);
       });
 
-      // Raccogliamo tutti i blocchi HTML
-      var blocchi = [];
-      gruppiValidi.forEach(function(gruppo, index) {
-        var gruppoFiltrato = gruppo.filter(function(inv){ return !nomiBaby.has(normN(inv.nome)); });
-        var bHTML = '';
-        gruppoFiltrato.forEach(function(inv) {
-          var eta = '';
-          if (inv.dataNascita) {
-            var matr = new Date(2026,5,21);
-            var nascita = null;
-            var d = inv.dataNascita.trim();
-            var m1 = d.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-            var m2 = d.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
-            var m3 = d.match(/^(\d{4})$/);
-            if (m1) nascita = new Date(+m1[3],+m1[2]-1,+m1[1]);
-            else if (m2) nascita = new Date(+m2[1],+m2[2]-1,+m2[3]);
-            else if (m3) nascita = new Date(+m3[1],0,1);
-            if (nascita) {
-              var anni = matr.getFullYear()-nascita.getFullYear();
-              var cp = (nascita.getMonth()<matr.getMonth())||(nascita.getMonth()===matr.getMonth()&&nascita.getDate()<=matr.getDate());
-              if (!cp) anni--;
-              eta = String(anni);
-            }
-          }
-          var vn = varN(inv.nome);
-          var stato = vn.reduce(function(a,v){return a||mapaR.get(v);}, undefined);
-          var stile = stato==='presente' ? 'font-weight:700;color:#1a4fa0' : stato==='assente' ? 'font-weight:700;color:#a83230' : '';
-          var spunta = stato ? '&#9745; ' : '';
-          bHTML += '<div style="margin-bottom:4px;line-height:1.3"><span style="'+stile+'">'+spunta+inv.nome+'</span>'+(eta?' <span style="font-weight:400">('+eta+')</span>':'')+'</div>';
+      gruppiValidi.forEach(function(gf,idx){
+        var bHTML='';
+        gf.forEach(function(inv){
+          var eta=calcEta(inv.dataNascita);
+          var vn=varN(inv.nome);
+          var st=vn.reduce(function(a,v){return a||mapaR.get(v);},undefined);
+          var stile=st==='presente'?'font-weight:700;color:#1a4fa0':st==='assente'?'font-weight:700;color:#a83230':'';
+          var sp=st?'&#9745; ':'';
+          bHTML+='<div style="margin-bottom:4px;line-height:1.4">'
+            +'<span style="'+stile+'">'+sp+inv.nome+'</span>'
+            +(eta?' <span>('+eta+')</span>':'')
+            +'</div>';
         });
-        if (index < gruppiValidi.length-1) bHTML += '<div style="border-bottom:1px solid #000;margin:6px 0 5px"></div>';
-        blocchi.push(bHTML);
+        if(idx<gruppiValidi.length-1)bHTML+='<div style="border-bottom:1px solid #000;margin:6px 0 5px"></div>';
+        var meta=Math.ceil(gruppiValidi.length/2);
+        if(idx<meta)colSx+=bHTML; else colDx+=bHTML;
       });
 
-      // Distribuzione: metà blocchi a sinistra, metà a destra
-      var meta = Math.ceil(blocchi.length/2);
-      var col1 = blocchi.slice(0, meta).join('');
-      var col2 = blocchi.slice(meta).join('');
-
-      h += '<table style="width:100%;border-collapse:collapse;font-size:14px"><tr>'
-        + '<td style="width:50%;vertical-align:top;padding-right:15px">'+col1+'</td>'
-        + '<td style="width:50%;vertical-align:top;padding-left:15px">'+col2+'</td>'
-        + '</tr></table></div>';
+      h+='<table style="width:100%;border-collapse:collapse;font-size:14px">'
+        +'<tr>'
+        +'<td style="width:50%;vertical-align:top;padding-right:15px">'+colSx+'</td>'
+        +'<td style="width:50%;vertical-align:top;padding-left:15px">'+colDx+'</td>'
+        +'</tr></table>';
+      h+='</div>';
     }
 
-    // ── Genera PDF ──────────────────────────────────────────────────────────
-    var container = document.createElement('div');
-    container.innerHTML = h;
-
-    var opt = {
-      margin:      10,
-      filename:    'Lista_Invitati_Giulia_Onofrio_' + currentLang.toUpperCase() + '.pdf',
-      image:       { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    // Genera PDF
+    var container=document.createElement('div');
+    container.innerHTML=h;
+    var opt={
+      margin:10,
+      filename:'Lista_Invitati_Giulia_Onofrio_'+currentLang.toUpperCase()+'.pdf',
+      image:{type:'jpeg',quality:0.98},
+      html2canvas:{scale:2},
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
     };
-
-    html2pdf().set(opt).from(container).save().then(function() {
-      if (btnPdf) { btnPdf.innerText = testi.pdf; btnPdf.disabled = false; }
+    html2pdf().set(opt).from(container).save().then(function(){
+      if(btnPdf){btnPdf.innerText=testi.pdf;btnPdf.disabled=false;}
     });
   }
 

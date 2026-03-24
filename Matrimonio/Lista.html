@@ -950,9 +950,9 @@
               eta = String(anni);
             }
           }
-          htmlPDF += '<div style="margin-bottom: 5px; line-height: 1.3;">'
-            + '<span style="font-weight: 600;">' + inv.nome + '</span>'
-            + (eta ? ' <span style="font-weight: 400;">(' + eta + ')</span>' : '')
+          htmlPDF += "<div style='margin-bottom: 5px; line-height: 1.3;'>"
+            + "<span style='font-weight: 600;'>" + inv.nome + "</span>"
+            + (eta ? " <span style='font-weight: 400;'>(" + eta + ")</span>" : "")
             + '</div>';
         if (index < gruppiInvitati.length - 1) {
           htmlPDF += `<div style="border-bottom: 1px solid #000000; margin-top: 8px; margin-bottom: 6px;"></div>`;

@@ -897,7 +897,7 @@
         const noteCell = isSegnaposto
           ? \`<span style="color: #a83230; font-weight: 600;">\${testi.kpiSegnaposto}</span>\`
           : isBaby
-            ? `<span style="color: #a83230; font-weight: 600;">${testi.kpiBaby}</span>`
+            ? \`<span style="color: #a83230; font-weight: 600;">\${testi.kpiBaby}</span>\`
             : (r.note ? r.note : '-');
 
         htmlPDF += \`

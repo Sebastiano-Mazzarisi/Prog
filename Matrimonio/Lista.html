@@ -777,8 +777,6 @@
 
     const container = document.createElement('div');
     container.style.padding = '0';
-    container.style.width = '794px';
-    container.style.boxSizing = 'border-box';
     container.style.fontFamily = "'Jost', sans-serif";
     container.style.color = "#000";
     
@@ -912,7 +910,7 @@
     
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
-      htmlPDF += `<div style="page-break-before: always;">`;
+      htmlPDF += `<div class="html2pdf__page-break"></div><div>`;
 
 
       htmlPDF += `
@@ -989,7 +987,7 @@
       margin:       [10, 10, 10, 10],
       filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, width: 794 },
+      html2canvas:  { scale: 2, useCORS: true, windowWidth: 794 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 

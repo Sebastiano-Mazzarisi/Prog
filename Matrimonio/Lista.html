@@ -925,6 +925,18 @@
           .map(r => (r.nome || '').trim().toLowerCase())
       );
 
+      function normalizzaNomeInv(n){return (n||"").trim().toLowerCase().replace(/\s+/g," ");}
+      function variantiNomeInv(n){
+        var p=normalizzaNomeInv(n).split(" ");
+        return p.length===2?[p[0]+" "+p[1],p[1]+" "+p[0]]:[normalizzaNomeInv(n)];
+      }
+      var mapaRisposteInv=new Map();
+      window.datiInvitati.forEach(function(r){
+        var stato=isAbsent(r.presenza,r.secondo)?"assente":"presente";
+        variantiNomeInv(r.nome).forEach(function(v){mapaRisposteInv.set(v,stato);});
+      });
+
+
       gruppiInvitati.forEach((gruppo, index) => {
         const gruppoFiltrato = gruppo.filter(inv => !nomiBaby.has((inv.nome || '').trim().toLowerCase()));
         if (gruppoFiltrato.length === 0) return;
@@ -932,6 +944,9 @@
         
         gruppoFiltrato.forEach(inv => {
           let eta = "";
+          var varN=variantiNomeInv(inv.nome);
+          var statoR=varN.reduce(function(a,v){return a||mapaRisposteInv.get(v);},undefined);
+          var nomeStI=statoR==="presente"?"font-weight:700;color:#1a4fa0;":statoR==="assente"?"font-weight:700;color:#a83230;":"";
           if (inv.dataNascita) {
             const matrimonio = new Date(2026, 5, 21);
             let nascita = null;
@@ -951,7 +966,7 @@
             }
           }
           htmlPDF += "<div style='margin-bottom: 5px; line-height: 1.3;'>"
-            + "<span style='" + nomeStyle + "'>" + inv.nome + "</span>"
+            + '<span style="' + nomeStI + '">' + inv.nome + '</span>'
             + (eta ? " <span style='font-weight: 400;'>(" + eta + ")</span>" : "")
             + '</div>';
         });

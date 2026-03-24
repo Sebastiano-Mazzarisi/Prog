@@ -478,6 +478,7 @@
     <div class="response-buttons" id="menu-buttons" style="display:none;">
       <button type="button" class="choice-btn" id="btn-menu-normale" onclick="setMenuType('normale')">🍽️ Menu normale</button>
       <button type="button" class="choice-btn" id="btn-menu-baby" onclick="setMenuType('baby')">🍼 Menu baby</button>
+      <button type="button" class="choice-btn" id="btn-menu-segnaposto" onclick="setMenuType('segnaposto')">📌 Solo segnaposto</button>
     </div>
     <div class="send-feedback" id="send-feedback">Risposta registrata.</div>
   </div>
@@ -723,6 +724,7 @@
     if (_rb) _rb.style.display = '';
     document.getElementById('btn-menu-normale').classList.remove('active-choice');
     document.getElementById('btn-menu-baby').classList.remove('active-choice');
+    document.getElementById('btn-menu-segnaposto').classList.remove('active-choice');
     document.querySelectorAll('#allergie-grid .chip.active').forEach(chip => chip.classList.remove('active'));
 
     document.querySelectorAll('#secondo-group .option-item').forEach(item => {
@@ -756,7 +758,7 @@
 
   function updateFormVisibility() {
     const hasName = document.getElementById('nome').value.trim() !== '';
-    const isBaby = attendanceStatus === 'yes' && menuType === 'baby';
+    const isBaby = attendanceStatus === 'yes' && (menuType === 'baby' || menuType === 'segnaposto');
     const isNormale = attendanceStatus === 'yes' && menuType === 'normale';
     const isNo = attendanceStatus === 'no';
 
@@ -812,6 +814,7 @@
       document.getElementById('menu-buttons').style.display = 'flex';
       document.getElementById('btn-menu-normale').classList.remove('active-choice');
       document.getElementById('btn-menu-baby').classList.remove('active-choice');
+      document.getElementById('btn-menu-segnaposto').classList.remove('active-choice');
     } else {
       // "Non potrò esserci": comportamento normale
       const respButtons = document.querySelector('.first-card .response-buttons');
@@ -825,6 +828,7 @@
     menuType = tipo;
     document.getElementById('btn-menu-normale').classList.toggle('active-choice', tipo === 'normale');
     document.getElementById('btn-menu-baby').classList.toggle('active-choice', tipo === 'baby');
+    document.getElementById('btn-menu-segnaposto').classList.toggle('active-choice', tipo === 'segnaposto');
     updateFormVisibility();
   }
 
@@ -873,6 +877,8 @@
     if (attendanceStatus === 'yes') {
       if (menuType === 'baby') {
         payload.secondo = '4';
+      } else if (menuType === 'segnaposto') {
+        payload.secondo = '5';
       } else {
         const secondoRadio = document.querySelector('input[name="secondo"]:checked');
         const secondo = secondoRadio ? secondoRadio.value : 'vegetariano';

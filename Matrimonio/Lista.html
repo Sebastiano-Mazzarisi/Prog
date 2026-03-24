@@ -940,7 +940,7 @@
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
       htmlPDF += `
-        <h3 style="font-size: 18px; margin-top: 0; margin-bottom: 15px; color: #8a5e1e; font-weight: 600; padding-top: 10px;">${testi.titoloInvitati} (${totInvitatiCsv})${titoloBambini}</h3>
+        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 15px; color: #8a5e1e; font-weight: 600; padding-top: 10px;">${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}</h3>
         <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
       `;
 

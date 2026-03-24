@@ -776,12 +776,12 @@
     }
 
     const container = document.createElement('div');
-    container.style.padding = '20px';
+    container.style.padding = '0';
     container.style.fontFamily = "'Jost', sans-serif";
     container.style.color = "#000";
     
     let htmlPDF = `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 5px;">${testi.titolo}</h1>
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-top: 0; margin-bottom: 5px;">${testi.titolo}</h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 25px;">Giulia & Onofrio</h2>
       
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
@@ -885,21 +885,29 @@
       `;
       presentiRows.forEach(r => {
         let secondoStr = detectSecondo(r.secondo);
+        const isSegnaposto = secondoStr === 'segnaposto';
+        const isBaby = secondoStr === 'baby';
         if (secondoStr === 'veg') secondoStr = testi.kpiVeg;
         else if (secondoStr === 'carne') secondoStr = testi.kpiCarne;
         else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
+        else if (isBaby) secondoStr = testi.kpiBaby;
         else secondoStr = '-';
 
         const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
+        const noteCell = isSegnaposto
+          ? \`<span style="color: #a83230; font-weight: 600;">\${testi.kpiSegnaposto}</span>\`
+          : isBaby
+            ? `<span style="color: #a83230; font-weight: 600;">${testi.kpiBaby}</span>`
+            : (r.note ? r.note : '-');
 
-        htmlPDF += `
+        htmlPDF += \`
           <tr>
-            <td style="padding: 4px 6px; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px;">${secondoStr}</td>
-            <td style="padding: 4px 6px; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
-            <td style="padding: 4px 6px;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 4px 6px; font-weight: 600;">\${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px;">\${secondoStr}</td>
+            <td style="padding: 4px 6px; \${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">\${allergie}</td>
+            <td style="padding: 4px 6px;">\${noteCell}</td>
           </tr>
-        `;
+        \`;
       });
       htmlPDF += `</tbody></table>`;
     }
@@ -939,10 +947,19 @@
         <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
       `;
 
+      // Nomi di chi ha scelto menu baby (da escludere dall'elenco invitati)
+      const nomiBaby = new Set(
+        window.datiInvitati
+          .filter(r => detectSecondo(r.secondo) === 'baby')
+          .map(r => (r.nome || '').trim().toLowerCase())
+      );
+
       gruppiInvitati.forEach((gruppo, index) => {
+        const gruppoFiltrato = gruppo.filter(inv => !nomiBaby.has((inv.nome || '').trim().toLowerCase()));
+        if (gruppoFiltrato.length === 0) return;
         htmlPDF += `<div style="break-inside: avoid-column; page-break-inside: avoid; -webkit-column-break-inside: avoid; margin-bottom: 10px;">`;
         
-        gruppo.forEach(inv => {
+        gruppoFiltrato.forEach(inv => {
           let eta = "";
           let isBambino = false;
           if (inv.dataNascita) {

@@ -16,471 +16,1060 @@
 <meta property="og:image:height" content="180">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Lista.html">
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
   :root {
-    --cream:#f5ede0;--warm-white:#fdf8f2;--gold:#b8893a;
-    --gold-light:#d4b07a;--gold-dark:#8a5e1e;
-    --text:#000;--border:#7a5c3a;--green:#2d6040;--red:#a83230;--blue:#2f5c9a;
+    --cream: #f5ede0;
+    --warm-white: #fdf8f2;
+    --gold: #b8893a;
+    --gold-light: #d4b07a;
+    --gold-dark: #8a5e1e;
+    --text: #000000;
+    --text-light: #000000;
+    --border: #7a5c3a;
+    --green: #2d6040;
+    --green-light: #dff0e6;
+    --red: #a83230;
+    --blue: #2f5c9a;
+    --blue-light: #e3eefb;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:#dee5cd;font-family:'Jost',sans-serif;font-weight:400;color:var(--text);min-height:100vh;}
-  .page-wrapper{max-width:540px;margin:0 auto;padding:20px 20px 60px;}
-  .lang-switcher{display:flex;justify-content:center;align-items:center;gap:15px;margin-bottom:20px;}
-  .lang-btn{background:none;border:1px solid var(--border);border-radius:20px;color:#000;font-family:'Jost',sans-serif;font-size:13px;letter-spacing:1px;padding:6px 16px;cursor:pointer;transition:all 0.2s;font-weight:500;}
-  .lang-btn:hover{background:rgba(184,137,58,0.08);}
-  .lang-btn.active-lang{background:var(--gold);color:#000;border-color:var(--gold);font-weight:600;}
-  .header{text-align:center;margin-bottom:40px;}
-  .header h1{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:600;font-style:italic;color:#000;line-height:1.2;margin-bottom:8px;}
-  .header .subtitle{font-size:22px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:700;}
-  .card{background:var(--warm-white);border:1.5px solid var(--border);border-radius:16px;padding:28px 24px;margin-bottom:16px;box-shadow:0 2px 20px rgba(44,36,24,0.05);}
-  .btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#000;border:none;border-radius:12px;font-family:'Jost',sans-serif;font-size:15px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s,transform 0.1s;}
-  .btn-submit:hover{opacity:0.92;transform:translateY(-1px);}
-  .btn-submit:active{transform:translateY(0);}
-  .btn-submit:disabled{opacity:0.5;cursor:wait;}
-  /* KPI */
-  .sposi-kpi{width:100%;border-collapse:collapse;margin-bottom:12px;}
-  .sposi-kpi td{padding:0;}
-  .kpi-box{background:#c8d5a8;border:1.5px solid #8fa668;border-radius:10px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;transition:background-color 0.2s,transform 0.1s;margin:3px;}
-  .kpi-box:hover{background:#b8c898;}
-  .kpi-box:active{transform:scale(0.98);}
-  .kpi-box.active-filter{background:#a0b878;border-color:#5a7a38;outline:2px solid #5a7a38;}
-  .kpi-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;flex-shrink:0;}
-  .kpi-label{font-size:12px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;flex-grow:1;}
-  /* Cards */
-  .risposta-card{background:var(--cream);border:1.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;}
-  .risposta-card.cat-assenti{background:#fdecea;border-color:#e8b4b0;}
-  .risposta-card.cat-assenti .risposta-nome{color:#a03030;}
-  .risposta-nome{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
-  .icona-secondo{font-size:16px;margin-left:6px;}
-  .icone-destra{display:flex;align-items:center;gap:6px;margin-left:auto;}
-  .freccia{font-size:12px;color:var(--gold-dark);transition:transform 0.2s;}
-  .freccia.open{transform:rotate(180deg);}
-  .freccia.allergia-alert{color:var(--red);}
-  .dettagli-scheda{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;}
-  .dettagli-scheda.aperto{display:block;}
-  .risposta-row{display:flex;gap:8px;margin-bottom:6px;font-size:14px;}
-  .risposta-label{font-weight:600;min-width:80px;color:var(--gold-dark);}
-  .risposta-val{color:var(--text);}
-  .risposta-val.allergia{color:var(--red);font-weight:600;}
-  .risposta-val.muted{color:#888;font-style:italic;}
-  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:600;}
-  .badge-veg{background:#dff0e6;color:var(--green);}
-  .badge-carne{background:#fdecea;color:var(--red);}
-  .badge-pesce{background:#e3eefb;color:var(--blue);}
-  .delete-btn{margin-top:10px;width:100%;padding:8px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;transition:background 0.2s;}
-  .delete-btn:hover{background:#a3413e;}
-  @media(max-width:520px){.header .subtitle{font-size:18px;letter-spacing:3px;}}
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #dee5cd;
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(201,169,110,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(201,169,110,0.06) 0%, transparent 60%);
+  }
+
+  .page-wrapper {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+  }
+
+  /* Selettore Lingua stile Matrimonio */
+  .lang-switcher {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: #000000;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .lang-btn:hover { background: rgba(184, 137, 58, 0.08); }
+  .lang-btn.active-lang {
+    background: var(--gold);
+    color: #000000;
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+
+  .header { text-align: center; margin-bottom: 40px; }
+
+  .header-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: 6px;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 600;
+    font-style: italic;
+    color: #000000;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-size: 22px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+
+  .card {
+    background: var(--warm-white);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 20px rgba(44,36,24,0.05);
+    transition: box-shadow 0.2s;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: #000000;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 4px 16px rgba(160,124,69,0.3);
+  }
+  .btn-submit:hover  { opacity: 0.92; transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: 0.5; cursor: wait; }
+
+  .sposi-kpi {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+  }
+  .sposi-kpi td {
+    padding: 0;
+  }
+  .kpi-box {
+    background: #c8d5a8;
+    border: 1.5px solid #8fa668;
+    border-radius: 10px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin: 3px;
+  }
+  .kpi-box:hover { background: #b8c898; }
+  .kpi-box:active { transform: scale(0.98); }
+  .kpi-box.active-filter {
+    background: #a0b878;
+    border-color: #5a7a38;
+    outline: 2px solid #5a7a38;
+  }
+  .kpi-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #3a5a18;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .kpi-label {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #2a3a18;
+    font-weight: 600;
+    flex-grow: 1;
+  }
+
+  .risposta-card {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .risposta-card.cat-assenti {
+    background: #fdecea;
+    border-color: #e8b4b0;
+  }
+  .risposta-card.cat-assenti .risposta-nome {
+    color: #a03030;
+  }
+  .risposta-nome {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .risposta-nome .freccia {
+    font-size: 13px;
+    color: var(--gold-dark);
+    flex-shrink: 0;
+  }
+  .risposta-nome .freccia.allergia-alert {
+    color: #cc0000;
+    font-weight: 900;
+  }
+  .risposta-nome .icona-secondo {
+    font-size: 16px;
+    margin-left: 6px;
+  }
+  .risposta-nome .icone-destra {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  
+  .dettagli-scheda {
+    display: none;
+    margin-top: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+
+  .risposta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 6px 0;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(224,212,192,0.4);
+  }
+  .risposta-row:last-child { border-bottom: none; }
+  .risposta-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+    min-width: 90px;
+    padding-top: 2px;
+    font-weight: 600;
+  }
+  .risposta-val {
+    color: var(--text);
+    text-align: right;
+    flex: 1;
+    font-weight: 400;
+  }
+  .risposta-val.allergia { color: #a83230; font-weight: 500; }
+  .risposta-data {
+    font-size: 11px;
+    color: var(--text);
+    margin-top: 8px;
+    text-align: right;
+    opacity: 0.7;
+  }
+
+  .badge {
+    display: inline-block;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-veg      { background: var(--green-light); color: var(--green); }
+  .badge-carne    { background: rgba(201,169,110,0.15); color: var(--gold-dark); }
+  .badge-pesce    { background: var(--blue-light); color: var(--blue); }
+  .muted          { color: #888; }
+
+  .delete-btn {
+    background: #c0504d;
+    border: none;
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    width: 100%;
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .delete-btn:hover {
+    background: #a3413e;
+  }
+
+  @media (max-width: 520px) {
+    /* sposi-kpi è già una tabella, nessun override necessario */
+    .header .subtitle { font-size: 18px; letter-spacing: 3px; }
+  }
+
+  /* Griglia tabelle PDF - bordo singolo garantito */
+  .pdf-table { border-collapse: collapse; border-spacing: 0; }
+  .pdf-table th, .pdf-table td {
+    border: none !important;
+    border-right: 0.5px solid #000 !important;
+    border-bottom: 0.5px solid #000 !important;
+  }
+  .pdf-table tr th:first-child, .pdf-table tr td:first-child {
+    border-left: 0.5px solid #000 !important;
+  }
+  .pdf-table thead tr:first-child th, .pdf-table tbody:first-child tr:first-child td {
+    border-top: 0.5px solid #000 !important;
+  }
 </style>
 </head>
 <body>
+
+<div id="sposi-section">
 <div class="page-wrapper">
-  <div class="lang-switcher">
-    <button class="lang-btn active-lang" id="btn-it" onclick="cambiaLingua('it')">Italiano</button>
-    ✦ ✦ ✦
-    <button class="lang-btn" id="btn-es" onclick="cambiaLingua('es')">Español</button>
-  </div>
+  
   <div class="header">
+    <div class="lang-switcher">
+      <button class="lang-btn active-lang" id="btn-it" onclick="cambiaLingua('it')">Italiano</button>
+      <div class="header-ornament">✦ ✦ ✦</div>
+      <button class="lang-btn" id="btn-es" onclick="cambiaLingua('es')">Español</button>
+    </div>
     <h1 id="titolo-pagina">Lista Invitati</h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
   </div>
+
   <div class="card">
-    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px">Caricamento...</p></div>
+    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px">Caricamento...<br><small id="ora-generazione" style="color:#888;font-size:11px"></small></p></div>
   </div>
+</div>
 </div>
 
 <script>
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
-let activeFilter=null;
-window.datiInvitati=[];
-let currentLang='it';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
+  let activeFilter = null;
+  window.datiInvitati = [];
+  
+  let currentLang = 'it';
+  const dizionario = {
+    it: {
+      titolo: "Lista Invitati",
+      caricamento: "Caricamento...",
+      nessunaRisposta: "Nessuna risposta ancora.",
+      aggiorna: "↻ Aggiorna",
+      riprova: "↻ Riprova",
+      pdf: "📄 PDF",
+      kpiPresenti: "Presenti",
+      kpiAssenti: "Assenti",
+      kpiAllergie: "Allergie",
+      kpiVeg: "Vegetariano",
+      kpiCarne: "Carne",
+      kpiPesce: "Pesce",
+      kpiBaby: "Baby",
+      kpiSegnaposto: "Segnaposto",
+      lblPresenza: "Presenza",
+      lblSecondo: "Secondo",
+      lblAllergie: "Allergie",
+      lblNote: "Note",
+      lblNessuna: "Nessuna",
+      btnElimina: "✕ Elimina questa scheda",
+      msgConferma: "Eliminare questa scheda?",
+      msgErrCanc: "Errore nella cancellazione.",
+      msgErrRete: "Errore di rete.",
+      msgNessunDato: "Nessun dato da stampare.",
+      pdfNome: "Nome",
+      badgeVeg: "🌿 Vegetariano",
+      badgeCarne: "🥩 Carne",
+      badgePesce: "🐟 Pesce",
+      titoloPresenti: "Presenti",
+      titoloAssenti: "Assenti",
+      titoloInvitati: "Invitati"
+    },
+    es: {
+      titolo: "Lista de Invitados",
+      caricamento: "Cargando...",
+      nessunaRisposta: "Ninguna respuesta todavía.",
+      aggiorna: "↻ Actualizar",
+      riprova: "↻ Reintentar",
+      pdf: "📄 PDF",
+      kpiPresenti: "Presentes",
+      kpiAssenti: "Ausentes",
+      kpiAllergie: "Alergias",
+      kpiVeg: "Vegetarianos",
+      kpiCarne: "Carne",
+      kpiPesce: "Pescado",
+      kpiBaby: "Baby",
+      kpiSegnaposto: "Marcador de posición",
+      lblPresenza: "Asistencia",
+      lblSecondo: "Segundo",
+      lblAllergie: "Alergias",
+      lblNote: "Notas",
+      lblNessuna: "Ninguna",
+      btnElimina: "✕ Eliminar esta tarjeta",
+      msgConferma: "¿Eliminar esta tarjeta?",
+      msgErrCanc: "Error al eliminar.",
+      msgErrRete: "Error de red.",
+      msgNessunDato: "No hay datos para imprimir.",
+      pdfNome: "Nombre",
+      badgeVeg: "🌿 Vegetariano",
+      badgeCarne: "🥩 Carne",
+      badgePesce: "🐟 Pescado",
+      titoloPresenti: "Presentes",
+      titoloAssenti: "Ausentes",
+      titoloInvitati: "Invitados"
+    }
+  };
 
-const D={
-  it:{
-    titolo:'Lista Invitati',caricamento:'Caricamento...',nessunaRisposta:'Nessuna risposta ancora.',
-    aggiorna:'↻ Aggiorna',riprova:'↻ Riprova',pdf:'📄 PDF',
-    kpiPresenti:'Presenti',kpiAssenti:'Assenti',kpiAllergie:'Allergie',
-    kpiVeg:'Vegetariano',kpiCarne:'Carne',kpiPesce:'Pesce',kpiBaby:'Baby',kpiSegnaposto:'Segnaposto',
-    lblPresenza:'Presenza',lblSecondo:'Secondo',lblAllergie:'Allergie',lblNote:'Note',lblNessuna:'Nessuna',
-    btnElimina:'✕ Elimina questa scheda',msgConferma:'Eliminare questa scheda?',
-    msgErrCanc:'Errore nella cancellazione.',msgErrRete:'Errore di rete.',msgNessunDato:'Nessun dato da stampare.',
-    pdfNome:'Nome',badgeVeg:'🌿 Vegetariano',badgeCarne:'🥩 Carne',badgePesce:'🐟 Pesce',
-    titoloPresenti:'Presenti',titoloAssenti:'Assenti',titoloInvitati:'Invitati'
-  },
-  es:{
-    titolo:'Lista de Invitados',caricamento:'Cargando...',nessunaRisposta:'Ninguna respuesta todavía.',
-    aggiorna:'↻ Actualizar',riprova:'↻ Reintentar',pdf:'📄 PDF',
-    kpiPresenti:'Presentes',kpiAssenti:'Ausentes',kpiAllergie:'Alergias',
-    kpiVeg:'Vegetarianos',kpiCarne:'Carne',kpiPesce:'Pescado',kpiBaby:'Baby',kpiSegnaposto:'Marcador de posición',
-    lblPresenza:'Asistencia',lblSecondo:'Segundo',lblAllergie:'Alergias',lblNote:'Notas',lblNessuna:'Ninguna',
-    btnElimina:'✕ Eliminar esta tarjeta',msgConferma:'¿Eliminar esta tarjeta?',
-    msgErrCanc:'Error al eliminar.',msgErrRete:'Error de red.',msgNessunDato:'No hay datos para imprimir.',
-    pdfNome:'Nombre',badgeVeg:'🌿 Vegetariano',badgeCarne:'🥩 Carne',badgePesce:'🐟 Pescado',
-    titoloPresenti:'Presentes',titoloAssenti:'Ausentes',titoloInvitati:'Invitados'
-  }
-};
-
-window.addEventListener('DOMContentLoaded',()=>caricaRisposte());
-
-function cambiaLingua(lang){
-  currentLang=lang;
-  document.getElementById('btn-it').classList.toggle('active-lang',lang==='it');
-  document.getElementById('btn-es').classList.toggle('active-lang',lang==='es');
-  document.getElementById('titolo-pagina').innerText=D[lang].titolo;
-  const tc=document.getElementById('txt-caricamento');
-  if(tc)tc.innerText=D[lang].caricamento;
-  if(window.datiInvitati&&window.datiInvitati.length>0)renderizzaDati();
-}
-
-function nt(v){return(v||'').toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
-
-function detectSecondo(v){
-  const s=nt(v);
-  if(s==='4')return'baby';
-  if(s==='5')return'segnaposto';
-  if(s.includes('veget')||s.includes('vegan'))return'veg';
-  if(s.includes('carne')||s.includes('meat'))return'carne';
-  if(s.includes('pesce')||s.includes('pescado')||s.includes('fish'))return'pesce';
-  return'';
-}
-
-function isAbsent(presenza,secondo){
-  const p=nt(presenza);
-  if(p==='0'||p==='false'||p==='no'||p.includes('non')||p.includes('assente')||p===''){
-    if(p===''&&detectSecondo(secondo)!=='')return false;
-    return true;
-  }
-  return false;
-}
-
-function hasAllergy(v){
-  if(!v)return false;
-  const s=nt(v).replace(/[^\w\s]/gi,'').replace(/\s+/g,' ').trim();
-  if(!s)return false;
-  return!['no','nessuna','nessuno','nessun','niente','nulla','nd','-','none','ninguna','ninguno'].includes(s);
-}
-
-function iconaAllergie(v){
-  if(!hasAllergy(v))return'';
-  const map={formaggi:'🧀',glutine:'🌾',lattosio:'🥛','frutta secca':'🥜',uova:'🥚',crostacei:'🦐',soia:'🫘',pesce:'🐟',sedano:'🥦'};
-  const s=nt(v);
-  return Object.entries(map).filter(([k])=>s.includes(k)).map(([,e])=>e).join('')||'⚠️';
-}
-
-function secondBadge(secondo,assente){
-  if(assente)return'<span class="badge" style="background:#f0e8d8;color:#888">—</span>';
-  const t=detectSecondo(secondo),T=D[currentLang];
-  if(t==='veg')return'<span class="badge badge-veg">'+T.badgeVeg+'</span>';
-  if(t==='carne')return'<span class="badge badge-carne">'+T.badgeCarne+'</span>';
-  if(t==='pesce')return'<span class="badge badge-pesce">'+T.badgePesce+'</span>';
-  if(t==='baby')return'<span class="badge" style="background:#e8f0fe;color:#1a4fa0">🍼 '+T.kpiBaby+'</span>';
-  if(t==='segnaposto')return'<span class="badge" style="background:#f0e8d8;color:#8a5e1e">📌 '+T.kpiSegnaposto+'</span>';
-  return'<span class="badge" style="background:#f0e8d8;color:#888">—</span>';
-}
-
-function toggleDettagli(id){
-  const d=document.getElementById('dettagli-'+id);
-  const f=document.querySelector('#card-'+id+' .freccia');
-  if(!d)return;
-  d.classList.toggle('aperto');
-  if(f)f.classList.toggle('open');
-}
-
-function filtraLista(cat){
-  activeFilter=(activeFilter===cat)?null:cat;
-  document.querySelectorAll('.kpi-box').forEach(el=>el.classList.remove('active-filter'));
-  if(activeFilter)document.getElementById('btn-'+activeFilter).classList.add('active-filter');
-  document.querySelectorAll('.risposta-card').forEach(card=>{
-    card.style.display=(!activeFilter||card.classList.contains('cat-'+activeFilter))?'block':'none';
+  window.addEventListener('DOMContentLoaded', () => {
+    const oraEl = document.getElementById('ora-generazione');
+    if (oraEl) oraEl.innerText = new Date().toLocaleTimeString('it-IT');
+    caricaRisposte();
   });
-}
 
-function caricaRisposte(){
-  const box=document.getElementById('sposi-table');
-  const T=D[currentLang];
-  box.innerHTML='<p style="text-align:center;padding:20px">'+T.caricamento+'</p>';
-  activeFilter=null;
-  fetch(SCRIPT_URL+'?t='+Date.now())
-    .then(r=>r.json())
-    .then(data=>{
-      if(!data||!data.righe){box.innerHTML='<p style="text-align:center;padding:20px">'+T.nessunaRisposta+'</p>';return;}
-      window.datiInvitati=data.righe.map((r,i)=>({...r,indiceOriginale:i+2}));
+  function cambiaLingua(lang) {
+    currentLang = lang;
+    document.getElementById('btn-it').classList.toggle('active-lang', lang === 'it');
+    document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');
+    document.getElementById('titolo-pagina').innerText = dizionario[lang].titolo;
+    
+    const txtCaricamento = document.getElementById('txt-caricamento');
+    if (txtCaricamento) txtCaricamento.innerText = dizionario[lang].caricamento;
+
+    if (window.datiInvitati && window.datiInvitati.length > 0) {
       renderizzaDati();
-    })
-    .catch(()=>{
-      box.innerHTML='<p style="color:red;text-align:center;padding:20px">'+T.msgErrRete+'</p>'
-        +'<button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0">'+T.riprova+'</button>';
-    });
-}
-
-function renderizzaDati(){
-  const box=document.getElementById('sposi-table');
-  const T=D[currentLang];
-  if(!window.datiInvitati||window.datiInvitati.length===0){
-    box.innerHTML='<p style="text-align:center;padding:20px">'+T.nessunaRisposta+'</p>';return;
+    }
   }
-  let tP=0,tA=0,tAll=0,tV=0,tC=0,tPe=0,tB=0,tS=0;
-  window.datiInvitati.forEach(r=>{
-    const ass=isAbsent(r.presenza||'',r.secondo||'');
-    if(ass){tA++;}else{
-      tP++;
-      if(hasAllergy(r.allergie))tAll++;
-      const t=detectSecondo(r.secondo);
-      if(t==='veg')tV++;else if(t==='carne')tC++;else if(t==='pesce')tPe++;
-      else if(t==='baby')tB++;else if(t==='segnaposto')tS++;
-    }
-  });
 
-  function kb(id,label,num){
-    return'<td><div class="kpi-box '+(activeFilter===id?'active-filter':'')+'" id="btn-'+id+'" onclick="filtraLista(\''+id+'\')"><div class="kpi-label">'+label+'</div><div class="kpi-num">'+num+'</div></div></td>';
+  function normalizeText(value) {
+    return (value || '')
+      .toString()
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
   }
-  let h='<table class="sposi-kpi">'
-    +'<tr>'+kb('presenti',T.kpiPresenti,tP)+kb('veg',T.kpiVeg,tV)+'</tr>'
-    +'<tr>'+kb('assenti',T.kpiAssenti,tA)+kb('carne',T.kpiCarne,tC)+'</tr>'
-    +'<tr>'+kb('baby',T.kpiBaby,tB)+kb('pesce',T.kpiPesce,tPe)+'</tr>'
-    +'<tr>'+kb('segnaposto',T.kpiSegnaposto,tS)+kb('allergie',T.kpiAllergie,tAll)+'</tr>'
-    +'</table>';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">'
-    +'<button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0">'+T.aggiorna+'</button>'
-    +'<button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0;background:linear-gradient(135deg,#2f5c9a,#4a7cbd);color:#fff">'+T.pdf+'</button>'
-    +'</div>';
-  h+='<div id="lista-invitati">';
-  window.datiInvitati.forEach(r=>{
-    const riga=r.indiceOriginale;
-    const ass=isAbsent(r.presenza||'',r.secondo||'');
-    const t=detectSecondo(r.secondo);
-    let cats=[];
-    if(ass){cats.push('cat-assenti');}else{
-      cats.push('cat-presenti');
-      if(hasAllergy(r.allergie))cats.push('cat-allergie');
-      if(t==='veg')cats.push('cat-veg');
-      if(t==='carne')cats.push('cat-carne');
-      if(t==='pesce')cats.push('cat-pesce');
-      if(t==='baby')cats.push('cat-baby');
-      if(t==='segnaposto')cats.push('cat-segnaposto');
+
+  function detectSecondo(value) {
+    const s = normalizeText(value);
+    if (s === '4') return 'baby';
+    if (s === '5') return 'segnaposto';
+    if (s.includes('veget') || s.includes('vegan')) return 'veg';
+    if (s.includes('carne') || s.includes('meat')) return 'carne';
+    if (s.includes('pesce') || s.includes('pescado') || s.includes('fish')) return 'pesce';
+    return '';
+  }
+
+  function isAbsent(presenza, secondo) {
+    const p = normalizeText(presenza);
+    if (p === '0' || p === 'false' || p === 'no' || p.includes('non') || p.includes('assente') || p === '') {
+        if (p === '' && detectSecondo(secondo) !== '') {
+            return false;
+        }
+        return true;
     }
-    const show=(!activeFilter||cats.includes('cat-'+activeFilter))?'display:block':'display:none';
-    const iS=ass?'':(t==='veg'?'🥦':t==='carne'?'🥩':t==='pesce'?'🐟':t==='baby'?'🍼':t==='segnaposto'?'📌':'');
-    const haA=hasAllergy(r.allergie);
-    const iA=iconaAllergie(r.allergie);
-    const allH=haA?'<span class="risposta-val allergia">'+r.allergie+'</span>':'<span class="risposta-val muted">'+T.lblNessuna+'</span>';
-    const noteH=r.note?'<span class="risposta-val">'+r.note+'</span>':'<span class="risposta-val muted">—</span>';
-    h+='<div class="risposta-card '+cats.join(' ')+'" id="card-'+riga+'" style="'+show+'">'
-      +'<div class="risposta-nome" onclick="toggleDettagli('+riga+')">'
-      +(r.nome||'Senza nome')+(iS?'<span class="icona-secondo">'+iS+'</span>':'')
-      +'<span class="icone-destra">'+(iA?'<span style="font-size:15px;letter-spacing:1px">'+iA+'</span>':'')
-      +'<span class="freccia'+(haA?' allergia-alert':'')+'">▼</span></span>'
-      +'</div>'
-      +'<div class="dettagli-scheda" id="dettagli-'+riga+'">'
-      +'<div class="risposta-row"><span class="risposta-label">'+T.lblPresenza+'</span><span class="risposta-val" style="font-weight:600">'+(ass?'0':'1')+'</span></div>'
-      +'<div class="risposta-row"><span class="risposta-label">'+T.lblSecondo+'</span><span class="risposta-val">'+secondBadge(r.secondo,ass)+'</span></div>'
-      +'<div class="risposta-row"><span class="risposta-label">'+T.lblAllergie+'</span>'+allH+'</div>'
-      +'<div class="risposta-row"><span class="risposta-label">'+T.lblNote+'</span>'+noteH+'</div>'
-      +'<button class="delete-btn" onclick="eliminaRiga('+riga+')">'+T.btnElimina+'</button>'
-      +'</div></div>';
-  });
-  h+='</div>';
-  box.innerHTML=h;
-}
+    return false;
+  }
 
-async function generaPDF(){
-  const T=D[currentLang];
-  if(!window.datiInvitati||window.datiInvitati.length===0){alert(T.msgNessunDato);return;}
-  const btnPdf=document.getElementById('btn-pdf-gen');
-  if(btnPdf){btnPdf.innerText='⏳...';btnPdf.disabled=true;}
+  function hasAllergy(value) {
+    if (!value) return false;
+    const s = normalizeText(value).replace(/[^\w\s]/gi, '').replace(/\s+/g, ' ').trim();
+    if (!s) return false; 
+    const falsiPositivi = [
+      'no', 'nessuna', 'nessuno', 'nessun', 'niente', 'nulla', 'nd', 
+      '0', 'false', 'nessuna allergia', 'no allergie', 'nessuna in particolare',
+      'no grazie', 'nessuna grazie'
+    ];
+    if (falsiPositivi.includes(s)) return false;
+    return true; 
+  }
 
-  // Contatori
-  var tP=0,tA=0,tAll=0,tV=0,tC=0,tPe=0,tB=0,tS=0,aR=[],pR=[];
-  window.datiInvitati.forEach(function(r){
-    var ass=isAbsent(r.presenza||'',r.secondo||'');
-    if(ass){tA++;aR.push(r);}else{
-      tP++;pR.push(r);
-      if(hasAllergy(r.allergie))tAll++;
-      var t=detectSecondo(r.secondo);
-      if(t==='veg')tV++;else if(t==='carne')tC++;else if(t==='pesce')tPe++;
-      else if(t==='baby')tB++;else if(t==='segnaposto')tS++;
-    }
-  });
-
-  // Fetch Invitati.csv
-  var gruppi=[],totCSV=0;
-  try{
-    var resp=await fetch('Invitati.csv?t='+Date.now());
-    if(resp.ok){
-      var txt=await resp.text();
-      var righe=txt.split(/\r?\n/).map(function(x){return x.trim();});
-      var sep=txt.includes(';')?';':',';
-      var si=(righe.length>0&&righe[0].toLowerCase().includes('nom'))?1:0;
-      var gc=null;
-      for(var i=si;i<righe.length;i++){
-        var rr=righe[i];if(!rr)continue;
-        var pp=rr.split(sep).map(function(x){return x.trim().replace(/^"|"$/g,'');});
-        var nm=pp[0]||'',dn=pp[1]||'';
-        if(!nm)continue;
-        if(!dn){if(gc&&gc.length)gruppi.push(gc);gc=[];continue;}
-        if(gc!==null){gc.push({nome:nm,dn:dn});totCSV++;}
+  function iconaAllergie(value) {
+    if (!hasAllergy(value)) return '';
+    // Mappa esatta dei valori usati in Matrimonio.html
+    const mappa = {
+      'formaggi':     '🧀',
+      'glutine':      '🌾',
+      'lattosio':     '🥛',
+      'frutta secca': '🥜',
+      'uova':         '🥚',
+      'crostacei':    '🦐',
+      'soia':         '🫘',
+      'pesce':        '🐟',
+      'sedano':       '🥦',
+    };
+    const voci = value.split(',').map(v => v.trim().toLowerCase());
+    const icone = [];
+    voci.forEach(v => {
+      if (mappa[v]) {
+        if (!icone.includes(mappa[v])) icone.push(mappa[v]);
+      } else {
+        // Voce libera non in mappa: icona generica se non già presente
+        if (!icone.includes('⚠️')) icone.push('⚠️');
       }
-      if(gc&&gc.length)gruppi.push(gc);
+    });
+    return icone.join('');
+  }
+
+  function secondBadge(secondo, assente) {
+    if (assente) return '<span class="muted">—</span>';
+    const tipo = detectSecondo(secondo);
+    const testi = dizionario[currentLang];
+    
+    if (tipo === 'veg') return `<span class="badge badge-veg">${testi.badgeVeg}</span>`;
+    if (tipo === 'carne') return `<span class="badge badge-carne">${testi.badgeCarne}</span>`;
+    if (tipo === 'pesce') return `<span class="badge badge-pesce">${testi.badgePesce}</span>`;
+    return '<span class="muted">—</span>';
+  }
+
+  function toggleDettagli(id) {
+    const element = document.getElementById('dettagli-' + id);
+    if (element.style.display === 'block') {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'block';
     }
-  }catch(e){console.log('csv',e);}
-
-  // Mappa risposte
-  function nn(n){return(n||'').trim().toLowerCase().replace(/\s+/g,' ');}
-  function vn(n){var p=nn(n).split(' ');return p.length===2?[p[0]+' '+p[1],p[1]+' '+p[0]]:[nn(n)];}
-  var mapa=new Map();
-  window.datiInvitati.forEach(function(r){
-    var st=isAbsent(r.presenza||'',r.secondo||'')?'a':'p';
-    vn(r.nome).forEach(function(v){mapa.set(v,st);});
-  });
-  var babySet=new Set(window.datiInvitati
-    .filter(function(r){return detectSecondo(r.secondo)==='baby';})
-    .map(function(r){return nn(r.nome);}));
-
-  // Calcola età
-  function calcEta(dn){
-    if(!dn)return'';
-    var M=new Date(2026,5,21),nas=null,d=dn.trim();
-    var m1=d.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-    var m2=d.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
-    var m3=d.match(/^(\d{4})$/);
-    if(m1)nas=new Date(+m1[3],+m1[2]-1,+m1[1]);
-    else if(m2)nas=new Date(+m2[1],+m2[2]-1,+m2[3]);
-    else if(m3)nas=new Date(+m3[1],0,1);
-    if(!nas)return'';
-    var a=M.getFullYear()-nas.getFullYear();
-    var ok=(nas.getMonth()<M.getMonth())||(nas.getMonth()===M.getMonth()&&nas.getDate()<=M.getDate());
-    if(!ok)a--;
-    return String(a);
   }
 
-  // KPI box
-  function kb(label,num){
-    return'<td style="padding:3px 4px 3px 0;width:50%">'
-      +'<div style="background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;padding:8px 10px;'
-      +'display:flex;align-items:center;justify-content:space-between;">'
-      +'<span style="font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:#2a3a18;font-weight:600">'+label+'</span>'
-      +'<span style="font-family:Cormorant Garamond,serif;font-size:20px;font-weight:700;color:#3a5a18">'+num+'</span>'
-      +'</div></td>';
-  }
-
-  // HTML pagina 1
-  var h='';
-  h+='<h1 style="text-align:center;font-family:Cormorant Garamond,serif;font-size:32px;margin:0 0 4px">'+T.titolo+'</h1>';
-  h+='<h2 style="text-align:center;font-family:Cormorant Garamond,serif;font-size:20px;color:#8a5e1e;margin:0 0 20px">Giulia &amp; Onofrio</h2>';
-  h+='<table style="width:100%;border-collapse:collapse;margin-bottom:20px">';
-  h+='<tr>'+kb(T.kpiPresenti,tP)+kb(T.kpiVeg,tV)+'</tr>';
-  h+='<tr>'+kb(T.kpiAssenti,tA)+kb(T.kpiCarne,tC)+'</tr>';
-  h+='<tr>'+kb(T.kpiBaby,tB)+kb(T.kpiPesce,tPe)+'</tr>';
-  h+='<tr>'+kb(T.kpiSegnaposto,tS)+kb(T.kpiAllergie,tAll)+'</tr>';
-  h+='</table>';
-
-  if(aR.length>0){
-    h+='<h3 style="font-size:16px;margin:0 0 8px;color:#8a5e1e;font-weight:600">'+T.titoloAssenti+' ('+tA+')</h3>';
-    h+='<table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">';
-    h+='<thead><tr style="background:#f5ede0;text-align:left"><th style="padding:6px;width:40%">'+T.pdfNome+'</th><th style="padding:6px">'+T.lblNote+'</th></tr></thead><tbody>';
-    aR.forEach(function(r){
-      h+='<tr><td style="padding:4px 6px;font-weight:600">'+(r.nome||'Senza nome')+'</td>'
-        +'<td style="padding:4px 6px">'+(r.note||'-')+'</td></tr>';
+  function filtraLista(categoria) {
+    if (activeFilter === categoria) {
+      activeFilter = null;
+    } else {
+      activeFilter = categoria;
+    }
+    document.querySelectorAll('.kpi-box').forEach(el => el.classList.remove('active-filter'));
+    if (activeFilter) {
+      document.getElementById('btn-' + activeFilter).classList.add('active-filter');
+    }
+    document.querySelectorAll('.risposta-card').forEach(card => {
+      if (!activeFilter || card.classList.contains('cat-' + activeFilter)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
     });
-    h+='</tbody></table>';
   }
 
-  if(pR.length>0){
-    h+='<h3 style="font-size:16px;margin:0 0 8px;color:#8a5e1e;font-weight:600">'+T.titoloPresenti+' ('+tP+')</h3>';
-    h+='<table style="width:100%;border-collapse:collapse;font-size:14px">';
-    h+='<thead><tr style="background:#f5ede0;text-align:left">'
-      +'<th style="padding:6px;width:35%">'+T.pdfNome+'</th>'
-      +'<th style="padding:6px;width:15%">'+T.lblSecondo+'</th>'
-      +'<th style="padding:6px;width:20%">'+T.kpiAllergie+'</th>'
-      +'<th style="padding:6px">'+T.lblNote+'</th>'
-      +'</tr></thead><tbody>';
-    pR.forEach(function(r){
-      var t=detectSecondo(r.secondo);
-      var sec=t==='veg'?T.kpiVeg:t==='carne'?T.kpiCarne:t==='pesce'?T.kpiPesce:'-';
-      var all=hasAllergy(r.allergie)?r.allergie:'-';
-      var aS=hasAllergy(r.allergie)?'color:#a83230;font-weight:600':'';
-      var nota=t==='segnaposto'?'<span style="color:#a83230;font-weight:600">'+T.kpiSegnaposto+'</span>'
-             :t==='baby'?'<span style="color:#a83230;font-weight:600">'+T.kpiBaby+'</span>'
-             :(r.note||'-');
-      h+='<tr>'
-        +'<td style="padding:4px 6px;font-weight:600">'+(r.nome||'Senza nome')+'</td>'
-        +'<td style="padding:4px 6px">'+sec+'</td>'
-        +'<td style="padding:4px 6px;'+aS+'">'+all+'</td>'
-        +'<td style="padding:4px 6px">'+nota+'</td>'
-        +'</tr>';
-    });
-    h+='</tbody></table>';
-  }
+  function caricaRisposte() {
+    const box = document.getElementById('sposi-table');
+    const testi = dizionario[currentLang];
+    box.innerHTML = `<p id="txt-caricamento" style="color:var(--text-light);text-align:center;padding:20px">${testi.caricamento}<br><small style="color:#888;font-size:11px">${new Date().toLocaleTimeString('it-IT')}</small></p>`;
+    activeFilter = null;
 
-  // Pagina 2: invitati bilanciati per NUMERO DI VOCI (non di gruppi)
-  if(gruppi.length>0){
-    // Costruisce array piatto: ogni elemento è un div HTML (nome o separatore)
-    var voci=[];
-    gruppi.forEach(function(g,gi){
-      var gf=g.filter(function(inv){return!babySet.has(nn(inv.nome));});
-      if(gf.length===0)return;
-      gf.forEach(function(inv){
-        var e=calcEta(inv.dn);
-        var vns=vn(inv.nome);
-        var st=vns.reduce(function(a,v){return a||mapa.get(v);},undefined);
-        var stile=st==='p'?'font-weight:700;color:#1a4fa0':st==='a'?'font-weight:700;color:#a83230':'';
-        var sp=st?'&#9745; ':'';
-        voci.push('<div style="margin-bottom:4px;line-height:1.4"><span style="'+stile+'">'+sp+inv.nome+'</span>'+(e?' <span>('+e+')</span>':'')+'</div>');
+    fetch(SCRIPT_URL + '?t=' + Date.now())
+      .then(r => {
+        if (!r.ok && r.status !== 0) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(txt => JSON.parse(txt))
+      .then(data => {
+        if (!data.ok || !data.rows || data.rows.length === 0) {
+          box.innerHTML = `
+            <p style="text-align:center;padding:20px;color:var(--text-light)">${testi.nessunaRisposta}</p>
+            <button class="btn-submit" onclick="caricaRisposte()">↻ ${testi.aggiorna}</button>
+          `;
+          window.datiInvitati = [];
+          return;
+        }
+
+        let righeMappate = data.rows.map((r, i) => ({
+          ...r,
+          presenza: r.presenza !== undefined ? r.presenza : String(r.persone ?? ''),
+          indiceOriginale: i + 2
+        }));
+        righeMappate.sort((a, b) => (a.nome || '~Senza nome').localeCompare(b.nome || '~Senza nome'));
+        window.datiInvitati = righeMappate;
+        renderizzaDati();
+      })
+      .catch((err) => {
+        console.error('FETCH ERROR:', err);
+        box.innerHTML = `
+          <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}<br><small style='font-size:10px;opacity:0.7'>${'${err}'}</small></p>
+          <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${dizionario[currentLang].riprova}</button>
+        `;
       });
-      voci.push('__SEP__');
-    });
-    // Rimuovi ultimo separatore
-    if(voci.length>0&&voci[voci.length-1]==='__SEP__')voci.pop();
-    // Sostituisci i separatori con HTML
-    var vociFinal=voci.map(function(v){
-      return v==='__SEP__'?'<div style="border-bottom:1px solid #000;margin:6px 0 5px"></div>':v;
-    });
-
-    // Bilancia: divide per metà delle voci totali
-    var meta=Math.ceil(vociFinal.length/2);
-    var sx=vociFinal.slice(0,meta).join('');
-    var dx=vociFinal.slice(meta).join('');
-
-    h+='<div style="page-break-before:always">';
-    h+='<h3 style="font-size:18px;margin:0 0 15px;color:#8a5e1e;font-weight:600">'+T.titoloInvitati+' ('+totCSV+')</h3>';
-    h+='<table style="width:100%;border-collapse:collapse;font-size:14px">'
-      +'<tr>'
-      +'<td style="width:50%;vertical-align:top;padding-right:15px">'+sx+'</td>'
-      +'<td style="width:50%;vertical-align:top;padding-left:15px">'+dx+'</td>'
-      +'</tr></table>';
-    h+='</div>';
   }
 
-  var container=document.createElement('div');
-  container.innerHTML=h;
-  html2pdf().set({
-    margin:10,
-    filename:'Lista_Invitati_Giulia_Onofrio_'+currentLang.toUpperCase()+'.pdf',
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
-  }).from(container).save().then(function(){
-    if(btnPdf){btnPdf.innerText=T.pdf;btnPdf.disabled=false;}
-  });
-}
+  function renderizzaDati() {
+    const box = document.getElementById('sposi-table');
+    const testi = dizionario[currentLang];
+    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0, totBaby = 0, totSegnaposto = 0;
 
-function eliminaRiga(riga){
-  if(!confirm(D[currentLang].msgConferma))return;
-  const card=document.getElementById('card-'+riga);
-  if(card){
-    card.style.transition='opacity 0.2s';card.style.opacity='0';
-    setTimeout(()=>{
-      card.remove();
-      window.datiInvitati=window.datiInvitati.filter(r=>r.indiceOriginale!==riga);
-      renderizzaDati();
-    },200);
+    window.datiInvitati.forEach(r => {
+      const presenza = r.presenza || '';
+      const secondo = r.secondo || '';
+      const allergie = r.allergie || '';
+      const assente = isAbsent(presenza, secondo);
+      
+      if (assente) {
+        totAssenti++;
+      } else {
+        totPresenti++;
+        if (hasAllergy(allergie)) totAllergie++;
+
+        const tipo = detectSecondo(secondo);
+        if (tipo === 'veg') totVeg++;
+        else if (tipo === 'carne') totCarne++;
+        else if (tipo === 'pesce') totPesce++;
+        else if (tipo === 'baby') totBaby++;
+        else if (tipo === 'segnaposto') totSegnaposto++;
+      }
+    });
+
+    let html = `<table class="sposi-kpi">
+      <tr>
+        <td><div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-label">${testi.kpiPresenti}</div><div class="kpi-num">${totPresenti}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-label">${testi.kpiVeg}</div><div class="kpi-num">${totVeg}</div></div></td>
+      </tr>
+      <tr>
+        <td><div class="kpi-box ${activeFilter==='assenti'?'active-filter':''}" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-label">${testi.kpiAssenti}</div><div class="kpi-num">${totAssenti}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-label">${testi.kpiCarne}</div><div class="kpi-num">${totCarne}</div></div></td>
+      </tr>
+      <tr>
+        <td><div class="kpi-box ${activeFilter==='baby'?'active-filter':''}" id="btn-baby" onclick="filtraLista('baby')"><div class="kpi-label">${testi.kpiBaby}</div><div class="kpi-num">${totBaby}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-label">${testi.kpiPesce}</div><div class="kpi-num">${totPesce}</div></div></td>
+      </tr>
+      <tr>
+        <td><div class="kpi-box ${activeFilter==='segnaposto'?'active-filter':''}" id="btn-segnaposto" onclick="filtraLista('segnaposto')"><div class="kpi-label">${testi.kpiSegnaposto}</div><div class="kpi-num">${totSegnaposto}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-label">${testi.kpiAllergie}</div><div class="kpi-num">${totAllergie}</div></div></td>
+      </tr>
+    </table>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${testi.aggiorna}</button>
+      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2f5c9a, #4a7cbd); color: #ffffff;">${testi.pdf}</button>
+    </div>
+    
+    <div id="lista-invitati">`;
+
+    window.datiInvitati.forEach(r => {
+      const riga = r.indiceOriginale;
+      const presenza = r.presenza || '';
+      const assente = isAbsent(presenza, r.secondo);
+      
+      let classiFiltro = [];
+      
+      const tipoSecondo = detectSecondo(r.secondo);
+      if (assente) {
+        classiFiltro.push('cat-assenti');
+      } else {
+        classiFiltro.push('cat-presenti');
+        if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
+        if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
+        if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
+        if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
+        if (tipoSecondo === 'baby') classiFiltro.push('cat-baby');
+        if (tipoSecondo === 'segnaposto') classiFiltro.push('cat-segnaposto');
+      }
+
+      const valPresenza = assente ? '0' : '1';
+      const allergieHtml = hasAllergy(r.allergie) ? `<span class="risposta-val allergia">${r.allergie}</span>` : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
+      const note = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
+      const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
+
+      const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : '');
+      const haAllergia = hasAllergy(r.allergie);
+      const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
+      const iconeAllergie = iconaAllergie(r.allergie);
+
+      html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}<span class="${classFreccia}">▼</span></span></div>
+        <div class="dettagli-scheda" id="dettagli-${riga}">
+          <div class="risposta-row">
+            <span class="risposta-label">${testi.lblPresenza}</span>
+            <span class="risposta-val" style="font-weight: 600;">${valPresenza}</span>
+          </div>
+          <div class="risposta-row">
+            <span class="risposta-label">${testi.lblSecondo}</span>
+            <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
+          </div>
+          <div class="risposta-row">
+            <span class="risposta-label">${testi.lblAllergie}</span>
+            ${allergieHtml}
+          </div>
+          <div class="risposta-row">
+            <span class="risposta-label">${testi.lblNote}</span>
+            ${note}
+          </div>
+          <div class="risposta-data">${r.data || ''}</div>
+          <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
+        </div>
+      </div>`;
+    });
+
+    html += `</div>`;
+    box.innerHTML = html;
   }
-  fetch(SCRIPT_URL+'?elimina='+riga+'&t='+Date.now())
-    .then(r=>r.json())
-    .then(data=>{if(!data.ok){alert(D[currentLang].msgErrCanc);caricaRisposte();}})
-    .catch(()=>{alert(D[currentLang].msgErrRete);caricaRisposte();});
-}
+
+  async function generaPDF() {
+    const testi = dizionario[currentLang];
+    if (!window.datiInvitati || window.datiInvitati.length === 0) {
+      alert(testi.msgNessunDato);
+      return;
+    }
+
+    const btnPdf = document.getElementById('btn-pdf-gen');
+    if (btnPdf) {
+      btnPdf.innerText = "⏳...";
+      btnPdf.disabled = true;
+    }
+
+    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0, totBaby = 0, totSegnaposto = 0;
+    let assentiRows = [];
+    let presentiRows = [];
+
+    window.datiInvitati.forEach(r => {
+      const assente = isAbsent(r.presenza, r.secondo);
+      if (assente) {
+        totAssenti++;
+        assentiRows.push(r);
+      } else {
+        totPresenti++;
+        presentiRows.push(r);
+        if (hasAllergy(r.allergie)) totAllergie++;
+        const tipo = detectSecondo(r.secondo);
+        if (tipo === 'veg') totVeg++;
+        else if (tipo === 'carne') totCarne++;
+        else if (tipo === 'pesce') totPesce++;
+        else if (tipo === 'baby') totBaby++;
+        else if (tipo === 'segnaposto') totSegnaposto++;
+      }
+    });
+
+    // FETCH Elenco completo Invitati e raggruppamento (CSV locale su GitHub)
+    let gruppiInvitati = [];
+    let totInvitatiCsv = 0;
+    try {
+      const resp = await fetch('Invitati.csv?t=' + Date.now());
+      if (resp.ok) {
+        const text = await resp.text();
+        const righe = text.split(/\r?\n/).map(r => r.trim()); 
+        const sep = text.includes(';') ? ';' : ',';
+        
+        let startIndex = 0;
+        if (righe.length > 0 && righe[0].toLowerCase().includes('nom')) startIndex = 1;
+        
+        let gruppoCorrente = [];
+        for (let i = startIndex; i < righe.length; i++) {
+          let cols = righe[i].split(sep);
+          let nome = cols[0] ? cols[0].replace(/['"]/g, '').trim() : '';
+          let dataNascita = cols[1] ? cols[1].replace(/['"]/g, '').trim() : '';
+          
+          if (!nome) {
+            if (gruppoCorrente.length > 0) {
+              gruppiInvitati.push(gruppoCorrente);
+              totInvitatiCsv += gruppoCorrente.length;
+              gruppoCorrente = [];
+            }
+          } else {
+            gruppoCorrente.push({ nome, dataNascita });
+          }
+        }
+        if (gruppoCorrente.length > 0) {
+          gruppiInvitati.push(gruppoCorrente);
+          totInvitatiCsv += gruppoCorrente.length;
+        }
+      }
+    } catch (err) {
+      console.log('File Invitati.csv non trovato o errore di caricamento.', err);
+    }
+
+    const container = document.createElement('div');
+    container.style.padding = '20px';
+    container.style.fontFamily = "'Jost', sans-serif";
+    container.style.color = "#000";
+    
+    let htmlPDF = `
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 5px;">${testi.titolo}</h1>
+      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 25px;">Giulia & Onofrio</h2>
+      
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+        <tr>
+          <td style="width: 50%; padding: 3px 4px 3px 0;">
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <div style="font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1;">${testi.kpiPresenti}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totPresenti}</div>
+            </div>
+          </td>
+          <td style="width: 50%; padding: 3px 0 3px 4px;">
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <div style="font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1;">${testi.kpiVeg}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totVeg}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 3px 4px 3px 0;">
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <div style="font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1;">${testi.kpiAssenti}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totAssenti}</div>
+            </div>
+          </td>
+          <td style="padding: 3px 0 3px 4px;">
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <div style="font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1;">${testi.kpiCarne}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totCarne}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 3px 4px 3px 0;">
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <div style="font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1;">${testi.kpiBaby}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totBaby}</div>
+            </div>
+          </td>
+          <td style="padding: 3px 0 3px 4px;">
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <div style="font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1;">${testi.kpiPesce}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totPesce}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 3px 4px 3px 0;">
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <div style="font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1;">${testi.kpiSegnaposto}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totSegnaposto}</div>
+            </div>
+          </td>
+          <td style="padding: 3px 0 3px 4px;">
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <div style="font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1;">${testi.kpiAllergie}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totAllergie}</div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    `;
+
+    // Tabella Assenti
+    if (assentiRows.length > 0) {
+      htmlPDF += `
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti} (${totAssenti})</h3>
+        <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 25px;">
+          <thead>
+            <tr style="background-color: #f5ede0; text-align: left;">
+              <th style="padding: 6px; width: 40%;">${testi.pdfNome}</th>
+              <th style="padding: 6px;">${testi.lblNote}</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      assentiRows.forEach(r => {
+        htmlPDF += `
+          <tr>
+            <td style="padding: 4px 6px; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px;">${r.note ? r.note : '-'}</td>
+          </tr>
+        `;
+      });
+      htmlPDF += `</tbody></table>`;
+    }
+
+    // Tabella Presenti
+    if (presentiRows.length > 0) {
+      htmlPDF += `
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>
+        <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <thead>
+            <tr style="background-color: #f5ede0; text-align: left;">
+              <th style="padding: 6px; width: 35%;">${testi.pdfNome}</th>
+              <th style="padding: 6px; width: 15%;">${testi.lblSecondo}</th>
+              <th style="padding: 6px; width: 20%;">${testi.lblAllergie}</th>
+              <th style="padding: 6px;">${testi.lblNote}</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      presentiRows.forEach(r => {
+        let secondoStr = detectSecondo(r.secondo);
+        if (secondoStr === 'veg') secondoStr = testi.kpiVeg;
+        else if (secondoStr === 'carne') secondoStr = testi.kpiCarne;
+        else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
+        else secondoStr = '-';
+
+        const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
+
+        htmlPDF += `
+          <tr>
+            <td style="padding: 4px 6px; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 4px 6px;">${secondoStr}</td>
+            <td style="padding: 4px 6px; ${hasAllergy(r.allergie) ? 'color: #a83230; font-weight: 600;' : ''}">${allergie}</td>
+            <td style="padding: 4px 6px;">${r.note ? r.note : '-'}</td>
+          </tr>
+        `;
+      });
+      htmlPDF += `</tbody></table>`;
+    }
+    
+    // Sezione: Invitati a 2 colonne con font più grande
+    if (gruppiInvitati.length > 0) {
+      htmlPDF += `<div style="page-break-before: always;">`;
+      // Calcola numero bambini (< 11 anni) per il titolo
+      let totBambini = 0;
+      const matrimonioCnt = new Date(2026, 5, 21);
+      gruppiInvitati.forEach(gruppo => {
+        gruppo.forEach(inv => {
+          if (inv.dataNascita) {
+            let nascitaCnt = null;
+            const dCnt = inv.dataNascita.trim();
+            const dmYc = dCnt.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+            const Ymdc = dCnt.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+            const soloAnnoc = dCnt.match(/^(\d{4})$/);
+            if (dmYc) nascitaCnt = new Date(parseInt(dmYc[3]), parseInt(dmYc[2])-1, parseInt(dmYc[1]));
+            else if (Ymdc) nascitaCnt = new Date(parseInt(Ymdc[1]), parseInt(Ymdc[2])-1, parseInt(Ymdc[3]));
+            else if (soloAnnoc) nascitaCnt = new Date(parseInt(soloAnnoc[1]), 0, 1);
+            if (nascitaCnt) {
+              let anniCnt = matrimonioCnt.getFullYear() - nascitaCnt.getFullYear();
+              const cpCnt = (nascitaCnt.getMonth() < matrimonioCnt.getMonth()) ||
+                (nascitaCnt.getMonth() === matrimonioCnt.getMonth() && nascitaCnt.getDate() <= matrimonioCnt.getDate());
+              if (!cpCnt) anniCnt--;
+              if (anniCnt < 11) totBambini++;
+            }
+          }
+        });
+      });
+      const totAdultiCsv = totInvitatiCsv - totBambini;
+      const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
+
+      htmlPDF += `
+        <h3 style="font-size: 18px; margin-top: 0; margin-bottom: 15px; color: #8a5e1e; font-weight: 600; padding-top: 10px;">${testi.titoloInvitati} (${totInvitatiCsv})${titoloBambini}</h3>
+        <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
+      `;
+
+      gruppiInvitati.forEach((gruppo, index) => {
+        htmlPDF += `<div style="break-inside: avoid-column; page-break-inside: avoid; -webkit-column-break-inside: avoid; margin-bottom: 10px;">`;
+        
+        gruppo.forEach(inv => {
+          let eta = "";
+          let isBambino = false;
+          if (inv.dataNascita) {
+            // Supporta formati: DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD, YYYY
+            const matrimonio = new Date(2026, 5, 21); // 21 giugno 2026
+            let nascita = null;
+            const d = inv.dataNascita.trim();
+            const dmY = d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+            const Ymd = d.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+            const soloAnno = d.match(/^(\d{4})$/);
+            if (dmY) {
+              nascita = new Date(parseInt(dmY[3]), parseInt(dmY[2])-1, parseInt(dmY[1]));
+            } else if (Ymd) {
+              nascita = new Date(parseInt(Ymd[1]), parseInt(Ymd[2])-1, parseInt(Ymd[3]));
+            } else if (soloAnno) {
+              nascita = new Date(parseInt(soloAnno[1]), 0, 1);
+            }
+            if (nascita) {
+              let anni = matrimonio.getFullYear() - nascita.getFullYear();
+              const compleannoPassed = (nascita.getMonth() < matrimonio.getMonth()) ||
+                (nascita.getMonth() === matrimonio.getMonth() && nascita.getDate() <= matrimonio.getDate());
+              if (!compleannoPassed) anni--;
+              eta = String(anni);
+              if (anni < 11) isBambino = true;
+            }
+          }
+          htmlPDF += `<div style="margin-bottom: 5px; line-height: 1.3;">
+            <span style="font-weight: 600;">${inv.nome}</span> 
+            <span style="font-weight: 400;">${eta ? '(' + eta + ')' : ''}${isBambino ? ' <span style="background-color: #ffff00; padding: 0 2px;">[*]</span>' : ''}</span>
+          </div>`;
+        });
+
+        if (index < gruppiInvitati.length - 1) {
+          htmlPDF += `<div style="border-bottom: 1px solid #000000; margin-top: 8px; margin-bottom: 6px;"></div>`;
+        }
+        
+        htmlPDF += `</div>`;
+      });
+
+      htmlPDF += `</div>`;
+      htmlPDF += `</div>`;
+    }
+
+    container.innerHTML = htmlPDF;
+
+    const opt = {
+      margin:       10,
+      filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(container).save().then(() => {
+      if (btnPdf) {
+        btnPdf.innerText = testi.pdf;
+        btnPdf.disabled = false;
+      }
+    });
+  }
+
+  function eliminaRiga(riga) {
+    if (!confirm(dizionario[currentLang].msgConferma)) return;
+    const card = document.getElementById('card-' + riga);
+
+    // Optimistic update: rimuove subito la card e aggiorna i KPI
+    if (card) {
+      card.style.transition = 'opacity 0.2s';
+      card.style.opacity = '0';
+      setTimeout(() => {
+        card.remove();
+        // Aggiorna window.datiInvitati e ricalcola KPI senza ricaricare dal server
+        window.datiInvitati = window.datiInvitati.filter(r => r.indiceOriginale !== riga);
+        renderizzaDati_soloKPI();
+      }, 200);
+    }
+
+    // Chiama il server in background senza bloccare l'UI
+    fetch(SCRIPT_URL + '?elimina=' + riga + '&t=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        if (!data.ok) {
+          // Rollback: ricarica dal server se qualcosa è andato storto
+          alert(dizionario[currentLang].msgErrCanc);
+          caricaRisposte();
+        }
+        // Se ok: niente da fare, UI già aggiornata
+      })
+      .catch(() => {
+        alert(dizionario[currentLang].msgErrRete);
+        caricaRisposte(); // Rollback
+      });
+  }
+
+  function renderizzaDati_soloKPI() {
+    // Ricalcola solo i numeri KPI senza rifare tutto il DOM
+    const testi = dizionario[currentLang];
+    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0;
+    window.datiInvitati.forEach(r => {
+      const presenza = r.presenza || '';
+      const secondo = r.secondo || '';
+      const allergie = r.allergie || '';
+      const assente = isAbsent(presenza, secondo);
+      if (assente) {
+        totAssenti++;
+      } else {
+        totPresenti++;
+        if (hasAllergy(allergie)) totAllergie++;
+        const tipo = detectSecondo(secondo);
+        if (tipo === 'veg') totVeg++;
+        else if (tipo === 'carne') totCarne++;
+        else if (tipo === 'pesce') totPesce++;
+      }
+    });
+    // Aggiorna solo i numeri nei box KPI già esistenti
+    const kpiMap = {
+      'btn-presenti': totPresenti, 'btn-assenti': totAssenti,
+      'btn-allergie': totAllergie, 'btn-veg': totVeg,
+      'btn-carne': totCarne, 'btn-pesce': totPesce
+    };
+    Object.entries(kpiMap).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.querySelector('.kpi-num').textContent = val;
+    });
+  }
 </script>
 </body>
 </html>

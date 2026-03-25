@@ -1,0 +1,80 @@
+# Tavolo 1 - Giulia & Onofrio
+Mazzarisi Onofrio
+Pérez Giulia
+Guarneri Lucia
+Pérez Clara
+Pricci Marica
+Mazzarisi Sebastiano
+Mazzarisi Teresa
+Ladogana Valentina
+
+# Tavolo 2 - Pérez
+Pérez Ramón
+Pérez Ana
+Guarneri Silvia
+Pérez Dulce
+Pérez Juani
+Pérez Marta
+Bencomo Tomás
+
+# Tavolo 3 - Lorusso
+Pricci Angela
+Lorusso Onofrio
+Lorusso Benny
+Lepore Genny
+Lorusso Alessandro
+Lorusso Alice
+Lorusso Nina
+Lorusso Cinzia
+Rotondi Gianni
+Rotondi Nicoletta
+
+# Tavolo 4 - Antonietta,Giuseppe e Vatta
+Pricci Maria Antonietta
+Chiarappa Saverio
+Chiarappa Martino
+Chiarappa Cristiano
+Trivisani Anna
+Pricci Giuseppe
+Pricci Gilda
+Pricci Asia
+Chiarappa Oletta
+Vatta Sergio
+
+# Tavolo 5 - Vanna, Mary, Titti
+Pricci Vanna
+Lefemine Domenico
+Lefemine Flavia
+Lefemine Francesco
+Mazzarisi Maria Grazia
+Minerva Nicola
+Pricci Giovanni
+Pricci Tiziana
+Dalena Riccardo
+
+# Tavolo 6 - Mazzarisi
+Mazzarisi Vito
+Nitti Enza
+Mazzarisi Daniele
+Mazzarisi Marco
+Bruni Stefania
+Mazzarisi Mariella
+Pacello Stefano
+Mazzarisi Francesco
+Guazzaroni Giulia
+Mazzarisi Alessandra
+Mazzarisi Andrea
+Mazzarisi Domenico
+Sabatelli Anna
+Mazzarisi Marilù
+
+# Tavolo 7 - Casulli
+Casulli Angelo
+Marchione Maria
+Casulli Gianluca
+Vinella Anna
+Casulli Edoardo
+Casulli Flavio
+Casulli Daniele
+Lovece Roberta
+Casulli Donatello

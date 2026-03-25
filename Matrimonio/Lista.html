@@ -344,7 +344,7 @@
   </div>
 
   <div class="card">
-    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">Caricamento...</span><br><small style="color:#888;font-size:13px">25/03/2026 00:37</small></p></div>
+    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">Caricamento...</span><br><small style="color:#888;font-size:13px">25/03/2026 07:26</small></p></div>
   </div>
 </div>
 </div>
@@ -554,7 +554,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#888;font-size:13px">25/03/2026 00:37</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#888;font-size:13px">25/03/2026 07:26</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -779,7 +779,6 @@
     container.style.padding = '0';
     container.style.width = '700px';
     container.style.fontSize = '11px';
-    container.style.marginTop = '-8px';
     container.style.fontFamily = "'Jost', sans-serif";
     container.style.color = "#000";
     
@@ -943,7 +942,7 @@
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
       htmlPDF += `
-        <h3 style="font-size: 13px; margin-top: 0; margin-bottom: 10px; color: #8a5e1e; font-weight: 600; padding-top: 10px;">${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}</h3>
+        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 0; color: #8a5e1e; font-weight: 600; padding-top: 6px;">${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}</h3><div style="border-bottom: 2px solid #8a5e1e; margin-bottom: 14px; margin-top: 4px;"></div>
         <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
       `;
 

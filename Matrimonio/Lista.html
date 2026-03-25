@@ -624,7 +624,7 @@
       .catch((err) => {
         console.error('FETCH ERROR:', err);
         box.innerHTML = `
-          <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}<br><small style='font-size:10px;opacity:0.7'>${'${err}'}</small></p>
+          <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}<br><small style='font-size:10px;opacity:0.7'>${err}</small></p>
           <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${dizionario[currentLang].riprova}</button>
         `;
       });
@@ -742,6 +742,7 @@
     <div id="sezione-tavoli" style="margin-top:24px;"></div>`;
     box.innerHTML = html;
     renderizzaTavoli();
+  }
 
   async function generaPDF() {
     const testi = dizionario[currentLang];

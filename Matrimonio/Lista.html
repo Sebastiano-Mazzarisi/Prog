@@ -676,9 +676,9 @@
     </table>
     
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px;">
-      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;font-size:13px;padding:12px 6px;">${testi.aggiorna}</button>
-      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2f5c9a, #4a7cbd); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.pdf}</button>
-      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #5a3a8a, #8a5abf); color: #ffffff;font-size:13px;padding:12px 6px;">🪑 ${testi.tavoli}</button>
+      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">${testi.aggiorna}</button>
+      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.pdf}</button>
+      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">🪑 ${testi.tavoli}</button>
     </div>
     
     <div id="lista-invitati">`;
@@ -1072,7 +1072,7 @@
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 18px;">Giulia &amp; Onofrio</h2>
       <div style="display: flex; flex-wrap: wrap; gap: 16px;">
     `;
-    const coloriTavoli = ['#7a4e8a','#2f5c9a','#2d6040','#8a5e1e','#a83230','#3a6a8a','#6a4a2a'];
+    const coloriTavoli = ['#8a5e1e','#2d6040','#7a5c3a','#5a7a38','#b8893a','#3a5a18','#6a4a2a'];
     TAVOLI.forEach((t, i) => {
       const colore = coloriTavoli[i % coloriTavoli.length];
       const label = t.nome.replace(/^Tavolo \d+ - /, '');
@@ -1089,6 +1089,9 @@
       `;
     });
     htmlPDF += `</div></div>`;
+
+    // FIX REGRESSIONE PDF: l'HTML generato va inserito nel container
+    container.innerHTML = htmlPDF;
 
     const opt = {
       margin:       10,
@@ -1117,15 +1120,15 @@
     const sezione = document.getElementById('sezione-tavoli');
     if (!sezione) return;
     
-    // Colori per i bottoni tavoli
+    // Colori per i bottoni tavoli (toni matrimonio e testo interno corrispondente)
     const colori = [
-      { bg: '#7a4e8a', hover: '#5a3a6a' },
-      { bg: '#2f5c9a', hover: '#1e3d6e' },
-      { bg: '#2d6040', hover: '#1e4030' },
-      { bg: '#8a5e1e', hover: '#6a4510' },
-      { bg: '#a83230', hover: '#7a2220' },
-      { bg: '#3a6a8a', hover: '#2a4a6a' },
-      { bg: '#6a4a2a', hover: '#4a3010' }
+      { bg: '#8a5e1e', textIn: '#8a5e1e' }, // Oro Scuro
+      { bg: '#2d6040', textIn: '#2d6040' }, // Verde Pino
+      { bg: '#7a5c3a', textIn: '#7a5c3a' }, // Marrone
+      { bg: '#5a7a38', textIn: '#3a5a18' }, // Verde Oliva
+      { bg: '#b8893a', textIn: '#8a5e1e' }, // Oro
+      { bg: '#3a5a18', textIn: '#3a5a18' }, // Verde Scuro
+      { bg: '#6a4a2a', textIn: '#6a4a2a' }  // Marrone Scuro
     ];
 
     let html = `<div style="margin-bottom:8px;"><div style="border-top: 2px solid var(--border); margin-bottom:16px;"></div>`;
@@ -1169,7 +1172,7 @@
             border-radius:0 0 12px 12px;
             padding:12px 16px;
           ">
-            ${t.persone.map((p,j) => `<div style="padding:5px 0;border-bottom:${j<t.persone.length-1?'1px solid #eee':'none'};font-family:'Cormorant Garamond',serif;font-size:18px;color:#000;">${p}</div>`).join('')}
+            ${t.persone.map((p,j) => `<div style="padding:5px 0;border-bottom:${j<t.persone.length-1?'1px solid #eee':'none'};font-family:'Cormorant Garamond',serif;font-size:18px;color:${c.textIn};font-weight:600;">${p}</div>`).join('')}
           </div>
         </div>
       `;

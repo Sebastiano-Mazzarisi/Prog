@@ -850,67 +850,85 @@
     container.style.width = '700px';
     container.style.fontSize = '11px';
     container.style.fontFamily = "'Jost', sans-serif";
-    container.style.color = "#000";
+    container.style.color = "#000000";
+    container.style.backgroundColor = "#ffffff"; // Previene sfondi indesiderati su html2canvas
     
     let htmlPDF = `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px;">${testi.titolo}</h1>
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo}</h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 15px;">Giulia & Onofrio</h2>
       
+      <!-- Modifica strutturale per evitare che i numeri si sgancino dai KPI e si sovrappongano -->
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; table-layout: fixed;">
         <tr>
           <td style="width: 50%; padding: 3px 4px 3px 0;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiPresenti}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totPresenti}</div>
-            </div>
+            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiPresenti}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totPresenti}</td>
+              </tr>
+            </table>
           </td>
           <td style="width: 50%; padding: 3px 0 3px 4px;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiVeg}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totVeg}</div>
-            </div>
+            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiVeg}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totVeg}</td>
+              </tr>
+            </table>
           </td>
         </tr>
         <tr>
           <td style="padding: 3px 4px 3px 0;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiAssenti}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totAssenti}</div>
-            </div>
+            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAssenti}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAssenti}</td>
+              </tr>
+            </table>
           </td>
           <td style="padding: 3px 0 3px 4px;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiCarne}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totCarne}</div>
-            </div>
+             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiCarne}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totCarne}</td>
+              </tr>
+            </table>
           </td>
         </tr>
         <tr>
           <td style="padding: 3px 4px 3px 0;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiBaby}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totBaby}</div>
-            </div>
+            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiBaby}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totBaby}</td>
+              </tr>
+            </table>
           </td>
           <td style="padding: 3px 0 3px 4px;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiPesce}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totPesce}</div>
-            </div>
+            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiPesce}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totPesce}</td>
+              </tr>
+            </table>
           </td>
         </tr>
         <tr>
           <td style="padding: 3px 4px 3px 0;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiSegnaposto}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totSegnaposto}</div>
-            </div>
+            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiSegnaposto}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totSegnaposto}</td>
+              </tr>
+            </table>
           </td>
           <td style="padding: 3px 0 3px 4px;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
-              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiAllergie}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totAllergie}</div>
-            </div>
+             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAllergie}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAllergie}</td>
+              </tr>
+            </table>
           </td>
         </tr>
       </table>
@@ -923,8 +941,8 @@
         <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 25px; table-layout: fixed; word-break: break-word;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 4px 5px; width: 30%;">${testi.pdfNome}</th>
-              <th style="padding: 4px 5px; width: 70%;">${testi.lblNote}</th>
+              <th style="padding: 4px 5px; width: 30%; color: #000;">${testi.pdfNome}</th>
+              <th style="padding: 4px 5px; width: 70%; color: #000;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -932,8 +950,8 @@
       assentiRows.forEach(r => {
         htmlPDF += `
           <tr>
-            <td style="padding: 3px 5px; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 3px 5px;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 3px 5px; font-weight: 600; color: #000;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 3px 5px; color: #000;">${r.note ? r.note : '-'}</td>
           </tr>
         `;
       });
@@ -947,10 +965,10 @@
         <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; word-break: break-word;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 4px 5px; width: 35%;">${testi.pdfNome}</th>
-              <th style="padding: 4px 5px; width: 15%;">${testi.lblSecondo}</th>
-              <th style="padding: 4px 5px; width: 20%;">${testi.lblAllergie}</th>
-              <th style="padding: 4px 5px; width: 30%;">${testi.lblNote}</th>
+              <th style="padding: 4px 5px; width: 35%; color: #000;">${testi.pdfNome}</th>
+              <th style="padding: 4px 5px; width: 15%; color: #000;">${testi.lblSecondo}</th>
+              <th style="padding: 4px 5px; width: 20%; color: #000;">${testi.lblAllergie}</th>
+              <th style="padding: 4px 5px; width: 30%; color: #000;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -972,10 +990,10 @@
             : (r.note ? r.note : '-');
 
         htmlPDF += '<tr>'
-          + '<td style="padding:4px 6px;font-weight:600">' + (r.nome || 'Senza nome') + '</td>'
-          + '<td style="padding:4px 6px">' + secondoStr + '</td>'
-          + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : '') + '">' + allergie + '</td>'
-          + '<td style="padding:4px 6px">' + notaCell + '</td>'
+          + '<td style="padding:4px 6px;font-weight:600;color:#000;">' + (r.nome || 'Senza nome') + '</td>'
+          + '<td style="padding:4px 6px;color:#000;">' + secondoStr + '</td>'
+          + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + allergie + '</td>'
+          + '<td style="padding:4px 6px;color:#000;">' + notaCell + '</td>'
           + '</tr>';
       });
       htmlPDF += `</tbody></table>`;
@@ -983,7 +1001,6 @@
     
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
-      // Classe corretta per interruzione pagina
       htmlPDF += `<div class="html2pdf__page-break"></div>`;
       htmlPDF += `<div>`;
       
@@ -1097,31 +1114,29 @@
     }
 
     // ===== PAGINA 3: DISPOSIZIONE DEI TAVOLI =====
-    // Classe corretta per interruzione pagina
     htmlPDF += `<div class="html2pdf__page-break"></div>`;
     htmlPDF += `<div>`;
     htmlPDF += `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px;">${testi.titoloTavoli}</h1>
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titoloTavoli}</h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 18px;">Giulia &amp; Onofrio</h2>
       <div style="display: flex; flex-wrap: wrap; gap: 16px;">
     `;
     
-    // Verde oliva chiaro chiaro uniforme per tutti i tavoli nel PDF
     const bgTavolo = '#e0e8d0';
     const borderTavolo = '#a5b589';
 
     TAVOLI.forEach((t, i) => {
       const label = t.nome.replace(/^Tavolo \d+ - /, '');
       htmlPDF += `
-        <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${borderTavolo}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px;">
-          <!-- Intestazione nera e sfondo verde oliva -->
-          <div style="background: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+        <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${borderTavolo}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px; background-color: #ffffff;">
+          <!-- Intestazione -->
+          <div style="background-color: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
             <span>Tavolo ${i+1} &middot; ${label}</span>
-            <span style="background:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;color:#000000;">${t.persone.length}</span>
+            <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;color:#000000;">${t.persone.length}</span>
           </div>
-          <!-- Elenco testo nero -->
-          <div style="padding: 8px 12px; column-count: 2; column-gap: 12px; background: #fff;">
-            ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000000; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
+          <!-- Elenco TESTO NERO SENZA SFONDO FORZATO -->
+          <div style="padding: 8px 12px; column-count: 2; column-gap: 12px; background-color: transparent;">
+            ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000000 !important; background-color: transparent !important; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
           </div>
         </div>
       `;
@@ -1170,10 +1185,10 @@
       const isOpen = tavoloAperto === i;
       html += `
         <div>
-          <!-- Bottoni tavoli neri su sfondo verde oliva chiaro chiaro -->
+          <!-- Intestazione tavoli neri su sfondo verde oliva chiaro -->
           <button onclick="toggleTavolo(${i})" style="
             width:100%;
-            background: ${bgTavolo};
+            background-color: ${bgTavolo};
             color:#000000;
             border:1.5px solid ${borderTavolo};
             border-bottom:${isOpen ? 'none' : '1.5px solid ' + borderTavolo};
@@ -1191,20 +1206,20 @@
           " id="btn-tavolo-${i}">
             <span>Tavolo ${i+1} &middot; ${label}</span>
             <span style="display:flex;align-items:center;gap:8px;">
-              <span style="background:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000000;">${t.persone.length}</span>
+              <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000000;">${t.persone.length}</span>
               <span style="font-size:12px;">${isOpen ? '▲' : '▼'}</span>
             </span>
           </button>
-          <!-- Elenco testo nero -->
+          <!-- Elenco TESTO NERO SENZA SFONDO FORZATO -->
           <div id="tavolo-panel-${i}" style="
             display:${isOpen ? 'block' : 'none'};
-            background:#fff;
+            background-color:transparent;
             border:1.5px solid ${borderTavolo};
             border-top:none;
             border-radius:0 0 12px 12px;
             padding:12px 16px;
           ">
-            ${t.persone.map((p,j) => `<div style="padding:5px 0; font-family:'Cormorant Garamond',serif; font-size:18px; color:#000000;">${p}</div>`).join('')}
+            ${t.persone.map((p,j) => `<div style="padding:5px 0; font-family:'Cormorant Garamond',serif; font-size:18px; color:#000000 !important; background-color: transparent !important;">${p}</div>`).join('')}
           </div>
         </div>
       `;

@@ -356,40 +356,10 @@
   
   let currentLang = 'it';
 
-  // ============================================================
-  // DATI TAVOLI (da Tavoli.txt)
-  // ============================================================
-  const TAVOLI = [
-    {
-      nome: "Tavolo 1 - Giulia & Onofrio",
-      persone: ["Mazzarisi Onofrio","Pérez Giulia","Guarneri Lucia","Pérez Clara","Pricci Marica","Mazzarisi Sebastiano","Mazzarisi Teresa","Ladogana Valentina"]
-    },
-    {
-      nome: "Tavolo 2 - Pérez",
-      persone: ["Pérez Ramón","Pérez Ana","Guarneri Silvia","Pérez Dulce","Pérez Juani","Pérez Marta","Bencomo Tomás"]
-    },
-    {
-      nome: "Tavolo 3 - Lorusso",
-      persone: ["Pricci Angela","Lorusso Onofrio","Lorusso Benny","Lepore Genny","Lorusso Alessandro","Lorusso Alice","Lorusso Nina","Lorusso Cinzia","Rotondi Gianni","Rotondi Nicoletta"]
-    },
-    {
-      nome: "Tavolo 4 - Pricci-Vatta",
-      persone: ["Pricci Maria Antonietta","Chiarappa Saverio","Chiarappa Martino","Chiarappa Cristiano","Trivisani Anna","Pricci Giuseppe","Pricci Gilda","Pricci Asia","Chiarappa Oletta","Vatta Sergio"]
-    },
-    {
-      nome: "Tavolo 5 - Pricci",
-      persone: ["Pricci Vanna","Lefemine Domenico","Lefemine Flavia","Lefemine Francesco","Mazzarisi Maria Grazia","Minerva Nicola","Pricci Giovanni","Pricci Tiziana","Dalena Riccardo"]
-    },
-    {
-      nome: "Tavolo 6 - Mazzarisi",
-      persone: ["Mazzarisi Vito","Nitti Enza","Mazzarisi Daniele","Mazzarisi Marco","Bruni Stefania","Mazzarisi Mariella","Pacello Stefano","Mazzarisi Francesco","Guazzaroni Giulia","Mazzarisi Alessandra","Mazzarisi Andrea","Mazzarisi Domenico","Sabatelli Anna","Mazzarisi Marilù"]
-    },
-    {
-      nome: "Tavolo 7 - Casulli",
-      persone: ["Casulli Angelo","Marchione Maria","Casulli Gianluca","Vinella Anna","Casulli Edoardo","Casulli Flavio","Casulli Daniele","Lovece Roberta","Casulli Donatello"]
-    }
-  ];
+  // Array dinamico per i tavoli
+  let TAVOLI = [];
   let tavoloAperto = null;
+
   const dizionario = {
     it: {
       titolo: "Lista Invitati",
@@ -464,8 +434,48 @@
   };
 
   window.addEventListener('DOMContentLoaded', () => {
-    caricaRisposte();
+    caricaTavoli(); // Avvia il fetch dei tavoli
+    caricaRisposte(); // Avvia il fetch da Google Script
   });
+
+  // Funzione per estrarre i dati da Tavoli.txt dinamicamente
+  async function caricaTavoli() {
+    try {
+      const response = await fetch('Tavoli.txt?t=' + Date.now());
+      if (response.ok) {
+        const text = await response.text();
+        const righe = text.split(/\r?\n/);
+        TAVOLI = []; // Resetta l'array per popolarlo dinamicamente
+        let tavoloCorrente = null;
+
+        righe.forEach(riga => {
+          const r = riga.trim();
+          if (!r) return; // Ignora le righe vuote
+
+          if (r.startsWith('#')) {
+            // Nuovo tavolo identificato (rimuove il '#' e gli spazi)
+            tavoloCorrente = {
+              nome: r.substring(1).trim(),
+              persone: []
+            };
+            TAVOLI.push(tavoloCorrente);
+          } else if (tavoloCorrente) {
+            // Aggiunge la persona al tavolo corrente
+            tavoloCorrente.persone.push(r);
+          }
+        });
+        
+        // Se la sezione HTML dei tavoli è già stata montata, la aggiorna
+        if (document.getElementById('sezione-tavoli')) {
+          renderizzaTavoli();
+        }
+      } else {
+        console.error("Errore nel caricamento di Tavoli.txt: " + response.status);
+      }
+    } catch (err) {
+      console.error("Errore di rete durante il caricamento di Tavoli.txt: ", err);
+    }
+  }
 
   function cambiaLingua(lang) {
     currentLang = lang;
@@ -955,7 +965,7 @@
     
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
-      // FIX REGRESSIONE PAGINAZIONE: div interruttore di pagina pulito
+      // Interruttore di pagina pulito
       htmlPDF += `<div style="page-break-before: always; clear: both; height: 0; line-height: 0; margin: 0; padding: 0;"></div>`;
       htmlPDF += `<div>`;
       
@@ -986,7 +996,6 @@
       const totAdultiCsv = totInvitatiCsv - totBambini;
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
-      // MODIFICA: Rimossi titoli grandi, ingrandito e centrato il riepilogo numerico
       htmlPDF += `
         <div style="font-size: 18px; text-align: center; color: #8a5e1e; font-weight: 600; padding-top: 6px; margin-bottom: 8px;">
           ${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}
@@ -1070,7 +1079,7 @@
     }
 
     // ===== PAGINA 3: DISPOSIZIONE DEI TAVOLI =====
-    // FIX REGRESSIONE PAGINAZIONE: div interruttore di pagina pulito
+    // Interruttore di pagina pulito
     htmlPDF += `<div style="page-break-before: always; clear: both; height: 0; line-height: 0; margin: 0; padding: 0;"></div>`;
     htmlPDF += `<div>`;
     htmlPDF += `
@@ -1088,9 +1097,9 @@
             <span>Tavolo ${i+1} &middot; ${label}</span>
             <span style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 8px;font-size:11px;">${t.persone.length}</span>
           </div>
-          <!-- MODIFICA: Elenco a doppia colonna con column-count -->
-          <div style="padding: 8px 12px; column-count: 2; column-gap: 12px;">
-            ${t.persone.map((p, j) => `<div style="padding:2px 0; border-bottom:0.5px solid #eee; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
+          <!-- Nessuna linea di bordo inferiore per il testo nel PDF e testo nero -->
+          <div style="padding: 8px 12px; column-count: 2; column-gap: 12px; background: #fff;">
+            ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
           </div>
         </div>
       `;
@@ -1098,6 +1107,12 @@
     htmlPDF += `</div></div>`; // Chiude flex e div contenitore pagina
 
     container.innerHTML = htmlPDF;
+
+    // Aggiungo momentaneamente il container invisibile al body così html2canvas può calcolare correttamente il Web Font
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.top = '0';
+    document.body.appendChild(container);
 
     const opt = {
       margin:       10,
@@ -1108,6 +1123,8 @@
     };
 
     html2pdf().set(opt).from(container).save().then(() => {
+      // Rimuovo il container fittizio a lavoro ultimato
+      document.body.removeChild(container);
       if (btnPdf) {
         btnPdf.innerText = testi.pdf;
         btnPdf.disabled = false;
@@ -1126,15 +1143,15 @@
     const sezione = document.getElementById('sezione-tavoli');
     if (!sezione) return;
     
-    // Colori per i bottoni tavoli (toni matrimonio e testo interno corrispondente)
+    // Colori per i bottoni tavoli
     const colori = [
-      { bg: '#8a5e1e', textIn: '#8a5e1e' }, // Oro Scuro
-      { bg: '#2d6040', textIn: '#2d6040' }, // Verde Pino
-      { bg: '#7a5c3a', textIn: '#7a5c3a' }, // Marrone
-      { bg: '#5a7a38', textIn: '#3a5a18' }, // Verde Oliva
-      { bg: '#b8893a', textIn: '#8a5e1e' }, // Oro
-      { bg: '#3a5a18', textIn: '#3a5a18' }, // Verde Scuro
-      { bg: '#6a4a2a', textIn: '#6a4a2a' }  // Marrone Scuro
+      { bg: '#8a5e1e' }, // Oro Scuro
+      { bg: '#2d6040' }, // Verde Pino
+      { bg: '#7a5c3a' }, // Marrone
+      { bg: '#5a7a38' }, // Verde Oliva
+      { bg: '#b8893a' }, // Oro
+      { bg: '#3a5a18' }, // Verde Scuro
+      { bg: '#6a4a2a' }  // Marrone Scuro
     ];
 
     let html = `<div style="margin-bottom:8px;"><div style="border-top: 2px solid var(--border); margin-bottom:16px;"></div>`;
@@ -1170,6 +1187,7 @@
               <span style="font-size:12px;">${isOpen ? '▲' : '▼'}</span>
             </span>
           </button>
+          <!-- Nessuna linea di separazione (border-bottom:none) e testo nero (color:#000) -->
           <div id="tavolo-panel-${i}" style="
             display:${isOpen ? 'block' : 'none'};
             background:#fff;
@@ -1178,7 +1196,7 @@
             border-radius:0 0 12px 12px;
             padding:12px 16px;
           ">
-            ${t.persone.map((p,j) => `<div style="padding:5px 0;border-bottom:${j<t.persone.length-1?'1px solid #eee':'none'};font-family:'Cormorant Garamond',serif;font-size:18px;color:${c.textIn};font-weight:600;">${p}</div>`).join('')}
+            ${t.persone.map((p,j) => `<div style="padding:5px 0; font-family:'Cormorant Garamond',serif; font-size:18px; color:#000;">${p}</div>`).join('')}
           </div>
         </div>
       `;

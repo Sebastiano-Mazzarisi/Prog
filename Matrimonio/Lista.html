@@ -326,16 +326,6 @@
   .pdf-table thead tr:first-child th, .pdf-table tbody:first-child tr:first-child td {
     border-top: 0.5px solid #000 !important;
   }
-
-  /* ── Stampa / PDF ────────────────────────────────────────────────── */
-  @page { margin: 10mm; size: A4 portrait; }
-  @media print {
-    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .page-wrapper { max-width: 100% !important; padding: 0 !important; }
-    * { max-width: 100% !important; box-sizing: border-box !important; }
-    table { table-layout: fixed !important; width: 100% !important; word-break: break-word !important; }
-    td, th { overflow-wrap: break-word !important; word-break: break-word !important; }
-  }
 </style>
 </head>
 <body>
@@ -787,72 +777,69 @@
 
     const container = document.createElement('div');
     container.style.padding = '0';
-    container.style.maxWidth = '190mm';
-    container.style.width = '190mm';
-    container.style.boxSizing = 'border-box';
-    container.style.wordBreak = 'break-word';
-    container.style.overflowWrap = 'break-word';
+    container.style.width = '700px';
+    container.style.fontSize = '11px';
     container.style.fontFamily = "'Jost', sans-serif";
     container.style.color = "#000";
     
     let htmlPDF = `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-top: 0; margin-bottom: 5px;">${testi.titolo}</h1>
-      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: #8a5e1e; margin-bottom: 25px;">Giulia & Onofrio</h2>
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px;">${testi.titolo}</h1>
+      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 15px;">Giulia & Onofrio</h2>
       
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; table-layout: fixed;">
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; table-layout: fixed;">
         <tr>
           <td style="width: 50%; padding: 3px 4px 3px 0;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-              <div style="font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiPresenti}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totPresenti}</div>
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiPresenti}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totPresenti}</div>
             </div>
           </td>
           <td style="width: 50%; padding: 3px 0 3px 4px;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-              <div style="font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiVeg}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totVeg}</div>
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiVeg}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totVeg}</div>
             </div>
           </td>
         </tr>
         <tr>
           <td style="padding: 3px 4px 3px 0;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-              <div style="font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiAssenti}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totAssenti}</div>
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiAssenti}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totAssenti}</div>
             </div>
           </td>
           <td style="padding: 3px 0 3px 4px;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-              <div style="font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiCarne}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totCarne}</div>
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiCarne}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totCarne}</div>
             </div>
           </td>
         </tr>
         <tr>
           <td style="padding: 3px 4px 3px 0;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-              <div style="font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiBaby}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totBaby}</div>
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiBaby}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totBaby}</div>
             </div>
           </td>
           <td style="padding: 3px 0 3px 4px;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-              <div style="font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiPesce}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totPesce}</div>
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiPesce}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totPesce}</div>
             </div>
           </td>
         </tr>
         <tr>
           <td style="padding: 3px 4px 3px 0;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-              <div style="font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiSegnaposto}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totSegnaposto}</div>
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiSegnaposto}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totSegnaposto}</div>
             </div>
           </td>
           <td style="padding: 3px 0 3px 4px;">
-            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-              <div style="font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiAllergie}</div>
-              <div style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totAllergie}</div>
+            <div style="background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+              <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; flex-grow: 1; word-break: break-word;">${testi.kpiAllergie}</div>
+              <div style="font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; color: #3a5a18; line-height: 1; flex-shrink: 0;">${totAllergie}</div>
             </div>
           </td>
         </tr>
@@ -862,12 +849,12 @@
     // Tabella Assenti
     if (assentiRows.length > 0) {
       htmlPDF += `
-        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti} (${totAssenti})</h3>
+        <h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti} (${totAssenti})</h3>
         <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 25px; table-layout: fixed; word-break: break-word;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 6px; width: 30%;">${testi.pdfNome}</th>
-              <th style="padding: 6px; width: 70%;">${testi.lblNote}</th>
+              <th style="padding: 4px 5px; width: 30%;">${testi.pdfNome}</th>
+              <th style="padding: 4px 5px; width: 70%;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -875,8 +862,8 @@
       assentiRows.forEach(r => {
         htmlPDF += `
           <tr>
-            <td style="padding: 4px 6px; font-weight: 600;">${r.nome || 'Senza nome'}</td>
-            <td style="padding: 4px 6px;">${r.note ? r.note : '-'}</td>
+            <td style="padding: 3px 5px; font-weight: 600;">${r.nome || 'Senza nome'}</td>
+            <td style="padding: 3px 5px;">${r.note ? r.note : '-'}</td>
           </tr>
         `;
       });
@@ -886,14 +873,14 @@
     // Tabella Presenti
     if (presentiRows.length > 0) {
       htmlPDF += `
-        <h3 style="font-size: 16px; margin-bottom: 8px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>
-        <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed; word-break: break-word;">
+        <h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>
+        <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; word-break: break-word;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 6px; width: 28%;">${testi.pdfNome}</th>
-              <th style="padding: 6px; width: 13%;">${testi.lblSecondo}</th>
-              <th style="padding: 6px; width: 18%;">${testi.lblAllergie}</th>
-              <th style="padding: 6px; width: 41%;">${testi.lblNote}</th>
+              <th style="padding: 4px 5px; width: 35%;">${testi.pdfNome}</th>
+              <th style="padding: 4px 5px; width: 15%;">${testi.lblSecondo}</th>
+              <th style="padding: 4px 5px; width: 20%;">${testi.lblAllergie}</th>
+              <th style="padding: 4px 5px; width: 30%;">${testi.lblNote}</th>
             </tr>
           </thead>
           <tbody>
@@ -955,7 +942,7 @@
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
       htmlPDF += `
-        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 15px; color: #8a5e1e; font-weight: 600; padding-top: 10px;">${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}</h3>
+        <h3 style="font-size: 13px; margin-top: 0; margin-bottom: 10px; color: #8a5e1e; font-weight: 600; padding-top: 10px;">${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}</h3>
         <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
       `;
 
@@ -1040,7 +1027,7 @@
       margin:       10,
       filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, windowWidth: 794 },
+      html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 

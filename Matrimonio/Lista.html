@@ -983,7 +983,7 @@
     
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
-      // Sostituzione con la classe corretta per forzare l'interruzione pagina pulita
+      // Classe corretta per interruzione pagina
       htmlPDF += `<div class="html2pdf__page-break"></div>`;
       htmlPDF += `<div>`;
       
@@ -1097,7 +1097,7 @@
     }
 
     // ===== PAGINA 3: DISPOSIZIONE DEI TAVOLI =====
-    // Sostituzione con la classe corretta
+    // Classe corretta per interruzione pagina
     htmlPDF += `<div class="html2pdf__page-break"></div>`;
     htmlPDF += `<div>`;
     htmlPDF += `
@@ -1105,18 +1105,21 @@
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 18px;">Giulia &amp; Onofrio</h2>
       <div style="display: flex; flex-wrap: wrap; gap: 16px;">
     `;
-    const coloriTavoli = ['#8a5e1e','#2d6040','#7a5c3a','#5a7a38','#b8893a','#3a5a18','#6a4a2a'];
+    
+    // Verde oliva chiaro chiaro uniforme per tutti i tavoli nel PDF
+    const bgTavolo = '#e0e8d0';
+    const borderTavolo = '#a5b589';
+
     TAVOLI.forEach((t, i) => {
-      const colore = coloriTavoli[i % coloriTavoli.length];
       const label = t.nome.replace(/^Tavolo \d+ - /, '');
       htmlPDF += `
-        <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${colore}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px;">
-          <!-- Intestazione nera e sfondo colorato -->
-          <div style="background: ${colore}; color: #000000; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+        <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${borderTavolo}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px;">
+          <!-- Intestazione nera e sfondo verde oliva -->
+          <div style="background: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
             <span>Tavolo ${i+1} &middot; ${label}</span>
-            <span style="background:rgba(255,255,255,0.4);border-radius:20px;padding:1px 8px;font-size:11px;color:#000;">${t.persone.length}</span>
+            <span style="background:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;color:#000000;">${t.persone.length}</span>
           </div>
-          <!-- Elenco nero e sfondo bianco -->
+          <!-- Elenco testo nero -->
           <div style="padding: 8px 12px; column-count: 2; column-gap: 12px; background: #fff;">
             ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000000; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
           </div>
@@ -1154,33 +1157,26 @@
     const sezione = document.getElementById('sezione-tavoli');
     if (!sezione) return;
     
-    // Colori per i bottoni tavoli
-    const colori = [
-      { bg: '#8a5e1e' }, // Oro Scuro
-      { bg: '#2d6040' }, // Verde Pino
-      { bg: '#7a5c3a' }, // Marrone
-      { bg: '#5a7a38' }, // Verde Oliva
-      { bg: '#b8893a' }, // Oro
-      { bg: '#3a5a18' }, // Verde Scuro
-      { bg: '#6a4a2a' }  // Marrone Scuro
-    ];
+    // Colore verde oliva chiaro chiaro uniforme per il Web
+    const bgTavolo = '#e0e8d0';
+    const borderTavolo = '#a5b589';
 
     let html = `<div style="margin-bottom:8px;"><div style="border-top: 2px solid var(--border); margin-bottom:16px;"></div>`;
     
     // Bottoni tavoli
     html += `<div style="display:flex;flex-direction:column;gap:8px;">`;
     TAVOLI.forEach((t, i) => {
-      const c = colori[i % colori.length];
       const label = t.nome.replace(/^Tavolo \d+ - /, '');
       const isOpen = tavoloAperto === i;
       html += `
         <div>
-          <!-- Bottoni tavoli neri -->
+          <!-- Bottoni tavoli neri su sfondo verde oliva chiaro chiaro -->
           <button onclick="toggleTavolo(${i})" style="
             width:100%;
-            background: ${c.bg};
+            background: ${bgTavolo};
             color:#000000;
-            border:none;
+            border:1.5px solid ${borderTavolo};
+            border-bottom:${isOpen ? 'none' : '1.5px solid ' + borderTavolo};
             border-radius:${isOpen ? '12px 12px 0 0' : '12px'};
             padding:13px 16px;
             font-family:'Jost',sans-serif;
@@ -1195,7 +1191,7 @@
           " id="btn-tavolo-${i}">
             <span>Tavolo ${i+1} &middot; ${label}</span>
             <span style="display:flex;align-items:center;gap:8px;">
-              <span style="background:rgba(255,255,255,0.4);border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000;">${t.persone.length}</span>
+              <span style="background:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000000;">${t.persone.length}</span>
               <span style="font-size:12px;">${isOpen ? '▲' : '▼'}</span>
             </span>
           </button>
@@ -1203,7 +1199,7 @@
           <div id="tavolo-panel-${i}" style="
             display:${isOpen ? 'block' : 'none'};
             background:#fff;
-            border:1.5px solid ${c.bg};
+            border:1.5px solid ${borderTavolo};
             border-top:none;
             border-radius:0 0 12px 12px;
             padding:12px 16px;

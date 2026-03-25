@@ -344,7 +344,7 @@
   </div>
 
   <div class="card">
-    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:18px;font-weight:600">Caricamento...</span><br><small style="color:#888;font-size:11px">25/03/2026 00:14:04</small></p></div>
+    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">Caricamento...</span><br><small style="color:#888;font-size:13px">25/03/2026 00:14</small></p></div>
   </div>
 </div>
 </div>
@@ -554,7 +554,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="color:var(--text-light,#555);text-align:center;padding:20px">' + testi.caricamento + '<br><small style="color:#888;font-size:11px">23:28:13</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#888;font-size:13px">25/03/2026 00:14</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())

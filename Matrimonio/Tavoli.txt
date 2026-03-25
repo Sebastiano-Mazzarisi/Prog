@@ -29,7 +29,7 @@ Lorusso Cinzia
 Rotondi Gianni
 Rotondi Nicoletta
 
-# Tavolo 4 - Antonietta,Giuseppe e Vatta
+# Tavolo 4 - Antonietta
 Pricci Maria Antonietta
 Chiarappa Saverio
 Chiarappa Martino
@@ -41,7 +41,7 @@ Pricci Asia
 Chiarappa Oletta
 Vatta Sergio
 
-# Tavolo 5 - Vanna, Mary, Titti
+# Tavolo 5 - Vanna
 Pricci Vanna
 Lefemine Domenico
 Lefemine Flavia

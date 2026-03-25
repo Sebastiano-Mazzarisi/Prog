@@ -344,12 +344,25 @@
   </div>
 
   <div class="card">
-    <div id="sposi-table"><p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">Caricamento...</span><br><small style="color:#888;font-size:13px">25/03/2026 07:26</small></p></div>
+    <div id="sposi-table">
+      <p id="txt-caricamento" style="text-align:center;padding:20px">
+        <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
+        <small style="color:#888;font-size:13px" id="time-placeholder"></small>
+      </p>
+    </div>
   </div>
 </div>
 </div>
 
 <script>
+  function getCurrentDateTime() {
+    const now = new Date();
+    return now.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: 'numeric'}) + ' ' + 
+           now.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
+  }
+  // Imposta l'orario iniziale subito prima del caricamento reale
+  document.getElementById('time-placeholder').innerText = getCurrentDateTime();
+
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
   let activeFilter = null;
   window.datiInvitati = [];
@@ -606,7 +619,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#888;font-size:13px">25/03/2026 07:26</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#888;font-size:13px">' + getCurrentDateTime() + '</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -694,6 +707,8 @@
       <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.tavoli}</button>
     </div>
     
+    <div style="text-align: center; color: #888; font-size: 13px; margin-bottom: 12px;">Aggiornato il: ${getCurrentDateTime()}</div>
+
     <div id="lista-invitati">`;
 
     window.datiInvitati.forEach(r => {
@@ -968,8 +983,8 @@
     
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
-      // Interruttore di pagina pulito
-      htmlPDF += `<div style="page-break-before: always; clear: both; height: 0; line-height: 0; margin: 0; padding: 0;"></div>`;
+      // Sostituzione con la classe corretta per forzare l'interruzione pagina pulita
+      htmlPDF += `<div class="html2pdf__page-break"></div>`;
       htmlPDF += `<div>`;
       
       // Calcola numero bambini (< 11 anni) per il titolo
@@ -1082,8 +1097,8 @@
     }
 
     // ===== PAGINA 3: DISPOSIZIONE DEI TAVOLI =====
-    // Interruttore di pagina pulito
-    htmlPDF += `<div style="page-break-before: always; clear: both; height: 0; line-height: 0; margin: 0; padding: 0;"></div>`;
+    // Sostituzione con la classe corretta
+    htmlPDF += `<div class="html2pdf__page-break"></div>`;
     htmlPDF += `<div>`;
     htmlPDF += `
       <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px;">${testi.titoloTavoli}</h1>
@@ -1096,13 +1111,14 @@
       const label = t.nome.replace(/^Tavolo \d+ - /, '');
       htmlPDF += `
         <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${colore}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px;">
-          <div style="background: ${colore}; color: #fff; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+          <!-- Intestazione nera e sfondo colorato -->
+          <div style="background: ${colore}; color: #000000; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
             <span>Tavolo ${i+1} &middot; ${label}</span>
-            <span style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 8px;font-size:11px;">${t.persone.length}</span>
+            <span style="background:rgba(255,255,255,0.4);border-radius:20px;padding:1px 8px;font-size:11px;color:#000;">${t.persone.length}</span>
           </div>
-          <!-- Nessuna linea di bordo inferiore per il testo nel PDF e testo nero -->
+          <!-- Elenco nero e sfondo bianco -->
           <div style="padding: 8px 12px; column-count: 2; column-gap: 12px; background: #fff;">
-            ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
+            ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000000; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
           </div>
         </div>
       `;
@@ -1119,7 +1135,6 @@
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // Rimosso l'inserimento nel DOM che causava l'errore pagina bianca
     html2pdf().set(opt).from(container).save().then(() => {
       if (btnPdf) {
         btnPdf.innerText = testi.pdf;
@@ -1160,10 +1175,11 @@
       const isOpen = tavoloAperto === i;
       html += `
         <div>
+          <!-- Bottoni tavoli neri -->
           <button onclick="toggleTavolo(${i})" style="
             width:100%;
             background: ${c.bg};
-            color:#fff;
+            color:#000000;
             border:none;
             border-radius:${isOpen ? '12px 12px 0 0' : '12px'};
             padding:13px 16px;
@@ -1179,11 +1195,11 @@
           " id="btn-tavolo-${i}">
             <span>Tavolo ${i+1} &middot; ${label}</span>
             <span style="display:flex;align-items:center;gap:8px;">
-              <span style="background:rgba(255,255,255,0.25);border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;">${t.persone.length}</span>
+              <span style="background:rgba(255,255,255,0.4);border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000;">${t.persone.length}</span>
               <span style="font-size:12px;">${isOpen ? '▲' : '▼'}</span>
             </span>
           </button>
-          <!-- Nessuna linea di separazione (border-bottom:none) e testo nero (color:#000) -->
+          <!-- Elenco testo nero -->
           <div id="tavolo-panel-${i}" style="
             display:${isOpen ? 'block' : 'none'};
             background:#fff;
@@ -1192,7 +1208,7 @@
             border-radius:0 0 12px 12px;
             padding:12px 16px;
           ">
-            ${t.persone.map((p,j) => `<div style="padding:5px 0; font-family:'Cormorant Garamond',serif; font-size:18px; color:#000;">${p}</div>`).join('')}
+            ${t.persone.map((p,j) => `<div style="padding:5px 0; font-family:'Cormorant Garamond',serif; font-size:18px; color:#000000;">${p}</div>`).join('')}
           </div>
         </div>
       `;

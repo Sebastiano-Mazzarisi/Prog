@@ -433,9 +433,12 @@
     }
   };
 
+  // Attende che i font web siano scaricati per evitare sfarfallii visivi e layout errati
   window.addEventListener('DOMContentLoaded', () => {
-    caricaTavoli(); // Avvia il fetch dei tavoli
-    caricaRisposte(); // Avvia il fetch da Google Script
+    document.fonts.ready.then(() => {
+      caricaTavoli(); // Avvia il fetch dei tavoli
+      caricaRisposte(); // Avvia il fetch da Google Script
+    });
   });
 
   // Funzione per estrarre i dati da Tavoli.txt dinamicamente
@@ -688,7 +691,7 @@
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px;">
       <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">${testi.aggiorna}</button>
       <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.pdf}</button>
-      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">🪑 ${testi.tavoli}</button>
+      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.tavoli}</button>
     </div>
     
     <div id="lista-invitati">`;
@@ -1181,7 +1184,7 @@
             align-items:center;
             transition:all 0.2s;
           " id="btn-tavolo-${i}">
-            <span>🪑 Tavolo ${i+1} · ${label}</span>
+            <span>Tavolo ${i+1} &middot; ${label}</span>
             <span style="display:flex;align-items:center;gap:8px;">
               <span style="background:rgba(255,255,255,0.25);border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;">${t.persone.length}</span>
               <span style="font-size:12px;">${isOpen ? '▲' : '▼'}</span>

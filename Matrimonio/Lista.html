@@ -387,7 +387,9 @@
       badgePesce: "🐟 Pesce",
       titoloPresenti: "Presenti",
       titoloAssenti: "Assenti",
-      titoloInvitati: "Invitati"
+      titoloInvitati: "Invitati",
+      tavoli: "Tavoli",
+      titoloTavoli: "Disposizione dei tavoli"
     },
     es: {
       titolo: "Lista de Invitados",
@@ -420,7 +422,9 @@
       badgePesce: "🐟 Pescado",
       titoloPresenti: "Presentes",
       titoloAssenti: "Ausentes",
-      titoloInvitati: "Invitados"
+      titoloInvitati: "Invitados",
+      tavoli: "Mesas",
+      titoloTavoli: "Disposición de las mesas"
     }
   };
 
@@ -636,9 +640,10 @@
       </tr>
     </table>
     
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${testi.aggiorna}</button>
-      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2f5c9a, #4a7cbd); color: #ffffff;">${testi.pdf}</button>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px;">
+      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;font-size:13px;padding:12px 6px;">${testi.aggiorna}</button>
+      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2f5c9a, #4a7cbd); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.pdf}</button>
+      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #5a3a8a, #8a5abf); color: #ffffff;font-size:13px;padding:12px 6px;">🪑 ${testi.tavoli}</button>
     </div>
     
     <div id="lista-invitati">`;
@@ -698,9 +703,10 @@
       </div>`;
     });
 
-    html += `</div>`;
+    html += `</div>
+    <div id="sezione-tavoli" style="margin-top:24px;"></div>`;
     box.innerHTML = html;
-  }
+    renderizzaTavoli();
 
   async function generaPDF() {
     const testi = dizionario[currentLang];
@@ -1021,7 +1027,30 @@
       htmlPDF += `</div>`;
     }
 
-    container.innerHTML = htmlPDF;
+    // ===== PAGINA 3: DISPOSIZIONE DEI TAVOLI =====
+    htmlPDF += `<div style="page-break-before: always;">`;
+    htmlPDF += `
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px;">${testi.titoloTavoli}</h1>
+      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 18px;">Giulia &amp; Onofrio</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+    `;
+    const coloriTavoli = ['#7a4e8a','#2f5c9a','#2d6040','#8a5e1e','#a83230','#3a6a8a','#6a4a2a'];
+    TAVOLI.forEach((t, i) => {
+      const colore = coloriTavoli[i % coloriTavoli.length];
+      const label = t.nome.replace(/^Tavolo \d+ - /, '');
+      htmlPDF += `
+        <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${colore}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px;">
+          <div style="background: ${colore}; color: #fff; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+            <span>Tavolo ${i+1} &middot; ${label}</span>
+            <span style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 8px;font-size:11px;">${t.persone.length}</span>
+          </div>
+          <div style="padding: 8px 12px;">
+            ${t.persone.map((p, j) => `<div style="padding:3px 0;border-bottom:${j<t.persone.length-1?'0.5px solid #ddd':'none'};font-family:'Cormorant Garamond',serif;font-size:14px;color:#000;">${p}</div>`).join('')}
+          </div>
+        </div>
+      `;
+    });
+    htmlPDF += `</div></div>`;
 
     const opt = {
       margin:       10,
@@ -1039,7 +1068,129 @@
     });
   }
 
-  function eliminaRiga(riga) {
+  // ============================================================
+  // DATI TAVOLI (da Tavoli.txt)
+  // ============================================================
+  const TAVOLI = [
+    {
+      nome: "Tavolo 1 - Giulia & Onofrio",
+      persone: ["Mazzarisi Onofrio","Pérez Giulia","Guarneri Lucia","Pérez Clara","Pricci Marica","Mazzarisi Sebastiano","Mazzarisi Teresa","Ladogana Valentina"]
+    },
+    {
+      nome: "Tavolo 2 - Pérez",
+      persone: ["Pérez Ramón","Pérez Ana","Guarneri Silvia","Pérez Dulce","Pérez Juani","Pérez Marta","Bencomo Tomás"]
+    },
+    {
+      nome: "Tavolo 3 - Lorusso",
+      persone: ["Pricci Angela","Lorusso Onofrio","Lorusso Benny","Lepore Genny","Lorusso Alessandro","Lorusso Alice","Lorusso Nina","Lorusso Cinzia","Rotondi Gianni","Rotondi Nicoletta"]
+    },
+    {
+      nome: "Tavolo 4 - Pricci-Vatta",
+      persone: ["Pricci Maria Antonietta","Chiarappa Saverio","Chiarappa Martino","Chiarappa Cristiano","Trivisani Anna","Pricci Giuseppe","Pricci Gilda","Pricci Asia","Chiarappa Oletta","Vatta Sergio"]
+    },
+    {
+      nome: "Tavolo 5 - Pricci",
+      persone: ["Pricci Vanna","Lefemine Domenico","Lefemine Flavia","Lefemine Francesco","Mazzarisi Maria Grazia","Minerva Nicola","Pricci Giovanni","Pricci Tiziana","Dalena Riccardo"]
+    },
+    {
+      nome: "Tavolo 6 - Mazzarisi",
+      persone: ["Mazzarisi Vito","Nitti Enza","Mazzarisi Daniele","Mazzarisi Marco","Bruni Stefania","Mazzarisi Mariella","Pacello Stefano","Mazzarisi Francesco","Guazzaroni Giulia","Mazzarisi Alessandra","Mazzarisi Andrea","Mazzarisi Domenico","Sabatelli Anna","Mazzarisi Marilù"]
+    },
+    {
+      nome: "Tavolo 7 - Casulli",
+      persone: ["Casulli Angelo","Marchione Maria","Casulli Gianluca","Vinella Anna","Casulli Edoardo","Casulli Flavio","Casulli Daniele","Lovece Roberta","Casulli Donatello"]
+    }
+  ];
+
+  let tavoloAperto = null; // indice del tavolo aperto (-1 = nessuno)
+
+  function scorriTavoli() {
+    const sezione = document.getElementById('sezione-tavoli');
+    if (sezione) {
+      sezione.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function renderizzaTavoli() {
+    const sezione = document.getElementById('sezione-tavoli');
+    if (!sezione) return;
+    
+    // Colori per i bottoni tavoli
+    const colori = [
+      { bg: '#7a4e8a', hover: '#5a3a6a' },
+      { bg: '#2f5c9a', hover: '#1e3d6e' },
+      { bg: '#2d6040', hover: '#1e4030' },
+      { bg: '#8a5e1e', hover: '#6a4510' },
+      { bg: '#a83230', hover: '#7a2220' },
+      { bg: '#3a6a8a', hover: '#2a4a6a' },
+      { bg: '#6a4a2a', hover: '#4a3010' }
+    ];
+
+    let html = `<div style="margin-bottom:8px;"><div style="border-top: 2px solid var(--border); margin-bottom:16px;"></div>`;
+    
+    // Bottoni tavoli
+    html += `<div style="display:flex;flex-direction:column;gap:8px;">`;
+    TAVOLI.forEach((t, i) => {
+      const c = colori[i % colori.length];
+      const label = t.nome.replace(/^Tavolo \d+ - /, '');
+      const isOpen = tavoloAperto === i;
+      html += `
+        <div>
+          <button onclick="toggleTavolo(${i})" style="
+            width:100%;
+            background: ${c.bg};
+            color:#fff;
+            border:none;
+            border-radius:${isOpen ? '12px 12px 0 0' : '12px'};
+            padding:13px 16px;
+            font-family:'Jost',sans-serif;
+            font-size:14px;
+            font-weight:600;
+            letter-spacing:0.5px;
+            cursor:pointer;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            transition:all 0.2s;
+          " id="btn-tavolo-${i}">
+            <span>🪑 Tavolo ${i+1} · ${label}</span>
+            <span style="display:flex;align-items:center;gap:8px;">
+              <span style="background:rgba(255,255,255,0.25);border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;">${t.persone.length}</span>
+              <span style="font-size:12px;">${isOpen ? '▲' : '▼'}</span>
+            </span>
+          </button>
+          <div id="tavolo-panel-${i}" style="
+            display:${isOpen ? 'block' : 'none'};
+            background:#fff;
+            border:1.5px solid ${c.bg};
+            border-top:none;
+            border-radius:0 0 12px 12px;
+            padding:12px 16px;
+          ">
+            ${t.persone.map((p,j) => `<div style="padding:5px 0;border-bottom:${j<t.persone.length-1?'1px solid #eee':'none'};font-family:'Cormorant Garamond',serif;font-size:18px;color:#000;">${p}</div>`).join('')}
+          </div>
+        </div>
+      `;
+    });
+    html += `</div></div>`;
+    sezione.innerHTML = html;
+  }
+
+  function toggleTavolo(idx) {
+    if (tavoloAperto === idx) {
+      tavoloAperto = null;
+    } else {
+      tavoloAperto = idx;
+    }
+    renderizzaTavoli();
+    // Dopo il toggle, scrolla al bottone appena cliccato
+    setTimeout(() => {
+      const btn = document.getElementById('btn-tavolo-' + idx);
+      if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+  }
+
+
     if (!confirm(dizionario[currentLang].msgConferma)) return;
     const card = document.getElementById('card-' + riga);
 

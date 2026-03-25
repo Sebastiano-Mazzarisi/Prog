@@ -355,6 +355,41 @@
   window.datiInvitati = [];
   
   let currentLang = 'it';
+
+  // ============================================================
+  // DATI TAVOLI (da Tavoli.txt)
+  // ============================================================
+  const TAVOLI = [
+    {
+      nome: "Tavolo 1 - Giulia & Onofrio",
+      persone: ["Mazzarisi Onofrio","Pérez Giulia","Guarneri Lucia","Pérez Clara","Pricci Marica","Mazzarisi Sebastiano","Mazzarisi Teresa","Ladogana Valentina"]
+    },
+    {
+      nome: "Tavolo 2 - Pérez",
+      persone: ["Pérez Ramón","Pérez Ana","Guarneri Silvia","Pérez Dulce","Pérez Juani","Pérez Marta","Bencomo Tomás"]
+    },
+    {
+      nome: "Tavolo 3 - Lorusso",
+      persone: ["Pricci Angela","Lorusso Onofrio","Lorusso Benny","Lepore Genny","Lorusso Alessandro","Lorusso Alice","Lorusso Nina","Lorusso Cinzia","Rotondi Gianni","Rotondi Nicoletta"]
+    },
+    {
+      nome: "Tavolo 4 - Pricci-Vatta",
+      persone: ["Pricci Maria Antonietta","Chiarappa Saverio","Chiarappa Martino","Chiarappa Cristiano","Trivisani Anna","Pricci Giuseppe","Pricci Gilda","Pricci Asia","Chiarappa Oletta","Vatta Sergio"]
+    },
+    {
+      nome: "Tavolo 5 - Pricci",
+      persone: ["Pricci Vanna","Lefemine Domenico","Lefemine Flavia","Lefemine Francesco","Mazzarisi Maria Grazia","Minerva Nicola","Pricci Giovanni","Pricci Tiziana","Dalena Riccardo"]
+    },
+    {
+      nome: "Tavolo 6 - Mazzarisi",
+      persone: ["Mazzarisi Vito","Nitti Enza","Mazzarisi Daniele","Mazzarisi Marco","Bruni Stefania","Mazzarisi Mariella","Pacello Stefano","Mazzarisi Francesco","Guazzaroni Giulia","Mazzarisi Alessandra","Mazzarisi Andrea","Mazzarisi Domenico","Sabatelli Anna","Mazzarisi Marilù"]
+    },
+    {
+      nome: "Tavolo 7 - Casulli",
+      persone: ["Casulli Angelo","Marchione Maria","Casulli Gianluca","Vinella Anna","Casulli Edoardo","Casulli Flavio","Casulli Daniele","Lovece Roberta","Casulli Donatello"]
+    }
+  ];
+  let tavoloAperto = null;
   const dizionario = {
     it: {
       titolo: "Lista Invitati",
@@ -1067,42 +1102,6 @@
       }
     });
   }
-
-  // ============================================================
-  // DATI TAVOLI (da Tavoli.txt)
-  // ============================================================
-  const TAVOLI = [
-    {
-      nome: "Tavolo 1 - Giulia & Onofrio",
-      persone: ["Mazzarisi Onofrio","Pérez Giulia","Guarneri Lucia","Pérez Clara","Pricci Marica","Mazzarisi Sebastiano","Mazzarisi Teresa","Ladogana Valentina"]
-    },
-    {
-      nome: "Tavolo 2 - Pérez",
-      persone: ["Pérez Ramón","Pérez Ana","Guarneri Silvia","Pérez Dulce","Pérez Juani","Pérez Marta","Bencomo Tomás"]
-    },
-    {
-      nome: "Tavolo 3 - Lorusso",
-      persone: ["Pricci Angela","Lorusso Onofrio","Lorusso Benny","Lepore Genny","Lorusso Alessandro","Lorusso Alice","Lorusso Nina","Lorusso Cinzia","Rotondi Gianni","Rotondi Nicoletta"]
-    },
-    {
-      nome: "Tavolo 4 - Pricci-Vatta",
-      persone: ["Pricci Maria Antonietta","Chiarappa Saverio","Chiarappa Martino","Chiarappa Cristiano","Trivisani Anna","Pricci Giuseppe","Pricci Gilda","Pricci Asia","Chiarappa Oletta","Vatta Sergio"]
-    },
-    {
-      nome: "Tavolo 5 - Pricci",
-      persone: ["Pricci Vanna","Lefemine Domenico","Lefemine Flavia","Lefemine Francesco","Mazzarisi Maria Grazia","Minerva Nicola","Pricci Giovanni","Pricci Tiziana","Dalena Riccardo"]
-    },
-    {
-      nome: "Tavolo 6 - Mazzarisi",
-      persone: ["Mazzarisi Vito","Nitti Enza","Mazzarisi Daniele","Mazzarisi Marco","Bruni Stefania","Mazzarisi Mariella","Pacello Stefano","Mazzarisi Francesco","Guazzaroni Giulia","Mazzarisi Alessandra","Mazzarisi Andrea","Mazzarisi Domenico","Sabatelli Anna","Mazzarisi Marilù"]
-    },
-    {
-      nome: "Tavolo 7 - Casulli",
-      persone: ["Casulli Angelo","Marchione Maria","Casulli Gianluca","Vinella Anna","Casulli Edoardo","Casulli Flavio","Casulli Daniele","Lovece Roberta","Casulli Donatello"]
-    }
-  ];
-
-  let tavoloAperto = null; // indice del tavolo aperto (-1 = nessuno)
 
   function scorriTavoli() {
     const sezione = document.getElementById('sezione-tavoli');

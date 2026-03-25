@@ -955,7 +955,10 @@
     
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
-      htmlPDF += `<div style="page-break-before: always;">`;
+      // FIX REGRESSIONE PAGINAZIONE: div interruttore di pagina pulito
+      htmlPDF += `<div style="page-break-before: always; clear: both; height: 0; line-height: 0; margin: 0; padding: 0;"></div>`;
+      htmlPDF += `<div>`;
+      
       // Calcola numero bambini (< 11 anni) per il titolo
       let totBambini = 0;
       const matrimonioCnt = new Date(2026, 5, 21);
@@ -983,10 +986,12 @@
       const totAdultiCsv = totInvitatiCsv - totBambini;
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
+      // MODIFICA: Rimossi titoli grandi, ingrandito e centrato il riepilogo numerico
       htmlPDF += `
-        <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px;">${testi.titoloInvitati}</h1>
-        <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 12px;">Giulia &amp; Onofrio</h2>
-        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 0; color: #8a5e1e; font-weight: 600; padding-top: 6px;">${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}</h3><div style="border-bottom: 2px solid #8a5e1e; margin-bottom: 14px; margin-top: 4px;"></div>
+        <div style="font-size: 18px; text-align: center; color: #8a5e1e; font-weight: 600; padding-top: 6px; margin-bottom: 8px;">
+          ${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}
+        </div>
+        <div style="border-bottom: 2px solid #8a5e1e; margin-bottom: 14px;"></div>
         <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
       `;
 
@@ -1014,7 +1019,6 @@
             }
           }
           // Matching intelligente: tutti i token del CSV devono essere nei token della risposta
-          // oppure viceversa, ma solo se il risultato è univoco (una sola risposta matcha)
           function tokensOf(n) {
             return (n||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().split(/\s+/).filter(Boolean);
           }
@@ -1061,12 +1065,14 @@
         htmlPDF += `</div>`;
       });
 
-      htmlPDF += `</div>`;
-      htmlPDF += `</div>`;
+      htmlPDF += `</div>`; // Chiude le 2 colonne
+      htmlPDF += `</div>`; // Chiude il div contenitore della pagina
     }
 
     // ===== PAGINA 3: DISPOSIZIONE DEI TAVOLI =====
-    htmlPDF += `<div style="page-break-before: always;">`;
+    // FIX REGRESSIONE PAGINAZIONE: div interruttore di pagina pulito
+    htmlPDF += `<div style="page-break-before: always; clear: both; height: 0; line-height: 0; margin: 0; padding: 0;"></div>`;
+    htmlPDF += `<div>`;
     htmlPDF += `
       <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px;">${testi.titoloTavoli}</h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 18px;">Giulia &amp; Onofrio</h2>
@@ -1082,15 +1088,15 @@
             <span>Tavolo ${i+1} &middot; ${label}</span>
             <span style="background:rgba(255,255,255,0.25);border-radius:20px;padding:1px 8px;font-size:11px;">${t.persone.length}</span>
           </div>
-          <div style="padding: 8px 12px;">
-            ${t.persone.map((p, j) => `<div style="padding:3px 0;border-bottom:${j<t.persone.length-1?'0.5px solid #ddd':'none'};font-family:'Cormorant Garamond',serif;font-size:14px;color:#000;">${p}</div>`).join('')}
+          <!-- MODIFICA: Elenco a doppia colonna con column-count -->
+          <div style="padding: 8px 12px; column-count: 2; column-gap: 12px;">
+            ${t.persone.map((p, j) => `<div style="padding:2px 0; border-bottom:0.5px solid #eee; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
           </div>
         </div>
       `;
     });
-    htmlPDF += `</div></div>`;
+    htmlPDF += `</div></div>`; // Chiude flex e div contenitore pagina
 
-    // FIX REGRESSIONE PDF: l'HTML generato va inserito nel container
     container.innerHTML = htmlPDF;
 
     const opt = {

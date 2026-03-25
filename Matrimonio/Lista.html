@@ -1111,12 +1111,6 @@
 
     container.innerHTML = htmlPDF;
 
-    // Aggiungo momentaneamente il container invisibile al body così html2canvas può calcolare correttamente il Web Font
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-    container.style.top = '0';
-    document.body.appendChild(container);
-
     const opt = {
       margin:       10,
       filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
@@ -1125,9 +1119,8 @@
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
+    // Rimosso l'inserimento nel DOM che causava l'errore pagina bianca
     html2pdf().set(opt).from(container).save().then(() => {
-      // Rimuovo il container fittizio a lavoro ultimato
-      document.body.removeChild(container);
       if (btnPdf) {
         btnPdf.innerText = testi.pdf;
         btnPdf.disabled = false;

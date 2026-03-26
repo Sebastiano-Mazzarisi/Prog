@@ -17,7 +17,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Lista.html">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
@@ -194,7 +194,7 @@
 
   .risposta-card {
     background: #ffffff;
-    border: 1.5px solid #b0c8ee;
+    border: 1.5px solid #7aaade;
     border-radius: 12px;
     padding: 0;
     margin-bottom: 12px;
@@ -207,7 +207,7 @@
     color: #a03030;
   }
   .risposta-nome {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Inter', sans-serif;
     font-size: 17px;
     font-weight: 600;
     color: #000000;
@@ -215,7 +215,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #e8f0fb;
+    background: #f0f5fd;
     padding: 10px 14px;
     border-radius: 0;
   }
@@ -772,6 +772,7 @@
     <div style="text-align:center; margin: 16px 0 8px;">
       <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="background:linear-gradient(135deg,#7a5c3a,#9e7f5b);color:#ffffff;border:none;border-radius:12px;padding:12px 28px;font-family:'Jost',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(122,92,58,0.3);">🏠 Home</button>
     </div>
+    <div style="height:10px;"></div>
     <div id="sezione-tavoli" style="margin-top:8px;"></div>`;
     box.innerHTML = html;
     renderizzaTavoli();
@@ -1316,4 +1317,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v20 - 26/03/2026 - Intestazione azzurro chiaro -->
+<!-- Lista.html v21 - 26/03/2026 - Azzurro più chiaro; +10px Home; font Inter -->

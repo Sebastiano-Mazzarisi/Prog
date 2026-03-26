@@ -1148,6 +1148,39 @@
         </div>
       `;
     });
+
+    // Riquadro riepilogo menu in fondo pagina 3
+    const totCenanti = totPresenti - totSegnaposto;
+    const totCompleti = totPresenti - totBaby - totSegnaposto;
+    const bgTavoloR = '#e0e8d0';
+    const borderTavoloR = '#a5b589';
+    htmlPDF += `
+      <div style="display:flex;justify-content:center;margin-top:24px;">
+        <div style="width:calc(50% - 8px);box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#ffffff;">
+          <!-- Intestazione -->
+          <div style="background-color:${bgTavoloR};padding:7px 12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#000000;text-align:center;border-bottom:2px solid ${borderTavoloR};">
+            Riepilogo Menu
+          </div>
+          <!-- Totale cenanti -->
+          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
+            <div style="font-family:'Inter',sans-serif;font-size:40px;font-weight:700;color:#000000;line-height:1;">${totCenanti}</div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:600;color:#555555;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Totale cenanti</div>
+          </div>
+          <!-- Completi e Baby -->
+          <div style="display:flex;border-top:none;">
+            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:700;color:#000000;line-height:1;">${totCompleti}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:600;color:#555555;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:10px 8px;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:700;color:#000000;line-height:1;">${totBaby}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:600;color:#555555;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Baby</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
     htmlPDF += `</div></div>`; // Chiude flex e div contenitore pagina
 
     container.innerHTML = htmlPDF;
@@ -1317,4 +1350,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v23 - 26/03/2026 - Azzurro #fafcff bordo blu scuro; tavoli font Inter -->
+<!-- Lista.html v24 - 26/03/2026 - Riquadro riepilogo menu in fondo pagina 3 -->

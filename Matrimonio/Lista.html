@@ -659,6 +659,23 @@
       });
   }
 
+  function trovaTavoloNum(nome) {
+    const eT=['','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+    const acc=/[̀-ͯ]/g;
+    const k=(nome||'').toLowerCase().normalize('NFD').replace(acc,'').trim();
+    for(let i=0;i<TAVOLI.length;i++){
+      const t=TAVOLI[i];
+      for(const p of t.persone){
+        const pk=p.toLowerCase().normalize('NFD').replace(acc,'').trim();
+        const tk=pk.split(' '),tn=k.split(' ');
+        if(tk.every(w=>tn.includes(w))||tn.every(w=>tk.includes(w))){
+          const n=i+1; return n<=10?eT[n]:String(n);
+        }
+      }
+    }
+    return '';
+  }
+
   function trovaTavolo(nome) {
     const eT=['','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
     const acc=/[̀-ͯ]/g;
@@ -762,7 +779,7 @@
       const iconeAllergie = iconaAllergie(r.allergie);
 
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
-        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}<span class="${classFreccia}">▼</span></span></div>
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${trovaTavoloNum(r.nome) ? '<span style="margin-right:4px;font-size:14px">' + trovaTavoloNum(r.nome) + '</span>' : ''}${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}<span class="${classFreccia}">▼</span></span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">Tavolo</span>
@@ -994,8 +1011,7 @@
         <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; word-break: break-word;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 4px 5px; width: 8%; color: #000;">Tav.</th>
-              <th style="padding: 4px 5px; width: 27%; color: #000;">${testi.pdfNome}</th>
+              <th style="padding: 4px 5px; width: 35%; color: #000;">${testi.pdfNome}</th>
               <th style="padding: 4px 5px; width: 15%; color: #000;">${testi.lblSecondo}</th>
               <th style="padding: 4px 5px; width: 20%; color: #000;">${testi.lblAllergie}</th>
               <th style="padding: 4px 5px; width: 30%; color: #000;">${testi.lblNote}</th>
@@ -1019,10 +1035,9 @@
             ? '<span style="color:#a83230;font-weight:600">' + testi.kpiBaby + '</span>'
             : (r.note ? r.note : '-');
 
-        const nTavPres = trovaTavolo(r.nome || '');
+        const nTavPres = trovaTavoloNum(r.nome || '');
         htmlPDF += '<tr>'
-          + '<td style="padding:4px 6px;text-align:center;font-size:13px;">' + (nTavPres || '-') + '</td>'
-          + '<td style="padding:4px 6px;font-weight:600;color:#000;">' + (r.nome || 'Senza nome') + '</td>'
+          + '<td style="padding:4px 6px;font-weight:600;color:#000;">' + (nTavPres ? '<span style="margin-right:3px">' + nTavPres + '</span>' : '') + (r.nome || 'Senza nome') + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + secondoStr + '</td>'
           + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + allergie + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + notaCell + '</td>'
@@ -1409,4 +1424,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v40 - 26/03/2026 - Fix: emojiTavolo → trovaTavolo nel PDF -->
+<!-- Lista.html v41 - 26/03/2026 - Emoji tavolo prima del nome, senza colonna separata -->

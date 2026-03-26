@@ -18,6 +18,7 @@
 <meta property="og:url" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Lista.html">
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
 <style>
@@ -1143,41 +1144,23 @@
     });
     htmlPDF += `</div></div>`; // Chiude flex e div contenitore pagina
 
-    // Apre finestra di stampa con contenuto PDF
-    const printWin = window.open('', '_blank');
-    printWin.document.write(`<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  @page { size: A4; margin: 10mm; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Jost', sans-serif; font-size: 11px; color: #000; background: #fff; }
-  h1 { text-align:center; font-family:'Cormorant Garamond',serif; font-size:24px; margin-top:0; margin-bottom:3px; color:#000; }
-  h2 { text-align:center; font-family:'Cormorant Garamond',serif; font-size:15px; color:#8a5e1e; margin-bottom:15px; }
-  .page-break { page-break-before: always; break-before: page; padding-top: 0; margin-top: 0; }
-</style>
-</head>
-<body>${htmlPDF.replace(/class="html2pdf__page-break"><\/div>/g, 'class="page-break"></div>')}</body>
-</html>`);
-    printWin.document.close();
-    printWin.focus();
-    // Aspetta font poi stampa
-    printWin.onload = () => {
-      printWin.document.fonts.ready.then(() => {
-        setTimeout(() => {
-          printWin.print();
-          if (btnPdf) {
-            btnPdf.innerText = testi.pdf;
-            btnPdf.disabled = false;
-          }
-        }, 800);
-      });
-    };
-  }
+    container.innerHTML = htmlPDF;
 
+    const opt = {
+      margin:       [5, 10, 10, 10],
+      filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(container).save().then(() => {
+      if (btnPdf) {
+        btnPdf.innerText = testi.pdf;
+        btnPdf.disabled = false;
+      }
+    });
+  }
   function scorriTavoli() {
     const sezione = document.getElementById('sezione-tavoli');
     if (sezione) {
@@ -1326,4 +1309,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v7 - 26/03/2026 - PDF via window.print() al posto di html2pdf -->
+<!-- Lista.html v6 - 26/03/2026 - Ripristino html2pdf -->

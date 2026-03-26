@@ -659,6 +659,24 @@
       });
   }
 
+  function trovaTavolo(nome) {
+    const eT=['','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+    const acc=/[̀-ͯ]/g;
+    const k=(nome||'').toLowerCase().normalize('NFD').replace(acc,'').trim();
+    for(let i=0;i<TAVOLI.length;i++){
+      const t=TAVOLI[i];
+      for(const p of t.persone){
+        const pk=p.toLowerCase().normalize('NFD').replace(acc,'').trim();
+        const tk=pk.split(' '),tn=k.split(' ');
+        if(tk.every(w=>tn.includes(w))||tn.every(w=>tk.includes(w))){
+          const n=i+1;
+          return(n<=10?eT[n]:String(n))+' '+t.nome.replace(/^Tavolo \d+ - /,'');
+        }
+      }
+    }
+    return '-';
+  }
+
   function renderizzaDati() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
@@ -748,7 +766,7 @@
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">Tavolo</span>
-            <span class="risposta-val" style="font-weight:600;font-size:16px;">${(() => { const k=(r.nome||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();const eN=['',...['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟']];for(let i=0;i<TAVOLI.length;i++){const t=TAVOLI[i];for(const p of t.persone){const pk=p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();const tk=pk.split(/\s+/),tn=k.split(/\s+/);if(tk.every(w=>tn.includes(w))||tn.every(w=>tk.includes(w))){return (i+1<=10?eN[i+1]:String(i+1))+' '+t.nome.replace(/^Tavolo \d+ - /,'');}}} return '-'; })()</span>
+            <span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span>
           </div>
           <div class="risposta-row">
             <span class="risposta-label">${testi.lblPresenza}</span>
@@ -1403,4 +1421,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v38 - 26/03/2026 - Num tavolo in pag1 PDF e dettaglio web -->
+<!-- Lista.html v39 - 26/03/2026 - Fix: trovaTavolo() funzione globale -->

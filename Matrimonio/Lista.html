@@ -1130,13 +1130,13 @@
       htmlPDF += `
         <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${borderTavolo}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px; background-color: #ffffff;">
           <!-- Intestazione -->
-          <div style="background-color: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid ${borderTavolo};">
+          <div style="background-color: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
             <span>Tavolo ${i+1} &middot; ${label}</span>
             <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;color:#000000;">${t.persone.length}</span>
           </div>
           <!-- Elenco TESTO NERO SENZA SFONDO FORZATO -->
           <div style="padding: 8px 12px; column-count: 2; column-gap: 12px; background-color: transparent;">
-            ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Jost',sans-serif; font-size:14px; font-weight:400; color:#000000 !important; background-color: transparent !important; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
+            ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Cormorant Garamond',serif; font-size:14px; color:#000000 !important; background-color: transparent !important; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
           </div>
         </div>
       `;
@@ -1146,7 +1146,7 @@
     container.innerHTML = htmlPDF;
 
     const opt = {
-      margin:       10,
+      margin:       [5, 10, 10, 10],
       filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2 },
@@ -1194,8 +1194,8 @@
             border-bottom:${isOpen ? 'none' : '1.5px solid ' + borderTavolo};
             border-radius:${isOpen ? '12px 12px 0 0' : '12px'};
             padding:13px 16px;
-            font-family:'Cormorant Garamond',serif;
-            font-size:22px;
+            font-family:'Jost',sans-serif;
+            font-size:14px;
             font-weight:600;
             letter-spacing:0.5px;
             cursor:pointer;
@@ -1219,7 +1219,7 @@
             border-radius:0 0 12px 12px;
             padding:12px 16px;
           ">
-            ${t.persone.map((p,j) => `<div style="padding:5px 0; font-family:'Cormorant Garamond',serif; font-size:18px; color:#000000 !important; background-color: transparent !important;">${p}</div>`).join('')}
+            ${t.persone.map((p,j) => `<div style="padding:5px 0; font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:#000000; -webkit-text-fill-color:#000000;">${p}</div>`).join('')}
           </div>
         </div>
       `;
@@ -1308,4 +1308,4 @@
   }
 </script>
 </body>
-</html><!-- Lista.html v4 - 26/03/2026 - Tavoli PDF: 14px+border-bottom+Jost; Web bottone: Cormorant 22px -->
+</html><!-- Lista.html v5 - 26/03/2026 - Fix: nomi tavolo web nero+grassetto; margine PDF top ridotto -->

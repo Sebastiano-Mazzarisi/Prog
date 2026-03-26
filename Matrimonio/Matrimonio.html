@@ -199,7 +199,7 @@
   .card:hover { box-shadow: 0 4px 28px rgba(44,36,24,0.09); }
 
   .card-label {
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 2.5px;
     text-transform: uppercase;
     color: #000000;
@@ -209,7 +209,7 @@
 
   .card-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
     color: #000000;
     margin-bottom: 16px;
@@ -235,7 +235,7 @@
     border-radius: 10px;
     padding: 8px 14px;
     font-family: 'Jost', sans-serif;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -256,7 +256,7 @@
   .send-feedback {
     display: none;
     margin-top: 14px;
-    font-size: 13px;
+    font-size: 15px;
     color: var(--green);
     font-weight: 600;
     letter-spacing: 0.3px;
@@ -269,7 +269,7 @@
     border-radius: 10px;
     padding: 12px 14px;
     font-family: 'Jost', sans-serif;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 400;
     color: #000000;
     background: var(--cream);
@@ -300,7 +300,7 @@
     border-radius: 12px;
     padding: 14px 12px;
     font-family: 'Jost', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     color: #000000;
     background: var(--cream);
@@ -379,8 +379,8 @@
   .option-item.selected-green .custom-dot::after,
   .option-item.selected-gold  .custom-dot::after { display: block; }
 
-  .option-text    { font-size: 15px; color: #000000; line-height: 1.3; font-weight: 500; }
-  .option-subtext { font-size: 12px; color: #000000; margin-top: 1px; opacity: 0.8; }
+  .option-text    { font-size: 17px; color: #000000; line-height: 1.3; font-weight: 500; }
+  .option-subtext { font-size: 14px; color: #000000; margin-top: 1px; opacity: 0.8; }
 
   /* ALLERGIE CHIPS */
   .allergie-grid {
@@ -397,7 +397,7 @@
     padding: 7px 13px;
     border: 1.5px solid var(--border);
     border-radius: 24px;
-    font-size: 13px;
+    font-size: 15px;
     cursor: pointer;
     transition: all 0.15s;
     user-select: none;
@@ -406,7 +406,7 @@
   }
   .chip:hover { border-color: var(--gold-light); background: rgba(201,169,110,0.06); }
   .chip.active  { background: #fdecea; border-color: #000000; color: #000000; font-weight: 600; }
-  .chip-icon    { font-size: 16px; }
+  .chip-icon    { font-size: 18px; }
 
   /* SUBMIT */
   .btn-submit {
@@ -417,7 +417,7 @@
     border: none;
     border-radius: 12px;
     font-family: 'Jost', sans-serif;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -432,7 +432,7 @@
   .req { color: #000000; margin-left: 2px; font-weight: bold; }
 
   .field-note {
-    font-size: 12px;
+    font-size: 14px;
     color: #000000;
     margin-top: 8px;
     line-height: 1.5;
@@ -442,7 +442,7 @@
   .footer {
     text-align: center;
     margin-top: 40px;
-    font-size: 12px;
+    font-size: 14px;
     color: #000000;
     letter-spacing: 1px;
   }
@@ -980,8 +980,19 @@
     if (!nome) {
       inp.focus();
       inp.style.borderColor = '#c0504d';
-      setTimeout(() => inp.style.borderColor = '', 2000);
+      setTimeout(() => inp.style.borderColor = '', 5000);
       mostraPopup();
+      return;
+    }
+
+    // Almeno 2 parole, ognuna di almeno 3 lettere
+    const parole = nome.split(/\s+/).filter(p => p.replace(/[^a-zA-ZÀ-ÿ]/g,'').length >= 3);
+    if (parole.length < 2) {
+      inp.select();
+      inp.style.borderColor = '#c0504d';
+      setTimeout(() => inp.style.borderColor = '', 5000);
+      mostraPopup();
+      setTimeout(() => inp.focus(), 100);
       return;
     }
 
@@ -1053,6 +1064,17 @@
       inp.style.borderColor = '#c0504d';
       setTimeout(() => inp.style.borderColor = '', 5000);
       mostraPopup();
+      return;
+    }
+    // Almeno 2 parole, ognuna di almeno 3 lettere
+    const parole = nome.split(/\s+/).filter(p => p.replace(/[^a-zA-ZÀ-ÿ]/g,'').length >= 3);
+    if (parole.length < 2) {
+      const inp = document.getElementById('nome');
+      inp.select();
+      inp.style.borderColor = '#c0504d';
+      setTimeout(() => inp.style.borderColor = '', 5000);
+      mostraPopup();
+      setTimeout(() => inp.focus(), 100);
       return;
     }
     const esito = trovaInvitato(nome);

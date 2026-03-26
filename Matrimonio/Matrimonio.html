@@ -708,6 +708,14 @@
   // Carica i testi all'apertura in base alla lingua
   window.addEventListener('DOMContentLoaded', () => {
     setLanguage('it');
+
+    // --- CONTATORE VISITE ---
+    // Non incrementa se si apre con ?v=12
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('v') !== '12') {
+      const n = parseInt(localStorage.getItem('matrimonio_visite') || '0', 10);
+      localStorage.setItem('matrimonio_visite', n + 1);
+    }
   });
 
   // FUNZIONE PER CAMBIARE LA LINGUA DINAMICAMENTE

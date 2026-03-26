@@ -1005,7 +1005,7 @@
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
       htmlPDF += `<div class="html2pdf__page-break"></div>`;
-      htmlPDF += `<div style="position:relative;min-height:257mm;">`;
+      htmlPDF += `<div>`;
 
       // Calcola numero bambini (< 11 anni) per il titolo
       let totBambini = 0;
@@ -1113,7 +1113,7 @@
       });
 
       htmlPDF += `</div>`; // Chiude le 2 colonne
-      htmlPDF += `<div style="position:absolute;bottom:5mm;left:0;right:0;text-align:center;font-family:Arial,sans-serif;font-size:10px;color:#555555;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">V</span>Vegetariano&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">C</span>Carne&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">P</span>Pesce&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#2d6040;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">B</span>Baby&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#8a6000;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">S</span>Segnaposto&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#a83230;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">A</span>Assente</div>`;
+      htmlPDF += `<div id="footer-pag2" style="padding-top:6px;text-align:center;font-family:Arial,sans-serif;font-size:10px;color:#555555;border-top:0.5px solid #cccccc;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">V</span>Vegetariano&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">C</span>Carne&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">P</span>Pesce&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#2d6040;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">B</span>Baby&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#8a6000;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">S</span>Segnaposto&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#a83230;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">A</span>Assente</div>`;
       htmlPDF += `</div>`; // Chiude il div contenitore della pagina
     }
 
@@ -1148,6 +1148,33 @@
     htmlPDF += `</div></div>`; // Chiude flex e div contenitore pagina
 
     container.innerHTML = htmlPDF;
+
+    // Aggiunge temporaneamente il container al DOM per misurare offsetTop
+    container.style.position = 'absolute';
+    container.style.visibility = 'hidden';
+    container.style.left = '-9999px';
+    document.body.appendChild(container);
+
+    // Calcola padding del footer pagina 2 per posizionarlo a fondo pagina
+    // A4 con margini [5,10,10,10]mm a 96dpi: area utile = 282mm = 1067px
+    // Footer a 5mm dal bordo inferiore = top a 277mm = 1047px
+    (() => {
+      const PX_PER_MM = 96 / 25.4;
+      const FOOTER_FROM_TOP = Math.round(277 * PX_PER_MM); // ~1047px
+      const footerEl = container.querySelector('#footer-pag2');
+      if (footerEl) {
+        const footerTop = footerEl.offsetTop;
+        const gap = FOOTER_FROM_TOP - footerTop;
+        if (gap > 0) {
+          footerEl.style.marginTop = gap + 'px';
+        }
+      }
+    })();
+
+    document.body.removeChild(container);
+    container.style.position = '';
+    container.style.visibility = '';
+    container.style.left = '';
 
     const opt = {
       margin:       [5, 10, 10, 10],
@@ -1312,4 +1339,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v10 - 26/03/2026 - Footer pagina 2 legenda badge -->
+<!-- Lista.html v12 - 26/03/2026 - Footer pagina 2: JS spacer con offsetTop reale -->

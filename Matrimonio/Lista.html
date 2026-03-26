@@ -1156,15 +1156,15 @@
     const borderTavoloR = '#a5b589';
     htmlPDF += `</div>`; // Chiude flex wrap tavoli
     htmlPDF += `
-      <div style="display:flex;justify-content:center;margin-top:70px;">
-        <div style="width:calc(50% - 8px);box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
-          <!-- Totale cenanti -->
-          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};background:#e0e8d0;">
+      <div style="display:flex;gap:16px;margin-top:70px;">
+
+        <!-- BOX SINISTRA: Totale cenanti + Baby + Segnaposto -->
+        <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
+          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCenanti}</div>
             <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Totale cenanti</div>
           </div>
-          <!-- Completi, Baby, Segnaposto -->
-          <div style="display:flex;background:#e0e8d0;">
+          <div style="display:flex;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCompleti}</div>
               <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
@@ -1179,6 +1179,29 @@
             </div>
           </div>
         </div>
+
+        <!-- BOX DESTRA: Menu completi + Veg/Carne/Pesce -->
+        <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
+          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
+            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCompleti}</div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+          </div>
+          <div style="display:flex;">
+            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totVeg}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Vegetariano</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCarne}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Carne</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:10px 8px;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totPesce}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Pesce</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     `;
 
@@ -1351,4 +1374,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v27 - 26/03/2026 - Box riepilogo: margin-top:70px -->
+<!-- Lista.html v28 - 26/03/2026 - Due box affiancati: cenanti+menu -->

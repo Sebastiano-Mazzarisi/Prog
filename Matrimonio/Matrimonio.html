@@ -802,21 +802,15 @@
     } catch(e) {}
   }
 
-  function mostraPopup(msg, sub, durata) {
-    document.getElementById('popup-msg').textContent = msg;
-    const subEl = document.getElementById('popup-sub');
-    if (sub) {
-      subEl.innerHTML = sub;
-      subEl.style.display = 'block';
-    } else {
-      subEl.style.display = 'none';
-    }
+  function mostraPopup() {
+    document.getElementById('popup-msg').textContent = 'Inserisci correttamente il nome e cognome';
+    document.getElementById('popup-sub').style.display = 'none';
     document.getElementById('popup-overlay').classList.add('visible');
     beepCupo();
     clearTimeout(_popupTimer);
     _popupTimer = setTimeout(() => {
       document.getElementById('popup-overlay').classList.remove('visible');
-    }, durata || 2000);
+    }, 5000);
   }
 
   // Chiude popup al click
@@ -987,7 +981,7 @@
       inp.focus();
       inp.style.borderColor = '#c0504d';
       setTimeout(() => inp.style.borderColor = '', 2000);
-      mostraPopup('Nominativo obbligatorio', null, 2000);
+      mostraPopup();
       return;
     }
 
@@ -996,12 +990,8 @@
     if (!esito.trovato) {
       inp.select();
       inp.style.borderColor = '#c0504d';
-      setTimeout(() => inp.style.borderColor = '', 3000);
-      mostraPopup(
-        'Nominativo non trovato',
-        'Inserisci il nome così come appare nell\'invito.<br>Controlla maiuscole, cognome e spazi.',
-        3000
-      );
+      setTimeout(() => inp.style.borderColor = '', 5000);
+      mostraPopup();
       setTimeout(() => inp.focus(), 100);
       return;
     }
@@ -1061,8 +1051,8 @@
       const inp = document.getElementById('nome');
       inp.focus();
       inp.style.borderColor = '#c0504d';
-      setTimeout(() => inp.style.borderColor = '', 2000);
-      mostraPopup('Nominativo obbligatorio', null, 2000);
+      setTimeout(() => inp.style.borderColor = '', 5000);
+      mostraPopup();
       return;
     }
     const esito = trovaInvitato(nome);
@@ -1070,12 +1060,8 @@
       const inp = document.getElementById('nome');
       inp.select();
       inp.style.borderColor = '#c0504d';
-      setTimeout(() => inp.style.borderColor = '', 3000);
-      mostraPopup(
-        'Nominativo non trovato',
-        'Inserisci il nome così come appare nell\'invito.',
-        3000
-      );
+      setTimeout(() => inp.style.borderColor = '', 5000);
+      mostraPopup();
       setTimeout(() => inp.focus(), 100);
       return;
     }

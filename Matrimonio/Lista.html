@@ -1159,7 +1159,7 @@
         <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${borderTavolo}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px; background-color: #ffffff;">
 
           <div style="background-color: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid ${borderTavolo};">
-            <span>Tavolo ${i+1} &middot; ${label}</span>
+            <span>Tavolo ${emojiNum[i+1] || i+1} &middot; ${label}</span>
             <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;color:#000000;">${t.persone.length}</span>
           </div>
 
@@ -1258,6 +1258,7 @@
     const sezione = document.getElementById('sezione-tavoli');
     if (!sezione) return;
 
+    const emojiNumW = ['','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
     // Colore verde oliva chiaro chiaro uniforme per il Web
     const bgTavolo = '#e0e8d0';
     const borderTavolo = '#a5b589';
@@ -1290,7 +1291,7 @@
             align-items:center;
             transition:all 0.2s;
           " id="btn-tavolo-${i}">
-            <span>Tavolo ${i+1} &middot; ${label}</span>
+            <span>Tavolo ${emojiNumW[i+1] || i+1} &middot; ${label}</span>
             <span style="display:flex;align-items:center;gap:8px;">
               <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000000;">${t.persone.length}</span>
               <span style="font-size:12px;">${isOpen ? '▲' : '▼'}</span>
@@ -1395,4 +1396,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v35 - 26/03/2026 - Emoji numero tavolo prima del nome in pag2 -->
+<!-- Lista.html v36 - 26/03/2026 - Emoji numero tavolo nei titoli pag3 e web -->

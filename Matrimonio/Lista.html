@@ -1005,7 +1005,7 @@
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
       htmlPDF += `<div class="html2pdf__page-break"></div>`;
-      htmlPDF += `<div>`;
+      htmlPDF += `<div style="position:relative;min-height:257mm;">`;
 
       // Calcola numero bambini (< 11 anni) per il titolo
       let totBambini = 0;
@@ -1113,6 +1113,7 @@
       });
 
       htmlPDF += `</div>`; // Chiude le 2 colonne
+      htmlPDF += `<div style="position:absolute;bottom:5mm;left:0;right:0;text-align:center;font-family:Arial,sans-serif;font-size:10px;color:#555555;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">V</span>Vegetariano&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">C</span>Carne&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">P</span>Pesce&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#2d6040;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">B</span>Baby&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#8a6000;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">S</span>Segnaposto&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#a83230;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">A</span>Assente</div>`;
       htmlPDF += `</div>`; // Chiude il div contenitore della pagina
     }
 
@@ -1311,4 +1312,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v9 - 26/03/2026 - Fix margine PDF: scrollY:0 -->
+<!-- Lista.html v10 - 26/03/2026 - Footer pagina 2 legenda badge -->

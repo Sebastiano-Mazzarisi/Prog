@@ -1152,7 +1152,7 @@
       margin:       [5, 10, 10, 10],
       filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
+      html2canvas:  { scale: 2, scrollY: 0 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
@@ -1311,4 +1311,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v8 - 26/03/2026 - Font ridotto 17px; bottone Home; rimossa data aggiornamento -->
+<!-- Lista.html v9 - 26/03/2026 - Fix margine PDF: scrollY:0 -->

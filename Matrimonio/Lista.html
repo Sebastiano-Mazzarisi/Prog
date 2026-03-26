@@ -1019,7 +1019,7 @@
             ? '<span style="color:#a83230;font-weight:600">' + testi.kpiBaby + '</span>'
             : (r.note ? r.note : '-');
 
-        const nTavPres = emojiTavolo(r.nome || '');
+        const nTavPres = trovaTavolo(r.nome || '');
         htmlPDF += '<tr>'
           + '<td style="padding:4px 6px;text-align:center;font-size:13px;">' + (nTavPres || '-') + '</td>'
           + '<td style="padding:4px 6px;font-weight:600;color:#000;">' + (r.nome || 'Senza nome') + '</td>'
@@ -1071,18 +1071,6 @@
           mapTavolo[chiave] = ti + 1; // numero tavolo 1-based
         });
       });
-      function emojiTavolo(nome) {
-        const chiave = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
-        // Ricerca parziale: controlla se la chiave è contenuta in qualche voce della mappa
-        for (const k in mapTavolo) {
-          const tk = k.split(/\s+/), tn = chiave.split(/\s+/);
-          if (tk.every(w => tn.includes(w)) || tn.every(w => tk.includes(w))) {
-            const n = mapTavolo[k];
-            return n <= 10 ? emojiNum[n] : String(n);
-          }
-        }
-        return '';
-      }
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
       htmlPDF += `
@@ -1146,7 +1134,7 @@
               else if (tipoM === 'veg') nomeExtra = badge('V', '#1a4fa0');
             }
           }
-          const tavoloEmoji = emojiTavolo(inv.nome);
+          const tavoloEmoji = trovaTavolo(inv.nome);
           htmlPDF += '<div style="margin-bottom:5px;line-height:1.3">'
             + (tavoloEmoji ? '<span style="margin-right:3px;font-size:11px">' + tavoloEmoji + '</span>' : '')
             + '<span style="' + nomeStyle + '">' + inv.nome + '</span>'
@@ -1421,4 +1409,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v39 - 26/03/2026 - Fix: trovaTavolo() funzione globale -->
+<!-- Lista.html v40 - 26/03/2026 - Fix: emojiTavolo → trovaTavolo nel PDF -->

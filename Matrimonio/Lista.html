@@ -1160,7 +1160,7 @@
     // Footer a 5mm dal bordo inferiore = top a 277mm = 1047px
     (() => {
       const PX_PER_MM = 96 / 25.4;
-      const FOOTER_FROM_TOP = Math.round(297 * PX_PER_MM); // ~1122px (fondo pagina A4)
+      const FOOTER_FROM_TOP = Math.round(312 * PX_PER_MM); // calibrato empiricamente
       const footerEl = container.querySelector('#footer-pag2');
       if (footerEl) {
         const footerTop = footerEl.offsetTop;
@@ -1339,4 +1339,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v13 - 26/03/2026 - Footer pagina 2: target 297mm -->
+<!-- Lista.html v14 - 26/03/2026 - Footer pagina 2: target 312mm -->

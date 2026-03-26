@@ -747,6 +747,10 @@
         <div class="risposta-nome" onclick="toggleDettagli(${riga})">${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}<span class="${classFreccia}">▼</span></span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
+            <span class="risposta-label">Tavolo</span>
+            <span class="risposta-val" style="font-weight:600;font-size:16px;">${(() => { const k=(r.nome||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();const eN=['',...['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟']];for(let i=0;i<TAVOLI.length;i++){const t=TAVOLI[i];for(const p of t.persone){const pk=p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();const tk=pk.split(/\s+/),tn=k.split(/\s+/);if(tk.every(w=>tn.includes(w))||tn.every(w=>tk.includes(w))){return (i+1<=10?eN[i+1]:String(i+1))+' '+t.nome.replace(/^Tavolo \d+ - /,'');}}} return '-'; })()</span>
+          </div>
+          <div class="risposta-row">
             <span class="risposta-label">${testi.lblPresenza}</span>
             <span class="risposta-val" style="font-weight: 600;">${valPresenza}</span>
           </div>
@@ -972,7 +976,8 @@
         <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; word-break: break-word;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 4px 5px; width: 35%; color: #000;">${testi.pdfNome}</th>
+              <th style="padding: 4px 5px; width: 8%; color: #000;">Tav.</th>
+              <th style="padding: 4px 5px; width: 27%; color: #000;">${testi.pdfNome}</th>
               <th style="padding: 4px 5px; width: 15%; color: #000;">${testi.lblSecondo}</th>
               <th style="padding: 4px 5px; width: 20%; color: #000;">${testi.lblAllergie}</th>
               <th style="padding: 4px 5px; width: 30%; color: #000;">${testi.lblNote}</th>
@@ -996,7 +1001,9 @@
             ? '<span style="color:#a83230;font-weight:600">' + testi.kpiBaby + '</span>'
             : (r.note ? r.note : '-');
 
+        const nTavPres = emojiTavolo(r.nome || '');
         htmlPDF += '<tr>'
+          + '<td style="padding:4px 6px;text-align:center;font-size:13px;">' + (nTavPres || '-') + '</td>'
           + '<td style="padding:4px 6px;font-weight:600;color:#000;">' + (r.nome || 'Senza nome') + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + secondoStr + '</td>'
           + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + allergie + '</td>'
@@ -1396,4 +1403,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v37 - 26/03/2026 - Fix: emojiNum spostato a scope generaPDF -->
+<!-- Lista.html v38 - 26/03/2026 - Num tavolo in pag1 PDF e dettaglio web -->

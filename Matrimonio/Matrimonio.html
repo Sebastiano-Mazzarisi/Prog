@@ -447,6 +447,53 @@
     letter-spacing: 1px;
   }
   .footer span { color: #000000; font-weight: 600; }
+
+  /* POPUP VALIDAZIONE NOME */
+  #popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.35);
+    align-items: center;
+    justify-content: center;
+  }
+  #popup-overlay.visible {
+    display: flex;
+  }
+  #popup-box {
+    background: var(--warm-white);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 28px 32px;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(44,36,24,0.22);
+    max-width: 320px;
+    width: 88%;
+    animation: popupIn 0.18s ease;
+  }
+  @keyframes popupIn {
+    from { transform: scale(0.88); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
+  #popup-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  #popup-msg {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #000000;
+    line-height: 1.4;
+  }
+  #popup-sub {
+    font-size: 13px;
+    color: #555;
+    margin-top: 8px;
+    line-height: 1.5;
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -548,6 +595,15 @@
 
 
 </div>
+</div>
+
+<!-- POPUP VALIDAZIONE -->
+<div id="popup-overlay">
+  <div id="popup-box">
+    <div id="popup-icon">⚠️</div>
+    <div id="popup-msg">Nominativo obbligatorio</div>
+    <div id="popup-sub"></div>
+  </div>
 </div>
 
 
@@ -706,6 +762,119 @@
     document.getElementById('note').placeholder = (attendanceStatus === 'no') ? '' : t.notePlaceholder;
   }
 
+  // --- LISTA INVITATI ---
+  let listaInvitati = [];
+
+  async function caricaInvitati() {
+    try {
+      const resp = await fetch('Tavoli.txt');
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const testo = await resp.text();
+      // Estrae tutti i nomi: una parola per riga o separati da virgola/punto e virgola
+      listaInvitati = testo
+        .split(/[\n,;]+/)
+        .map(r => r.trim())
+        .filter(r => r.length > 2);
+    } catch (e) {
+      console.warn('Tavoli.txt non caricato:', e.message);
+      listaInvitati = [];
+    }
+  }
+  caricaInvitati();
+
+  // --- POPUP E BEEP ---
+  let _popupTimer = null;
+
+  function beepCupo() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(90, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(55, ctx.currentTime + 0.35);
+      gain.gain.setValueAtTime(0.55, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+    } catch(e) {}
+  }
+
+  function mostraPopup(msg, sub, durata) {
+    document.getElementById('popup-msg').textContent = msg;
+    const subEl = document.getElementById('popup-sub');
+    if (sub) {
+      subEl.innerHTML = sub;
+      subEl.style.display = 'block';
+    } else {
+      subEl.style.display = 'none';
+    }
+    document.getElementById('popup-overlay').classList.add('visible');
+    beepCupo();
+    clearTimeout(_popupTimer);
+    _popupTimer = setTimeout(() => {
+      document.getElementById('popup-overlay').classList.remove('visible');
+    }, durata || 2000);
+  }
+
+  // Chiude popup al click
+  document.getElementById('popup-overlay').addEventListener('click', () => {
+    clearTimeout(_popupTimer);
+    document.getElementById('popup-overlay').classList.remove('visible');
+  });
+
+  // --- VERIFICA FUZZY NOMINATIVO ---
+  function normalizza(s) {
+    return s.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9 ]/g, '')
+      .trim();
+  }
+
+  // Distanza di Levenshtein
+  function levenshtein(a, b) {
+    const m = a.length, n = b.length;
+    const dp = Array.from({length: m+1}, (_, i) => [i, ...Array(n).fill(0)]);
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+    for (let i = 1; i <= m; i++)
+      for (let j = 1; j <= n; j++)
+        dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1]
+          : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+    return dp[m][n];
+  }
+
+  // Controlla se tutte le parole digitate sono contenute nell'invitato
+  function paroleContenute(input, invitato) {
+    const paroleInput = normalizza(input).split(/\s+/);
+    const inv = normalizza(invitato);
+    return paroleInput.every(p => inv.includes(p));
+  }
+
+  function trovaInvitato(nome) {
+    if (!listaInvitati.length) return { trovato: true, match: nome }; // lista non caricata: non bloccare
+    const nomeN = normalizza(nome);
+    // 1. Match esatto normalizzato
+    for (const inv of listaInvitati) {
+      if (normalizza(inv) === nomeN) return { trovato: true, match: inv };
+    }
+    // 2. Tutte le parole digitate sono contenute nell'invitato
+    for (const inv of listaInvitati) {
+      if (paroleContenute(nome, inv)) return { trovato: true, match: inv };
+    }
+    // 3. Fuzzy: distanza di Levenshtein tollerante (max 2 per nomi corti, max 3 per nomi lunghi)
+    let bestDist = Infinity, bestMatch = null;
+    for (const inv of listaInvitati) {
+      const d = levenshtein(nomeN, normalizza(inv));
+      if (d < bestDist) { bestDist = d; bestMatch = inv; }
+    }
+    const soglia = nomeN.length <= 6 ? 2 : 3;
+    if (bestDist <= soglia) return { trovato: true, match: bestMatch };
+
+    return { trovato: false, match: null };
+  }
+
   // --- LOGICA DEL FORM ---
 
   let attendanceStatus = '';
@@ -812,10 +981,28 @@
   function setAttendance(status) {
     const inp = document.getElementById('nome');
     const nome = inp.value.trim();
+
+    // Controllo campo vuoto
     if (!nome) {
       inp.focus();
       inp.style.borderColor = '#c0504d';
       setTimeout(() => inp.style.borderColor = '', 2000);
+      mostraPopup('Nominativo obbligatorio', null, 2000);
+      return;
+    }
+
+    // Verifica che il nominativo sia in lista invitati
+    const esito = trovaInvitato(nome);
+    if (!esito.trovato) {
+      inp.select();
+      inp.style.borderColor = '#c0504d';
+      setTimeout(() => inp.style.borderColor = '', 3000);
+      mostraPopup(
+        'Nominativo non trovato',
+        'Inserisci il nome così come appare nell\'invito.<br>Controlla maiuscole, cognome e spazi.',
+        3000
+      );
+      setTimeout(() => inp.focus(), 100);
       return;
     }
 
@@ -875,6 +1062,21 @@
       inp.focus();
       inp.style.borderColor = '#c0504d';
       setTimeout(() => inp.style.borderColor = '', 2000);
+      mostraPopup('Nominativo obbligatorio', null, 2000);
+      return;
+    }
+    const esito = trovaInvitato(nome);
+    if (!esito.trovato) {
+      const inp = document.getElementById('nome');
+      inp.select();
+      inp.style.borderColor = '#c0504d';
+      setTimeout(() => inp.style.borderColor = '', 3000);
+      mostraPopup(
+        'Nominativo non trovato',
+        'Inserisci il nome così come appare nell\'invito.',
+        3000
+      );
+      setTimeout(() => inp.focus(), 100);
       return;
     }
     if (!attendanceStatus) {

@@ -780,6 +780,7 @@
 
   async function generaPDF() {
     const testi = dizionario[currentLang];
+    const emojiNum = ['','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
     if (!window.datiInvitati || window.datiInvitati.length === 0) {
       alert(testi.msgNessunDato);
       return;
@@ -1038,7 +1039,6 @@
       const totNonRisposto = Math.max(0, totInvitatiCsv - window.datiInvitati.length);
 
       // Mappa nome normalizzato → numero tavolo (1-based)
-      const emojiNum = ['','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
       const mapTavolo = {};
       TAVOLI.forEach((t, ti) => {
         t.persone.forEach(p => {
@@ -1396,4 +1396,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v36 - 26/03/2026 - Emoji numero tavolo nei titoli pag3 e web -->
+<!-- Lista.html v37 - 26/03/2026 - Fix: emojiNum spostato a scope generaPDF -->

@@ -1041,7 +1041,7 @@
         <div style="font-size: 18px; text-align: center; color: #8a5e1e; font-weight: 600; padding-top: 6px; margin-bottom: 8px;">
           ${testi.titoloInvitati}: ${totInvitatiCsv} &ndash; ${testi.kpiPresenti}: ${totPresenti} &ndash; ${testi.kpiAssenti}: ${totAssenti} &ndash; ${testi.kpiBaby}: ${totBaby} &ndash; ${testi.kpiSegnaposto}: ${totSegnaposto}
         </div>
-        <div style="border-bottom: 2px solid #8a5e1e; margin-bottom: 14px;"></div>
+        <div style="text-align:center;font-family:Arial,sans-serif;font-size:10px;color:#555555;margin-bottom:10px;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">V</span>Vegetariano&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">C</span>Carne&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">P</span>Pesce&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#2d6040;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">B</span>Baby&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#8a6000;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">S</span>Segnaposto&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#a83230;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">A</span>Assente</div>
         <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%;">
       `;
 
@@ -1116,7 +1116,6 @@
       });
 
       htmlPDF += `</div>`; // Chiude le 2 colonne
-      htmlPDF += `<div id="footer-pag2" style="margin-top:70px;padding-top:6px;text-align:center;font-family:Arial,sans-serif;font-size:10px;color:#555555;border-top:0.5px solid #cccccc;page-break-before:avoid;page-break-inside:avoid;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">V</span>Vegetariano&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">C</span>Carne&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">P</span>Pesce&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#2d6040;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">B</span>Baby&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#8a6000;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">S</span>Segnaposto&nbsp;&nbsp;&nbsp;<span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#a83230;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">A</span>Assente</div>`;
       htmlPDF += `</div>`; // Chiude il div contenitore della pagina
     }
 
@@ -1374,4 +1373,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v28 - 26/03/2026 - Due box affiancati: cenanti+menu -->
+<!-- Lista.html v29 - 26/03/2026 - Legenda dopo titolo pag2; rimossa linea e footer -->

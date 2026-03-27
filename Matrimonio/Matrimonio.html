@@ -124,7 +124,7 @@
   .hero-toggle {
     width: 100%;
     max-width: 420px;
-    margin: 22px auto 26px;
+    margin: 0 auto;
     text-align: center;
     cursor: pointer;
   }
@@ -448,6 +448,79 @@
   }
   .footer span { color: #000000; font-weight: 600; }
 
+  /* PULSANTE INFO */
+  .btn-info {
+    display: block;
+    width: 100%;
+    margin: 0 auto 0;
+    padding: 11px 0;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 18px 18px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-info:hover {
+    background: rgba(184,137,58,0.10);
+    color: var(--gold);
+  }
+  .btn-info:active { opacity: 0.8; }
+
+  /* MODALE INFO */
+  #info-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.45);
+    align-items: center;
+    justify-content: center;
+  }
+  #info-overlay.visible { display: flex; }
+  #info-box {
+    background: var(--warm-white);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 28px 24px 20px;
+    box-shadow: 0 8px 40px rgba(44,36,24,0.25);
+    max-width: 480px;
+    width: 92%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: popupIn 0.18s ease;
+    position: relative;
+  }
+  #info-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--gold-dark);
+    line-height: 1;
+    padding: 0 4px;
+  }
+  #info-content {
+    font-size: 15px;
+    color: #000;
+    line-height: 1.75;
+    margin-top: 8px;
+  }
+  #info-content p { margin: 0 0 4px; }
+  #info-content a {
+    color: var(--gold-dark);
+    word-break: break-all;
+  }
+
   /* POPUP VALIDAZIONE NOME */
   #popup-overlay {
     display: none;
@@ -511,13 +584,16 @@
     <p class="description" id="main-desc"></p>
   </div>
 
-  <div class="hero-toggle" id="hero-toggle" onclick="toggleHeroInfo()">
-    <img id="hero-image" src="Foto.jpeg" alt="Giulia e Onofrio">
-    <div class="hero-details" id="hero-details" style="display:none">
-      <div class="hero-details-date" id="hero-details-date">Domenica 21 giugno 2026</div>
-      <div class="hero-details-line" id="hero-line-1">16:00 Cerimonia presso il Comune di Putignano</div>
-      <div class="hero-details-line" id="hero-line-2">18:00 Serata presso Barsentum</div>
+  <div style="width:100%;max-width:420px;margin:22px auto 26px;">
+    <div class="hero-toggle" id="hero-toggle" onclick="toggleHeroInfo()" style="margin:0 auto 0;">
+      <img id="hero-image" src="Foto.jpeg" alt="Giulia e Onofrio">
+      <div class="hero-details" id="hero-details" style="display:none">
+        <div class="hero-details-date" id="hero-details-date">Domenica 21 giugno 2026</div>
+        <div class="hero-details-line" id="hero-line-1">16:00 Cerimonia presso il Comune di Putignano</div>
+        <div class="hero-details-line" id="hero-line-2">18:00 Serata presso Barsentum</div>
+      </div>
     </div>
+    <button class="btn-info" id="btn-info" onclick="apriInfo()">INFO</button>
   </div>
 
   <div class="card first-card">
@@ -597,6 +673,14 @@
 </div>
 </div>
 
+<!-- MODALE INFO -->
+<div id="info-overlay">
+  <div id="info-box">
+    <button id="info-close-btn" onclick="chiudiInfo()">✕</button>
+    <div id="info-content">…</div>
+  </div>
+</div>
+
 <!-- POPUP VALIDAZIONE -->
 <div id="popup-overlay">
   <div id="popup-box">
@@ -659,6 +743,7 @@
       btnInvia: '✓ Conferma e invia',
       msgInvioInCorso: 'Invio in corso...',
       msgErroreRete: 'Errore di rete. Riprova.',
+      popupMsg: 'Inserisci correttamente il nome e cognome',
       thanksTitle: 'Grazie!',
       thanksDescYes: 'La tua risposta è stata registrata.<br>Ci vediamo al matrimonio! 💍',
       thanksDescNo: 'La tua risposta è stata registrata.<br>Grazie per averci avvisato.'
@@ -699,6 +784,7 @@
       btnInvia: '✓ Confirmar y enviar',
       msgInvioInCorso: 'Envío en curso...',
       msgErroreRete: 'Error de red. Inténtalo de nuevo.',
+      popupMsg: 'Introduce correctamente el nombre y apellido',
       thanksTitle: '¡Gracias!',
       thanksDescYes: 'Tu respuesta ha sido registrada.<br>¡Nos vemos en la boda! 💍',
       thanksDescNo: 'Tu respuesta ha sido registrada.<br>Gracias por avisarnos.'
@@ -811,7 +897,7 @@
   }
 
   function mostraPopup() {
-    document.getElementById('popup-msg').textContent = 'Inserisci correttamente il nome e cognome';
+    document.getElementById('popup-msg').textContent = translations[currentLanguage].popupMsg;
     document.getElementById('popup-sub').style.display = 'none';
     document.getElementById('popup-overlay').classList.add('visible');
     beepCupo();
@@ -820,6 +906,48 @@
       document.getElementById('popup-overlay').classList.remove('visible');
     }, 5000);
   }
+
+  // --- MODALE INFO ---
+  const INFO_BASE = 'https://raw.githubusercontent.com/Sebastiano-Mazzarisi/Prog/main/Matrimonio/';
+
+  function formattaInfo(testo) {
+    return testo.split('\n').map(riga => {
+      const r = riga.trimEnd();
+      if (!r) return '<p>&nbsp;</p>';
+      if (/^https?:\/\//i.test(r)) {
+        return '<p><a href="' + r + '" target="_blank" rel="noopener">' + r + '</a></p>';
+      }
+      if (r.endsWith(':')) {
+        return '<p><strong>' + r + '</strong></p>';
+      }
+      return '<p>' + r + '</p>';
+    }).join('');
+  }
+
+  async function apriInfo() {
+    const filename = currentLanguage === 'es' ? 'Info-ES.txt' : 'Info-IT.txt';
+    const url = INFO_BASE + filename;
+    const contenuto = document.getElementById('info-content');
+    contenuto.innerHTML = '<em>…</em>';
+    document.getElementById('info-overlay').classList.add('visible');
+    try {
+      const resp = await fetch(url + '?t=' + Date.now());
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const testo = await resp.text();
+      contenuto.innerHTML = formattaInfo(testo);
+    } catch(e) {
+      contenuto.innerHTML = '<em>Impossibile caricare le informazioni.</em>';
+    }
+  }
+
+  function chiudiInfo() {
+    document.getElementById('info-overlay').classList.remove('visible');
+  }
+
+  // Chiude modale info cliccando fuori
+  document.getElementById('info-overlay').addEventListener('click', function(e) {
+    if (e.target === this) chiudiInfo();
+  });
 
   // Chiude popup al click
   document.getElementById('popup-overlay').addEventListener('click', () => {

@@ -982,16 +982,20 @@
   const INFO_BASE = 'https://raw.githubusercontent.com/Sebastiano-Mazzarisi/Prog/main/Matrimonio/';
 
   function formattaInfo(testo) {
+    function applyInline(s) {
+      // *testo* → grassetto (WhatsApp style)
+      s = s.replace(/\*([^*]+)\*/g, '<strong>$1</strong>');
+      // _testo_ → corsivo (WhatsApp style)
+      s = s.replace(/_([^_]+)_/g, '<em>$1</em>');
+      return s;
+    }
     return testo.split('\n').map(riga => {
       const r = riga.trimEnd();
       if (!r) return '<p>&nbsp;</p>';
       if (/^https?:\/\//i.test(r)) {
         return '<p><a href="' + r + '" target="_blank" rel="noopener">' + r + '</a></p>';
       }
-      if (r.endsWith(':')) {
-        return '<p><strong>' + r + '</strong></p>';
-      }
-      return '<p>' + r + '</p>';
+      return '<p>' + applyInline(r) + '</p>';
     }).join('');
   }
 

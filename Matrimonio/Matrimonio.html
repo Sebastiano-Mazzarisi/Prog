@@ -487,13 +487,15 @@
     padding: 0 4px;
   }
   #msg-content {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px;
+    font-size: 15px;
     color: #000;
-    line-height: 1.5;
+    line-height: 1.35;
     margin-top: 8px;
-    text-align: center;
-    white-space: pre-line;
+  }
+  #msg-content p { margin: 0 0 2px; }
+  #msg-content a {
+    color: var(--gold-dark);
+    word-break: break-all;
   }
 
   /* PULSANTE INFO */
@@ -1074,7 +1076,7 @@
     fetch(url)
       .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
       .then(testo => {
-        document.getElementById('msg-content').textContent = testo.trim();
+        document.getElementById('msg-content').innerHTML = formattaInfo(testo);
         document.getElementById('msg-overlay').classList.add('visible');
       })
       .catch(() => {

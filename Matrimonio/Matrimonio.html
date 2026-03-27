@@ -763,7 +763,18 @@
   dataOggi.setHours(0, 0, 0, 0); 
   const diffTime = dataEvento - dataOggi;
   const giorniMancanti = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  const strGiorni = giorniMancanti > 0 ? ` (-${giorniMancanti})` : '';
+
+  function strGiorniLang(lang) {
+    if (giorniMancanti > 0) {
+      return lang === 'es'
+        ? ` (en ${giorniMancanti} días)`
+        : ` (tra ${giorniMancanti} giorni)`;
+    }
+    if (giorniMancanti === 0) return lang === 'es' ? ' (hoy)' : ' (oggi)';
+    if (giorniMancanti === -1) return lang === 'es' ? ' (mañana)' : ' (domani)';
+    if (giorniMancanti === -2) return lang === 'es' ? ' (pasado mañana)' : ' (dopodomani)';
+    return ''; // passato
+  }
 
   // OGGETTO CON LE TRADUZIONI
   const translations = {
@@ -772,7 +783,7 @@
       ogTitle: 'Matrimonio Giulia & Onofrio – Preferenze Cena',
       ogDesc: 'Compila il questionario per la cena di matrimonio: presenza, allergie e preferenze.',
       mainTitle: 'Cena di Matrimonio',
-      mainDesc: 'DOMENICA 21 GIUGNO 2026' + strGiorni,
+      mainDesc: 'DOMENICA 21 GIUGNO 2026' + strGiorniLang('it'),
       nomeTitle: 'Il tuo nome<span class="req">*</span>',
       nomePlaceholder: 'Nome e cognome',
       attendBtn: '😊 Sarò dei vostri',
@@ -813,7 +824,7 @@
       ogTitle: 'Boda de Giulia & Onofrio – Preferencias de Cena',
       ogDesc: 'Rellena el cuestionario para la cena de boda: asistencia, alergias y preferencias.',
       mainTitle: 'Cena de Boda',
-      mainDesc: 'DOMINGO 21 JUNIO 2026' + strGiorni,
+      mainDesc: 'DOMINGO 21 JUNIO 2026' + strGiorniLang('es'),
       nomeTitle: 'Tu nombre<span class="req">*</span>',
       nomePlaceholder: 'Nombre y apellido',
       attendBtn: '😊 Estaré con vosotros',
@@ -1072,15 +1083,17 @@
   let heroInfoVisible = false;
 
   function toggleHeroInfo() {
-    const filename = currentLanguage === 'es' ? 'Messaggio-ES.txt' : 'Messaggio-IT.txt';
+    const filename = (currentLanguage === 'es') ? 'Messaggio-ES.txt' : 'Messaggio-IT.txt';
     const url = INFO_BASE + filename + '?t=' + Date.now();
+    console.log('Carico:', url);
     fetch(url)
-      .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
       .then(testo => {
         document.getElementById('msg-content').innerHTML = formattaInfo(testo);
         document.getElementById('msg-overlay').classList.add('visible');
       })
-      .catch(() => {
+      .catch(err => {
+        console.warn('Messaggio non trovato:', err);
         // File non trovato: comportamento originale
         heroInfoVisible = !heroInfoVisible;
         document.getElementById('hero-image').style.display = heroInfoVisible ? 'none' : 'block';

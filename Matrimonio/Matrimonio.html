@@ -999,6 +999,19 @@
     }).join('');
   }
 
+  // Legge un file testuale provando prima UTF-8, poi windows-1252 (ANSI/latin)
+  async function fetchTesto(url) {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const buf = await resp.arrayBuffer();
+    try {
+      const testo = new TextDecoder('utf-8', { fatal: true }).decode(buf);
+      return testo;
+    } catch(e) {
+      return new TextDecoder('windows-1252').decode(buf);
+    }
+  }
+
   async function apriInfo() {
     const filename = currentLanguage === 'es' ? 'Info-ES.txt' : 'Info-IT.txt';
     const url = INFO_BASE + filename;
@@ -1006,9 +1019,7 @@
     contenuto.innerHTML = '<em>…</em>';
     document.getElementById('info-overlay').classList.add('visible');
     try {
-      const resp = await fetch(url + '?t=' + Date.now());
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      const testo = await resp.text();
+      const testo = await fetchTesto(url + '?t=' + Date.now());
       contenuto.innerHTML = formattaInfo(testo);
     } catch(e) {
       contenuto.innerHTML = '<em>Impossibile caricare le informazioni.</em>';
@@ -1089,16 +1100,12 @@
   function toggleHeroInfo() {
     const filename = (currentLanguage === 'es') ? 'Messaggio-ES.txt' : 'Messaggio-IT.txt';
     const url = INFO_BASE + filename + '?t=' + Date.now();
-    console.log('Carico:', url);
-    fetch(url)
-      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    fetchTesto(url)
       .then(testo => {
         document.getElementById('msg-content').innerHTML = formattaInfo(testo);
         document.getElementById('msg-overlay').classList.add('visible');
       })
-      .catch(err => {
-        console.warn('Messaggio non trovato:', err);
-        // File non trovato: comportamento originale
+      .catch(() => {
         heroInfoVisible = !heroInfoVisible;
         document.getElementById('hero-image').style.display = heroInfoVisible ? 'none' : 'block';
         document.getElementById('hero-details').style.display = heroInfoVisible ? 'block' : 'none';

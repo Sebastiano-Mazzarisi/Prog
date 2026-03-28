@@ -1318,7 +1318,7 @@
       const now = kpi.aggiornatoAlle ? kpi.aggiornatoAlle : new Date();
       const ore = now.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
       const data = now.toLocaleDateString('it-IT', {day:'2-digit', month:'2-digit', year:'numeric'});
-      const sep = '-----------------------------------';
+      const sep = '---------------------------';
       const testo =
         'Matrimonio Giulia & Onofrio\n' +
         'Dati aggiornati alle ore\n' +
@@ -1333,8 +1333,15 @@
         'Secondo carne: ' + (kpi.totCarne || 0) + '\n' +
         'Secondo pesce: ' + (kpi.totPesce || 0) + '\n' +
         'Menu baby: ' + (kpi.totBaby || 0) + '\n' +
-        sep;
-      navigator.clipboard.writeText(testo).catch(() => {});
+        sep + '\n';
+      navigator.clipboard.writeText(testo).then(() => {
+        const btn = document.getElementById('btn-tavoli-nav');
+        if (btn) {
+          const orig = btn.textContent;
+          btn.textContent = 'COPIATO!';
+          setTimeout(() => { btn.textContent = orig; }, 2000);
+        }
+      }).catch(() => {});
     } catch(e) {}
 
     // Scorri ai tavoli
@@ -1569,4 +1576,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v54 - 28/03/2026 - Clipboard: testo riepilogo aggiornato -->
+<!-- Lista.html v55 - 28/03/2026 - Tavoli: COPIATO! 2s, separatori -10, newline finale -->

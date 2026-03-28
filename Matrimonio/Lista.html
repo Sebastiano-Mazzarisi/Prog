@@ -389,6 +389,18 @@
       btnBackup: "BACKUP",
       btnTavoli: "TAVOLI",
       btnHome: "HOME",
+      lblTavolo: "Tavolo",
+      lblTotaleCenanti: "Totale cenanti",
+      lblCompleti: "Completi",
+      lblVegetariano: "Vegetariano",
+      lblCarne: "Carne",
+      lblPesce: "Pesce",
+      lblBaby: "Baby",
+      lblSegnaposto: "Segnaposto",
+      tipVeg: "Vegetariano",
+      tipCarne: "Carne",
+      tipPesce: "Pesce",
+      tipBaby: "Baby",
       riprova: "↻ Riprova",
       pdf: "📄 PDF",
       kpiPresenti: "Presenti",
@@ -445,6 +457,18 @@
       btnBackup: "BACKUP",
       btnTavoli: "MESAS",
       btnHome: "INICIO",
+      lblTavolo: "Mesa",
+      lblTotaleCenanti: "Total comensales",
+      lblCompleti: "Completos",
+      lblVegetariano: "Vegetariano",
+      lblCarne: "Carne",
+      lblPesce: "Pescado",
+      lblBaby: "Baby",
+      lblSegnaposto: "Marcador",
+      tipVeg: "Vegetariano",
+      tipCarne: "Carne",
+      tipPesce: "Pescado",
+      tipBaby: "Baby",
       riprova: "↻ Reintentar",
       pdf: "📄 PDF",
       kpiPresenti: "Presentes",
@@ -881,7 +905,7 @@
         <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${nomeDisplay}${isVideoDup && r.data ? `<span style="font-size:11px;font-weight:400;color:#7a5a00;margin-left:6px;white-space:nowrap">${r.data}</span>` : ''}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
-            <span class="risposta-label">Tavolo</span>
+            <span class="risposta-label">${testi.lblTavolo}</span>
             <span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span>
           </div>
           <div class="risposta-row">
@@ -1349,7 +1373,7 @@
         <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${borderTavolo}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px; background-color: #ffffff;">
 
           <div style="background-color: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid ${borderTavolo};">
-            <span>Tavolo ${emojiNum[i+1] || i+1} &middot; ${label}</span>
+            <span>${testi.lblTavolo} ${emojiNum[i+1] || i+1} &middot; ${label}</span>
             <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;color:#000000;">${t.persone.length}</span>
           </div>
 
@@ -1373,20 +1397,20 @@
         <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCenanti}</div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Totale cenanti</div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblTotaleCenanti}</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCompleti}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totBaby}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Baby</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblBaby}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totSegnaposto}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Segnaposto</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblSegnaposto}</div>
             </div>
           </div>
         </div>
@@ -1395,20 +1419,20 @@
         <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCompleti}</div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totVeg}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Vegetariano</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblVegetariano}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCarne}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Carne</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCarne}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totPesce}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Pesce</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblPesce}</div>
             </div>
           </div>
         </div>
@@ -1533,10 +1557,10 @@
     var iconaPart = '';
     if (match && match.secondo) {
       var tipo = detectSecondo(match.secondo);
-      if (tipo === 'veg')        iconaPart = ' <span title="Vegetariano" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2d6040;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">V</span>';
-      else if (tipo === 'carne') iconaPart = ' <span title="Carne" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#a83230;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">C</span>';
-      else if (tipo === 'pesce') iconaPart = ' <span title="Pesce" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#c8a000;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">P</span>';
-      else if (tipo === 'baby')  iconaPart = ' <span title="Baby" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2980b9;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">B</span>';
+      if (tipo === 'veg')        iconaPart = ' <span title="${dizionario[currentLang].tipVeg}" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2d6040;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">V</span>';
+      else if (tipo === 'carne') iconaPart = ' <span title="${dizionario[currentLang].tipCarne}" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#a83230;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">C</span>';
+      else if (tipo === 'pesce') iconaPart = ' <span title="${dizionario[currentLang].tipPesce}" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#c8a000;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">P</span>';
+      else if (tipo === 'baby')  iconaPart = ' <span title="${dizionario[currentLang].tipBaby}" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2980b9;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">B</span>';
     }
     return etaPart + iconaPart;
   }
@@ -1578,7 +1602,7 @@
             align-items:center;
             transition:all 0.2s;
           " id="btn-tavolo-${i}">
-            <span>Tavolo ${emojiNumW[i+1] || i+1} &middot; ${label}</span>
+            <span>${dizionario[currentLang].lblTavolo} ${emojiNumW[i+1] || i+1} &middot; ${label}</span>
             <span style="display:flex;align-items:center;gap:8px;">
               <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000000;">${t.persone.length}</span>
               
@@ -1887,4 +1911,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v80 - 28/03/2026 - HOME maiuscolo, pulsanti bilingue, fix tavolo+età sort -->
+<!-- Lista.html v81 - 28/03/2026 - Tutte le stringhe bilingue complete, fix tavolo/età sort -->

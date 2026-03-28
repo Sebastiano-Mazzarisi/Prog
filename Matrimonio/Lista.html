@@ -320,7 +320,7 @@
   .pdf-table { border-collapse: collapse; border-spacing: 0; }
   .pdf-table thead { display: table-header-group; }
   .pdf-table tbody tr { page-break-inside: avoid; }
-  .pdf-table tr.ultima-prima-break td { border-bottom: none !important; }
+  .pdf-table tbody tr:last-child td { border-bottom: none !important; }
   .pdf-table th, .pdf-table td {
     border: none !important;
     border-right: 0.5px solid #000 !important;
@@ -1058,8 +1058,10 @@
       htmlPDF += `</tbody></table>`;
     }
 
-    // Tabella Presenti - spezzata in base all'altezza reale delle righe
+    // Tabella Presenti - spezzata ogni N righe con header ripetuto
     if (presentiRows.length > 0) {
+      const RIGHE_PER_PAGINA_1 = 22; // prima pagina (ha KPI box sopra)
+      const RIGHE_PER_PAGINA_N = 30; // pagine successive
       const theadHTML = `
         <thead>
           <tr style="background-color: #f5ede0; text-align: left;">
@@ -1086,8 +1088,22 @@
         }
       }
 
-      // Costruisce HTML di ogni riga
-      function buildRowHTML(r, idx) {
+      htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>`;
+      htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
+
+      let paginaCorrente = 1;
+      let righeInPagina = 0;
+
+      presentiRows.forEach((r, idx) => {
+        const limiteRighe = paginaCorrente === 1 ? RIGHE_PER_PAGINA_1 : RIGHE_PER_PAGINA_N;
+        if (righeInPagina > 0 && righeInPagina >= limiteRighe) {
+          htmlPDF += `</tbody></table>`;
+          htmlPDF += `<div class="html2pdf__page-break"></div>`;
+          htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
+          paginaCorrente++;
+          righeInPagina = 0;
+        }
+
         let secondoStr = detectSecondo(r.secondo);
         const isBabyRow = secondoStr === 'baby';
         const isSegRow  = secondoStr === 'segnaposto';
@@ -1096,60 +1112,24 @@
         else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
         else if (isBabyRow) secondoStr = '🍼 ' + testi.kpiBaby;
         else secondoStr = '-';
+
         const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
-        const notaCell = isSegRow ? '<span style="color:#a83230;font-weight:600">' + testi.kpiSegnaposto + '</span>'
+        const notaCell = isSegRow
+          ? '<span style="color:#a83230;font-weight:600">' + testi.kpiSegnaposto + '</span>'
           : isBabyRow ? '<span style="color:#a83230;font-weight:600">' + testi.kpiBaby + '</span>'
           : (r.note ? r.note : '-');
+
         const nTavPres = trovaTavoloNum(r.nome || '');
         const isDup = nomeDuplicato.has(idx);
         const nomeBg = isDup ? 'background:#fff176;' : (!nTavPres ? 'background:#ffd6e0;' : '');
         const dataStr = isDup && r.data ? '<br><span style="font-size:9px;font-weight:400;color:#7a5a00">' + r.data + '</span>' : '';
-        return '<tr>'
+        htmlPDF += '<tr>'
           + '<td style="padding:4px 6px;font-weight:600;color:#000;' + nomeBg + '">' + (nTavPres ? '<span style="margin-right:3px">' + nTavPres + '</span>' : '') + (r.nome || 'Senza nome') + dataStr + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + secondoStr + '</td>'
           + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + allergie + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + notaCell + '</td>'
           + '</tr>';
-      }
-
-      // Misura altezze reali renderizzando in un contenitore nascosto
-      const misuratore = document.createElement('div');
-      misuratore.style.cssText = 'position:fixed;left:-9999px;top:0;width:680px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;';
-      const tabMisura = document.createElement('table');
-      tabMisura.style.cssText = tableStyle;
-      tabMisura.innerHTML = theadHTML + '<tbody>' + presentiRows.map((r,i) => buildRowHTML(r,i)).join('') + '</tbody>';
-      misuratore.appendChild(tabMisura);
-      document.body.appendChild(misuratore);
-
-      const righeDOM = tabMisura.querySelectorAll('tbody tr');
-      const testaAltezza = tabMisura.querySelector('thead tr') ? tabMisura.querySelector('thead tr').getBoundingClientRect().height : 20;
-      const altezze = Array.from(righeDOM).map(tr => tr.getBoundingClientRect().height);
-      document.body.removeChild(misuratore);
-
-      const ALTEZZA_PAGINA_PX = 980;   // px DOM per pagina intera
-      const ALTEZZA_PRIMA = ALTEZZA_PAGINA_PX - 160; // prima pagina: toglie KPI box + titoli sopra
-
-      let htmlPDFrighe = '';
-      htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>`;
-      htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
-
-      let altezzaAccumulata = testaAltezza;
-      let primaTabella = true;
-      const limiteCorrente = () => primaTabella ? ALTEZZA_PRIMA : ALTEZZA_PAGINA_PX - testaAltezza;
-
-      presentiRows.forEach((r, idx) => {
-        const h = altezze[idx] || 18;
-        if (altezzaAccumulata + h > limiteCorrente()) {
-          // Rimuovi border-bottom dall'ultima riga prima del break
-          htmlPDF = htmlPDF.replace(/<tr>(?![\s\S]*<tr>)/, '<tr class="ultima-prima-break">');
-          htmlPDF += '</tbody></table>';
-          htmlPDF += '<div class="html2pdf__page-break"></div>';
-          htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
-          altezzaAccumulata = testaAltezza;
-          primaTabella = false;
-        }
-        htmlPDF += buildRowHTML(r, idx);
-        altezzaAccumulata += h;
+        righeInPagina++;
       });
       htmlPDF += `</tbody></table>`;
     }
@@ -1654,4 +1634,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v65 - 28/03/2026 - PDF: calibrazione pagina aumentata, linea break rimossa -->
+<!-- Lista.html v66 - 28/03/2026 - PDF: righe fisse 22/30, linea finale rimossa -->

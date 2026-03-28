@@ -845,6 +845,9 @@
     <div style="height:10px;"></div>
     <div id="sezione-tavoli" style="margin-top:8px;"></div>`;
     box.innerHTML = html;
+    // Aggiorna subito il contatore (leggiContatore() è già nel template ma forziamo refresh)
+    const btnC = document.getElementById('btn-contatore');
+    if (btnC) btnC.textContent = leggiContatore();
     renderizzaTavoli();
   }
 
@@ -1335,12 +1338,12 @@
         'Menu baby: ' + (kpi.totBaby || 0) + '\n' +
         sep + '\n';
       navigator.clipboard.writeText(testo).then(() => {
-        const btn = document.getElementById('btn-tavoli-nav');
-        if (btn) {
-          const orig = btn.textContent;
-          btn.textContent = 'COPIATO!';
-          setTimeout(() => { btn.textContent = orig; }, 2000);
-        }
+        // Mostra popup COPIATO!
+        const popup = document.createElement('div');
+        popup.textContent = 'COPIATO!';
+        popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2d6040;color:#ffffff;font-family:Inter,sans-serif;font-size:22px;font-weight:900;letter-spacing:2px;padding:20px 40px;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.3);z-index:9999;pointer-events:none;';
+        document.body.appendChild(popup);
+        setTimeout(() => { document.body.removeChild(popup); }, 2000);
       }).catch(() => {});
     } catch(e) {}
 
@@ -1576,4 +1579,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v55 - 28/03/2026 - Tavoli: COPIATO! 2s, separatori -10, newline finale -->
+<!-- Lista.html v56 - 28/03/2026 - COPIATO! popup, contatore refresh robusto -->

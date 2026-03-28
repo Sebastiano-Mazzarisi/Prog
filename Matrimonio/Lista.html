@@ -1331,7 +1331,32 @@
             border-radius:0 0 12px 12px;
             padding:12px 16px;
           ">
-            ${t.persone.map((p,j) => `<div style="padding:5px 0; font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:#000000; -webkit-text-fill-color:#000000;">${p}</div>`).join('')}
+            ${t.persone.map((p,j) => {
+              let etaStr = '';
+              if (window.datiInvitati && window.datiInvitati.length) {
+                function tokTV(n){ return (n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().split(/\s+/).filter(Boolean); }
+                const pkTV = tokTV(p);
+                const match = window.datiInvitati.find(r => { const rk=tokTV(r.nome||''); return pkTV.every(w=>rk.includes(w))||rk.every(w=>pkTV.includes(w)); });
+                if (match && match.dataNascita) {
+                  const d = match.dataNascita.trim();
+                  const matrimonio = new Date(2026,5,21);
+                  let nascita = null;
+                  const dmY=d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+                  const Ymd=d.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+                  const soloAnno=d.match(/^(\d{4})$/);
+                  if(dmY) nascita=new Date(parseInt(dmY[3]),parseInt(dmY[2])-1,parseInt(dmY[1]));
+                  else if(Ymd) nascita=new Date(parseInt(Ymd[1]),parseInt(Ymd[2])-1,parseInt(Ymd[3]));
+                  else if(soloAnno) nascita=new Date(parseInt(soloAnno[1]),0,1);
+                  if(nascita){
+                    let anni=matrimonio.getFullYear()-nascita.getFullYear();
+                    const cp=(nascita.getMonth()<matrimonio.getMonth())||(nascita.getMonth()===matrimonio.getMonth()&&nascita.getDate()<=matrimonio.getDate());
+                    if(!cp) anni--;
+                    etaStr = ' <span style="font-weight:400;font-size:14px;color:#5a5a5a">('+anni+')</span>';
+                  }
+                }
+              }
+              return '<div style="padding:5px 0; font-family:\'Cormorant Garamond\',serif; font-size:18px; font-weight:600; color:#000000; -webkit-text-fill-color:#000000;">'+p+etaStr+'</div>';
+            }).join('')}
           </div>
         </div>
       `;
@@ -1435,4 +1460,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v44 - 28/03/2026 - PDF pag1: KPI 4col×2righe; pag2: pill formula sx, interlinea -2px -->
+<!-- Lista.html v45 - 28/03/2026 - Tavoli video: età accanto al nome se disponibile -->

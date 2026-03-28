@@ -1248,13 +1248,7 @@
   }
 
   function closeHtmlPage() {
-    window.open('', '_self');
-    window.close();
-    setTimeout(() => {
-      if (!window.closed) {
-        location.href = 'about:blank';
-      }
-    }, 120);
+    resetFormToStart();
   }
 
   function updateFormVisibility() {

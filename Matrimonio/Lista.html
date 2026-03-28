@@ -503,15 +503,18 @@
         const sepInv = txtInv.includes(';') ? ';' : ',';
         const acc = /[\u0300-\u036f]/g;
         window.mapNascita = {};
+        let totCsv = 0;
         let startInv = (righeInv.length > 0 && righeInv[0].toLowerCase().includes('nom')) ? 1 : 0;
         for (let i = startInv; i < righeInv.length; i++) {
           const cols = righeInv[i].split(sepInv);
           const nome = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
           const dataN = cols[1] ? cols[1].replace(/['"]/g,'').trim() : '';
-          if (nome && dataN) {
-            window.mapNascita[nome.toLowerCase().normalize('NFD').replace(acc,'').trim()] = dataN;
+          if (nome) {
+            totCsv++;
+            if (dataN) window.mapNascita[nome.toLowerCase().normalize('NFD').replace(acc,'').trim()] = dataN;
           }
         }
+        window.totInvitatiCsv = totCsv;
       }
     } catch(e) { console.log('mapNascita: Invitati.csv non disponibile', e); }
   }
@@ -740,6 +743,13 @@
       }
     });
 
+    // Salva snapshot KPI globalmente per scorriTavoli()
+    window.kpiSnapshot = {
+      totPresenti, totAssenti, totVeg, totCarne, totPesce, totBaby, totSegnaposto,
+      totRisposte: window.datiInvitati.length,
+      aggiornatoAlle: new Date()
+    };
+
     let html = `<table class="sposi-kpi">
       <tr>
         <td><div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-label">${testi.kpiPresenti}</div><div class="kpi-num">${totPresenti}</div></div></td>
@@ -909,6 +919,7 @@
         }
         // Salva mappa nome→dataNascita globalmente per etaTavoloHTML
         window.mapNascita = {};
+        window.totInvitatiCsv = totInvitatiCsv;
         gruppiInvitati.forEach(function(g){ g.forEach(function(inv){ if(inv.dataNascita){ var k=inv.nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim(); window.mapNascita[k]=inv.dataNascita; } }); });
       }
     } catch (err) {
@@ -1296,6 +1307,37 @@
     });
   }
   function scorriTavoli() {
+    // Copia riepilogo negli appunti in modo silente
+    try {
+      const kpi = window.kpiSnapshot || {};
+      const totInv = window.totInvitatiCsv || 0;
+      const totRisp = kpi.totRisposte || 0;
+      const totPres = kpi.totPresenti || 0;
+      const totAss = kpi.totAssenti || 0;
+      const totAttesa = Math.max(0, totInv - totRisp);
+      const now = kpi.aggiornatoAlle ? kpi.aggiornatoAlle : new Date();
+      const ore = now.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+      const data = now.toLocaleDateString('it-IT', {day:'2-digit', month:'2-digit', year:'numeric'});
+      const sep = '-----------------------------------';
+      const testo =
+        'Matrimonio Giulia & Onofrio\n' +
+        'Dati aggiornati alle ore\n' +
+        ore + ' del ' + data + '\n' +
+        sep + '\n' +
+        'Invitati + sposi: ' + totInv + '\n' +
+        'Confermata presenza: ' + totPres + '\n' +
+        'Comunicata assenza: ' + totAss + '\n' +
+        'In attesa di risposta: ' + totAttesa + '\n' +
+        sep + '\n' +
+        'Secondo vegetariano: ' + (kpi.totVeg || 0) + '\n' +
+        'Secondo carne: ' + (kpi.totCarne || 0) + '\n' +
+        'Secondo pesce: ' + (kpi.totPesce || 0) + '\n' +
+        'Menu baby: ' + (kpi.totBaby || 0) + '\n' +
+        sep;
+      navigator.clipboard.writeText(testo).catch(() => {});
+    } catch(e) {}
+
+    // Scorri ai tavoli
     const sezione = document.getElementById('sezione-tavoli');
     if (sezione) {
       sezione.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1527,4 +1569,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v52 - 28/03/2026 - Contatore: refresh su focus e ogni 30s -->
+<!-- Lista.html v54 - 28/03/2026 - Clipboard: testo riepilogo aggiornato -->

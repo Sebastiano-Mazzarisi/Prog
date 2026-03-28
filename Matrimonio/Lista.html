@@ -1060,8 +1060,8 @@
 
     // Tabella Presenti - spezzata ogni N righe con header ripetuto
     if (presentiRows.length > 0) {
-      const RIGHE_PER_PAGINA_1 = 22; // prima pagina (ha KPI box sopra)
-      const RIGHE_PER_PAGINA_N = 30; // pagine successive
+      const RIGHE_PER_PAGINA_1 = 26; // prima pagina (ha KPI box sopra)
+      const RIGHE_PER_PAGINA_N = 33; // pagine successive
       const theadHTML = `
         <thead>
           <tr style="background-color: #f5ede0; text-align: left;">
@@ -1098,7 +1098,7 @@
         const limiteRighe = paginaCorrente === 1 ? RIGHE_PER_PAGINA_1 : RIGHE_PER_PAGINA_N;
         if (righeInPagina > 0 && righeInPagina >= limiteRighe) {
           htmlPDF += `</tbody></table>`;
-          htmlPDF += `<div class="html2pdf__page-break"></div>`;
+          htmlPDF += `<div style="page-break-after:always;height:0;overflow:hidden;border:none;margin:0;padding:0;"></div>`;
           htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
           paginaCorrente++;
           righeInPagina = 0;
@@ -1634,4 +1634,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v66 - 28/03/2026 - PDF: righe fisse 22/30, linea finale rimossa -->
+<!-- Lista.html v67 - 28/03/2026 - PDF: 26/33 righe pagina, page-break senza linea -->

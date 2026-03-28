@@ -1091,7 +1091,7 @@
       // A4 in px a 96dpi con margini 5+20mm: area utile = (297-25)*3.7795 = 1028px
       // Il container PDF è 700px wide, scale:2 → la misura DOM è a scala 1x
       // Usiamo 700px per il misuratore, stessa larghezza del container PDF
-      const AREA_PAGINA = 1028; // px DOM, area utile pagina A4 con margini 5+20mm
+      const AREA_PAGINA = 910; // px DOM, calibrato empiricamente (A4 utile meno margine sicurezza)
 
       // Misura l'altezza di tutto ciò che è già nella pagina 1 prima delle righe presenti
       const misPage1 = document.createElement('div');
@@ -1660,4 +1660,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v69 - 28/03/2026 - PDF: assenti spostati dopo presenti -->
+<!-- Lista.html v70 - 28/03/2026 - PDF: AREA_PAGINA ridotta a 910px (-3 righe) -->

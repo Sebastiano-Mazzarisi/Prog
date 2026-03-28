@@ -320,7 +320,6 @@
   .pdf-table { border-collapse: collapse; border-spacing: 0; }
   .pdf-table thead { display: table-header-group; }
   .pdf-table tbody tr { page-break-inside: avoid; }
-  .pdf-table tbody tr:last-child td { border-bottom: none !important; }
   .pdf-table th, .pdf-table td {
     border: none !important;
     border-right: 0.5px solid #000 !important;
@@ -1091,7 +1090,7 @@
       // A4 in px a 96dpi con margini 5+20mm: area utile = (297-25)*3.7795 = 1028px
       // Il container PDF è 700px wide, scale:2 → la misura DOM è a scala 1x
       // Usiamo 700px per il misuratore, stessa larghezza del container PDF
-      const AREA_PAGINA = 970; // px DOM, calibrato empiricamente
+      const AREA_PAGINA = 1000; // px DOM, calibrato empiricamente
 
       // Misura l'altezza di tutto ciò che è già nella pagina 1 prima delle righe presenti
       const misPage1 = document.createElement('div');
@@ -1128,7 +1127,7 @@
         if (spazioRimanente - h < 0 && idx > 0) {
           htmlPDF += `</tbody></table>`;
           htmlPDF += `<div style="page-break-after:always;height:0;line-height:0;overflow:hidden;border:none;margin:0;padding:0;font-size:0;"></div>`;
-          htmlPDF += `<table class="pdf-table" style="${tableStyle}margin-top:10px;">${theadHTML}<tbody>`;
+          htmlPDF += `<table class="pdf-table" style="${tableStyle}margin-top:18px;">${theadHTML}<tbody>`;
           spazioRimanente = spazioPaginaN;
           primaPagina = false;
         }
@@ -1660,4 +1659,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v71 - 28/03/2026 - PDF: AREA_PAGINA 970, margine top tabella continua -->
+<!-- Lista.html v72 - 28/03/2026 - PDF: AREA 1000, margin-top 18px, bordo tabella ripristinato -->

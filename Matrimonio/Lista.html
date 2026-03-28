@@ -320,6 +320,7 @@
   .pdf-table { border-collapse: collapse; border-spacing: 0; }
   .pdf-table thead { display: table-header-group; }
   .pdf-table tbody tr { page-break-inside: avoid; }
+  .pdf-table tr.ultima-prima-break td { border-bottom: none !important; }
   .pdf-table th, .pdf-table td {
     border: none !important;
     border-right: 0.5px solid #000 !important;
@@ -1125,8 +1126,8 @@
       const altezze = Array.from(righeDOM).map(tr => tr.getBoundingClientRect().height);
       document.body.removeChild(misuratore);
 
-      const ALTEZZA_PAGINA_PX = 760;   // px DOM per pagina intera (calibrare se necessario)
-      const ALTEZZA_PRIMA = ALTEZZA_PAGINA_PX - 130; // prima pagina: toglie titolo h3 + KPI + assenti
+      const ALTEZZA_PAGINA_PX = 980;   // px DOM per pagina intera
+      const ALTEZZA_PRIMA = ALTEZZA_PAGINA_PX - 160; // prima pagina: toglie KPI box + titoli sopra
 
       let htmlPDFrighe = '';
       htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>`;
@@ -1139,7 +1140,8 @@
       presentiRows.forEach((r, idx) => {
         const h = altezze[idx] || 18;
         if (altezzaAccumulata + h > limiteCorrente()) {
-          // Salto pagina: chiudi tabella, break, nuova tabella con header
+          // Rimuovi border-bottom dall'ultima riga prima del break
+          htmlPDF = htmlPDF.replace(/<tr>(?![\s\S]*<tr>)/, '<tr class="ultima-prima-break">');
           htmlPDF += '</tbody></table>';
           htmlPDF += '<div class="html2pdf__page-break"></div>';
           htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
@@ -1652,4 +1654,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v64 - 28/03/2026 - PDF: calibrazione altezza pagina corretta -->
+<!-- Lista.html v65 - 28/03/2026 - PDF: calibrazione pagina aumentata, linea break rimossa -->

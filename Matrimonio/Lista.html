@@ -384,6 +384,11 @@
       caricamento: "Caricamento...",
       nessunaRisposta: "Nessuna risposta ancora.",
       aggiorna: "↻ Aggiorna",
+      btnAggiorna: "AGGIORNA",
+      btnPDF: "PDF",
+      btnBackup: "BACKUP",
+      btnTavoli: "TAVOLI",
+      btnHome: "HOME",
       riprova: "↻ Riprova",
       pdf: "📄 PDF",
       kpiPresenti: "Presenti",
@@ -435,6 +440,11 @@
       caricamento: "Cargando...",
       nessunaRisposta: "Ninguna respuesta todavía.",
       aggiorna: "↻ Actualizar",
+      btnAggiorna: "ACTUALIZAR",
+      btnPDF: "PDF",
+      btnBackup: "BACKUP",
+      btnTavoli: "MESAS",
+      btnHome: "INICIO",
       riprova: "↻ Reintentar",
       pdf: "📄 PDF",
       kpiPresenti: "Presentes",
@@ -804,10 +814,10 @@
     </table>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">Aggiorna</button>
-      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">PDF</button>
-      <button class="btn-submit" onclick="scaricaBackupCSV()" style="margin-top:0; background: linear-gradient(135deg, #2980b9, #3d9dd1); color: #ffffff;font-size:13px;padding:12px 6px;">Backup</button>
-      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">Tavoli</button>
+      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">${testi.btnAggiorna}</button>
+      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnPDF}</button>
+      <button class="btn-submit" onclick="scaricaBackupCSV()" style="margin-top:0; background: linear-gradient(135deg, #2980b9, #3d9dd1); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnBackup}</button>
+      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnTavoli}</button>
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:8px 4px;">
       <span style="font-family:'Inter',sans-serif;font-size:13px;color:#5a4a2a;white-space:nowrap;">${testi.ordinaPer}</span>
@@ -898,7 +908,7 @@
 
     html += `</div>
     <div style="text-align:center; margin: 16px 0 8px; display:flex; justify-content:center; align-items:center; gap:10px;">
-      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="background:linear-gradient(135deg,#7a5c3a,#9e7f5b);color:#ffffff;border:none;border-radius:12px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(122,92,58,0.3);">Home</button>
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="background:linear-gradient(135deg,#7a5c3a,#9e7f5b);color:#ffffff;border:none;border-radius:12px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(122,92,58,0.3);">${testi.btnHome}</button>
       <button onclick="gestisciContatore()" id="btn-contatore" style="display:none;background:linear-gradient(135deg,#3a6b7a,#5b9eb5);color:#ffffff;border:none;border-radius:12px;padding:12px 20px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(58,107,122,0.3);min-width:56px;">${leggiContatore()}</button>
     </div>
     <div style="height:10px;"></div>
@@ -1789,10 +1799,11 @@
         if (na !== nb) return na - nb;
         return a2z(cp(ultimoToken(a.nome)), cp(ultimoToken(b.nome)));
       });
+    } else if (criterio === 'eta') {
       arr2.sort((a,b) => {
         const ea = getEtaAnni(a.nome), eb = getEtaAnni(b.nome);
-        // Chi non ha età va in fondo
-        if (ea !== null && eb !== null) return ea - eb; // più vecchio (età maggiore) prima
+        // Chi non ha età va in fondo; più vecchio (età maggiore) prima
+        if (ea !== null && eb !== null) return eb - ea;
         if (ea !== null) return -1;
         if (eb !== null) return 1;
         return a2z(cp(ultimoToken(a.nome)), cp(ultimoToken(b.nome)));
@@ -1876,4 +1887,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v79 - 28/03/2026 - Spazio età, Cognome Nome sempre, modal semplice, tavolo fix -->
+<!-- Lista.html v80 - 28/03/2026 - HOME maiuscolo, pulsanti bilingue, fix tavolo+età sort -->

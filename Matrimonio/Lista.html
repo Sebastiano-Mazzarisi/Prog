@@ -1513,7 +1513,18 @@
       if (btn) btn.textContent = '👁 0';
     }
   }
+
+  // Aggiorna il bottone contatore ogni volta che la finestra torna in primo piano
+  window.addEventListener('focus', function() {
+    const btn = document.getElementById('btn-contatore');
+    if (btn) btn.textContent = leggiContatore();
+  });
+  // Aggiorna anche ogni 30 secondi
+  setInterval(function() {
+    const btn = document.getElementById('btn-contatore');
+    if (btn) btn.textContent = leggiContatore();
+  }, 30000);
 </script>
 </body>
 </html>
-<!-- Lista.html v51 - 28/03/2026 - Header: interlinea allineata a Matrimonio.html -->
+<!-- Lista.html v52 - 28/03/2026 - Contatore: refresh su focus e ogni 30s -->

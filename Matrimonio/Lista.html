@@ -414,11 +414,11 @@
       tavoli: "Tavoli",
       titoloTavoli: "Disposizione dei tavoli",
       ordinaPer: "Ordina per:",
-      btnOrdina_inserimento: "Inserimento (più recente prima)",
+      btnOrdina_inserimento: "Inserimento",
       btnOrdina_nome: "Nome",
-      btnOrdina_cognome: "Cognome (default)",
-      btnOrdina_cibo: "Cibo (Baby / Carne / Pesce / Vegetariano)",
-      btnOrdina_eta: "Età (decrescente)",
+      btnOrdina_cognome: "Cognome",
+      btnOrdina_cibo: "Cibo",
+      btnOrdina_eta: "Età",
       btnOrdina_tavolo: "Tavolo",
       lblAnnulla: "Annulla",
       lblOrdinaPer: "Ordina per",
@@ -465,11 +465,11 @@
       tavoli: "Mesas",
       titoloTavoli: "Disposición de las mesas",
       ordinaPer: "Ordenar por:",
-      btnOrdina_inserimento: "Registro (más reciente primero)",
+      btnOrdina_inserimento: "Registro",
       btnOrdina_nome: "Nombre",
-      btnOrdina_cognome: "Apellido (por defecto)",
-      btnOrdina_cibo: "Comida (Baby / Carne / Pescado / Vegetariano)",
-      btnOrdina_eta: "Edad (descendente)",
+      btnOrdina_cognome: "Apellido",
+      btnOrdina_cibo: "Comida",
+      btnOrdina_eta: "Edad",
       btnOrdina_tavolo: "Mesa",
       lblAnnulla: "Cancelar",
       lblOrdinaPer: "Ordenar por",
@@ -1730,14 +1730,14 @@
     if (!nome) return 'Senza nome';
     const tokens = nome.trim().split(/\s+/);
     let nomeStr = nome;
-    if (activeOrdine === 'cognome' && tokens.length >= 2) {
-      // Cognome Nome: ultimo token prima, resto dopo
+    if (activeOrdine !== 'nome' && tokens.length >= 2) {
+      // Sempre Cognome Nome tranne ordine NOME
       const cognome = tokens[tokens.length - 1];
       const resto = tokens.slice(0, tokens.length - 1).join(' ');
       nomeStr = cognome + ' ' + resto;
     }
     const eta = getEtaAnni(nome);
-    return nomeStr + (eta !== null ? ' <span style="font-weight:400;font-size:14px;color:#555"> (' + eta + ')</span>' : '');
+    return nomeStr + (eta !== null ? '&nbsp;<span style="font-weight:400;font-size:14px;color:#555">(' + eta + ')</span>' : '');
   }
 
   // --- ORDINAMENTO ---
@@ -1772,12 +1772,20 @@
         return a2z(cp(ultimoToken(a.nome)) + cp(primoToken(a.nome)), cp(ultimoToken(b.nome)) + cp(primoToken(b.nome)));
       });
     } else if (criterio === 'tavolo') {
+      function normTV(s) { return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
+      function matchTV(nomeInvitato, personaTavolo) {
+        const a = normTV(nomeInvitato).split(/\s+/).filter(Boolean);
+        const b = normTV(personaTavolo).split(/\s+/).filter(Boolean);
+        return a.every(w=>b.includes(w)) || b.every(w=>a.includes(w));
+      }
+      function numTavolo(nome) {
+        for (let i = 0; i < TAVOLI.length; i++) {
+          if (TAVOLI[i].persone.some(p => matchTV(nome, p))) return i;
+        }
+        return 9999;
+      }
       arr2.sort((a,b) => {
-        // Numero tavolo (0 = non assegnato, va in fondo)
-        const ta = TAVOLI.findIndex(t => t.persone.some(p => { const pk=cp(p); const nk=cp(a.nome||''); return pk.split(/\s+/).every(w=>nk.split(/\s+/).includes(w))||nk.split(/\s+/).every(w=>pk.split(/\s+/).includes(w)); }));
-        const tb = TAVOLI.findIndex(t => t.persone.some(p => { const pk=cp(p); const nk=cp(b.nome||''); return pk.split(/\s+/).every(w=>nk.split(/\s+/).includes(w))||nk.split(/\s+/).every(w=>pk.split(/\s+/).includes(w)); }));
-        const na = ta === -1 ? 9999 : ta;
-        const nb = tb === -1 ? 9999 : tb;
+        const na = numTavolo(a.nome||''), nb = numTavolo(b.nome||'');
         if (na !== nb) return na - nb;
         return a2z(cp(ultimoToken(a.nome)), cp(ultimoToken(b.nome)));
       });
@@ -1799,9 +1807,9 @@
       {val:'inserimento', lbl: t.btnOrdina_inserimento},
       {val:'nome',        lbl: t.btnOrdina_nome},
       {val:'cognome',     lbl: t.btnOrdina_cognome},
+      {val:'tavolo',      lbl: t.btnOrdina_tavolo},
       {val:'cibo',        lbl: t.btnOrdina_cibo},
-      {val:'eta',         lbl: t.btnOrdina_eta},
-      {val:'tavolo',      lbl: t.btnOrdina_tavolo}
+      {val:'eta',         lbl: t.btnOrdina_eta}
     ];
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:3000;display:flex;align-items:center;justify-content:center;';
@@ -1868,4 +1876,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v78 - 28/03/2026 - Spazio età, ordine tavolo, testi bilingue completi -->
+<!-- Lista.html v79 - 28/03/2026 - Spazio età, Cognome Nome sempre, modal semplice, tavolo fix -->

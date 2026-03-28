@@ -619,6 +619,77 @@
     line-height: 1.5;
     display: none;
   }
+
+  /* POPUP CONFERMA */
+  #conferma-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  #conferma-overlay.visible { display: flex; }
+  #conferma-box {
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px 24px 20px;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    animation: popupIn 0.18s ease;
+  }
+  #conferma-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #8a5e1e;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  #conferma-content {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #000;
+    line-height: 1.7;
+    margin-bottom: 22px;
+    border: 1px solid #e8d8c0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: #fdf8f2;
+  }
+  #conferma-content strong {
+    color: #8a5e1e;
+  }
+  #conferma-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  #btn-conferma-ok {
+    flex: 1;
+    background: linear-gradient(135deg, #2d6040, #4c7b5d);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 13px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  #btn-conferma-esci {
+    flex: 1;
+    background: linear-gradient(135deg, #a83230, #c0504d);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 13px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -750,6 +821,18 @@
   </div>
 </div>
 
+
+<!-- POPUP CONFERMA RIEPILOGO -->
+<div id="conferma-overlay">
+  <div id="conferma-box">
+    <div id="conferma-title">📋 Riepilogo</div>
+    <div id="conferma-content"></div>
+    <div id="conferma-buttons">
+      <button id="btn-conferma-ok" onclick="confermaDati()">✓ Conferma</button>
+      <button id="btn-conferma-esci" onclick="tornaDati()">✕ Esci</button>
+    </div>
+  </div>
+</div>
 
 <script>
   // --- CONTATORE VISITE (eseguito subito, non aspetta DOMContentLoaded) ---
@@ -1296,6 +1379,8 @@
     el.classList.toggle('active');
   }
 
+  let _payloadPronti = null; // Payload temporaneo in attesa di conferma
+
   function generaRiepilogo() {
     const nome = document.getElementById('nome').value.trim();
     if (!nome) {
@@ -1341,7 +1426,7 @@
       persone: attendanceStatus === 'yes' ? '1' : '0',
       secondo: '',
       allergie: '',
-      note: document.getElementById('note').value.trim() 
+      note: document.getElementById('note').value.trim()
     };
 
     if (attendanceStatus === 'yes') {
@@ -1363,25 +1448,51 @@
       }
     }
 
+    // Mappa codici secondo a testo leggibile
+    const secondoTesto = payload.secondo === '4' ? '🍼 Menu baby'
+      : payload.secondo === '5' ? '📌 Solo segnaposto'
+      : payload.secondo || '-';
+
+    // Costruisce il riepilogo HTML
+    let righe = `<strong>Nome:</strong> ${payload.nome}<br>`;
+    righe += `<strong>Presenza:</strong> ${attendanceStatus === 'yes' ? '✅ Sarò dei vostri' : '❌ Non potrò esserci'}<br>`;
+    if (attendanceStatus === 'yes') {
+      righe += `<strong>Menu:</strong> ${secondoTesto}<br>`;
+      if (payload.allergie) righe += `<strong>Allergie:</strong> ${payload.allergie}<br>`;
+    }
+    if (payload.note) righe += `<strong>Note:</strong> ${payload.note}<br>`;
+
+    document.getElementById('conferma-content').innerHTML = righe;
+    document.getElementById('conferma-overlay').classList.add('visible');
+    _payloadPronti = payload;
+  }
+
+  function confermaDati() {
+    document.getElementById('conferma-overlay').classList.remove('visible');
+    if (!_payloadPronti) return;
+    const payload = _payloadPronti;
+    _payloadPronti = null;
+
     const btn = document.getElementById('btn-invia');
     btn.disabled = true;
     btn.textContent = msgInvioInCorso;
 
-    // Feedback immediato senza aspettare Google
     showSavedFeedback();
     resetFormToStart();
 
-    // Invio al server in background (no-cors: non possiamo leggere la risposta)
     fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     }).catch(() => {
-      // Silenzioso: il dato potrebbe non essere arrivato,
-      // ma non disturbiamo l'utente che ha già visto il feedback
       console.warn('Invio fallito, dato potrebbe non essere salvato.');
     });
+  }
+
+  function tornaDati() {
+    document.getElementById('conferma-overlay').classList.remove('visible');
+    _payloadPronti = null;
   }
 </script>
 </body>

@@ -494,6 +494,26 @@
     } catch (err) {
       console.error("Errore di rete durante il caricamento di Tavoli.txt: ", err);
     }
+    // Carica Invitati.csv per popolare window.mapNascita (date di nascita)
+    try {
+      const respInv = await fetch('Invitati.csv?t=' + Date.now());
+      if (respInv.ok) {
+        const txtInv = await respInv.text();
+        const righeInv = txtInv.split(/\r?\n/).map(r => r.trim());
+        const sepInv = txtInv.includes(';') ? ';' : ',';
+        const acc = /[\u0300-\u036f]/g;
+        window.mapNascita = {};
+        let startInv = (righeInv.length > 0 && righeInv[0].toLowerCase().includes('nom')) ? 1 : 0;
+        for (let i = startInv; i < righeInv.length; i++) {
+          const cols = righeInv[i].split(sepInv);
+          const nome = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
+          const dataN = cols[1] ? cols[1].replace(/['"]/g,'').trim() : '';
+          if (nome && dataN) {
+            window.mapNascita[nome.toLowerCase().normalize('NFD').replace(acc,'').trim()] = dataN;
+          }
+        }
+      }
+    } catch(e) { console.log('mapNascita: Invitati.csv non disponibile', e); }
   }
 
   function cambiaLingua(lang) {
@@ -887,6 +907,9 @@
           gruppiInvitati.push(gruppoCorrente);
           totInvitatiCsv += gruppoCorrente.length;
         }
+        // Salva mappa nome→dataNascita globalmente per etaTavoloHTML
+        window.mapNascita = {};
+        gruppiInvitati.forEach(function(g){ g.forEach(function(inv){ if(inv.dataNascita){ var k=inv.nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim(); window.mapNascita[k]=inv.dataNascita; } }); });
       }
     } catch (err) {
       console.log('File Invitati.csv non trovato o errore di caricamento.', err);
@@ -1280,42 +1303,59 @@
   }
 
   function etaTavoloHTML(nome) {
-    if (!window.datiInvitati || !window.datiInvitati.length) return '';
     const acc = /[\u0300-\u036f]/g;
     function tok(n) { return (n||'').toLowerCase().normalize('NFD').replace(acc,'').trim().split(/\s+/).filter(Boolean); }
     const pk = tok(nome);
-    const match = window.datiInvitati.find(function(r) {
-      const rk = tok(r.nome||'');
-      return pk.every(function(w){return rk.includes(w);}) || rk.every(function(w){return pk.includes(w);});
-    });
-    // Età
-    let etaPart = '';
-    if (match && match.dataNascita) {
-      const d = match.dataNascita.trim();
-      const matrimonio = new Date(2026, 5, 21);
-      let nascita = null;
-      const dmY = d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-      const Ymd = d.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
-      const soloAnno = d.match(/^(\d{4})$/);
-      if (dmY) nascita = new Date(parseInt(dmY[3]), parseInt(dmY[2])-1, parseInt(dmY[1]));
-      else if (Ymd) nascita = new Date(parseInt(Ymd[1]), parseInt(Ymd[2])-1, parseInt(Ymd[3]));
-      else if (soloAnno) nascita = new Date(parseInt(soloAnno[1]), 0, 1);
-      if (nascita) {
-        let anni = matrimonio.getFullYear() - nascita.getFullYear();
-        const cp = (nascita.getMonth() < matrimonio.getMonth()) ||
-          (nascita.getMonth() === matrimonio.getMonth() && nascita.getDate() <= matrimonio.getDate());
-        if (!cp) anni--;
-        etaPart = ' <span style="font-weight:400;font-size:14px;color:#5a5a5a">('+anni+')</span>';
+    // Cerca in datiInvitati per secondo/icona
+    var match = null;
+    if (window.datiInvitati && window.datiInvitati.length) {
+      match = window.datiInvitati.find(function(r) {
+        var rk = tok(r.nome||'');
+        return pk.every(function(w){return rk.includes(w);}) || rk.every(function(w){return pk.includes(w);});
+      });
+    }
+    // Età da window.mapNascita
+    var etaPart = '';
+    if (window.mapNascita) {
+      // cerca chiave esatta o per token
+      var chiaveEsatta = nome.toLowerCase().normalize('NFD').replace(acc,'').trim();
+      var dataN = window.mapNascita[chiaveEsatta];
+      if (!dataN) {
+        // fallback: cerca per token match
+        Object.keys(window.mapNascita).forEach(function(k) {
+          var kTok = k.split(/\s+/).filter(Boolean);
+          if (pk.every(function(w){return kTok.includes(w);}) || kTok.every(function(w){return pk.includes(w);})) {
+            dataN = window.mapNascita[k];
+          }
+        });
+      }
+      if (dataN) {
+        var d = dataN.trim();
+        var matrimonio = new Date(2026, 5, 21);
+        var nascita = null;
+        var dmY = d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+        var Ymd = d.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+        var soloAnno = d.match(/^(\d{4})$/);
+        if (dmY) nascita = new Date(parseInt(dmY[3]), parseInt(dmY[2])-1, parseInt(dmY[1]));
+        else if (Ymd) nascita = new Date(parseInt(Ymd[1]), parseInt(Ymd[2])-1, parseInt(Ymd[3]));
+        else if (soloAnno) nascita = new Date(parseInt(soloAnno[1]), 0, 1);
+        if (nascita) {
+          var anni = matrimonio.getFullYear() - nascita.getFullYear();
+          var cp = (nascita.getMonth() < matrimonio.getMonth()) ||
+            (nascita.getMonth() === matrimonio.getMonth() && nascita.getDate() <= matrimonio.getDate());
+          if (!cp) anni--;
+          etaPart = ' <span style="font-weight:400;font-size:14px;color:#5a5a5a">('+anni+')</span>';
+        }
       }
     }
     // Icona secondo piatto
-    let iconaPart = '';
+    var iconaPart = '';
     if (match && match.secondo) {
-      const tipo = detectSecondo(match.secondo);
-      if (tipo === 'veg')        iconaPart = ' <span title="Vegetariano" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">V</span>';
-      else if (tipo === 'carne') iconaPart = ' <span title="Carne" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">C</span>';
-      else if (tipo === 'pesce') iconaPart = ' <span title="Pesce" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">P</span>';
-      else if (tipo === 'baby')  iconaPart = ' <span title="Baby" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2d6040;color:#fff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">B</span>';
+      var tipo = detectSecondo(match.secondo);
+      if (tipo === 'veg')        iconaPart = ' <span title="Vegetariano" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2d6040;color:#ffffff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">V</span>';
+      else if (tipo === 'carne') iconaPart = ' <span title="Carne" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#a83230;color:#ffffff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">C</span>';
+      else if (tipo === 'pesce') iconaPart = ' <span title="Pesce" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#c8a000;color:#ffffff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">P</span>';
+      else if (tipo === 'baby')  iconaPart = ' <span title="Baby" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2980b9;color:#ffffff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">B</span>';
     }
     return etaPart + iconaPart;
   }
@@ -1476,4 +1516,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v47 - 28/03/2026 - Tavoli video: età + icona secondo piatto -->
+<!-- Lista.html v49 - 28/03/2026 - Tavoli: mapNascita popolata in caricaTavoli() -->

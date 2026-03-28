@@ -318,6 +318,8 @@
 
   /* Griglia tabelle PDF - bordo singolo garantito */
   .pdf-table { border-collapse: collapse; border-spacing: 0; }
+  .pdf-table thead { display: table-header-group; }
+  .pdf-table tbody tr { page-break-inside: avoid; }
   .pdf-table th, .pdf-table td {
     border: none !important;
     border-right: 0.5px solid #000 !important;
@@ -1337,11 +1339,12 @@
 
 
     const opt = {
-      margin:       [5, 10, 10, 10],
+      margin:       [5, 10, 20, 10],
       filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0 },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['css', 'legacy'], avoid: '.pdf-table tr' }
     };
 
     html2pdf().set(opt).from(container).save().then(() => {
@@ -1621,4 +1624,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v60 - 28/03/2026 - Duplicati: data/ora visibile a video e nel PDF -->
+<!-- Lista.html v61 - 28/03/2026 - PDF: thead ripetuto su più pagine, margine 2cm -->

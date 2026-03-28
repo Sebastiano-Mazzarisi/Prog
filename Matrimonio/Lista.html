@@ -1125,12 +1125,8 @@
       const altezze = Array.from(righeDOM).map(tr => tr.getBoundingClientRect().height);
       document.body.removeChild(misuratore);
 
-      // A4 a 96dpi: ~1122px totali, margini top 5mm + bottom 20mm ≈ 94px, area utile ~1028px
-      // scala 2 → dividiamo per 2 per avere px a 96dpi
-      // In mm: A4=297mm, margini 5+20=25mm → 272mm utili → a 3.78px/mm ≈ 1028px
-      // Prima pagina ha anche titolo h3 (~24px) e KPI box (~50px) → riduciamo
-      const ALTEZZA_PAGINA_PX = 980;   // px a 96dpi per pagina intera
-      const ALTEZZA_PRIMA = ALTEZZA_PAGINA_PX - 80; // sottrai titolo + KPI prima pagina
+      const ALTEZZA_PAGINA_PX = 760;   // px DOM per pagina intera (calibrare se necessario)
+      const ALTEZZA_PRIMA = ALTEZZA_PAGINA_PX - 130; // prima pagina: toglie titolo h3 + KPI + assenti
 
       let htmlPDFrighe = '';
       htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>`;
@@ -1138,7 +1134,7 @@
 
       let altezzaAccumulata = testaAltezza;
       let primaTabella = true;
-      const limiteCorrente = () => primaTabella ? ALTEZZA_PRIMA : ALTEZZA_PAGINA_PX - testaAltezza * 2;
+      const limiteCorrente = () => primaTabella ? ALTEZZA_PRIMA : ALTEZZA_PAGINA_PX - testaAltezza;
 
       presentiRows.forEach((r, idx) => {
         const h = altezze[idx] || 18;
@@ -1656,4 +1652,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v63 - 28/03/2026 - PDF: break tabella basato su altezza reale righe DOM -->
+<!-- Lista.html v64 - 28/03/2026 - PDF: calibrazione altezza pagina corretta -->

@@ -412,7 +412,23 @@
       titoloAssenti: "Assenti",
       titoloInvitati: "Invitati",
       tavoli: "Tavoli",
-      titoloTavoli: "Disposizione dei tavoli"
+      titoloTavoli: "Disposizione dei tavoli",
+      ordinaPer: "Ordina per:",
+      btnOrdina_inserimento: "Inserimento (più recente prima)",
+      btnOrdina_nome: "Nome",
+      btnOrdina_cognome: "Cognome (default)",
+      btnOrdina_cibo: "Cibo (Baby / Carne / Pesce / Vegetariano)",
+      btnOrdina_eta: "Età (decrescente)",
+      btnOrdina_tavolo: "Tavolo",
+      lblAnnulla: "Annulla",
+      lblOrdinaPer: "Ordina per",
+      lblCopiato: "Copiato!",
+      lbl_INSERIMENTO: "INSERIMENTO",
+      lbl_NOME: "NOME",
+      lbl_COGNOME: "COGNOME",
+      lbl_CIBO: "CIBO",
+      lbl_ETA: "ETÀ",
+      lbl_TAVOLO: "TAVOLO"
     },
     es: {
       titolo: "Lista de Invitados",
@@ -447,7 +463,23 @@
       titoloAssenti: "Ausentes",
       titoloInvitati: "Invitados",
       tavoli: "Mesas",
-      titoloTavoli: "Disposición de las mesas"
+      titoloTavoli: "Disposición de las mesas",
+      ordinaPer: "Ordenar por:",
+      btnOrdina_inserimento: "Registro (más reciente primero)",
+      btnOrdina_nome: "Nombre",
+      btnOrdina_cognome: "Apellido (por defecto)",
+      btnOrdina_cibo: "Comida (Baby / Carne / Pescado / Vegetariano)",
+      btnOrdina_eta: "Edad (descendente)",
+      btnOrdina_tavolo: "Mesa",
+      lblAnnulla: "Cancelar",
+      lblOrdinaPer: "Ordenar por",
+      lblCopiato: "¡Copiado!",
+      lbl_INSERIMENTO: "REGISTRO",
+      lbl_NOME: "NOMBRE",
+      lbl_COGNOME: "APELLIDO",
+      lbl_CIBO: "COMIDA",
+      lbl_ETA: "EDAD",
+      lbl_TAVOLO: "MESA"
     }
   };
 
@@ -778,7 +810,7 @@
       <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">Tavoli</button>
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:8px 4px;">
-      <span style="font-family:'Inter',sans-serif;font-size:13px;color:#5a4a2a;white-space:nowrap;">Ordina per:</span>
+      <span style="font-family:'Inter',sans-serif;font-size:13px;color:#5a4a2a;white-space:nowrap;">${testi.ordinaPer}</span>
       <button id="btn-ordina" onclick="apriSceltaOrdine()" style="background:#f5ede0;border:1.5px solid #b8893a;border-radius:20px;padding:5px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#7a5c3a;cursor:pointer;letter-spacing:0.5px;">${labelOrdineCorrente()}</button>
     </div>
 
@@ -1427,7 +1459,7 @@
       navigator.clipboard.writeText(testo).then(() => {
         // Mostra popup COPIATO!
         const popup = document.createElement('div');
-        popup.textContent = 'Copiato!';
+        popup.textContent = dizionario[currentLang].lblCopiato;
         popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2d6040;color:#ffffff;font-family:Inter,sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;padding:10px 22px;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.25);z-index:9999;pointer-events:none;';
         document.body.appendChild(popup);
         setTimeout(() => { document.body.removeChild(popup); }, 1500);
@@ -1705,15 +1737,16 @@
       nomeStr = cognome + ' ' + resto;
     }
     const eta = getEtaAnni(nome);
-    return nomeStr + (eta !== null ? ' <span style="font-weight:400;font-size:14px;color:#555">(' + eta + ')</span>' : '');
+    return nomeStr + (eta !== null ? ' <span style="font-weight:400;font-size:14px;color:#555"> (' + eta + ')</span>' : '');
   }
 
   // --- ORDINAMENTO ---
   let activeOrdine = 'cognome'; // default
 
   function labelOrdineCorrente() {
-    const labels = { inserimento:'INSERIMENTO', nome:'NOME', cognome:'COGNOME', cibo:'CIBO', eta:'ETÀ' };
-    return labels[activeOrdine] || 'COGNOME';
+    const t = dizionario[currentLang];
+    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO };
+    return labels[activeOrdine] || t.lbl_COGNOME;
   }
 
   function primoToken(n) { return (n||'').trim().split(/\s+/)[0] || ''; }
@@ -1738,7 +1771,16 @@
         if (ca !== cb) return ca - cb;
         return a2z(cp(ultimoToken(a.nome)) + cp(primoToken(a.nome)), cp(ultimoToken(b.nome)) + cp(primoToken(b.nome)));
       });
-    } else if (criterio === 'eta') {
+    } else if (criterio === 'tavolo') {
+      arr2.sort((a,b) => {
+        // Numero tavolo (0 = non assegnato, va in fondo)
+        const ta = TAVOLI.findIndex(t => t.persone.some(p => { const pk=cp(p); const nk=cp(a.nome||''); return pk.split(/\s+/).every(w=>nk.split(/\s+/).includes(w))||nk.split(/\s+/).every(w=>pk.split(/\s+/).includes(w)); }));
+        const tb = TAVOLI.findIndex(t => t.persone.some(p => { const pk=cp(p); const nk=cp(b.nome||''); return pk.split(/\s+/).every(w=>nk.split(/\s+/).includes(w))||nk.split(/\s+/).every(w=>pk.split(/\s+/).includes(w)); }));
+        const na = ta === -1 ? 9999 : ta;
+        const nb = tb === -1 ? 9999 : tb;
+        if (na !== nb) return na - nb;
+        return a2z(cp(ultimoToken(a.nome)), cp(ultimoToken(b.nome)));
+      });
       arr2.sort((a,b) => {
         const ea = getEtaAnni(a.nome), eb = getEtaAnni(b.nome);
         // Chi non ha età va in fondo
@@ -1752,18 +1794,20 @@
   }
 
   function apriSceltaOrdine() {
+    const t = dizionario[currentLang];
     const opzioni = [
-      {val:'inserimento', lbl:'Inserimento (più recente prima)'},
-      {val:'nome',        lbl:'Nome'},
-      {val:'cognome',     lbl:'Cognome (default)'},
-      {val:'cibo',        lbl:'Cibo (Baby / Carne / Pesce / Vegetariano)'},
-      {val:'eta',         lbl:'Età (decrescente)'}
+      {val:'inserimento', lbl: t.btnOrdina_inserimento},
+      {val:'nome',        lbl: t.btnOrdina_nome},
+      {val:'cognome',     lbl: t.btnOrdina_cognome},
+      {val:'cibo',        lbl: t.btnOrdina_cibo},
+      {val:'eta',         lbl: t.btnOrdina_eta},
+      {val:'tavolo',      lbl: t.btnOrdina_tavolo}
     ];
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:3000;display:flex;align-items:center;justify-content:center;';
     const box = document.createElement('div');
     box.style.cssText = 'background:#fff;border-radius:16px;padding:22px 20px 16px;width:88%;max-width:340px;box-shadow:0 8px 30px rgba(0,0,0,0.2);';
-    box.innerHTML = '<div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:700;color:#8a5e1e;margin-bottom:16px;text-align:center;">Ordina per</div>';
+    box.innerHTML = '<div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:700;color:#8a5e1e;margin-bottom:16px;text-align:center;">' + t.lblOrdinaPer + '</div>';
     opzioni.forEach(o => {
       const btn = document.createElement('button');
       btn.textContent = o.lbl;
@@ -1778,7 +1822,7 @@
       box.appendChild(btn);
     });
     const annulla = document.createElement('button');
-    annulla.textContent = 'Annulla';
+    annulla.textContent = t.lblAnnulla;
     annulla.style.cssText = 'display:block;width:100%;margin-top:4px;padding:10px;border-radius:10px;border:none;background:#f0f0f0;font-family:\'Inter\',sans-serif;font-size:13px;color:#888;cursor:pointer;';
     annulla.onclick = () => document.body.removeChild(overlay);
     box.appendChild(annulla);
@@ -1824,4 +1868,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v77 - 28/03/2026 - Home senza icona, Tavoli, Cognome Nome, età in lista -->
+<!-- Lista.html v78 - 28/03/2026 - Spazio età, ordine tavolo, testi bilingue completi -->

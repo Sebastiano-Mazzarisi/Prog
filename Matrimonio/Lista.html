@@ -1344,7 +1344,7 @@
           var cp = (nascita.getMonth() < matrimonio.getMonth()) ||
             (nascita.getMonth() === matrimonio.getMonth() && nascita.getDate() <= matrimonio.getDate());
           if (!cp) anni--;
-          etaPart = ' <span style="font-weight:400;font-size:14px;color:#5a5a5a">('+anni+')</span>';
+          etaPart = ' <span style="font-weight:500;font-size:16px;color:#000000;-webkit-text-fill-color:#000000">('+anni+')</span>';
         }
       }
     }
@@ -1352,10 +1352,10 @@
     var iconaPart = '';
     if (match && match.secondo) {
       var tipo = detectSecondo(match.secondo);
-      if (tipo === 'veg')        iconaPart = ' <span title="Vegetariano" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2d6040;color:#ffffff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">V</span>';
-      else if (tipo === 'carne') iconaPart = ' <span title="Carne" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#a83230;color:#ffffff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">C</span>';
-      else if (tipo === 'pesce') iconaPart = ' <span title="Pesce" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#c8a000;color:#ffffff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">P</span>';
-      else if (tipo === 'baby')  iconaPart = ' <span title="Baby" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2980b9;color:#ffffff;font-size:10px;font-weight:700;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">B</span>';
+      if (tipo === 'veg')        iconaPart = ' <span title="Vegetariano" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2d6040;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">V</span>';
+      else if (tipo === 'carne') iconaPart = ' <span title="Carne" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#a83230;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">C</span>';
+      else if (tipo === 'pesce') iconaPart = ' <span title="Pesce" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#c8a000;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">P</span>';
+      else if (tipo === 'baby')  iconaPart = ' <span title="Baby" style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#2980b9;color:#ffffff !important;-webkit-text-fill-color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">B</span>';
     }
     return etaPart + iconaPart;
   }
@@ -1516,4 +1516,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v49 - 28/03/2026 - Tavoli: mapNascita popolata in caricaTavoli() -->
+<!-- Lista.html v50 - 28/03/2026 - Tavoli: età nera più grande, icone lettere bianche -->

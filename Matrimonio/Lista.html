@@ -778,7 +778,19 @@
 
     <div id="lista-invitati">`;
 
-    window.datiInvitati.forEach(r => {
+    // Pre-calcola duplicati e senza-tavolo per evidenziazione a video
+    function tokV(n) { return (n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().split(/\s+/).filter(Boolean); }
+    function matchV(a,b) { const ta=tokV(a),tb=tokV(b); return ta.every(w=>tb.includes(w))||tb.every(w=>ta.includes(w)); }
+    const idxDuplicatiVideo = new Set();
+    for (let i=0; i<window.datiInvitati.length; i++) {
+      for (let j=i+1; j<window.datiInvitati.length; j++) {
+        if (matchV(window.datiInvitati[i].nome, window.datiInvitati[j].nome)) {
+          idxDuplicatiVideo.add(i); idxDuplicatiVideo.add(j);
+        }
+      }
+    }
+
+    window.datiInvitati.forEach((r, idxV) => {
       const riga = r.indiceOriginale;
       const presenza = r.presenza || '';
       const assente = isAbsent(presenza, r.secondo);
@@ -803,13 +815,18 @@
       const note = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
       const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
 
-      const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : '');
+      const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : tipoSecondo === 'baby' ? '🍼' : '');
       const haAllergia = hasAllergy(r.allergie);
       const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
       const iconeAllergie = iconaAllergie(r.allergie);
 
+      const tavNum = trovaTavoloNum(r.nome);
+      const isVideoDup = idxDuplicatiVideo.has(idxV);
+      const isVideoNoTav = !assente && !tavNum;
+      const nomeBgVideo = isVideoDup ? 'background:#fff176;border-radius:4px;padding:1px 3px;' : isVideoNoTav ? 'background:#ffd6e0;border-radius:4px;padding:1px 3px;' : '';
+
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
-        <div class="risposta-nome" onclick="toggleDettagli(${riga})">${trovaTavoloNum(r.nome) ? '<span style="margin-right:4px;font-size:14px">' + trovaTavoloNum(r.nome) + '</span>' : ''}${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${r.nome || 'Senza nome'}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">Tavolo</span>
@@ -1080,6 +1097,7 @@
         if (secondoStr === 'veg') secondoStr = testi.kpiVeg;
         else if (secondoStr === 'carne') secondoStr = testi.kpiCarne;
         else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
+        else if (isBabyRow) secondoStr = '🍼 ' + testi.kpiBaby;
         else secondoStr = '-';
 
         const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
@@ -1363,10 +1381,10 @@
       navigator.clipboard.writeText(testo).then(() => {
         // Mostra popup COPIATO!
         const popup = document.createElement('div');
-        popup.textContent = 'COPIATO!';
-        popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2d6040;color:#ffffff;font-family:Inter,sans-serif;font-size:22px;font-weight:900;letter-spacing:2px;padding:20px 40px;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.3);z-index:9999;pointer-events:none;';
+        popup.textContent = 'Copiato!';
+        popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2d6040;color:#ffffff;font-family:Inter,sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;padding:10px 22px;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.25);z-index:9999;pointer-events:none;';
         document.body.appendChild(popup);
-        setTimeout(() => { document.body.removeChild(popup); }, 2000);
+        setTimeout(() => { document.body.removeChild(popup); }, 1500);
       }).catch(() => {});
     } catch(e) {}
 
@@ -1602,4 +1620,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v57 - 28/03/2026 - PDF: duplicati giallo, senza tavolo rosa, contatore nascosto -->
+<!-- Lista.html v58 - 28/03/2026 - Video: dup giallo/rosa, 🍼 baby, popup Copiato! ridotto -->

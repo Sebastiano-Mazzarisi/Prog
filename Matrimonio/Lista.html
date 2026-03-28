@@ -1150,7 +1150,7 @@
               else if (tipoM === 'veg') nomeExtra = badge('V', '#1a4fa0');
             }
           }
-          const tavoloEmoji = trovaTavolo(inv.nome);
+          const tavoloEmoji = trovaTavoloNum(inv.nome);
           htmlPDF += '<div style="margin-bottom:5px;line-height:1.3">'
             + (tavoloEmoji ? '<span style="margin-right:3px;font-size:11px">' + tavoloEmoji + '</span>' : '')
             + '<span style="' + nomeStyle + '">' + inv.nome + '</span>'
@@ -1439,4 +1439,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v42 - 26/03/2026 - Frecce rimosse da invitati e tavoli -->
+<!-- Lista.html v43 - 28/03/2026 - PDF: solo numero tavolo (senza nome gruppo) -->

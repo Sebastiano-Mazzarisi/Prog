@@ -771,10 +771,11 @@
       </tr>
     </table>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px;">
       <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">${testi.aggiorna}</button>
       <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.pdf}</button>
       <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.tavoli}</button>
+      <button class="btn-submit" onclick="scaricaBackupCSV()" style="margin-top:0; background: linear-gradient(135deg, #2980b9, #3d9dd1); color: #ffffff;font-size:13px;padding:12px 6px;">💾 Backup</button>
     </div>
 
 
@@ -1655,7 +1656,41 @@
     const btn = document.getElementById('btn-contatore');
     if (btn) btn.textContent = leggiContatore();
   }, 30000);
+
+  function scaricaBackupCSV() {
+    if (!window.datiInvitati || window.datiInvitati.length === 0) {
+      alert('Nessun dato da salvare.');
+      return;
+    }
+    // Intestazione colonne
+    const colonne = ['Nome', 'Presenza', 'Secondo', 'Allergie', 'Note', 'Data'];
+    const righe = [colonne.join(';')];
+
+    window.datiInvitati.forEach(r => {
+      const cella = v => '"' + String(v || '').replace(/"/g, '""') + '"';
+      righe.push([
+        cella(r.nome),
+        cella(r.presenza),
+        cella(r.secondo),
+        cella(r.allergie),
+        cella(r.note),
+        cella(r.data)
+      ].join(';'));
+    });
+
+    const csv = '\uFEFF' + righe.join('\r\n'); // BOM per Excel italiano
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const oggi = new Date().toLocaleDateString('it-IT', {day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'-');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Backup_Matrimonio_' + oggi + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 </script>
 </body>
 </html>
-<!-- Lista.html v74 - 28/03/2026 - PDF: margine riepilogo ridotto, seconda riga verde più chiaro -->
+<!-- Lista.html v75 - 28/03/2026 - Pulsante Backup CSV -->

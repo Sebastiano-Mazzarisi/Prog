@@ -634,29 +634,29 @@
   #conferma-box {
     background: #fff;
     border-radius: 18px;
-    padding: 28px 24px 20px;
-    max-width: 360px;
-    width: 90%;
+    padding: 32px 26px 24px;
+    max-width: 380px;
+    width: 92%;
     box-shadow: 0 12px 40px rgba(0,0,0,0.25);
     animation: popupIn 0.18s ease;
   }
   #conferma-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 700;
     color: #8a5e1e;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     text-align: center;
   }
   #conferma-content {
     font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    font-size: 17px;
     color: #000;
-    line-height: 1.7;
-    margin-bottom: 22px;
+    line-height: 1.9;
+    margin-bottom: 24px;
     border: 1px solid #e8d8c0;
     border-radius: 10px;
-    padding: 12px 14px;
+    padding: 14px 16px;
     background: #fdf8f2;
   }
   #conferma-content strong {
@@ -664,7 +664,7 @@
   }
   #conferma-buttons {
     display: flex;
-    gap: 10px;
+    gap: 12px;
   }
   #btn-conferma-ok {
     flex: 1;
@@ -672,9 +672,9 @@
     color: #fff;
     border: none;
     border-radius: 12px;
-    padding: 13px 10px;
+    padding: 16px 10px;
     font-family: 'Inter', sans-serif;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 700;
     cursor: pointer;
   }
@@ -684,9 +684,9 @@
     color: #fff;
     border: none;
     border-radius: 12px;
-    padding: 13px 10px;
+    padding: 16px 10px;
     font-family: 'Inter', sans-serif;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 700;
     cursor: pointer;
   }
@@ -1360,6 +1360,18 @@
     });
     document.getElementById('btn-menu-' + tipo).classList.add('active-menu');
     updateFormVisibility();
+    // Scrolla al primo elemento successivo visibile
+    setTimeout(() => {
+      let target = null;
+      if (tipo === 'normale') {
+        target = document.getElementById('card-2');
+      } else {
+        target = document.getElementById('btn-invia');
+      }
+      if (target && target.style.display !== 'none') {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
   }
 
   document.getElementById('nome').addEventListener('input', () => {

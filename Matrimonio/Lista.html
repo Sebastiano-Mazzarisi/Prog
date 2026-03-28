@@ -1137,10 +1137,10 @@
       htmlPDF += `</tbody></table>`;
     }
 
-    // Tabella Assenti - dopo i presenti
+    // Tabella Assenti - dopo i presenti, non spezzare header dal primo rigo
     if (assentiRows.length > 0) {
-      htmlPDF += `
-        <h3 style="font-size: 13px; margin-top: 18px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti} (${totAssenti})</h3>
+      htmlPDF += `<div style="page-break-inside: avoid;">`;
+      htmlPDF += `<h3 style="font-size: 13px; margin-top: 18px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti} (${totAssenti})</h3>
         <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 10px; table-layout: fixed; word-break: break-word;">
           <thead>
             <tr style="background-color: #f5ede0; text-align: left;">
@@ -1148,15 +1148,14 @@
               <th style="padding: 4px 5px; width: 70%; color: #000;">${testi.lblNote}</th>
             </tr>
           </thead>
-          <tbody>
-      `;
+          <tbody>`;
       assentiRows.forEach(r => {
         htmlPDF += `<tr>
           <td style="padding: 3px 5px; font-weight: 600; color: #000;">${r.nome || 'Senza nome'}</td>
           <td style="padding: 3px 5px; color: #000;">${r.note ? r.note : '-'}</td>
         </tr>`;
       });
-      htmlPDF += `</tbody></table>`;
+      htmlPDF += `</tbody></table></div>`;
     }
 
     // Sezione: Invitati a 2 colonne con font più grande
@@ -1318,7 +1317,7 @@
     const borderTavoloR = '#a5b589';
     htmlPDF += `</div>`; // Chiude flex wrap tavoli
     htmlPDF += `
-      <div style="display:flex;gap:16px;margin-top:70px;">
+      <div style="display:flex;gap:16px;margin-top:30px;">
 
         <!-- BOX SINISTRA: Totale cenanti + Baby + Segnaposto -->
         <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
@@ -1326,7 +1325,7 @@
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCenanti}</div>
             <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Totale cenanti</div>
           </div>
-          <div style="display:flex;">
+          <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCompleti}</div>
               <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
@@ -1348,7 +1347,7 @@
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCompleti}</div>
             <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
           </div>
-          <div style="display:flex;">
+          <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totVeg}</div>
               <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Vegetariano</div>
@@ -1659,4 +1658,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v72 - 28/03/2026 - PDF: AREA 1000, margin-top 18px, bordo tabella ripristinato -->
+<!-- Lista.html v74 - 28/03/2026 - PDF: margine riepilogo ridotto, seconda riga verde più chiaro -->

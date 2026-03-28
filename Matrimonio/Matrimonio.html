@@ -1224,8 +1224,8 @@
       return;
     }
 
-    // Almeno 2 parole, ognuna di almeno 3 lettere
-    const parole = nome.split(/\s+/).filter(p => p.replace(/[^a-zA-ZÀ-ÿ]/g,'').length >= 3);
+    // Almeno 2 parole, ognuna di almeno 3 lettere (DISABILITATO)
+    /* const parole = nome.split(/\s+/).filter(p => p.replace(/[^a-zA-ZÀ-ÿ]/g,'').length >= 3);
     if (parole.length < 2) {
       inp.select();
       inp.style.borderColor = '#c0504d';
@@ -1233,10 +1233,10 @@
       mostraPopup();
       setTimeout(() => inp.focus(), 100);
       return;
-    }
+    } */
 
-    // Verifica che il nominativo sia in lista invitati
-    const esito = trovaInvitato(nome);
+    // Verifica che il nominativo sia in lista invitati (DISABILITATO)
+    /* const esito = trovaInvitato(nome);
     if (!esito.trovato) {
       inp.select();
       inp.style.borderColor = '#c0504d';
@@ -1244,7 +1244,8 @@
       mostraPopup();
       setTimeout(() => inp.focus(), 100);
       return;
-    }
+    } */
+    const esito = { trovato: true, match: nome };
 
     attendanceStatus = status;
     menuType = '';
@@ -1305,8 +1306,8 @@
       mostraPopup();
       return;
     }
-    // Almeno 2 parole, ognuna di almeno 3 lettere
-    const parole = nome.split(/\s+/).filter(p => p.replace(/[^a-zA-ZÀ-ÿ]/g,'').length >= 3);
+    // Almeno 2 parole, ognuna di almeno 3 lettere (DISABILITATO)
+    /* const parole = nome.split(/\s+/).filter(p => p.replace(/[^a-zA-ZÀ-ÿ]/g,'').length >= 3);
     if (parole.length < 2) {
       const inp = document.getElementById('nome');
       inp.select();
@@ -1315,8 +1316,9 @@
       mostraPopup();
       setTimeout(() => inp.focus(), 100);
       return;
-    }
-    const esito = trovaInvitato(nome);
+    } */
+    // Verifica che il nominativo sia in lista invitati (DISABILITATO)
+    /* const esito = trovaInvitato(nome);
     if (!esito.trovato) {
       const inp = document.getElementById('nome');
       inp.select();
@@ -1325,7 +1327,7 @@
       mostraPopup();
       setTimeout(() => inp.focus(), 100);
       return;
-    }
+    } */
     if (!attendanceStatus) {
       return;
     }

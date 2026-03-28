@@ -1057,42 +1057,36 @@
       htmlPDF += `</tbody></table>`;
     }
 
-    // Tabella Presenti
+    // Tabella Presenti - spezzata in base all'altezza reale delle righe
     if (presentiRows.length > 0) {
-      htmlPDF += `
-        <h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>
-        <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; word-break: break-word;">
-          <thead>
-            <tr style="background-color: #f5ede0; text-align: left;">
-              <th style="padding: 4px 5px; width: 35%; color: #000;">${testi.pdfNome}</th>
-              <th style="padding: 4px 5px; width: 15%; color: #000;">${testi.lblSecondo}</th>
-              <th style="padding: 4px 5px; width: 20%; color: #000;">${testi.lblAllergie}</th>
-              <th style="padding: 4px 5px; width: 30%; color: #000;">${testi.lblNote}</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-      // Pre-calcola: nomi normalizzati per rilevare duplicati e chi non ha tavolo
-      function normNome(n) {
-        return (n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().split(/\s+/).filter(Boolean).sort().join(' ');
-      }
+      const theadHTML = `
+        <thead>
+          <tr style="background-color: #f5ede0; text-align: left;">
+            <th style="padding: 4px 5px; width: 35%; color: #000;">${testi.pdfNome}</th>
+            <th style="padding: 4px 5px; width: 15%; color: #000;">${testi.lblSecondo}</th>
+            <th style="padding: 4px 5px; width: 20%; color: #000;">${testi.lblAllergie}</th>
+            <th style="padding: 4px 5px; width: 30%; color: #000;">${testi.lblNote}</th>
+          </tr>
+        </thead>`;
+      const tableStyle = 'width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;word-break:break-word;';
+
+      // Pre-calcola duplicati
       function matchIntelligente(a, b) {
         const ta = (a||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().split(/\s+/).filter(Boolean);
         const tb = (b||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().split(/\s+/).filter(Boolean);
         return ta.every(w => tb.includes(w)) || tb.every(w => ta.includes(w));
       }
-      // Set di nomi duplicati
       const nomeDuplicato = new Set();
       for (let i = 0; i < presentiRows.length; i++) {
         for (let j = i + 1; j < presentiRows.length; j++) {
           if (matchIntelligente(presentiRows[i].nome, presentiRows[j].nome)) {
-            nomeDuplicato.add(i);
-            nomeDuplicato.add(j);
+            nomeDuplicato.add(i); nomeDuplicato.add(j);
           }
         }
       }
 
-      presentiRows.forEach((r, idx) => {
+      // Costruisce HTML di ogni riga
+      function buildRowHTML(r, idx) {
         let secondoStr = detectSecondo(r.secondo);
         const isBabyRow = secondoStr === 'baby';
         const isSegRow  = secondoStr === 'segnaposto';
@@ -1101,25 +1095,63 @@
         else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
         else if (isBabyRow) secondoStr = '🍼 ' + testi.kpiBaby;
         else secondoStr = '-';
-
         const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
-        const notaCell = isSegRow
-          ? '<span style="color:#a83230;font-weight:600">' + testi.kpiSegnaposto + '</span>'
-          : isBabyRow
-            ? '<span style="color:#a83230;font-weight:600">' + testi.kpiBaby + '</span>'
-            : (r.note ? r.note : '-');
-
+        const notaCell = isSegRow ? '<span style="color:#a83230;font-weight:600">' + testi.kpiSegnaposto + '</span>'
+          : isBabyRow ? '<span style="color:#a83230;font-weight:600">' + testi.kpiBaby + '</span>'
+          : (r.note ? r.note : '-');
         const nTavPres = trovaTavoloNum(r.nome || '');
         const isDup = nomeDuplicato.has(idx);
-        const noTav = !nTavPres;
-        const nomeBg = isDup ? 'background:#fff176;' : (noTav ? 'background:#ffd6e0;' : '');
+        const nomeBg = isDup ? 'background:#fff176;' : (!nTavPres ? 'background:#ffd6e0;' : '');
         const dataStr = isDup && r.data ? '<br><span style="font-size:9px;font-weight:400;color:#7a5a00">' + r.data + '</span>' : '';
-        htmlPDF += '<tr>'
+        return '<tr>'
           + '<td style="padding:4px 6px;font-weight:600;color:#000;' + nomeBg + '">' + (nTavPres ? '<span style="margin-right:3px">' + nTavPres + '</span>' : '') + (r.nome || 'Senza nome') + dataStr + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + secondoStr + '</td>'
           + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + allergie + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + notaCell + '</td>'
           + '</tr>';
+      }
+
+      // Misura altezze reali renderizzando in un contenitore nascosto
+      const misuratore = document.createElement('div');
+      misuratore.style.cssText = 'position:fixed;left:-9999px;top:0;width:680px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;';
+      const tabMisura = document.createElement('table');
+      tabMisura.style.cssText = tableStyle;
+      tabMisura.innerHTML = theadHTML + '<tbody>' + presentiRows.map((r,i) => buildRowHTML(r,i)).join('') + '</tbody>';
+      misuratore.appendChild(tabMisura);
+      document.body.appendChild(misuratore);
+
+      const righeDOM = tabMisura.querySelectorAll('tbody tr');
+      const testaAltezza = tabMisura.querySelector('thead tr') ? tabMisura.querySelector('thead tr').getBoundingClientRect().height : 20;
+      const altezze = Array.from(righeDOM).map(tr => tr.getBoundingClientRect().height);
+      document.body.removeChild(misuratore);
+
+      // A4 a 96dpi: ~1122px totali, margini top 5mm + bottom 20mm ≈ 94px, area utile ~1028px
+      // scala 2 → dividiamo per 2 per avere px a 96dpi
+      // In mm: A4=297mm, margini 5+20=25mm → 272mm utili → a 3.78px/mm ≈ 1028px
+      // Prima pagina ha anche titolo h3 (~24px) e KPI box (~50px) → riduciamo
+      const ALTEZZA_PAGINA_PX = 980;   // px a 96dpi per pagina intera
+      const ALTEZZA_PRIMA = ALTEZZA_PAGINA_PX - 80; // sottrai titolo + KPI prima pagina
+
+      let htmlPDFrighe = '';
+      htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>`;
+      htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
+
+      let altezzaAccumulata = testaAltezza;
+      let primaTabella = true;
+      const limiteCorrente = () => primaTabella ? ALTEZZA_PRIMA : ALTEZZA_PAGINA_PX - testaAltezza * 2;
+
+      presentiRows.forEach((r, idx) => {
+        const h = altezze[idx] || 18;
+        if (altezzaAccumulata + h > limiteCorrente()) {
+          // Salto pagina: chiudi tabella, break, nuova tabella con header
+          htmlPDF += '</tbody></table>';
+          htmlPDF += '<div class="html2pdf__page-break"></div>';
+          htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
+          altezzaAccumulata = testaAltezza;
+          primaTabella = false;
+        }
+        htmlPDF += buildRowHTML(r, idx);
+        altezzaAccumulata += h;
       });
       htmlPDF += `</tbody></table>`;
     }
@@ -1624,4 +1656,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v61 - 28/03/2026 - PDF: thead ripetuto su più pagine, margine 2cm -->
+<!-- Lista.html v63 - 28/03/2026 - PDF: break tabella basato su altezza reale righe DOM -->

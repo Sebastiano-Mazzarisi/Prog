@@ -775,7 +775,7 @@
       <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">Aggiorna</button>
       <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">PDF</button>
       <button class="btn-submit" onclick="scaricaBackupCSV()" style="margin-top:0; background: linear-gradient(135deg, #2980b9, #3d9dd1); color: #ffffff;font-size:13px;padding:12px 6px;">Backup</button>
-      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">⬇️</button>
+      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">Tavoli</button>
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:8px 4px;">
       <span style="font-family:'Inter',sans-serif;font-size:13px;color:#5a4a2a;white-space:nowrap;">Ordina per:</span>
@@ -832,8 +832,11 @@
       const isVideoNoTav = !assente && !tavNum;
       const nomeBgVideo = isVideoDup ? 'background:#fff9a0;' : isVideoNoTav ? 'background:#ffd6e0;' : '';
 
+      // Nome visualizzato: Cognome Nome (ordine cognome) oppure Nome Cognome + età
+      const nomeDisplay = formatNomeDisplay(r.nome);
+
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
-        <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${r.nome || 'Senza nome'}${isVideoDup && r.data ? `<span style="font-size:11px;font-weight:400;color:#7a5a00;margin-left:6px;white-space:nowrap">${r.data}</span>` : ''}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${nomeDisplay}${isVideoDup && r.data ? `<span style="font-size:11px;font-weight:400;color:#7a5a00;margin-left:6px;white-space:nowrap">${r.data}</span>` : ''}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">Tavolo</span>
@@ -863,7 +866,7 @@
 
     html += `</div>
     <div style="text-align:center; margin: 16px 0 8px; display:flex; justify-content:center; align-items:center; gap:10px;">
-      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="background:linear-gradient(135deg,#7a5c3a,#9e7f5b);color:#ffffff;border:none;border-radius:12px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(122,92,58,0.3);">🏠 Home</button>
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="background:linear-gradient(135deg,#7a5c3a,#9e7f5b);color:#ffffff;border:none;border-radius:12px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(122,92,58,0.3);">Home</button>
       <button onclick="gestisciContatore()" id="btn-contatore" style="display:none;background:linear-gradient(135deg,#3a6b7a,#5b9eb5);color:#ffffff;border:none;border-radius:12px;padding:12px 20px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(58,107,122,0.3);min-width:56px;">${leggiContatore()}</button>
     </div>
     <div style="height:10px;"></div>
@@ -1661,6 +1664,50 @@
     if (btn) btn.textContent = leggiContatore();
   }, 30000);
 
+  function getEtaAnni(nome) {
+    if (!window.mapNascita) return null;
+    const acc = /[\u0300-\u036f]/g;
+    const k = (nome||'').toLowerCase().normalize('NFD').replace(acc,'').trim();
+    // cerca chiave esatta o token match
+    let dataN = window.mapNascita[k];
+    if (!dataN) {
+      const pk = k.split(/\s+/).filter(Boolean);
+      Object.keys(window.mapNascita).forEach(mk => {
+        const mk2 = mk.split(/\s+/).filter(Boolean);
+        if (pk.every(w=>mk2.includes(w)) || mk2.every(w=>pk.includes(w))) dataN = window.mapNascita[mk];
+      });
+    }
+    if (!dataN) return null;
+    const d = dataN.trim();
+    const matrimonio = new Date(2026,5,21);
+    let nascita = null;
+    const dmY=d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+    const Ymd=d.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+    const soloA=d.match(/^(\d{4})$/);
+    if(dmY) nascita=new Date(parseInt(dmY[3]),parseInt(dmY[2])-1,parseInt(dmY[1]));
+    else if(Ymd) nascita=new Date(parseInt(Ymd[1]),parseInt(Ymd[2])-1,parseInt(Ymd[3]));
+    else if(soloA) nascita=new Date(parseInt(soloA[1]),0,1);
+    if(!nascita) return null;
+    let anni = matrimonio.getFullYear()-nascita.getFullYear();
+    const cp=(nascita.getMonth()<matrimonio.getMonth())||(nascita.getMonth()===matrimonio.getMonth()&&nascita.getDate()<=matrimonio.getDate());
+    if(!cp) anni--;
+    return anni;
+  }
+
+  function formatNomeDisplay(nome) {
+    if (!nome) return 'Senza nome';
+    const tokens = nome.trim().split(/\s+/);
+    let nomeStr = nome;
+    if (activeOrdine === 'cognome' && tokens.length >= 2) {
+      // Cognome Nome: ultimo token prima, resto dopo
+      const cognome = tokens[tokens.length - 1];
+      const resto = tokens.slice(0, tokens.length - 1).join(' ');
+      nomeStr = cognome + ' ' + resto;
+    }
+    const eta = getEtaAnni(nome);
+    return nomeStr + (eta !== null ? ' <span style="font-weight:400;font-size:14px;color:#555">(' + eta + ')</span>' : '');
+  }
+
   // --- ORDINAMENTO ---
   let activeOrdine = 'cognome'; // default
 
@@ -1692,26 +1739,12 @@
         return a2z(cp(ultimoToken(a.nome)) + cp(primoToken(a.nome)), cp(ultimoToken(b.nome)) + cp(primoToken(b.nome)));
       });
     } else if (criterio === 'eta') {
-      // Usa indiceOriginale come proxy età se non disponibile; altrimenti usa dataNascita da mapNascita
       arr2.sort((a,b) => {
-        const accNFD = /[\u0300-\u036f]/g;
-        function dataN(nome) {
-          if (!window.mapNascita) return null;
-          const k = (nome||'').toLowerCase().normalize('NFD').replace(accNFD,'').trim();
-          const d = window.mapNascita[k];
-          if (!d) return null;
-          const dmY=d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-          const Ymd=d.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
-          const soloA=d.match(/^(\d{4})$/);
-          if(dmY) return new Date(parseInt(dmY[3]),parseInt(dmY[2])-1,parseInt(dmY[1]));
-          if(Ymd) return new Date(parseInt(Ymd[1]),parseInt(Ymd[2])-1,parseInt(Ymd[3]));
-          if(soloA) return new Date(parseInt(soloA[1]),0,1);
-          return null;
-        }
-        const da = dataN(a.nome), db = dataN(b.nome);
-        if (da && db) return da - db; // più vecchio prima
-        if (da) return -1;
-        if (db) return 1;
+        const ea = getEtaAnni(a.nome), eb = getEtaAnni(b.nome);
+        // Chi non ha età va in fondo
+        if (ea !== null && eb !== null) return ea - eb; // più vecchio (età maggiore) prima
+        if (ea !== null) return -1;
+        if (eb !== null) return 1;
         return a2z(cp(ultimoToken(a.nome)), cp(ultimoToken(b.nome)));
       });
     }
@@ -1791,4 +1824,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v76 - 28/03/2026 - Ordinamento 5 criteri, pulsanti rinominati, backup timestamp -->
+<!-- Lista.html v77 - 28/03/2026 - Home senza icona, Tavoli, Cognome Nome, età in lista -->

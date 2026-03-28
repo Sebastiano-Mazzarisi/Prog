@@ -752,6 +752,14 @@
 
 
 <script>
+  // --- CONTATORE VISITE (eseguito subito, non aspetta DOMContentLoaded) ---
+  (function() {
+    try {
+      const n = parseInt(localStorage.getItem('matrimonio_visite') || '0', 10);
+      localStorage.setItem('matrimonio_visite', n + 1);
+    } catch(e) {}
+  })();
+
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
   let currentLanguage = 'it';
   let msgInvioInCorso = 'Invio in corso...';
@@ -865,11 +873,6 @@
   // Carica i testi all'apertura in base alla lingua
   window.addEventListener('DOMContentLoaded', () => {
     setLanguage('it');
-
-    // --- CONTATORE VISITE ---
-    const params = new URLSearchParams(window.location.search);
-    const n = parseInt(localStorage.getItem('matrimonio_visite') || '0', 10);
-    localStorage.setItem('matrimonio_visite', n + 1);
   });
 
   // FUNZIONE PER CAMBIARE LA LINGUA DINAMICAMENTE

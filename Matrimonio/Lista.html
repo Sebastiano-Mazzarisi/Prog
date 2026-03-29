@@ -1172,15 +1172,8 @@
 
     // Tabella Presenti - spezzata con header ripetuto
     if (presentiRows.length > 0) {
-      // Ordina per Cognome Nome (stesso criterio dell'ordinamento a video)
-      const cpPdf = v => (v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-      const ultTok = n => { const t=(n||'').trim().split(/\s+/); return t[t.length-1]||''; };
-      const primTok = n => (n||'').trim().split(/\s+/)[0]||'';
-      presentiRows.sort((a,b) => {
-        const ka = cpPdf(ultTok(a.nome)) + cpPdf(primTok(a.nome));
-        const kb = cpPdf(ultTok(b.nome)) + cpPdf(primTok(b.nome));
-        return ka.localeCompare(kb, 'it', {sensitivity:'base'});
-      });
+      // Ordina per Cognome Nome usando la stessa funzione che funziona a video
+      presentiRows = ordinaInvitati(presentiRows, 'cognome');
       const tableStyle = 'width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;word-break:break-word;';
       const theadHTML = `
         <thead>
@@ -2325,4 +2318,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v105 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v106 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

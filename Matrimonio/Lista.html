@@ -445,7 +445,15 @@
       lbl_COGNOME: "COGNOME",
       lbl_CIBO: "CIBO",
       lbl_ETA: "ETÀ",
-      lbl_TAVOLO: "TAVOLO"
+      lbl_TAVOLO: "TAVOLO",
+      btnOrdina_attesa: "In attesa",
+      lbl_ATTESA: "IN ATTESA",
+      titoloAttesa: "In attesa di risposta",
+      msgAttesaVuota: "Tutti gli invitati hanno risposto.",
+      msgCancellazionePendente: "Cancellazione in corso...",
+      msgCancellazioneOk: "Scheda eliminata.",
+      msgCancellazioneKo: "Cancellazione NON riuscita sul server.",
+      msgUscitaConPendente: "Attenzione: una cancellazione è ancora in corso. Attendere prima di uscire?"
     },
     es: {
       titolo: "Lista de Invitados",
@@ -513,7 +521,15 @@
       lbl_COGNOME: "APELLIDO",
       lbl_CIBO: "COMIDA",
       lbl_ETA: "EDAD",
-      lbl_TAVOLO: "MESA"
+      lbl_TAVOLO: "MESA",
+      btnOrdina_attesa: "En espera",
+      lbl_ATTESA: "EN ESPERA",
+      titoloAttesa: "En espera de respuesta",
+      msgAttesaVuota: "Todos los invitados han respondido.",
+      msgCancellazionePendente: "Eliminando...",
+      msgCancellazioneOk: "Tarjeta eliminada.",
+      msgCancellazioneKo: "Eliminación NO completada en el servidor.",
+      msgUscitaConPendente: "Atención: hay una eliminación en curso. ¿Esperar antes de salir?"
     }
   };
 
@@ -571,6 +587,7 @@
         const sepInv = txtInv.includes(';') ? ';' : ',';
         const acc = /[\u0300-\u036f]/g;
         window.mapNascita = {};
+        window.tuttiInvitatiCsvRaw = [];
         let totCsv = 0;
         let startInv = (righeInv.length > 0 && righeInv[0].toLowerCase().includes('nom')) ? 1 : 0;
         for (let i = startInv; i < righeInv.length; i++) {
@@ -579,10 +596,12 @@
           const dataN = cols[1] ? cols[1].replace(/['"]/g,'').trim() : '';
           if (nome) {
             totCsv++;
+            window.tuttiInvitatiCsvRaw.push({ nome, dataNascita: dataN });
             if (dataN) window.mapNascita[nome.toLowerCase().normalize('NFD').replace(acc,'').trim()] = dataN;
           }
         }
         window.totInvitatiCsv = totCsv;
+        window.totInvitatiCsvRaw = totCsv;
       }
     } catch(e) { console.log('mapNascita: Invitati.csv non disponibile', e); }
   }
@@ -1487,9 +1506,11 @@
 
 
 
+    const _d = new Date(), _p = n => String(n).padStart(2,'0');
+    const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
       margin:       [5, 10, 20, 10],
-      filename:     `Lista_Invitati_Giulia_Onofrio_${currentLang.toUpperCase()}.pdf`,
+      filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -1681,8 +1702,25 @@
     }, 50);
   }
 
+  // Traccia cancellazioni pendenti
+  let _cancellazionePendente = false;
+
+  window.addEventListener('beforeunload', function(e) {
+    if (_cancellazionePendente) {
+      const msg = dizionario[currentLang].msgUscitaConPendente;
+      e.preventDefault();
+      e.returnValue = msg;
+      return msg;
+    }
+  });
+
   function eliminaRiga(riga) {
-    if (!confirm(dizionario[currentLang].msgConferma)) return;
+    const testi = dizionario[currentLang];
+    // Prima conferma
+    if (!confirm(testi.msgConferma)) return;
+    // Seconda conferma
+    if (!confirm(testi.msgConferma)) return;
+
     const card = document.getElementById('card-' + riga);
 
     // Optimistic update: rimuove subito la card e aggiorna i KPI
@@ -1697,19 +1735,24 @@
       }, 200);
     }
 
+    // Segna la cancellazione come pendente
+    _cancellazionePendente = true;
+
     // Chiama il server in background senza bloccare l'UI
     fetch(SCRIPT_URL + '?elimina=' + riga + '&t=' + Date.now())
       .then(r => r.json())
       .then(data => {
+        _cancellazionePendente = false;
         if (!data.ok) {
           // Rollback: ricarica dal server se qualcosa è andato storto
-          alert(dizionario[currentLang].msgErrCanc);
+          alert(testi.msgCancellazioneKo + '\n' + testi.msgErrCanc);
           caricaRisposte();
         }
-        // Se ok: niente da fare, UI già aggiornata
+        // Se ok: cancellazione confermata
       })
       .catch(() => {
-        alert(dizionario[currentLang].msgErrRete);
+        _cancellazionePendente = false;
+        alert(testi.msgCancellazioneKo + '\n' + testi.msgErrRete);
         caricaRisposte(); // Rollback
       });
   }
@@ -1820,7 +1863,7 @@
 
   function labelOrdineCorrente() {
     const t = dizionario[currentLang];
-    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO };
+    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA };
     return labels[activeOrdine] || t.lbl_COGNOME;
   }
 
@@ -1877,6 +1920,90 @@
     return arr2;
   }
 
+  // Raccoglie gli invitati da Invitati.csv che non hanno ancora risposto
+  function calcolaInAttesa() {
+    if (!window.datiInvitati || !window.totInvitatiCsvRaw) return [];
+    const acc = /[\u0300-\u036f]/g;
+    function tok(n) { return (n||'').toLowerCase().normalize('NFD').replace(acc,'').trim().split(/\s+/).filter(Boolean); }
+    function matchN(a, b) {
+      const ta = tok(a), tb = tok(b);
+      return ta.every(w=>tb.includes(w)) || tb.every(w=>ta.includes(w));
+    }
+    // Tutti i nomi del CSV
+    const tuttiInvitati = window.tuttiInvitatiCsvRaw || [];
+    // Nomi che hanno già risposto
+    const hannoRisposto = window.datiInvitati.map(r => r.nome || '');
+    // Filtra chi NON ha risposto
+    return tuttiInvitati.filter(inv => {
+      return !hannoRisposto.some(nr => matchN(inv.nome, nr));
+    });
+  }
+
+  function mostraInAttesa() {
+    const testi = dizionario[currentLang];
+    const inAttesa = calcolaInAttesa();
+    const acc = /[\u0300-\u036f]/g;
+    const cp2 = v => (v||'').toLowerCase().normalize('NFD').replace(acc,'');
+    // Ordina per Cognome Nome
+    inAttesa.sort((a,b) => {
+      const tokA = (a.nome||'').trim().split(/\s+/);
+      const tokB = (b.nome||'').trim().split(/\s+/);
+      const cogA = cp2(tokA[tokA.length-1]||'') + cp2(tokA[0]||'');
+      const cogB = cp2(tokB[tokB.length-1]||'') + cp2(tokB[0]||'');
+      return cogA.localeCompare(cogB, 'it', {sensitivity:'base'});
+    });
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:4000;display:flex;align-items:flex-start;justify-content:center;padding-top:40px;overflow-y:auto;';
+
+    const box = document.createElement('div');
+    box.style.cssText = 'background:#fff;border-radius:16px;padding:20px 18px 16px;width:92%;max-width:420px;box-shadow:0 8px 30px rgba(0,0,0,0.25);margin-bottom:40px;';
+
+    let html = '<div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:700;color:#8a5e1e;margin-bottom:4px;text-align:center;">'
+      + testi.titoloAttesa + '</div>';
+    html += '<div style="text-align:center;font-family:\'Inter\',sans-serif;font-size:13px;color:#888;margin-bottom:14px;">'
+      + inAttesa.length + ' / ' + (window.totInvitatiCsv || '?') + '</div>';
+
+    if (inAttesa.length === 0) {
+      html += '<div style="text-align:center;color:#2d6040;font-weight:600;padding:16px 0;">' + testi.msgAttesaVuota + '</div>';
+    } else {
+      html += '<div style="font-family:\'Inter\',sans-serif;font-size:14px;">';
+      inAttesa.forEach((inv, idx) => {
+        // Formato: <tavolo> Cognome Nome (età)
+        const tokensNome = (inv.nome||'').trim().split(/\s+/);
+        let nomeFmt;
+        if (tokensNome.length >= 2) {
+          const cognome = tokensNome[tokensNome.length - 1];
+          const resto = tokensNome.slice(0, tokensNome.length - 1).join(' ');
+          nomeFmt = cognome + ' ' + resto;
+        } else {
+          nomeFmt = inv.nome || '';
+        }
+        const eta = getEtaAnni(inv.nome);
+        const etaStr = eta !== null ? ' <span style="font-weight:400;color:#888;font-size:13px">('+eta+')</span>' : '';
+        const tavNum = trovaTavoloNum(inv.nome || '');
+        const bg = idx % 2 === 0 ? '#fafafa' : '#ffffff';
+        html += '<div style="padding:7px 10px;border-radius:8px;background:' + bg + ';margin-bottom:3px;display:flex;align-items:center;gap:6px;">'
+          + (tavNum ? '<span style="font-size:13px;flex-shrink:0">' + tavNum + '</span>' : '<span style="width:18px;flex-shrink:0"></span>')
+          + '<span style="font-weight:600">' + nomeFmt + '</span>' + etaStr
+          + '</div>';
+      });
+      html += '</div>';
+    }
+
+    box.innerHTML = html;
+
+    const btnChiudi = document.createElement('button');
+    btnChiudi.textContent = testi.lblAnnulla;
+    btnChiudi.style.cssText = 'display:block;width:100%;margin-top:14px;padding:11px;border-radius:10px;border:none;background:#f0f0f0;font-family:\'Inter\',sans-serif;font-size:13px;font-weight:600;color:#555;cursor:pointer;';
+    btnChiudi.onclick = () => document.body.removeChild(overlay);
+    box.appendChild(btnChiudi);
+
+    overlay.appendChild(box);
+    overlay.onclick = e => { if (e.target === overlay) document.body.removeChild(overlay); };
+    document.body.appendChild(overlay);
+  }
+
   function apriSceltaOrdine() {
     const t = dizionario[currentLang];
     const opzioni = [
@@ -1885,7 +2012,8 @@
       {val:'cognome',     lbl: t.btnOrdina_cognome},
       {val:'tavolo',      lbl: t.btnOrdina_tavolo},
       {val:'cibo',        lbl: t.btnOrdina_cibo},
-      {val:'eta',         lbl: t.btnOrdina_eta}
+      {val:'eta',         lbl: t.btnOrdina_eta},
+      {val:'attesa',      lbl: t.btnOrdina_attesa}
     ];
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:3000;display:flex;align-items:center;justify-content:center;';
@@ -1896,12 +2024,17 @@
       const btn = document.createElement('button');
       btn.textContent = o.lbl;
       const isActive = o.val === activeOrdine;
-      btn.style.cssText = 'display:block;width:100%;margin-bottom:8px;padding:11px 14px;border-radius:10px;border:1.5px solid ' + (isActive ? '#b8893a' : '#ddd') + ';background:' + (isActive ? '#f5ede0' : '#fafafa') + ';font-family:\'Inter\',sans-serif;font-size:14px;font-weight:' + (isActive ? '700' : '400') + ';color:' + (isActive ? '#7a5c3a' : '#333') + ';cursor:pointer;text-align:left;';
+      const isAttesa = o.val === 'attesa';
+      btn.style.cssText = 'display:block;width:100%;margin-bottom:8px;padding:11px 14px;border-radius:10px;border:1.5px solid ' + (isActive ? '#b8893a' : (isAttesa ? '#e8a020' : '#ddd')) + ';background:' + (isActive ? '#f5ede0' : (isAttesa ? '#fff8ec' : '#fafafa')) + ';font-family:\'Inter\',sans-serif;font-size:14px;font-weight:' + (isActive ? '700' : '400') + ';color:' + (isActive ? '#7a5c3a' : (isAttesa ? '#8a5e00' : '#333')) + ';cursor:pointer;text-align:left;';
       btn.onclick = () => {
-        activeOrdine = o.val;
         document.body.removeChild(overlay);
-        window.datiInvitati = ordinaInvitati(window.datiInvitati, activeOrdine);
-        renderizzaDati();
+        if (o.val === 'attesa') {
+          mostraInAttesa();
+        } else {
+          activeOrdine = o.val;
+          window.datiInvitati = ordinaInvitati(window.datiInvitati, activeOrdine);
+          renderizzaDati();
+        }
       };
       box.appendChild(btn);
     });
@@ -1952,4 +2085,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v82 - 29/03/2026 - PDF p1: Cognome Nome (età); allergie overflow in Note; fix etichette PDF bilingue -->
+<!-- Lista.html v83 - 29/03/2026 - Ordina "In attesa" dal CSV; doppia conferma cancellazione; beforeunload su pendente; nome PDF Lista-AAAA-MM-GG-HH-MM-SS.pdf -->

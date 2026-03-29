@@ -1490,8 +1490,8 @@
             <span style="background-color:${bgCerchioPdf}; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700;color:#000000;">${rispostiPdf}/${t.persone.length}</span>
           </div>
 
-          <div style="padding: 8px 12px; column-count: 2; column-gap: 12px; background-color: transparent;">
-            ${t.persone.map((p, j) => `<div style="padding:2px 0; font-family:'Inter',sans-serif; font-size:14px; font-weight:400; color:#000000; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
+          <div style="padding: 6px 12px; column-count: 2; column-gap: 12px; background-color: transparent;">
+            ${t.persone.map((p, j) => `<div style="padding:1px 0; font-family:'Inter',sans-serif; font-size:13px; font-weight:400; color:#000000; line-height:1.2; break-inside: avoid; page-break-inside: avoid;">${p}</div>`).join('')}
           </div>
         </div>
       `;
@@ -1630,7 +1630,7 @@
 
     // ── Grafico 1: area temporale (area solo fino a oggi) ────────────────────
     // Dimensioni: larghezza piena 700px
-    var W1=700, H1=230, p1L=46, p1R=24, p1T=70, p1B=36;
+    var W1=700, H1=460, p1L=46, p1R=24, p1T=100, p1B=36;
     var g1ChartW=W1-p1L-p1R, g1ChartH=H1-p1T-p1B;
     var g1MaxY = Math.max(g1TotInv, g1Total, 1) * 1.5;
     var g1xStep = g1ChartW/(g1Days-1||1);
@@ -1687,7 +1687,7 @@
       + '</svg>';
 
     // ── Grafici 2 e 4: larghezza (700-24)/2 = 338px ciascuno ─────────────────
-    var GW=338, GH=240, gPadL=46, gPadR=14, gPadT=72, gPadB=36;
+    var GW=338, GH=480, gPadL=46, gPadR=14, gPadT=120, gPadB=40;
 
     // Grafico 2: fasce età
     var g2Data = [
@@ -2321,4 +2321,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v107 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v108 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

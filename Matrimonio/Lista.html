@@ -1564,7 +1564,7 @@
 
     // Grafico 1: registrazioni nel tempo
     // Genera array di date dal 28/03/2026 al 21/06/2026
-    const g1Start = new Date(2026,2,28); // 28 marzo
+    const g1Start = new Date(2026,2,21); // 21 marzo
     const g1End   = new Date(2026,5,21); // 21 giugno
     const g1Days  = Math.round((g1End - g1Start)/(1000*60*60*24)) + 1; // 86 giorni
     // Mappa data→conteggio
@@ -1630,7 +1630,7 @@
 
     // ── Grafico 1: area temporale (area solo fino a oggi) ────────────────────
     // Dimensioni: larghezza piena 700px
-    var W1=700, H1=460, p1L=46, p1R=24, p1T=100, p1B=36;
+    var W1=700, H1=322, p1L=46, p1R=24, p1T=68, p1B=36;
     var g1ChartW=W1-p1L-p1R, g1ChartH=H1-p1T-p1B;
     var g1MaxY = Math.max(g1TotInv, g1Total, 1) * 1.5;
     var g1xStep = g1ChartW/(g1Days-1||1);
@@ -1654,7 +1654,7 @@
     for (var gi=0;gi<g1Days;gi++) {
       var gd=new Date(g1Start); gd.setDate(gd.getDate()+gi);
       if (gd.getDate()===1 || gi===0) {
-        var mlbl = gd.getDate()===1 ? ['Gen','Feb','Mar','Apr','Mag','Giu'][gd.getMonth()] : '28/3';
+        var mlbl = gd.getDate()===1 ? ['Gen','Feb','Mar','Apr','Mag','Giu'][gd.getMonth()] : '21/3';
         g1Months.push({x:(p1L+gi*g1xStep), label:mlbl});
       }
     }
@@ -1662,9 +1662,9 @@
 
     var svg1 = '<svg width="'+W1+'" height="'+H1+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+W1+'" height="'+H1+'" fill="#f9fdf5" rx="8"/>'
-      + '<text x="'+(W1/2)+'" y="36" text-anchor="middle" font-size="26" font-weight="700" font-family="Arial" fill="#2d6040">Registrazioni nel tempo</text>'
+      + '<text x="'+(W1/2)+'" y="36" text-anchor="middle" font-size="26" font-weight="700" font-family="Arial" fill="#2d6040" y="28" >Registrazioni nel tempo</text>'
       + '<line x1="'+p1L+'" y1="'+g1yTarget.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+g1yTarget.toFixed(1)+'" stroke="#a83230" stroke-width="1.5" stroke-dasharray="5,4"/>'
-      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="10" fill="#a83230" font-family="Arial" font-weight="700">'+g1Total+'</text>'
+      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="10" fill="#a83230" font-family="Arial" font-weight="700">'+g1TotInv+'</text>'
       + [0,0.25,0.5,0.75,1].map(function(f){
           var yy=g1y(Math.round(g1MaxY*f));
           return '<line x1="'+p1L+'" y1="'+yy.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.7"/>'
@@ -1687,7 +1687,7 @@
       + '</svg>';
 
     // ── Grafici 2 e 4: larghezza (700-24)/2 = 338px ciascuno ─────────────────
-    var GW=338, GH=480, gPadL=46, gPadR=14, gPadT=120, gPadB=40;
+    var GW=338, GH=336, gPadL=46, gPadR=14, gPadT=72, gPadB=36;
 
     // Grafico 2: fasce età
     var g2Data = [
@@ -1698,7 +1698,7 @@
     ];
     var svg2 = '<svg width="'+GW+'" height="'+GH+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+GW+'" height="'+GH+'" fill="#f9fdf5" rx="8"/>'
-      + '<text x="'+(GW/2)+'" y="36" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d\'eta\'</text>'
+      + '<text x="'+(GW/2)+'" y="26" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d’età</text>'
       + svgBars(GW,GH,gPadL,gPadR,gPadT,gPadB,g2Data)
       + '</svg>';
 
@@ -1711,7 +1711,7 @@
     ];
     var svg4 = '<svg width="'+GW+'" height="'+GH+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+GW+'" height="'+GH+'" fill="#f9fdf5" rx="8"/>'
-      + '<text x="'+(GW/2)+'" y="36" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Scelta del cibo</text>'
+      + '<text x="'+(GW/2)+'" y="26" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Scelta del cibo</text>'
       + svgBars(GW,GH,gPadL,gPadR,gPadT,gPadB,g4Data)
       + '</svg>';
 
@@ -2321,4 +2321,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v108 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v109 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

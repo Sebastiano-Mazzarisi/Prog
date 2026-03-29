@@ -1629,10 +1629,10 @@
     }
 
     // ── Grafico 1: area temporale (area solo fino a oggi) ────────────────────
-    // Dimensioni: larghezza piena 700px
-    var W1=700, H1=322, p1L=46, p1R=24, p1T=68, p1B=36;
+    var W1=700, H1=322, p1L=46, p1R=36, p1T=52, p1B=36;
     var g1ChartW=W1-p1L-p1R, g1ChartH=H1-p1T-p1B;
-    var g1MaxY = Math.max(g1TotInv, g1Total, 1) * 1.5;
+    // Asse Y fisso 0-100
+    var g1MaxY = 100;
     var g1xStep = g1ChartW/(g1Days-1||1);
     function g1y(v){ return p1T + g1ChartH - (v/g1MaxY)*g1ChartH; }
 
@@ -1640,7 +1640,7 @@
     var g1Today = new Date();
     var g1TodayIdx = Math.min(g1Days-1, Math.max(0, Math.round((g1Today - g1Start)/(1000*60*60*24))));
 
-    // Punti fino a oggi per l'area
+    // Punti linea
     var g1ptsAll = g1Cum.map(function(v,i){ return (p1L+i*g1xStep).toFixed(1)+','+g1y(v).toFixed(1); });
     var g1ptsToday = g1ptsAll.slice(0, g1TodayIdx+1).join(' ');
     var g1ptsFull  = g1ptsAll.join(' ');
@@ -1649,45 +1649,57 @@
     var g1TodayX = (p1L + g1TodayIdx*g1xStep).toFixed(1);
     var g1AreaPts = p1L+','+(p1T+g1ChartH) + ' ' + g1ptsToday + ' ' + g1TodayX+','+(p1T+g1ChartH);
 
-    // Etichette mesi
-    var g1Months = [];
-    for (var gi=0;gi<g1Days;gi++) {
-      var gd=new Date(g1Start); gd.setDate(gd.getDate()+gi);
-      if (gd.getDate()===1 || gi===0) {
-        var mlbl = gd.getDate()===1 ? ['Gen','Feb','Mar','Apr','Mag','Giu'][gd.getMonth()] : '21/3';
-        g1Months.push({x:(p1L+gi*g1xStep), label:mlbl});
-      }
-    }
-    var g1yTarget = g1y(g1TotInv);
+    // Etichetta data odierna: GG/MM
+    var g1TodayLbl = g1Today.getDate()+'/'+(g1Today.getMonth()+1);
+
+    // Asse X: 21/03, 21/04, 21/05, 21/06 (fisso)
+    var g1AxisX = [
+      {dayOffset:0,   label:'21/03'},
+      {dayOffset:31,  label:'21/04'},
+      {dayOffset:61,  label:'21/05'},
+      {dayOffset:92,  label:'21/06'},
+    ];
+
+    var g1yTarget = g1y(g1TotInv);   // linea rossa = totale invitati
+    var g1yCompil = g1y(g1Total);     // linea verde = compilatori
 
     var svg1 = '<svg width="'+W1+'" height="'+H1+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+W1+'" height="'+H1+'" fill="#f9fdf5" rx="8"/>'
-      + '<text x="'+(W1/2)+'" y="36" text-anchor="middle" font-size="26" font-weight="700" font-family="Arial" fill="#2d6040" y="28" >Registrazioni nel tempo</text>'
+      // Titolo avvicinato
+      + '<text x="'+(W1/2)+'" y="20" text-anchor="middle" font-size="26" font-weight="700" font-family="Arial" fill="#2d6040">Registrazioni nel tempo</text>'
+      // Linea rossa tratteggiata = totale invitati
       + '<line x1="'+p1L+'" y1="'+g1yTarget.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+g1yTarget.toFixed(1)+'" stroke="#a83230" stroke-width="1.5" stroke-dasharray="5,4"/>'
       + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="10" fill="#a83230" font-family="Arial" font-weight="700">'+g1TotInv+'</text>'
-      + [0,0.25,0.5,0.75,1].map(function(f){
-          var yy=g1y(Math.round(g1MaxY*f));
+      // Griglia Y: 0,25,50,75,100
+      + [0,25,50,75,100].map(function(v){
+          var yy=g1y(v);
           return '<line x1="'+p1L+'" y1="'+yy.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.7"/>'
-               + '<text x="'+(p1L-4)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10" font-family="Arial" fill="#666">'+Math.round(g1MaxY*f)+'</text>';
+               + '<text x="'+(p1L-4)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10" font-family="Arial" fill="#666">'+v+'</text>';
         }).join('')
+      // Area riempita fino a oggi
       + '<polygon points="'+g1AreaPts+'" fill="rgba(45,96,64,0.2)"/>'
+      // Linea verde intera
       + '<polyline points="'+g1ptsFull+'" fill="none" stroke="#2d6040" stroke-width="2.5" stroke-linejoin="round"/>'
-      // Linea verticale "oggi"
-      + '<line x1="'+g1TodayX+'" y1="'+p1T+'" x2="'+g1TodayX+'" y2="'+(p1T+g1ChartH)+'" stroke="#b8893a" stroke-width="1" stroke-dasharray="3,3"/>'
-      + g1Months.map(function(m){
-          return '<line x1="'+m.x.toFixed(1)+'" y1="'+(p1T+g1ChartH)+'" x2="'+m.x.toFixed(1)+'" y2="'+(p1T+g1ChartH+5)+'" stroke="#999" stroke-width="0.7"/>'
-               + '<text x="'+m.x.toFixed(1)+'" y="'+(p1T+g1ChartH+17)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#555">'+m.label+'</text>';
+      // Numero compilatori a destra della linea verde
+      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yCompil+5).toFixed(1)+'" font-size="10" fill="#2d6040" font-family="Arial" font-weight="700">'+g1Total+'</text>'
+      // Linea verticale arancione "oggi" con data
+      + '<line x1="'+g1TodayX+'" y1="'+p1T+'" x2="'+g1TodayX+'" y2="'+(p1T+g1ChartH)+'" stroke="#b8893a" stroke-width="1.2" stroke-dasharray="3,3"/>'
+      + '<text x="'+g1TodayX+'" y="'+(p1T-4)+'" text-anchor="middle" font-size="9" font-family="Arial" fill="#b8893a" font-weight="700">'+g1TodayLbl+'</text>'
+      // Asse X fisso: 21/03, 21/04, 21/05, 21/06
+      + g1AxisX.map(function(m){
+          var mx = (p1L + m.dayOffset*g1xStep).toFixed(1);
+          return '<line x1="'+mx+'" y1="'+(p1T+g1ChartH)+'" x2="'+mx+'" y2="'+(p1T+g1ChartH+5)+'" stroke="#999" stroke-width="0.7"/>'
+               + '<text x="'+mx+'" y="'+(p1T+g1ChartH+17)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#555">'+m.label+'</text>';
         }).join('')
-      // Etichetta fine asse: 21/6
-      + '<line x1="'+(p1L+(g1Days-1)*g1xStep).toFixed(1)+'" y1="'+(p1T+g1ChartH)+'" x2="'+(p1L+(g1Days-1)*g1xStep).toFixed(1)+'" y2="'+(p1T+g1ChartH+5)+'" stroke="#999" stroke-width="0.7"/>'
-      + '<text x="'+(p1L+(g1Days-1)*g1xStep).toFixed(1)+'" y="'+(p1T+g1ChartH+17)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#555">21/6</text>'
+      // Assi
       + '<line x1="'+p1L+'" y1="'+p1T+'" x2="'+p1L+'" y2="'+(p1T+g1ChartH)+'" stroke="#333" stroke-width="1.5"/>'
       + '<line x1="'+p1L+'" y1="'+(p1T+g1ChartH)+'" x2="'+(W1-p1R)+'" y2="'+(p1T+g1ChartH)+'" stroke="#333" stroke-width="1.5"/>'
-      + '<circle cx="'+g1TodayX+'" cy="'+g1y(g1Total).toFixed(1)+'" r="5" fill="#2d6040"/>'
+      // Punto verde "oggi"
+      + '<circle cx="'+g1TodayX+'" cy="'+g1yCompil.toFixed(1)+'" r="5" fill="#2d6040"/>'
       + '</svg>';
 
     // ── Grafici 2 e 4: larghezza (700-24)/2 = 338px ciascuno ─────────────────
-    var GW=338, GH=336, gPadL=46, gPadR=14, gPadT=72, gPadB=36;
+    var GW=338, GH=336, gPadL=46, gPadR=14, gPadT=58, gPadB=36;
 
     // Grafico 2: fasce età
     var g2Data = [
@@ -1698,7 +1710,7 @@
     ];
     var svg2 = '<svg width="'+GW+'" height="'+GH+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+GW+'" height="'+GH+'" fill="#f9fdf5" rx="8"/>'
-      + '<text x="'+(GW/2)+'" y="26" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d’età</text>'
+      + '<text x="'+(GW/2)+'" y="20" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d’età</text>'
       + svgBars(GW,GH,gPadL,gPadR,gPadT,gPadB,g2Data)
       + '</svg>';
 
@@ -1711,7 +1723,7 @@
     ];
     var svg4 = '<svg width="'+GW+'" height="'+GH+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+GW+'" height="'+GH+'" fill="#f9fdf5" rx="8"/>'
-      + '<text x="'+(GW/2)+'" y="26" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Scelta del cibo</text>'
+      + '<text x="'+(GW/2)+'" y="20" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Scelta del cibo</text>'
       + svgBars(GW,GH,gPadL,gPadR,gPadT,gPadB,g4Data)
       + '</svg>';
 
@@ -2321,4 +2333,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v109 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v110 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

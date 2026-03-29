@@ -1480,14 +1480,21 @@
     const bgTavolo = '#e0e8d0';
     const borderTavolo = '#a5b589';
 
+    const accPdf = /[\u0300-\u036f]/g;
+    function tokPdfT(n) { return (n||'').toLowerCase().normalize('NFD').replace(accPdf,'').trim().split(/\s+/).filter(Boolean); }
+    function matchPdfT(a,b) { const ta=tokPdfT(a),tb=tokPdfT(b); return ta.every(w=>tb.includes(w))||tb.every(w=>ta.includes(w)); }
+
     TAVOLI.forEach((t, i) => {
       const label = t.nome.replace(/^Tavolo \d+ - /, '');
+      const rispostiPdf = t.persone.filter(p => window.datiInvitati.some(r => matchPdfT(p, r.nome||''))).length;
+      const completoPdf = rispostiPdf >= t.persone.length && t.persone.length > 0;
+      const bgCerchioPdf = completoPdf ? '#fff176' : '#ffffff';
       htmlPDF += `
         <div style="width: calc(50% - 8px); box-sizing: border-box; border: 2px solid ${borderTavolo}; border-radius: 10px; padding: 0; overflow: hidden; break-inside: avoid; page-break-inside: avoid; margin-bottom: 4px; background-color: #ffffff;">
 
           <div style="background-color: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid ${borderTavolo};">
             <span>${testi.lblTavolo} ${emojiNum[i+1] || i+1} &middot; ${label}</span>
-            <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;color:#000000;">${t.persone.length}</span>
+            <span style="background-color:${bgCerchioPdf}; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700;color:#000000;">${rispostiPdf}/${t.persone.length}</span>
           </div>
 
           <div style="padding: 8px 12px; column-count: 2; column-gap: 12px; background-color: transparent;">
@@ -2318,4 +2325,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v104 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v105 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

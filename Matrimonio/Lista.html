@@ -873,6 +873,15 @@
     if (activeOrdine === 'attesa') {
       // === MODALITÀ IN ATTESA: mostra chi non ha ancora risposto ===
       const inAttesa = calcolaInAttesa();
+      // Ordina per Cognome Nome
+      const acc2 = /[\u0300-\u036f]/g;
+      inAttesa.sort((a, b) => {
+        const tokA = (a.nome||'').trim().split(/\s+/);
+        const tokB = (b.nome||'').trim().split(/\s+/);
+        const keyA = (tokA[tokA.length-1]||'').toLowerCase().normalize('NFD').replace(acc2,'') + (tokA[0]||'').toLowerCase().normalize('NFD').replace(acc2,'');
+        const keyB = (tokB[tokB.length-1]||'').toLowerCase().normalize('NFD').replace(acc2,'') + (tokB[0]||'').toLowerCase().normalize('NFD').replace(acc2,'');
+        return keyA.localeCompare(keyB, 'it', {sensitivity:'base'});
+      });
       if (inAttesa.length === 0) {
         html += `<div style="text-align:center;color:#2d6040;font-weight:600;padding:24px 0;font-family:'Inter',sans-serif;">${testi.msgAttesaVuota}</div>`;
       } else {
@@ -2109,4 +2118,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v85 - 29/03/2026 - Pop-up ordina: solo voce attiva evidenziata, "In attesa" minuscolo; bottone mostra (N/Tot) con logica attesa/altri -->
+<!-- Lista.html v86 - 29/03/2026 - IN ATTESA ordinato per cognome -->

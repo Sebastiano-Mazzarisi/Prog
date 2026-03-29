@@ -592,8 +592,14 @@
         let startInv = (righeInv.length > 0 && righeInv[0].toLowerCase().includes('nom')) ? 1 : 0;
         for (let i = startInv; i < righeInv.length; i++) {
           const cols = righeInv[i].split(sepInv);
-          const nome = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
+          const nomeRaw = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
           const dataN = cols[1] ? cols[1].replace(/['"]/g,'').trim() : '';
+          // Il CSV è in formato "Cognome Nome" — inverte in "Nome Cognome"
+          // per compatibilità con la logica ordinaInvitati e formatNomeDisplay
+          const partiNome = nomeRaw.split(/\s+/).filter(Boolean);
+          const nome = partiNome.length >= 2
+            ? partiNome.slice(1).join(' ') + ' ' + partiNome[0]
+            : nomeRaw;
           if (nome) {
             totCsv++;
             window.tuttiInvitatiCsvRaw.push({ nome, dataNascita: dataN });
@@ -1048,8 +1054,13 @@
         let gruppoCorrente = [];
         for (let i = startIndex; i < righe.length; i++) {
           let cols = righe[i].split(sep);
-          let nome = cols[0] ? cols[0].replace(/['"]/g, '').trim() : '';
+          let nomeRawPdf = cols[0] ? cols[0].replace(/['"]/g, '').trim() : '';
           let dataNascita = cols[1] ? cols[1].replace(/['"]/g, '').trim() : '';
+          // Il CSV è in formato "Cognome Nome" — inverte in "Nome Cognome"
+          const partiPdf = nomeRawPdf.split(/\s+/).filter(Boolean);
+          let nome = partiPdf.length >= 2
+            ? partiPdf.slice(1).join(' ') + ' ' + partiPdf[0]
+            : nomeRawPdf;
 
           if (!nome) {
             if (gruppoCorrente.length > 0) {
@@ -2122,4 +2133,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v89 - 29/03/2026 - IN ATTESA: usa ordinaInvitati('cognome') identico all'ordinamento COGNOME -->
+<!-- Lista.html v90 - 29/03/2026 - Fix IN ATTESA: CSV in formato "Cognome Nome", invertito in "Nome Cognome" alla lettura -->

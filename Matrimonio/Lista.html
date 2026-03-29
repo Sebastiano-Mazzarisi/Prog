@@ -446,7 +446,7 @@
       lbl_CIBO: "CIBO",
       lbl_ETA: "ETÀ",
       lbl_TAVOLO: "TAVOLO",
-      btnOrdina_attesa: "IN ATTESA",
+      btnOrdina_attesa: "In attesa",
       lbl_ATTESA: "IN ATTESA",
       titoloAttesa: "In attesa di risposta",
       msgAttesaVuota: "Tutti gli invitati hanno risposto.",
@@ -522,7 +522,7 @@
       lbl_CIBO: "COMIDA",
       lbl_ETA: "EDAD",
       lbl_TAVOLO: "MESA",
-      btnOrdina_attesa: "EN ESPERA",
+      btnOrdina_attesa: "En espera",
       lbl_ATTESA: "EN ESPERA",
       titoloAttesa: "En espera de respuesta",
       msgAttesaVuota: "Todos los invitados han respondido.",
@@ -1884,7 +1884,16 @@
   function labelOrdineCorrente() {
     const t = dizionario[currentLang];
     const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA };
-    return labels[activeOrdine] || t.lbl_COGNOME;
+    const base = labels[activeOrdine] || t.lbl_COGNOME;
+    const totInv = window.totInvitatiCsv || null;
+    if (!totInv) return base;
+    if (activeOrdine === 'attesa') {
+      const nAttesa = calcolaInAttesa().length;
+      return base + ' (' + nAttesa + '/' + totInv + ')';
+    } else {
+      const nRisp = (window.datiInvitati || []).length;
+      return base + ' (' + nRisp + '/' + totInv + ')';
+    }
   }
 
   function primoToken(n) { return (n||'').trim().split(/\s+/)[0] || ''; }
@@ -2044,8 +2053,7 @@
       const btn = document.createElement('button');
       btn.textContent = o.lbl;
       const isActive = o.val === activeOrdine;
-      const isAttesa = o.val === 'attesa';
-      btn.style.cssText = 'display:block;width:100%;margin-bottom:8px;padding:11px 14px;border-radius:10px;border:1.5px solid ' + (isActive ? '#b8893a' : (isAttesa ? '#e8a020' : '#ddd')) + ';background:' + (isActive ? '#f5ede0' : (isAttesa ? '#fff8ec' : '#fafafa')) + ';font-family:\'Inter\',sans-serif;font-size:14px;font-weight:' + (isActive ? '700' : '400') + ';color:' + (isActive ? '#7a5c3a' : (isAttesa ? '#8a5e00' : '#333')) + ';cursor:pointer;text-align:left;';
+      btn.style.cssText = 'display:block;width:100%;margin-bottom:8px;padding:11px 14px;border-radius:10px;border:1.5px solid ' + (isActive ? '#b8893a' : '#ddd') + ';background:' + (isActive ? '#f5ede0' : '#fafafa') + ';font-family:\'Inter\',sans-serif;font-size:14px;font-weight:' + (isActive ? '700' : '400') + ';color:' + (isActive ? '#7a5c3a' : '#333') + ';cursor:pointer;text-align:left;';
       btn.onclick = () => {
         document.body.removeChild(overlay);
         activeOrdine = o.val;
@@ -2101,4 +2109,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v84 - 29/03/2026 - IN ATTESA nell'elenco principale (non modale), label maiuscolo -->
+<!-- Lista.html v85 - 29/03/2026 - Pop-up ordina: solo voce attiva evidenziata, "In attesa" minuscolo; bottone mostra (N/Tot) con logica attesa/altri -->

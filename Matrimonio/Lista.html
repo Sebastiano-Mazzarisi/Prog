@@ -1605,107 +1605,116 @@
     });
 
     // ── SVG helper barre ─────────────────────────────────────────────────────
-    function svgBars(W,H,padL,padR,padT,padB,data,titleY) {
+    function svgBars(W,H,padL,padR,padT,padB,data) {
       var bMax = Math.max.apply(null, data.map(function(d){return d.val;}).concat([1]));
       var cW=W-padL-padR, cH=H-padT-padB;
-      var bCount=data.length, bW=Math.min(55, (cW/bCount)*0.55), bGap=(cW-(bW*bCount))/(bCount+1);
+      var bCount=data.length, bW=(cW/bCount)*0.5, bGap=(cW-(bW*bCount))/(bCount+1);
       var out = '';
-      // Griglia Y
       [0,0.25,0.5,0.75,1].forEach(function(f){
         var yy=padT+cH-(cH*f);
-        out += '<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.5"/>'
-             + '<text x="'+(padL-4)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="end" font-size="9" font-family="Arial" fill="#888">'+Math.round(bMax*f)+'</text>';
+        out += '<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.7"/>'
+             + '<text x="'+(padL-5)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="11" font-family="Arial" fill="#888">'+Math.round(bMax*f)+'</text>';
       });
-      // Barre
       data.forEach(function(d,i){
         var bh = bMax>0 ? (d.val/bMax)*cH : 0;
         var bx = padL + bGap*(i+1) + bW*i;
         var by = padT+cH-bh;
-        out += '<rect x="'+bx.toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bW.toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+d.color+'" rx="4"/>'
-             + '<text x="'+(bx+bW/2).toFixed(1)+'" y="'+(by-6).toFixed(1)+'" text-anchor="middle" font-size="14" font-weight="700" font-family="Arial" fill="#333">'+d.val+'</text>'
-             + '<text x="'+(bx+bW/2).toFixed(1)+'" y="'+(padT+cH+16).toFixed(1)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#444">'+d.label+'</text>';
+        out += '<rect x="'+bx.toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bW.toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+d.color+'" rx="5"/>'
+             + '<text x="'+(bx+bW/2).toFixed(1)+'" y="'+(by-8).toFixed(1)+'" text-anchor="middle" font-size="16" font-weight="700" font-family="Arial" fill="#333">'+d.val+'</text>'
+             + '<text x="'+(bx+bW/2).toFixed(1)+'" y="'+(padT+cH+20).toFixed(1)+'" text-anchor="middle" font-size="12" font-family="Arial" fill="#444">'+d.label+'</text>';
       });
-      // Assi
-      out += '<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(padT+cH)+'" stroke="#333" stroke-width="1"/>'
-           + '<line x1="'+padL+'" y1="'+(padT+cH)+'" x2="'+(W-padR)+'" y2="'+(padT+cH)+'" stroke="#333" stroke-width="1"/>';
+      out += '<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(padT+cH)+'" stroke="#333" stroke-width="1.2"/>'
+           + '<line x1="'+padL+'" y1="'+(padT+cH)+'" x2="'+(W-padR)+'" y2="'+(padT+cH)+'" stroke="#333" stroke-width="1.2"/>';
       return out;
     }
 
-    // ── Grafico 1: area sotto la linea ───────────────────────────────────────
-    var W1=660, H1=180, padL=38, padR=22, padT=42, padB=30;
-    var g1ChartW=W1-padL-padR, g1ChartH=H1-padT-padB;
+    // ── Grafico 1: area temporale (area solo fino a oggi) ────────────────────
+    // Dimensioni: larghezza piena 700px
+    var W1=700, H1=230, p1L=46, p1R=24, p1T=70, p1B=36;
+    var g1ChartW=W1-p1L-p1R, g1ChartH=H1-p1T-p1B;
     var g1MaxY = Math.max(g1TotInv, g1Total, 1);
     var g1xStep = g1ChartW/(g1Days-1||1);
-    function g1y(v){ return padT + g1ChartH - (v/g1MaxY)*g1ChartH; }
-    var g1pts = g1Cum.map(function(v,i){ return (padL+i*g1xStep).toFixed(1)+','+g1y(v).toFixed(1); }).join(' ');
-    // Polygon per area chiusa
-    var g1AreaPts = (padL+','+( padT+g1ChartH)) + ' ' + g1pts + ' ' + ((padL+(g1Days-1)*g1xStep).toFixed(1)+','+(padT+g1ChartH));
+    function g1y(v){ return p1T + g1ChartH - (v/g1MaxY)*g1ChartH; }
+
+    // Trova l'indice corrispondente a oggi
+    var g1Today = new Date();
+    var g1TodayIdx = Math.min(g1Days-1, Math.max(0, Math.round((g1Today - g1Start)/(1000*60*60*24))));
+
+    // Punti fino a oggi per l'area
+    var g1ptsAll = g1Cum.map(function(v,i){ return (p1L+i*g1xStep).toFixed(1)+','+g1y(v).toFixed(1); });
+    var g1ptsToday = g1ptsAll.slice(0, g1TodayIdx+1).join(' ');
+    var g1ptsFull  = g1ptsAll.join(' ');
+
+    // Area chiusa fino a oggi
+    var g1TodayX = (p1L + g1TodayIdx*g1xStep).toFixed(1);
+    var g1AreaPts = p1L+','+(p1T+g1ChartH) + ' ' + g1ptsToday + ' ' + g1TodayX+','+(p1T+g1ChartH);
+
+    // Etichette mesi
     var g1Months = [];
     for (var gi=0;gi<g1Days;gi++) {
       var gd=new Date(g1Start); gd.setDate(gd.getDate()+gi);
       if (gd.getDate()===1 || gi===0) {
-        var mlbl = gd.getDate()===1 ? ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'][gd.getMonth()] : '28/3';
-        g1Months.push({x:(padL+gi*g1xStep), label:mlbl});
+        var mlbl = gd.getDate()===1 ? ['Gen','Feb','Mar','Apr','Mag','Giu'][gd.getMonth()] : '28/3';
+        g1Months.push({x:(p1L+gi*g1xStep), label:mlbl});
       }
     }
     var g1yTarget = g1y(g1TotInv);
+
     var svg1 = '<svg width="'+W1+'" height="'+H1+'" xmlns="http://www.w3.org/2000/svg">'
-      + '<rect width="'+W1+'" height="'+H1+'" fill="#f9fdf5" rx="6"/>'
-      + '<text x="'+(W1/2)+'" y="22" text-anchor="middle" font-size="14" font-weight="700" font-family="Arial" fill="#2d6040">Registrazioni nel tempo</text>'
-      // Linea target
-      + '<line x1="'+padL+'" y1="'+g1yTarget.toFixed(1)+'" x2="'+(W1-padR)+'" y2="'+g1yTarget.toFixed(1)+'" stroke="#a83230" stroke-width="1" stroke-dasharray="4,3"/>'
-      + '<text x="'+(W1-padR+2)+'" y="'+(g1yTarget+4).toFixed(1)+'" font-size="8" fill="#a83230" font-family="Arial">'+g1TotInv+'</text>'
-      // Griglia Y
+      + '<rect width="'+W1+'" height="'+H1+'" fill="#f9fdf5" rx="8"/>'
+      + '<text x="'+(W1/2)+'" y="36" text-anchor="middle" font-size="26" font-weight="700" font-family="Arial" fill="#2d6040">Registrazioni nel tempo</text>'
+      + '<line x1="'+p1L+'" y1="'+g1yTarget.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+g1yTarget.toFixed(1)+'" stroke="#a83230" stroke-width="1.5" stroke-dasharray="5,4"/>'
+      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="10" fill="#a83230" font-family="Arial" font-weight="700">'+g1TotInv+'</text>'
       + [0,0.25,0.5,0.75,1].map(function(f){
           var yy=g1y(Math.round(g1MaxY*f));
-          return '<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W1-padR)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.5"/>'
-               + '<text x="'+(padL-3)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="end" font-size="8" font-family="Arial" fill="#666">'+Math.round(g1MaxY*f)+'</text>';
+          return '<line x1="'+p1L+'" y1="'+yy.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.7"/>'
+               + '<text x="'+(p1L-4)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10" font-family="Arial" fill="#666">'+Math.round(g1MaxY*f)+'</text>';
         }).join('')
-      // Area riempita
-      + '<polygon points="'+g1AreaPts+'" fill="rgba(45,96,64,0.18)"/>'
-      // Linea sopra
-      + '<polyline points="'+g1pts+'" fill="none" stroke="#2d6040" stroke-width="2" stroke-linejoin="round"/>'
-      // Mesi asse X
+      + '<polygon points="'+g1AreaPts+'" fill="rgba(45,96,64,0.2)"/>'
+      + '<polyline points="'+g1ptsFull+'" fill="none" stroke="#2d6040" stroke-width="2.5" stroke-linejoin="round"/>'
+      // Linea verticale "oggi"
+      + '<line x1="'+g1TodayX+'" y1="'+p1T+'" x2="'+g1TodayX+'" y2="'+(p1T+g1ChartH)+'" stroke="#b8893a" stroke-width="1" stroke-dasharray="3,3"/>'
       + g1Months.map(function(m){
-          return '<line x1="'+m.x.toFixed(1)+'" y1="'+(padT+g1ChartH)+'" x2="'+m.x.toFixed(1)+'" y2="'+(padT+g1ChartH+4)+'" stroke="#999" stroke-width="0.5"/>'
-               + '<text x="'+m.x.toFixed(1)+'" y="'+(padT+g1ChartH+14)+'" text-anchor="middle" font-size="8" font-family="Arial" fill="#555">'+m.label+'</text>';
+          return '<line x1="'+m.x.toFixed(1)+'" y1="'+(p1T+g1ChartH)+'" x2="'+m.x.toFixed(1)+'" y2="'+(p1T+g1ChartH+5)+'" stroke="#999" stroke-width="0.7"/>'
+               + '<text x="'+m.x.toFixed(1)+'" y="'+(p1T+g1ChartH+17)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#555">'+m.label+'</text>';
         }).join('')
-      // Assi
-      + '<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(padT+g1ChartH)+'" stroke="#333" stroke-width="1"/>'
-      + '<line x1="'+padL+'" y1="'+(padT+g1ChartH)+'" x2="'+(W1-padR)+'" y2="'+(padT+g1ChartH)+'" stroke="#333" stroke-width="1"/>'
-      // Punto finale
-      + '<circle cx="'+(padL+(g1Days-1)*g1xStep).toFixed(1)+'" cy="'+g1y(g1Total).toFixed(1)+'" r="4" fill="#2d6040"/>'
+      + '<line x1="'+p1L+'" y1="'+p1T+'" x2="'+p1L+'" y2="'+(p1T+g1ChartH)+'" stroke="#333" stroke-width="1.5"/>'
+      + '<line x1="'+p1L+'" y1="'+(p1T+g1ChartH)+'" x2="'+(W1-p1R)+'" y2="'+(p1T+g1ChartH)+'" stroke="#333" stroke-width="1.5"/>'
+      + '<circle cx="'+g1TodayX+'" cy="'+g1y(g1Total).toFixed(1)+'" r="5" fill="#2d6040"/>'
       + '</svg>';
 
-    // ── Grafico 2: istogramma fasce d'età ────────────────────────────────────
+    // ── Grafici 2 e 4: larghezza (700-24)/2 = 338px ciascuno ─────────────────
+    var GW=338, GH=240, gPadL=46, gPadR=14, gPadT=72, gPadB=36;
+
+    // Grafico 2: fasce età
     var g2Data = [
       {label:'0-20 anni', val:g2.a0_20,  color:'#4ecdc4'},
       {label:'21-40 anni',val:g2.a21_40, color:'#2d6040'},
       {label:'41-60 anni',val:g2.a41_60, color:'#b8893a'},
       {label:'> 60 anni', val:g2.a60p,   color:'#a83230'},
     ];
-    var svg2 = '<svg width="320" height="210" xmlns="http://www.w3.org/2000/svg">'
-      + '<rect width="320" height="210" fill="#f9fdf5" rx="6"/>'
-      + '<text x="160" y="22" text-anchor="middle" font-size="13" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d\'eta\'</text>'
-      + svgBars(320,210,36,14,36,32,g2Data,22)
+    var svg2 = '<svg width="'+GW+'" height="'+GH+'" xmlns="http://www.w3.org/2000/svg">'
+      + '<rect width="'+GW+'" height="'+GH+'" fill="#f9fdf5" rx="8"/>'
+      + '<text x="'+(GW/2)+'" y="36" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d\'eta\'</text>'
+      + svgBars(GW,GH,gPadL,gPadR,gPadT,gPadB,g2Data)
       + '</svg>';
 
-    // ── Grafico 4: istogramma cibo (larghezza piena) ──────────────────────────
+    // Grafico 4: cibo
     var g4Data = [
       {label:'Baby',        val:totBaby, color:'#90caf9'},
       {label:'Carne',       val:totCarne,color:'#b8893a'},
       {label:'Pesce',       val:totPesce,color:'#45b7d1'},
       {label:'Vegetariano', val:totVeg,  color:'#2d6040'},
     ];
-    var svg4 = '<svg width="320" height="210" xmlns="http://www.w3.org/2000/svg">'
-      + '<rect width="320" height="210" fill="#f9fdf5" rx="6"/>'
-      + '<text x="160" y="22" text-anchor="middle" font-size="13" font-weight="700" font-family="Arial" fill="#2d6040">Scelta del cibo</text>'
-      + svgBars(320,210,36,14,36,32,g4Data,22)
+    var svg4 = '<svg width="'+GW+'" height="'+GH+'" xmlns="http://www.w3.org/2000/svg">'
+      + '<rect width="'+GW+'" height="'+GH+'" fill="#f9fdf5" rx="8"/>'
+      + '<text x="'+(GW/2)+'" y="36" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Scelta del cibo</text>'
+      + svgBars(GW,GH,gPadL,gPadR,gPadT,gPadB,g4Data)
       + '</svg>';
 
     // ── Layout pagina grafici ────────────────────────────────────────────────
-    htmlPDF += '<div style="margin-bottom:12px;">' + svg1 + '</div>'
-             + '<div style="display:flex;gap:12px;">'
+    htmlPDF += '<div style="margin-bottom:24px;">' + svg1 + '</div>'
+             + '<div style="display:flex;gap:24px;">'
              + '<div>' + svg2 + '</div>'
              + '<div>' + svg4 + '</div>'
              + '</div>';
@@ -2299,4 +2308,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v101 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v102 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

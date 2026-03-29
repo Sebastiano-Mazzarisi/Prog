@@ -874,12 +874,12 @@
       // === MODALITÀ IN ATTESA: mostra chi non ha ancora risposto ===
       const inAttesa = calcolaInAttesa();
       // Ordina per Cognome Nome
-      const acc2 = /[\u0300-\u036f]/g;
+      function normAttesa(s) { return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
       inAttesa.sort((a, b) => {
         const tokA = (a.nome||'').trim().split(/\s+/);
         const tokB = (b.nome||'').trim().split(/\s+/);
-        const keyA = (tokA[tokA.length-1]||'').toLowerCase().normalize('NFD').replace(acc2,'') + (tokA[0]||'').toLowerCase().normalize('NFD').replace(acc2,'');
-        const keyB = (tokB[tokB.length-1]||'').toLowerCase().normalize('NFD').replace(acc2,'') + (tokB[0]||'').toLowerCase().normalize('NFD').replace(acc2,'');
+        const keyA = normAttesa(tokA[tokA.length-1]) + normAttesa(tokA[0]||'');
+        const keyB = normAttesa(tokB[tokB.length-1]) + normAttesa(tokB[0]||'');
         return keyA.localeCompare(keyB, 'it', {sensitivity:'base'});
       });
       if (inAttesa.length === 0) {
@@ -2129,4 +2129,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v87 - 29/03/2026 - IN ATTESA: display Cognome Nome (età) forzato indipendentemente da formatNomeDisplay -->
+<!-- Lista.html v88 - 29/03/2026 - Fix sort IN ATTESA: regex /g condivisa causava ordinamento per nome invece che per cognome -->

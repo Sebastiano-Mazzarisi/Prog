@@ -887,10 +887,21 @@
       } else {
         inAttesa.forEach((inv) => {
           const tavNum = trovaTavoloNum(inv.nome || '');
-          const nomeDisplay = formatNomeDisplay(inv.nome);
+          // Display forzato: Cognome Nome (età) — indipendente da activeOrdine
+          const tokensInv = (inv.nome||'').trim().split(/\s+/);
+          let nomeFmt;
+          if (tokensInv.length >= 2) {
+            const cognome = tokensInv[tokensInv.length - 1];
+            const resto = tokensInv.slice(0, tokensInv.length - 1).join(' ');
+            nomeFmt = cognome + ' ' + resto;
+          } else {
+            nomeFmt = inv.nome || '';
+          }
+          const etaInv = getEtaAnni(inv.nome);
+          const etaStrInv = etaInv !== null ? '&nbsp;<span style="font-weight:400;font-size:14px;color:#777">(' + etaInv + ')</span>' : '';
           html += `<div class="risposta-card" style="border-color:#b0bec5;background:#f5f7f8;">
             <div class="risposta-nome" style="background:#eef1f3;color:#555;cursor:default;">
-              ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${nomeDisplay}
+              ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${nomeFmt}${etaStrInv}
               <span class="icone-destra"></span>
             </div>
           </div>`;
@@ -2118,4 +2129,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v86 - 29/03/2026 - IN ATTESA ordinato per cognome -->
+<!-- Lista.html v87 - 29/03/2026 - IN ATTESA: display Cognome Nome (età) forzato indipendentemente da formatNomeDisplay -->

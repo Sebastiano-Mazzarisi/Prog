@@ -1606,7 +1606,7 @@
 
     // ── SVG helper barre ─────────────────────────────────────────────────────
     function svgBars(W,H,padL,padR,padT,padB,data) {
-      var bMax = Math.max.apply(null, data.map(function(d){return d.val;}).concat([1]));
+      var bMax = Math.max.apply(null, data.map(function(d){return d.val;}).concat([1])) * 1.5;
       var cW=W-padL-padR, cH=H-padT-padB;
       var bCount=data.length, bW=(cW/bCount)*0.5, bGap=(cW-(bW*bCount))/(bCount+1);
       var out = '';
@@ -1632,7 +1632,7 @@
     // Dimensioni: larghezza piena 700px
     var W1=700, H1=230, p1L=46, p1R=24, p1T=70, p1B=36;
     var g1ChartW=W1-p1L-p1R, g1ChartH=H1-p1T-p1B;
-    var g1MaxY = Math.max(g1TotInv, g1Total, 1);
+    var g1MaxY = Math.max(g1TotInv, g1Total, 1) * 1.5;
     var g1xStep = g1ChartW/(g1Days-1||1);
     function g1y(v){ return p1T + g1ChartH - (v/g1MaxY)*g1ChartH; }
 
@@ -1664,7 +1664,7 @@
       + '<rect width="'+W1+'" height="'+H1+'" fill="#f9fdf5" rx="8"/>'
       + '<text x="'+(W1/2)+'" y="36" text-anchor="middle" font-size="26" font-weight="700" font-family="Arial" fill="#2d6040">Registrazioni nel tempo</text>'
       + '<line x1="'+p1L+'" y1="'+g1yTarget.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+g1yTarget.toFixed(1)+'" stroke="#a83230" stroke-width="1.5" stroke-dasharray="5,4"/>'
-      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="10" fill="#a83230" font-family="Arial" font-weight="700">'+g1TotInv+'</text>'
+      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="10" fill="#a83230" font-family="Arial" font-weight="700">'+g1Total+'</text>'
       + [0,0.25,0.5,0.75,1].map(function(f){
           var yy=g1y(Math.round(g1MaxY*f));
           return '<line x1="'+p1L+'" y1="'+yy.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.7"/>'
@@ -1678,6 +1678,9 @@
           return '<line x1="'+m.x.toFixed(1)+'" y1="'+(p1T+g1ChartH)+'" x2="'+m.x.toFixed(1)+'" y2="'+(p1T+g1ChartH+5)+'" stroke="#999" stroke-width="0.7"/>'
                + '<text x="'+m.x.toFixed(1)+'" y="'+(p1T+g1ChartH+17)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#555">'+m.label+'</text>';
         }).join('')
+      // Etichetta fine asse: 21/6
+      + '<line x1="'+(p1L+(g1Days-1)*g1xStep).toFixed(1)+'" y1="'+(p1T+g1ChartH)+'" x2="'+(p1L+(g1Days-1)*g1xStep).toFixed(1)+'" y2="'+(p1T+g1ChartH+5)+'" stroke="#999" stroke-width="0.7"/>'
+      + '<text x="'+(p1L+(g1Days-1)*g1xStep).toFixed(1)+'" y="'+(p1T+g1ChartH+17)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#555">21/6</text>'
       + '<line x1="'+p1L+'" y1="'+p1T+'" x2="'+p1L+'" y2="'+(p1T+g1ChartH)+'" stroke="#333" stroke-width="1.5"/>'
       + '<line x1="'+p1L+'" y1="'+(p1T+g1ChartH)+'" x2="'+(W1-p1R)+'" y2="'+(p1T+g1ChartH)+'" stroke="#333" stroke-width="1.5"/>'
       + '<circle cx="'+g1TodayX+'" cy="'+g1y(g1Total).toFixed(1)+'" r="5" fill="#2d6040"/>'
@@ -2318,4 +2321,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v106 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v107 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

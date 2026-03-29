@@ -1144,18 +1144,59 @@
         else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
         else if (isBabyRow) secondoStr = '🍼 ' + testi.kpiBaby;
         else secondoStr = '-';
-        const allergie = hasAllergy(r.allergie) ? r.allergie : '-';
+
+        // Formato nome: Cognome Nome (età)
+        const nomeCompleto = r.nome || 'Senza nome';
+        const tokensNome = nomeCompleto.trim().split(/\s+/);
+        let nomeFormattato;
+        if (tokensNome.length >= 2) {
+          const cognome = tokensNome[tokensNome.length - 1];
+          const resto = tokensNome.slice(0, tokensNome.length - 1).join(' ');
+          nomeFormattato = cognome + ' ' + resto;
+        } else {
+          nomeFormattato = nomeCompleto;
+        }
+        const etaAnni = getEtaAnni(nomeCompleto);
+        const etaStr = etaAnni !== null ? ' <span style="font-weight:400;font-size:10px;color:#555">('+etaAnni+')</span>' : '';
+
+        // Allergie: se lungo e Note è vuoto, si spalma nel campo Note
+        const ALLERGIE_MAX_CHARS = 28;
+        let allergieDisplay = '-';
+        let noteOverflow = '';
+        if (hasAllergy(r.allergie)) {
+          const allergieTesto = r.allergie;
+          if (!r.note && allergieTesto.length > ALLERGIE_MAX_CHARS) {
+            // Spezza: prima parte va in Allergie, il resto in Note
+            const voci = allergieTesto.split(',').map(v => v.trim());
+            let parteAllergie = '', parteNote = '';
+            let lunghezza = 0;
+            voci.forEach((v, vi) => {
+              if (lunghezza === 0 || lunghezza + v.length + 2 <= ALLERGIE_MAX_CHARS) {
+                parteAllergie += (parteAllergie ? ', ' : '') + v;
+                lunghezza += v.length + 2;
+              } else {
+                parteNote += (parteNote ? ', ' : '') + v;
+              }
+            });
+            allergieDisplay = parteAllergie;
+            noteOverflow = parteNote;
+          } else {
+            allergieDisplay = allergieTesto;
+          }
+        }
+
         const notaCell = isSegRow ? '<span style="color:#a83230;font-weight:600">' + testi.kpiSegnaposto + '</span>'
           : isBabyRow ? '<span style="color:#a83230;font-weight:600">' + testi.kpiBaby + '</span>'
-          : (r.note ? r.note : '-');
+          : (noteOverflow ? noteOverflow : (r.note ? r.note : '-'));
+
         const nTavPres = trovaTavoloNum(r.nome || '');
         const isDup = nomeDuplicato.has(idx);
         const nomeBg = isDup ? 'background:#fff176;' : (!nTavPres ? 'background:#ffd6e0;' : '');
         const dataStr = isDup && r.data ? '<br><span style="font-size:9px;font-weight:400;color:#7a5a00">' + r.data + '</span>' : '';
         return '<tr>'
-          + '<td style="padding:4px 6px;font-weight:600;color:#000;' + nomeBg + '">' + (nTavPres ? '<span style="margin-right:3px">' + nTavPres + '</span>' : '') + (r.nome || 'Senza nome') + dataStr + '</td>'
+          + '<td style="padding:4px 6px;font-weight:600;color:#000;' + nomeBg + '">' + (nTavPres ? '<span style="margin-right:3px">' + nTavPres + '</span>' : '') + nomeFormattato + etaStr + dataStr + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + secondoStr + '</td>'
-          + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + allergie + '</td>'
+          + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + allergieDisplay + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + notaCell + '</td>'
           + '</tr>';
       }
@@ -1275,7 +1316,7 @@
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
       htmlPDF += `
-        <div style="border:1.5px solid #a5b589;border-radius:8px;background:#eef4e8;margin-top:14px;margin-bottom:12px;overflow:hidden;"><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:4px 10px;text-align:left;white-space:nowrap;border-right:1px solid #a5b589;"><span style="display:inline-flex;align-items:center;justify-content:center;background:#fff176;border-radius:16px;padding:0 14px;height:32px;font-family:Arial,sans-serif;font-size:14px;font-weight:900;color:#000000;">${totInvitatiCsv}&nbsp;&#8722;&nbsp;${window.datiInvitati.length}&nbsp;&#61;&nbsp;${totNonRisposto}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">V</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totVeg}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">Veg</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">C</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totCarne}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">Carne</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">P</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totPesce}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">Pesce</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#2d6040;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">B</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totBaby}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">Baby</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#8a6000;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">S</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totSegnaposto}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">Segn.</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#a83230;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">A</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totAssenti}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">Assenti</span></td></tr></table></div>
+        <div style="border:1.5px solid #a5b589;border-radius:8px;background:#eef4e8;margin-top:14px;margin-bottom:12px;overflow:hidden;"><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:4px 10px;text-align:left;white-space:nowrap;border-right:1px solid #a5b589;"><span style="display:inline-flex;align-items:center;justify-content:center;background:#fff176;border-radius:16px;padding:0 14px;height:32px;font-family:Arial,sans-serif;font-size:14px;font-weight:900;color:#000000;">${totInvitatiCsv}&nbsp;&#8722;&nbsp;${window.datiInvitati.length}&nbsp;&#61;&nbsp;${totNonRisposto}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">V</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totVeg}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiVeg}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">C</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totCarne}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiCarne}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">P</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totPesce}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiPesce}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#2d6040;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">B</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totBaby}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiBaby}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#8a6000;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">S</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totSegnaposto}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiSegnaposto}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:#a83230;color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:15px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">A</span><span style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;color:#2a5a18;margin-right:2px">${totAssenti}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiAssenti}</span></td></tr></table></div>
                 <div style="column-count: 2; column-gap: 30px; font-size: 14px; width: 100%; margin-top: 26px;">
       `;
 
@@ -1911,4 +1952,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v81 - 28/03/2026 - Tutte le stringhe bilingue complete, fix tavolo/età sort -->
+<!-- Lista.html v82 - 29/03/2026 - PDF p1: Cognome Nome (età); allergie overflow in Note; fix etichette PDF bilingue -->

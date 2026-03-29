@@ -1862,6 +1862,17 @@
     TAVOLI.forEach((t, i) => {
       const label = t.nome.replace(/^Tavolo \d+ - /, '');
       const isOpen = tavoloAperto === i;
+
+      // Conta quante persone del tavolo hanno già risposto (presenza o assenza)
+      const acc = /[\u0300-\u036f]/g;
+      function tokTV(n) { return (n||'').toLowerCase().normalize('NFD').replace(acc,'').trim().split(/\s+/).filter(Boolean); }
+      function matchTV2(a, b) { const ta=tokTV(a), tb=tokTV(b); return ta.every(w=>tb.includes(w))||tb.every(w=>ta.includes(w)); }
+      const rispostiNelTavolo = t.persone.filter(p =>
+        (window.datiInvitati||[]).some(r => matchTV2(p, r.nome||''))
+      ).length;
+      const tavoloCompleto = rispostiNelTavolo >= t.persone.length && t.persone.length > 0;
+      const bgCerchio = tavoloCompleto ? '#fff176' : '#ffffff';
+
       html += `
         <div>
 
@@ -1885,8 +1896,7 @@
           " id="btn-tavolo-${i}">
             <span>${dizionario[currentLang].lblTavolo} ${emojiNumW[i+1] || i+1} &middot; ${label}</span>
             <span style="display:flex;align-items:center;gap:8px;">
-              <span style="background-color:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000000;">${t.persone.length}</span>
-              
+              <span style="background-color:${bgCerchio}; border:1px solid ${borderTavolo}; border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:#000000;">${t.persone.length}</span>
             </span>
           </button>
 
@@ -2308,4 +2318,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v102 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v103 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

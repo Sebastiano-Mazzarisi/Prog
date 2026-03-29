@@ -1593,69 +1593,53 @@
     const g1Total = window.datiInvitati.length;
     const g1TotInv = window.totInvitatiCsv || g1Total;
 
-    // Grafico 2: fasce d'età (tutti gli invitati con data nascita)
-    const g2 = {a0_10:0, a11_20:0, a21_40:0, a41_60:0, a60p:0, nd:0};
+    // Grafico 2: fasce d'età — nuovi range 0-20, 21-40, 41-60, >60
+    const g2 = {a0_20:0, a21_40:0, a41_60:0, a60p:0};
     window.datiInvitati.forEach(r => {
       const eta = getEtaAnni(r.nome);
-      if (eta===null) { g2.nd++; return; }
-      if (eta<=10) g2.a0_10++;
-      else if (eta<=20) g2.a11_20++;
+      if (eta===null) return;
+      if (eta<=20) g2.a0_20++;
       else if (eta<=40) g2.a21_40++;
       else if (eta<=60) g2.a41_60++;
       else g2.a60p++;
     });
-    const g2Tot = g2.a0_10+g2.a11_20+g2.a21_40+g2.a41_60+g2.a60p;
 
-    // Grafico 3: M/F tramite lista nomi maschili italiani+spagnoli comuni
-    const nomiM = new Set(['luca','marco','andrea','matteo','giovanni','giuseppe','antonio','mario','luigi','roberto','franco','sergio','massimo','daniele','davide','simone','stefano','fabio','alberto','gianni','enzo','nicola','pietro','angelo','domenico','vincenzo','onofrio','sebastiano','riccardo','emilio','giulio','diego','raffaele','enrico','carmelo','ivan','dario','sandro','renato','claudio','rocco','paolo','gennaro','saverio','cosimo','vito','carmino','gianluca','pierluigi','pierpaolo','giampiero','gianfranco','giancarlo','alessio','christian','kevin','michael','gabriel','carlos','ramon','tomas','juan','jose','miguel','antonio','pablo','manuel','jorge','sergio','alejandro','francisco','rafael','andres','vanni','benny','giovanni','lorusso','filippo','giacomo','roberto','guido','ernesto','mauro','oscar','ivan','biagio','donato']);
-    const nomiF = new Set(['maria','anna','laura','sara','giulia','francesca','elena','alessandra','valentina','chiara','paola','silvia','rosa','angela','rita','teresa','giovanna','caterina','lucia','simona','roberta','federica','cristina','claudia','barbara','patrizia','michela','elisa','beatrice','valeria','ilaria','monica','daniela','susanna','cinzia','grazia','mariella','mariangela','mariagrazia','tiziana','gilda','marica','marilena','asia','enza','stefania','flavia','concetta','carmela','giuseppina','luisa','carmina','miriam','ana','clara','dulce','marta','vanna','angela','anna','tiziana','valentina','gilda','mariella','anna','flavia','nicola','mariella','asia','stefania','fernanda','ana','dolores','carmen','isabel','lucia','rosa','elena','maria','julia','laura','sara','teresa','monica','gloria','cristina','silvia','patricia','natalia','alejandra','andrea','gabriela','sofia','valentina']);
-    let g3M=0, g3F=0, g3ND=0;
-    window.datiInvitati.forEach(r => {
-      const primoN = (r.nome||'').trim().split(/\s+/)[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-      if (nomiM.has(primoN)) g3M++;
-      else if (nomiF.has(primoN)) g3F++;
-      else g3ND++;
-    });
-
-    // Grafico 4: cibo (già calcolato)
-    // totBaby, totCarne, totPesce, totVeg
-
-    // ── SVG helpers ─────────────────────────────────────────────────────────
-    function svgPie(cx,cy,r,slices) {
-      var tot = slices.reduce(function(s,x){return s+x.val;},0);
-      if (!tot) return '';
-      var svg = '', startAngle = -Math.PI/2;
-      slices.forEach(function(sl) {
-        if (!sl.val) return;
-        var angle = (sl.val/tot)*2*Math.PI;
-        var endAngle = startAngle + angle;
-        var x1=cx+r*Math.cos(startAngle), y1=cy+r*Math.sin(startAngle);
-        var x2=cx+r*Math.cos(endAngle),   y2=cy+r*Math.sin(endAngle);
-        var lg = angle>Math.PI?1:0;
-        svg += '<path d="M'+cx+','+cy+' L'+x1.toFixed(1)+','+y1.toFixed(1)+' A'+r+','+r+' 0 '+lg+',1 '+x2.toFixed(1)+','+y2.toFixed(1)+' Z" fill="'+sl.color+'"/>';
-        var midA = startAngle + angle/2;
-        var lx = cx+(r*0.65)*Math.cos(midA), ly = cy+(r*0.65)*Math.sin(midA);
-        var pct = Math.round(sl.val/tot*100);
-        if (pct>=4) svg += '<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="700" fill="#fff" font-family="Arial">'+pct+'%</text>';
-        startAngle = endAngle;
+    // ── SVG helper barre ─────────────────────────────────────────────────────
+    function svgBars(W,H,padL,padR,padT,padB,data,titleY) {
+      var bMax = Math.max.apply(null, data.map(function(d){return d.val;}).concat([1]));
+      var cW=W-padL-padR, cH=H-padT-padB;
+      var bCount=data.length, bW=Math.min(55, (cW/bCount)*0.55), bGap=(cW-(bW*bCount))/(bCount+1);
+      var out = '';
+      // Griglia Y
+      [0,0.25,0.5,0.75,1].forEach(function(f){
+        var yy=padT+cH-(cH*f);
+        out += '<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.5"/>'
+             + '<text x="'+(padL-4)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="end" font-size="9" font-family="Arial" fill="#888">'+Math.round(bMax*f)+'</text>';
       });
-      return svg;
+      // Barre
+      data.forEach(function(d,i){
+        var bh = bMax>0 ? (d.val/bMax)*cH : 0;
+        var bx = padL + bGap*(i+1) + bW*i;
+        var by = padT+cH-bh;
+        out += '<rect x="'+bx.toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bW.toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+d.color+'" rx="4"/>'
+             + '<text x="'+(bx+bW/2).toFixed(1)+'" y="'+(by-6).toFixed(1)+'" text-anchor="middle" font-size="14" font-weight="700" font-family="Arial" fill="#333">'+d.val+'</text>'
+             + '<text x="'+(bx+bW/2).toFixed(1)+'" y="'+(padT+cH+16).toFixed(1)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#444">'+d.label+'</text>';
+      });
+      // Assi
+      out += '<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(padT+cH)+'" stroke="#333" stroke-width="1"/>'
+           + '<line x1="'+padL+'" y1="'+(padT+cH)+'" x2="'+(W-padR)+'" y2="'+(padT+cH)+'" stroke="#333" stroke-width="1"/>';
+      return out;
     }
 
-    function svgLegend(x,y,items) {
-      return items.map(function(it,i){
-        return '<rect x="'+x+'" y="'+(y+i*18)+'" width="12" height="12" fill="'+it.color+'" rx="2"/>'
-             + '<text x="'+(x+16)+'" y="'+(y+i*18+10)+'" font-size="10" font-family="Arial" fill="#333">'+it.label+' ('+it.val+')</text>';
-      }).join('');
-    }
-
-    // ── Grafico 1: linea temporale ───────────────────────────────────────────
-    var W1=660, H1=155, padL=36, padR=20, padT=18, padB=28;
-    var g1W=W1-padL-padR, g1H=H1-padT-padB;
+    // ── Grafico 1: area sotto la linea ───────────────────────────────────────
+    var W1=660, H1=180, padL=38, padR=22, padT=42, padB=30;
+    var g1ChartW=W1-padL-padR, g1ChartH=H1-padT-padB;
     var g1MaxY = Math.max(g1TotInv, g1Total, 1);
-    var g1xStep = g1W/(g1Days-1||1);
-    function g1y(v){ return padT + g1H - (v/g1MaxY)*g1H; }
-    var g1pts = g1Cum.map(function(v,i){ return (padL+i*g1xStep).toFixed(1)+','+(g1y(v)).toFixed(1); }).join(' ');
+    var g1xStep = g1ChartW/(g1Days-1||1);
+    function g1y(v){ return padT + g1ChartH - (v/g1MaxY)*g1ChartH; }
+    var g1pts = g1Cum.map(function(v,i){ return (padL+i*g1xStep).toFixed(1)+','+g1y(v).toFixed(1); }).join(' ');
+    // Polygon per area chiusa
+    var g1AreaPts = (padL+','+( padT+g1ChartH)) + ' ' + g1pts + ' ' + ((padL+(g1Days-1)*g1xStep).toFixed(1)+','+(padT+g1ChartH));
     var g1Months = [];
     for (var gi=0;gi<g1Days;gi++) {
       var gd=new Date(g1Start); gd.setDate(gd.getDate()+gi);
@@ -1667,92 +1651,64 @@
     var g1yTarget = g1y(g1TotInv);
     var svg1 = '<svg width="'+W1+'" height="'+H1+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+W1+'" height="'+H1+'" fill="#f9fdf5" rx="6"/>'
-      + '<text x="'+(W1/2)+'" y="12" text-anchor="middle" font-size="11" font-weight="700" font-family="Arial" fill="#2d6040">Registrazioni nel tempo</text>'
+      + '<text x="'+(W1/2)+'" y="22" text-anchor="middle" font-size="14" font-weight="700" font-family="Arial" fill="#2d6040">Registrazioni nel tempo</text>'
+      // Linea target
       + '<line x1="'+padL+'" y1="'+g1yTarget.toFixed(1)+'" x2="'+(W1-padR)+'" y2="'+g1yTarget.toFixed(1)+'" stroke="#a83230" stroke-width="1" stroke-dasharray="4,3"/>'
       + '<text x="'+(W1-padR+2)+'" y="'+(g1yTarget+4).toFixed(1)+'" font-size="8" fill="#a83230" font-family="Arial">'+g1TotInv+'</text>'
+      // Griglia Y
       + [0,0.25,0.5,0.75,1].map(function(f){
           var yy=g1y(Math.round(g1MaxY*f));
           return '<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W1-padR)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.5"/>'
                + '<text x="'+(padL-3)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="end" font-size="8" font-family="Arial" fill="#666">'+Math.round(g1MaxY*f)+'</text>';
         }).join('')
+      // Area riempita
+      + '<polygon points="'+g1AreaPts+'" fill="rgba(45,96,64,0.18)"/>'
+      // Linea sopra
       + '<polyline points="'+g1pts+'" fill="none" stroke="#2d6040" stroke-width="2" stroke-linejoin="round"/>'
+      // Mesi asse X
       + g1Months.map(function(m){
-          return '<line x1="'+m.x.toFixed(1)+'" y1="'+(padT+g1H)+'" x2="'+m.x.toFixed(1)+'" y2="'+(padT+g1H+4)+'" stroke="#999" stroke-width="0.5"/>'
-               + '<text x="'+m.x.toFixed(1)+'" y="'+(padT+g1H+13)+'" text-anchor="middle" font-size="8" font-family="Arial" fill="#555">'+m.label+'</text>';
+          return '<line x1="'+m.x.toFixed(1)+'" y1="'+(padT+g1ChartH)+'" x2="'+m.x.toFixed(1)+'" y2="'+(padT+g1ChartH+4)+'" stroke="#999" stroke-width="0.5"/>'
+               + '<text x="'+m.x.toFixed(1)+'" y="'+(padT+g1ChartH+14)+'" text-anchor="middle" font-size="8" font-family="Arial" fill="#555">'+m.label+'</text>';
         }).join('')
-      + '<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(padT+g1H)+'" stroke="#333" stroke-width="1"/>'
-      + '<line x1="'+padL+'" y1="'+(padT+g1H)+'" x2="'+(W1-padR)+'" y2="'+(padT+g1H)+'" stroke="#333" stroke-width="1"/>'
-      + '<circle cx="'+(padL+(g1Days-1)*g1xStep).toFixed(1)+'" cy="'+g1y(g1Total).toFixed(1)+'" r="3" fill="#2d6040"/>'
+      // Assi
+      + '<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(padT+g1ChartH)+'" stroke="#333" stroke-width="1"/>'
+      + '<line x1="'+padL+'" y1="'+(padT+g1ChartH)+'" x2="'+(W1-padR)+'" y2="'+(padT+g1ChartH)+'" stroke="#333" stroke-width="1"/>'
+      // Punto finale
+      + '<circle cx="'+(padL+(g1Days-1)*g1xStep).toFixed(1)+'" cy="'+g1y(g1Total).toFixed(1)+'" r="4" fill="#2d6040"/>'
       + '</svg>';
 
-    // ── Grafico 2: torta età ─────────────────────────────────────────────────
-    var g2Slices = [
-      {val:g2.a0_10,  color:'#4ecdc4', label:'0-10 anni'},
-      {val:g2.a11_20, color:'#45b7d1', label:'11-20 anni'},
-      {val:g2.a21_40, color:'#2d6040', label:'21-40 anni'},
-      {val:g2.a41_60, color:'#b8893a', label:'41-60 anni'},
-      {val:g2.a60p,   color:'#a83230', label:'oltre 60'},
+    // ── Grafico 2: istogramma fasce d'età ────────────────────────────────────
+    var g2Data = [
+      {label:'0-20 anni', val:g2.a0_20,  color:'#4ecdc4'},
+      {label:'21-40 anni',val:g2.a21_40, color:'#2d6040'},
+      {label:'41-60 anni',val:g2.a41_60, color:'#b8893a'},
+      {label:'> 60 anni', val:g2.a60p,   color:'#a83230'},
     ];
-    var svg2 = '<svg width="320" height="190" xmlns="http://www.w3.org/2000/svg">'
-      + '<rect width="320" height="190" fill="#f9fdf5" rx="6"/>'
-      + '<text x="160" y="14" text-anchor="middle" font-size="11" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d\'eta\'</text>'
-      + svgPie(90,105,78,g2Slices)
-      + svgLegend(178,28,g2Slices)
+    var svg2 = '<svg width="320" height="210" xmlns="http://www.w3.org/2000/svg">'
+      + '<rect width="320" height="210" fill="#f9fdf5" rx="6"/>'
+      + '<text x="160" y="22" text-anchor="middle" font-size="13" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d\'eta\'</text>'
+      + svgBars(320,210,36,14,36,32,g2Data,22)
       + '</svg>';
 
-    // ── Grafico 3: torta M/F ─────────────────────────────────────────────────
-    var g3Slices = [
-      {val:g3F, color:'#f48fb1', label:'Femmine'},
-      {val:g3M, color:'#90caf9', label:'Maschi'},
-      {val:g3ND,color:'#cccccc', label:'N.D.'},
-    ].filter(function(s){return s.val>0;});
-    var svg3 = '<svg width="320" height="190" xmlns="http://www.w3.org/2000/svg">'
-      + '<rect width="320" height="190" fill="#f9fdf5" rx="6"/>'
-      + '<text x="160" y="14" text-anchor="middle" font-size="11" font-weight="700" font-family="Arial" fill="#2d6040">Femmine / Maschi</text>'
-      + svgPie(90,105,78,g3Slices)
-      + svgLegend(178,55,g3Slices)
-      + '</svg>';
-
-    // ── Grafico 4: istogramma cibo ───────────────────────────────────────────
+    // ── Grafico 4: istogramma cibo (larghezza piena) ──────────────────────────
     var g4Data = [
       {label:'Baby',        val:totBaby, color:'#90caf9'},
       {label:'Carne',       val:totCarne,color:'#b8893a'},
       {label:'Pesce',       val:totPesce,color:'#45b7d1'},
       {label:'Vegetariano', val:totVeg,  color:'#2d6040'},
     ];
-    var g4Max = Math.max.apply(null, g4Data.map(function(d){return d.val;}).concat([1]));
-    var g4W=660,g4H=190,g4PadL=36,g4PadB=32,g4PadT=22,g4PadR=16;
-    var g4BW=60, g4Gap=40;
-    var g4ChartW=g4W-g4PadL-g4PadR, g4ChartH=g4H-g4PadT-g4PadB;
-    var g4TotW=(g4BW+g4Gap)*g4Data.length-g4Gap;
-    var g4OffX=g4PadL+(g4ChartW-g4TotW)/2;
-    var svg4 = '<svg width="'+g4W+'" height="'+g4H+'" xmlns="http://www.w3.org/2000/svg">'
-      + '<rect width="'+g4W+'" height="'+g4H+'" fill="#f9fdf5" rx="6"/>'
-      + '<text x="'+(g4W/2)+'" y="14" text-anchor="middle" font-size="11" font-weight="700" font-family="Arial" fill="#2d6040">Scelta del cibo</text>'
-      + [0,0.25,0.5,0.75,1].map(function(f){
-          var yy=g4PadT+g4ChartH-(g4ChartH*f);
-          return '<line x1="'+g4PadL+'" y1="'+yy.toFixed(1)+'" x2="'+(g4W-g4PadR)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.5"/>'
-               + '<text x="'+(g4PadL-3)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="end" font-size="9" font-family="Arial" fill="#666">'+Math.round(g4Max*f)+'</text>';
-        }).join('')
-      + g4Data.map(function(d,i){
-          var bh = g4Max>0 ? (d.val/g4Max)*g4ChartH : 0;
-          var bx = g4OffX+i*(g4BW+g4Gap);
-          var by = g4PadT+g4ChartH-bh;
-          return '<rect x="'+bx.toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+g4BW+'" height="'+bh.toFixed(1)+'" fill="'+d.color+'" rx="4"/>'
-               + '<text x="'+(bx+g4BW/2).toFixed(1)+'" y="'+(by-5).toFixed(1)+'" text-anchor="middle" font-size="14" font-weight="700" font-family="Arial" fill="#333">'+d.val+'</text>'
-               + '<text x="'+(bx+g4BW/2).toFixed(1)+'" y="'+(g4PadT+g4ChartH+18).toFixed(1)+'" text-anchor="middle" font-size="11" font-family="Arial" fill="#333">'+d.label+'</text>';
-        }).join('')
-      + '<line x1="'+g4PadL+'" y1="'+g4PadT+'" x2="'+g4PadL+'" y2="'+(g4PadT+g4ChartH)+'" stroke="#333" stroke-width="1"/>'
-      + '<line x1="'+g4PadL+'" y1="'+(g4PadT+g4ChartH)+'" x2="'+(g4W-g4PadR)+'" y2="'+(g4PadT+g4ChartH)+'" stroke="#333" stroke-width="1"/>'
+    var svg4 = '<svg width="320" height="210" xmlns="http://www.w3.org/2000/svg">'
+      + '<rect width="320" height="210" fill="#f9fdf5" rx="6"/>'
+      + '<text x="160" y="22" text-anchor="middle" font-size="13" font-weight="700" font-family="Arial" fill="#2d6040">Scelta del cibo</text>'
+      + svgBars(320,210,36,14,36,32,g4Data,22)
       + '</svg>';
 
     // ── Layout pagina grafici ────────────────────────────────────────────────
-    htmlPDF += '<div style="margin-bottom:10px;">' + svg1 + '</div>'
-             + '<div style="display:flex;gap:12px;margin-bottom:10px;">'
+    htmlPDF += '<div style="margin-bottom:12px;">' + svg1 + '</div>'
+             + '<div style="display:flex;gap:12px;">'
              + '<div>' + svg2 + '</div>'
-             + '<div>' + svg3 + '</div>'
-             + '</div>'
-             + '<div>' + svg4 + '</div>';
+             + '<div>' + svg4 + '</div>'
+             + '</div>';
 
     htmlPDF += `</div>`; // Chiude pagina grafici
 
@@ -2343,4 +2299,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v100 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v101 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

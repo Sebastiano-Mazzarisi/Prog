@@ -431,12 +431,12 @@
       tavoli: "Tavoli",
       titoloTavoli: "Disposizione dei tavoli",
       ordinaPer: "Ordina per:",
-      btnOrdina_inserimento: "Inserimento",
-      btnOrdina_nome: "Nome",
-      btnOrdina_cognome: "Cognome",
-      btnOrdina_cibo: "Cibo",
-      btnOrdina_eta: "Età",
-      btnOrdina_tavolo: "Tavolo",
+      btnOrdina_inserimento: "Data di <b>INSERIMENTO</b>",
+      btnOrdina_nome: "<b>NOME</b> e cognome",
+      btnOrdina_cognome: "<b>COGNOME</b> e nome",
+      btnOrdina_cibo: "<b>CIBO</b> scelto",
+      btnOrdina_eta: "<b>ETÀ</b> dell'invitato",
+      btnOrdina_tavolo: "Numero di <b>TAVOLO</b>",
       lblAnnulla: "Annulla",
       lblOrdinaPer: "Ordina per",
       lblCopiato: "Copiato!",
@@ -507,12 +507,12 @@
       tavoli: "Mesas",
       titoloTavoli: "Disposición de las mesas",
       ordinaPer: "Ordenar por:",
-      btnOrdina_inserimento: "Registro",
-      btnOrdina_nome: "Nombre",
-      btnOrdina_cognome: "Apellido",
-      btnOrdina_cibo: "Comida",
-      btnOrdina_eta: "Edad",
-      btnOrdina_tavolo: "Mesa",
+      btnOrdina_inserimento: "Fecha de <b>REGISTRO</b>",
+      btnOrdina_nome: "<b>NOMBRE</b> y apellido",
+      btnOrdina_cognome: "<b>APELLIDO</b> y nombre",
+      btnOrdina_cibo: "<b>COMIDA</b> elegida",
+      btnOrdina_eta: "<b>EDAD</b> del invitado",
+      btnOrdina_tavolo: "Número de <b>MESA</b>",
       lblAnnulla: "Cancelar",
       lblOrdinaPer: "Ordenar por",
       lblCopiato: "¡Copiado!",
@@ -2084,9 +2084,9 @@
     box.innerHTML = '<div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:700;color:#8a5e1e;margin-bottom:16px;text-align:center;">' + t.lblOrdinaPer + '</div>';
     opzioni.forEach(o => {
       const btn = document.createElement('button');
-      btn.textContent = o.lbl;
+      btn.innerHTML = o.lbl;
       const isActive = o.val === activeOrdine;
-      btn.style.cssText = 'display:block;width:100%;margin-bottom:8px;padding:11px 14px;border-radius:10px;border:1.5px solid ' + (isActive ? '#b8893a' : '#ddd') + ';background:' + (isActive ? '#f5ede0' : '#fafafa') + ';font-family:\'Inter\',sans-serif;font-size:14px;font-weight:' + (isActive ? '700' : '400') + ';color:' + (isActive ? '#7a5c3a' : '#333') + ';cursor:pointer;text-align:left;';
+      btn.style.cssText = 'display:block;width:100%;margin-bottom:8px;padding:11px 14px;border-radius:10px;border:1.5px solid ' + (isActive ? '#b8893a' : '#333') + ';background:' + (isActive ? '#f5ede0' : '#fafafa') + ';font-family:\'Inter\',sans-serif;font-size:14px;font-weight:400;color:' + (isActive ? '#7a5c3a' : '#333') + ';cursor:pointer;text-align:left;';
       btn.onclick = () => {
         document.body.removeChild(overlay);
         activeOrdine = o.val;
@@ -2097,7 +2097,7 @@
     });
     const annulla = document.createElement('button');
     annulla.textContent = t.lblAnnulla;
-    annulla.style.cssText = 'display:block;width:100%;margin-top:4px;padding:10px;border-radius:10px;border:none;background:#f0f0f0;font-family:\'Inter\',sans-serif;font-size:13px;color:#888;cursor:pointer;';
+    annulla.style.cssText = 'display:block;width:100%;margin-top:4px;padding:10px;border-radius:10px;border:1.5px solid #333;background:#fafafa;font-family:\'Inter\',sans-serif;font-size:14px;font-weight:700;color:#c0392b;cursor:pointer;';
     annulla.onclick = () => document.body.removeChild(overlay);
     box.appendChild(annulla);
     overlay.appendChild(box);
@@ -2142,4 +2142,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v96 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v97 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

@@ -873,19 +873,12 @@
     if (activeOrdine === 'attesa') {
       // === MODALITÀ IN ATTESA: mostra chi non ha ancora risposto ===
       const inAttesa = calcolaInAttesa();
-      // Ordina per Cognome Nome
-      function normAttesa(s) { return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
-      inAttesa.sort((a, b) => {
-        const tokA = (a.nome||'').trim().split(/\s+/);
-        const tokB = (b.nome||'').trim().split(/\s+/);
-        const keyA = normAttesa(tokA[tokA.length-1]) + normAttesa(tokA[0]||'');
-        const keyB = normAttesa(tokB[tokB.length-1]) + normAttesa(tokB[0]||'');
-        return keyA.localeCompare(keyB, 'it', {sensitivity:'base'});
-      });
+      // Ordina per Cognome Nome — usa la stessa funzione dell'ordinamento COGNOME
+      const inAttesaOrdinata = ordinaInvitati(inAttesa, 'cognome');
       if (inAttesa.length === 0) {
         html += `<div style="text-align:center;color:#2d6040;font-weight:600;padding:24px 0;font-family:'Inter',sans-serif;">${testi.msgAttesaVuota}</div>`;
       } else {
-        inAttesa.forEach((inv) => {
+        inAttesaOrdinata.forEach((inv) => {
           const tavNum = trovaTavoloNum(inv.nome || '');
           // Display forzato: Cognome Nome (età) — indipendente da activeOrdine
           const tokensInv = (inv.nome||'').trim().split(/\s+/);
@@ -2129,4 +2122,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v88 - 29/03/2026 - Fix sort IN ATTESA: regex /g condivisa causava ordinamento per nome invece che per cognome -->
+<!-- Lista.html v89 - 29/03/2026 - IN ATTESA: usa ordinaInvitati('cognome') identico all'ordinamento COGNOME -->

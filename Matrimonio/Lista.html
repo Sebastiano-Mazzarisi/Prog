@@ -446,7 +446,7 @@
       lbl_CIBO: "CIBO",
       lbl_ETA: "ETÀ",
       lbl_TAVOLO: "TAVOLO",
-      btnOrdina_attesa: "In attesa",
+      btnOrdina_attesa: "IN ATTESA",
       lbl_ATTESA: "IN ATTESA",
       titoloAttesa: "In attesa di risposta",
       msgAttesaVuota: "Tutti gli invitati hanno risposto.",
@@ -522,7 +522,7 @@
       lbl_CIBO: "COMIDA",
       lbl_ETA: "EDAD",
       lbl_TAVOLO: "MESA",
-      btnOrdina_attesa: "En espera",
+      btnOrdina_attesa: "EN ESPERA",
       lbl_ATTESA: "EN ESPERA",
       titoloAttesa: "En espera de respuesta",
       msgAttesaVuota: "Todos los invitados han respondido.",
@@ -870,6 +870,25 @@
 
     <div id="lista-invitati">`;
 
+    if (activeOrdine === 'attesa') {
+      // === MODALITÀ IN ATTESA: mostra chi non ha ancora risposto ===
+      const inAttesa = calcolaInAttesa();
+      if (inAttesa.length === 0) {
+        html += `<div style="text-align:center;color:#2d6040;font-weight:600;padding:24px 0;font-family:'Inter',sans-serif;">${testi.msgAttesaVuota}</div>`;
+      } else {
+        inAttesa.forEach((inv) => {
+          const tavNum = trovaTavoloNum(inv.nome || '');
+          const nomeDisplay = formatNomeDisplay(inv.nome);
+          html += `<div class="risposta-card" style="border-color:#b0bec5;background:#f5f7f8;">
+            <div class="risposta-nome" style="background:#eef1f3;color:#555;cursor:default;">
+              ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${nomeDisplay}
+              <span class="icone-destra"></span>
+            </div>
+          </div>`;
+        });
+      }
+    } else {
+
     // Pre-calcola duplicati e senza-tavolo per evidenziazione a video
     function tokV(n) { return (n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().split(/\s+/).filter(Boolean); }
     function matchV(a,b) { const ta=tokV(a),tb=tokV(b); return ta.every(w=>tb.includes(w))||tb.every(w=>ta.includes(w)); }
@@ -948,6 +967,7 @@
         </div>
       </div>`;
     });
+    } // fine else (non attesa)
 
     html += `</div>
     <div style="text-align:center; margin: 16px 0 8px; display:flex; justify-content:center; align-items:center; gap:10px;">
@@ -2028,13 +2048,9 @@
       btn.style.cssText = 'display:block;width:100%;margin-bottom:8px;padding:11px 14px;border-radius:10px;border:1.5px solid ' + (isActive ? '#b8893a' : (isAttesa ? '#e8a020' : '#ddd')) + ';background:' + (isActive ? '#f5ede0' : (isAttesa ? '#fff8ec' : '#fafafa')) + ';font-family:\'Inter\',sans-serif;font-size:14px;font-weight:' + (isActive ? '700' : '400') + ';color:' + (isActive ? '#7a5c3a' : (isAttesa ? '#8a5e00' : '#333')) + ';cursor:pointer;text-align:left;';
       btn.onclick = () => {
         document.body.removeChild(overlay);
-        if (o.val === 'attesa') {
-          mostraInAttesa();
-        } else {
-          activeOrdine = o.val;
-          window.datiInvitati = ordinaInvitati(window.datiInvitati, activeOrdine);
-          renderizzaDati();
-        }
+        activeOrdine = o.val;
+        window.datiInvitati = ordinaInvitati(window.datiInvitati, activeOrdine);
+        renderizzaDati();
       };
       box.appendChild(btn);
     });
@@ -2085,4 +2101,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v83 - 29/03/2026 - Ordina "In attesa" dal CSV; doppia conferma cancellazione; beforeunload su pendente; nome PDF Lista-AAAA-MM-GG-HH-MM-SS.pdf -->
+<!-- Lista.html v84 - 29/03/2026 - IN ATTESA nell'elenco principale (non modale), label maiuscolo -->

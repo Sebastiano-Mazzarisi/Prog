@@ -1277,7 +1277,7 @@
       // A4 in px a 96dpi con margini 5+20mm: area utile = (297-25)*3.7795 = 1028px
       // Il container PDF è 700px wide, scale:2 → la misura DOM è a scala 1x
       // Usiamo 700px per il misuratore, stessa larghezza del container PDF
-      const AREA_PAGINA = 920; // px DOM, calibrato per evitare pagine bianche
+      const AREA_PAGINA = 960; // px DOM, calibrato per evitare pagine bianche
 
       // Misura l'altezza di tutto ciò che è già nella pagina 1 prima delle righe presenti
       const misPage1 = document.createElement('div');
@@ -2142,4 +2142,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v92 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v93 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->

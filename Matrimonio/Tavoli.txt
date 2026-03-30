@@ -1,4 +1,4 @@
-# Tavolo 1 - Sposi
+# Tav. 1 - Sposi
 Mazzarisi Onofrio
 Pérez Giulia
 Guarneri Lucia
@@ -8,7 +8,7 @@ Mazzarisi Sebastiano
 Mazzarisi Teresa
 Ladogana Valentina
 
-# Tavolo 2
+# Tav. 2 - Pérez-Pricci-Lorusso
 Pérez Ramón
 Pérez Ana
 Guarneri Silvia
@@ -39,7 +39,7 @@ Pricci Asia
 Chiarappa Oletta
 Vatta Sergio
 
-# Tavolo 3
+# Tav. 3 - Pricci-Mazzarisi-Casulli
 Pricci Vanna
 Lefemine Domenico
 Lefemine Flavia

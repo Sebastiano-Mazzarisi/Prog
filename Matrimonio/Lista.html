@@ -972,8 +972,15 @@
       // Nome visualizzato: Cognome Nome (ordine cognome) oppure Nome Cognome + età
       const nomeDisplay = formatNomeDisplay(r.nome);
 
+      // Data formattata [GG/MM - HH:MM] per ordinamento inserimento
+      let dataInserimento = '';
+      if (activeOrdine === 'inserimento' && r.data) {
+        const mData = r.data.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})\s+(\d{2}:\d{2})/);
+        if (mData) dataInserimento = `[${mData[1]}/${mData[2]} - ${mData[4]}]`;
+      }
+
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
-        <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${nomeDisplay}${isVideoDup && r.data ? `<span style="font-size:11px;font-weight:400;color:#7a5a00;margin-left:6px;white-space:nowrap">${r.data}</span>` : ''}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${nomeDisplay}${isVideoDup && r.data ? `<span style="font-size:11px;font-weight:400;color:#7a5a00;margin-left:6px;white-space:nowrap">${r.data}</span>` : ''}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}${dataInserimento ? `<span style="font-size:11px;font-weight:400;color:#5a6e3a;margin-left:6px;white-space:nowrap">${dataInserimento}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">${testi.lblTavolo}</span>

@@ -974,9 +974,25 @@
 
       // Data formattata [GG/MM - HH:MM] per ordinamento inserimento
       let dataInserimento = '';
-      if (activeOrdine === 'inserimento' && r.data) {
-        const mData = r.data.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})\s+(\d{2}:\d{2})/);
-        if (mData) dataInserimento = `[${mData[1]}/${mData[2]} - ${mData[4]}]`;
+      if (activeOrdine === 'inserimento') {
+        const rawData = r.data || r.Data || r['data'] || r['Data'] || '';
+        if (rawData) {
+          const parti = String(rawData).trim().split(/\s+/);
+          if (parti.length >= 2) {
+            const dataParts = parti[0].split(/[\/\-]/);
+            const oraParts = parti[1].split(':');
+            if (dataParts.length >= 2 && oraParts.length >= 2) {
+              dataInserimento = `[${dataParts[0]}/${dataParts[1]} - ${oraParts[0]}:${oraParts[1]}]`;
+            } else {
+              dataInserimento = `[${rawData}]`;
+            }
+          } else {
+            dataInserimento = `[${rawData}]`;
+          }
+        } else {
+          // DEBUG: mostra le chiavi disponibili sul primo record
+          if (idxV === 0) dataInserimento = `[chiavi:${Object.keys(r).join('|')}]`;
+        }
       }
 
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">

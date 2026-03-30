@@ -8,7 +8,7 @@ Mazzarisi Sebastiano
 Mazzarisi Teresa
 Ladogana Valentina
 
-# Tavolo 2 - Pérez
+# Tavolo 2
 Pérez Ramón
 Pérez Ana
 Guarneri Silvia
@@ -17,7 +17,6 @@ Pérez Juani
 Pérez Marta
 Bencomo Tomás
 
-# Tavolo 3 - Lorusso
 Pricci Angela
 Lorusso Onofrio
 Lorusso Benny
@@ -29,7 +28,6 @@ Lorusso Cinzia
 Rotondi Gianni
 Rotondi Nicoletta
 
-# Tavolo 4 - Antonietta
 Pricci Maria Antonietta
 Chiarappa Saverio
 Chiarappa Martino
@@ -41,7 +39,7 @@ Pricci Asia
 Chiarappa Oletta
 Vatta Sergio
 
-# Tavolo 5 - Vanna
+# Tavolo 3
 Pricci Vanna
 Lefemine Domenico
 Lefemine Flavia
@@ -52,7 +50,6 @@ Pricci Giovanni
 Pricci Tiziana
 Dalena Riccardo
 
-# Tavolo 6 - Mazzarisi
 Mazzarisi Vito
 Nitti Enza
 Mazzarisi Daniele
@@ -68,7 +65,6 @@ Mazzarisi Domenico
 Sabatelli Anna
 Mazzarisi Marilù
 
-# Tavolo 7 - Casulli
 Casulli Angelo
 Marchione Maria
 Casulli Gianluca

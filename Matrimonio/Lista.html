@@ -627,6 +627,7 @@
   }
 
   function cambiaLingua(lang) {
+    if (lang === currentLang) lang = (lang === 'it') ? 'es' : 'it';
     currentLang = lang;
     document.getElementById('btn-it').classList.toggle('active-lang', lang === 'it');
     document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');

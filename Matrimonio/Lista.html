@@ -2333,8 +2333,10 @@
       const respT = await fetch('Telefoni.txt?t=' + Date.now());
       if (respT.ok) {
         const txtT = await respT.text();
+        console.log('[Telefoni] Primi 500 chars:', JSON.stringify(txtT.slice(0,500)));
         const normV = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
-        txtT.split(/\r?\n/).forEach(riga => {
+        txtT.split(/\r?\n/).forEach((riga, i) => {
+          if (i < 5) console.log('[Telefoni] riga ' + i + ':', JSON.stringify(riga));
           const m = riga.match(/^(.+?)\s{2,}(\S+)$/);
           if (m) {
             const nome = m[1].trim(); const cell = m[2].trim();
@@ -2345,8 +2347,11 @@
             }
           }
         });
+        console.log('[Telefoni] Voci mappa:', Object.keys(mapTelVideo).length, '- prime chiavi:', Object.keys(mapTelVideo).slice(0,5));
+      } else {
+        console.log('[Telefoni] fetch fallito, status:', respT.status);
       }
-    } catch(e) {}
+    } catch(e) { console.log('[Telefoni] errore:', e); }
 
     function cercaTelVideo(nomeDisplay) {
       const normV = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
@@ -2356,6 +2361,7 @@
       if (parti.length >= 2) {
         const k2 = normV(parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' '));
         if (mapTelVideo[k2]) return mapTelVideo[k2];
+        console.log('[Telefoni] nessun match per:', JSON.stringify(nomeDisplay), '-> k1:', k1, '/ k2:', k2);
       }
       return '';
     }

@@ -1422,8 +1422,8 @@
         const tokN = (inv.nome||'').trim().split(/\s+/);
         let nomeFmt = tokN.length >= 2 ? tokN[tokN.length-1] + ' ' + tokN.slice(0,-1).join(' ') : (inv.nome||'');
         const cell = cercaTelPdf(inv.nome);
-        const testo = cell ? nomeFmt + ' - ' + formattaNumPdf(cell) : nomeFmt;
-        return `<td style="padding:3px 6px;font-size:10px;color:#000;vertical-align:top;">${testo}</td>`;
+        const testo = cell ? nomeFmt + ' ' + formattaNumPdf(cell) : nomeFmt;
+        return `<td style="padding:5px 6px;font-size:10px;color:#000;vertical-align:top;">${testo}</td>`;
       }
       let righeAttesa = '';
       for (let i = 0; i < inAttesaPdf.length; i += 3) {

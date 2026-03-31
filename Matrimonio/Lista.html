@@ -629,6 +629,7 @@
   }
 
   function cambiaLingua(lang) {
+    if (lang === currentLang) lang = (lang === 'it') ? 'es' : 'it';
     currentLang = lang;
     document.getElementById('btn-it').classList.toggle('active-lang', lang === 'it');
     document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');
@@ -1086,15 +1087,12 @@
         const acc2 = /[\u0300-\u036f]/g;
         function normTel(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc2,'').trim(); }
         txtTel.split(/\r?\n/).forEach(riga => {
-          // Formato atteso: "Nome Cognome  nnn-nn.nn.nnn" (2+ spazi come separatore)
-          // oppure "Cognome Nome  nnn..." — gestiamo entrambi cercando il numero
           const m = riga.match(/^(.+?)\s{2,}(\S+)$/);
           if (m) {
             const nome = m[1].trim();
             const cell = m[2].trim();
             if (cell !== '—' && cell !== '-') {
               mapTelefoni[normTel(nome)] = cell;
-              // Aggiungi anche chiave invertita (Cognome Nome ↔ Nome Cognome)
               const parti = nome.split(/\s+/);
               if (parti.length >= 2) {
                 const inv = parti.slice(1).join(' ') + ' ' + parti[0];
@@ -1388,7 +1386,6 @@
     // Tabella "In attesa di conferma" — chi è nel CSV ma non ha ancora risposto
     const inAttesaPdf = calcolaInAttesa();
     if (inAttesaPdf.length > 0) {
-      // Ordina per Cognome Nome
       const acc3 = /[\u0300-\u036f]/g;
       const cp3 = v => (v||'').toLowerCase().normalize('NFD').replace(acc3,'');
       inAttesaPdf.sort((a, b) => {
@@ -1399,14 +1396,11 @@
         return cogA.localeCompare(cogB, 'it', {sensitivity:'base'});
       });
 
-      // Funzione lookup telefono
-      function cercaTelefono(nomeDisplay) {
-        // nomeDisplay è "Nome Cognome"
-        const accF = /[\u0300-\u036f]/g;
-        const normF = s => (s||'').toLowerCase().normalize('NFD').replace(accF,'').trim();
+      const accF = /[\u0300-\u036f]/g;
+      const normF = s => (s||'').toLowerCase().normalize('NFD').replace(accF,'').trim();
+      function cercaTelPdf(nomeDisplay) {
         const k1 = normF(nomeDisplay);
         if (mapTelefoni[k1]) return mapTelefoni[k1];
-        // prova inversione Cognome Nome
         const parti = nomeDisplay.trim().split(/\s+/);
         if (parti.length >= 2) {
           const k2 = normF(parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' '));
@@ -1414,68 +1408,40 @@
         }
         return '';
       }
-
-      // Formatta numero: "3356276262" → "335-62.76.262"
-      function formattaNumero(raw) {
+      function formattaNumPdf(raw) {
         const digits = raw.replace(/\D/g,'');
-        const prefix = raw.startsWith('+') ? '+' : '';
-        if (!digits) return raw;
-        // Formato italiano mobile: 3 cifre prefisso + 7 resto → XXX-XX.XX.XXX
-        if (digits.length === 10) {
-          return prefix + digits.slice(0,3) + '-' + digits.slice(3,5) + '.' + digits.slice(5,7) + '.' + digits.slice(7);
-        }
-        // 11 cifre con prefisso +39
+        if (digits.length === 10)
+          return digits.slice(0,3) + '-' + digits.slice(3,5) + '.' + digits.slice(5,7) + '.' + digits.slice(7);
         if (digits.length === 12 && digits.startsWith('39')) {
           const loc = digits.slice(2);
           return '+39 ' + loc.slice(0,3) + '-' + loc.slice(3,5) + '.' + loc.slice(5,7) + '.' + loc.slice(7);
         }
-        return raw; // lascia invariato se formato non riconoscibile
+        return raw;
       }
-
-      // Costruisce celle: "Cognome Nome - XXX-XX.XX.XXX" oppure solo "Cognome Nome"
       function buildCellaAttesa(inv) {
-        // inv.nome è in formato "Nome Cognome" (dal CSV invertito)
-        const tokensN = (inv.nome||'').trim().split(/\s+/);
-        let nomeFmt;
-        if (tokensN.length >= 2) {
-          const cognome = tokensN[tokensN.length-1];
-          const resto   = tokensN.slice(0,-1).join(' ');
-          nomeFmt = cognome + ' ' + resto;
-        } else {
-          nomeFmt = inv.nome||'';
-        }
-        const cell = cercaTelefono(inv.nome);
-        const cellFmt = cell ? formattaNumero(cell) : '';
-        const testo = cellFmt ? nomeFmt + ' - ' + cellFmt : nomeFmt;
+        const tokN = (inv.nome||'').trim().split(/\s+/);
+        let nomeFmt = tokN.length >= 2 ? tokN[tokN.length-1] + ' ' + tokN.slice(0,-1).join(' ') : (inv.nome||'');
+        const cell = cercaTelPdf(inv.nome);
+        const testo = cell ? nomeFmt + ' - ' + formattaNumPdf(cell) : nomeFmt;
         return `<td style="padding:3px 6px;font-size:10px;color:#000;vertical-align:top;">${testo}</td>`;
       }
-
-      // Dispone in 3 colonne con sequenza 1-2-3 / 4-5-6 / ...
-      const COLS = 3;
       let righeAttesa = '';
-      for (let i = 0; i < inAttesaPdf.length; i += COLS) {
+      for (let i = 0; i < inAttesaPdf.length; i += 3) {
         righeAttesa += '<tr>';
-        for (let c = 0; c < COLS; c++) {
+        for (let c = 0; c < 3; c++) {
           const inv = inAttesaPdf[i + c];
-          if (inv) {
-            righeAttesa += buildCellaAttesa(inv);
-          } else {
-            righeAttesa += '<td></td>';
-          }
+          righeAttesa += inv ? buildCellaAttesa(inv) : '<td></td>';
         }
         righeAttesa += '</tr>';
       }
-
       htmlPDF += `<div style="page-break-inside:avoid;">`;
       htmlPDF += `<h3 style="font-size:13px;margin-top:18px;margin-bottom:6px;color:#8a5e1e;font-weight:600;">${testi.titoloConferma} (${inAttesaPdf.length})</h3>`;
       htmlPDF += `<table class="pdf-table" style="width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed;">
-        <thead>
-          <tr style="background-color:#f5ede0;">
-            <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
-            <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
-            <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
-          </tr>
-        </thead>
+        <thead><tr style="background-color:#f5ede0;">
+          <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
+          <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
+          <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
+        </tr></thead>
         <tbody>${righeAttesa}</tbody>
       </table></div>`;
     }
@@ -2355,11 +2321,55 @@
     });
   }
 
-  function mostraInAttesa() {
+  async function mostraInAttesa() {
     const testi = dizionario[currentLang];
     const inAttesa = calcolaInAttesa();
     const acc = /[\u0300-\u036f]/g;
     const cp2 = v => (v||'').toLowerCase().normalize('NFD').replace(acc,'');
+
+    // Carica Telefoni.txt per i numeri di cellulare
+    const mapTelVideo = {};
+    try {
+      const respT = await fetch('Telefoni.txt?t=' + Date.now());
+      if (respT.ok) {
+        const txtT = await respT.text();
+        const normV = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+        txtT.split(/\r?\n/).forEach(riga => {
+          const m = riga.match(/^(.+?)\s{2,}(\S+)$/);
+          if (m) {
+            const nome = m[1].trim(); const cell = m[2].trim();
+            if (cell !== '\u2014' && cell !== '-') {
+              mapTelVideo[normV(nome)] = cell;
+              const parti = nome.split(/\s+/);
+              if (parti.length >= 2) mapTelVideo[normV(parti.slice(1).join(' ') + ' ' + parti[0])] = cell;
+            }
+          }
+        });
+      }
+    } catch(e) {}
+
+    function cercaTelVideo(nomeDisplay) {
+      const normV = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+      const k1 = normV(nomeDisplay);
+      if (mapTelVideo[k1]) return mapTelVideo[k1];
+      const parti = nomeDisplay.trim().split(/\s+/);
+      if (parti.length >= 2) {
+        const k2 = normV(parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' '));
+        if (mapTelVideo[k2]) return mapTelVideo[k2];
+      }
+      return '';
+    }
+    function formattaNumVideo(raw) {
+      const digits = raw.replace(/\D/g,'');
+      if (digits.length === 10)
+        return digits.slice(0,3) + '-' + digits.slice(3,5) + '.' + digits.slice(5,7) + '.' + digits.slice(7);
+      if (digits.length === 12 && digits.startsWith('39')) {
+        const loc = digits.slice(2);
+        return '+39\u00a0' + loc.slice(0,3) + '-' + loc.slice(3,5) + '.' + loc.slice(5,7) + '.' + loc.slice(7);
+      }
+      return raw;
+    }
+
     // Ordina per Cognome Nome
     inAttesa.sort((a,b) => {
       const tokA = (a.nome||'').trim().split(/\s+/);
@@ -2373,7 +2383,7 @@
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:4000;display:flex;align-items:flex-start;justify-content:center;padding-top:40px;overflow-y:auto;';
 
     const box = document.createElement('div');
-    box.style.cssText = 'background:#fff;border-radius:16px;padding:20px 18px 16px;width:92%;max-width:420px;box-shadow:0 8px 30px rgba(0,0,0,0.25);margin-bottom:40px;';
+    box.style.cssText = 'background:#fff;border-radius:16px;padding:20px 18px 16px;width:92%;max-width:480px;box-shadow:0 8px 30px rgba(0,0,0,0.25);margin-bottom:40px;';
 
     let html = '<div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:700;color:#8a5e1e;margin-bottom:4px;text-align:center;">'
       + testi.titoloAttesa + '</div>';
@@ -2385,7 +2395,6 @@
     } else {
       html += '<div style="font-family:\'Inter\',sans-serif;font-size:14px;">';
       inAttesa.forEach((inv, idx) => {
-        // Formato: <tavolo> Cognome Nome (età)
         const tokensNome = (inv.nome||'').trim().split(/\s+/);
         let nomeFmt;
         if (tokensNome.length >= 2) {
@@ -2399,9 +2408,13 @@
         const etaStr = eta !== null ? ' <span style="font-weight:400;color:#888;font-size:13px">('+eta+')</span>' : '';
         const tavNum = trovaTavoloNum(inv.nome || '');
         const bg = idx % 2 === 0 ? '#fafafa' : '#ffffff';
+        const cell = cercaTelVideo(inv.nome);
+        const cellStr = cell
+          ? ' <span style="font-size:12px;color:#1a4fa0;font-weight:500;margin-left:4px;">\ud83d\udcf1\u00a0' + formattaNumVideo(cell) + '</span>'
+          : '';
         html += '<div style="padding:7px 10px;border-radius:8px;background:' + bg + ';margin-bottom:3px;display:flex;align-items:center;gap:6px;">'
           + (tavNum ? '<span style="font-size:13px;flex-shrink:0">' + tavNum + '</span>' : '<span style="width:18px;flex-shrink:0"></span>')
-          + '<span style="font-weight:600">' + nomeFmt + '</span>' + etaStr
+          + '<span style="font-weight:600">' + nomeFmt + '</span>' + etaStr + cellStr
           + '</div>';
       });
       html += '</div>';

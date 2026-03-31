@@ -456,6 +456,7 @@
       btnOrdina_attesa: "In attesa",
       lbl_ATTESA: "IN ATTESA",
       titoloAttesa: "In attesa di risposta",
+      titoloConferma: "In attesa di conferma",
       msgAttesaVuota: "Tutti gli invitati hanno risposto.",
       msgCancellazionePendente: "Cancellazione in corso...",
       msgCancellazioneOk: "Scheda eliminata.",
@@ -539,6 +540,7 @@
       btnOrdina_attesa: "En espera",
       lbl_ATTESA: "EN ESPERA",
       titoloAttesa: "En espera de respuesta",
+      titoloConferma: "En espera de confirmación",
       msgAttesaVuota: "Todos los invitados han respondido.",
       msgCancellazionePendente: "Eliminando...",
       msgCancellazioneOk: "Tarjeta eliminada.",
@@ -627,7 +629,6 @@
   }
 
   function cambiaLingua(lang) {
-    if (lang === currentLang) lang = (lang === 'it') ? 'es' : 'it';
     currentLang = lang;
     document.getElementById('btn-it').classList.toggle('active-lang', lang === 'it');
     document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');
@@ -1076,6 +1077,35 @@
       }
     });
 
+    // FETCH Telefoni.txt — mappa nome normalizzato → cellulare
+    const mapTelefoni = {};
+    try {
+      const respTel = await fetch('Telefoni.txt?t=' + Date.now());
+      if (respTel.ok) {
+        const txtTel = await respTel.text();
+        const acc2 = /[\u0300-\u036f]/g;
+        function normTel(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc2,'').trim(); }
+        txtTel.split(/\r?\n/).forEach(riga => {
+          // Formato atteso: "Nome Cognome  nnn-nn.nn.nnn" (2+ spazi come separatore)
+          // oppure "Cognome Nome  nnn..." — gestiamo entrambi cercando il numero
+          const m = riga.match(/^(.+?)\s{2,}(\S+)$/);
+          if (m) {
+            const nome = m[1].trim();
+            const cell = m[2].trim();
+            if (cell !== '—' && cell !== '-') {
+              mapTelefoni[normTel(nome)] = cell;
+              // Aggiungi anche chiave invertita (Cognome Nome ↔ Nome Cognome)
+              const parti = nome.split(/\s+/);
+              if (parti.length >= 2) {
+                const inv = parti.slice(1).join(' ') + ' ' + parti[0];
+                mapTelefoni[normTel(inv)] = cell;
+              }
+            }
+          }
+        });
+      }
+    } catch(e) { console.log('Telefoni.txt non disponibile', e); }
+
     // FETCH Elenco completo Invitati e raggruppamento (CSV locale su GitHub)
     let gruppiInvitati = [];
     let totInvitatiCsv = 0;
@@ -1353,6 +1383,101 @@
         spazioRimanente -= h;
       });
       htmlPDF += `</tbody></table>`;
+    }
+
+    // Tabella "In attesa di conferma" — chi è nel CSV ma non ha ancora risposto
+    const inAttesaPdf = calcolaInAttesa();
+    if (inAttesaPdf.length > 0) {
+      // Ordina per Cognome Nome
+      const acc3 = /[\u0300-\u036f]/g;
+      const cp3 = v => (v||'').toLowerCase().normalize('NFD').replace(acc3,'');
+      inAttesaPdf.sort((a, b) => {
+        const tokA = (a.nome||'').trim().split(/\s+/);
+        const tokB = (b.nome||'').trim().split(/\s+/);
+        const cogA = cp3(tokA[tokA.length-1]||'') + cp3(tokA[0]||'');
+        const cogB = cp3(tokB[tokB.length-1]||'') + cp3(tokB[0]||'');
+        return cogA.localeCompare(cogB, 'it', {sensitivity:'base'});
+      });
+
+      // Funzione lookup telefono
+      function cercaTelefono(nomeDisplay) {
+        // nomeDisplay è "Nome Cognome"
+        const accF = /[\u0300-\u036f]/g;
+        const normF = s => (s||'').toLowerCase().normalize('NFD').replace(accF,'').trim();
+        const k1 = normF(nomeDisplay);
+        if (mapTelefoni[k1]) return mapTelefoni[k1];
+        // prova inversione Cognome Nome
+        const parti = nomeDisplay.trim().split(/\s+/);
+        if (parti.length >= 2) {
+          const k2 = normF(parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' '));
+          if (mapTelefoni[k2]) return mapTelefoni[k2];
+        }
+        return '';
+      }
+
+      // Formatta numero: "3356276262" → "335-62.76.262"
+      function formattaNumero(raw) {
+        const digits = raw.replace(/\D/g,'');
+        const prefix = raw.startsWith('+') ? '+' : '';
+        if (!digits) return raw;
+        // Formato italiano mobile: 3 cifre prefisso + 7 resto → XXX-XX.XX.XXX
+        if (digits.length === 10) {
+          return prefix + digits.slice(0,3) + '-' + digits.slice(3,5) + '.' + digits.slice(5,7) + '.' + digits.slice(7);
+        }
+        // 11 cifre con prefisso +39
+        if (digits.length === 12 && digits.startsWith('39')) {
+          const loc = digits.slice(2);
+          return '+39 ' + loc.slice(0,3) + '-' + loc.slice(3,5) + '.' + loc.slice(5,7) + '.' + loc.slice(7);
+        }
+        return raw; // lascia invariato se formato non riconoscibile
+      }
+
+      // Costruisce celle: "Cognome Nome - XXX-XX.XX.XXX" oppure solo "Cognome Nome"
+      function buildCellaAttesa(inv) {
+        // inv.nome è in formato "Nome Cognome" (dal CSV invertito)
+        const tokensN = (inv.nome||'').trim().split(/\s+/);
+        let nomeFmt;
+        if (tokensN.length >= 2) {
+          const cognome = tokensN[tokensN.length-1];
+          const resto   = tokensN.slice(0,-1).join(' ');
+          nomeFmt = cognome + ' ' + resto;
+        } else {
+          nomeFmt = inv.nome||'';
+        }
+        const cell = cercaTelefono(inv.nome);
+        const cellFmt = cell ? formattaNumero(cell) : '';
+        const testo = cellFmt ? nomeFmt + ' - ' + cellFmt : nomeFmt;
+        return `<td style="padding:3px 6px;font-size:10px;color:#000;vertical-align:top;">${testo}</td>`;
+      }
+
+      // Dispone in 3 colonne con sequenza 1-2-3 / 4-5-6 / ...
+      const COLS = 3;
+      let righeAttesa = '';
+      for (let i = 0; i < inAttesaPdf.length; i += COLS) {
+        righeAttesa += '<tr>';
+        for (let c = 0; c < COLS; c++) {
+          const inv = inAttesaPdf[i + c];
+          if (inv) {
+            righeAttesa += buildCellaAttesa(inv);
+          } else {
+            righeAttesa += '<td></td>';
+          }
+        }
+        righeAttesa += '</tr>';
+      }
+
+      htmlPDF += `<div style="page-break-inside:avoid;">`;
+      htmlPDF += `<h3 style="font-size:13px;margin-top:18px;margin-bottom:6px;color:#8a5e1e;font-weight:600;">${testi.titoloConferma} (${inAttesaPdf.length})</h3>`;
+      htmlPDF += `<table class="pdf-table" style="width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed;">
+        <thead>
+          <tr style="background-color:#f5ede0;">
+            <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
+            <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
+            <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
+          </tr>
+        </thead>
+        <tbody>${righeAttesa}</tbody>
+      </table></div>`;
     }
 
     // Tabella Assenti - dopo i presenti, non spezzare header dal primo rigo

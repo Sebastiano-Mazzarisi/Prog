@@ -1422,7 +1422,9 @@
         const tokN = (inv.nome||'').trim().split(/\s+/);
         let nomeFmt = tokN.length >= 2 ? tokN[tokN.length-1] + ' ' + tokN.slice(0,-1).join(' ') : (inv.nome||'');
         const cell = cercaTelPdf(inv.nome);
-        const testo = cell ? nomeFmt + ' ' + formattaNumPdf(cell) : nomeFmt;
+        const testo = cell
+          ? `<span>${nomeFmt}</span><span style="float:right;">${formattaNumPdf(cell)}</span>`
+          : nomeFmt;
         return `<td style="padding:5px 6px;font-size:10px;color:#000;vertical-align:top;">${testo}</td>`;
       }
       let righeAttesa = '';

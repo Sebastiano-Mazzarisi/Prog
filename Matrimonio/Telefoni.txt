@@ -1,0 +1,73 @@
+NOME                     CELLULARE
+-----------------------------------------
+Alessandra Mazzarisi     +393403735401
+Alessandro Lorusso       +393347511975
+Alice Lorusso            —
+Ana Pérez                —
+Andrea Mazzarisi         +393392588991
+Angela Pricci            +393386726240
+Angelo Casulli           +393391586056
+Anna Sabatelli           +393314952056
+Anna Trivisani           +393398259343
+Anna Vinella             +393803741855
+Asia Pricci              +393342809332
+Benny Lorusso            +393468002051
+Cinzia Lorusso           +393884703343
+Clara Pérez              —
+Cristiano Chiarappa      +393348726967
+Daniele Casulli          +393331006042
+Daniele Mazzarisi        +393738099227
+Domenico Lefemine        +393272010026
+Domenico Mazzarisi       +393389896564
+Donatello Casulli        —
+Dulce Pérez              —
+Edoardo Casulli          —
+Enza Nitti               +393206776244
+Flavia Lefemine          +393803741880
+Flavio Casulli           —
+Francesco Lefemine       +393388076187
+Francesco Mazzarisi      +393383015596
+Genny Lepore             +393334433476
+Gianluca Casulli         +393393146041
+Gianni Rotondi           +393930476000
+Gilda Pricci             +393342767939
+Giovanni Pricci          +393383360159
+Giulia Guazzaroni        +393474056540
+Giulia Pérez             +393280622347
+Giuseppe Pricci          +393316663078
+Juani Pérez              —
+Lucia Guarneri           —
+Marco Mazzarisi          +393891263017
+Maria Antonietta Pricci  +393389395852
+Maria Grazia Mazzarisi   +393334132705
+Maria Marchione          +393389730711
+Marica Pricci            +393388258474
+Mariella Mazzarisi       +393395963910
+Marilù Mazzarisi         +393662189546
+Marta Pérez              —
+Martino Chiarappa        +393388219149
+Nicola Minerva           +393931048294
+Nicoletta Rotondi        —
+Nina Lorusso             —
+Oletta Chiarappa         —
+Onofrio Lorusso          +393384841822
+Onofrio Mazzarisi        +393335443537
+Ramón Pérez              —
+Riccardo Dalena          +393473485333
+Roberta Lovece           —
+Saverio Chiarappa        +393683218240
+Sebastiano Mazzarisi     +393356276262
+Sergio Vatta             +393345358392
+Silvia Guarneri          —
+Stefania Bruni           —
+Stefano Pacello          +393333428049
+Teresa Mazzarisi         +393891309424
+Tiziana Pricci           +393389801540
+Tomás Bencomo            —
+Valentina Ladogana       —
+Vanna Pricci             +39330630303
+Vito Mazzarisi           +393313960960
+
+Totale invitati  : 67
+Con cellulare    : 48
+Senza cellulare  : 19

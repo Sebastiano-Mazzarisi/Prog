@@ -973,21 +973,22 @@
           </div>`;
         });
         // Verifica quali foto esistono e rende i nomi cliccabili, mantenendo ordine
-        window.fotoDisponibili = []; // reset
+        // fotoDisponibili: array di {nome, file} per TUTTI — file=null se mancante
+        window.fotoDisponibili = [];
         setTimeout(() => {
           const risultatiA = new Array(inAttesaOrdinata.length).fill(null);
           let completatiA = 0;
           function controllaCompletoA() {
             completatiA++;
             if (completatiA === inAttesaOrdinata.length) {
-              window.fotoDisponibili = risultatiA.filter(Boolean);
+              window.fotoDisponibili = risultatiA;
             }
           }
           function variantiNomeA(n) {
             const v = new Set();
             v.add(n);
             v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
-            v.add(n.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
+            v.add(n.replace(/u'$/, '\u00f9').replace(/a'$/, '\u00e0').replace(/e'$/, '\u00e8').replace(/i'$/, '\u00ec').replace(/o'$/, '\u00f2'));
             v.add(n.replace(/'$/, ''));
             return [...v];
           }
@@ -1001,6 +1002,7 @@
             } else {
               nomeFileFoto2 = inv.nome || '';
             }
+            risultatiA[posizione] = { nome: nomeFileFoto2, file: null }; // default: nessuna foto
             const idSafe2 = 'attesa-' + nomeFileFoto2.replace(/[^a-zA-Z0-9]/g, '_');
             const card = document.getElementById(idSafe2);
             if (!card) { controllaCompletoA(); return; }
@@ -1017,7 +1019,7 @@
                 .then(r => {
                   if (r.ok && !trovata) {
                     trovata = true;
-                    risultatiA[posizione] = variantiA[vi] + '.' + estensioni[ei];
+                    risultatiA[posizione] = { nome: nomeFileFoto2, file: variantiA[vi] + '.' + estensioni[ei] };
                     nomeSpan.style.cursor = 'pointer';
                     nomeSpan.style.background = '#e8f4e8';
                     nomeSpan.style.color = '#2d6040';
@@ -1033,7 +1035,6 @@
           });
           if (inAttesaOrdinata.length === 0) window.fotoDisponibili = [];
         }, 50);
-      }
     } else {
 
     // Pre-calcola duplicati e senza-tavolo per evidenziazione a video
@@ -1138,7 +1139,8 @@
       </div>`;
     });
     // Dopo il rendering, verifica quali foto esistono, mantiene ordine di visualizzazione
-    window.fotoDisponibili = []; // reset ad ogni render
+    // fotoDisponibili: array di {nome, file} per TUTTI — file=null se mancante
+    window.fotoDisponibili = [];
     setTimeout(() => {
       const spans = [...document.querySelectorAll('[id^="nomefoto-"]')];
       const risultati = new Array(spans.length).fill(null);
@@ -1146,20 +1148,21 @@
       function controllaCompleto() {
         completati++;
         if (completati === spans.length) {
-          window.fotoDisponibili = risultati.filter(Boolean);
+          window.fotoDisponibili = risultati;
         }
       }
       function variantiNome(n) {
         const v = new Set();
         v.add(n);
         v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
-        v.add(n.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
+        v.add(n.replace(/u'$/, '\u00f9').replace(/a'$/, '\u00e0').replace(/e'$/, '\u00e8').replace(/i'$/, '\u00ec').replace(/o'$/, '\u00f2'));
         v.add(n.replace(/'$/, ''));
         return [...v];
       }
       spans.forEach((span, posizione) => {
         const nomeFile = span.getAttribute('data-nomefile');
         if (!nomeFile) { controllaCompleto(); return; }
+        risultati[posizione] = { nome: nomeFile, file: null }; // default: nessuna foto
         const varianti = variantiNome(nomeFile);
         const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
         let trovata = false;
@@ -1171,7 +1174,7 @@
             .then(r => {
               if (r.ok && !trovata) {
                 trovata = true;
-                risultati[posizione] = varianti[vi] + '.' + estensioni[ei];
+                risultati[posizione] = { nome: nomeFile, file: varianti[vi] + '.' + estensioni[ei] };
                 span.style.color = '#1a4fa0';
                 span.style.fontWeight = '700';
                 span.style.cursor = 'pointer';
@@ -1187,6 +1190,7 @@
       });
       if (spans.length === 0) window.fotoDisponibili = [];
     }, 50);
+    } // fine else (non attesa)
     } // fine else (non attesa)
 
     html += `</div>
@@ -2643,7 +2647,9 @@
 
   function mostraFotoPopup(nomeFile) {
     const foto = window.fotoDisponibili || [];
-    let idx = foto.indexOf(nomeFile);
+    // Trova indice: cerca prima per file, poi per nome
+    let idx = foto.findIndex(f => f && f.file === nomeFile);
+    if (idx < 0) idx = foto.findIndex(f => f && f.nome === nomeFile);
     if (idx < 0) idx = 0;
 
     const overlay = document.createElement('div');
@@ -2651,17 +2657,18 @@
 
     function renderContenuto(i) {
       overlay.innerHTML = '';
-      const nf = foto[i] || nomeFile;
+      const voce = foto[i] || { nome: nomeFile, file: null };
+      const haFoto = !!voce.file;
       const box = document.createElement('div');
       box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
 
       const img = document.createElement('img');
-      img.src = 'Foto/' + nf;
+      img.src = haFoto ? 'Foto/' + voce.file : 'Foto/Foto.png';
       img.style.cssText = 'max-width:80vw;max-height:78vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.7);';
 
       const label = document.createElement('div');
-      label.textContent = nf.replace(/\.[^.]+$/, '');
-      label.style.cssText = 'color:#fff;font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;';
+      label.textContent = voce.nome;
+      label.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;color:' + (haFoto ? '#fff' : '#ffaa55') + ';';
 
       // Contatore N/tot
       const counter = document.createElement('div');
@@ -2670,7 +2677,7 @@
 
       // Bottone chiudi
       const chiudi = document.createElement('button');
-      chiudi.textContent = '✕';
+      chiudi.textContent = '\u2715';
       chiudi.style.cssText = 'position:absolute;top:-14px;right:-14px;background:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);color:#333;';
       chiudi.onclick = () => { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); };
 
@@ -2680,20 +2687,19 @@
       if (foto.length > 1) box.appendChild(counter);
       overlay.appendChild(box);
 
-      // Freccia sinistra
+      // Frecce (sempre visibili se più di 1 voce)
       if (foto.length > 1) {
         const btnSx = document.createElement('button');
-        btnSx.textContent = '‹';
-        btnSx.style.cssText = 'position:fixed;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;transition:background 0.2s;';
+        btnSx.textContent = '\u2039';
+        btnSx.style.cssText = 'position:fixed;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;';
         btnSx.onmouseover = () => btnSx.style.background = 'rgba(255,255,255,0.35)';
         btnSx.onmouseout  = () => btnSx.style.background = 'rgba(255,255,255,0.15)';
         btnSx.onclick = e => { e.stopPropagation(); idx = (i - 1 + foto.length) % foto.length; renderContenuto(idx); };
         overlay.appendChild(btnSx);
 
-        // Freccia destra
         const btnDx = document.createElement('button');
-        btnDx.textContent = '›';
-        btnDx.style.cssText = 'position:fixed;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;transition:background 0.2s;';
+        btnDx.textContent = '\u203a';
+        btnDx.style.cssText = 'position:fixed;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;';
         btnDx.onmouseover = () => btnDx.style.background = 'rgba(255,255,255,0.35)';
         btnDx.onmouseout  = () => btnDx.style.background = 'rgba(255,255,255,0.15)';
         btnDx.onclick = e => { e.stopPropagation(); idx = (i + 1) % foto.length; renderContenuto(idx); };

@@ -1035,6 +1035,7 @@
           });
           if (inAttesaOrdinata.length === 0) window.fotoDisponibili = [];
         }, 50);
+      }
     } else {
 
     // Pre-calcola duplicati e senza-tavolo per evidenziazione a video
@@ -2714,6 +2715,16 @@
       if (e.key === 'Escape')     { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); }
     }
     document.addEventListener('keydown', onKey);
+
+    // Swipe touch per smartphone
+    let touchStartX = 0;
+    overlay.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    overlay.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) < 40) return; // movimento troppo piccolo
+      if (dx < 0) { idx = (idx + 1) % foto.length; renderContenuto(idx); }       // swipe sinistra → avanti
+      else         { idx = (idx - 1 + foto.length) % foto.length; renderContenuto(idx); } // swipe destra → indietro
+    }, { passive: true });
     overlay.onclick = e => { if (e.target === overlay) { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); } };
 
     renderContenuto(idx);

@@ -2073,31 +2073,49 @@
     htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:#8a5e1e;margin-bottom:10px;">Giulia &amp; Onofrio</h2>`;
 
     // Costruisce lista ordinata da fotoDisponibili o datiInvitati come fallback
-    const fotoPagina = [];
-    const fotoDisp = window.fotoDisponibili || [];
-    if (fotoDisp.length > 0) {
-      fotoDisp.forEach(voce => {
-        if (!voce) return;
-        // voce.nome è "Cognome Nome" — uguale al formato del CSV
-        const id = getIdentificativo(voce.nome);
-        // età: inverti in "Nome Cognome" per getEtaAnni
-        const parti = (voce.nome || '').trim().split(/\s+/);
-        const nomePerEta = parti.length >= 2 ? parti.slice(1).join(' ') + ' ' + parti[0] : voce.nome;
-        const eta = getEtaAnni(nomePerEta);
-        const label = id + (eta !== null ? ' (' + eta + ')' : '');
-        fotoPagina.push({ nome: voce.nome, file: voce.file || null, label });
-      });
-    } else {
-      // Fallback: usa datiInvitati (nome è "Nome Cognome" → inverti per CSV)
-      (window.datiInvitati || []).forEach(r => {
-        const parti = (r.nome || '').trim().split(/\s+/);
-        const cognomeNome = parti.length >= 2 ? parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' ') : r.nome;
-        const id = getIdentificativo(cognomeNome);
-        const eta = getEtaAnni(r.nome);
-        const label = id + (eta !== null ? ' (' + eta + ')' : '');
-        fotoPagina.push({ nome: cognomeNome, file: null, label });
-      });
+    // Costruisce mappa CognomeNome → file foto da fotoDisponibili
+    const mapFotoFile = {};
+    (window.fotoDisponibili || []).forEach(voce => {
+      if (!voce || !voce.file) return;
+      const acc = /[\u0300-\u036f]/g;
+      const k = (voce.nome || '').toLowerCase().normalize('NFD').replace(acc, '').trim();
+      mapFotoFile[k] = voce.file;
+    });
+
+    function trovaCognomeNome(nomeInv) {
+      // nomeInv è "Nome Cognome" → converti in "Cognome Nome"
+      const parti = (nomeInv || '').trim().split(/\s+/);
+      return parti.length >= 2 ? parti[parti.length - 1] + ' ' + parti.slice(0, -1).join(' ') : nomeInv;
     }
+
+    function trovFoto(cognomeNome) {
+      const acc = /[\u0300-\u036f]/g;
+      function norm(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc,'').trim(); }
+      // Prova varianti accenti
+      const varianti = new Set();
+      varianti.add(cognomeNome);
+      varianti.add(cognomeNome.normalize('NFD').replace(acc,''));
+      varianti.add(cognomeNome.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
+      varianti.add(cognomeNome.replace(/'$/, ''));
+      for (const v of varianti) {
+        if (mapFotoFile[norm(v)]) return mapFotoFile[norm(v)];
+      }
+      return null;
+    }
+
+    // Base: TUTTI i 67 invitati da tuttiInvitatiCsvRaw
+    const fotoPagina = [];
+    const tuttiCsv = window.tuttiInvitatiCsvRaw || [];
+    const fonteBase = tuttiCsv.length > 0 ? tuttiCsv : (window.datiInvitati || []);
+    fonteBase.forEach(r => {
+      const nomeInv = r.nome || ''; // formato "Nome Cognome"
+      const cognomeNome = trovaCognomeNome(nomeInv);
+      const id = getIdentificativo(cognomeNome);
+      const eta = getEtaAnni(nomeInv);
+      const label = id + (eta !== null ? ' (' + eta + ')' : '');
+      const file = trovFoto(cognomeNome);
+      fotoPagina.push({ nome: cognomeNome, file, label });
+    });
 
     // Ordina per identificativo (alfabetico, case-insensitive)
     fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));

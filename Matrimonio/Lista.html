@@ -2069,8 +2069,8 @@
 
     htmlPDF += `<div class="html2pdf__page-break"></div>`;
     htmlPDF += `<div style="width:700px;padding:0;font-family:'Inter',sans-serif;">`;
-    htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Fotografie</h1>`;
-    htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:18px;">Giulia &amp; Onofrio</h2>`;
+    htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;margin-top:0;margin-bottom:2px;color:#000;">Fotografie</h1>`;
+    htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:#8a5e1e;margin-bottom:10px;">Giulia &amp; Onofrio</h2>`;
 
     // Costruisce lista ordinata da fotoDisponibili o datiInvitati come fallback
     const fotoPagina = [];
@@ -2102,10 +2102,10 @@
     // Ordina per identificativo (alfabetico, case-insensitive)
     fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));
 
-    // Griglia: 5 colonne
-    const COLS = 5;
-    const CELL_W = 130;
-    const IMG_SIZE = 110; // px DOM (×2 canvas ≈ 2cm)
+    // Griglia: 6 colonne con margini stretti
+    const COLS = 6;
+    const CELL_W = 108;
+    const IMG_SIZE = 95; // px DOM (×2 canvas ≈ 2cm)
 
     htmlPDF += `<table style="border-collapse:collapse;width:100%;table-layout:fixed;">`;
     for (let row = 0; row < Math.ceil(fotoPagina.length / COLS); row++) {
@@ -2118,9 +2118,9 @@
         }
         const voce = fotoPagina[i];
         const imgSrc = voce.file ? 'Foto/' + voce.file : 'Foto/Foto.png';
-        htmlPDF += `<td style="width:${CELL_W}px;padding:4px 3px;text-align:center;vertical-align:top;">
+        htmlPDF += `<td style="width:${CELL_W}px;padding:2px 1px;text-align:center;vertical-align:top;">
           <img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;" crossorigin="anonymous" />
-          <div style="font-size:8px;font-family:'Inter',sans-serif;color:${voce.file ? '#222' : '#999'};margin-top:3px;line-height:1.2;word-break:break-word;">${voce.label}</div>
+          <div style="font-size:8px;font-family:'Inter',sans-serif;color:${voce.file ? '#222' : '#999'};margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>
         </td>`;
       }
       htmlPDF += `</tr>`;

@@ -972,9 +972,26 @@
             </div>
           </div>`;
         });
-        // Verifica in parallelo quali foto esistono e rende i nomi cliccabili (solo cambio colore, niente icone)
+        // Verifica quali foto esistono e rende i nomi cliccabili, mantenendo ordine
+        window.fotoDisponibili = []; // reset
         setTimeout(() => {
-          inAttesaOrdinata.forEach((inv) => {
+          const risultatiA = new Array(inAttesaOrdinata.length).fill(null);
+          let completatiA = 0;
+          function controllaCompletoA() {
+            completatiA++;
+            if (completatiA === inAttesaOrdinata.length) {
+              window.fotoDisponibili = risultatiA.filter(Boolean);
+            }
+          }
+          function variantiNomeA(n) {
+            const v = new Set();
+            v.add(n);
+            v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+            v.add(n.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
+            v.add(n.replace(/'$/, ''));
+            return [...v];
+          }
+          inAttesaOrdinata.forEach((inv, posizione) => {
             const tokensInv2 = (inv.nome||'').trim().split(/\s+/);
             let nomeFileFoto2 = '';
             if (tokensInv2.length >= 2) {
@@ -986,39 +1003,35 @@
             }
             const idSafe2 = 'attesa-' + nomeFileFoto2.replace(/[^a-zA-Z0-9]/g, '_');
             const card = document.getElementById(idSafe2);
-            if (!card) return;
+            if (!card) { controllaCompletoA(); return; }
             const nomeSpan = card.querySelector('.risposta-nome');
-            if (!nomeSpan) return;
-            function variantiNomeA(n) {
-              const v = new Set();
-              v.add(n);
-              v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
-              v.add(n.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
-              v.add(n.replace(/'$/, ''));
-              return [...v];
-            }
+            if (!nomeSpan) { controllaCompletoA(); return; }
             const variantiA = variantiNomeA(nomeFileFoto2);
             const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
             let trovata = false;
             function provaComboA(vi, ei) {
               if (trovata) return;
-              if (vi >= variantiA.length) return;
+              if (vi >= variantiA.length) { controllaCompletoA(); return; }
               if (ei >= estensioni.length) { provaComboA(vi + 1, 0); return; }
               fetch('Foto/' + variantiA[vi] + '.' + estensioni[ei] + '?t=' + Date.now(), { method: 'HEAD' })
                 .then(r => {
                   if (r.ok && !trovata) {
                     trovata = true;
+                    risultatiA[posizione] = variantiA[vi] + '.' + estensioni[ei];
                     nomeSpan.style.cursor = 'pointer';
                     nomeSpan.style.background = '#e8f4e8';
                     nomeSpan.style.color = '#2d6040';
                     nomeSpan.title = 'Clicca per vedere la foto';
-                    nomeSpan.onclick = () => mostraFotoPopup(variantiA[vi] + '.' + estensioni[ei]);
+                    const nf = variantiA[vi] + '.' + estensioni[ei];
+                    nomeSpan.onclick = () => mostraFotoPopup(nf);
+                    controllaCompletoA();
                   } else { provaComboA(vi, ei + 1); }
                 })
                 .catch(() => provaComboA(vi, ei + 1));
             }
             provaComboA(0, 0);
           });
+          if (inAttesaOrdinata.length === 0) window.fotoDisponibili = [];
         }, 50);
       }
     } else {
@@ -1124,42 +1137,55 @@
         </div>
       </div>`;
     });
-    // Dopo il rendering, verifica in parallelo quali foto esistono e rende il nome blu e cliccabile
+    // Dopo il rendering, verifica quali foto esistono, mantiene ordine di visualizzazione
+    window.fotoDisponibili = []; // reset ad ogni render
     setTimeout(() => {
-      document.querySelectorAll('[id^="nomefoto-"]').forEach(span => {
-        const nomeFile = span.getAttribute('data-nomefile');
-        if (!nomeFile) return;
-        // Varianti del nome per gestire accenti/apostrofi (Marilù = Marilu' = Marilu)
-        function variantiNome(n) {
-          const v = new Set();
-          v.add(n);
-          v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
-          v.add(n.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
-          v.add(n.replace(/'$/, ''));
-          return [...v];
+      const spans = [...document.querySelectorAll('[id^="nomefoto-"]')];
+      const risultati = new Array(spans.length).fill(null);
+      let completati = 0;
+      function controllaCompleto() {
+        completati++;
+        if (completati === spans.length) {
+          window.fotoDisponibili = risultati.filter(Boolean);
         }
+      }
+      function variantiNome(n) {
+        const v = new Set();
+        v.add(n);
+        v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+        v.add(n.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
+        v.add(n.replace(/'$/, ''));
+        return [...v];
+      }
+      spans.forEach((span, posizione) => {
+        const nomeFile = span.getAttribute('data-nomefile');
+        if (!nomeFile) { controllaCompleto(); return; }
         const varianti = variantiNome(nomeFile);
         const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
         let trovata = false;
         function provaCombo(vi, ei) {
           if (trovata) return;
-          if (vi >= varianti.length) return;
+          if (vi >= varianti.length) { controllaCompleto(); return; }
           if (ei >= estensioni.length) { provaCombo(vi + 1, 0); return; }
           fetch('Foto/' + varianti[vi] + '.' + estensioni[ei] + '?t=' + Date.now(), { method: 'HEAD' })
             .then(r => {
               if (r.ok && !trovata) {
                 trovata = true;
+                risultati[posizione] = varianti[vi] + '.' + estensioni[ei];
                 span.style.color = '#1a4fa0';
                 span.style.fontWeight = '700';
                 span.style.cursor = 'pointer';
                 span.title = 'Clicca per vedere la foto';
-                span.onclick = e => { e.stopPropagation(); mostraFotoPopup(varianti[vi] + '.' + estensioni[ei]); };
+                const nomeFileFinal = varianti[vi] + '.' + estensioni[ei];
+                span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nomeFileFinal); };
+                controllaCompleto();
               } else { provaCombo(vi, ei + 1); }
             })
             .catch(() => provaCombo(vi, ei + 1));
         }
         provaCombo(0, 0);
       });
+      if (spans.length === 0) window.fotoDisponibili = [];
     }, 50);
     } // fine else (non attesa)
 
@@ -2616,25 +2642,75 @@
   }
 
   function mostraFotoPopup(nomeFile) {
+    const foto = window.fotoDisponibili || [];
+    let idx = foto.indexOf(nomeFile);
+    if (idx < 0) idx = 0;
+
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9999;display:flex;align-items:center;justify-content:center;';
-    const box = document.createElement('div');
-    box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
-    const img = document.createElement('img');
-    img.src = 'Foto/' + nomeFile;
-    img.style.cssText = 'max-width:88vw;max-height:80vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.7);';
-    const label = document.createElement('div');
-    label.textContent = nomeFile.replace(/\.[^.]+$/, '');
-    label.style.cssText = 'color:#fff;font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;';
-    const chiudi = document.createElement('button');
-    chiudi.textContent = '✕';
-    chiudi.style.cssText = 'position:absolute;top:-14px;right:-14px;background:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);color:#333;';
-    chiudi.onclick = () => document.body.removeChild(overlay);
-    overlay.onclick = e => { if (e.target === overlay) document.body.removeChild(overlay); };
-    box.appendChild(chiudi);
-    box.appendChild(img);
-    box.appendChild(label);
-    overlay.appendChild(box);
+
+    function renderContenuto(i) {
+      overlay.innerHTML = '';
+      const nf = foto[i] || nomeFile;
+      const box = document.createElement('div');
+      box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
+
+      const img = document.createElement('img');
+      img.src = 'Foto/' + nf;
+      img.style.cssText = 'max-width:80vw;max-height:78vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.7);';
+
+      const label = document.createElement('div');
+      label.textContent = nf.replace(/\.[^.]+$/, '');
+      label.style.cssText = 'color:#fff;font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;';
+
+      // Contatore N/tot
+      const counter = document.createElement('div');
+      counter.textContent = (i + 1) + ' / ' + foto.length;
+      counter.style.cssText = 'color:#aaa;font-family:\'Inter\',sans-serif;font-size:12px;';
+
+      // Bottone chiudi
+      const chiudi = document.createElement('button');
+      chiudi.textContent = '✕';
+      chiudi.style.cssText = 'position:absolute;top:-14px;right:-14px;background:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);color:#333;';
+      chiudi.onclick = () => { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); };
+
+      box.appendChild(chiudi);
+      box.appendChild(img);
+      box.appendChild(label);
+      if (foto.length > 1) box.appendChild(counter);
+      overlay.appendChild(box);
+
+      // Freccia sinistra
+      if (foto.length > 1) {
+        const btnSx = document.createElement('button');
+        btnSx.textContent = '‹';
+        btnSx.style.cssText = 'position:fixed;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;transition:background 0.2s;';
+        btnSx.onmouseover = () => btnSx.style.background = 'rgba(255,255,255,0.35)';
+        btnSx.onmouseout  = () => btnSx.style.background = 'rgba(255,255,255,0.15)';
+        btnSx.onclick = e => { e.stopPropagation(); idx = (i - 1 + foto.length) % foto.length; renderContenuto(idx); };
+        overlay.appendChild(btnSx);
+
+        // Freccia destra
+        const btnDx = document.createElement('button');
+        btnDx.textContent = '›';
+        btnDx.style.cssText = 'position:fixed;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;transition:background 0.2s;';
+        btnDx.onmouseover = () => btnDx.style.background = 'rgba(255,255,255,0.35)';
+        btnDx.onmouseout  = () => btnDx.style.background = 'rgba(255,255,255,0.15)';
+        btnDx.onclick = e => { e.stopPropagation(); idx = (i + 1) % foto.length; renderContenuto(idx); };
+        overlay.appendChild(btnDx);
+      }
+    }
+
+    // Navigazione tastiera
+    function onKey(e) {
+      if (e.key === 'ArrowRight') { idx = (idx + 1) % foto.length; renderContenuto(idx); }
+      if (e.key === 'ArrowLeft')  { idx = (idx - 1 + foto.length) % foto.length; renderContenuto(idx); }
+      if (e.key === 'Escape')     { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); }
+    }
+    document.addEventListener('keydown', onKey);
+    overlay.onclick = e => { if (e.target === overlay) { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); } };
+
+    renderContenuto(idx);
     document.body.appendChild(overlay);
   }
 

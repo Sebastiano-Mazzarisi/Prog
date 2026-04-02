@@ -455,6 +455,8 @@
       lbl_g_60p: "> 60 anni",
       btnOrdina_attesa: "<b>IN ATTESA</b> di registrazione",
       lbl_ATTESA: "IN ATTESA di registrazione",
+      btnOrdina_tutti: "<b>TUTTI</b> in ordine di cognome",
+      lbl_TUTTI: "TUTTI in ordine di cognome",
       titoloAttesa: "In attesa di risposta",
       titoloConferma: "In attesa di conferma",
       msgAttesaVuota: "Tutti gli invitati hanno risposto.",
@@ -539,6 +541,8 @@
       lbl_g_60p: "> 60 a\u00f1os",
       btnOrdina_attesa: "<b>EN ESPERA</b>",
       lbl_ATTESA: "EN ESPERA",
+      btnOrdina_tutti: "<b>TODOS</b> por apellido",
+      lbl_TUTTI: "TODOS por apellido",
       titoloAttesa: "En espera de respuesta",
       titoloConferma: "En espera de confirmación",
       msgAttesaVuota: "Todos los invitados han respondido.",
@@ -1036,7 +1040,89 @@
           if (inAttesaOrdinata.length === 0) window.fotoDisponibili = [];
         }, 50);
       }
+    } else if (activeOrdine === 'tutti') {
+      // === MODALITÀ TUTTI: mostra tutti gli invitati (rispondenti + in attesa) per cognome ===
+      const tuttiRaw = window.tuttiInvitatiCsvRaw || [];
+      const tuttiOrdinati = [...tuttiRaw].sort((a, b) => {
+        const ca = ultimoToken(a.nome), cb = ultimoToken(b.nome);
+        const res = ca.localeCompare(cb, 'it', { sensitivity: 'base' });
+        if (res !== 0) return res;
+        return (a.nome||'').localeCompare(b.nome||'', 'it', { sensitivity: 'base' });
+      });
+      const acc0 = /[\u0300-\u036f]/g;
+      function norm0(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim(); }
+      const setRispondenti = new Set((window.datiInvitati||[]).map(r => norm0(r.nome)));
+      if (tuttiOrdinati.length === 0) {
+        html += `<div style="text-align:center;color:#2d6040;font-weight:600;padding:24px 0;font-family:'Inter',sans-serif;">Nessun invitato trovato</div>`;
+      } else {
+        tuttiOrdinati.forEach((inv) => {
+          const nomeInv = inv.nome || '';
+          const haRisposto = setRispondenti.has(norm0(nomeInv));
+          const tavNum = trovaTavoloNum(nomeInv);
+          const nomeDisplay = formatNomeDisplay(nomeInv);
+          const etaInv = getEtaAnni(nomeInv);
+          const etaStr = etaInv !== null ? '&nbsp;<span style="font-weight:400;font-size:14px;color:#777">(' + etaInv + ')</span>' : '';
+          const cellInv = cercaTelefono(nomeInv);
+          const cellStr = cellInv ? '<span style="margin-left:auto;font-size:12px;color:#1a4fa0;font-weight:500;white-space:nowrap;">' + formattaNumero(cellInv) + '</span>' : '';
+          const bg = haRisposto ? '' : 'background:#f5f7f8;';
+          const bgNome = haRisposto ? '' : 'background:#eef1f3;color:#555;';
+          const checkIcon = haRisposto ? '<span style="font-size:13px;color:#2d6040;margin-left:6px;">\u2713</span>' : '';
+          const partiN = nomeInv.trim().split(/\s+/);
+          const nomeFileFoto = partiN.length >= 2 ? partiN[partiN.length-1] + ' ' + partiN.slice(0,-1).join(' ') : nomeInv;
+          const idSafe = 'tutti-' + nomeFileFoto.replace(/[^a-zA-Z0-9]/g, '_');
+          html += `<div class="risposta-card" style="border-color:#b0bec5;${bg}" id="${idSafe}">
+            <div class="risposta-nome" style="${bgNome}cursor:default;">
+              ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}<span id="nomefoto-t-${idSafe}" data-nomefile="${nomeFileFoto}" style="flex:1">${nomeDisplay}${etaStr}</span>${cellStr}${checkIcon}
+              <span class="icone-destra" style="flex-shrink:0;margin-left:4px;"></span>
+            </div>
+          </div>`;
+        });
+        window.fotoDisponibili = [];
+        setTimeout(() => {
+          const spans = [...document.querySelectorAll('[id^="nomefoto-t-"]')];
+          const risultati = new Array(spans.length).fill(null);
+          let completati = 0;
+          function controllaCompletoT() {
+            completati++;
+            if (completati === spans.length) window.fotoDisponibili = risultati;
+          }
+          function variantiNomeT(n) {
+            const v = new Set();
+            v.add(n); v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
+            v.add(n.replace(/u'$/,'\u00f9').replace(/a'$/,'\u00e0').replace(/e'$/,'\u00e8').replace(/i'$/,'\u00ec').replace(/o'$/,'\u00f2'));
+            v.add(n.replace(/'$/,'')); return [...v];
+          }
+          spans.forEach((span, posizione) => {
+            const nomeFile = span.getAttribute('data-nomefile');
+            if (!nomeFile) { controllaCompletoT(); return; }
+            risultati[posizione] = { nome: nomeFile, file: null };
+            const varianti = variantiNomeT(nomeFile);
+            const estensioni = ['jpg','JPG','jpeg','JPEG'];
+            let trovata = false;
+            function provaComboT(vi, ei) {
+              if (trovata) return;
+              if (vi >= varianti.length) { controllaCompletoT(); return; }
+              if (ei >= estensioni.length) { provaComboT(vi+1,0); return; }
+              fetch('Foto/'+varianti[vi]+'.'+estensioni[ei]+'?t='+Date.now(),{method:'HEAD'})
+                .then(r => {
+                  if (r.ok && !trovata) {
+                    trovata = true;
+                    risultati[posizione] = { nome: nomeFile, file: varianti[vi]+'.'+estensioni[ei] };
+                    span.style.color = '#1a4fa0'; span.style.fontWeight = '700'; span.style.cursor = 'pointer';
+                    span.title = 'Clicca per vedere la foto';
+                    const nf = varianti[vi]+'.'+estensioni[ei];
+                    span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nf); };
+                    controllaCompletoT();
+                  } else { provaComboT(vi, ei+1); }
+                }).catch(() => provaComboT(vi, ei+1));
+            }
+            provaComboT(0,0);
+          });
+          if (spans.length === 0) window.fotoDisponibili = [];
+        }, 50);
+      }
     } else {
+
 
     // Pre-calcola duplicati e senza-tavolo per evidenziazione a video
     function tokV(n) { return (n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().split(/\s+/).filter(Boolean); }
@@ -2537,13 +2623,16 @@
 
   function labelOrdineCorrente() {
     const t = dizionario[currentLang];
-    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA };
+    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA, tutti: t.lbl_TUTTI };
     const base = labels[activeOrdine] || t.lbl_COGNOME;
     const totInv = window.totInvitatiCsv || null;
     if (!totInv) return base;
     if (activeOrdine === 'attesa') {
       const nAttesa = calcolaInAttesa().length;
       return base + ' (' + nAttesa + '/' + totInv + ')';
+    } else if (activeOrdine === 'tutti') {
+      const nTutti = (window.tuttiInvitatiCsvRaw || []).length;
+      return base + ' (' + nTutti + ')';
     } else {
       const nRisp = (window.datiInvitati || []).length;
       return base + ' (' + nRisp + '/' + totInv + ')';
@@ -2749,7 +2838,8 @@
       {val:'tavolo',      lbl: t.btnOrdina_tavolo},
       {val:'cibo',        lbl: t.btnOrdina_cibo},
       {val:'eta',         lbl: t.btnOrdina_eta},
-      {val:'attesa',      lbl: t.btnOrdina_attesa}
+      {val:'attesa',      lbl: t.btnOrdina_attesa},
+      {val:'tutti',       lbl: t.btnOrdina_tutti}
     ];
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:3000;display:flex;align-items:center;justify-content:center;';

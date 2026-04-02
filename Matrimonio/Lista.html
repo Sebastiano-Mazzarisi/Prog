@@ -2647,86 +2647,141 @@
 
   function mostraFotoPopup(nomeFile) {
     const foto = window.fotoDisponibili || [];
-    // Trova indice: cerca prima per file, poi per nome
     let idx = foto.findIndex(f => f && f.file === nomeFile);
     if (idx < 0) idx = foto.findIndex(f => f && f.nome === nomeFile);
     if (idx < 0) idx = 0;
 
+    let playTimer = null;
+    const PLAY_INTERVAL = 3000;
+
+    // ── Overlay ──────────────────────────────────────────────────────────
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9999;display:flex;align-items:center;justify-content:center;';
 
-    function renderContenuto(i) {
-      overlay.innerHTML = '';
-      const voce = foto[i] || { nome: nomeFile, file: null };
-      const haFoto = !!voce.file;
-      const box = document.createElement('div');
-      box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
+    // ── Box centrale ─────────────────────────────────────────────────────
+    const box = document.createElement('div');
+    box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
 
-      const img = document.createElement('img');
-      img.src = haFoto ? 'Foto/' + voce.file : 'Foto/Foto.png';
-      img.style.cssText = 'max-width:80vw;max-height:78vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.7);';
+    // ── Immagine con transizione opacity ─────────────────────────────────
+    const img = document.createElement('img');
+    img.style.cssText = 'max-width:80vw;max-height:78vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.7);transition:opacity 0.25s ease;';
 
-      const label = document.createElement('div');
-      label.textContent = voce.nome;
-      label.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;color:' + (haFoto ? '#fff' : '#ffaa55') + ';';
+    // ── Label nome ───────────────────────────────────────────────────────
+    const label = document.createElement('div');
+    label.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;transition:opacity 0.25s ease;';
 
-      // Contatore N/tot
-      const counter = document.createElement('div');
-      counter.textContent = (i + 1) + ' / ' + foto.length;
-      counter.style.cssText = 'color:#aaa;font-family:\'Inter\',sans-serif;font-size:12px;';
+    // ── Contatore ────────────────────────────────────────────────────────
+    const counter = document.createElement('div');
+    counter.style.cssText = 'color:#aaa;font-family:\'Inter\',sans-serif;font-size:12px;';
 
-      // Bottone chiudi
-      const chiudi = document.createElement('button');
-      chiudi.textContent = '\u2715';
-      chiudi.style.cssText = 'position:absolute;top:-14px;right:-14px;background:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);color:#333;';
-      chiudi.onclick = () => { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); };
+    // ── Bottone chiudi ───────────────────────────────────────────────────
+    const chiudi = document.createElement('button');
+    chiudi.textContent = '✕';
+    chiudi.style.cssText = 'position:absolute;top:-14px;right:-14px;background:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);color:#333;';
+    chiudi.onclick = () => { stopPlay(); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); };
 
-      box.appendChild(chiudi);
-      box.appendChild(img);
-      box.appendChild(label);
-      if (foto.length > 1) box.appendChild(counter);
-      overlay.appendChild(box);
+    box.appendChild(chiudi);
+    box.appendChild(img);
+    box.appendChild(label);
+    if (foto.length > 1) box.appendChild(counter);
+    overlay.appendChild(box);
 
-      // Frecce (sempre visibili se più di 1 voce)
-      if (foto.length > 1) {
-        const btnSx = document.createElement('button');
-        btnSx.textContent = '\u2039';
-        btnSx.style.cssText = 'position:fixed;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;';
-        btnSx.onmouseover = () => btnSx.style.background = 'rgba(255,255,255,0.35)';
-        btnSx.onmouseout  = () => btnSx.style.background = 'rgba(255,255,255,0.15)';
-        btnSx.onclick = e => { e.stopPropagation(); idx = (i - 1 + foto.length) % foto.length; renderContenuto(idx); };
-        overlay.appendChild(btnSx);
+    // ── Frecce ───────────────────────────────────────────────────────────
+    const btnStyle = (side) => 'position:fixed;' + side + ':12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;';
+    if (foto.length > 1) {
+      const btnSx = document.createElement('button');
+      btnSx.textContent = '‹';
+      btnSx.style.cssText = btnStyle('left');
+      btnSx.onmouseover = () => btnSx.style.background = 'rgba(255,255,255,0.35)';
+      btnSx.onmouseout  = () => btnSx.style.background = 'rgba(255,255,255,0.15)';
+      btnSx.onclick = e => { e.stopPropagation(); stopPlay(); vai((idx - 1 + foto.length) % foto.length); };
+      overlay.appendChild(btnSx);
 
-        const btnDx = document.createElement('button');
-        btnDx.textContent = '\u203a';
-        btnDx.style.cssText = 'position:fixed;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;';
-        btnDx.onmouseover = () => btnDx.style.background = 'rgba(255,255,255,0.35)';
-        btnDx.onmouseout  = () => btnDx.style.background = 'rgba(255,255,255,0.15)';
-        btnDx.onclick = e => { e.stopPropagation(); idx = (i + 1) % foto.length; renderContenuto(idx); };
-        overlay.appendChild(btnDx);
-      }
+      const btnDx = document.createElement('button');
+      btnDx.textContent = '›';
+      btnDx.style.cssText = btnStyle('right');
+      btnDx.onmouseover = () => btnDx.style.background = 'rgba(255,255,255,0.35)';
+      btnDx.onmouseout  = () => btnDx.style.background = 'rgba(255,255,255,0.15)';
+      btnDx.onclick = e => { e.stopPropagation(); stopPlay(); vai((idx + 1) % foto.length); };
+      overlay.appendChild(btnDx);
+
+      // ── Tasto Play/Pausa ─────────────────────────────────────────────
+      const btnPlay = document.createElement('button');
+      btnPlay.textContent = '▶';
+      btnPlay.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.18);border:none;border-radius:50%;width:44px;height:44px;font-size:20px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;';
+      btnPlay.onmouseover = () => btnPlay.style.background = 'rgba(255,255,255,0.38)';
+      btnPlay.onmouseout  = () => btnPlay.style.background = playing() ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.18)';
+      btnPlay.onclick = e => { e.stopPropagation(); togglePlay(btnPlay); };
+      overlay.appendChild(btnPlay);
     }
 
-    // Navigazione tastiera
+    // ── Aggiorna contenuto senza ricreare elementi (no sfarfallio) ───────
+    function aggiornaContenuto(i) {
+      const voce = foto[i] || { nome: nomeFile, file: null };
+      const haFoto = !!voce.file;
+      const nuovaSrc = haFoto ? 'Foto/' + voce.file : 'Foto/Foto.png';
+      // Fade out → cambia src → fade in
+      img.style.opacity = '0';
+      label.style.opacity = '0';
+      setTimeout(() => {
+        img.src = nuovaSrc;
+        label.textContent = voce.nome;
+        label.style.color = haFoto ? '#fff' : '#ffaa55';
+        counter.textContent = (i + 1) + ' / ' + foto.length;
+        img.style.opacity = '1';
+        label.style.opacity = '1';
+      }, 220);
+    }
+
+    function vai(i) {
+      idx = i;
+      aggiornaContenuto(idx);
+    }
+
+    // ── Play / Pausa ─────────────────────────────────────────────────────
+    function playing() { return playTimer !== null; }
+    function startPlay(btn) {
+      playTimer = setInterval(() => { idx = (idx + 1) % foto.length; aggiornaContenuto(idx); }, PLAY_INTERVAL);
+      if (btn) { btn.textContent = '⏸'; btn.style.background = 'rgba(255,255,255,0.28)'; }
+    }
+    function stopPlay() {
+      if (playTimer) { clearInterval(playTimer); playTimer = null; }
+      const btn = overlay.querySelector('[data-play]');
+      if (btn) { btn.textContent = '▶'; btn.style.background = 'rgba(255,255,255,0.18)'; }
+    }
+    function togglePlay(btn) {
+      btn.setAttribute('data-play', '1');
+      if (playing()) { stopPlay(); } else { startPlay(btn); }
+    }
+
+    // ── Tastiera ─────────────────────────────────────────────────────────
     function onKey(e) {
-      if (e.key === 'ArrowRight') { idx = (idx + 1) % foto.length; renderContenuto(idx); }
-      if (e.key === 'ArrowLeft')  { idx = (idx - 1 + foto.length) % foto.length; renderContenuto(idx); }
-      if (e.key === 'Escape')     { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); }
+      if (e.key === 'ArrowRight') { stopPlay(); vai((idx + 1) % foto.length); }
+      if (e.key === 'ArrowLeft')  { stopPlay(); vai((idx - 1 + foto.length) % foto.length); }
+      if (e.key === 'Escape')     { stopPlay(); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); }
     }
     document.addEventListener('keydown', onKey);
 
-    // Swipe touch per smartphone
+    // ── Swipe touch ──────────────────────────────────────────────────────
     let touchStartX = 0;
     overlay.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
     overlay.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) < 40) return; // movimento troppo piccolo
-      if (dx < 0) { idx = (idx + 1) % foto.length; renderContenuto(idx); }       // swipe sinistra → avanti
-      else         { idx = (idx - 1 + foto.length) % foto.length; renderContenuto(idx); } // swipe destra → indietro
+      if (Math.abs(dx) < 40) return;
+      stopPlay();
+      if (dx < 0) vai((idx + 1) % foto.length);
+      else         vai((idx - 1 + foto.length) % foto.length);
     }, { passive: true });
-    overlay.onclick = e => { if (e.target === overlay) { document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); } };
 
-    renderContenuto(idx);
+    overlay.onclick = e => { if (e.target === overlay) { stopPlay(); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); } };
+
+    // ── Prima visualizzazione (senza fade, già visibile) ─────────────────
+    const voce0 = foto[idx] || { nome: nomeFile, file: null };
+    img.src = voce0.file ? 'Foto/' + voce0.file : 'Foto/Foto.png';
+    label.textContent = voce0.nome;
+    label.style.color = voce0.file ? '#fff' : '#ffaa55';
+    counter.textContent = (idx + 1) + ' / ' + foto.length;
+
     document.body.appendChild(overlay);
   }
 

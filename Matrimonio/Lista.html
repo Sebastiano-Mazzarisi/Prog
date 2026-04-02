@@ -1089,7 +1089,7 @@
       }
 
       html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
-        <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}${nomeDisplay}${isVideoDup && r.data ? `<span style="font-size:11px;font-weight:400;color:#7a5a00;margin-left:6px;white-space:nowrap">${r.data}</span>` : ''}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}${dataInserimento ? `<span style="font-size:11px;font-weight:400;color:#5a6e3a;margin-left:6px;white-space:nowrap">${dataInserimento}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
+        <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}<span id="nomefoto-${riga}" data-nomefile="${(() => { const t=(r.nome||'').trim().split(/\s+/); return t.length>=2 ? t[t.length-1]+' '+t.slice(0,t.length-1).join(' ') : (r.nome||''); })()}">${nomeDisplay}</span>${isVideoDup && r.data ? `<span style="font-size:11px;font-weight:400;color:#7a5a00;margin-left:6px;white-space:nowrap">${r.data}</span>` : ''}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}${dataInserimento ? `<span style="font-size:11px;font-weight:400;color:#5a6e3a;margin-left:6px;white-space:nowrap">${dataInserimento}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row">
             <span class="risposta-label">${testi.lblTavolo}</span>
@@ -1116,6 +1116,32 @@
         </div>
       </div>`;
     });
+    // Dopo il rendering, verifica in parallelo quali foto esistono e rende il nome blu e cliccabile
+    setTimeout(() => {
+      document.querySelectorAll('[id^="nomefoto-"]').forEach(span => {
+        const nomeFile = span.getAttribute('data-nomefile');
+        if (!nomeFile) return;
+        const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
+        let trovata = false;
+        function provaProssima(i) {
+          if (i >= estensioni.length || trovata) return;
+          fetch('Foto/' + nomeFile + '.' + estensioni[i] + '?t=' + Date.now(), { method: 'HEAD' })
+            .then(r => {
+              if (r.ok && !trovata) {
+                trovata = true;
+                span.style.color = '#1a4fa0';
+                span.style.fontWeight = '700';
+                span.style.cursor = 'pointer';
+                span.style.textDecoration = 'underline';
+                span.title = 'Clicca per vedere la foto';
+                span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nomeFile + '.' + estensioni[i]); };
+              } else { provaProssima(i + 1); }
+            })
+            .catch(() => provaProssima(i + 1));
+        }
+        provaProssima(0);
+      });
+    }, 50);
     } // fine else (non attesa)
 
     html += `</div>
@@ -2324,7 +2350,7 @@
   }
 
   // --- ORDINAMENTO ---
-  let activeOrdine = 'cognome'; // default
+  let activeOrdine = 'inserimento'; // default
 
   function labelOrdineCorrente() {
     const t = dizionario[currentLang];

@@ -1072,7 +1072,7 @@
           const idSafe = 'tutti-' + nomeFileFoto.replace(/[^a-zA-Z0-9]/g, '_');
           html += `<div class="risposta-card" style="border-color:#b0bec5;${bg}" id="${idSafe}">
             <div class="risposta-nome" style="${bgNome}cursor:default;">
-              ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}<span id="nomefoto-t-${idSafe}" data-nomefile="${nomeFileFoto}" style="flex:1">${nomeDisplay}${etaStr}</span>${cellStr}${checkIcon}
+              ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}<span id="nomefoto-t-${idSafe}" data-nomefile="${nomeFileFoto}" style="flex:1">${nomeDisplay}</span>${cellStr}${checkIcon}
               <span class="icone-destra" style="flex-shrink:0;margin-left:4px;"></span>
             </div>
           </div>`;

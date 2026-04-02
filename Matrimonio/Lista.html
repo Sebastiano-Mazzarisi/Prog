@@ -2099,10 +2099,13 @@
       });
     }
 
-    // Griglia: 7 colonne, celle 94px wide
-    const COLS = 7;
-    const CELL_W = 94;
-    const IMG_SIZE = 72; // px DOM (×2 canvas ≈ 2cm)
+    // Ordina per identificativo (alfabetico, case-insensitive)
+    fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));
+
+    // Griglia: 5 colonne
+    const COLS = 5;
+    const CELL_W = 130;
+    const IMG_SIZE = 110; // px DOM (×2 canvas ≈ 2cm)
 
     htmlPDF += `<table style="border-collapse:collapse;width:100%;table-layout:fixed;">`;
     for (let row = 0; row < Math.ceil(fotoPagina.length / COLS); row++) {

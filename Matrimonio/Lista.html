@@ -2032,6 +2032,99 @@
 
     htmlPDF += `</div>`; // Chiude pagina grafici
 
+    // ===== PAGINA FOTOGRAFIE: miniature 2x2cm in griglia =====
+
+    // Carica Identificativi.csv per label personalizzati
+    const mapIdentificativi = {};
+    try {
+      const respId = await fetch('Identificativi.csv?t=' + Date.now());
+      if (respId.ok) {
+        const txtId = await respId.text();
+        const acc = /[\u0300-\u036f]/g;
+        function normId(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc,'').trim(); }
+        txtId.split(/\r?\n/).forEach((riga, i) => {
+          if (i === 0 || !riga.trim()) return; // salta intestazione
+          const sep = riga.includes(';') ? ';' : ',';
+          const cols = riga.split(sep);
+          const cognomeNome = (cols[0] || '').replace(/['"]/g,'').trim();
+          const id = (cols[1] || '').replace(/['"]/g,'').trim();
+          if (cognomeNome && id) mapIdentificativi[normId(cognomeNome)] = id;
+        });
+      }
+    } catch(e) { console.log('Identificativi.csv non disponibile', e); }
+
+    function getIdentificativo(cognomeNome) {
+      const acc = /[\u0300-\u036f]/g;
+      function norm(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc,'').trim(); }
+      const k = norm(cognomeNome);
+      if (mapIdentificativi[k]) return mapIdentificativi[k];
+      // fallback: prova senza accenti nel confronto
+      for (const mk of Object.keys(mapIdentificativi)) {
+        if (norm(mk) === k) return mapIdentificativi[mk];
+      }
+      // fallback: primo nome
+      const parti = cognomeNome.trim().split(/\s+/);
+      return parti.length >= 2 ? parti.slice(1).join(' ') : cognomeNome;
+    }
+
+    htmlPDF += `<div class="html2pdf__page-break"></div>`;
+    htmlPDF += `<div style="width:700px;padding:0;font-family:'Inter',sans-serif;">`;
+    htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Fotografie</h1>`;
+    htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:18px;">Giulia &amp; Onofrio</h2>`;
+
+    // Costruisce lista ordinata da fotoDisponibili o datiInvitati come fallback
+    const fotoPagina = [];
+    const fotoDisp = window.fotoDisponibili || [];
+    if (fotoDisp.length > 0) {
+      fotoDisp.forEach(voce => {
+        if (!voce) return;
+        // voce.nome è "Cognome Nome" — uguale al formato del CSV
+        const id = getIdentificativo(voce.nome);
+        // età: inverti in "Nome Cognome" per getEtaAnni
+        const parti = (voce.nome || '').trim().split(/\s+/);
+        const nomePerEta = parti.length >= 2 ? parti.slice(1).join(' ') + ' ' + parti[0] : voce.nome;
+        const eta = getEtaAnni(nomePerEta);
+        const label = id + (eta !== null ? ' (' + eta + ')' : '');
+        fotoPagina.push({ nome: voce.nome, file: voce.file || null, label });
+      });
+    } else {
+      // Fallback: usa datiInvitati (nome è "Nome Cognome" → inverti per CSV)
+      (window.datiInvitati || []).forEach(r => {
+        const parti = (r.nome || '').trim().split(/\s+/);
+        const cognomeNome = parti.length >= 2 ? parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' ') : r.nome;
+        const id = getIdentificativo(cognomeNome);
+        const eta = getEtaAnni(r.nome);
+        const label = id + (eta !== null ? ' (' + eta + ')' : '');
+        fotoPagina.push({ nome: cognomeNome, file: null, label });
+      });
+    }
+
+    // Griglia: 7 colonne, celle 94px wide
+    const COLS = 7;
+    const CELL_W = 94;
+    const IMG_SIZE = 72; // px DOM (×2 canvas ≈ 2cm)
+
+    htmlPDF += `<table style="border-collapse:collapse;width:100%;table-layout:fixed;">`;
+    for (let row = 0; row < Math.ceil(fotoPagina.length / COLS); row++) {
+      htmlPDF += `<tr>`;
+      for (let col = 0; col < COLS; col++) {
+        const i = row * COLS + col;
+        if (i >= fotoPagina.length) {
+          htmlPDF += `<td style="width:${CELL_W}px;padding:4px 3px;"></td>`;
+          continue;
+        }
+        const voce = fotoPagina[i];
+        const imgSrc = voce.file ? 'Foto/' + voce.file : 'Foto/Foto.png';
+        htmlPDF += `<td style="width:${CELL_W}px;padding:4px 3px;text-align:center;vertical-align:top;">
+          <img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;" crossorigin="anonymous" />
+          <div style="font-size:8px;font-family:'Inter',sans-serif;color:${voce.file ? '#222' : '#999'};margin-top:3px;line-height:1.2;word-break:break-word;">${voce.label}</div>
+        </td>`;
+      }
+      htmlPDF += `</tr>`;
+    }
+    htmlPDF += `</table>`;
+    htmlPDF += `</div>`;
+
     container.innerHTML = htmlPDF;
 
 

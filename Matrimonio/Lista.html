@@ -989,12 +989,22 @@
             if (!card) return;
             const nomeSpan = card.querySelector('.risposta-nome');
             if (!nomeSpan) return;
+            function variantiNomeA(n) {
+              const v = new Set();
+              v.add(n);
+              v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+              v.add(n.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
+              v.add(n.replace(/'$/, ''));
+              return [...v];
+            }
+            const variantiA = variantiNomeA(nomeFileFoto2);
             const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
             let trovata = false;
-            function provaProssima(i) {
-              if (i >= estensioni.length || trovata) return;
-              const urlFoto = 'Foto/' + nomeFileFoto2 + '.' + estensioni[i] + '?t=' + Date.now();
-              fetch(urlFoto, { method: 'HEAD' })
+            function provaComboA(vi, ei) {
+              if (trovata) return;
+              if (vi >= variantiA.length) return;
+              if (ei >= estensioni.length) { provaComboA(vi + 1, 0); return; }
+              fetch('Foto/' + variantiA[vi] + '.' + estensioni[ei] + '?t=' + Date.now(), { method: 'HEAD' })
                 .then(r => {
                   if (r.ok && !trovata) {
                     trovata = true;
@@ -1002,14 +1012,12 @@
                     nomeSpan.style.background = '#e8f4e8';
                     nomeSpan.style.color = '#2d6040';
                     nomeSpan.title = 'Clicca per vedere la foto';
-                    nomeSpan.onclick = () => mostraFotoPopup(nomeFileFoto2 + '.' + estensioni[i]);
-                  } else {
-                    provaProssima(i + 1);
-                  }
+                    nomeSpan.onclick = () => mostraFotoPopup(variantiA[vi] + '.' + estensioni[ei]);
+                  } else { provaComboA(vi, ei + 1); }
                 })
-                .catch(() => provaProssima(i + 1));
+                .catch(() => provaComboA(vi, ei + 1));
             }
-            provaProssima(0);
+            provaComboA(0, 0);
           });
         }, 50);
       }
@@ -1121,25 +1129,36 @@
       document.querySelectorAll('[id^="nomefoto-"]').forEach(span => {
         const nomeFile = span.getAttribute('data-nomefile');
         if (!nomeFile) return;
+        // Varianti del nome per gestire accenti/apostrofi (Marilù = Marilu' = Marilu)
+        function variantiNome(n) {
+          const v = new Set();
+          v.add(n);
+          v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+          v.add(n.replace(/u'$/, 'ù').replace(/a'$/, 'à').replace(/e'$/, 'è').replace(/i'$/, 'ì').replace(/o'$/, 'ò'));
+          v.add(n.replace(/'$/, ''));
+          return [...v];
+        }
+        const varianti = variantiNome(nomeFile);
         const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
         let trovata = false;
-        function provaProssima(i) {
-          if (i >= estensioni.length || trovata) return;
-          fetch('Foto/' + nomeFile + '.' + estensioni[i] + '?t=' + Date.now(), { method: 'HEAD' })
+        function provaCombo(vi, ei) {
+          if (trovata) return;
+          if (vi >= varianti.length) return;
+          if (ei >= estensioni.length) { provaCombo(vi + 1, 0); return; }
+          fetch('Foto/' + varianti[vi] + '.' + estensioni[ei] + '?t=' + Date.now(), { method: 'HEAD' })
             .then(r => {
               if (r.ok && !trovata) {
                 trovata = true;
                 span.style.color = '#1a4fa0';
                 span.style.fontWeight = '700';
                 span.style.cursor = 'pointer';
-                span.style.textDecoration = 'underline';
                 span.title = 'Clicca per vedere la foto';
-                span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nomeFile + '.' + estensioni[i]); };
-              } else { provaProssima(i + 1); }
+                span.onclick = e => { e.stopPropagation(); mostraFotoPopup(varianti[vi] + '.' + estensioni[ei]); };
+              } else { provaCombo(vi, ei + 1); }
             })
-            .catch(() => provaProssima(i + 1));
+            .catch(() => provaCombo(vi, ei + 1));
         }
-        provaProssima(0);
+        provaCombo(0, 0);
       });
     }, 50);
     } // fine else (non attesa)

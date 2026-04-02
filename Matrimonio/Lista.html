@@ -453,8 +453,8 @@
       lbl_g_21_40: "21-40 anni",
       lbl_g_41_60: "41-60 anni",
       lbl_g_60p: "> 60 anni",
-      btnOrdina_attesa: "<b>IN ATTESA</b> di registrazione",
-      lbl_ATTESA: "IN ATTESA di registrazione",
+      btnOrdina_attesa: "<b>IN ATTESA</b>",
+      lbl_ATTESA: "IN ATTESA",
       titoloAttesa: "In attesa di risposta",
       titoloConferma: "In attesa di conferma",
       msgAttesaVuota: "Tutti gli invitati hanno risposto.",
@@ -950,24 +950,77 @@
           // Display forzato: Cognome Nome (età) — indipendente da activeOrdine
           const tokensInv = (inv.nome||'').trim().split(/\s+/);
           let nomeFmt;
+          let nomeFileFoto = ''; // "Cognome Nome" come da GitHub
           if (tokensInv.length >= 2) {
             const cognome = tokensInv[tokensInv.length - 1];
             const resto = tokensInv.slice(0, tokensInv.length - 1).join(' ');
             nomeFmt = cognome + ' ' + resto;
+            nomeFileFoto = cognome + ' ' + resto; // stesso formato
           } else {
             nomeFmt = inv.nome || '';
+            nomeFileFoto = inv.nome || '';
           }
           const etaInv = getEtaAnni(inv.nome);
           const etaStrInv = etaInv !== null ? '&nbsp;<span style="font-weight:400;font-size:14px;color:#777">(' + etaInv + ')</span>' : '';
           const cellInv = cercaTelefono(inv.nome);
           const cellStrInv = cellInv ? '<span style="margin-left:auto;font-size:12px;color:#1a4fa0;font-weight:500;white-space:nowrap;">' + formattaNumero(cellInv) + '</span>' : '';
-          html += `<div class="risposta-card" style="border-color:#b0bec5;background:#f5f7f8;">
+          // ID sicuro per DOM: rimuovi spazi e caratteri speciali
+          const idSafe = 'attesa-' + nomeFileFoto.replace(/[^a-zA-Z0-9]/g, '_');
+          html += `<div class="risposta-card" style="border-color:#b0bec5;background:#f5f7f8;" id="${idSafe}">
             <div class="risposta-nome" style="background:#eef1f3;color:#555;cursor:default;">
               ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}<span style="flex:1">${nomeFmt}${etaStrInv}</span>${cellStrInv}
               <span class="icone-destra" style="flex-shrink:0;margin-left:4px;"></span>
             </div>
           </div>`;
         });
+        // Dopo il rendering, verifica in parallelo quali foto esistono e rende i nomi cliccabili
+        setTimeout(() => {
+          inAttesaOrdinata.forEach((inv) => {
+            const tokensInv2 = (inv.nome||'').trim().split(/\s+/);
+            let nomeFileFoto2 = '';
+            if (tokensInv2.length >= 2) {
+              const cognome2 = tokensInv2[tokensInv2.length - 1];
+              const resto2 = tokensInv2.slice(0, tokensInv2.length - 1).join(' ');
+              nomeFileFoto2 = cognome2 + ' ' + resto2;
+            } else {
+              nomeFileFoto2 = inv.nome || '';
+            }
+            const idSafe2 = 'attesa-' + nomeFileFoto2.replace(/[^a-zA-Z0-9]/g, '_');
+            const card = document.getElementById(idSafe2);
+            if (!card) return;
+            const nomeSpan = card.querySelector('.risposta-nome');
+            if (!nomeSpan) return;
+            // Prova prima .jpg poi .JPG
+            const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
+            let trovata = false;
+            function provaProssima(i) {
+              if (i >= estensioni.length || trovata) return;
+              const urlFoto = 'Foto/' + nomeFileFoto2 + '.' + estensioni[i] + '?t=' + Date.now();
+              fetch(urlFoto, { method: 'HEAD' })
+                .then(r => {
+                  if (r.ok && !trovata) {
+                    trovata = true;
+                    // Rende la card cliccabile
+                    nomeSpan.style.cursor = 'pointer';
+                    nomeSpan.style.background = '#e8f4e8';
+                    nomeSpan.style.color = '#2d6040';
+                    nomeSpan.title = '📷 Clicca per vedere la foto';
+                    // Aggiunge icona foto
+                    const iconaFoto = document.createElement('span');
+                    iconaFoto.textContent = '📷';
+                    iconaFoto.style.cssText = 'margin-left:6px;font-size:16px;flex-shrink:0;';
+                    const iconeSpan = nomeSpan.querySelector('.icone-destra');
+                    if (iconeSpan) iconeSpan.prepend(iconaFoto);
+                    nomeSpan.onclick = () => mostraFotoPopup(nomeFileFoto2 + '.' + estensioni[i]);
+                  } else {
+                    provaProssima(i + 1);
+                  }
+                })
+                .catch(() => provaProssima(i + 1));
+            }
+            provaProssima(0);
+          });
+        }, 50);
       }
     } else {
 
@@ -2518,11 +2571,34 @@
     });
     const annulla = document.createElement('button');
     annulla.textContent = t.lblAnnulla;
-    annulla.style.cssText = 'display:block;width:100%;margin-top:4px;padding:10px;border-radius:10px;border:1.5px solid #333;background:#fdd9d7;font-family:\'Inter\',sans-serif;font-size:14px;font-weight:700;color:#c0392b;cursor:pointer;';
+    annulla.style.cssText = 'display:block;width:100%;margin-top:4px;padding:10px;border-radius:10px;border:1.5px solid #333;background:#fafafa;font-family:\'Inter\',sans-serif;font-size:14px;font-weight:700;color:#c0392b;cursor:pointer;';
     annulla.onclick = () => document.body.removeChild(overlay);
     box.appendChild(annulla);
     overlay.appendChild(box);
     overlay.onclick = e => { if (e.target === overlay) document.body.removeChild(overlay); };
+    document.body.appendChild(overlay);
+  }
+
+  function mostraFotoPopup(nomeFile) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.80);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    const box = document.createElement('div');
+    box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
+    const img = document.createElement('img');
+    img.src = 'Foto/' + nomeFile;
+    img.style.cssText = 'max-width:88vw;max-height:80vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.7);';
+    const label = document.createElement('div');
+    label.textContent = nomeFile.replace(/\.[^.]+$/, ''); // solo il nome senza estensione
+    label.style.cssText = 'color:#fff;font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;';
+    const chiudi = document.createElement('button');
+    chiudi.textContent = '✕';
+    chiudi.style.cssText = 'position:absolute;top:-14px;right:-14px;background:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);color:#333;';
+    chiudi.onclick = () => document.body.removeChild(overlay);
+    overlay.onclick = e => { if (e.target === overlay) document.body.removeChild(overlay); };
+    box.appendChild(chiudi);
+    box.appendChild(img);
+    box.appendChild(label);
+    overlay.appendChild(box);
     document.body.appendChild(overlay);
   }
 

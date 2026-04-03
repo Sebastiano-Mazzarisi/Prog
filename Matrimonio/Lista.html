@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v124</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v125</small>
       </p>
     </div>
   </div>
@@ -802,7 +802,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v124</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v125</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2957,16 +2957,16 @@
 
     // ── Barra laterale destra (solo landscape) ───────────────────────────
     const sideBar = document.createElement('div');
-    sideBar.style.cssText = 'position:absolute;top:0;right:0;bottom:0;width:280px;z-index:10;background:#2d3a0e;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:24px 16px;';
+    sideBar.style.cssText = 'position:absolute;top:0;right:0;bottom:0;width:280px;z-index:10;background:#2d3a0e;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:24px 16px;box-sizing:border-box;';
 
     const sideNum   = document.createElement('div');
-    sideNum.style.cssText   = 'font-family:\'Inter\',sans-serif;font-size:54px;font-weight:700;color:#fff;text-align:center;line-height:1;';
+    sideNum.style.cssText   = 'font-family:\'Inter\',sans-serif;font-size:54px;font-weight:700;color:#d4b07a;text-align:center;line-height:1;width:100%;';
     const sideName  = document.createElement('div');
-    sideName.style.cssText  = 'font-family:\'Inter\',sans-serif;font-size:42px;font-weight:600;color:#fff;text-align:center;line-height:1.2;word-break:break-word;';
+    sideName.style.cssText  = 'font-family:\'Inter\',sans-serif;font-size:42px;font-weight:600;color:#fff;text-align:center;line-height:1.2;word-break:break-word;width:100%;';
     const sideFood  = document.createElement('div');
-    sideFood.style.cssText  = 'font-family:\'Inter\',sans-serif;font-size:60px;text-align:center;line-height:1;';
+    sideFood.style.cssText  = 'font-family:\'Inter\',sans-serif;font-size:60px;text-align:center;line-height:1;width:100%;';
     const sideFoodTxt = document.createElement('div');
-    sideFoodTxt.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:36px;font-weight:500;color:#c8d8a0;text-align:center;letter-spacing:0.5px;';
+    sideFoodTxt.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:36px;font-weight:500;color:#c8d8a0;text-align:center;letter-spacing:0.5px;width:100%;';
 
     sideBar.appendChild(sideNum);
     sideBar.appendChild(sideName);
@@ -3108,4 +3108,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v124 - 04/04/2026 - Sidebar landscape: testo triplo, fascia 280px, centrata verticalmente -->
+<!-- Lista.html v125 - 04/04/2026 - Sidebar centrata con width:100%, n/t in giallo gold -->

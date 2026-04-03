@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v135</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v136</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v135</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v136</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2942,7 +2942,8 @@
         .fp-group-thumb.highlight { border-color:#d4b07a; }
         .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(8px,0.9vw,13px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
         .fp-group-label.highlight { color:#fff; font-weight:700; }
-        .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 2s ease; }
+        .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; max-width:100%; opacity:0; transition:opacity 2s ease; }
+        .fp-overlay.landscape .fp-img { left:50px; width:calc(100% - 50px); }
         .fp-img.front { opacity:1; }
         .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:2vh; padding:3vh 2vw; box-sizing:border-box; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
@@ -3049,36 +3050,37 @@
                   || (window.mapGruppo || {})[normK(nomeInv)]
                   || [];
 
-      // gruppo è in formato "Nome Cognome" — converti in "Cognome Nome" per cercare la foto
       function nomeToFilename(n) {
         const p = n.trim().split(/\s+/);
         return p.length >= 2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : n;
       }
-      function nomeDisplay(n) { return nomeToFilename(n); } // stessa logica
-
-      // cerca il file foto per un nome (stesso meccanismo del resto del codice)
       function thumbSrc(cognomeNome) {
         const fotoDisp = window.fotoDisponibili || [];
         const match = fotoDisp.find(f => f && normK(f.nome) === normK(cognomeNome));
         return match && match.file ? 'Foto/' + match.file : null;
       }
 
-      // disponi in righe da 2
+      // disponi in righe da 2, con preload per evitare foto alternativa
       for (let r = 0; r < gruppo.length; r += 2) {
         const riga = document.createElement('div');
         riga.className = 'fp-group-row';
         for (let c = r; c < Math.min(r+2, gruppo.length); c++) {
-          const nomeGruppo = gruppo[c]; // "Nome Cognome"
-          const cognomeNome = nomeToFilename(nomeGruppo); // "Cognome Nome"
+          const nomeGruppo = gruppo[c];
+          const cognomeNome = nomeToFilename(nomeGruppo);
           const isMe = normK(nomeGruppo)===normK(nomeInv) || normK(cognomeNome)===normK(nomeVoce);
           const src = thumbSrc(cognomeNome);
           const cell = document.createElement('div');
           cell.className = 'fp-group-cell';
-          const img = document.createElement('img');
-          img.className = 'fp-group-thumb' + (isMe ? ' highlight' : '');
-          img.src = src || 'Foto/Foto.png';
-          img.alt = cognomeNome;
-          // click sulla miniatura naviga a quella foto
+          const imgThumb = document.createElement('img');
+          imgThumb.className = 'fp-group-thumb' + (isMe ? ' highlight' : '');
+          imgThumb.alt = cognomeNome;
+          // preload: mostra solo quando caricata, non la foto alternativa
+          if (src) {
+            const preloadThumb = new Image();
+            preloadThumb.onload = () => { imgThumb.src = src; };
+            preloadThumb.onerror = () => { /* nessuna foto: resta vuoto */ };
+            preloadThumb.src = src;
+          }
           const idxTarget = (window.fotoDisponibili||[]).findIndex(f => f && normK(f.nome)===normK(cognomeNome));
           if (idxTarget >= 0) {
             cell.style.cursor = 'pointer';
@@ -3086,11 +3088,10 @@
           }
           const lbl = document.createElement('div');
           lbl.className = 'fp-group-label' + (isMe ? ' highlight' : '');
-          // mostra su due righe: Cognome / Nome
           const pDisp = cognomeNome.trim().split(/\s+/);
           lbl.textContent = pDisp.length >= 2 ? pDisp[0]+'\n'+pDisp.slice(1).join(' ') : cognomeNome;
           lbl.style.whiteSpace = 'pre-line';
-          cell.appendChild(img);
+          cell.appendChild(imgThumb);
           cell.appendChild(lbl);
           riga.appendChild(cell);
         }
@@ -3235,4 +3236,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v135 - 04/04/2026 - Colonna sinistra: miniature gruppo 2 per riga cliccabili -->
+<!-- Lista.html v136 - 04/04/2026 - Preload miniature, no zoom foto, margine 50px sinistra landscape -->

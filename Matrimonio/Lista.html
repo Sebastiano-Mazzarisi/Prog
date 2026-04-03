@@ -2883,6 +2883,10 @@
     let playTimer = null;
     const PLAY_INTERVAL = 3000;
 
+    // ── Audio ─────────────────────────────────────────────────────────────
+    const audio = new Audio('https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Onofrio.mp3');
+    audio.loop = true;
+
     // ── Overlay ──────────────────────────────────────────────────────────
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9999;display:flex;align-items:center;justify-content:center;';
@@ -2972,11 +2976,15 @@
     function startPlay(btn) {
       playTimer = setInterval(() => { idx = (idx + 1) % foto.length; aggiornaContenuto(idx); }, PLAY_INTERVAL);
       if (btn) { btn.textContent = '⏸'; btn.style.background = 'rgba(255,255,255,0.28)'; }
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
     }
     function stopPlay() {
       if (playTimer) { clearInterval(playTimer); playTimer = null; }
       const btn = overlay.querySelector('[data-play]');
       if (btn) { btn.textContent = '▶'; btn.style.background = 'rgba(255,255,255,0.18)'; }
+      audio.pause();
+      audio.currentTime = 0;
     }
     function togglePlay(btn) {
       btn.setAttribute('data-play', '1');
@@ -3051,4 +3059,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v112 - 29/03/2026 - AREA_PAGINA=920 bilanciamento spazio pagina PDF -->
+<!-- Lista.html v113 - 03/04/2026 - Audio Onofrio.mp3 sincronizzato con Play/Pausa slideshow foto -->

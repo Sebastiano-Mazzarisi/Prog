@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v163</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v164</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v163</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v164</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2932,53 +2932,18 @@
       st.textContent = `
         .fp-overlay { position:fixed; inset:0; background:#2d3a0e; z-index:9999; }
         .fp-layout  { position:absolute; inset:0; display:grid; grid-template-columns:1fr; }
-        .fp-overlay.landscape .fp-layout { grid-template-columns: 30% 1fr; }
-        @media (max-width:1024px) { .fp-overlay.landscape .fp-layout { grid-template-columns: 30% 1fr; } }
+        .fp-overlay.landscape .fp-layout { grid-template-columns: minmax(0,28%) minmax(0,46%) minmax(0,26%); }
+        @media (max-width:1024px) { .fp-overlay.landscape .fp-layout { grid-template-columns: minmax(0,30%) minmax(0,52%) minmax(0,18%); } }
         .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
-        .fp-overlay.landscape .fp-stage { margin-right:280px; }
-        @media (max-width:1024px) { .fp-overlay.landscape .fp-stage { margin-right:200px; } }
-        .fp-sidebar {
-          display: none;
-          position: absolute;
-          top: 0; right: 0; bottom: 0;
-          width: 280px;
-          background: #2d3a0e;
-          flex-direction: column;
-          justify-content: center;
-          align-items: stretch;
-          gap: 1.5vh;
-          padding: 2vh 0;
-          box-sizing: border-box;
-          z-index: 5;
-          overflow: hidden;
-        }
+        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:stretch; text-align:center; gap:1.5vh; padding:2vh 8px; box-sizing:border-box; width:100%; min-width:0; overflow:hidden; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
-        @media (max-width:1024px) { .fp-sidebar { width: 200px; } }
-        .fp-side-num, .fp-side-cognome, .fp-side-nome, .fp-side-emoji, .fp-side-desc {
-          display: block;
-          width: 200px;
-          max-width: 100%;
-          text-align: center;
-          margin: 0 auto;
-          padding: 0 8px;
-          box-sizing: border-box;
-          overflow-wrap: break-word;
-          word-break: break-word;
-          min-width: 0;
-        }
-        @media (max-width:1024px) {
-          .fp-side-num, .fp-side-cognome, .fp-side-nome, .fp-side-emoji, .fp-side-desc {
-            width: 184px;
-          }
-        }
         .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:flex-start; gap:0; padding:6px 4px 6px 10px; box-sizing:border-box; overflow-y:auto; min-width:0; }
         .fp-overlay.landscape .fp-col-left { display:flex; }
         .fp-group-row { display:flex; gap:3px; width:100%; justify-content:flex-start; margin-bottom:5px; }
         @media (max-width:1024px) {
           .fp-group-row { margin-bottom:10px; }
-          .fp-sidebar { padding:2vh 4px 2vh 4px; align-items:center; justify-content:center; }
+          .fp-sidebar { padding:2vh 4px 2vh 4px; align-items:stretch; justify-content:center; overflow:hidden; }
           .fp-side-cognome { font-weight:700 !important; }
-          .fp-side-num, .fp-side-cognome, .fp-side-nome, .fp-side-emoji, .fp-side-desc { text-align:center !important; width:100% !important; display:block !important; }
         }
         .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 2px); min-width:0; }
         .fp-group-thumb-wrap { width:100%; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
@@ -2991,11 +2956,11 @@
         .fp-img.front { opacity:1; }
         .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:1.5vh; padding:2vh 8px; box-sizing:border-box; width:100%; min-width:0; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
-        .fp-side-num, .fp-side-cognome, .fp-side-nome, .fp-side-emoji, .fp-side-desc { display:block; width:100%; text-align:center !important; margin:0 auto; min-width:0; overflow-wrap:break-word; word-wrap:break-word; }
+        .fp-side-num, .fp-side-cognome, .fp-side-nome, .fp-side-emoji, .fp-side-desc { display:block; width:100%; text-align:center; margin:0; padding:0 8px; box-sizing:border-box; min-width:0; overflow-wrap:break-word; word-break:break-word; }
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
         .fp-overlay.landscape [data-arrow] { display:none !important; }
-        .fp-ctrl-bar { display:none; flex-direction:column; justify-content:center; align-items:center; gap:6px; margin-top:2vh; }
+        .fp-ctrl-bar { display:none; flex-direction:column; justify-content:center; align-items:center; gap:6px; margin-top:2vh; align-self:center; }
         .fp-overlay.landscape .fp-ctrl-bar { display:flex; }
         .fp-ctrl-row { display:flex; flex-direction:row; gap:8px; justify-content:center; }
         .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:10px; width:54px; height:48px; font-size:26px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
@@ -3469,4 +3434,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v163 - 05/04/2026 - Sidebar position:absolute destra larghezza fissa, stage con margin-right -->
+<!-- Lista.html v164 - 05/04/2026 - Fix iOS: minmax(0,%), align-items:stretch, overflow:hidden, align-self:center ctrlBar -->

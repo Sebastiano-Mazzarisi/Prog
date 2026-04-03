@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v126</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v127</small>
       </p>
     </div>
   </div>
@@ -802,7 +802,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v126</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v127</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2886,93 +2886,7 @@
     const audio = new Audio('https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Onofrio.mp3');
     audio.loop = true;
 
-    // ── Icona secondo dal nome ─────────────────────────────────────────────
-    function iconaPerNome(nome) {
-      const norm = s => (s||'').trim().toLowerCase().replace(/\s+/g,' ');
-      const nn = norm(nome);
-      const inv = (window.datiInvitati||[]).find(r => {
-        const rn = norm(r.nome);
-        const rnRev = rn.split(' ').reverse().join(' ');
-        return rn === nn || rnRev === nn;
-      });
-      if (!inv) return '';
-      const tipo = detectSecondo(inv.secondo||'');
-      return tipo==='baby'?'🍼' : tipo==='carne'?'🥩' : tipo==='pesce'?'🐟' : tipo==='veg'?'🌿' : '';
-    }
-
-    // ── Overlay fullscreen ────────────────────────────────────────────────
-    const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;background:#2d3a0e;z-index:9999;';
-
-    // ── Due img sovrapposti per cross-fade ────────────────────────────────
-    const imgA = document.createElement('img');
-    imgA.style.cssText = 'position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:100%;object-fit:contain;transition:opacity 2s ease;';
-    const imgB = document.createElement('img');
-    imgB.style.cssText = 'position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:100%;object-fit:contain;transition:opacity 2s ease;opacity:0;';
-    overlay.appendChild(imgA);
-    overlay.appendChild(imgB);
-    let imgFront = imgA, imgBack = imgB;
-
-    // ── Barra inferiore con gradiente ────────────────────────────────────
-    const bar = document.createElement('div');
-    bar.style.cssText = 'position:absolute;bottom:0;left:0;right:0;z-index:10;background:linear-gradient(transparent,rgba(0,0,0,0.75) 35%);padding:36px 20px 16px;display:flex;flex-direction:column;align-items:center;gap:8px;';
-
-    const infoBar = document.createElement('div');
-    infoBar.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:17px;font-weight:600;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,0.8);white-space:nowrap;text-align:center;';
-
-    const btnPlay = document.createElement('button');
-    btnPlay.textContent = '▶';
-    btnPlay.style.cssText = 'background:rgba(255,255,255,0.22);border:none;border-radius:50%;width:34px;height:34px;font-size:15px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;';
-    btnPlay.onmouseover = () => btnPlay.style.background = 'rgba(255,255,255,0.42)';
-    btnPlay.onmouseout  = () => btnPlay.style.background = playing() ? 'rgba(255,255,255,0.32)' : 'rgba(255,255,255,0.22)';
-    btnPlay.onclick = e => { e.stopPropagation(); togglePlay(btnPlay); };
-
-    bar.appendChild(infoBar);
-    if (foto.length > 1) bar.appendChild(btnPlay);
-    overlay.appendChild(bar);
-
-    // ── Bottone chiudi ────────────────────────────────────────────────────
-    const chiudi = document.createElement('button');
-    chiudi.textContent = '✕';
-    chiudi.style.cssText = 'position:absolute;top:12px;right:14px;background:rgba(0,0,0,0.5);border:none;border-radius:50%;width:34px;height:34px;font-size:16px;font-weight:700;cursor:pointer;color:#fff;z-index:11;display:flex;align-items:center;justify-content:center;';
-    chiudi.onclick = () => { stopPlay(true); document.removeEventListener('keydown', onKey); window.removeEventListener('resize', aggiornaOrientamento); document.body.removeChild(overlay); };
-    overlay.appendChild(chiudi);
-
-    // ── Frecce ────────────────────────────────────────────────────────────
-    if (foto.length > 1) {
-      const arrowStyle = (side) => 'position:absolute;' + side + ':12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:11;display:flex;align-items:center;justify-content:center;';
-      const btnSx = document.createElement('button');
-      btnSx.textContent = '‹'; btnSx.style.cssText = arrowStyle('left'); btnSx.setAttribute('data-arrow','1');
-      btnSx.onmouseover = () => btnSx.style.background = 'rgba(255,255,255,0.35)';
-      btnSx.onmouseout  = () => btnSx.style.background = 'rgba(255,255,255,0.15)';
-      btnSx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx-1+foto.length)%foto.length); };
-      overlay.appendChild(btnSx);
-      const btnDx = document.createElement('button');
-      btnDx.textContent = '›'; btnDx.style.cssText = arrowStyle('right'); btnDx.setAttribute('data-arrow','1');
-      btnDx.onmouseover = () => btnDx.style.background = 'rgba(255,255,255,0.35)';
-      btnDx.onmouseout  = () => btnDx.style.background = 'rgba(255,255,255,0.15)';
-      btnDx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx+1)%foto.length); };
-      overlay.appendChild(btnDx);
-    }
-
-    // ── Barra laterale destra (solo landscape) ───────────────────────────
-    const sideBar = document.createElement('div');
-    sideBar.style.cssText = 'position:absolute;top:0;right:0;bottom:0;width:280px;z-index:10;background:#2d3a0e;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:24px 16px;box-sizing:border-box;';
-
-    const sideNum   = document.createElement('div');
-    sideNum.style.cssText   = 'font-family:\'Inter\',sans-serif;font-size:54px;font-weight:700;color:#d4b07a;text-align:center;line-height:1;width:100%;';
-    const sideName  = document.createElement('div');
-    sideName.style.cssText  = 'font-family:\'Inter\',sans-serif;font-size:42px;font-weight:600;color:#fff;text-align:center;line-height:1.2;word-break:break-word;width:100%;';
-    const sideFood  = document.createElement('div');
-    sideFood.style.cssText  = 'font-family:\'Inter\',sans-serif;font-size:60px;text-align:center;line-height:1;width:100%;';
-    const sideFoodTxt = document.createElement('div');
-    sideFoodTxt.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:36px;font-weight:500;color:#c8d8a0;text-align:center;letter-spacing:0.5px;width:100%;';
-
-    sideBar.appendChild(sideNum);
-    sideBar.appendChild(sideName);
-    sideBar.appendChild(sideFood);
-    sideBar.appendChild(sideFoodTxt);
-    overlay.appendChild(sideBar);
+    // ── Helper: dati secondo ──────────────────────────────────────────────
     function infoSecondo(nome) {
       const norm = s => (s||'').trim().toLowerCase().replace(/\s+/g,' ');
       const nn = norm(nome);
@@ -2986,28 +2900,110 @@
       return map[tipo] ? {icona:map[tipo][0],desc:map[tipo][1]} : {icona:'',desc:''};
     }
 
+    // ── CSS iniettato una sola volta ──────────────────────────────────────
+    if (!document.getElementById('foto-popup-style')) {
+      const st = document.createElement('style');
+      st.id = 'foto-popup-style';
+      st.textContent = `
+        .fp-overlay { position:fixed; inset:0; background:#2d3a0e; z-index:9999; }
+        .fp-layout  { position:absolute; inset:0; display:grid; grid-template-columns:1fr; }
+        .fp-overlay.landscape .fp-layout { grid-template-columns: minmax(0,1fr) 280px; }
+        .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
+        .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 2s ease; }
+        .fp-img.front { opacity:1; }
+        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:20px; padding:24px 18px; box-sizing:border-box; }
+        .fp-overlay.landscape .fp-sidebar { display:flex; }
+        .fp-overlay.landscape .fp-bar,
+        .fp-overlay.landscape .fp-close,
+        .fp-overlay.landscape [data-arrow] { display:none !important; }
+        .fp-bar     { position:absolute; bottom:0; left:0; right:0; z-index:10; background:linear-gradient(transparent,rgba(0,0,0,0.75) 35%); padding:36px 20px 16px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+        .fp-info    { font-family:'Inter',sans-serif; font-size:17px; font-weight:600; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,0.8); white-space:nowrap; text-align:center; }
+        .fp-btn-play{ background:rgba(255,255,255,0.22); border:none; border-radius:50%; width:34px; height:34px; font-size:15px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .fp-close   { position:absolute; top:12px; right:14px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; width:34px; height:34px; font-size:16px; font-weight:700; cursor:pointer; color:#fff; z-index:11; display:flex; align-items:center; justify-content:center; }
+        .fp-arrow   { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:48px; height:48px; font-size:32px; color:#fff; cursor:pointer; z-index:11; display:flex; align-items:center; justify-content:center; }
+        .fp-arrow.left  { left:12px; }
+        .fp-arrow.right { right:12px; }
+        .fp-side-num  { font-family:'Inter',sans-serif; font-size:54px; font-weight:700; color:#d4b07a; line-height:1; width:100%; }
+        .fp-side-name { font-family:'Inter',sans-serif; font-size:42px; font-weight:600; color:#fff; line-height:1.2; word-break:break-word; width:100%; }
+        .fp-side-emoji{ font-size:60px; line-height:1; width:100%; }
+        .fp-side-desc { font-family:'Inter',sans-serif; font-size:36px; font-weight:500; color:#c8d8a0; letter-spacing:0.5px; width:100%; }
+      `;
+      document.head.appendChild(st);
+    }
+
+    // ── DOM ───────────────────────────────────────────────────────────────
+    const overlay = document.createElement('div');
+    overlay.className = 'fp-overlay portrait';
+
+    const layout = document.createElement('div');
+    layout.className = 'fp-layout';
+
+    // stage (foto)
+    const stage = document.createElement('div');
+    stage.className = 'fp-stage';
+    const imgA = document.createElement('img'); imgA.className = 'fp-img front';
+    const imgB = document.createElement('img'); imgB.className = 'fp-img';
+    stage.appendChild(imgA); stage.appendChild(imgB);
+    let imgFront = imgA, imgBack = imgB;
+
+    // sidebar
+    const sidebar = document.createElement('div'); sidebar.className = 'fp-sidebar';
+    const sideNum  = document.createElement('div'); sideNum.className  = 'fp-side-num';
+    const sideName = document.createElement('div'); sideName.className = 'fp-side-name';
+    const sideEmoji= document.createElement('div'); sideEmoji.className= 'fp-side-emoji';
+    const sideDesc = document.createElement('div'); sideDesc.className = 'fp-side-desc';
+    sidebar.append(sideNum, sideName, sideEmoji, sideDesc);
+
+    layout.appendChild(stage);
+    layout.appendChild(sidebar);
+    overlay.appendChild(layout);
+
+    // barra inferiore portrait
+    const bar = document.createElement('div'); bar.className = 'fp-bar';
+    const infoBar = document.createElement('div'); infoBar.className = 'fp-info';
+    const btnPlay = document.createElement('button'); btnPlay.className = 'fp-btn-play'; btnPlay.textContent = '▶';
+    btnPlay.onclick = e => { e.stopPropagation(); togglePlay(btnPlay); };
+    bar.appendChild(infoBar);
+    if (foto.length > 1) bar.appendChild(btnPlay);
+    overlay.appendChild(bar);
+
+    // chiudi
+    const chiudi = document.createElement('button'); chiudi.className = 'fp-close'; chiudi.textContent = '✕';
+    chiudi.onclick = () => chiudiPopup();
+    overlay.appendChild(chiudi);
+
+    // frecce
+    if (foto.length > 1) {
+      const bSx = document.createElement('button'); bSx.className = 'fp-arrow left'; bSx.textContent = '‹'; bSx.setAttribute('data-arrow','1');
+      bSx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx-1+foto.length)%foto.length); };
+      const bDx = document.createElement('button'); bDx.className = 'fp-arrow right'; bDx.textContent = '›'; bDx.setAttribute('data-arrow','1');
+      bDx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx+1)%foto.length); };
+      overlay.appendChild(bSx); overlay.appendChild(bDx);
+    }
+
+    // ── Aggiorna contenuto ────────────────────────────────────────────────
     function aggiornaContenuto(i, immediato) {
       const voce = foto[i] || { nome: nomeFile, file: null };
-      const nuovaSrc = voce.file ? 'Foto/'+voce.file : 'Foto/Foto.png';
+      const src = voce.file ? 'Foto/'+voce.file : 'Foto/Foto.png';
       const {icona,desc} = infoSecondo(voce.nome);
-      // barra inferiore portrait
-      infoBar.textContent = (i+1)+' / '+foto.length+' \u2013 '+voce.nome+(icona ? '  '+icona : '');
-      // barra laterale landscape
-      sideNum.textContent = (i+1)+' / '+foto.length;
       const eta = getEtaAnni(voce.nome);
-      sideName.textContent = voce.nome+(eta!==null ? ' ('+eta+')' : '');
-      sideFood.textContent = icona;
-      sideFoodTxt.textContent = desc;
-      if (immediato) {
-        imgFront.src = nuovaSrc; imgFront.style.opacity='1'; imgBack.style.opacity='0'; return;
-      }
-      imgBack.src = nuovaSrc;
-      imgBack.style.transition = 'none'; imgBack.style.opacity = '0';
-      imgBack.onload = () => {
-        imgBack.style.transition = 'opacity 2s ease';
-        imgBack.style.opacity = '1'; imgFront.style.opacity = '0';
-        setTimeout(() => { [imgFront,imgBack]=[imgBack,imgFront]; }, 2000);
+      infoBar.textContent = (i+1)+' / '+foto.length+' \u2013 '+voce.nome+(icona?'  '+icona:'');
+      sideNum.textContent  = (i+1)+' / '+foto.length;
+      sideName.textContent = voce.nome+(eta!==null?' ('+eta+')':'');
+      sideEmoji.textContent = icona;
+      sideDesc.textContent  = desc;
+      if (immediato) { imgFront.src=src; return; }
+      const preload = new Image();
+      preload.onload = () => {
+        imgBack.src = src;
+        imgBack.classList.remove('front');
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          imgBack.classList.add('front');
+          imgFront.classList.remove('front');
+          setTimeout(()=>{ [imgFront,imgBack]=[imgBack,imgFront]; }, 2000);
+        }));
       };
+      preload.src = src;
     }
 
     function vai(i) { idx=i; aggiornaContenuto(idx,false); }
@@ -3016,26 +3012,34 @@
     function playing() { return playTimer!==null; }
     function startPlay(btn) {
       playTimer = setInterval(()=>{ idx=(idx+1)%foto.length; aggiornaContenuto(idx,false); }, PLAY_INTERVAL);
-      if (btn) { btn.textContent='⏸'; btn.setAttribute('data-play','1'); btn.style.background='rgba(255,255,255,0.32)'; }
+      if (btn) { btn.textContent='⏸'; btn.setAttribute('data-play','1'); }
       audio.play().catch(()=>{});
     }
     function stopPlay(reset) {
       if (playTimer) { clearInterval(playTimer); playTimer=null; }
       const btn = overlay.querySelector('[data-play]');
-      if (btn) { btn.textContent='▶'; btn.style.background='rgba(255,255,255,0.22)'; }
+      if (btn) { btn.textContent='▶'; btn.removeAttribute('data-play'); }
       audio.pause(); if (reset) audio.currentTime=0;
     }
     function togglePlay(btn) {
-      btn.setAttribute('data-play','1');
       if (playing()) { stopPlay(false); } else { startPlay(btn); }
     }
+
+    // ── Orientamento ──────────────────────────────────────────────────────
+    function aggiornaOrientamento() {
+      const landscape = window.innerWidth > window.innerHeight;
+      overlay.classList.toggle('landscape', landscape);
+      overlay.classList.toggle('portrait', !landscape);
+    }
+    window.addEventListener('resize', aggiornaOrientamento);
+    aggiornaOrientamento();
 
     // ── Tastiera ──────────────────────────────────────────────────────────
     function onKey(e) {
       if (e.key==='ArrowRight') { stopPlay(false); vai((idx+1)%foto.length); }
       if (e.key==='ArrowLeft')  { stopPlay(false); vai((idx-1+foto.length)%foto.length); }
       if (e.key===' ')          { e.preventDefault(); togglePlay(btnPlay); }
-      if (e.key==='Escape')     { stopPlay(true); document.removeEventListener('keydown',onKey); window.removeEventListener('resize',aggiornaOrientamento); document.body.removeChild(overlay); }
+      if (e.key==='Escape')     { chiudiPopup(); }
     }
     document.addEventListener('keydown', onKey);
 
@@ -3049,27 +3053,14 @@
       if (dx<0) vai((idx+1)%foto.length); else vai((idx-1+foto.length)%foto.length);
     }, {passive:true});
 
-    overlay.onclick = e=>{ if (e.target===overlay) { stopPlay(true); document.removeEventListener('keydown',onKey); window.removeEventListener('resize',aggiornaOrientamento); document.body.removeChild(overlay); } };
-
-    // ── Gestione orientamento ─────────────────────────────────────────────
-    function aggiornaOrientamento() {
-      const landscape = window.innerWidth > window.innerHeight;
-      bar.style.display    = landscape ? 'none' : 'flex';
-      chiudi.style.display = landscape ? 'none' : 'flex';
-      overlay.querySelectorAll('[data-arrow]').forEach(el => el.style.display = landscape ? 'none' : 'flex');
-      sideBar.style.display = landscape ? 'flex' : 'none';
-      // in landscape le img lasciano spazio alla sidebar (160px a destra)
-      // in landscape la foto occupa tutto tranne la sidebar a destra
-      if (landscape) {
-        imgA.style.right = '280px'; imgA.style.width = 'calc(100% - 280px)';
-        imgB.style.right = '280px'; imgB.style.width = 'calc(100% - 280px)';
-      } else {
-        imgA.style.right = '0'; imgA.style.width = '100%';
-        imgB.style.right = '0'; imgB.style.width = '100%';
-      }
+    // ── Chiusura ──────────────────────────────────────────────────────────
+    function chiudiPopup() {
+      stopPlay(true);
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', aggiornaOrientamento);
+      document.body.removeChild(overlay);
     }
-    window.addEventListener('resize', aggiornaOrientamento);
-    aggiornaOrientamento();
+    overlay.onclick = e=>{ if (e.target===overlay || e.target===stage || e.target===layout) chiudiPopup(); };
 
     // ── Prima visualizzazione ─────────────────────────────────────────────
     aggiornaContenuto(idx, true);
@@ -3113,4 +3104,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v126 - 04/04/2026 - Fix foto landscape: width calc(100%-280px) per non sovrapporsi alla sidebar -->
+<!-- Lista.html v127 - 04/04/2026 - Refactor popup foto: overlay→grid(stage+sidebar), CSS classi, orientamento via classList -->

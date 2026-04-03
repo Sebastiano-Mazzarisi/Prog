@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v141</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v142</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v141</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v142</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2939,6 +2939,7 @@
         .fp-group-row { display:flex; gap:4px; width:100%; justify-content:flex-start; margin-bottom:4px; }
         .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 3px); min-width:0; }
         .fp-group-thumb-wrap { width:100%; max-width:230px; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
+        @media (max-width:768px) { .fp-group-thumb-wrap { max-width:280px; } }
         .fp-group-thumb-wrap.highlight { border-color:#d4b07a; }
         .fp-group-thumb { width:100%; height:100%; object-fit:cover; display:block; }
         .fp-group-placeholder { font-size:20pt; line-height:1; }
@@ -3142,11 +3143,8 @@
             ph.textContent = '📷';
             wrap.appendChild(ph);
           } else {
-            // in caricamento (Image obj o undefined): placeholder ⏳, si aggiorna via data-ck
-            const ph = document.createElement('div');
-            ph.className = 'fp-group-placeholder';
-            ph.textContent = '⏳';
-            wrap.appendChild(ph);
+            // in caricamento (Image obj o undefined): wrap vuoto, si aggiorna via data-ck
+            // nessun placeholder visibile — la foto apparirà quando pronta
             if (cachedImg && cachedImg.addEventListener) {
               cachedImg.addEventListener('load', () => {
                 wrap.innerHTML = '';
@@ -3181,7 +3179,7 @@
 
     function aggiornaContenuto(i, immediato) {
       const voce = foto[i] || { nome: nomeFile, file: null };
-      const src = voce.file ? 'Foto/'+voce.file : 'Foto/Foto.png';
+      const src = voce.file ? 'Foto/'+voce.file : null;
       const {icona,desc} = infoSecondo(voce.nome);
       const eta = getEtaAnni(voce.nome);
 
@@ -3201,13 +3199,29 @@
       costruisciMiniature(voce);
 
       if (immediato) {
-        // preload anche per la prima visualizzazione
-        const preloadFirst = new Image();
-        preloadFirst.onload = () => { imgFront.src = src; };
-        preloadFirst.onerror = () => { imgFront.src = 'Foto/Foto.png'; };
-        preloadFirst.src = src;
+        if (src) {
+          const preloadFirst = new Image();
+          preloadFirst.onload = () => { imgFront.src = src; };
+          preloadFirst.src = src;
+        } else {
+          // nessuna foto: mostra emoji al centro sullo stage
+          imgFront.src = '';
+          stage.style.background = '#4a6a2a';
+          if (!stage.querySelector('.fp-stage-placeholder')) {
+            const sph = document.createElement('div');
+            sph.className = 'fp-stage-placeholder';
+            sph.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:80px;z-index:1;';
+            sph.textContent = '📷';
+            stage.appendChild(sph);
+          }
+        }
         return;
       }
+      // rimuovi placeholder stage se c'era
+      const oldSph = stage.querySelector('.fp-stage-placeholder');
+      if (oldSph) stage.removeChild(oldSph);
+      stage.style.background = '';
+      if (!src) return;
       const preload = new Image();
       preload.onload = () => {
         imgBack.src = src;
@@ -3345,4 +3359,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v141 - 05/04/2026 - Landscape 30/50/20, miniature 3 per riga 230px -->
+<!-- Lista.html v142 - 05/04/2026 - Mobile: miniature 280px, no clessidra, no Foto.png, emoji 📷 se manca foto -->

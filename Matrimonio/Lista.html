@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v139</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v140</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v139</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v140</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -3034,6 +3034,43 @@
       return match && match.file ? 'Foto/'+match.file : null;
     }
 
+    // Fetch diretto con varianti nome+estensione, aggiorna cache e DOM quando trova
+    function cercaFotoDirectly(cn, key) {
+      const varianti = [cn, cn.normalize('NFD').replace(/[\u0300-\u036f]/g,'')];
+      const estensioni = ['jpg','JPG','jpeg','JPEG'];
+      let trovata = false;
+      function prova(vi, ei) {
+        if (trovata || vi >= varianti.length) {
+          if (!trovata) thumbCache.set(key, null); // non esiste
+          return;
+        }
+        if (ei >= estensioni.length) { prova(vi+1, 0); return; }
+        const url = 'Foto/'+varianti[vi]+'.'+estensioni[ei];
+        fetch(url, {method:'HEAD'})
+          .then(r => {
+            if (r.ok && !trovata) {
+              trovata = true;
+              const im = new Image();
+              im.onload = () => {
+                im._ready = true;
+                thumbCache.set(key, im);
+                // aggiorna wrap già nel DOM per questo nome (attributo data-ck)
+                document.querySelectorAll('[data-ck="'+key+'"]').forEach(wrap => {
+                  wrap.innerHTML = '';
+                  const imgEl = document.createElement('img');
+                  imgEl.className = 'fp-group-thumb';
+                  imgEl.src = im.src;
+                  wrap.appendChild(imgEl);
+                });
+              };
+              im.src = url;
+            } else { prova(vi, ei+1); }
+          })
+          .catch(() => prova(vi, ei+1));
+      }
+      prova(0, 0);
+    }
+
     // Calcola il gruppo della foto iniziale e precarica tutte le miniature
     function calcolaGruppo(nomeVoce) {
       const partiV = nomeVoce.trim().split(/\s+/);
@@ -3046,14 +3083,21 @@
     function precaricaGruppo(gruppo) {
       gruppo.forEach(nomeGruppo => {
         const cn = nomeToFilename(nomeGruppo);
-        if (thumbCache.has(normKG(cn))) return;
+        const key = normKG(cn);
+        if (thumbCache.has(key)) return;
         const src = thumbSrcFor(cn);
-        if (!src) { thumbCache.set(normKG(cn), null); return; }
-        const im = new Image();
-        im.onload  = () => { im._ready = true; };
-        im.onerror = () => thumbCache.set(normKG(cn), null);
-        im.src = src;
-        thumbCache.set(normKG(cn), im);
+        if (src) {
+          // foto già verificata da fotoDisponibili
+          const im = new Image();
+          im.onload  = () => { im._ready = true; thumbCache.set(key, im); };
+          im.onerror = () => thumbCache.set(key, null);
+          im.src = src;
+          thumbCache.set(key, im);
+        } else {
+          // non trovata in fotoDisponibili (es. card non nel DOM corrente) — fetch diretto
+          thumbCache.set(key, undefined); // in ricerca
+          cercaFotoDirectly(cn, key);
+        }
       });
     }
 
@@ -3081,26 +3125,29 @@
 
           const wrap = document.createElement('div');
           wrap.className = 'fp-group-thumb-wrap' + (isMe ? ' highlight' : '');
+          wrap.setAttribute('data-ck', normKG(cn)); // per aggiornamento asincrono
 
           const cachedImg = thumbCache.get(normKG(cn));
           if (cachedImg && cachedImg._ready) {
+            // foto pronta
             const imgEl = document.createElement('img');
             imgEl.className = 'fp-group-thumb';
             imgEl.src = cachedImg.src;
             imgEl.alt = cn;
             wrap.appendChild(imgEl);
           } else if (cachedImg === null) {
+            // nessuna foto
             const ph = document.createElement('div');
             ph.className = 'fp-group-placeholder';
             ph.textContent = '📷';
             wrap.appendChild(ph);
           } else {
-            // ancora in caricamento — placeholder temporaneo, riprova tra 200ms
+            // in caricamento (Image obj o undefined): placeholder ⏳, si aggiorna via data-ck
             const ph = document.createElement('div');
             ph.className = 'fp-group-placeholder';
             ph.textContent = '⏳';
             wrap.appendChild(ph);
-            if (cachedImg) {
+            if (cachedImg && cachedImg.addEventListener) {
               cachedImg.addEventListener('load', () => {
                 wrap.innerHTML = '';
                 const imgEl = document.createElement('img');
@@ -3298,4 +3345,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v139 - 05/04/2026 - Fix miniature: onload asincrono, niente precaricamento anticipato, placeholder ⏳/📷 -->
+<!-- Lista.html v140 - 05/04/2026 - Fix miniature: fetch diretto se non in fotoDisponibili, data-ck per aggiornamento asincrono -->

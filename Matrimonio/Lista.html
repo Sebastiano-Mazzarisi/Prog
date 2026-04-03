@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v120</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v121</small>
       </p>
     </div>
   </div>
@@ -802,7 +802,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v120</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v121</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2906,9 +2906,9 @@
 
     // ── Due img sovrapposti per cross-fade ────────────────────────────────
     const imgA = document.createElement('img');
-    imgA.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 2s ease;';
+    imgA.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 2s ease;';
     const imgB = document.createElement('img');
-    imgB.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 2s ease;opacity:0;';
+    imgB.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 2s ease;opacity:0;';
     overlay.appendChild(imgA);
     overlay.appendChild(imgB);
     let imgFront = imgA, imgBack = imgB;
@@ -3055,4 +3055,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v120 - 04/04/2026 - Caricamento: solo versione, niente data/ora -->
+<!-- Lista.html v121 - 04/04/2026 - Foto a pieno schermo verticale con object-fit:contain, barre laterali verde oliva -->

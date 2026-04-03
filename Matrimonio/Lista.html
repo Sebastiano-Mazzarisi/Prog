@@ -2895,13 +2895,16 @@
     const box = document.createElement('div');
     box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
 
-    // ── Wrapper cross-fade: due img sovrapposti ───────────────────────────
+    // ── Wrapper 1024×1024 con cross-fade ─────────────────────────────────
+    // La dimensione è fissa 1024×1024 ma si riduce proporzionalmente su schermi piccoli
+    const SZ = 'min(1024px, min(96vw, 90vh))';
     const imgWrapper = document.createElement('div');
-    imgWrapper.style.cssText = 'position:relative;max-width:96vw;max-height:90vh;';
+    imgWrapper.style.cssText = 'position:relative;width:' + SZ + ';height:' + SZ + ';border-radius:6px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.7);background:#111;';
+
     const imgA = document.createElement('img');
-    imgA.style.cssText = 'max-width:96vw;max-height:90vh;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,0.7);object-fit:contain;display:block;transition:opacity 2s ease;';
+    imgA.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 2s ease;';
     const imgB = document.createElement('img');
-    imgB.style.cssText = 'max-width:96vw;max-height:90vh;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,0.7);object-fit:contain;position:absolute;inset:0;width:100%;height:100%;transition:opacity 2s ease;opacity:0;';
+    imgB.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 2s ease;opacity:0;';
     imgWrapper.appendChild(imgA);
     imgWrapper.appendChild(imgB);
     let imgFront = imgA, imgBack = imgB;
@@ -2909,10 +2912,6 @@
     // ── Label unica: "21 / 50 – Nome Cognome" ────────────────────────────
     const infoBar = document.createElement('div');
     infoBar.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;color:#fff;white-space:nowrap;';
-
-    // Manteniamo anche counter e label come alias per compatibilità
-    const counter = { textContent: '' };
-    const label   = { textContent: '', style: { color: '#fff' } };
 
     // ── Bottone chiudi ───────────────────────────────────────────────────
     const chiudi = document.createElement('button');
@@ -3071,4 +3070,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v114 - 03/04/2026 - Slideshow 6s cross-fade 2s, audio Onofrio.mp3, pausa riprende da dove si era fermata, infoBar unificata -->
+<!-- Lista.html v115 - 03/04/2026 - Foto fissa 1024x1024, cross-fade 2s, slideshow 6s, audio Onofrio.mp3, pausa riprende da posizione, infoBar unificata -->

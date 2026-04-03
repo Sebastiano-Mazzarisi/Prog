@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v133</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v134</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v133</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v134</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -3036,13 +3036,25 @@
       // colonna sinistra: gruppo
       colLeft.innerHTML = '';
       const normK = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
-      const gruppo = (window.mapGruppo || {})[normK(voce.nome)] || [];
+      // voce.nome è "Cognome Nome" (formato fotoDisponibili)
+      // mapGruppo ha chiavi in "Nome Cognome" (formato CSV invertito)
+      // proviamo entrambe le forme
+      const nomeVoce = voce.nome || '';
+      const partiVoce = nomeVoce.trim().split(/\s+/);
+      const nomeInv = partiVoce.length >= 2
+        ? partiVoce.slice(1).join(' ') + ' ' + partiVoce[0]
+        : nomeVoce;
+      const gruppo = (window.mapGruppo || {})[normK(nomeVoce)]
+                  || (window.mapGruppo || {})[normK(nomeInv)]
+                  || [];
       gruppo.forEach(nGruppo => {
         const el = document.createElement('div');
-        el.className = 'fp-group-item' + (normK(nGruppo)===normK(voce.nome) ? ' highlight' : '');
-        // visualizza "Cognome Nome" (inverti)
+        // nGruppo è "Nome Cognome" — visualizza come "Cognome Nome"
         const p = nGruppo.trim().split(/\s+/);
-        el.textContent = p.length >= 2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : nGruppo;
+        const display = p.length >= 2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : nGruppo;
+        const isMe = normK(nGruppo)===normK(nomeVoce) || normK(nGruppo)===normK(nomeInv);
+        el.className = 'fp-group-item' + (isMe ? ' highlight' : '');
+        el.textContent = display;
         colLeft.appendChild(el);
       });
 
@@ -3184,4 +3196,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v133 - 04/04/2026 - Landscape: colonna sx=gruppo, cognome/nome su due righe, 25/50/25 -->
+<!-- Lista.html v134 - 04/04/2026 - Fix matching gruppo: prova Cognome Nome e Nome Cognome -->

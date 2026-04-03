@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v157</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v158</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v157</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v158</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2959,6 +2959,10 @@
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
         .fp-overlay.landscape [data-arrow] { display:none !important; }
+        .fp-ctrl-bar { display:none; position:absolute; bottom:12px; right:12px; z-index:12; background:rgba(0,0,0,0.45); border-radius:10px; padding:4px 6px; gap:4px; }
+        .fp-overlay.landscape .fp-ctrl-bar { display:flex; }
+        .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:7px; width:40px; height:36px; font-size:18px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .fp-ctrl-btn:hover { background:rgba(255,255,255,0.35); }
         .fp-bar     { position:absolute; bottom:0; left:0; right:0; z-index:10; background:linear-gradient(transparent,rgba(0,0,0,0.75) 35%); padding:36px 20px 16px; display:flex; flex-direction:column; align-items:center; gap:8px; }
         .fp-info    { font-family:'Inter',sans-serif; font-size:17px; font-weight:600; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,0.8); white-space:nowrap; text-align:center; }
         .fp-btn-play{ background:rgba(255,255,255,0.22); border:none; border-radius:50%; width:34px; height:34px; font-size:15px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
@@ -3004,6 +3008,17 @@
     layout.appendChild(stage);
     layout.appendChild(sidebar);
     overlay.appendChild(layout);
+
+    // ── Barra controlli landscape [‹][▶][›] in basso a destra della foto ─
+    const ctrlBar = document.createElement('div'); ctrlBar.className = 'fp-ctrl-bar';
+    const ctrlSx   = document.createElement('button'); ctrlSx.className   = 'fp-ctrl-btn'; ctrlSx.textContent = '‹';
+    ctrlSx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx-1+foto.length)%foto.length); };
+    const ctrlPlay = document.createElement('button'); ctrlPlay.className = 'fp-ctrl-btn'; ctrlPlay.textContent = '▶';
+    ctrlPlay.onclick = e => { e.stopPropagation(); togglePlay(ctrlPlay); };
+    const ctrlDx   = document.createElement('button'); ctrlDx.className   = 'fp-ctrl-btn'; ctrlDx.textContent = '›';
+    ctrlDx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx+1)%foto.length); };
+    ctrlBar.appendChild(ctrlSx); ctrlBar.appendChild(ctrlPlay); ctrlBar.appendChild(ctrlDx);
+    stage.appendChild(ctrlBar);
 
     // barra inferiore portrait
     const bar = document.createElement('div'); bar.className = 'fp-bar';
@@ -3280,13 +3295,12 @@
     function playing() { return playTimer!==null; }
     function startPlay(btn) {
       playTimer = setInterval(()=>{ idx=(idx+1)%foto.length; aggiornaContenuto(idx,false); }, PLAY_INTERVAL);
-      if (btn) { btn.textContent='⏸'; btn.setAttribute('data-play','1'); }
+      [btn, ctrlPlay].forEach(b => { if(b){ b.textContent='⏸'; b.setAttribute('data-play','1'); }});
       audio.play().catch(()=>{});
     }
     function stopPlay(reset) {
       if (playTimer) { clearInterval(playTimer); playTimer=null; }
-      const btn = overlay.querySelector('[data-play]');
-      if (btn) { btn.textContent='▶'; btn.removeAttribute('data-play'); }
+      [btnPlay, ctrlPlay].forEach(b => { if(b){ b.textContent='▶'; b.removeAttribute('data-play'); }});
       audio.pause(); if (reset) audio.currentTime=0;
     }
     function togglePlay(btn) {
@@ -3411,4 +3425,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v157 - 05/04/2026 - Grafico 1 PDF: scala Y 0-80 con intervalli di 10 -->
+<!-- Lista.html v158 - 05/04/2026 - Barra controlli landscape [‹][▶][›] in basso a destra della foto -->

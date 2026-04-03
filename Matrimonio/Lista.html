@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v165</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v166</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v165</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v166</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -1332,9 +1332,15 @@
 
     const btnPdf = document.getElementById('btn-pdf-gen');
     if (btnPdf) {
-      btnPdf.innerText = "⏳...";
       btnPdf.disabled = true;
     }
+
+    // Toast "Creazione PDF in corso!"
+    const pdfToast = document.createElement('div');
+    pdfToast.id = 'pdf-toast';
+    pdfToast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2d6040;color:#fff;font-family:\'Inter\',sans-serif;font-size:16px;font-weight:600;padding:18px 32px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:99999;text-align:center;letter-spacing:0.3px;';
+    pdfToast.textContent = 'Creazione PDF in corso...';
+    document.body.appendChild(pdfToast);
 
     let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0, totBaby = 0, totSegnaposto = 0;
     let assentiRows = [];
@@ -2225,7 +2231,7 @@
     }
 
     // Aggiorna pulsante durante attesa
-    if (btnPdf) btnPdf.innerText = '⏳ Foto...';
+    if (btnPdf) { /* foto in caricamento, toast già visibile */ }
 
     const mapFotoFile = {};
     await Promise.all(fonteBase.map(async r => {
@@ -2297,6 +2303,8 @@
     };
 
     html2pdf().set(opt).from(container).save().then(() => {
+      const t = document.getElementById('pdf-toast');
+      if (t) document.body.removeChild(t);
       if (btnPdf) {
         btnPdf.innerText = testi.pdf;
         btnPdf.disabled = false;
@@ -3427,4 +3435,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v165 - 05/04/2026 - CSS popup riscritto pulito: minmax, align-items:stretch, font ridotti, no duplicati -->
+<!-- Lista.html v166 - 05/04/2026 - Toast "Creazione PDF in corso..." invece della clessidra sul bottone -->

@@ -353,7 +353,6 @@
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
         <small style="color:#b8893a;font-size:13px;font-weight:600">v117</small>
-        <small style="color:#b8893a;font-size:13px;margin-left:10px;font-weight:600">v116</small>
       </p>
     </div>
   </div>
@@ -366,8 +365,7 @@
     return now.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: 'numeric'}) + ' ' +
            now.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
   }
-  // Imposta l'orario iniziale subito prima del caricamento reale
-  document.getElementById('time-placeholder').innerText = getCurrentDateTime();
+  // Versione corrente visualizzata nel Caricamento
 
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
   let activeFilter = null;

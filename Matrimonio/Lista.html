@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v127</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v129</small>
       </p>
     </div>
   </div>
@@ -802,7 +802,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v127</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v129</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2907,11 +2907,11 @@
       st.textContent = `
         .fp-overlay { position:fixed; inset:0; background:#2d3a0e; z-index:9999; }
         .fp-layout  { position:absolute; inset:0; display:grid; grid-template-columns:1fr; }
-        .fp-overlay.landscape .fp-layout { grid-template-columns: minmax(0,1fr) 280px; }
+        .fp-overlay.landscape .fp-layout { grid-template-columns: minmax(0,1fr) 25vw; }
         .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
         .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 2s ease; }
         .fp-img.front { opacity:1; }
-        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:20px; padding:24px 18px; box-sizing:border-box; }
+        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:2vh; padding:3vh 1.5vw; box-sizing:border-box; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
@@ -2923,10 +2923,10 @@
         .fp-arrow   { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:48px; height:48px; font-size:32px; color:#fff; cursor:pointer; z-index:11; display:flex; align-items:center; justify-content:center; }
         .fp-arrow.left  { left:12px; }
         .fp-arrow.right { right:12px; }
-        .fp-side-num  { font-family:'Inter',sans-serif; font-size:54px; font-weight:700; color:#d4b07a; line-height:1; width:100%; }
-        .fp-side-name { font-family:'Inter',sans-serif; font-size:42px; font-weight:600; color:#fff; line-height:1.2; word-break:break-word; width:100%; }
-        .fp-side-emoji{ font-size:60px; line-height:1; width:100%; }
-        .fp-side-desc { font-family:'Inter',sans-serif; font-size:36px; font-weight:500; color:#c8d8a0; letter-spacing:0.5px; width:100%; }
+        .fp-side-num  { font-family:'Inter',sans-serif; font-size:clamp(28px,4vw,60px); font-weight:700; color:#d4b07a; line-height:1; width:100%; }
+        .fp-side-name { font-family:'Inter',sans-serif; font-size:clamp(20px,3vw,44px); font-weight:600; color:#fff; line-height:1.3; word-break:break-word; width:100%; }
+        .fp-side-emoji{ font-size:clamp(32px,4.5vw,64px); line-height:1; width:100%; }
+        .fp-side-desc { font-family:'Inter',sans-serif; font-size:clamp(18px,2.5vw,38px); font-weight:500; color:#c8d8a0; letter-spacing:0.5px; width:100%; }
       `;
       document.head.appendChild(st);
     }
@@ -3053,6 +3053,23 @@
       if (dx<0) vai((idx+1)%foto.length); else vai((idx-1+foto.length)%foto.length);
     }, {passive:true});
 
+    // ── Tap touch in landscape: stage=play/pausa, sidebar=chiudi ─────────
+    let touchMoved = false;
+    stage.addEventListener('touchstart', () => { touchMoved = false; }, {passive:true});
+    stage.addEventListener('touchmove',  () => { touchMoved = true;  }, {passive:true});
+    stage.addEventListener('touchend', e => {
+      if (touchMoved) return; // era uno swipe, ignora
+      if (!overlay.classList.contains('landscape')) return; // in portrait gestisce la barra
+      e.stopPropagation();
+      togglePlay(btnPlay);
+    }, {passive:true});
+
+    sidebar.addEventListener('touchend', e => {
+      if (!overlay.classList.contains('landscape')) return;
+      e.stopPropagation();
+      chiudiPopup();
+    }, {passive:true});
+
     // ── Chiusura ──────────────────────────────────────────────────────────
     function chiudiPopup() {
       stopPlay(true);
@@ -3104,4 +3121,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v127 - 04/04/2026 - Refactor popup foto: overlay→grid(stage+sidebar), CSS classi, orientamento via classList -->
+<!-- Lista.html v129 - 04/04/2026 - Sidebar 25vw, font clamp() scalabili per PC e iPhone -->

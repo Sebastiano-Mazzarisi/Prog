@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v136</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v137</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v136</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v137</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2934,16 +2934,15 @@
         .fp-layout  { position:absolute; inset:0; display:grid; grid-template-columns:1fr; }
         .fp-overlay.landscape .fp-layout { grid-template-columns: 25% 50% 25%; }
         .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
-        .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:center; gap:0; padding:8px 6px; box-sizing:border-box; overflow-y:auto; }
+        .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:center; gap:0; padding:8px 6px 8px 56px; box-sizing:border-box; overflow-y:auto; }
         .fp-overlay.landscape .fp-col-left { display:flex; }
         .fp-group-row { display:flex; gap:6px; width:100%; justify-content:center; margin-bottom:6px; }
-        .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:3px; flex:1; min-width:0; cursor:pointer; }
-        .fp-group-thumb { width:100%; aspect-ratio:1; object-fit:cover; border-radius:4px; border:2px solid transparent; display:block; }
+        .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:3px; flex:0 0 calc(50% - 3px); min-width:0; }
+        .fp-group-thumb { width:100%; max-width:250px; aspect-ratio:1; object-fit:cover; border-radius:4px; border:2px solid transparent; display:block; }
         .fp-group-thumb.highlight { border-color:#d4b07a; }
         .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(8px,0.9vw,13px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
         .fp-group-label.highlight { color:#fff; font-weight:700; }
-        .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; max-width:100%; opacity:0; transition:opacity 2s ease; }
-        .fp-overlay.landscape .fp-img { left:50px; width:calc(100% - 50px); }
+        .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; opacity:0; transition:opacity 2s ease; }
         .fp-img.front { opacity:1; }
         .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:2vh; padding:3vh 2vw; box-sizing:border-box; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
@@ -3098,7 +3097,14 @@
         colLeft.appendChild(riga);
       }
 
-      if (immediato) { imgFront.src=src; return; }
+      if (immediato) {
+        // preload anche per la prima visualizzazione
+        const preloadFirst = new Image();
+        preloadFirst.onload = () => { imgFront.src = src; };
+        preloadFirst.onerror = () => { imgFront.src = 'Foto/Foto.png'; };
+        preloadFirst.src = src;
+        return;
+      }
       const preload = new Image();
       preload.onload = () => {
         imgBack.src = src;
@@ -3236,4 +3242,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v136 - 04/04/2026 - Preload miniature, no zoom foto, margine 50px sinistra landscape -->
+<!-- Lista.html v137 - 04/04/2026 - Fix caricamento iniziale, 50px padding-left colonna sx, miniature 250px -->

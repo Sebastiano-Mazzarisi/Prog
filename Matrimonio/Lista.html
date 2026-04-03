@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v130</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v131</small>
       </p>
     </div>
   </div>
@@ -802,7 +802,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v130</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v131</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2907,11 +2907,13 @@
       st.textContent = `
         .fp-overlay { position:fixed; inset:0; background:#2d3a0e; z-index:9999; }
         .fp-layout  { position:absolute; inset:0; display:grid; grid-template-columns:1fr; }
-        .fp-overlay.landscape .fp-layout { grid-template-columns: minmax(0,1fr) 25vw; }
+        .fp-overlay.landscape .fp-layout { grid-template-columns: 30% 40% 30%; }
         .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
+        .fp-col-left { background:#2d3a0e; display:none; }
+        .fp-overlay.landscape .fp-col-left { display:block; }
         .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 2s ease; }
         .fp-img.front { opacity:1; }
-        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:2vh; padding:3vh 3vw 3vh 1vw; box-sizing:border-box; }
+        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:2vh; padding:3vh 2vw; box-sizing:border-box; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
@@ -2954,6 +2956,8 @@
     const sideDesc = document.createElement('div'); sideDesc.className = 'fp-side-desc';
     sidebar.append(sideNum, sideName, sideEmoji, sideDesc);
 
+    const colLeft = document.createElement('div'); colLeft.className = 'fp-col-left';
+    layout.appendChild(colLeft);
     layout.appendChild(stage);
     layout.appendChild(sidebar);
     overlay.appendChild(layout);
@@ -3053,6 +3057,15 @@
       if (dx<0) vai((idx+1)%foto.length); else vai((idx-1+foto.length)%foto.length);
     }, {passive:true});
 
+    colLeft.addEventListener('touchend', e => {
+      if (!overlay.classList.contains('landscape')) return;
+      e.stopPropagation(); chiudiPopup();
+    }, {passive:true});
+    colLeft.addEventListener('click', e => {
+      if (!overlay.classList.contains('landscape')) return;
+      e.stopPropagation(); chiudiPopup();
+    });
+
     // ── Tap touch in landscape: stage=play/pausa, sidebar=chiudi ─────────
     let touchMoved = false;
     stage.addEventListener('touchstart', () => { touchMoved = false; }, {passive:true});
@@ -3121,4 +3134,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v130 - 04/04/2026 - Sidebar: testo -4pt, padding asimmetrico per spostare a sinistra -->
+<!-- Lista.html v131 - 04/04/2026 - Landscape 3 colonne: 30% verde | 40% foto | 30% info -->

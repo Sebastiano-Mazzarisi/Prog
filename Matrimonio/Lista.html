@@ -353,6 +353,7 @@
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
         <small style="color:#888;font-size:13px" id="time-placeholder"></small>
+        <small style="color:#b8893a;font-size:13px;margin-left:10px;font-weight:600">v116</small>
       </p>
     </div>
   </div>
@@ -2881,11 +2882,7 @@
     if (idx < 0) idx = 0;
 
     let playTimer = null;
-    const PLAY_INTERVAL = 6000;
-
-    // ── Audio ─────────────────────────────────────────────────────────────
-    const audio = new Audio('https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Onofrio.mp3');
-    audio.loop = true;
+    const PLAY_INTERVAL = 3000;
 
     // ── Overlay ──────────────────────────────────────────────────────────
     const overlay = document.createElement('div');
@@ -2895,33 +2892,28 @@
     const box = document.createElement('div');
     box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
 
-    // ── Wrapper 1024×1024 con cross-fade ─────────────────────────────────
-    // La dimensione è fissa 1024×1024 ma si riduce proporzionalmente su schermi piccoli
-    const SZ = 'min(1024px, min(96vw, 90vh))';
-    const imgWrapper = document.createElement('div');
-    imgWrapper.style.cssText = 'position:relative;width:' + SZ + ';height:' + SZ + ';border-radius:6px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.7);background:#111;';
+    // ── Immagine con transizione opacity ─────────────────────────────────
+    const img = document.createElement('img');
+    img.style.cssText = 'max-width:96vw;max-height:90vh;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,0.7);transition:opacity 0.25s ease;object-fit:contain;';
 
-    const imgA = document.createElement('img');
-    imgA.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 2s ease;';
-    const imgB = document.createElement('img');
-    imgB.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 2s ease;opacity:0;';
-    imgWrapper.appendChild(imgA);
-    imgWrapper.appendChild(imgB);
-    let imgFront = imgA, imgBack = imgB;
+    // ── Label nome ───────────────────────────────────────────────────────
+    const label = document.createElement('div');
+    label.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;transition:opacity 0.25s ease;';
 
-    // ── Label unica: "21 / 50 – Nome Cognome" ────────────────────────────
-    const infoBar = document.createElement('div');
-    infoBar.style.cssText = 'font-family:\'Inter\',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.5px;color:#fff;white-space:nowrap;';
+    // ── Contatore ────────────────────────────────────────────────────────
+    const counter = document.createElement('div');
+    counter.style.cssText = 'color:#aaa;font-family:\'Inter\',sans-serif;font-size:12px;';
 
     // ── Bottone chiudi ───────────────────────────────────────────────────
     const chiudi = document.createElement('button');
     chiudi.textContent = '✕';
     chiudi.style.cssText = 'position:absolute;top:-14px;right:-14px;background:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);color:#333;';
-    chiudi.onclick = () => { stopPlay(true); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); };
+    chiudi.onclick = () => { stopPlay(); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); };
 
     box.appendChild(chiudi);
-    box.appendChild(imgWrapper);
-    box.appendChild(infoBar);
+    box.appendChild(img);
+    box.appendChild(label);
+    if (foto.length > 1) box.appendChild(counter);
     overlay.appendChild(box);
 
     // ── Frecce ───────────────────────────────────────────────────────────
@@ -2946,66 +2938,57 @@
       // ── Tasto Play/Pausa ─────────────────────────────────────────────
       const btnPlay = document.createElement('button');
       btnPlay.textContent = '▶';
-      btnPlay.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.18);border:none;border-radius:50%;width:44px;height:44px;font-size:20px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;';
+      btnPlay.style.cssText = 'position:fixed;bottom:22px;right:22px;background:rgba(255,255,255,0.18);border:none;border-radius:50%;width:44px;height:44px;font-size:20px;color:#fff;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center;';
       btnPlay.onmouseover = () => btnPlay.style.background = 'rgba(255,255,255,0.38)';
       btnPlay.onmouseout  = () => btnPlay.style.background = playing() ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.18)';
       btnPlay.onclick = e => { e.stopPropagation(); togglePlay(btnPlay); };
       overlay.appendChild(btnPlay);
     }
 
-    // ── Aggiorna contenuto con cross-fade 2s ─────────────────────────────
-    function aggiornaContenuto(i, immediato) {
+    // ── Aggiorna contenuto senza ricreare elementi (no sfarfallio) ───────
+    function aggiornaContenuto(i) {
       const voce = foto[i] || { nome: nomeFile, file: null };
       const haFoto = !!voce.file;
       const nuovaSrc = haFoto ? 'Foto/' + voce.file : 'Foto/Foto.png';
-      infoBar.style.color = haFoto ? '#fff' : '#ffaa55';
-      infoBar.textContent = (i + 1) + ' / ' + foto.length + ' – ' + voce.nome;
-      if (immediato) {
-        imgFront.src = nuovaSrc;
-        imgFront.style.opacity = '1';
-        imgBack.style.opacity  = '0';
-        return;
-      }
-      imgBack.src = nuovaSrc;
-      imgBack.style.transition = 'none';
-      imgBack.style.opacity = '0';
-      imgBack.onload = () => {
-        imgBack.style.transition = 'opacity 2s ease';
-        imgBack.style.opacity = '1';
-        imgFront.style.opacity = '0';
-        setTimeout(() => { [imgFront, imgBack] = [imgBack, imgFront]; }, 2000);
-      };
+      // Fade out → cambia src → fade in
+      img.style.opacity = '0';
+      label.style.opacity = '0';
+      setTimeout(() => {
+        img.src = nuovaSrc;
+        label.textContent = voce.nome;
+        label.style.color = haFoto ? '#fff' : '#ffaa55';
+        counter.textContent = (i + 1) + ' / ' + foto.length;
+        img.style.opacity = '1';
+        label.style.opacity = '1';
+      }, 220);
     }
 
     function vai(i) {
       idx = i;
-      aggiornaContenuto(idx, false);
+      aggiornaContenuto(idx);
     }
 
     // ── Play / Pausa ─────────────────────────────────────────────────────
     function playing() { return playTimer !== null; }
     function startPlay(btn) {
-      playTimer = setInterval(() => { idx = (idx + 1) % foto.length; aggiornaContenuto(idx, false); }, PLAY_INTERVAL);
+      playTimer = setInterval(() => { idx = (idx + 1) % foto.length; aggiornaContenuto(idx); }, PLAY_INTERVAL);
       if (btn) { btn.textContent = '⏸'; btn.style.background = 'rgba(255,255,255,0.28)'; }
-      audio.play().catch(() => {});
     }
-    function stopPlay(reset) {
+    function stopPlay() {
       if (playTimer) { clearInterval(playTimer); playTimer = null; }
       const btn = overlay.querySelector('[data-play]');
       if (btn) { btn.textContent = '▶'; btn.style.background = 'rgba(255,255,255,0.18)'; }
-      audio.pause();
-      if (reset) audio.currentTime = 0;
     }
     function togglePlay(btn) {
       btn.setAttribute('data-play', '1');
-      if (playing()) { stopPlay(false); } else { startPlay(btn); }
+      if (playing()) { stopPlay(); } else { startPlay(btn); }
     }
 
     // ── Tastiera ─────────────────────────────────────────────────────────
     function onKey(e) {
-      if (e.key === 'ArrowRight') { stopPlay(false); vai((idx + 1) % foto.length); }
-      if (e.key === 'ArrowLeft')  { stopPlay(false); vai((idx - 1 + foto.length) % foto.length); }
-      if (e.key === 'Escape')     { stopPlay(true); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); }
+      if (e.key === 'ArrowRight') { stopPlay(); vai((idx + 1) % foto.length); }
+      if (e.key === 'ArrowLeft')  { stopPlay(); vai((idx - 1 + foto.length) % foto.length); }
+      if (e.key === 'Escape')     { stopPlay(); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); }
     }
     document.addEventListener('keydown', onKey);
 
@@ -3015,20 +2998,19 @@
     overlay.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - touchStartX;
       if (Math.abs(dx) < 40) return;
-      stopPlay(false);
+      stopPlay();
       if (dx < 0) vai((idx + 1) % foto.length);
       else         vai((idx - 1 + foto.length) % foto.length);
     }, { passive: true });
 
-    overlay.onclick = e => { if (e.target === overlay) { stopPlay(true); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); } };
+    overlay.onclick = e => { if (e.target === overlay) { stopPlay(); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); } };
 
-    // ── Prima visualizzazione ─────────────────────────────────────────────
+    // ── Prima visualizzazione (senza fade, già visibile) ─────────────────
     const voce0 = foto[idx] || { nome: nomeFile, file: null };
-    imgFront.src = voce0.file ? 'Foto/' + voce0.file : 'Foto/Foto.png';
-    imgFront.style.opacity = '1';
-    imgBack.style.opacity  = '0';
-    infoBar.style.color = voce0.file ? '#fff' : '#ffaa55';
-    infoBar.textContent = (idx + 1) + ' / ' + foto.length + ' – ' + voce0.nome;
+    img.src = voce0.file ? 'Foto/' + voce0.file : 'Foto/Foto.png';
+    label.textContent = voce0.nome;
+    label.style.color = voce0.file ? '#fff' : '#ffaa55';
+    counter.textContent = (idx + 1) + ' / ' + foto.length;
 
     document.body.appendChild(overlay);
   }
@@ -3070,4 +3052,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v115 - 03/04/2026 - Foto fissa 1024x1024, cross-fade 2s, slideshow 6s, audio Onofrio.mp3, pausa riprende da posizione, infoBar unificata -->
+<!-- Lista.html v116 - 03/04/2026 - Play/Pause in basso a destra, versione nel Caricamento -->

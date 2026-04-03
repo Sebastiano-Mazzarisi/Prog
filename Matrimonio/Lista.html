@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v164</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v165</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v164</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v165</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2935,16 +2935,10 @@
         .fp-overlay.landscape .fp-layout { grid-template-columns: minmax(0,28%) minmax(0,46%) minmax(0,26%); }
         @media (max-width:1024px) { .fp-overlay.landscape .fp-layout { grid-template-columns: minmax(0,30%) minmax(0,52%) minmax(0,18%); } }
         .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
-        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:stretch; text-align:center; gap:1.5vh; padding:2vh 8px; box-sizing:border-box; width:100%; min-width:0; overflow:hidden; }
-        .fp-overlay.landscape .fp-sidebar { display:flex; }
         .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:flex-start; gap:0; padding:6px 4px 6px 10px; box-sizing:border-box; overflow-y:auto; min-width:0; }
         .fp-overlay.landscape .fp-col-left { display:flex; }
         .fp-group-row { display:flex; gap:3px; width:100%; justify-content:flex-start; margin-bottom:5px; }
-        @media (max-width:1024px) {
-          .fp-group-row { margin-bottom:10px; }
-          .fp-sidebar { padding:2vh 4px 2vh 4px; align-items:stretch; justify-content:center; overflow:hidden; }
-          .fp-side-cognome { font-weight:700 !important; }
-        }
+        @media (max-width:1024px) { .fp-group-row { margin-bottom:10px; } }
         .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 2px); min-width:0; }
         .fp-group-thumb-wrap { width:100%; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
         .fp-group-thumb-wrap.highlight { border:4px solid #d4b07a; }
@@ -2952,31 +2946,30 @@
         .fp-group-placeholder { font-size:16pt; line-height:1; }
         .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(7px,1.4vw,12px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
         .fp-group-label.highlight { color:#fff; font-weight:700; }
-        .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; opacity:0; transition:opacity 1s ease; }
+        .fp-img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; opacity:0; transition:opacity 1s ease; }
         .fp-img.front { opacity:1; }
-        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:1.5vh; padding:2vh 8px; box-sizing:border-box; width:100%; min-width:0; }
+        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:stretch; text-align:center; gap:1.2vh; padding:1.5vh 0; box-sizing:border-box; min-width:0; overflow:hidden; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
-        .fp-side-num, .fp-side-cognome, .fp-side-nome, .fp-side-emoji, .fp-side-desc { display:block; width:100%; text-align:center; margin:0; padding:0 8px; box-sizing:border-box; min-width:0; overflow-wrap:break-word; word-break:break-word; }
+        .fp-side-num    { font-family:'Inter',sans-serif; font-size:clamp(13px,2.2vw,40px); font-weight:700; color:#d4b07a; line-height:1; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
+        .fp-side-cognome{ font-family:'Inter',sans-serif; font-size:clamp(10px,1.7vw,28px); font-weight:700; color:#fff; line-height:1.2; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
+        .fp-side-nome   { font-family:'Inter',sans-serif; font-size:clamp(9px,1.5vw,24px); font-weight:500; color:#e8e8e8; line-height:1.2; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
+        .fp-side-emoji  { font-size:clamp(13px,2.5vw,42px); line-height:1; text-align:center; padding:0 4px; min-width:0; }
+        .fp-side-desc   { font-family:'Inter',sans-serif; font-size:clamp(9px,1.4vw,24px); font-weight:500; color:#c8d8a0; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
         .fp-overlay.landscape [data-arrow] { display:none !important; }
-        .fp-ctrl-bar { display:none; flex-direction:column; justify-content:center; align-items:center; gap:6px; margin-top:2vh; align-self:center; }
-        .fp-overlay.landscape .fp-ctrl-bar { display:flex; }
-        .fp-ctrl-row { display:flex; flex-direction:row; gap:8px; justify-content:center; }
-        .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:10px; width:54px; height:48px; font-size:26px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-        .fp-ctrl-btn:hover { background:rgba(255,255,255,0.35); }
-        .fp-bar     { position:absolute; bottom:0; left:0; right:0; z-index:10; background:linear-gradient(transparent,rgba(0,0,0,0.75) 35%); padding:36px 20px 16px; display:flex; flex-direction:column; align-items:center; gap:8px; }
-        .fp-info    { font-family:'Inter',sans-serif; font-size:17px; font-weight:600; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,0.8); white-space:nowrap; text-align:center; }
-        .fp-btn-play{ background:rgba(255,255,255,0.22); border:none; border-radius:50%; width:34px; height:34px; font-size:15px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-        .fp-close   { position:absolute; top:12px; right:14px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; width:34px; height:34px; font-size:16px; font-weight:700; cursor:pointer; color:#fff; z-index:11; display:flex; align-items:center; justify-content:center; }
-        .fp-arrow   { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:48px; height:48px; font-size:32px; color:#fff; cursor:pointer; z-index:11; display:flex; align-items:center; justify-content:center; }
+        .fp-bar  { position:absolute; bottom:0; left:0; right:0; z-index:10; background:linear-gradient(transparent,rgba(0,0,0,0.75) 35%); padding:36px 20px 16px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+        .fp-info { font-family:'Inter',sans-serif; font-size:17px; font-weight:600; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,0.8); white-space:nowrap; text-align:center; }
+        .fp-btn-play { background:rgba(255,255,255,0.22); border:none; border-radius:50%; width:34px; height:34px; font-size:15px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .fp-close { position:absolute; top:12px; right:14px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; width:34px; height:34px; font-size:16px; font-weight:700; cursor:pointer; color:#fff; z-index:11; display:flex; align-items:center; justify-content:center; }
+        .fp-arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:48px; height:48px; font-size:32px; color:#fff; cursor:pointer; z-index:11; display:flex; align-items:center; justify-content:center; }
         .fp-arrow.left  { left:12px; }
         .fp-arrow.right { right:12px; }
-        .fp-side-num    { font-family:'Inter',sans-serif; font-size:clamp(14px,2.5vw,45px); font-weight:700; color:#d4b07a; line-height:1; width:100%; text-align:center; }
-        .fp-side-cognome{ font-family:'Inter',sans-serif; font-size:clamp(11px,2vw,32px); font-weight:700; color:#fff; line-height:1.2; word-break:break-word; width:100%; text-align:center; }
-        .fp-side-nome   { font-family:'Inter',sans-serif; font-size:clamp(10px,1.8vw,29px); font-weight:500; color:#e8e8e8; line-height:1.2; word-break:break-word; width:100%; text-align:center; }
-        .fp-side-emoji  { font-size:clamp(14px,3vw,48px); line-height:1; width:100%; text-align:center; }
-        .fp-side-desc   { font-family:'Inter',sans-serif; font-size:clamp(10px,1.6vw,27px); font-weight:500; color:#c8d8a0; letter-spacing:0.5px; width:100%; text-align:center; }
+        .fp-ctrl-bar { display:none; flex-direction:column; justify-content:center; align-items:center; gap:6px; margin-top:1.5vh; align-self:center; }
+        .fp-overlay.landscape .fp-ctrl-bar { display:flex; }
+        .fp-ctrl-row { display:flex; flex-direction:row; gap:8px; justify-content:center; }
+        .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:10px; width:44px; height:38px; font-size:20px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .fp-ctrl-btn:hover { background:rgba(255,255,255,0.35); }
       `;
       document.head.appendChild(st);
     }
@@ -3434,4 +3427,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v164 - 05/04/2026 - Fix iOS: minmax(0,%), align-items:stretch, overflow:hidden, align-self:center ctrlBar -->
+<!-- Lista.html v165 - 05/04/2026 - CSS popup riscritto pulito: minmax, align-items:stretch, font ridotti, no duplicati -->

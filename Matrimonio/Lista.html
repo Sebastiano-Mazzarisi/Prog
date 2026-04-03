@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v121</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v122</small>
       </p>
     </div>
   </div>
@@ -802,7 +802,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v121</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v122</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2902,7 +2902,7 @@
 
     // ── Overlay fullscreen ────────────────────────────────────────────────
     const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;background:#556b2f;z-index:9999;';
+    overlay.style.cssText = 'position:fixed;inset:0;background:#2d3a0e;z-index:9999;';
 
     // ── Due img sovrapposti per cross-fade ────────────────────────────────
     const imgA = document.createElement('img');
@@ -2935,20 +2935,20 @@
     const chiudi = document.createElement('button');
     chiudi.textContent = '✕';
     chiudi.style.cssText = 'position:absolute;top:12px;right:14px;background:rgba(0,0,0,0.5);border:none;border-radius:50%;width:34px;height:34px;font-size:16px;font-weight:700;cursor:pointer;color:#fff;z-index:11;display:flex;align-items:center;justify-content:center;';
-    chiudi.onclick = () => { stopPlay(true); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); };
+    chiudi.onclick = () => { stopPlay(true); document.removeEventListener('keydown', onKey); window.removeEventListener('resize', aggiornaOrientamento); document.body.removeChild(overlay); };
     overlay.appendChild(chiudi);
 
     // ── Frecce ────────────────────────────────────────────────────────────
     if (foto.length > 1) {
       const arrowStyle = (side) => 'position:absolute;' + side + ':12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:48px;height:48px;font-size:32px;color:#fff;cursor:pointer;z-index:11;display:flex;align-items:center;justify-content:center;';
       const btnSx = document.createElement('button');
-      btnSx.textContent = '‹'; btnSx.style.cssText = arrowStyle('left');
+      btnSx.textContent = '‹'; btnSx.style.cssText = arrowStyle('left'); btnSx.setAttribute('data-arrow','1');
       btnSx.onmouseover = () => btnSx.style.background = 'rgba(255,255,255,0.35)';
       btnSx.onmouseout  = () => btnSx.style.background = 'rgba(255,255,255,0.15)';
       btnSx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx-1+foto.length)%foto.length); };
       overlay.appendChild(btnSx);
       const btnDx = document.createElement('button');
-      btnDx.textContent = '›'; btnDx.style.cssText = arrowStyle('right');
+      btnDx.textContent = '›'; btnDx.style.cssText = arrowStyle('right'); btnDx.setAttribute('data-arrow','1');
       btnDx.onmouseover = () => btnDx.style.background = 'rgba(255,255,255,0.35)';
       btnDx.onmouseout  = () => btnDx.style.background = 'rgba(255,255,255,0.15)';
       btnDx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx+1)%foto.length); };
@@ -2997,7 +2997,7 @@
     function onKey(e) {
       if (e.key==='ArrowRight') { stopPlay(false); vai((idx+1)%foto.length); }
       if (e.key==='ArrowLeft')  { stopPlay(false); vai((idx-1+foto.length)%foto.length); }
-      if (e.key==='Escape')     { stopPlay(true); document.removeEventListener('keydown',onKey); document.body.removeChild(overlay); }
+      if (e.key==='Escape')     { stopPlay(true); document.removeEventListener('keydown',onKey); window.removeEventListener('resize',aggiornaOrientamento); document.body.removeChild(overlay); }
     }
     document.addEventListener('keydown', onKey);
 
@@ -3011,7 +3011,17 @@
       if (dx<0) vai((idx+1)%foto.length); else vai((idx-1+foto.length)%foto.length);
     }, {passive:true});
 
-    overlay.onclick = e=>{ if (e.target===overlay) { stopPlay(true); document.removeEventListener('keydown',onKey); document.body.removeChild(overlay); } };
+    overlay.onclick = e=>{ if (e.target===overlay) { stopPlay(true); document.removeEventListener('keydown',onKey); window.removeEventListener('resize',aggiornaOrientamento); document.body.removeChild(overlay); } };
+
+    // ── Gestione orientamento: landscape = solo foto, niente controlli ────
+    function aggiornaOrientamento() {
+      const landscape = window.innerWidth > window.innerHeight;
+      bar.style.display    = landscape ? 'none' : 'flex';
+      chiudi.style.display = landscape ? 'none' : 'flex';
+      overlay.querySelectorAll('[data-arrow]').forEach(el => el.style.display = landscape ? 'none' : 'flex');
+    }
+    window.addEventListener('resize', aggiornaOrientamento);
+    aggiornaOrientamento();
 
     // ── Prima visualizzazione ─────────────────────────────────────────────
     aggiornaContenuto(idx, true);
@@ -3055,4 +3065,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v121 - 04/04/2026 - Foto a pieno schermo verticale con object-fit:contain, barre laterali verde oliva -->
+<!-- Lista.html v122 - 04/04/2026 - Verde oliva scuro #2d3a0e, landscape=solo foto senza controlli -->

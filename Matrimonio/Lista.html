@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v144</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v145</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v144</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v145</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2932,22 +2932,21 @@
       st.textContent = `
         .fp-overlay { position:fixed; inset:0; background:#2d3a0e; z-index:9999; }
         .fp-layout  { position:absolute; inset:0; display:grid; grid-template-columns:1fr; }
-        .fp-overlay.landscape .fp-layout { grid-template-columns: 30% 50% 20%; }
+        .fp-overlay.landscape .fp-layout { grid-template-columns: 28% 46% 26%; }
         .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
-        .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:center; gap:0; padding:8px 4px 8px 56px; box-sizing:border-box; overflow-y:auto; }
+        .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:flex-start; gap:0; padding:6px 4px 6px 10px; box-sizing:border-box; overflow-y:auto; }
         .fp-overlay.landscape .fp-col-left { display:flex; }
-        .fp-group-row { display:flex; gap:4px; width:100%; justify-content:flex-start; margin-bottom:4px; }
-        .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 3px); min-width:0; }
-        .fp-group-thumb-wrap { width:100%; max-width:230px; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
-        @media (max-width:768px) { .fp-group-thumb-wrap { max-width:280px; } }
+        .fp-group-row { display:flex; gap:3px; width:100%; justify-content:flex-start; margin-bottom:3px; }
+        .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 2px); min-width:0; }
+        .fp-group-thumb-wrap { width:100%; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
         .fp-group-thumb-wrap.highlight { border-color:#d4b07a; }
         .fp-group-thumb { width:100%; height:100%; object-fit:cover; display:block; }
-        .fp-group-placeholder { font-size:20pt; line-height:1; }
-        .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(7px,0.75vw,11px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
+        .fp-group-placeholder { font-size:16pt; line-height:1; }
+        .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(7px,1.4vw,12px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
         .fp-group-label.highlight { color:#fff; font-weight:700; }
         .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; opacity:0; transition:opacity 2s ease; }
         .fp-img.front { opacity:1; }
-        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:2vh; padding:3vh 2vw; box-sizing:border-box; }
+        .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:1.5vh; padding:2vh 1.5vw; box-sizing:border-box; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
@@ -2959,11 +2958,11 @@
         .fp-arrow   { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:48px; height:48px; font-size:32px; color:#fff; cursor:pointer; z-index:11; display:flex; align-items:center; justify-content:center; }
         .fp-arrow.left  { left:12px; }
         .fp-arrow.right { right:12px; }
-        .fp-side-num    { font-family:'Inter',sans-serif; font-size:clamp(19px,2.8vw,45px); font-weight:700; color:#d4b07a; line-height:1; width:100%; }
-        .fp-side-cognome{ font-family:'Inter',sans-serif; font-size:clamp(14px,2.1vw,32px); font-weight:700; color:#fff; line-height:1.2; word-break:break-word; width:100%; }
-        .fp-side-nome   { font-family:'Inter',sans-serif; font-size:clamp(13px,1.9vw,29px); font-weight:500; color:#e8e8e8; line-height:1.2; word-break:break-word; width:100%; }
-        .fp-side-emoji  { font-size:clamp(22px,3.2vw,48px); line-height:1; width:100%; }
-        .fp-side-desc   { font-family:'Inter',sans-serif; font-size:clamp(12px,1.7vw,27px); font-weight:500; color:#c8d8a0; letter-spacing:0.5px; width:100%; }
+        .fp-side-num    { font-family:'Inter',sans-serif; font-size:clamp(14px,2.5vw,45px); font-weight:700; color:#d4b07a; line-height:1; width:100%; }
+        .fp-side-cognome{ font-family:'Inter',sans-serif; font-size:clamp(11px,2vw,32px); font-weight:700; color:#fff; line-height:1.2; word-break:break-word; width:100%; }
+        .fp-side-nome   { font-family:'Inter',sans-serif; font-size:clamp(10px,1.8vw,29px); font-weight:500; color:#e8e8e8; line-height:1.2; word-break:break-word; width:100%; }
+        .fp-side-emoji  { font-size:clamp(14px,3vw,48px); line-height:1; width:100%; }
+        .fp-side-desc   { font-family:'Inter',sans-serif; font-size:clamp(10px,1.6vw,27px); font-weight:500; color:#c8d8a0; letter-spacing:0.5px; width:100%; }
       `;
       document.head.appendChild(st);
     }
@@ -3389,4 +3388,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v144 - 05/04/2026 - Fix orientamento iOS: orientationchange + screen.orientation + setTimeout -->
+<!-- Lista.html v145 - 05/04/2026 - Layout landscape ricalibrato per iPhone: colonne 28/46/26, miniature fluid, font clamp ridotti -->

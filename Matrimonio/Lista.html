@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v145</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v146</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v145</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v146</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -3176,7 +3176,11 @@
       }
     }
 
+    let currentGen = 0; // generazione corrente: annulla callback di navigazioni precedenti
+    let noFotoTimer = null; // timer per il placeholder "nessuna foto"
+
     function aggiornaContenuto(i, immediato) {
+      const gen = ++currentGen; // ogni chiamata ha la sua generazione
       const voce = foto[i] || { nome: nomeFile, file: null };
       const src = voce.file ? 'Foto/'+voce.file : null;
       const {icona,desc} = infoSecondo(voce.nome);
@@ -3225,7 +3229,9 @@
         // nessuna foto: fade out quella corrente e mostra emoji
         imgFront.classList.remove('front');
         imgBack.classList.remove('front');
-        setTimeout(() => {
+        if (noFotoTimer) clearTimeout(noFotoTimer);
+        noFotoTimer = setTimeout(() => {
+          if (currentGen !== gen) return; // navigato via nel frattempo
           stage.style.background = '#4a6a2a';
           const sph = document.createElement('div');
           sph.className = 'fp-stage-placeholder';
@@ -3234,18 +3240,27 @@
           stage.appendChild(sph);
           imgFront.src = ''; imgBack.src = '';
           [imgFront, imgBack] = [imgBack, imgFront];
+          noFotoTimer = null;
         }, 2000);
         return;
       }
 
+      // c'è una foto: cancella eventuale timer nessuna-foto pendente
+      if (noFotoTimer) { clearTimeout(noFotoTimer); noFotoTimer = null; }
+
       const preload = new Image();
       preload.onload = () => {
+        if (currentGen !== gen) return; // navigato via nel frattempo
         imgBack.src = src;
         imgBack.classList.remove('front');
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          if (currentGen !== gen) return;
           imgBack.classList.add('front');
           imgFront.classList.remove('front');
-          setTimeout(()=>{ [imgFront,imgBack]=[imgBack,imgFront]; }, 2000);
+          setTimeout(()=>{
+            if (currentGen !== gen) return;
+            [imgFront,imgBack]=[imgBack,imgFront];
+          }, 2000);
         }));
       };
       preload.src = src;
@@ -3388,4 +3403,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v145 - 05/04/2026 - Layout landscape ricalibrato per iPhone: colonne 28/46/26, miniature fluid, font clamp ridotti -->
+<!-- Lista.html v146 - 05/04/2026 - Fix: generazione per annullare callback asincrone obsolete, no emoji su foto esistenti -->

@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v138</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v139</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v138</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v139</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -3050,45 +3050,23 @@
         const src = thumbSrcFor(cn);
         if (!src) { thumbCache.set(normKG(cn), null); return; }
         const im = new Image();
-        im.onload  = () => thumbCache.set(normKG(cn), im);
+        im.onload  = () => { im._ready = true; };
         im.onerror = () => thumbCache.set(normKG(cn), null);
         im.src = src;
-        thumbCache.set(normKG(cn), im); // metti subito l'oggetto, onload aggiorna il src
+        thumbCache.set(normKG(cn), im);
       });
     }
 
-    // Precarica subito per il gruppo della prima foto
-    const gruppoIniziale = calcolaGruppo(foto[idx]?.nome || '');
-    precaricaGruppo(gruppoIniziale);
-    function aggiornaContenuto(i, immediato) {
-      const voce = foto[i] || { nome: nomeFile, file: null };
-      const src = voce.file ? 'Foto/'+voce.file : 'Foto/Foto.png';
-      const {icona,desc} = infoSecondo(voce.nome);
-      const eta = getEtaAnni(voce.nome);
-
-      // barra inferiore portrait
-      infoBar.textContent = (i+1)+' / '+foto.length+' \u2013 '+voce.nome+(icona?'  '+icona:'');
-
-      // sidebar destra: numero, cognome, nome (età), emoji, descrizione
-      sideNum.textContent = (i+1)+' / '+foto.length;
-      const parti = (voce.nome||'').trim().split(/\s+/);
-      // il nome è memorizzato come "Nome Cognome" (primo = nome, ultimo = cognome)
-      sideCognome.textContent = parti.length >= 2 ? parti[parti.length-1] : voce.nome;
-      sideNome.textContent = (parti.length >= 2 ? parti.slice(0,-1).join(' ') : '') + (eta!==null?' ('+eta+')':'');
-      sideEmoji.textContent = icona;
-      sideDesc.textContent  = desc;
-
-      // colonna sinistra: miniature gruppo 2 per riga dalla cache
-      colLeft.innerHTML = '';
+    // Costruisce le miniature: se la cache non è ancora pronta riprova dopo 200ms
+    function costruisciMiniature(voce, tentativo) {
       const nomeVoce = voce.nome || '';
       const partiVoce = nomeVoce.trim().split(/\s+/);
       const nomeInvV = partiVoce.length >= 2 ? partiVoce.slice(1).join(' ')+' '+partiVoce[0] : nomeVoce;
       const gruppo = calcolaGruppo(nomeVoce);
-
-      // precarica anche il gruppo della foto corrente (può cambiare se si naviga)
       precaricaGruppo(gruppo);
 
-      // disponi sempre a sinistra, 2 per riga
+      colLeft.innerHTML = '';
+
       for (let r = 0; r < gruppo.length; r += 2) {
         const riga = document.createElement('div');
         riga.className = 'fp-group-row';
@@ -3105,32 +3083,30 @@
           wrap.className = 'fp-group-thumb-wrap' + (isMe ? ' highlight' : '');
 
           const cachedImg = thumbCache.get(normKG(cn));
-          if (cachedImg && cachedImg.complete && cachedImg.naturalWidth > 0) {
-            // foto già in cache: usa direttamente
+          if (cachedImg && cachedImg._ready) {
             const imgEl = document.createElement('img');
             imgEl.className = 'fp-group-thumb';
             imgEl.src = cachedImg.src;
             imgEl.alt = cn;
             wrap.appendChild(imgEl);
           } else if (cachedImg === null) {
-            // nessuna foto: placeholder 📷
             const ph = document.createElement('div');
             ph.className = 'fp-group-placeholder';
             ph.textContent = '📷';
             wrap.appendChild(ph);
           } else {
-            // ancora in caricamento: attacca onload
+            // ancora in caricamento — placeholder temporaneo, riprova tra 200ms
             const ph = document.createElement('div');
             ph.className = 'fp-group-placeholder';
-            ph.textContent = '📷';
+            ph.textContent = '⏳';
             wrap.appendChild(ph);
             if (cachedImg) {
               cachedImg.addEventListener('load', () => {
+                wrap.innerHTML = '';
                 const imgEl = document.createElement('img');
                 imgEl.className = 'fp-group-thumb';
                 imgEl.src = cachedImg.src;
                 imgEl.alt = cn;
-                wrap.innerHTML = '';
                 wrap.appendChild(imgEl);
               }, {once:true});
             }
@@ -3154,6 +3130,28 @@
         }
         colLeft.appendChild(riga);
       }
+    }
+
+    function aggiornaContenuto(i, immediato) {
+      const voce = foto[i] || { nome: nomeFile, file: null };
+      const src = voce.file ? 'Foto/'+voce.file : 'Foto/Foto.png';
+      const {icona,desc} = infoSecondo(voce.nome);
+      const eta = getEtaAnni(voce.nome);
+
+      // barra inferiore portrait
+      infoBar.textContent = (i+1)+' / '+foto.length+' \u2013 '+voce.nome+(icona?'  '+icona:'');
+
+      // sidebar destra: numero, cognome, nome (età), emoji, descrizione
+      sideNum.textContent = (i+1)+' / '+foto.length;
+      const parti = (voce.nome||'').trim().split(/\s+/);
+      // il nome è memorizzato come "Nome Cognome" (primo = nome, ultimo = cognome)
+      sideCognome.textContent = parti.length >= 2 ? parti[parti.length-1] : voce.nome;
+      sideNome.textContent = (parti.length >= 2 ? parti.slice(0,-1).join(' ') : '') + (eta!==null?' ('+eta+')':'');
+      sideEmoji.textContent = icona;
+      sideDesc.textContent  = desc;
+
+      // colonna sinistra: miniature gruppo
+      costruisciMiniature(voce);
 
       if (immediato) {
         // preload anche per la prima visualizzazione
@@ -3300,4 +3298,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v138 - 04/04/2026 - Miniature: cache in memoria, allineamento sx, placeholder 📷, 250px -->
+<!-- Lista.html v139 - 05/04/2026 - Fix miniature: onload asincrono, niente precaricamento anticipato, placeholder ⏳/📷 -->

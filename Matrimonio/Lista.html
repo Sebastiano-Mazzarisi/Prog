@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v159</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v160</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v159</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v160</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2959,8 +2959,9 @@
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
         .fp-overlay.landscape [data-arrow] { display:none !important; }
-        .fp-ctrl-bar { display:none; flex-direction:row; justify-content:center; align-items:center; gap:8px; margin-top:2vh; }
+        .fp-ctrl-bar { display:none; flex-direction:column; justify-content:center; align-items:center; gap:6px; margin-top:2vh; }
         .fp-overlay.landscape .fp-ctrl-bar { display:flex; }
+        .fp-ctrl-row { display:flex; flex-direction:row; gap:8px; justify-content:center; }
         .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:10px; width:54px; height:48px; font-size:26px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
         .fp-ctrl-btn:hover { background:rgba(255,255,255,0.35); }
         .fp-bar     { position:absolute; bottom:0; left:0; right:0; z-index:10; background:linear-gradient(transparent,rgba(0,0,0,0.75) 35%); padding:36px 20px 16px; display:flex; flex-direction:column; align-items:center; gap:8px; }
@@ -3011,13 +3012,15 @@
 
     // ── Barra controlli landscape [‹][▶][›] in basso a destra della foto ─
     const ctrlBar = document.createElement('div'); ctrlBar.className = 'fp-ctrl-bar';
-    const ctrlSx   = document.createElement('button'); ctrlSx.className   = 'fp-ctrl-btn'; ctrlSx.textContent = '‹';
-    ctrlSx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx-1+foto.length)%foto.length); };
     const ctrlPlay = document.createElement('button'); ctrlPlay.className = 'fp-ctrl-btn'; ctrlPlay.textContent = '▶';
     ctrlPlay.onclick = e => { e.stopPropagation(); togglePlay(ctrlPlay); };
+    const ctrlRow = document.createElement('div'); ctrlRow.className = 'fp-ctrl-row';
+    const ctrlSx   = document.createElement('button'); ctrlSx.className   = 'fp-ctrl-btn'; ctrlSx.textContent = '‹';
+    ctrlSx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx-1+foto.length)%foto.length); };
     const ctrlDx   = document.createElement('button'); ctrlDx.className   = 'fp-ctrl-btn'; ctrlDx.textContent = '›';
     ctrlDx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx+1)%foto.length); };
-    ctrlBar.appendChild(ctrlSx); ctrlBar.appendChild(ctrlPlay); ctrlBar.appendChild(ctrlDx);
+    ctrlRow.appendChild(ctrlSx); ctrlRow.appendChild(ctrlDx);
+    ctrlBar.appendChild(ctrlPlay); ctrlBar.appendChild(ctrlRow);
     sidebar.appendChild(ctrlBar);
 
     // barra inferiore portrait
@@ -3425,4 +3428,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v159 - 05/04/2026 - Controlli [‹][▶][›] nella sidebar destra, più grandi -->
+<!-- Lista.html v160 - 05/04/2026 - Controlli: Play sopra, [‹][›] sotto su riga separata -->

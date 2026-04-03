@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v166</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v167</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v166</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v167</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2306,7 +2306,7 @@
       const t = document.getElementById('pdf-toast');
       if (t) document.body.removeChild(t);
       if (btnPdf) {
-        btnPdf.innerText = testi.pdf;
+        btnPdf.innerText = testi.btnPDF;
         btnPdf.disabled = false;
       }
     });
@@ -3435,4 +3435,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v166 - 05/04/2026 - Toast "Creazione PDF in corso..." invece della clessidra sul bottone -->
+<!-- Lista.html v167 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->

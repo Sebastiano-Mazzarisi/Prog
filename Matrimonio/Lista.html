@@ -2881,7 +2881,7 @@
     if (idx < 0) idx = 0;
 
     let playTimer = null;
-    const PLAY_INTERVAL = 3000;
+    const PLAY_INTERVAL = 6000;
 
     // ── Audio ─────────────────────────────────────────────────────────────
     const audio = new Audio('https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Onofrio.mp3');
@@ -2895,9 +2895,21 @@
     const box = document.createElement('div');
     box.style.cssText = 'position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;';
 
-    // ── Immagine con transizione opacity ─────────────────────────────────
-    const img = document.createElement('img');
-    img.style.cssText = 'max-width:96vw;max-height:90vh;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,0.7);transition:opacity 0.25s ease;object-fit:contain;';
+    // ── Wrapper per cross-fade con due img sovrapposti ────────────────────
+    const imgWrapper = document.createElement('div');
+    imgWrapper.style.cssText = 'position:relative;max-width:96vw;max-height:90vh;';
+
+    const imgA = document.createElement('img');
+    imgA.style.cssText = 'max-width:96vw;max-height:90vh;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,0.7);object-fit:contain;display:block;transition:opacity 2s ease;';
+
+    const imgB = document.createElement('img');
+    imgB.style.cssText = 'max-width:96vw;max-height:90vh;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,0.7);object-fit:contain;position:absolute;inset:0;width:100%;height:100%;transition:opacity 2s ease;opacity:0;';
+
+    imgWrapper.appendChild(imgA);
+    imgWrapper.appendChild(imgB);
+
+    // layer visibile corrente / quello nascosto
+    let imgFront = imgA, imgBack = imgB;
 
     // ── Label nome ───────────────────────────────────────────────────────
     const label = document.createElement('div');
@@ -2914,7 +2926,7 @@
     chiudi.onclick = () => { stopPlay(); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); };
 
     box.appendChild(chiudi);
-    box.appendChild(img);
+    box.appendChild(imgWrapper);
     box.appendChild(label);
     if (foto.length > 1) box.appendChild(counter);
     overlay.appendChild(box);
@@ -2948,27 +2960,38 @@
       overlay.appendChild(btnPlay);
     }
 
-    // ── Aggiorna contenuto senza ricreare elementi (no sfarfallio) ───────
-    function aggiornaContenuto(i) {
+    // ── Aggiorna contenuto con cross-fade 2s ─────────────────────────────
+    function aggiornaContenuto(i, immediato) {
       const voce = foto[i] || { nome: nomeFile, file: null };
       const haFoto = !!voce.file;
       const nuovaSrc = haFoto ? 'Foto/' + voce.file : 'Foto/Foto.png';
-      // Fade out → cambia src → fade in
-      img.style.opacity = '0';
-      label.style.opacity = '0';
-      setTimeout(() => {
-        img.src = nuovaSrc;
-        label.textContent = voce.nome;
-        label.style.color = haFoto ? '#fff' : '#ffaa55';
-        counter.textContent = (i + 1) + ' / ' + foto.length;
-        img.style.opacity = '1';
-        label.style.opacity = '1';
-      }, 220);
+      label.textContent = voce.nome;
+      label.style.color = haFoto ? '#fff' : '#ffaa55';
+      counter.textContent = (i + 1) + ' / ' + foto.length;
+      if (immediato) {
+        imgFront.src = nuovaSrc;
+        imgFront.style.opacity = '1';
+        imgBack.style.opacity  = '0';
+        return;
+      }
+      // carica la nuova src nel layer nascosto, poi esegue il cross-fade
+      imgBack.src = nuovaSrc;
+      imgBack.style.transition = 'none';
+      imgBack.style.opacity = '0';
+      imgBack.onload = () => {
+        imgBack.style.transition = 'opacity 2s ease';
+        imgBack.style.opacity = '1';
+        imgFront.style.opacity = '0';
+        // scambia i ruoli dopo la transizione
+        setTimeout(() => {
+          [imgFront, imgBack] = [imgBack, imgFront];
+        }, 2000);
+      };
     }
 
     function vai(i) {
       idx = i;
-      aggiornaContenuto(idx);
+      aggiornaContenuto(idx, false);
     }
 
     // ── Play / Pausa ─────────────────────────────────────────────────────
@@ -3012,9 +3035,10 @@
 
     overlay.onclick = e => { if (e.target === overlay) { stopPlay(); document.removeEventListener('keydown', onKey); document.body.removeChild(overlay); } };
 
-    // ── Prima visualizzazione (senza fade, già visibile) ─────────────────
     const voce0 = foto[idx] || { nome: nomeFile, file: null };
-    img.src = voce0.file ? 'Foto/' + voce0.file : 'Foto/Foto.png';
+    imgFront.src = voce0.file ? 'Foto/' + voce0.file : 'Foto/Foto.png';
+    imgFront.style.opacity = '1';
+    imgBack.style.opacity  = '0';
     label.textContent = voce0.nome;
     label.style.color = voce0.file ? '#fff' : '#ffaa55';
     counter.textContent = (idx + 1) + ' / ' + foto.length;
@@ -3059,4 +3083,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v113 - 03/04/2026 - Audio Onofrio.mp3 sincronizzato con Play/Pausa slideshow foto -->
+<!-- Lista.html v114 - 03/04/2026 - Slideshow 6s, cross-fade 2s, audio Onofrio.mp3 -->

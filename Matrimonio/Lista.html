@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v140</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v141</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v140</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v141</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2932,17 +2932,17 @@
       st.textContent = `
         .fp-overlay { position:fixed; inset:0; background:#2d3a0e; z-index:9999; }
         .fp-layout  { position:absolute; inset:0; display:grid; grid-template-columns:1fr; }
-        .fp-overlay.landscape .fp-layout { grid-template-columns: 25% 50% 25%; }
+        .fp-overlay.landscape .fp-layout { grid-template-columns: 30% 50% 20%; }
         .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
-        .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:center; gap:0; padding:8px 6px 8px 56px; box-sizing:border-box; overflow-y:auto; }
+        .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:center; gap:0; padding:8px 4px 8px 56px; box-sizing:border-box; overflow-y:auto; }
         .fp-overlay.landscape .fp-col-left { display:flex; }
-        .fp-group-row { display:flex; gap:6px; width:100%; justify-content:center; margin-bottom:6px; }
-        .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:3px; flex:0 0 calc(50% - 3px); min-width:0; }
-        .fp-group-thumb-wrap { width:100%; max-width:250px; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
+        .fp-group-row { display:flex; gap:4px; width:100%; justify-content:flex-start; margin-bottom:4px; }
+        .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 3px); min-width:0; }
+        .fp-group-thumb-wrap { width:100%; max-width:230px; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
         .fp-group-thumb-wrap.highlight { border-color:#d4b07a; }
         .fp-group-thumb { width:100%; height:100%; object-fit:cover; display:block; }
         .fp-group-placeholder { font-size:20pt; line-height:1; }
-        .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(8px,0.9vw,13px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
+        .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(7px,0.75vw,11px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
         .fp-group-label.highlight { color:#fff; font-weight:700; }
         .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; opacity:0; transition:opacity 2s ease; }
         .fp-img.front { opacity:1; }
@@ -3111,11 +3111,11 @@
 
       colLeft.innerHTML = '';
 
-      for (let r = 0; r < gruppo.length; r += 2) {
+      for (let r = 0; r < gruppo.length; r += 3) {
         const riga = document.createElement('div');
         riga.className = 'fp-group-row';
         riga.style.justifyContent = 'flex-start';
-        for (let c = r; c < Math.min(r+2, gruppo.length); c++) {
+        for (let c = r; c < Math.min(r+3, gruppo.length); c++) {
           const nomeGruppo = gruppo[c];
           const cn = nomeToFilename(nomeGruppo);
           const isMe = normKG(cn)===normKG(nomeVoce) || normKG(nomeGruppo)===normKG(nomeInvV);
@@ -3345,4 +3345,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v140 - 05/04/2026 - Fix miniature: fetch diretto se non in fotoDisponibili, data-ck per aggiornamento asincrono -->
+<!-- Lista.html v141 - 05/04/2026 - Landscape 30/50/20, miniature 3 per riga 230px -->

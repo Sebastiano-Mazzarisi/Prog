@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v143</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v144</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v143</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v144</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -3273,11 +3273,22 @@
 
     // ── Orientamento ──────────────────────────────────────────────────────
     function aggiornaOrientamento() {
-      const landscape = window.innerWidth > window.innerHeight;
+      let landscape;
+      if (screen.orientation && screen.orientation.type) {
+        landscape = screen.orientation.type.includes('landscape');
+      } else if (typeof window.orientation !== 'undefined') {
+        landscape = Math.abs(window.orientation) === 90;
+      } else {
+        landscape = window.innerWidth > window.innerHeight;
+      }
       overlay.classList.toggle('landscape', landscape);
       overlay.classList.toggle('portrait', !landscape);
     }
     window.addEventListener('resize', aggiornaOrientamento);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(aggiornaOrientamento, 100); // iOS ritarda il viewport update
+    });
+    if (screen.orientation) screen.orientation.addEventListener('change', aggiornaOrientamento);
     aggiornaOrientamento();
 
     // ── Tastiera ──────────────────────────────────────────────────────────
@@ -3330,6 +3341,8 @@
       stopPlay(true);
       document.removeEventListener('keydown', onKey);
       window.removeEventListener('resize', aggiornaOrientamento);
+      window.removeEventListener('orientationchange', aggiornaOrientamento);
+      if (screen.orientation) screen.orientation.removeEventListener('change', aggiornaOrientamento);
       document.body.removeChild(overlay);
     }
     overlay.onclick = e=>{ if (e.target===overlay || e.target===stage || e.target===layout) chiudiPopup(); };
@@ -3376,4 +3389,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v143 - 05/04/2026 - Fix: emoji 📷 anche passando da foto a nessuna foto con fade out -->
+<!-- Lista.html v144 - 05/04/2026 - Fix orientamento iOS: orientationchange + screen.orientation + setTimeout -->

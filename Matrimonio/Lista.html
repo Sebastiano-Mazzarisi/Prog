@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v137</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v138</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v137</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v138</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2938,8 +2938,10 @@
         .fp-overlay.landscape .fp-col-left { display:flex; }
         .fp-group-row { display:flex; gap:6px; width:100%; justify-content:center; margin-bottom:6px; }
         .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:3px; flex:0 0 calc(50% - 3px); min-width:0; }
-        .fp-group-thumb { width:100%; max-width:250px; aspect-ratio:1; object-fit:cover; border-radius:4px; border:2px solid transparent; display:block; }
-        .fp-group-thumb.highlight { border-color:#d4b07a; }
+        .fp-group-thumb-wrap { width:100%; max-width:250px; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
+        .fp-group-thumb-wrap.highlight { border-color:#d4b07a; }
+        .fp-group-thumb { width:100%; height:100%; object-fit:cover; display:block; }
+        .fp-group-placeholder { font-size:20pt; line-height:1; }
         .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(8px,0.9vw,13px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
         .fp-group-label.highlight { color:#fff; font-weight:700; }
         .fp-img     { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; opacity:0; transition:opacity 2s ease; }
@@ -3018,7 +3020,46 @@
       overlay.appendChild(bSx); overlay.appendChild(bDx);
     }
 
-    // ── Aggiorna contenuto ────────────────────────────────────────────────
+    // ── Precaricamento foto gruppo in memoria ─────────────────────────────
+    // thumbCache: Map  cognomeNome → HTMLImageElement (già caricato) | null
+    const thumbCache = new Map();
+    const normKG = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+
+    function nomeToFilename(n) {
+      const p = n.trim().split(/\s+/);
+      return p.length >= 2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : n;
+    }
+    function thumbSrcFor(cognomeNome) {
+      const match = (window.fotoDisponibili||[]).find(f => f && normKG(f.nome)===normKG(cognomeNome));
+      return match && match.file ? 'Foto/'+match.file : null;
+    }
+
+    // Calcola il gruppo della foto iniziale e precarica tutte le miniature
+    function calcolaGruppo(nomeVoce) {
+      const partiV = nomeVoce.trim().split(/\s+/);
+      const nomeInv = partiV.length >= 2 ? partiV.slice(1).join(' ')+' '+partiV[0] : nomeVoce;
+      return (window.mapGruppo||{})[normKG(nomeVoce)]
+          || (window.mapGruppo||{})[normKG(nomeInv)]
+          || [];
+    }
+
+    function precaricaGruppo(gruppo) {
+      gruppo.forEach(nomeGruppo => {
+        const cn = nomeToFilename(nomeGruppo);
+        if (thumbCache.has(normKG(cn))) return;
+        const src = thumbSrcFor(cn);
+        if (!src) { thumbCache.set(normKG(cn), null); return; }
+        const im = new Image();
+        im.onload  = () => thumbCache.set(normKG(cn), im);
+        im.onerror = () => thumbCache.set(normKG(cn), null);
+        im.src = src;
+        thumbCache.set(normKG(cn), im); // metti subito l'oggetto, onload aggiorna il src
+      });
+    }
+
+    // Precarica subito per il gruppo della prima foto
+    const gruppoIniziale = calcolaGruppo(foto[idx]?.nome || '');
+    precaricaGruppo(gruppoIniziale);
     function aggiornaContenuto(i, immediato) {
       const voce = foto[i] || { nome: nomeFile, file: null };
       const src = voce.file ? 'Foto/'+voce.file : 'Foto/Foto.png';
@@ -3037,60 +3078,77 @@
       sideEmoji.textContent = icona;
       sideDesc.textContent  = desc;
 
-      // colonna sinistra: miniature gruppo 2 per riga
+      // colonna sinistra: miniature gruppo 2 per riga dalla cache
       colLeft.innerHTML = '';
-      const normK = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
       const nomeVoce = voce.nome || '';
       const partiVoce = nomeVoce.trim().split(/\s+/);
-      const nomeInv = partiVoce.length >= 2
-        ? partiVoce.slice(1).join(' ') + ' ' + partiVoce[0]
-        : nomeVoce;
-      const gruppo = (window.mapGruppo || {})[normK(nomeVoce)]
-                  || (window.mapGruppo || {})[normK(nomeInv)]
-                  || [];
+      const nomeInvV = partiVoce.length >= 2 ? partiVoce.slice(1).join(' ')+' '+partiVoce[0] : nomeVoce;
+      const gruppo = calcolaGruppo(nomeVoce);
 
-      function nomeToFilename(n) {
-        const p = n.trim().split(/\s+/);
-        return p.length >= 2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : n;
-      }
-      function thumbSrc(cognomeNome) {
-        const fotoDisp = window.fotoDisponibili || [];
-        const match = fotoDisp.find(f => f && normK(f.nome) === normK(cognomeNome));
-        return match && match.file ? 'Foto/' + match.file : null;
-      }
+      // precarica anche il gruppo della foto corrente (può cambiare se si naviga)
+      precaricaGruppo(gruppo);
 
-      // disponi in righe da 2, con preload per evitare foto alternativa
+      // disponi sempre a sinistra, 2 per riga
       for (let r = 0; r < gruppo.length; r += 2) {
         const riga = document.createElement('div');
         riga.className = 'fp-group-row';
+        riga.style.justifyContent = 'flex-start';
         for (let c = r; c < Math.min(r+2, gruppo.length); c++) {
           const nomeGruppo = gruppo[c];
-          const cognomeNome = nomeToFilename(nomeGruppo);
-          const isMe = normK(nomeGruppo)===normK(nomeInv) || normK(cognomeNome)===normK(nomeVoce);
-          const src = thumbSrc(cognomeNome);
+          const cn = nomeToFilename(nomeGruppo);
+          const isMe = normKG(cn)===normKG(nomeVoce) || normKG(nomeGruppo)===normKG(nomeInvV);
+
           const cell = document.createElement('div');
           cell.className = 'fp-group-cell';
-          const imgThumb = document.createElement('img');
-          imgThumb.className = 'fp-group-thumb' + (isMe ? ' highlight' : '');
-          imgThumb.alt = cognomeNome;
-          // preload: mostra solo quando caricata, non la foto alternativa
-          if (src) {
-            const preloadThumb = new Image();
-            preloadThumb.onload = () => { imgThumb.src = src; };
-            preloadThumb.onerror = () => { /* nessuna foto: resta vuoto */ };
-            preloadThumb.src = src;
+
+          const wrap = document.createElement('div');
+          wrap.className = 'fp-group-thumb-wrap' + (isMe ? ' highlight' : '');
+
+          const cachedImg = thumbCache.get(normKG(cn));
+          if (cachedImg && cachedImg.complete && cachedImg.naturalWidth > 0) {
+            // foto già in cache: usa direttamente
+            const imgEl = document.createElement('img');
+            imgEl.className = 'fp-group-thumb';
+            imgEl.src = cachedImg.src;
+            imgEl.alt = cn;
+            wrap.appendChild(imgEl);
+          } else if (cachedImg === null) {
+            // nessuna foto: placeholder 📷
+            const ph = document.createElement('div');
+            ph.className = 'fp-group-placeholder';
+            ph.textContent = '📷';
+            wrap.appendChild(ph);
+          } else {
+            // ancora in caricamento: attacca onload
+            const ph = document.createElement('div');
+            ph.className = 'fp-group-placeholder';
+            ph.textContent = '📷';
+            wrap.appendChild(ph);
+            if (cachedImg) {
+              cachedImg.addEventListener('load', () => {
+                const imgEl = document.createElement('img');
+                imgEl.className = 'fp-group-thumb';
+                imgEl.src = cachedImg.src;
+                imgEl.alt = cn;
+                wrap.innerHTML = '';
+                wrap.appendChild(imgEl);
+              }, {once:true});
+            }
           }
-          const idxTarget = (window.fotoDisponibili||[]).findIndex(f => f && normK(f.nome)===normK(cognomeNome));
+
+          const idxTarget = (window.fotoDisponibili||[]).findIndex(f => f && normKG(f.nome)===normKG(cn));
           if (idxTarget >= 0) {
             cell.style.cursor = 'pointer';
-            cell.onclick = () => { stopPlay(false); vai(idxTarget); };
+            cell.onclick = e => { e.stopPropagation(); stopPlay(false); vai(idxTarget); };
           }
+
           const lbl = document.createElement('div');
           lbl.className = 'fp-group-label' + (isMe ? ' highlight' : '');
-          const pDisp = cognomeNome.trim().split(/\s+/);
-          lbl.textContent = pDisp.length >= 2 ? pDisp[0]+'\n'+pDisp.slice(1).join(' ') : cognomeNome;
+          const pDisp = cn.trim().split(/\s+/);
           lbl.style.whiteSpace = 'pre-line';
-          cell.appendChild(imgThumb);
+          lbl.textContent = pDisp.length >= 2 ? pDisp[0]+'\n'+pDisp.slice(1).join(' ') : cn;
+
+          cell.appendChild(wrap);
           cell.appendChild(lbl);
           riga.appendChild(cell);
         }
@@ -3242,4 +3300,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v137 - 04/04/2026 - Fix caricamento iniziale, 50px padding-left colonna sx, miniature 250px -->
+<!-- Lista.html v138 - 04/04/2026 - Miniature: cache in memoria, allineamento sx, placeholder 📷, 250px -->

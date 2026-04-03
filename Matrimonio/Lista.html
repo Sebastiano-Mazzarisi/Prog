@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v160</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v161</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v160</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v161</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -3019,6 +3019,11 @@
     ctrlSx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx-1+foto.length)%foto.length); };
     const ctrlDx   = document.createElement('button'); ctrlDx.className   = 'fp-ctrl-btn'; ctrlDx.textContent = '›';
     ctrlDx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx+1)%foto.length); };
+    // blocca propagazione touch su tutti i pulsanti per evitare chiusura accidentale su mobile
+    [ctrlPlay, ctrlSx, ctrlDx, ctrlRow, ctrlBar].forEach(el => {
+      el.addEventListener('touchstart', e => e.stopPropagation(), {passive:false});
+      el.addEventListener('touchend',   e => e.stopPropagation(), {passive:false});
+    });
     ctrlRow.appendChild(ctrlSx); ctrlRow.appendChild(ctrlDx);
     ctrlBar.appendChild(ctrlPlay); ctrlBar.appendChild(ctrlRow);
     sidebar.appendChild(ctrlBar);
@@ -3428,4 +3433,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v160 - 05/04/2026 - Controlli: Play sopra, [‹][›] sotto su riga separata -->
+<!-- Lista.html v161 - 05/04/2026 - Fix mobile: stopPropagation touchstart/touchend su ctrlBar -->

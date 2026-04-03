@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v156</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v157</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v156</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v157</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2042,8 +2042,8 @@
     // ── Grafico 1: area temporale (area solo fino a oggi) ────────────────────
     var W1=700, H1=483, p1L=46, p1R=36, p1T=52, p1B=36;
     var g1ChartW=W1-p1L-p1R, g1ChartH=H1-p1T-p1B;
-    // Asse Y fisso 0-100
-    var g1MaxY = 100;
+    // Asse Y fisso 0-80 con intervalli di 10
+    var g1MaxY = 80;
     var g1xStep = g1ChartW/(g1Days-1||1);
     function g1y(v){ return p1T + g1ChartH - (v/g1MaxY)*g1ChartH; }
 
@@ -2081,8 +2081,8 @@
       // Linea rossa tratteggiata = totale invitati
       + '<line x1="'+p1L+'" y1="'+g1yTarget.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+g1yTarget.toFixed(1)+'" stroke="#a83230" stroke-width="1.5" stroke-dasharray="5,4"/>'
       + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="10" fill="#a83230" font-family="Arial" font-weight="700">'+g1TotInv+'</text>'
-      // Griglia Y: 0,25,50,75,100
-      + [0,25,50,75,100].map(function(v){
+      // Griglia Y: 0,10,20,...,80
+      + [0,10,20,30,40,50,60,70,80].map(function(v){
           var yy=g1y(v);
           return '<line x1="'+p1L+'" y1="'+yy.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.7"/>'
                + '<text x="'+(p1L-4)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10" font-family="Arial" fill="#666">'+v+'</text>';
@@ -3411,4 +3411,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v156 - 05/04/2026 - Grafico registrazioni PDF: H1 +50% (322→483) -->
+<!-- Lista.html v157 - 05/04/2026 - Grafico 1 PDF: scala Y 0-80 con intervalli di 10 -->

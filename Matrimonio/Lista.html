@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v149</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v152</small>
       </p>
     </div>
   </div>
@@ -827,7 +827,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v149</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v152</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2932,9 +2932,10 @@
       st.textContent = `
         .fp-overlay { position:fixed; inset:0; background:#2d3a0e; z-index:9999; }
         .fp-layout  { position:absolute; inset:0; display:grid; grid-template-columns:1fr; }
-        .fp-overlay.landscape .fp-layout { grid-template-columns: 22% 52% 26%; }
+        .fp-overlay.landscape .fp-layout { grid-template-columns: 28% 46% 26%; }
+        @media (max-width:1024px) { .fp-overlay.landscape .fp-layout { grid-template-columns: 30% 52% 18%; } }
         .fp-stage   { position:relative; min-width:0; min-height:0; overflow:hidden; }
-        .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:flex-start; gap:0; padding:6px 80px 6px 10px; box-sizing:border-box; overflow-y:auto; }
+        .fp-col-left { background:#2d3a0e; display:none; flex-direction:column; justify-content:flex-start; align-items:flex-start; gap:0; padding:6px 4px 6px 10px; box-sizing:border-box; overflow-y:auto; }
         .fp-overlay.landscape .fp-col-left { display:flex; }
         .fp-group-row { display:flex; gap:3px; width:100%; justify-content:flex-start; margin-bottom:5px; }
         .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 2px); min-width:0; }
@@ -3403,4 +3404,4 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v149 - 05/04/2026 - Colonna sinistra padding-right 80px per spostare foto centrale a destra -->
+<!-- Lista.html v152 - 05/04/2026 - Colonne PC 28/46/26, mobile 30/52/18 via media query -->

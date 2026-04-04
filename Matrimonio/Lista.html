@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v172</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v173</small>
       </p>
     </div>
   </div>
@@ -836,7 +836,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v172</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v173</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -1448,7 +1448,7 @@
 
     const container = document.createElement('div');
     container.style.padding = '0';
-    container.style.width = '700px';
+    container.style.width = '660px';
     container.style.fontSize = '11px';
     container.style.fontFamily = "'Inter', sans-serif";
     container.style.color = "#000000";
@@ -1630,13 +1630,13 @@
 
       // === MISURA DOM ===
       // A4 in px a 96dpi con margini 5+20mm: area utile = (297-25)*3.7795 = 1028px
-      // Il container PDF è 700px wide, scale:2 → la misura DOM è a scala 1x
-      // Usiamo 700px per il misuratore, stessa larghezza del container PDF
+      // Il container PDF è 660px wide, scale:2 → la misura DOM è a scala 1x
+      // Usiamo 660px per il misuratore, stessa larghezza del container PDF
       const AREA_PAGINA = 960; // px DOM, calibrato per evitare pagine bianche
 
       // Misura l'altezza di tutto ciò che è già nella pagina 1 prima delle righe presenti
       const misPage1 = document.createElement('div');
-      misPage1.style.cssText = 'position:fixed;left:-9999px;top:0;width:700px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
+      misPage1.style.cssText = 'position:fixed;left:-9999px;top:0;width:660px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
       misPage1.innerHTML = htmlPDF; // tutto quello costruito finora (KPI + assenti)
       document.body.appendChild(misPage1);
       const altezzaPagina1Usata = misPage1.getBoundingClientRect().height;
@@ -1644,7 +1644,7 @@
 
       // Misura le singole righe presenti + header
       const misTabel = document.createElement('div');
-      misTabel.style.cssText = 'position:fixed;left:-9999px;top:0;width:700px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
+      misTabel.style.cssText = 'position:fixed;left:-9999px;top:0;width:660px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
       const tabTemp = document.createElement('table');
       tabTemp.style.cssText = tableStyle;
       tabTemp.innerHTML = theadHTML + '<tbody>' + presentiRows.map((r,i) => buildRowHTML(r,i)).join('') + '</tbody>';
@@ -1988,7 +1988,7 @@
 
     // ===== PAGINA GRAFICI =====
     htmlPDF += `<div class="html2pdf__page-break"></div>`;
-    htmlPDF += `<div style="width:700px;padding:0;font-family:'Inter',sans-serif;">`;
+    htmlPDF += `<div style="width:660px;padding:0;font-family:'Inter',sans-serif;">`;
     htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#000;margin:0 0 14px 0;">Statistiche</h2>`;
 
     // ── Calcoli comuni ──────────────────────────────────────────────────────
@@ -2203,7 +2203,7 @@
     }
 
     htmlPDF += `<div class="html2pdf__page-break"></div>`;
-    htmlPDF += `<div style="width:720px;padding:0;margin:0 -10px;font-family:'Inter',sans-serif;">`;
+    htmlPDF += `<div style="width:660px;padding:0;font-family:'Inter',sans-serif;">`;
     htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;margin-top:0;margin-bottom:2px;color:#000;">Fotografie</h1>`;
     htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:#8a5e1e;margin-bottom:10px;">Giulia &amp; Onofrio</h2>`;
 
@@ -2293,15 +2293,14 @@
         const imgSrc = voce.file ? 'Foto/' + voce.file : null;
         htmlPDF += `<td style="width:${CELL_W}px;padding:2px 0px;text-align:center;vertical-align:top;">
           ${imgSrc
-            ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;" crossorigin="anonymous" />`
-            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.33}px;line-height:1;">📷</div>`}
+            ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;border:1.5px solid #cccccc;box-sizing:border-box;" crossorigin="anonymous" />`
+            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.33}px;line-height:1;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;">📷</div>`}
           <div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>
         </td>`;
       }
       htmlPDF += `</tr>`;
     }
     htmlPDF += `</table>`;
-    htmlPDF += `<div style="margin-bottom:-14mm;"></div>`;
     htmlPDF += `</div>`;
 
     container.innerHTML = htmlPDF;
@@ -2311,7 +2310,7 @@
     const _d = new Date(), _p = n => String(n).padStart(2,'0');
     const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
-      margin:       [5, 5, 0, 0],
+      margin:       [8, 3, 10, 10],
       filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0 },
@@ -3456,5 +3455,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v172 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
+<!-- Lista.html v173 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
 

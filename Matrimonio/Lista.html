@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v179</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v181</small>
       </p>
     </div>
   </div>
@@ -836,7 +836,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v179</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v181</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2294,7 +2294,7 @@
         htmlPDF += `<td style="width:${CELL_W}px;padding:2px 0px;text-align:center;vertical-align:top;">
           ${imgSrc
             ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;border:1.5px solid #cccccc;box-sizing:border-box;" crossorigin="anonymous" /><div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>`
-            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.28}px;line-height:1;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;background:#fffde7;gap:3px;"><span>📷</span><span style="font-size:9px;font-weight:700;font-family:'Inter',sans-serif;color:#333;line-height:1.1;text-align:center;word-break:break-word;padding:0 2px;">${voce.label}</span></div>`}
+            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.28}px;line-height:1;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;background:#fffde7;gap:3px;"><span>📷</span><span style="font-size:11px;font-weight:700;font-family:'Inter',sans-serif;color:#333;line-height:1.1;text-align:center;word-break:break-word;padding:0 2px;">${voce.label}</span></div>`}
         </td>`;
       }
       htmlPDF += `</tr>`;
@@ -2309,7 +2309,7 @@
     const _d = new Date(), _p = n => String(n).padStart(2,'0');
     const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
-      margin:       [8, 2, 2, 10],
+      margin:       [8, 2, 2, 5],
       filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0, windowHeight: 99999 },
@@ -3454,5 +3454,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v179 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
+<!-- Lista.html v181 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
 

@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v177</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v178</small>
       </p>
     </div>
   </div>
@@ -836,7 +836,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v177</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v178</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2203,7 +2203,7 @@
     }
 
     htmlPDF += `<div class="html2pdf__page-break"></div>`;
-    htmlPDF += `<div style="width:740px;padding:0;font-family:'Inter',sans-serif;">`;
+    htmlPDF += `<div style="width:740px;padding:0 0 20mm 0;font-family:'Inter',sans-serif;">`;
     htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;margin-top:0;margin-bottom:2px;color:#000;">Fotografie</h1>`;
     htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:#8a5e1e;margin-bottom:10px;">Giulia &amp; Onofrio</h2>`;
 
@@ -2293,9 +2293,8 @@
         const imgSrc = voce.file ? 'Foto/' + voce.file : null;
         htmlPDF += `<td style="width:${CELL_W}px;padding:2px 0px;text-align:center;vertical-align:top;">
           ${imgSrc
-            ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;border:1.5px solid #cccccc;box-sizing:border-box;" crossorigin="anonymous" />`
-            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.33}px;line-height:1;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;background:#fffde7;">📷</div>`}
-          <div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>
+            ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;border:1.5px solid #cccccc;box-sizing:border-box;" crossorigin="anonymous" /><div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>`
+            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.28}px;line-height:1;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;background:#fffde7;gap:3px;"><span>📷</span><span style="font-size:7px;font-family:'Inter',sans-serif;color:#444;line-height:1.1;text-align:center;word-break:break-word;padding:0 2px;">${voce.label}</span></div>`}
         </td>`;
       }
       htmlPDF += `</tr>`;
@@ -3455,5 +3454,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v177 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
+<!-- Lista.html v178 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
 

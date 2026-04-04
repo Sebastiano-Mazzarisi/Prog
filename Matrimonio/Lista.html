@@ -2311,7 +2311,7 @@
     const _d = new Date(), _p = n => String(n).padStart(2,'0');
     const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
-      margin:       [8, 3, 10, 10],
+      margin:       [5, 5, 5, 5],
       filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0 },

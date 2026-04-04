@@ -1447,10 +1447,10 @@
 
     let htmlPDF = `
       <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo}</h1>
-      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 15px;">Giulia & Onofrio</h2>
+      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 8px;">Giulia & Onofrio</h2>
 
 
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; table-layout: fixed;">
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; table-layout: fixed;">
         <tr>
           <td style="width: 25%; padding: 3px 4px 3px 0;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
@@ -1648,7 +1648,7 @@
       let spazioPagina1 = AREA_PAGINA - altezzaPagina1Usata - altezzaTheadH3;
       const spazioPaginaN = AREA_PAGINA - altezzaTheadH3;
 
-      htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>`;
+      htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 3px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>`;
       htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
 
       let spazioRimanente = spazioPagina1;
@@ -1659,7 +1659,7 @@
         if (spazioRimanente - h < 0 && idx > 0) {
           htmlPDF += `</tbody></table>`;
           htmlPDF += `<div style="page-break-after:always;height:0;line-height:0;overflow:hidden;border:none;margin:0;padding:0;font-size:0;"></div>`;
-          htmlPDF += `<table class="pdf-table" style="${tableStyle}margin-top:18px;">${theadHTML}<tbody>`;
+          htmlPDF += `<table class="pdf-table" style="${tableStyle}margin-top:10px;">${theadHTML}<tbody>`;
           spazioRimanente = spazioPaginaN;
           primaPagina = false;
         }
@@ -1723,7 +1723,7 @@
         righeAttesa += '</tr>';
       }
       htmlPDF += `<div style="page-break-inside:avoid;">`;
-      htmlPDF += `<h3 style="font-size:13px;margin-top:18px;margin-bottom:6px;color:#8a5e1e;font-weight:600;">${testi.titoloConferma} (${inAttesaPdf.length})</h3>`;
+      htmlPDF += `<h3 style="font-size:13px;margin-top:10px;margin-bottom:4px;color:#8a5e1e;font-weight:600;">${testi.titoloConferma} (${inAttesaPdf.length})</h3>`;
       htmlPDF += `<table class="pdf-table" style="width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed;">
         <thead><tr style="background-color:#f5ede0;">
           <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
@@ -2261,10 +2261,10 @@
     // Ordina per identificativo (alfabetico, case-insensitive)
     fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));
 
-    // Griglia: 7 colonne con margini stretti
-    const COLS = 7;
-    const CELL_W = 94;
-    const IMG_SIZE = 82; // px DOM
+    // Griglia: 8 colonne con margini stretti
+    const COLS = 8;
+    const CELL_W = 82;
+    const IMG_SIZE = 70; // px DOM
 
     htmlPDF += `<table style="border-collapse:collapse;width:100%;table-layout:fixed;">`;
     for (let row = 0; row < Math.ceil(fotoPagina.length / COLS); row++) {
@@ -2294,7 +2294,7 @@
     const _d = new Date(), _p = n => String(n).padStart(2,'0');
     const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
-      margin:       [5, 10, 20, 10],
+      margin:       [5, 6, 20, 6],
       filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0 },
@@ -3012,22 +3012,26 @@
     layout.appendChild(sidebar);
     overlay.appendChild(layout);
 
-    // ── Barra controlli landscape [‹][▶][›] in basso a destra della foto ─
+    // ── Barra controlli landscape [‹][▶][⏹][›] in basso a destra della foto ─
     const ctrlBar = document.createElement('div'); ctrlBar.className = 'fp-ctrl-bar';
     const ctrlPlay = document.createElement('button'); ctrlPlay.className = 'fp-ctrl-btn'; ctrlPlay.textContent = '▶';
     ctrlPlay.onclick = e => { e.stopPropagation(); togglePlay(ctrlPlay); };
+    const ctrlStop = document.createElement('button'); ctrlStop.className = 'fp-ctrl-btn'; ctrlStop.textContent = '⏹';
+    ctrlStop.title = 'Chiudi presentazione';
+    ctrlStop.style.cssText = 'opacity:0.75;';
+    ctrlStop.onclick = e => { e.stopPropagation(); chiudiPopup(); };
     const ctrlRow = document.createElement('div'); ctrlRow.className = 'fp-ctrl-row';
     const ctrlSx   = document.createElement('button'); ctrlSx.className   = 'fp-ctrl-btn'; ctrlSx.textContent = '‹';
     ctrlSx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx-1+foto.length)%foto.length); };
     const ctrlDx   = document.createElement('button'); ctrlDx.className   = 'fp-ctrl-btn'; ctrlDx.textContent = '›';
     ctrlDx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx+1)%foto.length); };
     // blocca propagazione touch su tutti i pulsanti per evitare chiusura accidentale su mobile
-    [ctrlPlay, ctrlSx, ctrlDx, ctrlRow, ctrlBar].forEach(el => {
+    [ctrlPlay, ctrlStop, ctrlSx, ctrlDx, ctrlRow, ctrlBar].forEach(el => {
       el.addEventListener('touchstart', e => e.stopPropagation(), {passive:false});
       el.addEventListener('touchend',   e => e.stopPropagation(), {passive:false});
     });
     ctrlRow.appendChild(ctrlSx); ctrlRow.appendChild(ctrlDx);
-    ctrlBar.appendChild(ctrlPlay); ctrlBar.appendChild(ctrlRow);
+    ctrlBar.appendChild(ctrlPlay); ctrlBar.appendChild(ctrlStop); ctrlBar.appendChild(ctrlRow);
     sidebar.appendChild(ctrlBar);
 
     // barra inferiore portrait

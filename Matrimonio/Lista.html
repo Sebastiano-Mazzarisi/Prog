@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v167</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v168</small>
       </p>
     </div>
   </div>
@@ -676,7 +676,7 @@
           const el = document.getElementById('titolo-pagina');
           if (el) {
             const testi = dizionario[currentLang];
-            el.innerText = testi.titolo + ' (' + totCsv + ')';
+            el.innerHTML = testi.titolo + ' <small style="font-size:0.5em;font-weight:400;color:#555;vertical-align:middle;">(' + totCsv + ')</small>';
           }
         })();
 
@@ -713,8 +713,8 @@
     currentLang = lang;
     document.getElementById('btn-it').classList.toggle('active-lang', lang === 'it');
     document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');
-    const _totH1 = window.totInvitatiCsv ? ' (' + window.totInvitatiCsv + ')' : '';
-    document.getElementById('titolo-pagina').innerText = dizionario[lang].titolo + _totH1;
+    const _totH1 = window.totInvitatiCsv ? ' <small style="font-size:0.5em;font-weight:400;color:#555;vertical-align:middle;">(' + window.totInvitatiCsv + ')</small>' : '';
+    document.getElementById('titolo-pagina').innerHTML = dizionario[lang].titolo + _totH1;
 
     const txtCaricamento = document.getElementById('txt-caricamento');
     if (txtCaricamento) txtCaricamento.innerText = dizionario[lang].caricamento;
@@ -836,7 +836,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v167</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v168</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -1455,7 +1455,7 @@
     container.style.backgroundColor = "#ffffff"; // Previene sfondi indesiderati su html2canvas
 
     let htmlPDF = `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo} (${totInvitatiCsv})</h1>
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo} <span style="font-size:12px;font-weight:400;color:#666666;">(${totInvitatiCsv})</span></h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 8px;">Giulia & Onofrio</h2>
 
 
@@ -1768,6 +1768,8 @@
     if (gruppiInvitati.length > 0) {
       htmlPDF += `<div class="html2pdf__page-break"></div>`;
       htmlPDF += `<div>`;
+      htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Controllo moduli</h1>`;
+      htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:8px;">Giulia &amp; Onofrio</h2>`;
 
       // Calcola numero bambini (< 11 anni) per il titolo
       let totBambini = 0;
@@ -1935,7 +1937,7 @@
         <!-- BOX SINISTRA: Totale cenanti + Baby + Segnaposto -->
         <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCenanti}</div>
+            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCenanti}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
             <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblTotaleCenanti}</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
@@ -1957,7 +1959,7 @@
         <!-- BOX DESTRA: Menu completi + Veg/Carne/Pesce -->
         <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCompleti}</div>
+            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCompleti}<span style="font-size:22px;font-weight:500;color:#555;">/${totCenanti}</span></div>
             <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
@@ -2272,8 +2274,8 @@
 
     // Griglia: 8 colonne con margini stretti
     const COLS = 8;
-    const CELL_W = 82;
-    const IMG_SIZE = 70; // px DOM
+    const CELL_W = 88;
+    const IMG_SIZE = 80; // px DOM
 
     htmlPDF += `<table style="border-collapse:collapse;width:100%;table-layout:fixed;">`;
     for (let row = 0; row < Math.ceil(fotoPagina.length / COLS); row++) {
@@ -2281,12 +2283,12 @@
       for (let col = 0; col < COLS; col++) {
         const i = row * COLS + col;
         if (i >= fotoPagina.length) {
-          htmlPDF += `<td style="width:${CELL_W}px;padding:4px 3px;"></td>`;
+          htmlPDF += `<td style="width:${CELL_W}px;padding:4px 0px;"></td>`;
           continue;
         }
         const voce = fotoPagina[i];
         const imgSrc = voce.file ? 'Foto/' + voce.file : null;
-        htmlPDF += `<td style="width:${CELL_W}px;padding:2px 1px;text-align:center;vertical-align:top;">
+        htmlPDF += `<td style="width:${CELL_W}px;padding:2px 0px;text-align:center;vertical-align:top;">
           ${imgSrc
             ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;" crossorigin="anonymous" />`
             : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.33}px;line-height:1;">📷</div>`}
@@ -2305,7 +2307,7 @@
     const _d = new Date(), _p = n => String(n).padStart(2,'0');
     const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
-      margin:       [5, 6, 20, 6],
+      margin:       [5, 6, 10, 6],
       filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0 },
@@ -3450,5 +3452,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v167 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
+<!-- Lista.html v168 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
 

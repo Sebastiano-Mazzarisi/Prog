@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v170</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v171</small>
       </p>
     </div>
   </div>
@@ -836,7 +836,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v170</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v171</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2301,7 +2301,7 @@
       htmlPDF += `</tr>`;
     }
     htmlPDF += `</table>`;
-    htmlPDF += `<div style="margin-bottom:-12mm;"></div>`;
+    htmlPDF += `<div style="margin-bottom:-6mm;"></div>`;
     htmlPDF += `</div>`;
 
     container.innerHTML = htmlPDF;
@@ -2311,7 +2311,7 @@
     const _d = new Date(), _p = n => String(n).padStart(2,'0');
     const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
-      margin:       [8, 3, 10, 6],
+      margin:       [8, 6, 10, 10],
       filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0 },
@@ -3456,5 +3456,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v170 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
+<!-- Lista.html v171 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
 

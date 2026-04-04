@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v182</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v183</small>
       </p>
     </div>
   </div>
@@ -836,7 +836,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v182</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v183</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -2930,8 +2930,10 @@
     let playTimer = null;
     const PLAY_INTERVAL = 6000;
 
-    // ── Audio ─────────────────────────────────────────────────────────────
-    const audio = new Audio('https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Onofrio.mp3');
+    // ── Audio — dipende dalla lingua impostata ───────────────────────────
+    const _baseUrl = 'https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/';
+    const _audioFile = (currentLang === 'es') ? 'Spagnolo.mp3' : 'Italiano.mp3';
+    const audio = new Audio(_baseUrl + _audioFile);
     audio.loop = true;
 
     // ── Helper: dati secondo ──────────────────────────────────────────────
@@ -3475,5 +3477,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v182 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
+<!-- Lista.html v183 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
 

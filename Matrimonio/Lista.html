@@ -671,6 +671,14 @@
         }
         window.totInvitatiCsv = totCsv;
         window.totInvitatiCsvRaw = totCsv;
+        // Aggiorna titolo h1 con numero invitati
+        (function() {
+          const el = document.getElementById('titolo-pagina');
+          if (el) {
+            const testi = dizionario[currentLang];
+            el.innerText = testi.titolo + ' (' + totCsv + ')';
+          }
+        })();
 
         // ── Mappa gruppi: ogni persona → lista nomi del suo gruppo ───────
         window.mapGruppo = {};
@@ -705,7 +713,8 @@
     currentLang = lang;
     document.getElementById('btn-it').classList.toggle('active-lang', lang === 'it');
     document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');
-    document.getElementById('titolo-pagina').innerText = dizionario[lang].titolo;
+    const _totH1 = window.totInvitatiCsv ? ' (' + window.totInvitatiCsv + ')' : '';
+    document.getElementById('titolo-pagina').innerText = dizionario[lang].titolo + _totH1;
 
     const txtCaricamento = document.getElementById('txt-caricamento');
     if (txtCaricamento) txtCaricamento.innerText = dizionario[lang].caricamento;
@@ -1446,7 +1455,7 @@
     container.style.backgroundColor = "#ffffff"; // Previene sfondi indesiderati su html2canvas
 
     let htmlPDF = `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo}</h1>
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo} (${totInvitatiCsv})</h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 8px;">Giulia & Onofrio</h2>
 
 
@@ -2280,7 +2289,7 @@
         htmlPDF += `<td style="width:${CELL_W}px;padding:2px 1px;text-align:center;vertical-align:top;">
           ${imgSrc
             ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;" crossorigin="anonymous" />`
-            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.65}px;line-height:1;">📷</div>`}
+            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.33}px;line-height:1;">📷</div>`}
           <div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>
         </td>`;
       }

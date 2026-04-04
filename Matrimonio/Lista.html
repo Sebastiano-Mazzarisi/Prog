@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v168</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v169</small>
       </p>
     </div>
   </div>
@@ -676,7 +676,7 @@
           const el = document.getElementById('titolo-pagina');
           if (el) {
             const testi = dizionario[currentLang];
-            el.innerHTML = testi.titolo + ' <small style="font-size:0.5em;font-weight:400;color:#555;vertical-align:middle;">(' + totCsv + ')</small>';
+            el.innerHTML = testi.titolo + ' <small style="font-size:0.5em;font-weight:600;color:#000;vertical-align:middle;">(' + totCsv + ')</small>';
           }
         })();
 
@@ -713,7 +713,7 @@
     currentLang = lang;
     document.getElementById('btn-it').classList.toggle('active-lang', lang === 'it');
     document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');
-    const _totH1 = window.totInvitatiCsv ? ' <small style="font-size:0.5em;font-weight:400;color:#555;vertical-align:middle;">(' + window.totInvitatiCsv + ')</small>' : '';
+    const _totH1 = window.totInvitatiCsv ? ' <small style="font-size:0.5em;font-weight:600;color:#000;vertical-align:middle;">(' + window.totInvitatiCsv + ')</small>' : '';
     document.getElementById('titolo-pagina').innerHTML = dizionario[lang].titolo + _totH1;
 
     const txtCaricamento = document.getElementById('txt-caricamento');
@@ -836,7 +836,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v168</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v169</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -1455,7 +1455,8 @@
     container.style.backgroundColor = "#ffffff"; // Previene sfondi indesiderati su html2canvas
 
     let htmlPDF = `
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo} <span style="font-size:12px;font-weight:400;color:#666666;">(${totInvitatiCsv})</span></h1>
+      <div style="margin-bottom:-8mm;">
+      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo} <span style="font-size:12px;font-weight:700;color:#000000;">(${totInvitatiCsv})</span></h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 8px;">Giulia & Onofrio</h2>
 
 
@@ -1766,6 +1767,7 @@
 
     // Sezione: Invitati a 2 colonne con font più grande
     if (gruppiInvitati.length > 0) {
+      htmlPDF += `<div style="margin-bottom:-15mm;"></div>`; // riduci spazio fondo pag1
       htmlPDF += `<div class="html2pdf__page-break"></div>`;
       htmlPDF += `<div>`;
       htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Controllo moduli</h1>`;
@@ -1981,6 +1983,7 @@
       </div>
     `;
 
+    htmlPDF += `<div style="margin-bottom:-15mm;"></div>`; // riduci spazio fondo pag2
     htmlPDF += `</div>`; // Chiude div contenitore pagina
 
     // ===== PAGINA GRAFICI =====
@@ -2307,7 +2310,7 @@
     const _d = new Date(), _p = n => String(n).padStart(2,'0');
     const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
-      margin:       [5, 6, 10, 6],
+      margin:       [8, 6, 10, 6],
       filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0 },
@@ -3452,5 +3455,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v168 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
+<!-- Lista.html v169 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
 

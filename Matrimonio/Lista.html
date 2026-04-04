@@ -352,7 +352,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small style="color:#b8893a;font-size:13px;font-weight:600">v181</small>
+        <small style="color:#b8893a;font-size:13px;font-weight:600">v182</small>
       </p>
     </div>
   </div>
@@ -836,7 +836,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v181</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">v182</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -3322,15 +3322,35 @@
 
     // ── Play / Pausa ──────────────────────────────────────────────────────
     function playing() { return playTimer!==null; }
+
+    // ── Wake Lock: impedisce lo screensaver durante la presentazione ──────
+    let _wakeLock = null;
+    async function acquireWakeLock() {
+      if (!('wakeLock' in navigator)) return;
+      try {
+        _wakeLock = await navigator.wakeLock.request('screen');
+        _wakeLock.addEventListener('release', () => { _wakeLock = null; });
+      } catch(e) { /* permesso negato o non supportato */ }
+    }
+    function releaseWakeLock() {
+      if (_wakeLock) { _wakeLock.release(); _wakeLock = null; }
+    }
+    // Riacquisisce il lock se la pagina torna visibile mentre è in play
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && playing()) acquireWakeLock();
+    });
+
     function startPlay(btn) {
       playTimer = setInterval(()=>{ idx=(idx+1)%foto.length; aggiornaContenuto(idx,false); }, PLAY_INTERVAL);
       [btn, ctrlPlay].forEach(b => { if(b){ b.textContent='⏸'; b.setAttribute('data-play','1'); }});
       audio.play().catch(()=>{});
+      acquireWakeLock();
     }
     function stopPlay(reset) {
       if (playTimer) { clearInterval(playTimer); playTimer=null; }
       [btnPlay, ctrlPlay].forEach(b => { if(b){ b.textContent='▶'; b.removeAttribute('data-play'); }});
       audio.pause(); if (reset) audio.currentTime=0;
+      releaseWakeLock();
     }
     function togglePlay(btn) {
       if (playing()) { stopPlay(false); } else { startPlay(btn); }
@@ -3404,6 +3424,7 @@
     // ── Chiusura ──────────────────────────────────────────────────────────
     function chiudiPopup() {
       stopPlay(true);
+      releaseWakeLock();
       document.removeEventListener('keydown', onKey);
       window.removeEventListener('resize', aggiornaOrientamento);
       window.removeEventListener('orientationchange', aggiornaOrientamento);
@@ -3454,5 +3475,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v181 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
+<!-- Lista.html v182 - 05/04/2026 - Fix: bottone PDF ripristinato senza emoji dopo completamento -->
 

@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 06/04/2026 · 00:34:31';
+  const APP_VERSION = 'v196 · 06/04/2026 · 00:46:59';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2236,10 +2236,10 @@
              </div>`
           : '';
         const edgeDx = flags.ponteRigaDestra
-          ? `<div style="position:absolute;top:0;right:0;width:${EDGE_W}px;height:${IMG_SIZE}px;background:${EDGE_COLOR};z-index:6;border-top-right-radius:4px;border-bottom-right-radius:4px;"></div>`
+          ? `<div style="position:absolute;top:0;right:0;width:${FRAME_W}px;height:${IMG_SIZE}px;background:${FRAME_COLOR};z-index:6;border-top-right-radius:4px;border-bottom-right-radius:4px;"></div>`
           : '';
         const edgeSx = flags.ponteRigaSinistra
-          ? `<div style="position:absolute;top:0;left:0;width:${EDGE_W}px;height:${IMG_SIZE}px;background:${EDGE_COLOR};z-index:6;border-top-left-radius:4px;border-bottom-left-radius:4px;"></div>`
+          ? `<div style="position:absolute;top:0;left:0;width:${FRAME_W}px;height:${IMG_SIZE}px;background:${FRAME_COLOR};z-index:6;border-top-left-radius:4px;border-bottom-left-radius:4px;"></div>`
           : '';
         const frameOlive = (flags.frameTop || flags.frameBottom || flags.frameLeft || flags.frameRight)
           ? `<div style="position:absolute;top:0;left:0;width:${IMG_SIZE}px;height:${IMG_SIZE}px;box-sizing:border-box;border-top:${flags.frameTop ? FRAME_W : 0}px solid ${FRAME_COLOR};border-bottom:${flags.frameBottom ? FRAME_W : 0}px solid ${FRAME_COLOR};border-left:${flags.frameLeft ? FRAME_W : 0}px solid ${FRAME_COLOR};border-right:${flags.frameRight ? FRAME_W : 0}px solid ${FRAME_COLOR};border-radius:4px;pointer-events:none;z-index:4;"></div>`

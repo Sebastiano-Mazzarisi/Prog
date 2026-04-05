@@ -1,4 +1,4 @@
-<!-- Lista.html v185 - 05/04/2026 -->
+<!-- Lista.html v186 - 05/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -317,6 +317,15 @@
     .header .subtitle { font-size: 18px; letter-spacing: 3px; }
   }
 
+
+  /* Card split: metà sinistra = foto, metà destra = scheda */
+  .risposta-nome { display:flex; align-items:center; }
+  .rn-foto  { display:flex; align-items:center; gap:0; flex:0 0 50%; min-width:0; cursor:pointer; padding:10px 8px 10px 14px; }
+  .rn-scheda{ display:flex; align-items:center; gap:4px; flex:0 0 50%; justify-content:flex-end; cursor:pointer; padding:10px 14px 10px 4px; border-left:1px solid rgba(0,0,0,0.06); }
+  .risposta-card.ha-risposto .risposta-nome { background:#e8f0fb; }
+  .risposta-card.non-risposto .risposta-nome { background:#fffde7; }
+  .risposta-card.non-risposto .rn-scheda { opacity:0.4; pointer-events:none; }
+
   /* Griglia tabelle PDF - bordo singolo garantito */
   .pdf-table { border-collapse: collapse; border-spacing: 0; }
   .pdf-table thead { display: table-header-group; }
@@ -353,7 +362,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v185</small>
+        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v186</small>
       </p>
     </div>
   </div>
@@ -361,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v185 · 05/04/2026 · 13:42:00';
+  const APP_VERSION = 'v186 · 05/04/2026 · 14:13:01';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -458,8 +467,6 @@
       lbl_g_60p: "> 60 anni",
       btnOrdina_attesa: "<b>IN ATTESA</b> di registrazione",
       lbl_ATTESA: "IN ATTESA di registrazione",
-      btnOrdina_tutti: "<b>TUTTI</b> in ordine di cognome",
-      lbl_TUTTI: "TUTTI in ordine di cognome",
       btnOrdina_gruppi: "<b>GRUPPI</b>",
       lbl_GRUPPI: "GRUPPI",
       titoloAttesa: "In attesa di risposta",
@@ -546,8 +553,6 @@
       lbl_g_60p: "> 60 a\u00f1os",
       btnOrdina_attesa: "<b>EN ESPERA</b>",
       lbl_ATTESA: "EN ESPERA",
-      btnOrdina_tutti: "<b>TODOS</b> por apellido",
-      lbl_TUTTI: "TODOS por apellido",
       btnOrdina_gruppi: "<b>GRUPOS</b>",
       lbl_GRUPPI: "GRUPOS",
       titoloAttesa: "En espera de respuesta",
@@ -712,7 +717,7 @@
           gruppoCorrente.push(nomeConv);
         }
         flushGruppo();
-        // Array ordinato dei gruppi (stesso ordine del CSV) per la vista GRUPPI
+        // Salva gruppi ordinati per la vista GRUPPI
         window.gruppiCsvOrdinati = [];
         let _gc = [];
         for (let i = startInv; i < righeInv.length; i++) {
@@ -995,498 +1000,177 @@
 
     <div id="lista-invitati">`;
 
-    if (activeOrdine === 'attesa') {
-      // === MODALITÀ IN ATTESA: mostra chi non ha ancora risposto ===
-      const inAttesa = calcolaInAttesa();
-      // Ordina per Cognome Nome — usa la stessa funzione dell'ordinamento COGNOME
-      const inAttesaOrdinata = ordinaInvitati(inAttesa, 'cognome');
-      if (inAttesa.length === 0) {
-        html += `<div style="text-align:center;color:#2d6040;font-weight:600;padding:24px 0;font-family:'Inter',sans-serif;">${testi.msgAttesaVuota}</div>`;
-      } else {
-        inAttesaOrdinata.forEach((inv) => {
-          const tavNum = trovaTavoloNum(inv.nome || '');
-          // Display forzato: Cognome Nome (età) — indipendente da activeOrdine
-          const tokensInv = (inv.nome||'').trim().split(/\s+/);
-          let nomeFmt;
-          let nomeFileFoto = '';
-          if (tokensInv.length >= 2) {
-            const cognome = tokensInv[tokensInv.length - 1];
-            const resto = tokensInv.slice(0, tokensInv.length - 1).join(' ');
-            nomeFmt = cognome + ' ' + resto;
-            nomeFileFoto = cognome + ' ' + resto;
-          } else {
-            nomeFmt = inv.nome || '';
-            nomeFileFoto = inv.nome || '';
-          }
-          const etaInv = getEtaAnni(inv.nome);
-          const etaStrInv = etaInv !== null ? '&nbsp;<span style="font-weight:400;font-size:14px;color:#777">(' + etaInv + ')</span>' : '';
-          const cellInv = cercaTelefono(inv.nome);
-          const cellStrInv = cellInv ? '<span style="margin-left:auto;font-size:12px;color:#1a4fa0;font-weight:500;white-space:nowrap;">' + formattaNumero(cellInv) + '</span>' : '';
-          const idSafe = 'attesa-' + nomeFileFoto.replace(/[^a-zA-Z0-9]/g, '_');
-          html += `<div class="risposta-card" style="border-color:#b0bec5;background:#f5f7f8;" id="${idSafe}">
-            <div class="risposta-nome" style="background:#eef1f3;color:#555;cursor:default;">
-              ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}<span style="flex:1">${nomeFmt}${etaStrInv}</span>${cellStrInv}
-              <span class="icone-destra" style="flex-shrink:0;margin-left:4px;"></span>
-            </div>
-          </div>`;
-        });
-        // Verifica quali foto esistono e rende i nomi cliccabili, mantenendo ordine
-        // fotoDisponibili: array di {nome, file} per TUTTI — file=null se mancante
-        window.fotoDisponibili = [];
-        setTimeout(() => {
-          const risultatiA = new Array(inAttesaOrdinata.length).fill(null);
-          let completatiA = 0;
-          function controllaCompletoA() {
-            completatiA++;
-            if (completatiA === inAttesaOrdinata.length) {
-              window.fotoDisponibili = risultatiA;
-            }
-          }
-          function variantiNomeA(n) {
-            const v = new Set();
-            v.add(n);
-            v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
-            v.add(n.replace(/u'$/, '\u00f9').replace(/a'$/, '\u00e0').replace(/e'$/, '\u00e8').replace(/i'$/, '\u00ec').replace(/o'$/, '\u00f2'));
-            v.add(n.replace(/'$/, ''));
-            return [...v];
-          }
-          inAttesaOrdinata.forEach((inv, posizione) => {
-            const tokensInv2 = (inv.nome||'').trim().split(/\s+/);
-            let nomeFileFoto2 = '';
-            if (tokensInv2.length >= 2) {
-              const cognome2 = tokensInv2[tokensInv2.length - 1];
-              const resto2 = tokensInv2.slice(0, tokensInv2.length - 1).join(' ');
-              nomeFileFoto2 = cognome2 + ' ' + resto2;
-            } else {
-              nomeFileFoto2 = inv.nome || '';
-            }
-            risultatiA[posizione] = { nome: nomeFileFoto2, file: null }; // default: nessuna foto
-            const idSafe2 = 'attesa-' + nomeFileFoto2.replace(/[^a-zA-Z0-9]/g, '_');
-            const card = document.getElementById(idSafe2);
-            if (!card) { controllaCompletoA(); return; }
-            const nomeSpan = card.querySelector('.risposta-nome');
-            if (!nomeSpan) { controllaCompletoA(); return; }
-            const variantiA = variantiNomeA(nomeFileFoto2);
-            const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
-            let trovata = false;
-            function provaComboA(vi, ei) {
-              if (trovata) return;
-              if (vi >= variantiA.length) { controllaCompletoA(); return; }
-              if (ei >= estensioni.length) { provaComboA(vi + 1, 0); return; }
-              fetch('Foto/' + variantiA[vi] + '.' + estensioni[ei] + '?t=' + Date.now(), { method: 'HEAD' })
-                .then(r => {
-                  if (r.ok && !trovata) {
-                    trovata = true;
-                    risultatiA[posizione] = { nome: nomeFileFoto2, file: variantiA[vi] + '.' + estensioni[ei] };
-                    nomeSpan.style.cursor = 'pointer';
-                    nomeSpan.style.background = '#e8f4e8';
-                    nomeSpan.style.color = '#2d6040';
-                    nomeSpan.title = 'Clicca per vedere la foto';
-                    const nf = variantiA[vi] + '.' + estensioni[ei];
-                    nomeSpan.onclick = () => mostraFotoPopup(nf);
-                    controllaCompletoA();
-                  } else { provaComboA(vi, ei + 1); }
-                })
-                .catch(() => provaComboA(vi, ei + 1));
-            }
-            provaComboA(0, 0);
-          });
-          if (inAttesaOrdinata.length === 0) window.fotoDisponibili = [];
-        }, 50);
-      }
-    } else if (activeOrdine === 'tutti') {
-      // === MODALITÀ TUTTI: mostra tutti gli invitati (rispondenti + in attesa) per cognome ===
-      const tuttiRaw = window.tuttiInvitatiCsvRaw || [];
-      const tuttiOrdinati = [...tuttiRaw].sort((a, b) => {
-        const ca = ultimoToken(a.nome), cb = ultimoToken(b.nome);
-        const res = ca.localeCompare(cb, 'it', { sensitivity: 'base' });
-        if (res !== 0) return res;
-        return (a.nome||'').localeCompare(b.nome||'', 'it', { sensitivity: 'base' });
-      });
-      const acc0 = /[\u0300-\u036f]/g;
-      function norm0(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim(); }
-      const setRispondenti = new Set((window.datiInvitati||[]).map(r => norm0(r.nome)));
-      if (tuttiOrdinati.length === 0) {
-        html += `<div style="text-align:center;color:#2d6040;font-weight:600;padding:24px 0;font-family:'Inter',sans-serif;">Nessun invitato trovato</div>`;
-      } else {
-        // Legenda
-        html += `<div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;padding:8px 12px;background:#f0f0f0;border-radius:10px;font-family:'Inter',sans-serif;font-size:12px;color:#444;">
-          <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:14px;background:#ffffff;border:1.5px solid #c8d8c0;border-radius:3px;"></span> Ha risposto ✓</span>
-          <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:14px;background:#e8e0d0;border:1.5px solid #c8b89a;border-radius:3px;"></span> In attesa</span>
-        </div>`;
-        tuttiOrdinati.forEach((inv) => {
-          const nomeInv = inv.nome || '';
-          const haRisposto = setRispondenti.has(norm0(nomeInv));
-          const tavNum = trovaTavoloNum(nomeInv);
-          const nomeDisplay = formatNomeDisplay(nomeInv);
-          const etaInv = getEtaAnni(nomeInv);
-          const etaStr = etaInv !== null ? '&nbsp;<span style="font-weight:400;font-size:14px;color:#777">(' + etaInv + ')</span>' : '';
-          const cellInv = cercaTelefono(nomeInv);
-          const cellStr = cellInv ? '<span style="margin-left:auto;font-size:12px;color:#1a4fa0;font-weight:500;white-space:nowrap;">' + formattaNumero(cellInv) + '</span>' : '';
-          const bg = haRisposto ? '' : 'background:#e8e0d0;';
-          const bgNome = haRisposto ? '' : 'background:#ddd4c0;color:#555;';
-          const checkIcon = haRisposto ? '<span style="font-size:13px;color:#2d6040;margin-left:6px;">\u2713</span>' : '';
-          const partiN = nomeInv.trim().split(/\s+/);
-          const nomeFileFoto = partiN.length >= 2 ? partiN[partiN.length-1] + ' ' + partiN.slice(0,-1).join(' ') : nomeInv;
-          const idSafe = 'tutti-' + nomeFileFoto.replace(/[^a-zA-Z0-9]/g, '_');
-          html += `<div class="risposta-card" style="border-color:#b0bec5;${bg}" id="${idSafe}">
-            <div class="risposta-nome" style="${bgNome}cursor:default;">
-              ${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}<span id="nomefoto-t-${idSafe}" data-nomefile="${nomeFileFoto}" style="flex:1">${nomeDisplay}</span>${cellStr}${checkIcon}
-              <span class="icone-destra" style="flex-shrink:0;margin-left:4px;"></span>
-            </div>
-          </div>`;
-        });
-        window.fotoDisponibili = [];
-        setTimeout(() => {
-          const spans = [...document.querySelectorAll('[id^="nomefoto-t-"]')];
-          const risultati = new Array(spans.length).fill(null);
-          let completati = 0;
-          function controllaCompletoT() {
-            completati++;
-            if (completati === spans.length) window.fotoDisponibili = risultati;
-          }
-          function variantiNomeT(n) {
-            const v = new Set();
-            v.add(n); v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
-            v.add(n.replace(/u'$/,'\u00f9').replace(/a'$/,'\u00e0').replace(/e'$/,'\u00e8').replace(/i'$/,'\u00ec').replace(/o'$/,'\u00f2'));
-            v.add(n.replace(/'$/,'')); return [...v];
-          }
-          spans.forEach((span, posizione) => {
-            const nomeFile = span.getAttribute('data-nomefile');
-            if (!nomeFile) { controllaCompletoT(); return; }
-            risultati[posizione] = { nome: nomeFile, file: null };
-            const varianti = variantiNomeT(nomeFile);
-            const estensioni = ['jpg','JPG','jpeg','JPEG'];
-            let trovata = false;
-            function provaComboT(vi, ei) {
-              if (trovata) return;
-              if (vi >= varianti.length) { controllaCompletoT(); return; }
-              if (ei >= estensioni.length) { provaComboT(vi+1,0); return; }
-              fetch('Foto/'+varianti[vi]+'.'+estensioni[ei]+'?t='+Date.now(),{method:'HEAD'})
-                .then(r => {
-                  if (r.ok && !trovata) {
-                    trovata = true;
-                    risultati[posizione] = { nome: nomeFile, file: varianti[vi]+'.'+estensioni[ei] };
-                    span.style.color = '#1a4fa0'; span.style.fontWeight = '700'; span.style.cursor = 'pointer';
-                    span.title = 'Clicca per vedere la foto';
-                    const nf = varianti[vi]+'.'+estensioni[ei];
-                    span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nf); };
-                    controllaCompletoT();
-                  } else { provaComboT(vi, ei+1); }
-                }).catch(() => provaComboT(vi, ei+1));
-            }
-            provaComboT(0,0);
-          });
-          if (spans.length === 0) window.fotoDisponibili = [];
-        }, 50);
-      }
-    } else if (activeOrdine === 'gruppi') {
-      // === MODALITÀ GRUPPI: tutti gli invitati, ordine CSV, linea grigio doppia tra gruppi ===
-      const acc0 = /[\u0300-\u036f]/g;
-      const norm0 = s => (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim();
-      function tokG(n) { return norm0(n).split(/\s+/).filter(Boolean); }
-      function matchG(a, b) {
-        const ta=tokG(a), tb=tokG(b);
-        return ta.every(w=>tb.includes(w)) || tb.every(w=>ta.includes(w));
-      }
-      // Usa direttamente i gruppi già costruiti dal CSV (include tutti, nessuno perso)
-      const gruppiDaUsare = window.gruppiCsvOrdinati || [];
+    // === NUOVO SISTEMA UNIFICATO: tutti gli ordini mostrano TUTTI gli invitati ===
+    // Card bipartita: metà sinistra (clic) = foto | metà destra (clic) = scheda
+    // Fondo azzurro chiaro = ha risposto | giallo tenue = non ha risposto
 
-      let primoG = true;
-      gruppiDaUsare.forEach(gruppoNomi => {
-        // Separatore grigio scuro tra gruppi (non prima del primo)
-        if (!primoG) {
-          html += `<div style="margin-top:10px;border-bottom:2px solid #555;margin-bottom:10px;"></div>`;
-        }
-        primoG = false;
-
-        // Mostra TUTTI i membri del gruppo (rispondenti e non)
-        gruppoNomi.forEach(nomeCSV => {
-          const r = (window.datiInvitati||[]).find(inv => matchG(nomeCSV, inv.nome||''));
-
-          if (r) {
-            // ── Rispondente: card completa cliccabile ──────────────────
-            const riga = r.indiceOriginale;
-            const presenza = r.presenza||'';
-            const assente = isAbsent(presenza, r.secondo);
-            const tipoSecondo = detectSecondo(r.secondo);
-            let classiFiltro = [];
-            if (assente) { classiFiltro.push('cat-assenti'); }
-            else {
-              classiFiltro.push('cat-presenti');
-              if (hasAllergy(r.allergie))       classiFiltro.push('cat-allergie');
-              if (tipoSecondo==='veg')           classiFiltro.push('cat-veg');
-              if (tipoSecondo==='carne')         classiFiltro.push('cat-carne');
-              if (tipoSecondo==='pesce')         classiFiltro.push('cat-pesce');
-              if (tipoSecondo==='baby')          classiFiltro.push('cat-baby');
-              if (tipoSecondo==='segnaposto')    classiFiltro.push('cat-segnaposto');
-            }
-            const displayStyle = (activeFilter && !classiFiltro.includes('cat-'+activeFilter)) ? 'display:none;' : 'display:block;';
-            const iconaSecondo = assente ? '' : (tipoSecondo==='veg'?'🥦':tipoSecondo==='carne'?'🥩':tipoSecondo==='pesce'?'🐟':tipoSecondo==='baby'?'🍼':'');
-            const haAllergia = hasAllergy(r.allergie);
-            const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
-            const iconeAllergie = iconaAllergie(r.allergie);
-            const tavNum = trovaTavoloNum(r.nome);
-            const nomeDisplay = formatNomeDisplay(r.nome);
-            const allergieHtml = hasAllergy(r.allergie)
-              ? `<span class="risposta-val allergia">${r.allergie}</span>`
-              : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
-            const note = r.note
-              ? `<span class="risposta-val">${r.note}</span>`
-              : `<span class="risposta-val muted">—</span>`;
-            const parti = (r.nome||'').trim().split(/\s+/);
-            const nomeFileFoto = parti.length>=2 ? parti[parti.length-1]+' '+parti.slice(0,-1).join(' ') : (r.nome||'');
-            html += `<div class="risposta-card ${classiFiltro.join(' ')}" style="${displayStyle}" id="card-${riga}">
-              <div class="risposta-nome" onclick="toggleDettagli(${riga})">
-                ${tavNum?`<span style="margin-right:4px;font-size:14px">${tavNum}</span>`:''}<span id="nomefoto-${riga}" data-nomefile="${nomeFileFoto}">${nomeDisplay}</span>${iconaSecondo?`<span class="icona-secondo">${iconaSecondo}</span>`:''}
-                <span class="icone-destra">${iconeAllergie?`<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>`:''}</span>
-                <span class="${classFreccia}">›</span>
-              </div>
-              <div class="dettagli-scheda" id="dettagli-${riga}">
-                <div class="risposta-row">
-                  <span class="risposta-label">${testi.lblTavolo}</span>
-                  <span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span>
-                </div>
-                <div class="risposta-row">
-                  <span class="risposta-label">${testi.lblPresenza}</span>
-                  <span class="risposta-val" style="font-weight:600;">${assente ? '0' : '1'}</span>
-                </div>
-                <div class="risposta-row">
-                  <span class="risposta-label">${testi.lblSecondo}</span>
-                  <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
-                </div>
-                <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span>${allergieHtml}</div>
-                <div class="risposta-row"><span class="risposta-label">${testi.lblNote}</span>${note}</div>
-                <div class="risposta-data">${r.data||''}</div>
-                <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
-              </div>
-            </div>`;
-          } else {
-            // ── Non rispondente: riga grigia non espandibile ───────────
-            const safeId = norm0(nomeCSV).replace(/[^a-z0-9]/g,'_');
-            const partiCSV = nomeCSV.trim().split(/\s+/);
-            const nomeFileFoto = partiCSV.length>=2 ? partiCSV[partiCSV.length-1]+' '+partiCSV.slice(0,-1).join(' ') : nomeCSV;
-            const tavNum = trovaTavoloNum(nomeCSV);
-            html += `<div class="risposta-card" style="border-color:#b0bec5;opacity:0.55;" id="attesa-${safeId}">
-              <div class="risposta-nome" style="cursor:default;">
-                ${tavNum?`<span style="margin-right:4px;font-size:14px">${tavNum}</span>`:''}<span id="nomefoto-csv-${safeId}" data-nomefile="${nomeFileFoto}" style="color:#999;">${nomeCSV}</span>
-                <span class="icone-destra"></span>
-                <span class="freccia" style="color:#ccc;">—</span>
-              </div>
-            </div>`;
-          }
-        });
-      });
-
-      // Fetch foto: rispondenti + non rispondenti con foto
-      window.fotoDisponibili = [];
-      setTimeout(() => {
-        function variantiNomeG(n) {
-          const v=new Set();
-          v.add(n); v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
-          v.add(n.replace(/u'$/,'\u00f9').replace(/a'$/,'\u00e0').replace(/e'$/,'\u00e8').replace(/i'$/,'\u00ec').replace(/o'$/,'\u00f2'));
-          v.add(n.replace(/'$/,'')); return [...v];
-        }
-        function fetchFoto(span, onTrovata) {
-          const nomeFile=span.getAttribute('data-nomefile'); if(!nomeFile) return;
-          const varianti=variantiNomeG(nomeFile), estensioni=['jpg','JPG','jpeg','JPEG'];
-          let trovata=false;
-          function prova(vi,ei) {
-            if(trovata) return;
-            if(vi>=varianti.length) return;
-            if(ei>=estensioni.length){prova(vi+1,0);return;}
-            fetch('Foto/'+varianti[vi]+'.'+estensioni[ei]+'?t='+Date.now(),{method:'HEAD'})
-              .then(res=>{if(res.ok&&!trovata){trovata=true;onTrovata(varianti[vi]+'.'+estensioni[ei]);}else prova(vi,ei+1);})
-              .catch(()=>prova(vi,ei+1));
-          }
-          prova(0,0);
-        }
-        const spansRisp=[...document.querySelectorAll('[id^="nomefoto-"]')].filter(s=>!s.id.startsWith('nomefoto-csv-'));
-        const risultati=new Array(spansRisp.length).fill(null);
-        let completati=0;
-        function done(){completati++;if(completati===spansRisp.length)window.fotoDisponibili=risultati;}
-        spansRisp.forEach((span,pos)=>{
-          const nf=span.getAttribute('data-nomefile');
-          if(!nf){done();return;}
-          risultati[pos]={nome:nf,file:null};
-          fetchFoto(span,nomeFile=>{
-            risultati[pos]={nome:nf,file:nomeFile};
-            span.style.color='#1a4fa0';span.style.fontWeight='700';span.style.cursor='pointer';
-            span.title='Clicca per vedere la foto';
-            span.onclick=e=>{e.stopPropagation();mostraFotoPopup(nomeFile);};
-            done();
-          });
-          // conta come completato anche se non trova foto
-          setTimeout(()=>{if(!risultati[pos]?.file)done();},5000);
-        });
-        if(spansRisp.length===0) window.fotoDisponibili=[];
-        // Foto anche per non-rispondenti
-        [...document.querySelectorAll('[id^="nomefoto-csv-"]')].forEach(span=>{
-          fetchFoto(span,nomeFile=>{
-            span.style.color='#1a4fa0';span.style.fontWeight='700';span.style.cursor='pointer';span.style.opacity='1';
-            span.title='Clicca per vedere la foto';
-            span.onclick=e=>{e.stopPropagation();mostraFotoPopup(nomeFile);};
-          });
-        });
-      }, 50);
-
-    } else {
-
-
-    // Pre-calcola duplicati e senza-tavolo per evidenziazione a video
-    function tokV(n) { return (n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().split(/\s+/).filter(Boolean); }
-    function matchV(a,b) { const ta=tokV(a),tb=tokV(b); return ta.every(w=>tb.includes(w))||tb.every(w=>ta.includes(w)); }
-    const idxDuplicatiVideo = new Set();
-    for (let i=0; i<window.datiInvitati.length; i++) {
-      for (let j=i+1; j<window.datiInvitati.length; j++) {
-        if (matchV(window.datiInvitati[i].nome, window.datiInvitati[j].nome)) {
-          idxDuplicatiVideo.add(i); idxDuplicatiVideo.add(j);
-        }
-      }
+    function variantiFoto(n) {
+      const v = new Set();
+      v.add(n); v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
+      v.add(n.replace(/u'$/,'\u00f9').replace(/a'$/,'\u00e0').replace(/e'$/,'\u00e8').replace(/i'$/,'\u00ec').replace(/o'$/,'\u00f2'));
+      v.add(n.replace(/'$/,'')); return [...v];
     }
 
-    window.datiInvitati.forEach((r, idxV) => {
+    function cardRispondente(r) {
       const riga = r.indiceOriginale;
-      const presenza = r.presenza || '';
+      const presenza = r.presenza||'';
       const assente = isAbsent(presenza, r.secondo);
-
-      let classiFiltro = [];
-
       const tipoSecondo = detectSecondo(r.secondo);
-      if (assente) {
-        classiFiltro.push('cat-assenti');
-      } else {
-        classiFiltro.push('cat-presenti');
-        if (hasAllergy(r.allergie)) classiFiltro.push('cat-allergie');
-        if (tipoSecondo === 'veg') classiFiltro.push('cat-veg');
-        if (tipoSecondo === 'carne') classiFiltro.push('cat-carne');
-        if (tipoSecondo === 'pesce') classiFiltro.push('cat-pesce');
-        if (tipoSecondo === 'baby') classiFiltro.push('cat-baby');
-        if (tipoSecondo === 'segnaposto') classiFiltro.push('cat-segnaposto');
+      let cf = ['ha-risposto'];
+      if (assente) { cf.push('cat-assenti'); }
+      else {
+        cf.push('cat-presenti');
+        if (hasAllergy(r.allergie))       cf.push('cat-allergie');
+        if (tipoSecondo==='veg')           cf.push('cat-veg');
+        if (tipoSecondo==='carne')         cf.push('cat-carne');
+        if (tipoSecondo==='pesce')         cf.push('cat-pesce');
+        if (tipoSecondo==='baby')          cf.push('cat-baby');
+        if (tipoSecondo==='segnaposto')    cf.push('cat-segnaposto');
       }
-
-      const valPresenza = assente ? '0' : '1';
-      const allergieHtml = hasAllergy(r.allergie) ? `<span class="risposta-val allergia">${r.allergie}</span>` : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
-      const note = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
-      const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
-
-      const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : tipoSecondo === 'baby' ? '🍼' : '');
-      const haAllergia = hasAllergy(r.allergie);
-      const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
-      const iconeAllergie = iconaAllergie(r.allergie);
-
-      const tavNum = trovaTavoloNum(r.nome);
-      const isVideoDup = idxDuplicatiVideo.has(idxV);
-      const isVideoNoTav = !assente && !tavNum;
-      const nomeBgVideo = isVideoDup ? 'background:#fff9a0;' : isVideoNoTav ? 'background:#ffd6e0;' : '';
-
-      // Nome visualizzato: Cognome Nome (ordine cognome) oppure Nome Cognome + età
-      const nomeDisplay = formatNomeDisplay(r.nome);
-
-      // Data formattata [GG/MM - HH:MM] per ordinamento inserimento
-      let dataInserimento = '';
-      if (activeOrdine === 'inserimento') {
-        const rawData = r.data || r.Data || r['data'] || r['Data'] || '';
-        if (rawData) {
-          const parti = String(rawData).trim().split(/\s+/);
-          if (parti.length >= 2) {
-            const dataParts = parti[0].split(/[\/\-]/);
-            const oraParts = parti[1].split(':');
-            if (dataParts.length >= 2 && oraParts.length >= 2) {
-              dataInserimento = `[${dataParts[0]}/${dataParts[1]} - ${oraParts[0]}:${oraParts[1]}]`;
-            } else {
-              dataInserimento = `[${rawData}]`;
-            }
-          } else {
-            dataInserimento = `[${rawData}]`;
-          }
-        } else {
-          // DEBUG: mostra le chiavi disponibili sul primo record
-          if (idxV === 0) dataInserimento = `[chiavi:${Object.keys(r).join('|')}]`;
-        }
-      }
-
-      html += `<div class="risposta-card ${classiFiltro.join(' ')}" id="card-${riga}" style="${displayStyle}">
-        <div class="risposta-nome" onclick="toggleDettagli(${riga})" style="${nomeBgVideo}">${tavNum ? '<span style="margin-right:4px;font-size:14px">' + tavNum + '</span>' : ''}<span id="nomefoto-${riga}" data-nomefile="${(() => { const t=(r.nome||'').trim().split(/\s+/); return t.length>=2 ? t[t.length-1]+' '+t.slice(0,t.length-1).join(' ') : (r.nome||''); })()}">${nomeDisplay}</span>${isVideoDup && r.data ? `<span style="font-size:11px;font-weight:400;color:#7a5a00;margin-left:6px;white-space:nowrap">${r.data}</span>` : ''}${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}${dataInserimento ? `<span style="font-size:11px;font-weight:400;color:#5a6e3a;margin-left:6px;white-space:nowrap">${dataInserimento}</span>` : ''}<span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span></div>
+      const ds = (activeFilter && !cf.includes('cat-'+activeFilter)) ? 'display:none;' : 'display:block;';
+      const ico = assente ? '' : (tipoSecondo==='veg'?'🥦':tipoSecondo==='carne'?'🥩':tipoSecondo==='pesce'?'🐟':tipoSecondo==='baby'?'🍼':'');
+      const haA = hasAllergy(r.allergie);
+      const cf2 = haA ? 'freccia allergia-alert' : 'freccia';
+      const iceA = iconaAllergie(r.allergie);
+      const tavN = trovaTavoloNum(r.nome);
+      const nomDisp = formatNomeDisplay(r.nome);
+      const allHtml = hasAllergy(r.allergie) ? `<span class="risposta-val allergia">${r.allergie}</span>` : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
+      const noteHtml = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
+      const parti = (r.nome||'').trim().split(/\s+/);
+      const nff = parti.length>=2 ? parti[parti.length-1]+' '+parti.slice(0,-1).join(' ') : (r.nome||'');
+      return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}">
+        <div class="risposta-nome">
+          <div class="rn-foto" id="nomefoto-${riga}" data-nomefile="${nff}">
+            ${tavN?`<span style="margin-right:4px;font-size:14px;flex-shrink:0">${tavN}</span>`:''}<span style="color:#000;font-weight:600;">${nomDisp}</span>
+          </div>
+          <div class="rn-scheda" onclick="toggleDettagli(${riga})">
+            ${ico?`<span class="icona-secondo">${ico}</span>`:''}
+            <span class="icone-destra">${iceA?`<span style="font-size:15px">${iceA}</span>`:''}</span>
+            <span class="${cf2}">›</span>
+          </div>
+        </div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
-          <div class="risposta-row">
-            <span class="risposta-label">${testi.lblTavolo}</span>
-            <span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span>
-          </div>
-          <div class="risposta-row">
-            <span class="risposta-label">${testi.lblPresenza}</span>
-            <span class="risposta-val" style="font-weight: 600;">${valPresenza}</span>
-          </div>
-          <div class="risposta-row">
-            <span class="risposta-label">${testi.lblSecondo}</span>
-            <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
-          </div>
-          <div class="risposta-row">
-            <span class="risposta-label">${testi.lblAllergie}</span>
-            ${allergieHtml}
-          </div>
-          <div class="risposta-row">
-            <span class="risposta-label">${testi.lblNote}</span>
-            ${note}
-          </div>
-          <div class="risposta-data">${r.data || ''}</div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblTavolo}</span><span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span></div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblPresenza}</span><span class="risposta-val" style="font-weight:600;">${assente?'0':'1'}</span></div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblSecondo}</span><span class="risposta-val">${secondBadge(r.secondo,assente)}</span></div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span>${allHtml}</div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblNote}</span>${noteHtml}</div>
+          <div class="risposta-data">${r.data||''}</div>
           <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
         </div>
       </div>`;
-    });
-    // Dopo il rendering, verifica quali foto esistono, mantiene ordine di visualizzazione
-    // fotoDisponibili: array di {nome, file} per TUTTI — file=null se mancante
+    }
+
+    function cardNonRispondente(nomeCSV, pfx) {
+      const safeId = pfx + nomeCSV.replace(/[^a-zA-Z0-9]/g,'_');
+      const p = nomeCSV.trim().split(/\s+/);
+      const nff = p.length>=2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : nomeCSV;
+      const nomDisp = p.length>=2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : nomeCSV;
+      const eta = getEtaAnni(nomeCSV);
+      const etaStr = eta!==null ? `\u00a0<span style="font-weight:400;font-size:14px;color:#555">(${eta})</span>` : '';
+      const tavN = trovaTavoloNum(nomeCSV);
+      const ds = (activeFilter && activeFilter!=='assenti') ? 'display:none;' : 'display:block;';
+      return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}">
+        <div class="risposta-nome">
+          <div class="rn-foto" id="nomefoto-csv-${safeId}" data-nomefile="${nff}">
+            ${tavN?`<span style="margin-right:4px;font-size:14px;flex-shrink:0">${tavN}</span>`:''}<span style="color:#000;font-weight:600;">${nomDisp}${etaStr}</span>
+          </div>
+          <div class="rn-scheda" style="opacity:0.3;pointer-events:none;">
+            <span class="freccia" style="color:#aaa;">—</span>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function fetchFotoSpans(els, risultati, onDone) {
+      if (!els.length) { if(onDone) onDone(risultati||[]); return; }
+      let done=0;
+      function completato() { done++; if(done===els.length && onDone) onDone(risultati||[]); }
+      els.forEach((el,pos) => {
+        const nf = el.getAttribute('data-nomefile');
+        if (!nf) { completato(); return; }
+        if (risultati) risultati[pos] = { nome: nf, file: null };
+        const varianti=variantiFoto(nf), ext=['jpg','JPG','jpeg','JPEG'];
+        let trovata=false;
+        function prova(vi,ei) {
+          if(trovata) return;
+          if(vi>=varianti.length){completato();return;}
+          if(ei>=ext.length){prova(vi+1,0);return;}
+          fetch('Foto/'+varianti[vi]+'.'+ext[ei]+'?t='+Date.now(),{method:'HEAD'})
+            .then(r=>{
+              if(r.ok&&!trovata){
+                trovata=true;
+                const file=varianti[vi]+'.'+ext[ei];
+                if(risultati) risultati[pos]={nome:nf,file};
+                el.style.cursor='pointer';
+                el.onclick=()=>mostraFotoPopup(file);
+                completato();
+              } else prova(vi,ei+1);
+            }).catch(()=>prova(vi,ei+1));
+        }
+        prova(0,0);
+      });
+    }
+
+    // Non-rispondenti: tutti quelli nel CSV che non hanno una risposta
+    const _accNR = /[\u0300-\u036f]/g;
+    const _normNR = s => (s||'').toLowerCase().normalize('NFD').replace(_accNR,'').trim();
+    function _tokNR(n) { return _normNR(n).split(/\s+/).filter(Boolean); }
+    function _matchNR(a,b) { const ta=_tokNR(a),tb=_tokNR(b); return ta.every(w=>tb.includes(w))||tb.every(w=>ta.includes(w)); }
+    const _tuttiCSV = window.tuttiInvitatiCsvRaw || [];
+    const _nonRisp = _tuttiCSV.filter(inv => !(window.datiInvitati||[]).some(r => _matchNR(inv.nome, r.nome||'')));
+    function _sortCognome(arr) {
+      return [...arr].sort((a,b) => {
+        const na = a.nome||a, nb = b.nome||b;
+        const ca=_normNR(ultimoToken(na))+_normNR(primoToken(na));
+        const cb=_normNR(ultimoToken(nb))+_normNR(primoToken(nb));
+        return ca.localeCompare(cb,'it',{sensitivity:'base'});
+      });
+    }
+
+    const _sep = `<div style="margin-top:12px;border-bottom:1px solid #b8893a;margin-bottom:8px;opacity:0.4;"></div>`;
+
+    if (activeOrdine === 'gruppi') {
+      // Ordine CSV con tutti i membri, linea grigio tra gruppi
+      const gList = window.gruppiCsvOrdinati || [];
+      let primoG = true;
+      gList.forEach(gNomi => {
+        if (!primoG) html += `<div style="margin-top:10px;border-bottom:2px solid #555;margin-bottom:10px;"></div>`;
+        primoG = false;
+        gNomi.forEach(nc => {
+          const r = (window.datiInvitati||[]).find(inv => _matchNR(nc, inv.nome||''));
+          html += r ? cardRispondente(r) : cardNonRispondente(nc, 'g-');
+        });
+      });
+
+    } else if (activeOrdine === 'attesa') {
+      // Non-rispondenti per cognome → poi rispondenti per cognome in coda
+      _sortCognome(_nonRisp).forEach(inv => { html += cardNonRispondente(inv.nome, 'att-'); });
+      if ((window.datiInvitati||[]).length > 0) {
+        html += _sep;
+        ordinaInvitati([...(window.datiInvitati||[])], 'cognome').forEach(r => { html += cardRispondente(r); });
+      }
+
+    } else {
+      // Tutti gli altri ordini: rispondenti già ordinati + non-rispondenti per cognome
+      (window.datiInvitati||[]).forEach(r => { html += cardRispondente(r); });
+      if (_nonRisp.length > 0) {
+        html += _sep;
+        _sortCognome(_nonRisp).forEach(inv => { html += cardNonRispondente(inv.nome, 'nr-'); });
+      }
+    }
+
+    // Fetch foto per tutti dopo rendering
     window.fotoDisponibili = [];
     setTimeout(() => {
-      const spans = [...document.querySelectorAll('[id^="nomefoto-"]')];
-      const risultati = new Array(spans.length).fill(null);
-      let completati = 0;
-      function controllaCompleto() {
-        completati++;
-        if (completati === spans.length) {
-          window.fotoDisponibili = risultati;
-        }
-      }
-      function variantiNome(n) {
-        const v = new Set();
-        v.add(n);
-        v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
-        v.add(n.replace(/u'$/, '\u00f9').replace(/a'$/, '\u00e0').replace(/e'$/, '\u00e8').replace(/i'$/, '\u00ec').replace(/o'$/, '\u00f2'));
-        v.add(n.replace(/'$/, ''));
-        return [...v];
-      }
-      spans.forEach((span, posizione) => {
-        const nomeFile = span.getAttribute('data-nomefile');
-        if (!nomeFile) { controllaCompleto(); return; }
-        risultati[posizione] = { nome: nomeFile, file: null }; // default: nessuna foto
-        const varianti = variantiNome(nomeFile);
-        const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
-        let trovata = false;
-        function provaCombo(vi, ei) {
-          if (trovata) return;
-          if (vi >= varianti.length) { controllaCompleto(); return; }
-          if (ei >= estensioni.length) { provaCombo(vi + 1, 0); return; }
-          fetch('Foto/' + varianti[vi] + '.' + estensioni[ei] + '?t=' + Date.now(), { method: 'HEAD' })
-            .then(r => {
-              if (r.ok && !trovata) {
-                trovata = true;
-                risultati[posizione] = { nome: nomeFile, file: varianti[vi] + '.' + estensioni[ei] };
-                span.style.color = '#1a4fa0';
-                span.style.fontWeight = '700';
-                span.style.cursor = 'pointer';
-                span.title = 'Clicca per vedere la foto';
-                const nomeFileFinal = varianti[vi] + '.' + estensioni[ei];
-                span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nomeFileFinal); };
-                controllaCompleto();
-              } else { provaCombo(vi, ei + 1); }
-            })
-            .catch(() => provaCombo(vi, ei + 1));
-        }
-        provaCombo(0, 0);
-      });
-      if (spans.length === 0) window.fotoDisponibili = [];
+      const tutti = [...document.querySelectorAll('.rn-foto[data-nomefile]')];
+      const spR  = tutti.filter(el => el.id.startsWith('nomefoto-') && !el.id.startsWith('nomefoto-csv-'));
+      const spNR = tutti.filter(el => el.id.startsWith('nomefoto-csv-'));
+      const ris = new Array(spR.length).fill(null);
+      fetchFotoSpans(spR, ris, res => { window.fotoDisponibili = res; });
+      fetchFotoSpans(spNR, null, null);
     }, 50);
-    } // fine else (non attesa)
+
 
     html += `</div>
     <div style="text-align:center; margin: 16px 0 8px; display:flex; justify-content:center; align-items:center; gap:10px;">
@@ -2846,16 +2530,13 @@
 
   function labelOrdineCorrente() {
     const t = dizionario[currentLang];
-    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA, tutti: t.lbl_TUTTI, gruppi: t.lbl_GRUPPI };
+    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA, gruppi: t.lbl_GRUPPI };
     const base = labels[activeOrdine] || t.lbl_COGNOME;
     const totInv = window.totInvitatiCsv || null;
     if (!totInv) return base;
     if (activeOrdine === 'attesa') {
       const nAttesa = calcolaInAttesa().length;
       return base + ' (' + nAttesa + '/' + totInv + ')';
-    } else if (activeOrdine === 'tutti') {
-      const nTutti = (window.tuttiInvitatiCsvRaw || []).length;
-      return base + ' (' + nTutti + ')';
     } else {
       const nRisp = (window.datiInvitati || []).length;
       return base + ' (' + nRisp + '/' + totInv + ')';
@@ -3062,7 +2743,6 @@
       {val:'cibo',        lbl: t.btnOrdina_cibo},
       {val:'eta',         lbl: t.btnOrdina_eta},
       {val:'attesa',      lbl: t.btnOrdina_attesa},
-      {val:'tutti',       lbl: t.btnOrdina_tutti},
       {val:'gruppi',      lbl: t.btnOrdina_gruppi}
     ];
     const overlay = document.createElement('div');
@@ -3680,5 +3360,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v185 - 05/04/2026 - GRUPPI da gruppiCsvOrdinati (nessuno perso); linea grigio 2px; sidebar grassetto+gap dopo desc -->
+<!-- Lista.html v186 - 05/04/2026 - Nuovo sistema: split foto/scheda per tutti gli ordini; tutti in lista; TUTTI rimosso; GRUPPI da gruppiCsvOrdinati -->
 

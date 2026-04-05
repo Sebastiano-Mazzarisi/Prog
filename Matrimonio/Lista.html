@@ -361,7 +361,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v185 · 05/04/2026 · 10:49:41';
+  const APP_VERSION = 'v185 · 05/04/2026 · 11:10:53';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1168,7 +1168,7 @@
         }, 50);
       }
     } else if (activeOrdine === 'gruppi') {
-      // === MODALITÀ GRUPPI: ordine Invitati.csv, linea+spazio tra gruppi, tutto funzionante ===
+      // === MODALITÀ GRUPPI: TUTTI gli invitati in ordine CSV, linea tra gruppi ===
       const acc0 = /[\u0300-\u036f]/g;
       const norm0 = s => (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim();
       function tokG(n) { return norm0(n).split(/\s+/).filter(Boolean); }
@@ -1194,85 +1194,108 @@
 
       let primoG = true;
       gruppiOrdinati.forEach(gruppoNomi => {
-        const rispondenti = gruppoNomi
-          .map(nCSV => (window.datiInvitati||[]).find(r => matchG(nCSV, r.nome||'')))
-          .filter(Boolean);
-        if (rispondenti.length === 0) return;
-
-        // Separatore con spazio verticale tra gruppi
+        // Separa tra gruppi con spazio + linea
         if (!primoG) {
           html += `<div style="margin-top:14px;border-bottom:1px solid #d4b07a;margin-bottom:14px;"></div>`;
         }
         primoG = false;
 
-        rispondenti.forEach(r => {
-          const riga = r.indiceOriginale;
-          const presenza = r.presenza||'';
-          const assente = isAbsent(presenza, r.secondo);
-          const tipoSecondo = detectSecondo(r.secondo);
-          let classiFiltro = [];
-          if (assente) { classiFiltro.push('cat-assenti'); }
-          else {
-            classiFiltro.push('cat-presenti');
-            if (hasAllergy(r.allergie))       classiFiltro.push('cat-allergie');
-            if (tipoSecondo==='veg')           classiFiltro.push('cat-veg');
-            if (tipoSecondo==='carne')         classiFiltro.push('cat-carne');
-            if (tipoSecondo==='pesce')         classiFiltro.push('cat-pesce');
-            if (tipoSecondo==='baby')          classiFiltro.push('cat-baby');
-            if (tipoSecondo==='segnaposto')    classiFiltro.push('cat-segnaposto');
+        // Mostra TUTTI i membri del gruppo, rispondenti e non
+        gruppoNomi.forEach(nomeCSV => {
+          // Cerca il corrispondente tra i rispondenti
+          const r = (window.datiInvitati||[]).find(inv => matchG(nomeCSV, inv.nome||''));
+
+          if (r) {
+            // ── Rispondente: card completa cliccabile ──────────────────
+            const riga = r.indiceOriginale;
+            const presenza = r.presenza||'';
+            const assente = isAbsent(presenza, r.secondo);
+            const tipoSecondo = detectSecondo(r.secondo);
+            let classiFiltro = [];
+            if (assente) { classiFiltro.push('cat-assenti'); }
+            else {
+              classiFiltro.push('cat-presenti');
+              if (hasAllergy(r.allergie))       classiFiltro.push('cat-allergie');
+              if (tipoSecondo==='veg')           classiFiltro.push('cat-veg');
+              if (tipoSecondo==='carne')         classiFiltro.push('cat-carne');
+              if (tipoSecondo==='pesce')         classiFiltro.push('cat-pesce');
+              if (tipoSecondo==='baby')          classiFiltro.push('cat-baby');
+              if (tipoSecondo==='segnaposto')    classiFiltro.push('cat-segnaposto');
+            }
+            const displayStyle = (activeFilter && !classiFiltro.includes('cat-'+activeFilter)) ? 'display:none;' : 'display:block;';
+            const iconaSecondo = assente ? '' : (tipoSecondo==='veg'?'🥦':tipoSecondo==='carne'?'🥩':tipoSecondo==='pesce'?'🐟':tipoSecondo==='baby'?'🍼':'');
+            const haAllergia = hasAllergy(r.allergie);
+            const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
+            const iconeAllergie = iconaAllergie(r.allergie);
+            const tavNum = trovaTavoloNum(r.nome);
+            const nomeDisplay = formatNomeDisplay(r.nome);
+            const allergieHtml = hasAllergy(r.allergie)
+              ? `<span class="risposta-val allergia">${r.allergie}</span>`
+              : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
+            const note = r.note
+              ? `<span class="risposta-val">${r.note}</span>`
+              : `<span class="risposta-val muted">—</span>`;
+            const parti = (r.nome||'').trim().split(/\s+/);
+            const nomeFileFoto = parti.length>=2 ? parti[parti.length-1]+' '+parti.slice(0,-1).join(' ') : (r.nome||'');
+            html += `<div class="risposta-card ${classiFiltro.join(' ')}" style="${displayStyle}" id="card-${riga}">
+              <div class="risposta-nome" onclick="toggleDettagli(${riga})">
+                ${tavNum?`<span style="margin-right:4px;font-size:14px">${tavNum}</span>`:''}<span id="nomefoto-${riga}" data-nomefile="${nomeFileFoto}">${nomeDisplay}</span>${iconaSecondo?`<span class="icona-secondo">${iconaSecondo}</span>`:''}
+                <span class="icone-destra">${iconeAllergie?`<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>`:''}</span>
+                <span class="${classFreccia}">›</span>
+              </div>
+              <div class="dettagli-scheda" id="dettagli-${riga}">
+                <div class="risposta-row">
+                  <span class="risposta-label">${testi.lblTavolo}</span>
+                  <span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span>
+                </div>
+                <div class="risposta-row">
+                  <span class="risposta-label">${testi.lblPresenza}</span>
+                  <span class="risposta-val" style="font-weight:600;">${assente ? '0' : '1'}</span>
+                </div>
+                <div class="risposta-row">
+                  <span class="risposta-label">${testi.lblSecondo}</span>
+                  <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
+                </div>
+                <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span>${allergieHtml}</div>
+                <div class="risposta-row"><span class="risposta-label">${testi.lblNote}</span>${note}</div>
+                <div class="risposta-data">${r.data||''}</div>
+                <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
+              </div>
+            </div>`;
+          } else {
+            // ── Non rispondente: riga grigia non espandibile ───────────
+            const displayStyle = (activeFilter && activeFilter !== 'presenti' && activeFilter !== 'assenti') ? 'display:none;' : 'display:block;';
+            const partiCSV = nomeCSV.trim().split(/\s+/);
+            // Il nome nel CSV è "Nome Cognome" (già convertito da caricaTavoli)
+            const nomeDisplayCSV = partiCSV.length >= 2
+              ? partiCSV[partiCSV.length-1] + ' ' + partiCSV.slice(0,-1).join(' ')
+              : nomeCSV;
+            const tavNum = trovaTavoloNum(nomeCSV);
+            const nomeFileFoto = partiCSV.length>=2 ? partiCSV[partiCSV.length-1]+' '+partiCSV.slice(0,-1).join(' ') : nomeCSV;
+            html += `<div class="risposta-card cat-assenti" style="border-color:#b0c8ee;opacity:0.6;${displayStyle}" id="attesa-${norm0(nomeCSV).replace(/\s+/g,'_')}">
+              <div class="risposta-nome" style="cursor:default;color:#888;">
+                ${tavNum?`<span style="margin-right:4px;font-size:14px">${tavNum}</span>`:''}<span id="nomefoto-csv-${norm0(nomeCSV).replace(/\s+/g,'_')}" data-nomefile="${nomeFileFoto}" style="color:#aaa;">${nomeDisplayCSV}</span>
+                <span class="icone-destra"></span>
+                <span class="freccia" style="color:#ccc;">—</span>
+              </div>
+            </div>`;
           }
-          const displayStyle = (activeFilter && !classiFiltro.includes('cat-'+activeFilter)) ? 'display:none;' : 'display:block;';
-          const iconaSecondo = assente ? '' : (tipoSecondo==='veg'?'🥦':tipoSecondo==='carne'?'🥩':tipoSecondo==='pesce'?'🐟':tipoSecondo==='baby'?'🍼':'');
-          const haAllergia = hasAllergy(r.allergie);
-          const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
-          const iconeAllergie = iconaAllergie(r.allergie);
-          const tavNum = trovaTavoloNum(r.nome);
-          const nomeDisplay = formatNomeDisplay(r.nome);
-          const allergieHtml = hasAllergy(r.allergie)
-            ? `<span class="risposta-val allergia">${r.allergie}</span>`
-            : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
-          const note = r.note
-            ? `<span class="risposta-val">${r.note}</span>`
-            : `<span class="risposta-val muted">—</span>`;
-          const parti = (r.nome||'').trim().split(/\s+/);
-          const nomeFileFoto = parti.length>=2 ? parti[parti.length-1]+' '+parti.slice(0,-1).join(' ') : (r.nome||'');
-          html += `<div class="risposta-card ${classiFiltro.join(' ')}" style="${displayStyle}" id="card-${riga}">
-            <div class="risposta-nome" onclick="toggleDettagli(${riga})">
-              ${tavNum?`<span style="margin-right:4px;font-size:14px">${tavNum}</span>`:''}<span id="nomefoto-${riga}" data-nomefile="${nomeFileFoto}">${nomeDisplay}</span>${iconaSecondo?`<span class="icona-secondo">${iconaSecondo}</span>`:''}
-              <span class="icone-destra">${iconeAllergie?`<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>`:''}</span>
-              <span class="${classFreccia}">›</span>
-            </div>
-            <div class="dettagli-scheda" id="dettagli-${riga}">
-              <div class="risposta-row">
-                <span class="risposta-label">${testi.lblTavolo}</span>
-                <span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span>
-              </div>
-              <div class="risposta-row">
-                <span class="risposta-label">${testi.lblPresenza}</span>
-                <span class="risposta-val" style="font-weight:600;">${assente ? '0' : '1'}</span>
-              </div>
-              <div class="risposta-row">
-                <span class="risposta-label">${testi.lblSecondo}</span>
-                <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
-              </div>
-              <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span>${allergieHtml}</div>
-              <div class="risposta-row"><span class="risposta-label">${testi.lblNote}</span>${note}</div>
-              <div class="risposta-data">${r.data||''}</div>
-              <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
-            </div>
-          </div>`;
         });
       });
 
-      // Fetch foto: rende i nomi cliccabili come negli altri ordinamenti
+      // Fetch foto: rende i nomi cliccabili (solo rispondenti con id nomefoto-)
       window.fotoDisponibili = [];
       setTimeout(() => {
-        const spans = [...document.querySelectorAll('[id^="nomefoto-"]')];
-        const risultati = new Array(spans.length).fill(null);
+        const spans = [...document.querySelectorAll('[id^="nomefoto-"]:not([id^="nomefoto-csv-"])').length
+          ? document.querySelectorAll('[id^="nomefoto-"]:not([id^="nomefoto-csv-"])')
+          : document.querySelectorAll('[id^="nomefoto-"]')];
+        // Usa solo i nomefoto- dei rispondenti (non csv)
+        const spansRisp = [...document.querySelectorAll('[id^="nomefoto-"]')].filter(s => !s.id.startsWith('nomefoto-csv-'));
+        const risultati = new Array(spansRisp.length).fill(null);
         let completati = 0;
         function controllaCompletoG() {
           completati++;
-          if (completati === spans.length) window.fotoDisponibili = risultati;
+          if (completati === spansRisp.length) window.fotoDisponibili = risultati;
         }
         function variantiNomeG(n) {
           const v = new Set();
@@ -1282,7 +1305,7 @@
           v.add(n.replace(/'$/,''));
           return [...v];
         }
-        spans.forEach((span, posizione) => {
+        spansRisp.forEach((span, posizione) => {
           const nomeFile = span.getAttribute('data-nomefile');
           if (!nomeFile) { controllaCompletoG(); return; }
           risultati[posizione] = { nome: nomeFile, file: null };
@@ -1311,7 +1334,36 @@
           }
           provaComboG(0,0);
         });
-        if (spans.length === 0) window.fotoDisponibili = [];
+        if (spansRisp.length === 0) window.fotoDisponibili = [];
+
+        // Fetch foto anche per i non-rispondenti (solo per rendere il nome cliccabile)
+        [...document.querySelectorAll('[id^="nomefoto-csv-"]')].forEach(span => {
+          const nomeFile = span.getAttribute('data-nomefile');
+          if (!nomeFile) return;
+          const varianti = variantiNomeG(nomeFile);
+          const estensioni = ['jpg','JPG','jpeg','JPEG'];
+          let trovata = false;
+          function provaCSV(vi, ei) {
+            if (trovata) return;
+            if (vi >= varianti.length) return;
+            if (ei >= estensioni.length) { provaCSV(vi+1,0); return; }
+            fetch('Foto/'+varianti[vi]+'.'+estensioni[ei]+'?t='+Date.now(), {method:'HEAD'})
+              .then(res => {
+                if (res.ok && !trovata) {
+                  trovata = true;
+                  span.style.color = '#1a4fa0';
+                  span.style.fontWeight = '700';
+                  span.style.cursor = 'pointer';
+                  span.style.opacity = '1';
+                  span.title = 'Clicca per vedere la foto';
+                  const nf = varianti[vi]+'.'+estensioni[ei];
+                  span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nf); };
+                } else { provaCSV(vi, ei+1); }
+              })
+              .catch(() => provaCSV(vi, ei+1));
+          }
+          provaCSV(0,0);
+        });
       }, 50);
 
     } else {
@@ -3133,9 +3185,9 @@
         .fp-overlay.landscape .fp-sidebar { display:flex; }
         .fp-side-num    { font-family:'Inter',sans-serif; font-size:clamp(13px,2.2vw,40px); font-weight:700; color:#d4b07a; line-height:1; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
         .fp-side-cognome{ font-family:'Inter',sans-serif; font-size:clamp(10px,1.7vw,28px); font-weight:700; color:#fff; line-height:1.2; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
-        .fp-side-nome   { font-family:'Inter',sans-serif; font-size:clamp(9px,1.5vw,24px); font-weight:500; color:#e8e8e8; line-height:1.2; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
+        .fp-side-nome   { font-family:'Inter',sans-serif; font-size:clamp(9px,1.5vw,24px); font-weight:700; color:#e8e8e8; line-height:1.2; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
         .fp-side-emoji  { font-size:clamp(13px,2.5vw,42px); line-height:1; text-align:center; padding:0 4px; min-width:0; }
-        .fp-side-desc   { font-family:'Inter',sans-serif; font-size:clamp(9px,1.4vw,24px); font-weight:500; color:#c8d8a0; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
+        .fp-side-desc   { font-family:'Inter',sans-serif; font-size:clamp(9px,1.4vw,24px); font-weight:700; color:#ffffff; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
         .fp-overlay.landscape [data-arrow] { display:none !important; }
@@ -3177,7 +3229,8 @@
     const sideNome    = document.createElement('div'); sideNome.className    = 'fp-side-nome';
     const sideEmoji   = document.createElement('div'); sideEmoji.className   = 'fp-side-emoji';
     const sideDesc    = document.createElement('div'); sideDesc.className    = 'fp-side-desc';
-    sidebar.append(sideNum, sideCognome, sideNome, sideEmoji, sideDesc);
+    const sideGap = document.createElement('div'); sideGap.style.cssText = 'height:clamp(6px,1.2vh,20px);'; 
+    sidebar.append(sideNum, sideCognome, sideNome, sideEmoji, sideGap, sideDesc);
 
     const colLeft = document.createElement('div'); colLeft.className = 'fp-col-left';
     layout.appendChild(colLeft);
@@ -3587,8 +3640,8 @@
     document.body.appendChild(focusFrame);
     let focusTimer = null;
     function getFotoRect() {
-      const sr = stage.getBoundingClientRect();
-      if (!imgFront.naturalWidth||!imgFront.naturalHeight) return sr;
+      const sr=stage.getBoundingClientRect();
+      if(!imgFront.naturalWidth||!imgFront.naturalHeight) return sr;
       const scale=Math.min(sr.width/imgFront.naturalWidth,sr.height/imgFront.naturalHeight);
       const fw=imgFront.naturalWidth*scale,fh=imgFront.naturalHeight*scale;
       return {left:sr.left+(sr.width-fw)/2,top:sr.top+(sr.height-fh)/2,width:fw,height:fh};
@@ -3663,5 +3716,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v185 - 05/04/2026 - GRUPPI: click rigo funzionante, spazio tra gruppi, fetch foto -->
+<!-- Lista.html v185 - 05/04/2026 - GRUPPI: tutti gli invitati; sidebar grassetto+riga vuota; fetch foto -->
 

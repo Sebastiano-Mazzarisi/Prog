@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v186 · 05/04/2026 · 14:13:01';
+  const APP_VERSION = 'v186 · 05/04/2026 · 14:31:57';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1028,9 +1028,21 @@
         if (tipoSecondo==='segnaposto')    cf.push('cat-segnaposto');
       }
       const ds = (activeFilter && !cf.includes('cat-'+activeFilter)) ? 'display:none;' : 'display:block;';
+      // Icona cibo (dopo età, nella zona foto)
       const ico = assente ? '' : (tipoSecondo==='veg'?'🥦':tipoSecondo==='carne'?'🥩':tipoSecondo==='pesce'?'🐟':tipoSecondo==='baby'?'🍼':'');
+      // Data/ora invio formattata [GG/MM - HH:MM]
+      let dataOraInvio = '';
+      const rawData = r.data||'';
+      if (rawData) {
+        const parti2 = String(rawData).trim().split(/\s+/);
+        if (parti2.length >= 2) {
+          const dp = parti2[0].split(/[\/\-]/), op = parti2[1].split(':');
+          dataOraInvio = (dp.length>=2 && op.length>=2)
+            ? `[${dp[0]}/${dp[1]} ${op[0]}:${op[1]}]`
+            : `[${rawData}]`;
+        } else dataOraInvio = `[${rawData}]`;
+      }
       const haA = hasAllergy(r.allergie);
-      const cf2 = haA ? 'freccia allergia-alert' : 'freccia';
       const iceA = iconaAllergie(r.allergie);
       const tavN = trovaTavoloNum(r.nome);
       const nomDisp = formatNomeDisplay(r.nome);
@@ -1038,16 +1050,14 @@
       const noteHtml = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
       const parti = (r.nome||'').trim().split(/\s+/);
       const nff = parti.length>=2 ? parti[parti.length-1]+' '+parti.slice(0,-1).join(' ') : (r.nome||'');
+      // Cerchietto bianco con freccia rossa per aprire la scheda
+      const btnScheda = `<span onclick="event.stopPropagation();toggleDettagli(${riga})" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #c0392b;flex-shrink:0;cursor:pointer;" title="Apri scheda"><span style="color:#c0392b;font-size:18px;font-weight:900;line-height:1;">›</span></span>`;
       return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}">
-        <div class="risposta-nome">
-          <div class="rn-foto" id="nomefoto-${riga}" data-nomefile="${nff}">
-            ${tavN?`<span style="margin-right:4px;font-size:14px;flex-shrink:0">${tavN}</span>`:''}<span style="color:#000;font-weight:600;">${nomDisp}</span>
-          </div>
-          <div class="rn-scheda" onclick="toggleDettagli(${riga})">
-            ${ico?`<span class="icona-secondo">${ico}</span>`:''}
-            <span class="icone-destra">${iceA?`<span style="font-size:15px">${iceA}</span>`:''}</span>
-            <span class="${cf2}">›</span>
-          </div>
+        <div class="risposta-nome" id="nomefoto-${riga}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="mostraFotoPopup && this.getAttribute('data-nf') ? mostraFotoPopup(this.getAttribute('data-nf')) : null">
+          ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
+          <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}${ico?`&nbsp;<span style="font-size:16px">${ico}</span>`:''}${dataOraInvio?`&nbsp;<span style="font-size:11px;font-weight:400;color:#5a6e3a;white-space:nowrap">${dataOraInvio}</span>`:''}</span>
+          <span class="icone-destra" style="flex-shrink:0">${iceA?`<span style="font-size:15px">${iceA}</span>`:''}</span>
+          ${btnScheda}
         </div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
           <div class="risposta-row"><span class="risposta-label">${testi.lblTavolo}</span><span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span></div>
@@ -1071,13 +1081,10 @@
       const tavN = trovaTavoloNum(nomeCSV);
       const ds = (activeFilter && activeFilter!=='assenti') ? 'display:none;' : 'display:block;';
       return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}">
-        <div class="risposta-nome">
-          <div class="rn-foto" id="nomefoto-csv-${safeId}" data-nomefile="${nff}">
-            ${tavN?`<span style="margin-right:4px;font-size:14px;flex-shrink:0">${tavN}</span>`:''}<span style="color:#000;font-weight:600;">${nomDisp}${etaStr}</span>
-          </div>
-          <div class="rn-scheda" style="opacity:0.3;pointer-events:none;">
-            <span class="freccia" style="color:#aaa;">—</span>
-          </div>
+        <div class="risposta-nome" id="nomefoto-csv-${safeId}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;">
+          ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
+          <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}${etaStr}</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #ccc;flex-shrink:0;opacity:0.4;"><span style="color:#aaa;font-size:18px;font-weight:900;line-height:1;">—</span></span>
         </div>
       </div>`;
     }
@@ -1102,7 +1109,8 @@
                 trovata=true;
                 const file=varianti[vi]+'.'+ext[ei];
                 if(risultati) risultati[pos]={nome:nf,file};
-                el.style.cursor='pointer';
+                // Salva il file come attributo e aggancia il click sull'intero div-nome
+                el.setAttribute('data-nf', file);
                 el.onclick=()=>mostraFotoPopup(file);
                 completato();
               } else prova(vi,ei+1);
@@ -1131,11 +1139,11 @@
     const _sep = `<div style="margin-top:12px;border-bottom:1px solid #b8893a;margin-bottom:8px;opacity:0.4;"></div>`;
 
     if (activeOrdine === 'gruppi') {
-      // Ordine CSV con tutti i membri, linea grigio tra gruppi
+      // Ordine CSV con tutti i membri, 50px di spazio tra gruppi
       const gList = window.gruppiCsvOrdinati || [];
       let primoG = true;
       gList.forEach(gNomi => {
-        if (!primoG) html += `<div style="margin-top:10px;border-bottom:2px solid #555;margin-bottom:10px;"></div>`;
+        if (!primoG) html += `<div style="height:50px;"></div>`;
         primoG = false;
         gNomi.forEach(nc => {
           const r = (window.datiInvitati||[]).find(inv => _matchNR(nc, inv.nome||''));
@@ -1163,7 +1171,8 @@
     // Fetch foto per tutti dopo rendering
     window.fotoDisponibili = [];
     setTimeout(() => {
-      const tutti = [...document.querySelectorAll('.rn-foto[data-nomefile]')];
+      // I div .risposta-nome con data-nomefile sono i contenitori foto cliccabili
+      const tutti = [...document.querySelectorAll('.risposta-nome[data-nomefile]')];
       const spR  = tutti.filter(el => el.id.startsWith('nomefoto-') && !el.id.startsWith('nomefoto-csv-'));
       const spNR = tutti.filter(el => el.id.startsWith('nomefoto-csv-'));
       const ris = new Array(spR.length).fill(null);
@@ -3360,5 +3369,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v186 - 05/04/2026 - Nuovo sistema: split foto/scheda per tutti gli ordini; tutti in lista; TUTTI rimosso; GRUPPI da gruppiCsvOrdinati -->
+<!-- Lista.html v186 - 05/04/2026 - Card: icona cibo+data dopo eta; cerchietto bianco freccia rossa per scheda; gruppi 50px spazio -->
 

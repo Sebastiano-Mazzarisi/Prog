@@ -1,4 +1,4 @@
-<!-- Lista.html v184 - 05/04/2026 -->
+<!-- Lista.html v185 - 05/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -353,7 +353,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v184</small>
+        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v185</small>
       </p>
     </div>
   </div>
@@ -361,7 +361,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v184 · 05/04/2026 · 10:26:54'; // aggiornato da Matr.py al push
+  const APP_VERSION = 'v185 · 05/04/2026 · 10:34:09'; // aggiornato da Matr.py al push
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -460,7 +460,7 @@
       lbl_ATTESA: "IN ATTESA di registrazione",
       btnOrdina_tutti: "<b>TUTTI</b> in ordine di cognome",
       lbl_TUTTI: "TUTTI in ordine di cognome",
-      btnOrdina_gruppi: "<b>GRUPPI</b> (come in Invitati.csv)",
+      btnOrdina_gruppi: "<b>GRUPPI</b>",
       lbl_GRUPPI: "GRUPPI",
       titoloAttesa: "In attesa di risposta",
       titoloConferma: "In attesa di conferma",
@@ -548,7 +548,7 @@
       lbl_ATTESA: "EN ESPERA",
       btnOrdina_tutti: "<b>TODOS</b> por apellido",
       lbl_TUTTI: "TODOS por apellido",
-      btnOrdina_gruppi: "<b>GRUPOS</b> (según Invitati.csv)",
+      btnOrdina_gruppi: "<b>GRUPOS</b>",
       lbl_GRUPPI: "GRUPOS",
       titoloAttesa: "En espera de respuesta",
       titoloConferma: "En espera de confirmación",
@@ -844,7 +844,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v184</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">' + APP_VERSION + '</small></p>';
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -1168,8 +1168,7 @@
         }, 50);
       }
     } else if (activeOrdine === 'gruppi') {
-      // === MODALITÀ GRUPPI: rispondenti nell'ordine dei gruppi di Invitati.csv ===
-      // Ricostruisce i gruppi dall'ordine originale del CSV usando tuttiInvitatiCsvRaw
+      // === MODALITÀ GRUPPI: stesso ordine di Invitati.csv, linea tra gruppi ===
       const acc0 = /[\u0300-\u036f]/g;
       const norm0 = s => (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim();
       function tokG(n) { return norm0(n).split(/\s+/).filter(Boolean); }
@@ -1178,11 +1177,9 @@
         return ta.every(w => tb.includes(w)) || tb.every(w => ta.includes(w));
       }
 
-      // Ricostruisce i gruppi nell'ordine del CSV (già disponibili in window.mapGruppo)
-      // Usiamo tuttiInvitatiCsvRaw che è già in ordine, separati per riga vuota
-      // Raggruppiamo usando mapGruppo: per ogni persona troviamo il suo gruppo
+      // Ricostruisce i gruppi nell'ordine originale del CSV
       const visti = new Set();
-      const gruppiOrdinati = []; // array di array di nomi (ordine CSV)
+      const gruppiOrdinati = [];
       (window.tuttiInvitatiCsvRaw || []).forEach(inv => {
         const k = norm0(inv.nome);
         if (visti.has(k)) return;
@@ -1196,18 +1193,19 @@
         }
       });
 
-      // Per ogni gruppo: trova i rispondenti (da window.datiInvitati) nello stesso ordine CSV
-      gruppiOrdinati.forEach((gruppoNomi, gi) => {
-        // Rispondenti di questo gruppo, nell'ordine del CSV
+      let primoGruppoConRispondenti = true;
+      gruppiOrdinati.forEach(gruppoNomi => {
+        // Rispondenti di questo gruppo nell'ordine del CSV
         const rispondentiGruppo = gruppoNomi
           .map(nomeCSV => (window.datiInvitati || []).find(r => matchG(nomeCSV, r.nome || '')))
           .filter(Boolean);
+        if (rispondentiGruppo.length === 0) return;
 
-        if (rispondentiGruppo.length === 0) return; // nessun rispondente in questo gruppo
-
-        // Intestazione gruppo: cognome del primo membro (ultimo token)
-        const nomeIntestazione = ultimoToken(gruppoNomi[0]).toUpperCase();
-        html += `<div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:#8a5e1e;padding:10px 6px 3px;letter-spacing:1px;border-bottom:1px solid #d4b07a;margin-bottom:4px;margin-top:${gi===0?'0':'10px'};">${nomeIntestazione}</div>`;
+        // Linea separatrice tra gruppi (non prima del primo)
+        if (!primoGruppoConRispondenti) {
+          html += `<div style="border-bottom:1px solid #d4b07a;margin:8px 0 6px;"></div>`;
+        }
+        primoGruppoConRispondenti = false;
 
         rispondentiGruppo.forEach(r => {
           const riga = r.indiceOriginale;
@@ -1218,12 +1216,12 @@
           if (assente) { classiFiltro.push('cat-assenti'); }
           else {
             classiFiltro.push('cat-presenti');
-            if (hasAllergy(r.allergie))      classiFiltro.push('cat-allergie');
-            if (tipoSecondo === 'veg')        classiFiltro.push('cat-veg');
-            if (tipoSecondo === 'carne')      classiFiltro.push('cat-carne');
-            if (tipoSecondo === 'pesce')      classiFiltro.push('cat-pesce');
-            if (tipoSecondo === 'baby')       classiFiltro.push('cat-baby');
-            if (tipoSecondo === 'segnaposto') classiFiltro.push('cat-segnaposto');
+            if (hasAllergy(r.allergie))       classiFiltro.push('cat-allergie');
+            if (tipoSecondo === 'veg')         classiFiltro.push('cat-veg');
+            if (tipoSecondo === 'carne')       classiFiltro.push('cat-carne');
+            if (tipoSecondo === 'pesce')       classiFiltro.push('cat-pesce');
+            if (tipoSecondo === 'baby')        classiFiltro.push('cat-baby');
+            if (tipoSecondo === 'segnaposto')  classiFiltro.push('cat-segnaposto');
           }
           const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
           const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : tipoSecondo === 'baby' ? '🍼' : '');
@@ -3062,7 +3060,7 @@
         @media (max-width:1024px) { .fp-group-row { margin-bottom:10px; } }
         .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 2px); min-width:0; }
         .fp-group-thumb-wrap { width:100%; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
-        .fp-group-thumb-wrap.highlight { border:4px solid #d4b07a; }
+        .fp-group-thumb-wrap.highlight { border:4px solid #f5d78a; }
         .fp-group-thumb { width:100%; height:100%; object-fit:cover; display:block; }
         .fp-group-placeholder { font-size:16pt; line-height:1; }
         .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(7px,1.4vw,12px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
@@ -3105,8 +3103,8 @@
     // stage (foto)
     const stage = document.createElement('div');
     stage.className = 'fp-stage';
-    const imgA = document.createElement('img'); imgA.className = 'fp-img front';
-    const imgB = document.createElement('img'); imgB.className = 'fp-img';
+    const imgA = document.createElement('img'); imgA.className = 'fp-img front'; imgA.style.pointerEvents='auto';
+    const imgB = document.createElement('img'); imgB.className = 'fp-img';       imgB.style.pointerEvents='none';
     stage.appendChild(imgA); stage.appendChild(imgB);
     let imgFront = imgA, imgBack = imgB;
 
@@ -3390,6 +3388,7 @@
           stage.appendChild(sph);
           imgFront.src = ''; imgBack.src = '';
           [imgFront, imgBack] = [imgBack, imgFront];
+          imgFront.style.pointerEvents='auto'; imgBack.style.pointerEvents='none';
           noFotoTimer = null;
         }, 0);
         return;
@@ -3410,13 +3409,14 @@
           setTimeout(()=>{
             if (currentGen !== gen) return;
             [imgFront,imgBack]=[imgBack,imgFront];
+            imgFront.style.pointerEvents='auto'; imgBack.style.pointerEvents='none';
           }, 1000);
         }));
       };
       preload.src = src;
     }
 
-    function vai(i) { idx=i; aggiornaContenuto(idx,false); }
+    function vai(i) { idx=i; nascondiFocusFrame(); aggiornaContenuto(idx,false); }
 
     // ── Play / Pausa ──────────────────────────────────────────────────────
     function playing() { return playTimer!==null; }
@@ -3519,8 +3519,46 @@
       chiudiPopup();
     }, {passive:true});
 
+    // ── Cornice di focus sulla foto grande ────────────────────────────────
+    const focusFrame = document.createElement('div');
+    focusFrame.style.cssText = 'position:fixed;pointer-events:none;z-index:10000;border:3px solid rgba(245,215,138,0.9);box-sizing:border-box;opacity:0;transition:opacity 0.2s;display:none;';
+    document.body.appendChild(focusFrame);
+    let focusTimer = null;
+
+    function getFotoRect() {
+      const sr = stage.getBoundingClientRect();
+      if (!imgFront.naturalWidth || !imgFront.naturalHeight) return sr;
+      const scale = Math.min(sr.width / imgFront.naturalWidth, sr.height / imgFront.naturalHeight);
+      const fw = imgFront.naturalWidth * scale, fh = imgFront.naturalHeight * scale;
+      return { left: sr.left + (sr.width-fw)/2, top: sr.top + (sr.height-fh)/2, width: fw, height: fh };
+    }
+    function mostraFocusFrame() {
+      const r = getFotoRect();
+      focusFrame.style.left = r.left+'px'; focusFrame.style.top = r.top+'px';
+      focusFrame.style.width = r.width+'px'; focusFrame.style.height = r.height+'px';
+      focusFrame.style.display = 'block';
+      void focusFrame.offsetWidth;
+      focusFrame.style.opacity = '1';
+      if (focusTimer) clearTimeout(focusTimer);
+      focusTimer = setTimeout(() => {
+        focusFrame.style.opacity = '0';
+        setTimeout(() => { focusFrame.style.display = 'none'; }, 250);
+        focusTimer = null;
+      }, 1800);
+    }
+    function nascondiFocusFrame() {
+      if (focusTimer) { clearTimeout(focusTimer); focusTimer = null; }
+      focusFrame.style.opacity = '0'; focusFrame.style.display = 'none';
+    }
+    stage.addEventListener('click', e => {
+      if (e.target.closest && (e.target.closest('[data-arrow]') || e.target.closest('button'))) return;
+      mostraFocusFrame();
+    });
+
     // ── Chiusura ──────────────────────────────────────────────────────────
     function chiudiPopup() {
+      nascondiFocusFrame();
+      if (document.body.contains(focusFrame)) document.body.removeChild(focusFrame);
       stopPlay(true);
       releaseWakeLock();
       document.removeEventListener('keydown', onKey);
@@ -3573,5 +3611,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v184 - 05/04/2026 - Nuovo ordine GRUPPI dai gruppi reali di Invitati.csv (come nel PDF); APP_VERSION in cima; miniatura giallo chiaro; focusFrame; pointer-events imgFront -->
+<!-- Lista.html v185 - 05/04/2026 - GRUPPI senza titolo, linea tra gruppi, ordine Invitati.csv; APP_VERSION con data/ora; focusFrame; pointer-events imgFront -->
 

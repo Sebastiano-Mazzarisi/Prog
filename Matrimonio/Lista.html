@@ -362,7 +362,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v189</small>
+        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v190</small>
       </p>
     </div>
   </div>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v189 · 05/04/2026 · 16:33:59';
+  const APP_VERSION = 'v189 · 05/04/2026 · 16:51:33';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -708,16 +708,19 @@
           const cols = righeInv[i].split(sepInv);
           const nomeRaw = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
           const dataN = cols[1] ? cols[1].replace(/['"]/g,'').trim() : '';
-          // Il CSV è in formato "Cognome Nome" — inverte in "Nome Cognome"
-          // per compatibilità con la logica ordinaInvitati e formatNomeDisplay
           const partiNome = nomeRaw.split(/\s+/).filter(Boolean);
-          const nome = partiNome.length >= 2
+          const nomeInvertito = partiNome.length >= 2
             ? partiNome.slice(1).join(' ') + ' ' + partiNome[0]
             : nomeRaw;
-          if (nome) {
+          if (nomeRaw) {
             totCsv++;
-            window.tuttiInvitatiCsvRaw.push({ nome, dataNascita: dataN });
-            if (dataN) window.mapNascita[nome.toLowerCase().normalize('NFD').replace(acc,'').trim()] = dataN;
+            window.tuttiInvitatiCsvRaw.push({ nome: nomeRaw, nomeCanonico: nomeRaw, nomeInvertito, dataNascita: dataN });
+            if (dataN) {
+              window.mapNascita[nomeRaw.toLowerCase().normalize('NFD').replace(acc,'').trim()] = dataN;
+              if (nomeInvertito && nomeInvertito !== nomeRaw) {
+                window.mapNascita[nomeInvertito.toLowerCase().normalize('NFD').replace(acc,'').trim()] = dataN;
+              }
+            }
           }
         }
         window.totInvitatiCsv = totCsv;
@@ -749,10 +752,7 @@
           const cols = riga.split(sepInv);
           const nomeRaw = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
           if (!nomeRaw) { flushGruppo(); continue; }
-          // converti in "Nome Cognome" come nel resto del codice
-          const parti = nomeRaw.split(/\s+/).filter(Boolean);
-          const nomeConv = parti.length >= 2 ? parti.slice(1).join(' ') + ' ' + parti[0] : nomeRaw;
-          gruppoCorrente.push(nomeConv);
+          gruppoCorrente.push(nomeRaw);
         }
         flushGruppo();
         // Salva gruppi ordinati per la vista GRUPPI
@@ -764,8 +764,7 @@
           const _c = _r.split(sepInv);
           const _nr = _c[0] ? _c[0].replace(/['"]/g,'').trim() : '';
           if (!_nr) { if (_gc.length) { window.gruppiCsvOrdinati.push([..._gc]); _gc = []; } continue; }
-          const _p = _nr.split(/\s+/).filter(Boolean);
-          _gc.push(_p.length >= 2 ? _p.slice(1).join(' ') + ' ' + _p[0] : _nr);
+          _gc.push(_nr);
         }
         if (_gc.length) window.gruppiCsvOrdinati.push(_gc);
       }
@@ -1082,12 +1081,13 @@
       }
       const haA = hasAllergy(r.allergie);
       const iceA = iconaAllergie(r.allergie);
-      const tavN = trovaTavoloNum(r.nome);
-      const nomDisp = formatNomeDisplay(r.nome);
+      const nomeCanonico = trovaNomeCanonico(r.nome) || (r.nome || '');
+      const tavN = trovaTavoloNum(nomeCanonico);
+      const nomDisp = formatNomeDisplay(nomeCanonico);
       const allHtml = hasAllergy(r.allergie) ? `<span class="risposta-val allergia">${r.allergie}</span>` : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
       const noteHtml = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
       const parti = (r.nome||'').trim().split(/\s+/);
-      const nff = parti.length>=2 ? parti[parti.length-1]+' '+parti.slice(0,-1).join(' ') : (r.nome||'');
+      const nff = nomeCanonico || (r.nome||'');
       // Cerchietto bianco con freccia rossa per aprire la scheda
       const btnScheda = `<span onclick="event.stopPropagation();toggleDettagli(${riga})" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #c0392b;flex-shrink:0;cursor:pointer;" title="Apri scheda"><span style="color:#c0392b;font-size:18px;font-weight:900;line-height:1;">›</span></span>`;
       return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}">
@@ -1098,7 +1098,7 @@
           ${btnScheda}
         </div>
         <div class="dettagli-scheda" id="dettagli-${riga}">
-          <div class="risposta-row"><span class="risposta-label">${testi.lblTavolo}</span><span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span></div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblTavolo}</span><span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(nomeCanonico)}</span></div>
           <div class="risposta-row"><span class="risposta-label">${testi.lblPresenza}</span><span class="risposta-val" style="font-weight:600;">${assente?'0':'1'}</span></div>
           <div class="risposta-row"><span class="risposta-label">${testi.lblSecondo}</span><span class="risposta-val">${secondBadge(r.secondo,assente)}</span></div>
           <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span>${allHtml}</div>
@@ -1111,11 +1111,11 @@
 
     function cardNonRispondente(nomeCSV, pfx) {
       const safeId = pfx + nomeCSV.replace(/[^a-zA-Z0-9]/g,'_');
-      const p = nomeCSV.trim().split(/\s+/);
-      const nff = p.length>=2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : nomeCSV;
+      const nomeCanonico = trovaNomeCanonico(nomeCSV) || nomeCSV;
+      const nff = nomeCanonico;
       // Usa formatNomeDisplay per rispettare l'ordinamento attivo (Nome vs Cognome)
-      const nomDisp = formatNomeDisplay(nomeCSV);
-      const tavN = trovaTavoloNum(nomeCSV);
+      const nomDisp = formatNomeDisplay(nomeCanonico);
+      const tavN = trovaTavoloNum(nomeCanonico);
       const ds = (activeFilter && activeFilter!=='assenti') ? 'display:none;' : 'display:block;';
       return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}">
         <div class="risposta-nome" id="nomefoto-csv-${safeId}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
@@ -1205,7 +1205,7 @@
     if (activeOrdine === 'gruppi') {
       // Ordine CSV con tutti i membri e separatore grafico tra i gruppi
       const gList = window.gruppiCsvOrdinati || [];
-      const sepGruppi = `<div style="display:flex;justify-content:center;align-items:center;margin:10px 0 12px;"><div style="background:#e7e2b8;padding:7px 16px 6px;border-radius:0;color:#c6a055;font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:8px;line-height:1;">✦ ✦ ✦</div></div>`;
+      const sepGruppi = `<div style="display:flex;justify-content:center;align-items:center;margin:10px 0 12px;color:#c6a055;font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:8px;line-height:1;background:transparent;">✦ ✦ ✦</div>`;
       let primoG = true;
       gList.forEach(gNomi => {
         if (!primoG) html += sepGruppi;
@@ -1367,11 +1367,7 @@
           let cols = righe[i].split(sep);
           let nomeRawPdf = cols[0] ? cols[0].replace(/['"]/g, '').trim() : '';
           let dataNascita = cols[1] ? cols[1].replace(/['"]/g, '').trim() : '';
-          // Il CSV è in formato "Cognome Nome" — inverte in "Nome Cognome"
-          const partiPdf = nomeRawPdf.split(/\s+/).filter(Boolean);
-          let nome = partiPdf.length >= 2
-            ? partiPdf.slice(1).join(' ') + ' ' + partiPdf[0]
-            : nomeRawPdf;
+          let nome = nomeRawPdf;
 
           if (!nome) {
             if (gruppoCorrente.length > 0) {
@@ -1524,15 +1520,8 @@
 
         // Formato nome: Cognome Nome (età)
         const nomeCompleto = r.nome || 'Senza nome';
-        const tokensNome = nomeCompleto.trim().split(/\s+/);
-        let nomeFormattato;
-        if (tokensNome.length >= 2) {
-          const cognome = tokensNome[tokensNome.length - 1];
-          const resto = tokensNome.slice(0, tokensNome.length - 1).join(' ');
-          nomeFormattato = cognome + ' ' + resto;
-        } else {
-          nomeFormattato = nomeCompleto;
-        }
+        const partiNomePdf = partiNomeRaw(nomeCompleto);
+        let nomeFormattato = partiNomePdf.display || nomeCompleto;
         const etaAnni = getEtaAnni(nomeCompleto);
         const etaStr = etaAnni !== null ? ' <span style="font-weight:400;font-size:10px;color:#555">('+etaAnni+')</span>' : '';
 
@@ -1666,7 +1655,7 @@
       }
       function buildCellaAttesa(inv) {
         const tokN = (inv.nome||'').trim().split(/\s+/);
-        let nomeFmt = tokN.length >= 2 ? tokN[tokN.length-1] + ' ' + tokN.slice(0,-1).join(' ') : (inv.nome||'');
+        let nomeFmt = partiNomeRaw(inv.nome||'').display || (inv.nome||'');
         const cell = cercaTelPdf(inv.nome);
         const testo = cell
           ? `<span>${nomeFmt}</span><span style="float:right;">${formattaNumPdf(cell)}</span>`
@@ -2626,15 +2615,32 @@
     return labels[activeOrdine] || t.lbl_COGNOME;
   }
 
-  function primoToken(n) { return (n||'').trim().split(/\s+/)[0] || ''; }
-  function ultimoToken(n) { const t=(n||'').trim().split(/\s+/); return t[t.length-1]||''; }
+  function primoToken(n) { return partiNomeRaw(n).cognome || ''; }
+  function ultimoToken(n) { return partiNomeRaw(n).nome || ''; }
+  function nomeTokensNormalizzati(n) {
+    return (n||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim().split(/\s+/).filter(Boolean);
+  }
+  function nomiCompatibili(a, b) {
+    const ta = nomeTokensNormalizzati(a);
+    const tb = nomeTokensNormalizzati(b);
+    if (!ta.length || !tb.length) return false;
+    return ta.every(w => tb.includes(w)) || tb.every(w => ta.includes(w));
+  }
+  function trovaNomeCanonico(n) {
+    const base = (n || '').trim();
+    if (!base) return '';
+    const elenco = window.tuttiInvitatiCsvRaw || [];
+    const trovato = elenco.find(inv => nomiCompatibili(base, inv.nomeCanonico || inv.nome || ''));
+    return trovato ? (trovato.nomeCanonico || trovato.nome || base) : base;
+  }
   function partiNomeRaw(n) {
-    const t = (n||'').trim().split(/\s+/).filter(Boolean);
+    const base = trovaNomeCanonico(n) || (n||'').trim();
+    const t = base.split(/\s+/).filter(Boolean);
     if (!t.length) return { nome: '', cognome: '', display: '' };
     if (t.length === 1) return { nome: '', cognome: t[0], display: t[0] };
-    const cognome = t[t.length - 1];
-    const nome = t.slice(0, -1).join(' ');
-    return { nome, cognome, display: cognome + ' ' + nome };
+    const cognome = t[0];
+    const nome = t.slice(1).join(' ');
+    return { nome, cognome, display: base };
   }
   function chiaveNomeCompleto(n) {
     const p = partiNomeRaw(n);
@@ -3039,8 +3045,7 @@
     const normKG = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
 
     function nomeToFilename(n) {
-      const p = n.trim().split(/\s+/);
-      return p.length >= 2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : n;
+      return trovaNomeCanonico(n) || n;
     }
     function thumbSrcFor(cognomeNome) {
       const match = (window.fotoDisponibili||[]).find(f => f && normKG(f.nome)===normKG(cognomeNome));
@@ -3096,10 +3101,9 @@
 
     // Calcola il gruppo della foto iniziale e precarica tutte le miniature
     function calcolaGruppo(nomeVoce) {
-      const partiV = nomeVoce.trim().split(/\s+/);
-      const nomeInv = partiV.length >= 2 ? partiV.slice(1).join(' ')+' '+partiV[0] : nomeVoce;
-      return (window.mapGruppo||{})[normKG(nomeVoce)]
-          || (window.mapGruppo||{})[normKG(nomeInv)]
+      const nomeCanonico = trovaNomeCanonico(nomeVoce) || nomeVoce;
+      return (window.mapGruppo||{})[normKG(nomeCanonico)]
+          || (window.mapGruppo||{})[normKG(nomeVoce)]
           || [];
     }
 
@@ -3127,8 +3131,7 @@
     // Costruisce le miniature: se la cache non è ancora pronta riprova dopo 200ms
     function costruisciMiniature(voce, tentativo) {
       const nomeVoce = voce.nome || '';
-      const partiVoce = nomeVoce.trim().split(/\s+/);
-      const nomeInvV = partiVoce.length >= 2 ? partiVoce.slice(1).join(' ')+' '+partiVoce[0] : nomeVoce;
+      const nomeCanonicoVoce = trovaNomeCanonico(nomeVoce) || nomeVoce;
       const gruppo = calcolaGruppo(nomeVoce);
       precaricaGruppo(gruppo);
 
@@ -3141,7 +3144,7 @@
         for (let c = r; c < Math.min(r+3, gruppo.length); c++) {
           const nomeGruppo = gruppo[c];
           const cn = nomeToFilename(nomeGruppo);
-          const isMe = normKG(cn)===normKG(nomeVoce) || normKG(nomeGruppo)===normKG(nomeInvV);
+          const isMe = normKG(cn)===normKG(nomeCanonicoVoce) || normKG(nomeGruppo)===normKG(nomeCanonicoVoce);
 
           const cell = document.createElement('div');
           cell.className = 'fp-group-cell';
@@ -3215,10 +3218,9 @@
 
       // sidebar destra: numero, cognome, nome (età), emoji, descrizione
       sideNum.textContent = (i+1)+' / '+foto.length;
-      const parti = (voce.nome||'').trim().split(/\s+/);
-      // il nome grezzo è gestito come "Nome Cognome"; in visualizzazione diventa sempre "Cognome Nome"
-      sideCognome.textContent = parti.length >= 2 ? parti[parti.length-1] : voce.nome;
-      sideNome.textContent = (parti.length >= 2 ? parti.slice(0,-1).join(' ') : '') + (eta!==null?' ('+eta+')':'');
+      const parti = partiNomeRaw(voce.nome||'');
+      sideCognome.textContent = parti.cognome || voce.nome;
+      sideNome.textContent = (parti.nome || '') + (eta!==null?' ('+eta+')':'');
       sideEmoji.textContent = icona;
       sideDesc.textContent  = desc;
 

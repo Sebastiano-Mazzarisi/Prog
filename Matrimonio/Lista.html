@@ -353,8 +353,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600"></small>
-        <script>document.getElementById('ver-label').textContent = APP_VERSION;</script>
+        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v184</small>
       </p>
     </div>
   </div>
@@ -362,8 +361,10 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v184 · 05/04/2026 · 09:59:45';
+  const APP_VERSION = 'v184 · 05/04/2026 · 10:03:51'; // aggiornato da Matr.py al push
+  (function(){ var el = document.getElementById('ver-label'); if(el) el.textContent = APP_VERSION; })();
 
+  function getCurrentDateTime() {
     const now = new Date();
     return now.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: 'numeric'}) + ' ' +
            now.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
@@ -3480,5 +3481,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v184 - 05/04/2026 - Fix: versione con data e ora in caricamento/aggiorna; cornice miniatura giallo chiaro; focusFrame sulla foto reale; pointer-events solo su imgFront -->
+<!-- Lista.html v184 - 05/04/2026 - Fix: APP_VERSION prima di tutto nel script; ver-label aggiornato senza inline script; cornice miniatura giallo chiaro; focusFrame foto reale; pointer-events imgFront -->
 

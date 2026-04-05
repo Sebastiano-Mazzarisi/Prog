@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 05/04/2026 · 18:29:41';
+  const APP_VERSION = 'v196 · 05/04/2026 · 22:40:25';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2266,53 +2266,21 @@
     renderPaginaMiniature('Fotografie', fotoPagina, false);
 
     // ===== PAGINA FOTOGRAFIE PER GRUPPI =====
+    // Stessa identica griglia e stessa spaziatura della pagina precedente:
+    // cambia solo l'ordine dei nominativi, che segue i gruppi del CSV.
     const gruppiPdfSorgente = (window.gruppiCsvOrdinati && window.gruppiCsvOrdinati.length > 0)
       ? window.gruppiCsvOrdinati
       : [fonteBase.map(r => r.nome || '').filter(Boolean)];
 
-    const COLS_GRUPPI = 8;
-    const righeGruppi = [];
-    let rigaCorrente = [];
-
-    function flushRigaGruppi() {
-      if (rigaCorrente.length === 0) return;
-      while (rigaCorrente.length < COLS_GRUPPI) rigaCorrente.push(null);
-      righeGruppi.push(rigaCorrente);
-      rigaCorrente = [];
-    }
-
+    const fotoPaginaGruppi = [];
     gruppiPdfSorgente.forEach(gruppo => {
-      const vociGruppo = (gruppo || [])
-        .map(n => buildVoceFoto(trovaCognomeNome(n)))
-        .filter(v => v && v.nome);
-
-      if (vociGruppo.length === 0) return;
-
-      if (vociGruppo.length > COLS_GRUPPI) {
-        flushRigaGruppi();
-        for (let i = 0; i < vociGruppo.length; i += COLS_GRUPPI) {
-          const chunk = vociGruppo.slice(i, i + COLS_GRUPPI).map((v, idx, arr) => ({
-            ...v,
-          }));
-          while (chunk.length < COLS_GRUPPI) chunk.push(null);
-          righeGruppi.push(chunk);
-        }
-        return;
-      }
-
-      if (rigaCorrente.length > 0 && rigaCorrente.length + vociGruppo.length > COLS_GRUPPI) {
-        flushRigaGruppi();
-      }
-
-      vociGruppo.forEach((v, idx) => {
-        rigaCorrente.push({
-          ...v
-        });
+      (gruppo || []).forEach(n => {
+        const voce = buildVoceFoto(trovaCognomeNome(n));
+        if (voce && voce.nome) fotoPaginaGruppi.push(voce);
       });
     });
 
-    flushRigaGruppi();
-    renderPaginaMiniature('Fotografie per gruppi', righeGruppi, true);
+    renderPaginaMiniature('Fotografie per gruppi', fotoPaginaGruppi, false);
 
     container.innerHTML = htmlPDF;
 

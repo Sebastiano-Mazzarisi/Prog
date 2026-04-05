@@ -1,4 +1,4 @@
-<!-- Lista.html v188 - 05/04/2026 -->
+<!-- Lista.html v189 - 05/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -362,7 +362,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v188</small>
+        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v189</small>
       </p>
     </div>
   </div>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v188 · 05/04/2026 · 16:19:14';
+  const APP_VERSION = 'v189 · 05/04/2026 · 16:33:59';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -390,18 +390,37 @@
   function assetFetchStart() {
     assetReloadState.pending++;
   }
+  function eseguiRefreshAssetMirato() {
+    assetReloadState.requestRefresh = false;
+    assetReloadState.refreshTriggered = false;
+    try {
+      const domEls = [...document.querySelectorAll('.risposta-nome[data-nomefile]')]
+        .filter(el => el.closest('.risposta-card') && el.closest('.risposta-card').style.display !== 'none');
+      if (domEls.length) {
+        window.fotoDisponibili = domEls.map(el => ({
+          nome: el.getAttribute('data-nomefile'),
+          file: el.getAttribute('data-foto-file') || null
+        }));
+      }
+      if (typeof window.__refreshPopupFromAssets === 'function') {
+        window.__refreshPopupFromAssets();
+      }
+    } catch (e) {
+      console.log('Refresh asset mirato non riuscito', e);
+    }
+  }
   function assetFetchEnd() {
     if (assetReloadState.pending > 0) assetReloadState.pending--;
     if (assetReloadState.requestRefresh && assetReloadState.pending === 0 && !assetReloadState.refreshTriggered) {
       assetReloadState.refreshTriggered = true;
-      setTimeout(() => { window.location.reload(); }, 200);
+      setTimeout(eseguiRefreshAssetMirato, 120);
     }
   }
-  function requestFullRefreshWhenAssetsReady() {
+  function requestVisualRefreshWhenAssetsReady() {
     assetReloadState.requestRefresh = true;
     if (assetReloadState.pending === 0 && !assetReloadState.refreshTriggered) {
       assetReloadState.refreshTriggered = true;
-      setTimeout(() => { window.location.reload(); }, 200);
+      setTimeout(eseguiRefreshAssetMirato, 120);
     }
   }
 
@@ -1161,7 +1180,7 @@
       window.fotoDisponibili = fotoArr;
       // Apre il popup sull'elemento corretto
       const entry = fotoArr[idx];
-      if (entry && !entry.file && assetReloadState.pending > 0) requestFullRefreshWhenAssetsReady();
+      if (entry && !entry.file && assetReloadState.pending > 0) requestVisualRefreshWhenAssetsReady();
       mostraFotoPopup(entry.file || entry.nome); // passa file se esiste, altrimenti nome (mostrerà icona)
     };
 
@@ -1184,11 +1203,12 @@
     const _sep = `<div style="margin-top:12px;border-bottom:1px solid #b8893a;margin-bottom:8px;opacity:0.4;"></div>`;
 
     if (activeOrdine === 'gruppi') {
-      // Ordine CSV con tutti i membri, 50px di spazio tra gruppi
+      // Ordine CSV con tutti i membri e separatore grafico tra i gruppi
       const gList = window.gruppiCsvOrdinati || [];
+      const sepGruppi = `<div style="display:flex;justify-content:center;align-items:center;margin:10px 0 12px;"><div style="background:#e7e2b8;padding:7px 16px 6px;border-radius:0;color:#c6a055;font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:8px;line-height:1;">✦ ✦ ✦</div></div>`;
       let primoG = true;
       gList.forEach(gNomi => {
-        if (!primoG) html += `<div style="height:50px;"></div>`;
+        if (!primoG) html += sepGruppi;
         primoG = false;
         gNomi.forEach(nc => {
           const r = (window.datiInvitati||[]).find(inv => _matchNR(nc, inv.nome||''));
@@ -3147,7 +3167,7 @@
           } else {
             // in caricamento (Image obj o undefined): wrap vuoto, si aggiorna via data-ck
             // nessun placeholder visibile — la foto apparirà quando pronta
-            requestFullRefreshWhenAssetsReady();
+            requestVisualRefreshWhenAssetsReady();
             if (cachedImg && cachedImg.addEventListener) {
               cachedImg.addEventListener('load', () => {
                 wrap.innerHTML = '';
@@ -3211,7 +3231,7 @@
           preloadFirst.onload = () => { imgFront.src = src; };
           preloadFirst.src = src;
         } else {
-          if (assetReloadState.pending > 0) requestFullRefreshWhenAssetsReady();
+          if (assetReloadState.pending > 0) requestVisualRefreshWhenAssetsReady();
           // nessuna foto: mostra emoji al centro sullo stage
           imgFront.src = '';
           stage.style.background = '#4a6a2a';
@@ -3231,7 +3251,7 @@
       stage.style.background = '';
 
       if (!src) {
-        if (assetReloadState.pending > 0) requestFullRefreshWhenAssetsReady();
+        if (assetReloadState.pending > 0) requestVisualRefreshWhenAssetsReady();
         // nessuna foto: fade out quella corrente e mostra emoji
         imgFront.classList.remove('front');
         imgBack.classList.remove('front');
@@ -3404,6 +3424,26 @@
       if(e.target.closest&&(e.target.closest('[data-arrow]')||e.target.closest('button'))) return;
       mostraFocusFrame();
     });
+    const refreshPopupFromAssets = () => {
+      const nomeCorrente = (foto[idx] && foto[idx].nome) || nomeFile || '';
+      const domEls = [...document.querySelectorAll('.risposta-nome[data-nomefile]')]
+        .filter(el => el.closest('.risposta-card') && el.closest('.risposta-card').style.display !== 'none');
+      const aggiornate = domEls.map(el => ({
+        nome: el.getAttribute('data-nomefile'),
+        file: el.getAttribute('data-foto-file') || null
+      }));
+      if (!aggiornate.length) return;
+      const nuovoIdx = aggiornate.findIndex(f => f && f.nome === nomeCorrente);
+      foto.length = 0;
+      aggiornate.forEach(f => foto.push(f));
+      window.fotoDisponibili = foto;
+      if (nuovoIdx >= 0) idx = nuovoIdx;
+      if (idx >= foto.length) idx = foto.length - 1;
+      if (idx < 0) idx = 0;
+      aggiornaContenuto(idx, true);
+    };
+    window.__refreshPopupFromAssets = refreshPopupFromAssets;
+
     // ── Chiusura ──────────────────────────────────────────────────────────
     function chiudiPopup() {
       nascondiFocusFrame();
@@ -3413,6 +3453,7 @@
       window.removeEventListener('resize', aggiornaOrientamento);
       window.removeEventListener('orientationchange', aggiornaOrientamento);
       if (screen.orientation) screen.orientation.removeEventListener('change', aggiornaOrientamento);
+      if (window.__refreshPopupFromAssets === refreshPopupFromAssets) window.__refreshPopupFromAssets = null;
       document.body.removeChild(overlay);
     }
     overlay.onclick = e=>{ if (e.target===overlay || e.target===stage || e.target===layout) chiudiPopup(); };

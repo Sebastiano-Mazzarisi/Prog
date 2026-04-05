@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 05/04/2026 · 22:40:25';
+  const APP_VERSION = 'v196 · 05/04/2026 · 23:15:51';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2201,22 +2201,30 @@
       return { nome: cognomeNome, file, label };
     }
 
-    function renderPaginaMiniature(titolo, vociOrRows, groupedMode) {
+    function renderPaginaMiniature(titolo, vociOrRows, groupedMode, opts = {}) {
       const COLS = 8;
       const CELL_W = 88;
       const IMG_SIZE = 80;
+      const GAP_W = CELL_W - IMG_SIZE;
+      const breakCss = opts.breakBefore ? 'page-break-before:always;break-before:page;' : '';
 
-      function cellMiniatura(voce) {
+      function cellMiniatura(voce, collegaDestra) {
         const imgSrc = voce.file ? 'Foto/' + voce.file : null;
+        const partiMini = partiNomeRaw(voce.nome || '');
+        const nomeMini = partiMini.nome || voce.label || '';
+        const cognomeMini = partiMini.cognome || '';
+        const linkDx = collegaDestra
+          ? `<div style="position:absolute;right:-${GAP_W}px;top:${Math.round((IMG_SIZE-8)/2)}px;width:${GAP_W}px;height:8px;background:#6b7d2a;"></div>`
+          : '';
+
         return `<td style="width:${CELL_W}px;padding:2px 0px;text-align:center;vertical-align:top;">
           ${imgSrc
-            ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;border:1.5px solid #cccccc;box-sizing:border-box;background:#fff;" crossorigin="anonymous" /><div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>`
-            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.28}px;line-height:1;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;background:#fffde7;gap:3px;"><span>📷</span><span style="font-size:11px;font-weight:700;font-family:'Inter',sans-serif;color:#333;line-height:1.1;text-align:center;word-break:break-word;padding:0 2px;">${voce.label}</span></div>`}
+            ? `<div style="width:${IMG_SIZE}px;margin:0 auto;position:relative;"><img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;border:1.5px solid #cccccc;box-sizing:border-box;background:#fff;" crossorigin="anonymous" />${linkDx}</div><div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>`
+            : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;position:relative;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;background:#fffde7;padding:0 3px;overflow:hidden;">${linkDx}<div style="font-size:11px;font-weight:700;font-family:'Inter',sans-serif;color:#333;line-height:1.05;text-align:center;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${nomeMini}</div><div style="font-size:11px;font-weight:700;font-family:'Inter',sans-serif;color:#333;line-height:1.05;text-align:center;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${cognomeMini}</div></div>`}
         </td>`;
       }
 
-      htmlPDF += `<div class="html2pdf__page-break"></div>`;
-      htmlPDF += `<div style="width:740px;padding:0 0 20mm 0;font-family:'Inter',sans-serif;">`;
+      htmlPDF += `<div style="${breakCss}width:740px;padding:0 0 20mm 0;font-family:'Inter',sans-serif;">`;
       htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;margin-top:0;margin-bottom:2px;color:#000;">${titolo}</h1>`;
       htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:#8a5e1e;margin-bottom:10px;">Giulia &amp; Onofrio</h2>`;
       htmlPDF += `<table style="border-collapse:collapse;width:100%;table-layout:fixed;">`;
@@ -2245,7 +2253,9 @@
               htmlPDF += `<td style="width:${CELL_W}px;padding:4px 0px;"></td>`;
               continue;
             }
-            htmlPDF += cellMiniatura(voce);
+            const prossima = (col < COLS - 1) ? riga[col + 1] : null;
+            const collegaDestra = !!(voce && prossima && voce.groupId !== undefined && voce.groupId === prossima.groupId);
+            htmlPDF += cellMiniatura(voce, collegaDestra);
           }
           htmlPDF += `</tr>`;
         });
@@ -2263,7 +2273,7 @@
       fotoPagina.push(buildVoceFoto(cognomeNome));
     });
     fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));
-    renderPaginaMiniature('Fotografie', fotoPagina, false);
+    renderPaginaMiniature('Fotografie', fotoPagina, false, { breakBefore: true });
 
     // ===== PAGINA FOTOGRAFIE PER GRUPPI =====
     // Stessa identica griglia e stessa spaziatura della pagina precedente:
@@ -2272,15 +2282,23 @@
       ? window.gruppiCsvOrdinati
       : [fonteBase.map(r => r.nome || '').filter(Boolean)];
 
-    const fotoPaginaGruppi = [];
-    gruppiPdfSorgente.forEach(gruppo => {
+    const fotoPaginaGruppiFlat = [];
+    gruppiPdfSorgente.forEach((gruppo, groupId) => {
       (gruppo || []).forEach(n => {
         const voce = buildVoceFoto(trovaCognomeNome(n));
-        if (voce && voce.nome) fotoPaginaGruppi.push(voce);
+        if (voce && voce.nome) {
+          voce.groupId = groupId;
+          fotoPaginaGruppiFlat.push(voce);
+        }
       });
     });
 
-    renderPaginaMiniature('Fotografie per gruppi', fotoPaginaGruppi, false);
+    const fotoPaginaGruppiRighe = [];
+    for (let i = 0; i < fotoPaginaGruppiFlat.length; i += 8) {
+      fotoPaginaGruppiRighe.push(fotoPaginaGruppiFlat.slice(i, i + 8));
+    }
+
+    renderPaginaMiniature('Fotografie per gruppi', fotoPaginaGruppiRighe, true, { breakBefore: true });
 
     container.innerHTML = htmlPDF;
 

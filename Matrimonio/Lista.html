@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 05/04/2026 · 23:28:23';
+  const APP_VERSION = 'v196 · 05/04/2026 · 23:47:05';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2206,18 +2206,32 @@
       const CELL_W = 88;
       const IMG_SIZE = 80;
       const GAP_W = CELL_W - IMG_SIZE;
-      const LINK_H = 10;
-      const LINK_W = GAP_W + 2;
+      const LINK_H = 14;
+      const LINK_W = GAP_W + 4;
       const LINK_RIGHT = -LINK_W;
+      const LINK_COLOR = '#ff0000';
+      const EDGE_COLOR = '#ff0000';
+      const EDGE_W = 5;
       const breakCss = opts.breakBefore ? 'page-break-before:always;break-before:page;' : '';
 
-      function cellMiniatura(voce, collegaDestra) {
+      function stessaFamiglia(a, b) {
+        return !!(a && b && a.groupId !== undefined && a.groupId === b.groupId);
+      }
+
+      function cellMiniatura(voce, flags = {}) {
         const imgSrc = voce.file ? 'Foto/' + voce.file : null;
         const partiMini = partiNomeRaw(voce.nome || '');
         const nomeMini = partiMini.nome || voce.label || '';
         const cognomeMini = partiMini.cognome || '';
-        const linkDx = collegaDestra
-          ? `<div style="position:absolute;right:${LINK_RIGHT}px;top:${Math.round((IMG_SIZE-LINK_H)/2)}px;width:${LINK_W}px;height:${LINK_H}px;background:#6b7d2a;z-index:3;"></div>`
+        const labelSotto = voce.label || '';
+        const linkDx = flags.collegaDestra
+          ? `<div style="position:absolute;right:${LINK_RIGHT}px;top:${Math.round((IMG_SIZE-LINK_H)/2)}px;width:${LINK_W}px;height:${LINK_H}px;background:${LINK_COLOR};z-index:3;"></div>`
+          : '';
+        const edgeDx = flags.ponteRigaDestra
+          ? `<div style="position:absolute;top:0;right:0;width:${EDGE_W}px;height:${IMG_SIZE}px;background:${EDGE_COLOR};z-index:4;border-top-right-radius:4px;border-bottom-right-radius:4px;"></div>`
+          : '';
+        const edgeSx = flags.ponteRigaSinistra
+          ? `<div style="position:absolute;top:0;left:0;width:${EDGE_W}px;height:${IMG_SIZE}px;background:${EDGE_COLOR};z-index:4;border-top-left-radius:4px;border-bottom-left-radius:4px;"></div>`
           : '';
 
         const boxContenuto = imgSrc
@@ -2225,8 +2239,8 @@
           : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;background:#fffde7;padding:0 3px;position:relative;z-index:2;"><div style="font-size:11px;font-weight:700;font-family:'Inter',sans-serif;color:#333;line-height:1.05;text-align:center;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${nomeMini}</div><div style="font-size:11px;font-weight:700;font-family:'Inter',sans-serif;color:#333;line-height:1.05;text-align:center;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${cognomeMini}</div></div>`;
 
         return `<td style="width:${CELL_W}px;padding:2px 0px;text-align:center;vertical-align:top;">
-          <div style="width:${IMG_SIZE}px;margin:0 auto;position:relative;overflow:visible;">${boxContenuto}${linkDx}</div>
-          <div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>
+          <div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;margin:0 auto;position:relative;overflow:visible;">${boxContenuto}${edgeSx}${edgeDx}${linkDx}</div>
+          <div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${labelSotto}</div>
         </td>`;
       }
 
@@ -2245,13 +2259,17 @@
               htmlPDF += `<td style="width:${CELL_W}px;padding:4px 0px;"></td>`;
               continue;
             }
-            htmlPDF += cellMiniatura(voci[i], false);
+            htmlPDF += cellMiniatura(voci[i]);
           }
           htmlPDF += `</tr>`;
         }
       } else {
         const righe = vociOrRows;
-        righe.forEach(riga => {
+        const lastTruthy = row => {
+          for (let i = row.length - 1; i >= 0; i--) if (row[i]) return row[i];
+          return null;
+        };
+        righe.forEach((riga, rowIndex) => {
           htmlPDF += `<tr>`;
           for (let col = 0; col < COLS; col++) {
             const voce = riga[col];
@@ -2260,8 +2278,14 @@
               continue;
             }
             const prossima = (col < COLS - 1) ? riga[col + 1] : null;
-            const collegaDestra = !!(voce && prossima && voce.groupId !== undefined && voce.groupId === prossima.groupId);
-            htmlPDF += cellMiniatura(voce, collegaDestra);
+            const precedenteRiga = rowIndex > 0 ? lastTruthy(righe[rowIndex - 1]) : null;
+            const prossimaRiga = rowIndex < righe.length - 1 ? righe[rowIndex + 1][0] : null;
+            const flags = {
+              collegaDestra: stessaFamiglia(voce, prossima),
+              ponteRigaDestra: (col === COLS - 1) && stessaFamiglia(voce, prossimaRiga),
+              ponteRigaSinistra: (col === 0) && stessaFamiglia(precedenteRiga, voce)
+            };
+            htmlPDF += cellMiniatura(voce, flags);
           }
           htmlPDF += `</tr>`;
         });
@@ -2279,8 +2303,7 @@
       fotoPagina.push(buildVoceFoto(cognomeNome));
     });
     fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));
-    htmlPDF += `<div class="html2pdf__page-break"></div>`;
-    renderPaginaMiniature('Fotografie', fotoPagina, false, { breakBefore: false });
+    renderPaginaMiniature('Fotografie', fotoPagina, false, { breakBefore: true });
 
     // ===== PAGINA FOTOGRAFIE PER GRUPPI =====
     // Stessa identica griglia e stessa spaziatura della pagina precedente:
@@ -2305,8 +2328,7 @@
       fotoPaginaGruppiRighe.push(fotoPaginaGruppiFlat.slice(i, i + 8));
     }
 
-    htmlPDF += `<div class="html2pdf__page-break"></div>`;
-    renderPaginaMiniature('Fotografie per gruppi', fotoPaginaGruppiRighe, true, { breakBefore: false });
+    renderPaginaMiniature('Fotografie per gruppi', fotoPaginaGruppiRighe, true, { breakBefore: true });
 
     container.innerHTML = htmlPDF;
 

@@ -1,4 +1,4 @@
-<!-- Lista.html v187 - 05/04/2026 -->
+<!-- Lista.html v188 - 05/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -362,7 +362,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v187</small>
+        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v188</small>
       </p>
     </div>
   </div>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v187 · 05/04/2026 · 15:47:46';
+  const APP_VERSION = 'v188 · 05/04/2026 · 16:19:14';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -385,6 +385,25 @@
   window.datiInvitati = [];
 
   let currentLang = 'it';
+
+  const assetReloadState = { pending: 0, requestRefresh: false, refreshTriggered: false };
+  function assetFetchStart() {
+    assetReloadState.pending++;
+  }
+  function assetFetchEnd() {
+    if (assetReloadState.pending > 0) assetReloadState.pending--;
+    if (assetReloadState.requestRefresh && assetReloadState.pending === 0 && !assetReloadState.refreshTriggered) {
+      assetReloadState.refreshTriggered = true;
+      setTimeout(() => { window.location.reload(); }, 200);
+    }
+  }
+  function requestFullRefreshWhenAssetsReady() {
+    assetReloadState.requestRefresh = true;
+    if (assetReloadState.pending === 0 && !assetReloadState.refreshTriggered) {
+      assetReloadState.refreshTriggered = true;
+      setTimeout(() => { window.location.reload(); }, 200);
+    }
+  }
 
   // Array dinamico per i tavoli
   let TAVOLI = [];
@@ -1095,12 +1114,20 @@
       els.forEach((el,pos) => {
         const nf = el.getAttribute('data-nomefile');
         if (!nf) { completato(); return; }
+        assetFetchStart();
         if (risultati) risultati[pos] = { nome: nf, file: null };
         const varianti=variantiFoto(nf), ext=['jpg','JPG','jpeg','JPEG'];
         let trovata=false;
+        let chiuso=false;
+        function fineRicerca() {
+          if (chiuso) return;
+          chiuso = true;
+          assetFetchEnd();
+          completato();
+        }
         function prova(vi,ei) {
           if(trovata) return;
-          if(vi>=varianti.length){completato();return;}
+          if(vi>=varianti.length){fineRicerca();return;}
           if(ei>=ext.length){prova(vi+1,0);return;}
           fetch('Foto/'+varianti[vi]+'.'+ext[ei]+'?t='+Date.now(),{method:'HEAD'})
             .then(r=>{
@@ -1109,7 +1136,7 @@
                 const file=varianti[vi]+'.'+ext[ei];
                 if(risultati) risultati[pos]={nome:nf,file};
                 el.setAttribute('data-foto-file', file); // salva il file trovato
-                completato();
+                fineRicerca();
               } else prova(vi,ei+1);
             }).catch(()=>prova(vi,ei+1));
         }
@@ -1134,6 +1161,7 @@
       window.fotoDisponibili = fotoArr;
       // Apre il popup sull'elemento corretto
       const entry = fotoArr[idx];
+      if (entry && !entry.file && assetReloadState.pending > 0) requestFullRefreshWhenAssetsReady();
       mostraFotoPopup(entry.file || entry.nome); // passa file se esiste, altrimenti nome (mostrerà icona)
     };
 
@@ -1147,8 +1175,8 @@
     function _sortCognome(arr) {
       return [...arr].sort((a,b) => {
         const na = a.nome||a, nb = b.nome||b;
-        const ca=_normNR(ultimoToken(na))+_normNR(primoToken(na));
-        const cb=_normNR(ultimoToken(nb))+_normNR(primoToken(nb));
+        const ca=_normNR(chiaveCognomeNome(na));
+        const cb=_normNR(chiaveCognomeNome(nb));
         return ca.localeCompare(cb,'it',{sensitivity:'base'});
       });
     }
@@ -1168,60 +1196,41 @@
         });
       });
 
-    } else if (activeOrdine === 'attesa') {
-      // Non-rispondenti per cognome → poi rispondenti per cognome in coda
-      _sortCognome(_nonRisp).forEach(inv => { html += cardNonRispondente(inv.nome, 'att-'); });
-      if ((window.datiInvitati||[]).length > 0) {
-        html += _sep;
-        ordinaInvitati([...(window.datiInvitati||[])], 'cognome').forEach(r => { html += cardRispondente(r); });
-      }
-
-    } else if (activeOrdine === 'cognome') {
-      // Ordine unificato per cognome: tutti i nominativi in un solo elenco, senza dividerli in due gruppi
-      const combinati = [
-        ...(window.datiInvitati || []).map(r => ({ tipo: 'r', nome: r.nome || '', valore: r })),
-        ..._nonRisp.map(inv => ({ tipo: 'n', nome: inv.nome || '', valore: inv.nome }))
-      ];
-
-      const chiaveCognome = (nome) => {
-        const tokens = _normNR(nome).split(/\s+/).filter(Boolean);
-        if (!tokens.length) return '';
-        const cognome = tokens[tokens.length - 1] || '';
-        const resto = tokens.slice(0, -1).join(' ');
-        return cognome + ' ' + resto;
-      };
-
-      combinati.sort((a, b) => {
-        const ka = chiaveCognome(a.nome);
-        const kb = chiaveCognome(b.nome);
-        const cmp = ka.localeCompare(kb, 'it', { sensitivity: 'base' });
-        if (cmp !== 0) return cmp;
-        return _normNR(a.nome).localeCompare(_normNR(b.nome), 'it', { sensitivity: 'base' });
-      });
-
-      combinati.forEach(item => {
-        html += item.tipo === 'r'
-          ? cardRispondente(item.valore)
-          : cardNonRispondente(item.valore, 'cg-');
-      });
-
     } else {
-      // Tutti gli altri ordini: rispondenti già ordinati + non-rispondenti con stesso criterio
-      (window.datiInvitati||[]).forEach(r => { html += cardRispondente(r); });
-      if (_nonRisp.length > 0) {
-        html += _sep;
-        // Ordina i non-rispondenti con lo stesso criterio attivo
-        let nrSorted;
-        if (activeOrdine === 'nome') {
-          nrSorted = [..._nonRisp].sort((a,b) => {
-            const na=a.nome||'', nb=b.nome||'';
-            return _normNR(primoToken(na)+ultimoToken(na)).localeCompare(_normNR(primoToken(nb)+ultimoToken(nb)),'it',{sensitivity:'base'});
-          });
+      let elencoUnificato = [];
+
+      if (activeOrdine === 'attesa') {
+        elencoUnificato = [
+          ..._sortCognome(_nonRisp).map(inv => ({ ...inv, _nonRisposto: true })),
+          ...ordinaInvitati([...(window.datiInvitati||[])], 'cognome').map(r => ({ ...r, _nonRisposto: false }))
+        ];
+      } else {
+        const bloccoRisposte = ordinaInvitati([...(window.datiInvitati||[])], activeOrdine)
+          .map(r => ({ ...r, _nonRisposto: false }));
+
+        const baseNonRisp = _nonRisp.map(inv => ({
+          nome: inv.nome || '',
+          dataNascita: inv.dataNascita || '',
+          indiceOriginale: -1,
+          secondo: '',
+          allergie: '',
+          note: '',
+          _nonRisposto: true
+        }));
+
+        if (activeOrdine === 'inserimento') {
+          elencoUnificato = [
+            ...bloccoRisposte,
+            ..._sortCognome(baseNonRisp).map(inv => ({ ...inv, _nonRisposto: true }))
+          ];
         } else {
-          nrSorted = _sortCognome(_nonRisp);
+          elencoUnificato = ordinaInvitati([ ...bloccoRisposte, ...baseNonRisp ], activeOrdine);
         }
-        nrSorted.forEach(inv => { html += cardNonRispondente(inv.nome, 'nr-'); });
       }
+
+      elencoUnificato.forEach((item, idx) => {
+        html += item._nonRisposto ? cardNonRispondente(item.nome, 'u-' + idx + '-') : cardRispondente(item);
+      });
     }
 
     // Fetch foto per tutti dopo rendering - registra data-foto-file su ogni div
@@ -1608,8 +1617,8 @@
       inAttesaPdf.sort((a, b) => {
         const tokA = (a.nome||'').trim().split(/\s+/);
         const tokB = (b.nome||'').trim().split(/\s+/);
-        const cogA = cp3(tokA[tokA.length-1]||'') + cp3(tokA[0]||'');
-        const cogB = cp3(tokB[tokB.length-1]||'') + cp3(tokB[0]||'');
+        const cogA = cp3(chiaveCognomeNome(a.nome||''));
+        const cogB = cp3(chiaveCognomeNome(b.nome||''));
         return cogA.localeCompare(cogB, 'it', {sensitivity:'base'});
       });
 
@@ -2579,13 +2588,10 @@
 
   function formatNomeDisplay(nome) {
     if (!nome) return 'Senza nome';
-    const tokens = nome.trim().split(/\s+/);
-    let nomeStr = nome;
-    if (activeOrdine !== 'nome' && tokens.length >= 2) {
-      // Sempre Cognome Nome tranne ordine NOME
-      const cognome = tokens[tokens.length - 1];
-      const resto = tokens.slice(0, tokens.length - 1).join(' ');
-      nomeStr = cognome + ' ' + resto;
+    const parti = partiNomeRaw(nome);
+    let nomeStr = parti.display || nome;
+    if (activeOrdine === 'nome' && parti.nome) {
+      nomeStr = parti.nome + ' ' + parti.cognome;
     }
     const eta = getEtaAnni(nome);
     return nomeStr + (eta !== null ? '&nbsp;<span style="font-weight:400;font-size:14px;color:#555">(' + eta + ')</span>' : '');
@@ -2602,6 +2608,22 @@
 
   function primoToken(n) { return (n||'').trim().split(/\s+/)[0] || ''; }
   function ultimoToken(n) { const t=(n||'').trim().split(/\s+/); return t[t.length-1]||''; }
+  function partiNomeRaw(n) {
+    const t = (n||'').trim().split(/\s+/).filter(Boolean);
+    if (!t.length) return { nome: '', cognome: '', display: '' };
+    if (t.length === 1) return { nome: '', cognome: t[0], display: t[0] };
+    const cognome = t[t.length - 1];
+    const nome = t.slice(0, -1).join(' ');
+    return { nome, cognome, display: cognome + ' ' + nome };
+  }
+  function chiaveNomeCompleto(n) {
+    const p = partiNomeRaw(n);
+    return (p.nome + ' ' + p.cognome).trim();
+  }
+  function chiaveCognomeNome(n) {
+    const p = partiNomeRaw(n);
+    return (p.cognome + ' ' + p.nome).trim();
+  }
 
   function ordinaInvitati(arr, criterio) {
     const a2z = (a,b) => a.localeCompare(b, 'it', {sensitivity:'base'});
@@ -2611,16 +2633,16 @@
       // Ordina per indiceOriginale decrescente (più recente prima)
       arr2.sort((a,b) => (b.indiceOriginale||0) - (a.indiceOriginale||0));
     } else if (criterio === 'nome') {
-      arr2.sort((a,b) => a2z(cp(primoToken(a.nome)) + cp(ultimoToken(a.nome)), cp(primoToken(b.nome)) + cp(ultimoToken(b.nome))));
+      arr2.sort((a,b) => a2z(cp(chiaveNomeCompleto(a.nome)), cp(chiaveNomeCompleto(b.nome))));
     } else if (criterio === 'cognome') {
-      arr2.sort((a,b) => a2z(cp(ultimoToken(a.nome)) + cp(primoToken(a.nome)), cp(ultimoToken(b.nome)) + cp(primoToken(b.nome))));
+      arr2.sort((a,b) => a2z(cp(chiaveCognomeNome(a.nome)), cp(chiaveCognomeNome(b.nome))));
     } else if (criterio === 'cibo') {
       const ordCibo = {'baby':0,'veg':1,'vegetariano':1,'carne':2,'pesce':3};
       arr2.sort((a,b) => {
         const ca = ordCibo[detectSecondo(a.secondo)] ?? 9;
         const cb = ordCibo[detectSecondo(b.secondo)] ?? 9;
         if (ca !== cb) return ca - cb;
-        return a2z(cp(ultimoToken(a.nome)) + cp(primoToken(a.nome)), cp(ultimoToken(b.nome)) + cp(primoToken(b.nome)));
+        return a2z(cp(chiaveCognomeNome(a.nome)), cp(chiaveCognomeNome(b.nome)));
       });
     } else if (criterio === 'tavolo') {
       function normTV(s) { return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
@@ -2638,7 +2660,7 @@
       arr2.sort((a,b) => {
         const na = numTavolo(a.nome||''), nb = numTavolo(b.nome||'');
         if (na !== nb) return na - nb;
-        return a2z(cp(ultimoToken(a.nome)), cp(ultimoToken(b.nome)));
+        return a2z(cp(chiaveCognomeNome(a.nome)), cp(chiaveCognomeNome(b.nome)));
       });
     } else if (criterio === 'eta') {
       arr2.sort((a,b) => {
@@ -2647,7 +2669,7 @@
         if (ea !== null && eb !== null) return eb - ea;
         if (ea !== null) return -1;
         if (eb !== null) return 1;
-        return a2z(cp(ultimoToken(a.nome)), cp(ultimoToken(b.nome)));
+        return a2z(cp(chiaveCognomeNome(a.nome)), cp(chiaveCognomeNome(b.nome)));
       });
     }
     return arr2;
@@ -2731,8 +2753,8 @@
     inAttesa.sort((a,b) => {
       const tokA = (a.nome||'').trim().split(/\s+/);
       const tokB = (b.nome||'').trim().split(/\s+/);
-      const cogA = cp2(tokA[tokA.length-1]||'') + cp2(tokA[0]||'');
-      const cogB = cp2(tokB[tokB.length-1]||'') + cp2(tokB[0]||'');
+      const cogA = cp2(chiaveCognomeNome(a.nome||''));
+      const cogB = cp2(chiaveCognomeNome(b.nome||''));
       return cogA.localeCompare(cogB, 'it', {sensitivity:'base'});
     });
 
@@ -3010,9 +3032,17 @@
       const varianti = [cn, cn.normalize('NFD').replace(/[\u0300-\u036f]/g,'')];
       const estensioni = ['jpg','JPG','jpeg','JPEG'];
       let trovata = false;
+      let chiuso = false;
+      assetFetchStart();
+      function fineRicerca() {
+        if (chiuso) return;
+        chiuso = true;
+        assetFetchEnd();
+      }
       function prova(vi, ei) {
         if (trovata || vi >= varianti.length) {
           if (!trovata) thumbCache.set(key, null); // non esiste
+          fineRicerca();
           return;
         }
         if (ei >= estensioni.length) { prova(vi+1, 0); return; }
@@ -3033,7 +3063,9 @@
                   imgEl.src = im.src;
                   wrap.appendChild(imgEl);
                 });
+                fineRicerca();
               };
+              im.onerror = () => { thumbCache.set(key, null); fineRicerca(); };
               im.src = url;
             } else { prova(vi, ei+1); }
           })
@@ -3115,6 +3147,7 @@
           } else {
             // in caricamento (Image obj o undefined): wrap vuoto, si aggiorna via data-ck
             // nessun placeholder visibile — la foto apparirà quando pronta
+            requestFullRefreshWhenAssetsReady();
             if (cachedImg && cachedImg.addEventListener) {
               cachedImg.addEventListener('load', () => {
                 wrap.innerHTML = '';
@@ -3163,7 +3196,7 @@
       // sidebar destra: numero, cognome, nome (età), emoji, descrizione
       sideNum.textContent = (i+1)+' / '+foto.length;
       const parti = (voce.nome||'').trim().split(/\s+/);
-      // il nome è memorizzato come "Nome Cognome" (primo = nome, ultimo = cognome)
+      // il nome grezzo è gestito come "Nome Cognome"; in visualizzazione diventa sempre "Cognome Nome"
       sideCognome.textContent = parti.length >= 2 ? parti[parti.length-1] : voce.nome;
       sideNome.textContent = (parti.length >= 2 ? parti.slice(0,-1).join(' ') : '') + (eta!==null?' ('+eta+')':'');
       sideEmoji.textContent = icona;
@@ -3178,6 +3211,7 @@
           preloadFirst.onload = () => { imgFront.src = src; };
           preloadFirst.src = src;
         } else {
+          if (assetReloadState.pending > 0) requestFullRefreshWhenAssetsReady();
           // nessuna foto: mostra emoji al centro sullo stage
           imgFront.src = '';
           stage.style.background = '#4a6a2a';
@@ -3197,6 +3231,7 @@
       stage.style.background = '';
 
       if (!src) {
+        if (assetReloadState.pending > 0) requestFullRefreshWhenAssetsReady();
         // nessuna foto: fade out quella corrente e mostra emoji
         imgFront.classList.remove('front');
         imgBack.classList.remove('front');
@@ -3424,5 +3459,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v186 - 05/04/2026 - Fix: no parentesi label; _apriGalleria corregge bug foto; non-risp usano formatNomeDisplay; ordinamento nome/cognome per tutti -->
+<!-- Lista.html v188 - 05/04/2026 - Refresh completo quando foto in ritardo; ordinamento unificato in tutte le viste; nome completo gestito anche con due parole -->
 

@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v186 · 05/04/2026 · 14:31:57';
+  const APP_VERSION = 'v186 · 05/04/2026 · 14:59:56';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1053,7 +1053,7 @@
       // Cerchietto bianco con freccia rossa per aprire la scheda
       const btnScheda = `<span onclick="event.stopPropagation();toggleDettagli(${riga})" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #c0392b;flex-shrink:0;cursor:pointer;" title="Apri scheda"><span style="color:#c0392b;font-size:18px;font-weight:900;line-height:1;">›</span></span>`;
       return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}">
-        <div class="risposta-nome" id="nomefoto-${riga}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="mostraFotoPopup && this.getAttribute('data-nf') ? mostraFotoPopup(this.getAttribute('data-nf')) : null">
+        <div class="risposta-nome" id="nomefoto-${riga}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
           ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
           <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}${ico?`&nbsp;<span style="font-size:16px">${ico}</span>`:''}${dataOraInvio?`&nbsp;<span style="font-size:11px;font-weight:400;color:#5a6e3a;white-space:nowrap">${dataOraInvio}</span>`:''}</span>
           <span class="icone-destra" style="flex-shrink:0">${iceA?`<span style="font-size:15px">${iceA}</span>`:''}</span>
@@ -1075,15 +1075,14 @@
       const safeId = pfx + nomeCSV.replace(/[^a-zA-Z0-9]/g,'_');
       const p = nomeCSV.trim().split(/\s+/);
       const nff = p.length>=2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : nomeCSV;
-      const nomDisp = p.length>=2 ? p[p.length-1]+' '+p.slice(0,-1).join(' ') : nomeCSV;
-      const eta = getEtaAnni(nomeCSV);
-      const etaStr = eta!==null ? `\u00a0<span style="font-weight:400;font-size:14px;color:#555">(${eta})</span>` : '';
+      // Usa formatNomeDisplay per rispettare l'ordinamento attivo (Nome vs Cognome)
+      const nomDisp = formatNomeDisplay(nomeCSV);
       const tavN = trovaTavoloNum(nomeCSV);
       const ds = (activeFilter && activeFilter!=='assenti') ? 'display:none;' : 'display:block;';
       return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}">
-        <div class="risposta-nome" id="nomefoto-csv-${safeId}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;">
+        <div class="risposta-nome" id="nomefoto-csv-${safeId}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
           ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
-          <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}${etaStr}</span>
+          <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}</span>
           <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #ccc;flex-shrink:0;opacity:0.4;"><span style="color:#aaa;font-size:18px;font-weight:900;line-height:1;">—</span></span>
         </div>
       </div>`;
@@ -1109,9 +1108,7 @@
                 trovata=true;
                 const file=varianti[vi]+'.'+ext[ei];
                 if(risultati) risultati[pos]={nome:nf,file};
-                // Salva il file come attributo e aggancia il click sull'intero div-nome
-                el.setAttribute('data-nf', file);
-                el.onclick=()=>mostraFotoPopup(file);
+                el.setAttribute('data-foto-file', file); // salva il file trovato
                 completato();
               } else prova(vi,ei+1);
             }).catch(()=>prova(vi,ei+1));
@@ -1119,6 +1116,26 @@
         prova(0,0);
       });
     }
+
+    // Apre la galleria partendo dal nominativo cliccato.
+    // Costruisce l'array ordinato dall'elenco corrente nel DOM, poi chiama mostraFotoPopup.
+    window._apriGalleria = function(nomeFile) {
+      // Raccoglie tutti i div .risposta-nome[data-nomefile] visibili nel DOM nell'ordine attuale
+      const domEls = [...document.querySelectorAll('.risposta-nome[data-nomefile]')]
+        .filter(el => el.closest('.risposta-card') && el.closest('.risposta-card').style.display !== 'none');
+      const fotoArr = domEls.map(el => ({
+        nome: el.getAttribute('data-nomefile'),
+        file: el.getAttribute('data-foto-file') || null
+      }));
+      // Trova l'indice di quello cliccato
+      let idx = fotoArr.findIndex(f => f.nome === nomeFile);
+      if (idx < 0) idx = 0;
+      // Aggiorna fotoDisponibili con l'array nell'ordine corrente
+      window.fotoDisponibili = fotoArr;
+      // Apre il popup sull'elemento corretto
+      const entry = fotoArr[idx];
+      mostraFotoPopup(entry.file || entry.nome); // passa file se esiste, altrimenti nome (mostrerà icona)
+    };
 
     // Non-rispondenti: tutti quelli nel CSV che non hanno una risposta
     const _accNR = /[\u0300-\u036f]/g;
@@ -1160,23 +1177,34 @@
       }
 
     } else {
-      // Tutti gli altri ordini: rispondenti già ordinati + non-rispondenti per cognome
+      // Tutti gli altri ordini: rispondenti già ordinati + non-rispondenti con stesso criterio
       (window.datiInvitati||[]).forEach(r => { html += cardRispondente(r); });
       if (_nonRisp.length > 0) {
         html += _sep;
-        _sortCognome(_nonRisp).forEach(inv => { html += cardNonRispondente(inv.nome, 'nr-'); });
+        // Ordina i non-rispondenti con lo stesso criterio attivo
+        let nrSorted;
+        if (activeOrdine === 'nome') {
+          nrSorted = [..._nonRisp].sort((a,b) => {
+            const na=a.nome||'', nb=b.nome||'';
+            return _normNR(primoToken(na)+ultimoToken(na)).localeCompare(_normNR(primoToken(nb)+ultimoToken(nb)),'it',{sensitivity:'base'});
+          });
+        } else {
+          nrSorted = _sortCognome(_nonRisp);
+        }
+        nrSorted.forEach(inv => { html += cardNonRispondente(inv.nome, 'nr-'); });
       }
     }
 
-    // Fetch foto per tutti dopo rendering
+    // Fetch foto per tutti dopo rendering - registra data-foto-file su ogni div
     window.fotoDisponibili = [];
     setTimeout(() => {
-      // I div .risposta-nome con data-nomefile sono i contenitori foto cliccabili
       const tutti = [...document.querySelectorAll('.risposta-nome[data-nomefile]')];
       const spR  = tutti.filter(el => el.id.startsWith('nomefoto-') && !el.id.startsWith('nomefoto-csv-'));
       const spNR = tutti.filter(el => el.id.startsWith('nomefoto-csv-'));
       const ris = new Array(spR.length).fill(null);
-      fetchFotoSpans(spR, ris, res => { window.fotoDisponibili = res; });
+      fetchFotoSpans(spR, ris, res => {
+        window.fotoDisponibili = res;
+      });
       fetchFotoSpans(spNR, null, null);
     }, 50);
 
@@ -2540,16 +2568,7 @@
   function labelOrdineCorrente() {
     const t = dizionario[currentLang];
     const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA, gruppi: t.lbl_GRUPPI };
-    const base = labels[activeOrdine] || t.lbl_COGNOME;
-    const totInv = window.totInvitatiCsv || null;
-    if (!totInv) return base;
-    if (activeOrdine === 'attesa') {
-      const nAttesa = calcolaInAttesa().length;
-      return base + ' (' + nAttesa + '/' + totInv + ')';
-    } else {
-      const nRisp = (window.datiInvitati || []).length;
-      return base + ' (' + nRisp + '/' + totInv + ')';
-    }
+    return labels[activeOrdine] || t.lbl_COGNOME;
   }
 
   function primoToken(n) { return (n||'').trim().split(/\s+/)[0] || ''; }
@@ -2784,9 +2803,16 @@
 
   function mostraFotoPopup(nomeFile) {
     const foto = window.fotoDisponibili || [];
-    let idx = foto.findIndex(f => f && f.file === nomeFile);
+    // Cerca prima per file esatto, poi per nome, poi usa idx=0 solo se l'array è vuoto
+    let idx = foto.findIndex(f => f && f.file && f.file === nomeFile);
     if (idx < 0) idx = foto.findIndex(f => f && f.nome === nomeFile);
-    if (idx < 0) idx = 0;
+    // Se non trovato ma l'array ha elementi, cerca il nome senza estensione
+    if (idx < 0 && nomeFile) {
+      const nomeSenzaExt = nomeFile.replace(/\.[^.]+$/, '');
+      idx = foto.findIndex(f => f && (f.nome === nomeSenzaExt || (f.file && f.file.replace(/\.[^.]+$/,'') === nomeSenzaExt)));
+    }
+    if (idx < 0) idx = foto.length > 0 ? 0 : -1;
+    if (foto.length === 0) return; // niente da mostrare
 
     let playTimer = null;
     const PLAY_INTERVAL = 6000;
@@ -3369,5 +3395,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v186 - 05/04/2026 - Card: icona cibo+data dopo eta; cerchietto bianco freccia rossa per scheda; gruppi 50px spazio -->
+<!-- Lista.html v186 - 05/04/2026 - Fix: no parentesi label; _apriGalleria corregge bug foto; non-risp usano formatNomeDisplay; ordinamento nome/cognome per tutti -->
 

@@ -57,7 +57,6 @@
     padding: 20px 20px 60px;
   }
 
-  /* Selettore Lingua stile Matrimonio */
   .lang-switcher {
     display: flex;
     justify-content: center;
@@ -219,19 +218,6 @@
     padding: 10px 14px;
     border-radius: 0;
   }
-  .risposta-nome .freccia {
-    font-size: 13px;
-    color: var(--gold-dark);
-    flex-shrink: 0;
-  }
-  .risposta-nome .freccia.allergia-alert {
-    color: #cc0000;
-    font-weight: 900;
-  }
-  .risposta-nome .icona-secondo {
-    font-size: 16px;
-    margin-left: 6px;
-  }
   .risposta-nome .icone-destra {
     margin-left: auto;
     display: flex;
@@ -312,20 +298,11 @@
   }
 
   @media (max-width: 520px) {
-    /* sposi-kpi è già una tabella, nessun override necessario */
     .header .subtitle { font-size: 18px; letter-spacing: 3px; }
   }
 
-
-  /* Card split: metà sinistra = foto, metà destra = scheda */
   .risposta-nome { display:flex; align-items:center; }
-  .rn-foto  { display:flex; align-items:center; gap:0; flex:0 0 50%; min-width:0; cursor:pointer; padding:10px 8px 10px 14px; }
-  .rn-scheda{ display:flex; align-items:center; gap:4px; flex:0 0 50%; justify-content:flex-end; cursor:pointer; padding:10px 14px 10px 4px; border-left:1px solid rgba(0,0,0,0.06); }
-  .risposta-card.ha-risposto .risposta-nome { background:#e8f0fb; }
-  .risposta-card.non-risposto .risposta-nome { background:#fffde7; }
-  .risposta-card.non-risposto .rn-scheda { opacity:0.4; pointer-events:none; }
-
-  /* Griglia tabelle PDF - bordo singolo garantito */
+  
   .pdf-table { border-collapse: collapse; border-spacing: 0; }
   .pdf-table thead { display: table-header-group; }
   .pdf-table tbody tr { page-break-inside: avoid; }
@@ -361,7 +338,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v188</small>
+        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v189</small>
       </p>
     </div>
   </div>
@@ -369,207 +346,30 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v? · 05/04/2026 · 15:30:09';
+  const APP_VERSION = 'v? · 05/04/2026 · 15:33:32';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
-
-  function getCurrentDateTime() {
-    const now = new Date();
-    return now.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: 'numeric'}) + ' ' +
-           now.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
-  }
-  // Versione corrente visualizzata nel Caricamento
 
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
   let activeFilter = null;
   window.datiInvitati = [];
-
   let currentLang = 'it';
-
-  // Array dinamico per i tavoli
   let TAVOLI = [];
   let tavoloAperto = null;
 
   const dizionario = {
     it: {
-      titolo: "Lista Invitati",
-      caricamento: "Caricamento...",
-      nessunaRisposta: "Nessuna risposta ancora.",
-      aggiorna: "↻ Aggiorna",
-      btnAggiorna: "AGGIORNA",
-      btnPDF: "PDF",
-      btnBackup: "BACKUP",
-      btnTavoli: "TAVOLI",
-      btnHome: "HOME",
-      lblTavolo: "Tavolo",
-      lblTotaleCenanti: "Totale cenanti",
-      lblCompleti: "Completi",
-      lblVegetariano: "Vegetariano",
-      lblCarne: "Carne",
-      lblPesce: "Pesce",
-      lblBaby: "Baby",
-      lblSegnaposto: "Segnaposto",
-      tipVeg: "Vegetariano",
-      tipCarne: "Carne",
-      tipPesce: "Pesce",
-      tipBaby: "Baby",
-      riprova: "↻ Riprova",
-      pdf: "📄 PDF",
-      kpiPresenti: "Presenti",
-      kpiAssenti: "Assenti",
-      kpiAllergie: "Allergie",
-      kpiVeg: "Vegetariano",
-      kpiCarne: "Carne",
-      kpiPesce: "Pesce",
-      kpiBaby: "Baby",
-      kpiSegnaposto: "Segnaposto",
-      lblPresenza: "Presenza",
-      lblSecondo: "Secondo",
-      lblAllergie: "Allergie",
-      lblNote: "Note",
-      lblNessuna: "Nessuna",
-      btnElimina: "✕ Elimina questa scheda",
-      msgConferma: "Eliminare questa scheda?",
-      msgErrCanc: "Errore nella cancellazione.",
-      msgErrRete: "Errore di rete.",
-      msgNessunDato: "Nessun dato da stampare.",
-      pdfNome: "Nome",
-      badgeVeg: "🌿 Vegetariano",
-      badgeCarne: "🥩 Carne",
-      badgePesce: "🐟 Pesce",
-      titoloPresenti: "Presenti",
-      titoloAssenti: "Assenti",
-      titoloInvitati: "Invitati",
-      tavoli: "Tavoli",
-      titoloTavoli: "Disposizione dei tavoli",
-      ordinaPer: "Ordina per:",
-      btnOrdina_inserimento: "Data di <b>INSERIMENTO</b>",
-      btnOrdina_nome: "<b>NOME</b>",
-      btnOrdina_cognome: "<b>COGNOME</b>",
-      btnOrdina_cibo: "<b>CIBO</b> scelto",
-      btnOrdina_eta: "<b>ETÀ</b> dell'invitato",
-      btnOrdina_tavolo: "Numero di <b>TAVOLO</b>",
-      lblAnnulla: "Annulla",
-      lblOrdinaPer: "Ordina per",
-      lblCopiato: "Copiato!",
-      lbl_INSERIMENTO: "INSERIMENTO",
-      lbl_NOME: "NOME",
-      lbl_COGNOME: "COGNOME",
-      lbl_CIBO: "CIBO",
-      lbl_ETA: "ETÀ",
-      lbl_TAVOLO: "TAVOLO",
-      grafico_registrazioni: "Registrazioni nel tempo",
-      grafico_fasce: "Fasce d'età",
-      grafico_cibo: "Scelta del cibo",
-      lbl_g_0_20: "0-20 anni",
-      lbl_g_21_40: "21-40 anni",
-      lbl_g_41_60: "41-60 anni",
-      lbl_g_60p: "> 60 anni",
-      btnOrdina_attesa: "<b>IN ATTESA</b> di registrazione",
-      lbl_ATTESA: "IN ATTESA di registrazione",
-      btnOrdina_gruppi: "<b>GRUPPI</b>",
-      lbl_GRUPPI: "GRUPPI",
-      titoloAttesa: "In attesa di risposta",
-      titoloConferma: "In attesa di conferma",
-      msgAttesaVuota: "Tutti gli invitati hanno risposto.",
-      msgCancellazionePendente: "Cancellazione in corso...",
-      msgCancellazioneOk: "Scheda eliminata.",
-      msgCancellazioneKo: "Cancellazione NON riuscita sul server.",
-      msgUscitaConPendente: "Attenzione: una cancellazione è ancora in corso. Attendere prima di uscire?"
+      titolo: "Lista Invitati", caricamento: "Caricamento...", nessunaRisposta: "Nessuna risposta ancora.", aggiorna: "↻ Aggiorna", btnAggiorna: "AGGIORNA", btnPDF: "PDF", btnBackup: "BACKUP", btnTavoli: "TAVOLI", btnHome: "HOME", lblTavolo: "Tavolo", lblTotaleCenanti: "Totale cenanti", lblCompleti: "Completi", lblVegetariano: "Vegetariano", lblCarne: "Carne", lblPesce: "Pesce", lblBaby: "Baby", lblSegnaposto: "Segnaposto", tipVeg: "Vegetariano", tipCarne: "Carne", tipPesce: "Pesce", tipBaby: "Baby", riprova: "↻ Riprova", pdf: "📄 PDF", kpiPresenti: "Presenti", kpiAssenti: "Assenti", kpiAllergie: "Allergie", kpiVeg: "Vegetariano", kpiCarne: "Carne", kpiPesce: "Pesce", kpiBaby: "Baby", kpiSegnaposto: "Segnaposto", lblPresenza: "Presenza", lblSecondo: "Secondo", lblAllergie: "Allergie", lblNote: "Note", lblNessuna: "Nessuna", btnElimina: "✕ Elimina questa scheda", msgConferma: "Eliminare questa scheda?", msgErrCanc: "Errore nella cancellazione.", msgErrRete: "Errore di rete.", msgNessunDato: "Nessun dato da stampare.", pdfNome: "Nome", badgeVeg: "🌿 Vegetariano", badgeCarne: "🥩 Carne", badgePesce: "🐟 Pesce", titoloPresenti: "Presenti", titoloAssenti: "Assenti", titoloInvitati: "Invitati", tavoli: "Tavoli", titoloTavoli: "Disposizione dei tavoli", ordinaPer: "Ordina per:", btnOrdina_inserimento: "Data di <b>INSERIMENTO</b>", btnOrdina_nome: "<b>NOME</b>", btnOrdina_cognome: "<b>COGNOME</b>", btnOrdina_cibo: "<b>CIBO</b> scelto", btnOrdina_eta: "<b>ETÀ</b> dell'invitato", btnOrdina_tavolo: "Numero di <b>TAVOLO</b>", lblAnnulla: "Annulla", lblOrdinaPer: "Ordina per", lblCopiato: "Copiato!", lbl_INSERIMENTO: "INSERIMENTO", lbl_NOME: "NOME", lbl_COGNOME: "COGNOME", lbl_CIBO: "CIBO", lbl_ETA: "ETÀ", lbl_TAVOLO: "TAVOLO", grafico_registrazioni: "Registrazioni nel tempo", grafico_fasce: "Fasce d'età", grafico_cibo: "Scelta del cibo", lbl_g_0_20: "0-20 anni", lbl_g_21_40: "21-40 anni", lbl_g_41_60: "41-60 anni", lbl_g_60p: "> 60 anni", btnOrdina_attesa: "<b>IN ATTESA</b>", lbl_ATTESA: "IN ATTESA", btnOrdina_gruppi: "<b>GRUPPI</b>", lbl_GRUPPI: "GRUPPI", titoloAttesa: "In attesa di risposta", titoloConferma: "In attesa di conferma", msgAttesaVuota: "Tutti gli invitati hanno risposto.", msgCancellazionePendente: "Cancellazione in corso...", msgCancellazioneOk: "Scheda eliminata.", msgCancellazioneKo: "Cancellazione NON riuscita sul server.", msgUscitaConPendente: "Attenzione: una cancellazione è ancora in corso. Attendere prima di uscire?"
     },
     es: {
-      titolo: "Lista de Invitados",
-      caricamento: "Cargando...",
-      nessunaRisposta: "Ninguna respuesta todavía.",
-      aggiorna: "↻ Actualizar",
-      btnAggiorna: "ACTUALIZAR",
-      btnPDF: "PDF",
-      btnBackup: "BACKUP",
-      btnTavoli: "MESAS",
-      btnHome: "INICIO",
-      lblTavolo: "Mesa",
-      lblTotaleCenanti: "Total comensales",
-      lblCompleti: "Completos",
-      lblVegetariano: "Vegetariano",
-      lblCarne: "Carne",
-      lblPesce: "Pescado",
-      lblBaby: "Baby",
-      lblSegnaposto: "Marcador",
-      tipVeg: "Vegetariano",
-      tipCarne: "Carne",
-      tipPesce: "Pescado",
-      tipBaby: "Baby",
-      riprova: "↻ Reintentar",
-      pdf: "📄 PDF",
-      kpiPresenti: "Presentes",
-      kpiAssenti: "Ausentes",
-      kpiAllergie: "Alergias",
-      kpiVeg: "Vegetarianos",
-      kpiCarne: "Carne",
-      kpiPesce: "Pescado",
-      kpiBaby: "Baby",
-      kpiSegnaposto: "Marcador",
-      lblPresenza: "Asistencia",
-      lblSecondo: "Segundo",
-      lblAllergie: "Alergias",
-      lblNote: "Notas",
-      lblNessuna: "Ninguna",
-      btnElimina: "✕ Eliminar esta tarjeta",
-      msgConferma: "¿Eliminar esta tarjeta?",
-      msgErrCanc: "Error al eliminar.",
-      msgErrRete: "Error de red.",
-      msgNessunDato: "No hay datos para imprimir.",
-      pdfNome: "Nombre",
-      badgeVeg: "🌿 Vegetariano",
-      badgeCarne: "🥩 Carne",
-      badgePesce: "🐟 Pescado",
-      titoloPresenti: "Presentes",
-      titoloAssenti: "Ausentes",
-      titoloInvitati: "Invitados",
-      tavoli: "Mesas",
-      titoloTavoli: "Disposición de las mesas",
-      ordinaPer: "Ordenar por:",
-      btnOrdina_inserimento: "Fecha de <b>REGISTRO</b>",
-      btnOrdina_nome: "<b>NOMBRE</b>",
-      btnOrdina_cognome: "<b>APELLIDO</b>",
-      btnOrdina_cibo: "<b>COMIDA</b> elegida",
-      btnOrdina_eta: "<b>EDAD</b> del invitado",
-      btnOrdina_tavolo: "Número de <b>MESA</b>",
-      lblAnnulla: "Cancelar",
-      lblOrdinaPer: "Ordenar por",
-      lblCopiato: "¡Copiado!",
-      lbl_INSERIMENTO: "REGISTRO",
-      lbl_NOME: "NOMBRE",
-      lbl_COGNOME: "APELLIDO",
-      lbl_CIBO: "COMIDA",
-      lbl_ETA: "EDAD",
-      lbl_TAVOLO: "MESA",
-      grafico_registrazioni: "Registros en el tiempo",
-      grafico_fasce: "Grupos de edad",
-      grafico_cibo: "Elección del menú",
-      lbl_g_0_20: "0-20 años",
-      lbl_g_21_40: "21-40 años",
-      lbl_g_41_60: "41-60 años",
-      lbl_g_60p: "> 60 años",
-      btnOrdina_attesa: "<b>EN ESPERA</b>",
-      lbl_ATTESA: "EN ESPERA",
-      btnOrdina_gruppi: "<b>GRUPOS</b>",
-      lbl_GRUPPI: "GRUPOS",
-      titoloAttesa: "En espera de respuesta",
-      titoloConferma: "En espera de confirmación",
-      msgAttesaVuota: "Todos los invitados han respondido.",
-      msgCancellazionePendente: "Eliminando...",
-      msgCancellazioneOk: "Tarjeta eliminada.",
-      msgCancellazioneKo: "Eliminación NO completada en el servidor.",
-      msgUscitaConPendente: "Atención: hay una eliminación en curso. ¿Esperar antes de salir?"
+      titolo: "Lista de Invitados", caricamento: "Cargando...", nessunaRisposta: "Ninguna respuesta todavía.", aggiorna: "↻ Actualizar", btnAggiorna: "ACTUALIZAR", btnPDF: "PDF", btnBackup: "BACKUP", btnTavoli: "MESAS", btnHome: "INICIO", lblTavolo: "Mesa", lblTotaleCenanti: "Total comensales", lblCompleti: "Completos", lblVegetariano: "Vegetariano", lblCarne: "Carne", lblPesce: "Pescado", lblBaby: "Baby", lblSegnaposto: "Marcador", tipVeg: "Vegetariano", tipCarne: "Carne", tipPesce: "Pescado", tipBaby: "Baby", riprova: "↻ Reintentar", pdf: "📄 PDF", kpiPresenti: "Presentes", kpiAssenti: "Ausentes", kpiAllergie: "Alergias", kpiVeg: "Vegetarianos", kpiCarne: "Carne", kpiPesce: "Pescado", kpiBaby: "Baby", kpiSegnaposto: "Marcador", lblPresenza: "Asistencia", lblSecondo: "Segundo", lblAllergie: "Alergias", lblNote: "Notas", lblNessuna: "Ninguna", btnElimina: "✕ Eliminar esta tarjeta", msgConferma: "¿Eliminar esta tarjeta?", msgErrCanc: "Error al eliminar.", msgErrRete: "Error de red.", msgNessunDato: "No hay dati per la stampa.", pdfNome: "Nombre", badgeVeg: "🌿 Vegetariano", badgeCarne: "🥩 Carne", badgePesce: "🐟 Pescado", titoloPresenti: "Presentes", titoloAssenti: "Ausentes", titoloInvitati: "Invitados", tavoli: "Mesas", titoloTavoli: "Disposición de las mesas", ordinaPer: "Ordenar por:", btnOrdina_inserimento: "Fecha de <b>REGISTRO</b>", btnOrdina_nome: "<b>NOMBRE</b>", btnOrdina_cognome: "<b>APELLIDO</b>", btnOrdina_cibo: "<b>COMIDA</b> elegida", btnOrdina_eta: "<b>EDAD</b> del invitado", btnOrdina_tavolo: "Número de <b>MESA</b>", lblAnnulla: "Cancelar", lblOrdinaPer: "Ordenar por", lblCopiato: "¡Copiado!", lbl_INSERIMENTO: "REGISTRO", lbl_NOME: "NOMBRE", lbl_COGNOME: "APELLIDO", lbl_CIBO: "COMIDA", lbl_ETA: "EDAD", lbl_TAVOLO: "MESA", grafico_registrazioni: "Registros en el tiempo", grafico_fasce: "Grupos de edad", grafico_cibo: "Elección del menú", btnOrdina_attesa: "<b>EN ESPERA</b>", lbl_ATTESA: "EN ESPERA", btnOrdina_gruppi: "<b>GRUPOS</b>", lbl_GRUPPI: "GRUPOS", titoloAttesa: "En espera de respuesta", titoloConferma: "En espera de confirmación", msgAttesaVuota: "Todos los invitados han respondido.", msgCancellazionePendente: "Eliminando...", msgCancellazioneOk: "Tarjeta eliminada.", msgCancellazioneKo: "Eliminación NO completada en el servidor.", msgUscitaConPendente: "Atención: hay una eliminación en curso. ¿Esperar antes de salir?"
     }
   };
 
-  // Attende che i font web siano scaricati per evitare sfarfallii visivi e layout errati
   window.addEventListener('DOMContentLoaded', () => {
     document.fonts.ready.then(() => {
-      caricaTavoli(); // Avvia il fetch dei tavoli
-      caricaRisposte(); // Avvia il fetch da Google Script
-      caricaTelefoni(); // Avvia il fetch di Telefoni.txt
+      caricaTavoli();
+      caricaRisposte();
+      caricaTelefoni();
     });
   });
 
@@ -586,74 +386,32 @@
         const nome = m[1].trim(); const cell = m[2].trim();
         if (cell === '\u2014' || cell === '-') return;
         window.mapTelefoni[norm(nome)] = cell;
-        const parti = nome.split(/\s+/);
-        if (parti.length >= 2)
-          window.mapTelefoni[norm(parti.slice(1).join(' ') + ' ' + parti[0])] = cell;
       });
     } catch(e) {}
   }
 
-  function cercaTelefono(nomeDisplay) {
-    const norm = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
-    const k1 = norm(nomeDisplay);
-    if (window.mapTelefoni[k1]) return window.mapTelefoni[k1];
-    const parti = nomeDisplay.trim().split(/\s+/);
-    if (parti.length >= 2) {
-      const k2 = norm(parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' '));
-      if (window.mapTelefoni[k2]) return window.mapTelefoni[k2];
-    }
-    return '';
-  }
-
-  function formattaNumero(raw) {
-    const digits = raw.replace(/\D/g,'');
-    if (digits.length === 10)
-      return digits.slice(0,3) + '-' + digits.slice(3,5) + '.' + digits.slice(5,7) + '.' + digits.slice(7);
-    if (digits.length === 12 && digits.startsWith('39')) {
-      const loc = digits.slice(2);
-      return '+39\u00a0' + loc.slice(0,3) + '-' + loc.slice(3,5) + '.' + loc.slice(5,7) + '.' + loc.slice(7);
-    }
-    return raw;
-  }
-
-  // Funzione per estrarre i dati da Tavoli.txt dinamicamente
   async function caricaTavoli() {
     try {
       const response = await fetch('Tavoli.txt?t=' + Date.now());
       if (response.ok) {
         const text = await response.text();
         const righe = text.split(/\r?\n/);
-        TAVOLI = []; // Resetta l'array per popolarlo dinamicamente
+        TAVOLI = [];
         let tavoloCorrente = null;
-
         righe.forEach(riga => {
           const r = riga.trim();
-          if (!r) return; // Ignora le righe vuote
-
+          if (!r) return;
           if (r.startsWith('#')) {
-            // Nuovo tavolo identificato (rimuove il '#' e gli spazi)
-            tavoloCorrente = {
-              nome: r.substring(1).trim(),
-              persone: []
-            };
+            tavoloCorrente = { nome: r.substring(1).trim(), persone: [] };
             TAVOLI.push(tavoloCorrente);
           } else if (tavoloCorrente) {
-            // Aggiunge la persona al tavolo corrente
             tavoloCorrente.persone.push(r);
           }
         });
-
-        // Se la sezione HTML dei tavoli è già stata montata, la aggiorna
-        if (document.getElementById('sezione-tavoli')) {
-          renderizzaTavoli();
-        }
-      } else {
-        console.error("Errore nel caricamento di Tavoli.txt: " + response.status);
+        if (document.getElementById('sezione-tavoli')) renderizzaTavoli();
       }
-    } catch (err) {
-      console.error("Errore di rete durante il caricamento di Tavoli.txt: ", err);
-    }
-    // Carica Invitati.csv per popolare window.mapNascita (date di nascita)
+    } catch (err) {}
+
     try {
       const respInv = await fetch('Invitati.csv?t=' + Date.now());
       if (respInv.ok) {
@@ -669,7 +427,6 @@
           const cols = righeInv[i].split(sepInv);
           const nome = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
           const dataN = cols[1] ? cols[1].replace(/['"]/g,'').trim() : '';
-          
           if (nome) {
             totCsv++;
             window.tuttiInvitatiCsvRaw.push({ nome, dataNascita: dataN });
@@ -677,8 +434,6 @@
           }
         }
         window.totInvitatiCsv = totCsv;
-        window.totInvitatiCsvRaw = totCsv;
-        // Aggiorna titolo h1 con numero invitati
         (function() {
           const el = document.getElementById('titolo-pagina');
           if (el) {
@@ -687,10 +442,8 @@
           }
         })();
 
-        // ── Mappa gruppi: ogni persona → lista nomi del suo gruppo ───────
         window.mapGruppo = {};
-        const acc2 = /[\u0300-\u036f]/g;
-        const normK = s => (s||'').toLowerCase().normalize('NFD').replace(acc2,'').trim();
+        const normK = s => (s||'').toLowerCase().normalize('NFD').replace(acc,'').trim();
         let gruppoCorrente = [];
         const flushGruppo = () => {
           if (gruppoCorrente.length > 0) {
@@ -708,7 +461,7 @@
           gruppoCorrente.push(n);
         }
         flushGruppo();
-        // Salva gruppi ordinati per la vista GRUPPI
+
         window.gruppiCsvOrdinati = [];
         let _gc = [];
         for (let i = startInv; i < righeInv.length; i++) {
@@ -721,7 +474,7 @@
         }
         if (_gc.length) window.gruppiCsvOrdinati.push(_gc);
       }
-    } catch(e) { console.log('mapNascita: Invitati.csv non disponibile', e); }
+    } catch(e) {}
   }
 
   function cambiaLingua(lang) {
@@ -731,22 +484,11 @@
     document.getElementById('btn-es').classList.toggle('active-lang', lang === 'es');
     const _totH1 = window.totInvitatiCsv ? ' <small style="font-size:0.5em;font-weight:600;color:#000;vertical-align:middle;">(' + window.totInvitatiCsv + ')</small>' : '';
     document.getElementById('titolo-pagina').innerHTML = dizionario[lang].titolo + _totH1;
-
-    const txtCaricamento = document.getElementById('txt-caricamento');
-    if (txtCaricamento) txtCaricamento.innerText = dizionario[lang].caricamento;
-
-    if (window.datiInvitati && window.datiInvitati.length > 0) {
-      renderizzaDati();
-    }
+    if (window.datiInvitati && window.datiInvitati.length > 0) renderizzaDati();
   }
 
   function normalizeText(value) {
-    return (value || '')
-      .toString()
-      .trim()
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
+    return (value || '').toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
   function detectSecondo(value) {
@@ -762,9 +504,7 @@
   function isAbsent(presenza, secondo) {
     const p = normalizeText(presenza);
     if (p === '0' || p === 'false' || p === 'no' || p.includes('non') || p.includes('assente') || p === '') {
-        if (p === '' && detectSecondo(secondo) !== '') {
-            return false;
-        }
+        if (p === '' && detectSecondo(secondo) !== '') return false;
         return true;
     }
     return false;
@@ -773,39 +513,18 @@
   function hasAllergy(value) {
     if (!value) return false;
     const s = normalizeText(value).replace(/[^\w\s]/gi, '').replace(/\s+/g, ' ').trim();
-    if (!s) return false;
-    const falsiPositivi = [
-      'no', 'nessuna', 'nessuno', 'nessun', 'niente', 'nulla', 'nd',
-      '0', 'false', 'nessuna allergia', 'no allergie', 'nessuna in particolare',
-      'no grazie', 'nessuna grazie'
-    ];
-    if (falsiPositivi.includes(s)) return false;
+    if (!s || ['no', 'nessuna', 'nessuno', 'nessun', 'niente', 'nulla', 'nd', '0', 'false'].includes(s)) return false;
     return true;
   }
 
   function iconaAllergie(value) {
     if (!hasAllergy(value)) return '';
-    // Mappa esatta dei valori usati in Matrimonio.html
-    const mappa = {
-      'formaggi':     '🧀',
-      'glutine':      '🌾',
-      'lattosio':     '🥛',
-      'frutta secca': '🥜',
-      'uova':         '🥚',
-      'crostacei':    '🦐',
-      'soia':         '🫘',
-      'pesce':        '🐟',
-      'sedano':       '🥦',
-    };
+    const mappa = { 'formaggi': '🧀', 'glutine': '🌾', 'lattosio': '🥛', 'frutta secca': '🥜', 'uova': '🥚', 'crostacei': '🦐', 'soia': '🫘', 'pesce': '🐟', 'sedano': '🥦' };
     const voci = value.split(',').map(v => v.trim().toLowerCase());
     const icone = [];
     voci.forEach(v => {
-      if (mappa[v]) {
-        if (!icone.includes(mappa[v])) icone.push(mappa[v]);
-      } else {
-        // Voce libera non in mappa: icona generica se non già presente
-        if (!icone.includes('⚠️')) icone.push('⚠️');
-      }
+      if (mappa[v]) { if (!icone.includes(mappa[v])) icone.push(mappa[v]); }
+      else { if (!icone.includes('⚠️')) icone.push('⚠️'); }
     });
     return icone.join('');
   }
@@ -814,7 +533,6 @@
     if (assente) return '<span class="muted">—</span>';
     const tipo = detectSecondo(secondo);
     const testi = dizionario[currentLang];
-
     if (tipo === 'veg') return `<span class="badge badge-veg">${testi.badgeVeg}</span>`;
     if (tipo === 'carne') return `<span class="badge badge-carne">${testi.badgeCarne}</span>`;
     if (tipo === 'pesce') return `<span class="badge badge-pesce">${testi.badgePesce}</span>`;
@@ -822,30 +540,16 @@
   }
 
   function toggleDettagli(id) {
-    const element = document.getElementById('dettagli-' + id);
-    if (element.style.display === 'block') {
-      element.style.display = 'none';
-    } else {
-      element.style.display = 'block';
-    }
+    const el = document.getElementById('dettagli-' + id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
   }
 
   function filtraLista(categoria) {
-    if (activeFilter === categoria) {
-      activeFilter = null;
-    } else {
-      activeFilter = categoria;
-    }
+    activeFilter = (activeFilter === categoria) ? null : categoria;
     document.querySelectorAll('.kpi-box').forEach(el => el.classList.remove('active-filter'));
-    if (activeFilter) {
-      document.getElementById('btn-' + activeFilter).classList.add('active-filter');
-    }
+    if (activeFilter) document.getElementById('btn-' + activeFilter).classList.add('active-filter');
     document.querySelectorAll('.risposta-card').forEach(card => {
-      if (!activeFilter || card.classList.contains('cat-' + activeFilter)) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
+      card.style.display = (!activeFilter || card.classList.contains('cat-' + activeFilter)) ? 'block' : 'none';
     });
   }
 
@@ -853,39 +557,18 @@
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
     box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">' + APP_VERSION + '</small></p>';
-    activeFilter = null;
-
     fetch(SCRIPT_URL + '?t=' + Date.now())
-      .then(r => {
-        if (!r.ok && r.status !== 0) throw new Error('HTTP ' + r.status);
-        return r.text();
-      })
-      .then(txt => JSON.parse(txt))
+      .then(r => r.text()).then(txt => JSON.parse(txt))
       .then(data => {
         if (!data.ok || !data.rows || data.rows.length === 0) {
-          box.innerHTML = `
-            <p style="text-align:center;padding:20px;color:var(--text-light)">${testi.nessunaRisposta}</p>
-            <button class="btn-submit" onclick="caricaRisposte()">↻ ${testi.aggiorna}</button>
-          `;
-          window.datiInvitati = [];
+          box.innerHTML = `<p style="text-align:center;padding:20px;color:var(--text-light)">${testi.nessunaRisposta}</p><button class="btn-submit" onclick="caricaRisposte()">↻ ${testi.aggiorna}</button>`;
           return;
         }
-
-        let righeMappate = data.rows.map((r, i) => ({
-          ...r,
-          presenza: r.presenza !== undefined ? r.presenza : String(r.persone ?? ''),
-          indiceOriginale: i + 2
-        }));
-        righeMappate = ordinaInvitati(righeMappate, activeOrdine);
-        window.datiInvitati = righeMappate;
+        let righeMappate = data.rows.map((r, i) => ({ ...r, presenza: r.presenza !== undefined ? r.presenza : String(r.persone ?? ''), indiceOriginale: i + 2 }));
+        window.datiInvitati = ordinaInvitati(righeMappate, activeOrdine);
         renderizzaDati();
-      })
-      .catch((err) => {
-        console.error('FETCH ERROR:', err);
-        box.innerHTML = `
-          <p style="color:red;text-align:center;padding:20px">${dizionario[currentLang].msgErrRete}<br><small style='font-size:10px;opacity:0.7'>${err}</small></p>
-          <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0;">${dizionario[currentLang].riprova}</button>
-        `;
+      }).catch(err => {
+        box.innerHTML = `<p style="color:red;text-align:center;padding:20px">${testi.msgErrRete}<br><small style='font-size:10px;opacity:0.7'>${err}</small></p><button class="btn-submit" onclick="caricaRisposte()">${testi.riprova}</button>`;
       });
   }
 
@@ -894,11 +577,9 @@
     const acc=/[̀-ͯ]/g;
     const k=(nome||'').toLowerCase().normalize('NFD').replace(acc,'').trim();
     for(let i=0;i<TAVOLI.length;i++){
-      const t=TAVOLI[i];
-      for(const p of t.persone){
+      for(const p of TAVOLI[i].persone){
         const pk=p.toLowerCase().normalize('NFD').replace(acc,'').trim();
-        const tk=pk.split(' '),tn=k.split(' ');
-        if(tk.every(w=>tn.includes(w))||tn.every(w=>tk.includes(w))){
+        if(pk===k || pk.includes(k) || k.includes(pk)){
           const n=i+1; return n<=10?eT[n]:String(n);
         }
       }
@@ -911,613 +592,14 @@
     const acc=/[̀-ͯ]/g;
     const k=(nome||'').toLowerCase().normalize('NFD').replace(acc,'').trim();
     for(let i=0;i<TAVOLI.length;i++){
-      const t=TAVOLI[i];
-      for(const p of t.persone){
+      for(const p of TAVOLI[i].persone){
         const pk=p.toLowerCase().normalize('NFD').replace(acc,'').trim();
-        const tk=pk.split(' '),tn=k.split(' ');
-        if(tk.every(w=>tn.includes(w))||tn.every(w=>tk.includes(w))){
-          const n=i+1;
-          return(n<=10?eT[n]:String(n))+' '+t.nome.replace(/^Tavolo \d+ - /,'');
+        if(pk===k || pk.includes(k) || k.includes(pk)){
+          const n=i+1; return(n<=10?eT[n]:String(n))+' '+TAVOLI[i].nome.replace(/^Tavolo \d+ - /,'');
         }
       }
     }
     return '-';
-  }
-
-  function renderizzaDati() {
-    const box = document.getElementById('sposi-table');
-    const testi = dizionario[currentLang];
-    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0, totBaby = 0, totSegnaposto = 0;
-
-    window.datiInvitati.forEach(r => {
-      const presenza = r.presenza || '';
-      const secondo = r.secondo || '';
-      const allergie = r.allergie || '';
-      const assente = isAbsent(presenza, secondo);
-
-      if (assente) {
-        totAssenti++;
-      } else {
-        totPresenti++;
-        if (hasAllergy(allergie)) totAllergie++;
-
-        const tipo = detectSecondo(secondo);
-        if (tipo === 'veg') totVeg++;
-        else if (tipo === 'carne') totCarne++;
-        else if (tipo === 'pesce') totPesce++;
-        else if (tipo === 'baby') totBaby++;
-        else if (tipo === 'segnaposto') totSegnaposto++;
-      }
-    });
-
-    // Salva snapshot KPI globalmente per scorriTavoli()
-    window.kpiSnapshot = {
-      totPresenti, totAssenti, totVeg, totCarne, totPesce, totBaby, totSegnaposto,
-      totRisposte: window.datiInvitati.length,
-      aggiornatoAlle: new Date()
-    };
-
-    let html = `<table class="sposi-kpi">
-      <tr>
-        <td><div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-label">${testi.kpiPresenti}</div><div class="kpi-num">${totPresenti}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-label">${testi.kpiVeg}</div><div class="kpi-num">${totVeg}</div></div></td>
-      </tr>
-      <tr>
-        <td><div class="kpi-box ${activeFilter==='assenti'?'active-filter':''}" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-label">${testi.kpiAssenti}</div><div class="kpi-num">${totAssenti}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-label">${testi.kpiCarne}</div><div class="kpi-num">${totCarne}</div></div></td>
-      </tr>
-      <tr>
-        <td><div class="kpi-box ${activeFilter==='baby'?'active-filter':''}" id="btn-baby" onclick="filtraLista('baby')"><div class="kpi-label">${testi.kpiBaby}</div><div class="kpi-num">${totBaby}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-label">${testi.kpiPesce}</div><div class="kpi-num">${totPesce}</div></div></td>
-      </tr>
-      <tr>
-        <td><div class="kpi-box ${activeFilter==='segnaposto'?'active-filter':''}" id="btn-segnaposto" onclick="filtraLista('segnaposto')"><div class="kpi-label">${testi.kpiSegnaposto}</div><div class="kpi-num">${totSegnaposto}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-label">${testi.kpiAllergie}</div><div class="kpi-num">${totAllergie}</div></div></td>
-      </tr>
-    </table>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">${testi.btnAggiorna}</button>
-      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnPDF}</button>
-      <button class="btn-submit" onclick="scaricaBackupCSV()" style="margin-top:0; background: linear-gradient(135deg, #2980b9, #3d9dd1); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnBackup}</button>
-      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnTavoli}</button>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:8px 4px;">
-      <span style="font-family:'Inter',sans-serif;font-size:13px;color:#5a4a2a;white-space:nowrap;">${testi.ordinaPer}</span>
-      <button id="btn-ordina" onclick="apriSceltaOrdine()" style="background:#f5ede0;border:1.5px solid #b8893a;border-radius:20px;padding:5px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#7a5c3a;cursor:pointer;letter-spacing:0.5px;white-space:normal;text-align:left;">${labelOrdineCorrente()}</button>
-    </div>
-
-
-    <div id="lista-invitati">`;
-
-    // === NUOVO SISTEMA UNIFICATO: tutti gli ordini mostrano TUTTI gli invitati ===
-    // Card bipartita: metà sinistra (clic) = foto | metà destra (clic) = scheda
-    // Fondo azzurro chiaro = ha risposto | giallo tenue = non ha risposto
-
-    function variantiFoto(n) {
-      const v = new Set();
-      v.add(n); v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
-      v.add(n.replace(/u'$/,'\u00f9').replace(/a'$/,'\u00e0').replace(/e'$/,'\u00e8').replace(/i'$/,'\u00ec').replace(/o'$/,'\u00f2'));
-      v.add(n.replace(/'$/,'')); return [...v];
-    }
-
-    function cardRispondente(r) {
-      const riga = r.indiceOriginale;
-      const presenza = r.presenza||'';
-      const assente = isAbsent(presenza, r.secondo);
-      const tipoSecondo = detectSecondo(r.secondo);
-      let cf = ['ha-risposto'];
-      if (assente) { cf.push('cat-assenti'); }
-      else {
-        cf.push('cat-presenti');
-        if (hasAllergy(r.allergie))       cf.push('cat-allergie');
-        if (tipoSecondo==='veg')           cf.push('cat-veg');
-        if (tipoSecondo==='carne')         cf.push('cat-carne');
-        if (tipoSecondo==='pesce')         cf.push('cat-pesce');
-        if (tipoSecondo==='baby')          cf.push('cat-baby');
-        if (tipoSecondo==='segnaposto')    cf.push('cat-segnaposto');
-      }
-      const ds = (activeFilter && !cf.includes('cat-'+activeFilter)) ? 'display:none;' : 'display:block;';
-      // Icona cibo (dopo età, nella zona foto)
-      const ico = assente ? '' : (tipoSecondo==='veg'?'🥦':tipoSecondo==='carne'?'🥩':tipoSecondo==='pesce'?'🐟':tipoSecondo==='baby'?'🍼':'');
-      // Data/ora invio formattata [GG/MM - HH:MM]
-      let dataOraInvio = '';
-      const rawData = r.data||'';
-      if (rawData) {
-        const parti2 = String(rawData).trim().split(/\s+/);
-        if (parti2.length >= 2) {
-          const dp = parti2[0].split(/[\/\-]/), op = parti2[1].split(':');
-          dataOraInvio = (dp.length>=2 && op.length>=2)
-            ? `[${dp[0]}/${dp[1]} ${op[0]}:${op[1]}]`
-            : `[${rawData}]`;
-        } else dataOraInvio = `[${rawData}]`;
-      }
-      const haA = hasAllergy(r.allergie);
-      const iceA = iconaAllergie(r.allergie);
-      const tavN = trovaTavoloNum(r.nome);
-      const nomDisp = formatNomeDisplay(r.nome);
-      const allHtml = hasAllergy(r.allergie) ? `<span class="risposta-val allergia">${r.allergie}</span>` : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
-      const noteHtml = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
-      
-      const nff = (r.nome||''); // Nome file corrisponde al nominativo
-      
-      // Cerchietto bianco con freccia rossa per aprire la scheda
-      const btnScheda = `<span onclick="event.stopPropagation();toggleDettagli(${riga})" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #c0392b;flex-shrink:0;cursor:pointer;" title="Apri scheda"><span style="color:#c0392b;font-size:18px;font-weight:900;line-height:1;">›</span></span>`;
-      return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}">
-        <div class="risposta-nome" id="nomefoto-${riga}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
-          ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
-          <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}${ico?`&nbsp;<span style="font-size:16px">${ico}</span>`:''}${dataOraInvio?`&nbsp;<span style="font-size:11px;font-weight:400;color:#5a6e3a;white-space:nowrap">${dataOraInvio}</span>`:''}</span>
-          <span class="icone-destra" style="flex-shrink:0">${iceA?`<span style="font-size:15px">${iceA}</span>`:''}</span>
-          ${btnScheda}
-        </div>
-        <div class="dettagli-scheda" id="dettagli-${riga}">
-          <div class="risposta-row"><span class="risposta-label">${testi.lblTavolo}</span><span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span></div>
-          <div class="risposta-row"><span class="risposta-label">${testi.lblPresenza}</span><span class="risposta-val" style="font-weight:600;">${assente?'0':'1'}</span></div>
-          <div class="risposta-row"><span class="risposta-label">${testi.lblSecondo}</span><span class="risposta-val">${secondBadge(r.secondo,assente)}</span></div>
-          <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span>${allHtml}</div>
-          <div class="risposta-row"><span class="risposta-label">${testi.lblNote}</span>${noteHtml}</div>
-          <div class="risposta-data">${r.data||''}</div>
-          <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
-        </div>
-      </div>`;
-    }
-
-    function cardNonRispondente(nomeCSV, pfx) {
-      const safeId = pfx + nomeCSV.replace(/[^a-zA-Z0-9]/g,'_');
-      const nff = nomeCSV;
-      // Usa formatNomeDisplay per rispettare l'ordinamento attivo (Nome vs Cognome)
-      const nomDisp = formatNomeDisplay(nomeCSV);
-      const tavN = trovaTavoloNum(nomeCSV);
-      const ds = (activeFilter && activeFilter!=='assenti') ? 'display:none;' : 'display:block;';
-      return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}">
-        <div class="risposta-nome" id="nomefoto-csv-${safeId}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
-          ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
-          <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}</span>
-          <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #ccc;flex-shrink:0;opacity:0.4;"><span style="color:#aaa;font-size:18px;font-weight:900;line-height:1;">—</span></span>
-        </div>
-      </div>`;
-    }
-
-    function fetchFotoSpans(els, risultati, onDone) {
-      if (!els.length) { if(onDone) onDone(risultati||[]); return; }
-      let done=0;
-      function completato() { done++; if(done===els.length && onDone) onDone(risultati||[]); }
-      els.forEach((el,pos) => {
-        const nf = el.getAttribute('data-nomefile');
-        if (!nf) { completato(); return; }
-        if (risultati) risultati[pos] = { nome: nf, file: null };
-        const varianti=variantiFoto(nf), ext=['jpg','JPG','jpeg','JPEG'];
-        let trovata=false;
-        function prova(vi,ei) {
-          if(trovata) return;
-          if(vi>=varianti.length){completato();return;}
-          if(ei>=ext.length){prova(vi+1,0);return;}
-          fetch('Foto/'+varianti[vi]+'.'+ext[ei]+'?t='+Date.now(),{method:'HEAD'})
-            .then(r=>{
-              if(r.ok&&!trovata){
-                trovata=true;
-                const file=varianti[vi]+'.'+ext[ei];
-                if(risultati) risultati[pos]={nome:nf,file};
-                el.setAttribute('data-foto-file', file); // salva il file trovato
-                completato();
-              } else prova(vi,ei+1);
-            }).catch(()=>prova(vi,ei+1));
-        }
-        prova(0,0);
-      });
-    }
-
-    // Apre la galleria partendo dal nominativo cliccato.
-    window._apriGalleria = function(nomeFile) {
-      // Raccoglie tutti i div .risposta-nome[data-nomefile] visibili nel DOM nell'ordine attuale
-      const domEls = [...document.querySelectorAll('.risposta-nome[data-nomefile]')]
-        .filter(el => el.closest('.risposta-card') && el.closest('.risposta-card').style.display !== 'none');
-      const fotoArr = domEls.map(el => ({
-        nome: el.getAttribute('data-nomefile'),
-        file: el.getAttribute('data-foto-file') || null
-      }));
-      // Trova l'indice di quello cliccato
-      let idx = fotoArr.findIndex(f => f.nome === nomeFile);
-      if (idx < 0) idx = 0;
-      // Aggiorna fotoDisponibili con l'array nell'ordine corrente
-      window.fotoDisponibili = fotoArr;
-      // Apre il popup sull'elemento corretto
-      const entry = fotoArr[idx];
-      mostraFotoPopup(entry.file || entry.nome); // passa file se esiste, altrimenti nome (mostrerà icona)
-    };
-
-    // Non-rispondenti: tutti quelli nel CSV che non hanno una risposta
-    const _accNR = /[\u0300-\u036f]/g;
-    const _normNR = s => (s||'').toLowerCase().normalize('NFD').replace(_accNR,'').trim();
-    function _tokNR(n) { return _normNR(n).split(/\s+/).filter(Boolean); }
-    function _matchNR(a,b) { const ta=_tokNR(a),tb=_tokNR(b); return ta.every(w=>tb.includes(w))||tb.every(w=>ta.includes(w)); }
-    const _tuttiCSV = window.tuttiInvitatiCsvRaw || [];
-    const _nonRisp = _tuttiCSV.filter(inv => !(window.datiInvitati||[]).some(r => _matchNR(inv.nome, r.nome||'')));
-    
-    function _sortCognome(arr) {
-      return [...arr].sort((a,b) => {
-        const na = a.nome||a, nb = b.nome||b;
-        const ta = (na||'').trim().split(/\s+/);
-        const tb = (nb||'').trim().split(/\s+/);
-        const ca=_normNR(ta[0]);
-        const cb=_normNR(tb[0]);
-        return ca.localeCompare(cb,'it',{sensitivity:'base'});
-      });
-    }
-
-    const _sep = `<div style="margin-top:12px;border-bottom:1px solid #b8893a;margin-bottom:8px;opacity:0.4;"></div>`;
-
-    if (activeOrdine === 'gruppi') {
-      // Ordine CSV con tutti i membri, 50px di spazio tra gruppi
-      const gList = window.gruppiCsvOrdinati || [];
-      let primoG = true;
-      gList.forEach(gNomi => {
-        if (!primoG) html += `<div style="height:50px;"></div>`;
-        primoG = false;
-        gNomi.forEach(nc => {
-          const r = (window.datiInvitati||[]).find(inv => _matchNR(nc, inv.nome||''));
-          html += r ? cardRispondente(r) : cardNonRispondente(nc, 'g-');
-        });
-      });
-
-    } else if (activeOrdine === 'attesa') {
-      // Non-rispondenti per cognome → poi rispondenti per cognome in coda
-      _sortCognome(_nonRisp).forEach(inv => { html += cardNonRispondente(inv.nome, 'att-'); });
-      if ((window.datiInvitati||[]).length > 0) {
-        html += _sep;
-        ordinaInvitati([...(window.datiInvitati||[])], 'cognome').forEach(r => { html += cardRispondente(r); });
-      }
-
-    } else {
-      // Tutti gli altri ordini: rispondenti già ordinati + non-rispondenti con stesso criterio
-      (window.datiInvitati||[]).forEach(r => { html += cardRispondente(r); });
-      if (_nonRisp.length > 0) {
-        html += _sep;
-        // Ordina i non-rispondenti con lo stesso criterio attivo
-        let nrSorted;
-        if (activeOrdine === 'nome') {
-          nrSorted = [..._nonRisp].sort((a,b) => {
-            const na=(a.nome||'').trim().split(/\s+/);
-            const nb=(b.nome||'').trim().split(/\s+/);
-            return _normNR(na.slice(1).join(' ')).localeCompare(_normNR(nb.slice(1).join(' ')),'it',{sensitivity:'base'});
-          });
-        } else {
-          nrSorted = _sortCognome(_nonRisp);
-        }
-        nrSorted.forEach(inv => { html += cardNonRispondente(inv.nome, 'nr-'); });
-      }
-    }
-
-    // Fetch foto per tutti dopo rendering - registra data-foto-file su ogni div
-    window.fotoDisponibili = [];
-    setTimeout(() => {
-      const tutti = [...document.querySelectorAll('.risposta-nome[data-nomefile]')];
-      const spR  = tutti.filter(el => el.id.startsWith('nomefoto-') && !el.id.startsWith('nomefoto-csv-'));
-      const spNR = tutti.filter(el => el.id.startsWith('nomefoto-csv-'));
-      const ris = new Array(spR.length).fill(null);
-      fetchFotoSpans(spR, ris, res => {
-        window.fotoDisponibili = res;
-      });
-      fetchFotoSpans(spNR, null, null);
-    }, 50);
-
-
-    html += `</div>
-    <div style="text-align:center; margin: 16px 0 8px; display:flex; justify-content:center; align-items:center; gap:10px;">
-      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="background:linear-gradient(135deg,#7a5c3a,#9e7f5b);color:#ffffff;border:none;border-radius:12px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(122,92,58,0.3);">${testi.btnHome}</button>
-      <button onclick="gestisciContatore()" id="btn-contatore" style="display:none;background:linear-gradient(135deg,#3a6b7a,#5b9eb5);color:#ffffff;border:none;border-radius:12px;padding:12px 20px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(58,107,122,0.3);min-width:56px;">${leggiContatore()}</button>
-    </div>
-    <div style="height:10px;"></div>
-    <div id="sezione-tavoli" style="margin-top:8px;"></div>`;
-    box.innerHTML = html;
-    // Aggiorna subito il contatore
-    const btnC = document.getElementById('btn-contatore');
-    if (btnC) btnC.textContent = leggiContatore();
-    renderizzaTavoli();
-  }
-
-  async function generaPDF() {
-    const testi = dizionario[currentLang];
-    if (!window.datiInvitati || window.datiInvitati.length === 0) {
-      alert(testi.msgNessunDato);
-      return;
-    }
-
-    const btnPdf = document.getElementById('btn-pdf-gen');
-    if (btnPdf) btnPdf.disabled = true;
-
-    // Toast "Creazione PDF in corso!"
-    const pdfToast = document.createElement('div');
-    pdfToast.id = 'pdf-toast';
-    pdfToast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2d6040;color:#fff;font-family:\'Inter\',sans-serif;font-size:16px;font-weight:600;padding:18px 32px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:99999;text-align:center;letter-spacing:0.3px;';
-    pdfToast.textContent = 'Creazione PDF in corso...';
-    document.body.appendChild(pdfToast);
-
-    let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0, totBaby = 0, totSegnaposto = 0;
-    let assentiRows = [];
-    let presentiRows = [];
-
-    window.datiInvitati.forEach(r => {
-      const assente = isAbsent(r.presenza, r.secondo);
-      if (assente) {
-        totAssenti++;
-        assentiRows.push(r);
-      } else {
-        totPresenti++;
-        presentiRows.push(r);
-        if (hasAllergy(r.allergie)) totAllergie++;
-        const tipo = detectSecondo(r.secondo);
-        if (tipo === 'veg') totVeg++;
-        else if (tipo === 'carne') totCarne++;
-        else if (tipo === 'pesce') totPesce++;
-        else if (tipo === 'baby') totBaby++;
-        else if (tipo === 'segnaposto') totSegnaposto++;
-      }
-    });
-
-    const mapTelefoni = window.mapTelefoni;
-    let gruppiInvitati = [];
-    let totInvitatiCsv = window.totInvitatiCsv;
-
-    // Fetch Elenco completo Invitati e raggruppamento (CSV locale su GitHub)
-    try {
-      const resp = await fetch('Invitati.csv?t=' + Date.now());
-      if (resp.ok) {
-        const text = await resp.text();
-        const righe = text.split(/\r?\n/).map(r => r.trim());
-        const sep = text.includes(';') ? ';' : ',';
-
-        let startIndex = 0;
-        if (righe.length > 0 && righe[0].toLowerCase().includes('nom')) startIndex = 1;
-
-        let gruppoCorrente = [];
-        for (let i = startIndex; i < righe.length; i++) {
-          let cols = righe[i].split(sep);
-          let nome = cols[0] ? cols[0].replace(/['"]/g, '').trim() : '';
-          let dataNascita = cols[1] ? cols[1].replace(/['"]/g, '').trim() : '';
-
-          if (!nome) {
-            if (gruppoCorrente.length > 0) {
-              gruppiInvitati.push(gruppoCorrente);
-              gruppoCorrente = [];
-            }
-          } else {
-            gruppoCorrente.push({ nome, dataNascita });
-          }
-        }
-        if (gruppoCorrente.length > 0) gruppiInvitati.push(gruppoCorrente);
-      }
-    } catch (err) {}
-
-    const container = document.createElement('div');
-    container.style.padding = '0';
-    container.style.width = '740px';
-    container.style.fontSize = '11px';
-    container.style.fontFamily = "'Inter', sans-serif";
-    container.style.color = "#000000";
-    container.style.backgroundColor = "#ffffff";
-
-    let htmlPDF = `
-      <div style="margin-bottom:-8mm;">
-      <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo} <span style="font-size:12px;font-weight:700;color:#000000;">(${totInvitatiCsv})</span></h1>
-      <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 8px;">Giulia & Onofrio</h2>
-
-
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; table-layout: fixed;">
-        <tr>
-          <td style="width: 25%; padding: 3px 4px 3px 0;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiPresenti}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totPresenti}</td>
-              </tr>
-            </table>
-          </td>
-          <td style="width: 25%; padding: 3px 4px;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAssenti}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAssenti}</td>
-              </tr>
-            </table>
-          </td>
-          <td style="width: 25%; padding: 3px 4px;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiBaby}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totBaby}</td>
-              </tr>
-            </table>
-          </td>
-          <td style="width: 25%; padding: 3px 0 3px 4px;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiSegnaposto}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totSegnaposto}</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding: 3px 4px 3px 0;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiVeg}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totVeg}</td>
-              </tr>
-            </table>
-          </td>
-          <td style="padding: 3px 4px;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiCarne}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totCarne}</td>
-              </tr>
-            </table>
-          </td>
-          <td style="padding: 3px 4px;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiPesce}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totPesce}</td>
-              </tr>
-            </table>
-          </td>
-          <td style="padding: 3px 0 3px 4px;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAllergie}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAllergie}</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    `;
-
-    // Tabella Presenti
-    if (presentiRows.length > 0) {
-      presentiRows = ordinaInvitati(presentiRows, 'cognome');
-      const tableStyle = 'width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;word-break:break-word;';
-      const theadHTML = `
-        <thead>
-          <tr style="background-color: #f5ede0; text-align: left;">
-            <th style="padding: 4px 5px; width: 35%; color: #000;">${testi.pdfNome}</th>
-            <th style="padding: 4px 5px; width: 15%; color: #000;">${testi.lblSecondo}</th>
-            <th style="padding: 4px 5px; width: 20%; color: #000;">${testi.lblAllergie}</th>
-            <th style="padding: 4px 5px; width: 30%; color: #000;">${testi.lblNote}</th>
-          </tr>
-        </thead>`;
-
-      function buildRowHTML(r, idx) {
-        let secondoStr = detectSecondo(r.secondo);
-        const isBabyRow = secondoStr === 'baby';
-        const isSegRow  = secondoStr === 'segnaposto';
-        if (secondoStr === 'veg') secondoStr = testi.kpiVeg;
-        else if (secondoStr === 'carne') secondoStr = testi.kpiCarne;
-        else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
-        else if (isBabyRow) secondoStr = '🍼 ' + testi.kpiBaby;
-        else secondoStr = '-';
-
-        const nomeFormattato = formatNomeDisplay(r.nome);
-        const etaAnni = getEtaAnni(r.nome);
-        const etaStr = etaAnni !== null ? ' <span style="font-weight:400;font-size:10px;color:#555">('+etaAnni+')</span>' : '';
-
-        const nTavPres = trovaTavoloNum(r.nome || '');
-        const nomeBg = !nTavPres ? 'background:#ffd6e0;' : '';
-        
-        return '<tr>'
-          + '<td style="padding:4px 6px;font-weight:600;color:#000;' + nomeBg + '">' + (nTavPres ? '<span style="margin-right:3px">' + nTavPres + '</span>' : '') + nomeFormattato + '</td>'
-          + '<td style="padding:4px 6px;color:#000;">' + secondoStr + '</td>'
-          + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + (r.allergie || '-') + '</td>'
-          + '<td style="padding:4px 6px;color:#000;">' + (isSegRow ? testi.kpiSegnaposto : isBabyRow ? testi.kpiBaby : (r.note || '-')) + '</td>'
-          + '</tr>';
-      }
-
-      htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 3px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti} (${totPresenti})</h3>`;
-      htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
-      presentiRows.forEach((r, idx) => { htmlPDF += buildRowHTML(r, idx); });
-      htmlPDF += `</tbody></table>`;
-    }
-
-    // In attesa di conferma
-    const inAttesaPdf = calcolaInAttesa();
-    if (inAttesaPdf.length > 0) {
-      htmlPDF += `<div style="page-break-inside:avoid;">`;
-      htmlPDF += `<h3 style="font-size:13px;margin-top:10px;margin-bottom:4px;color:#8a5e1e;font-weight:600;">${testi.titoloConferma} (${inAttesaPdf.length})</h3>`;
-      htmlPDF += `<table class="pdf-table" style="width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed;">
-        <thead><tr style="background-color:#f5ede0;"><th style="padding:3px 6px;color:#000;">${testi.pdfNome}</th></tr></thead>
-        <tbody>`;
-      inAttesaPdf.forEach(inv => {
-        htmlPDF += `<tr><td style="padding:5px 6px;">${inv.nome}</td></tr>`;
-      });
-      htmlPDF += `</tbody></table></div>`;
-    }
-
-    // Assenti
-    if (assentiRows.length > 0) {
-      htmlPDF += `<div style="page-break-inside: avoid;">`;
-      htmlPDF += `<h3 style="font-size: 13px; margin-top: 18px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti} (${totAssenti})</h3>
-        <table class="pdf-table" style="width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed;">
-          <thead><tr style="background-color: #f5ede0;"><th style="padding: 4px 5px; width: 30%;">${testi.pdfNome}</th><th style="padding: 4px 5px; width: 70%;">${testi.lblNote}</th></tr></thead>
-          <tbody>`;
-      assentiRows.forEach(r => {
-        htmlPDF += `<tr><td style="padding: 3px 5px; font-weight: 600;">${r.nome}</td><td style="padding: 3px 5px;">${r.note || '-'}</td></tr>`;
-      });
-      htmlPDF += `</tbody></table></div>`;
-    }
-
-    // Statistiche e Grafici (omessi per brevità nella visualizzazione ma mantenuti nella logica completa)
-    // ... (restanti sezioni del PDF originali) ...
-
-    const _d = new Date(), _p = n => String(n).padStart(2,'0');
-    const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate());
-    const opt = {
-      margin:       [8, 2, 2, 5],
-      filename:     'Lista-' + _ts + '.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(opt).from(container).save().then(() => {
-      const t = document.getElementById('pdf-toast');
-      if (t) document.body.removeChild(t);
-      if (btnPdf) btnPdf.disabled = false;
-    });
-  }
-
-  function scorriTavoli() {
-    const sezione = document.getElementById('sezione-tavoli');
-    if (sezione) sezione.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  function renderizzaTavoli() {
-    const sezione = document.getElementById('sezione-tavoli');
-    if (!sezione) return;
-
-    const bgTavolo = '#e0e8d0';
-    const borderTavolo = '#a5b589';
-
-    let html = `<div style="margin-bottom:8px;">`;
-    html += `<div style="display:flex;flex-direction:column;gap:8px;">`;
-    TAVOLI.forEach((t, i) => {
-      const label = t.nome.replace(/^Tavolo \d+ - /, '');
-      const isOpen = tavoloAperto === i;
-      const rispostiNelTavolo = t.persone.filter(p => (window.datiInvitati||[]).some(r => normalizeText(r.nome) === normalizeText(p))).length;
-      
-      html += `
-        <div>
-          <button onclick="toggleTavolo(${i})" style="width:100%; background-color: ${bgTavolo}; border:1.5px solid ${borderTavolo}; border-radius:${isOpen ? '12px 12px 0 0' : '12px'}; padding:13px 16px; font-family:'Inter',sans-serif; font-size:17px; font-weight:600; display:flex; justify-content:space-between; align-items:center;">
-            <span>${label}</span>
-            <span style="background:#ffffff; border:1px solid ${borderTavolo}; border-radius:20px; padding:2px 10px; font-size:13px; font-weight:700;">${rispostiNelTavolo}/${t.persone.length}</span>
-          </button>
-          <div id="tavolo-panel-${i}" style="display:${isOpen ? 'block' : 'none'}; border:1.5px solid ${borderTavolo}; border-top:none; border-radius:0 0 12px 12px; padding:12px 16px; background:#f9fff0;">
-            ${t.persone.map(p => '<div style="padding:5px 0; font-family:\'Cormorant Garamond\',serif; font-size:18px; font-weight:600; color:#000000;">' + p + etaTavoloHTML(p) + '</div>').join('')}
-          </div>
-        </div>
-      `;
-    });
-    html += `</div></div>`;
-    sezione.innerHTML = html;
-  }
-
-  function toggleTavolo(idx) {
-    tavoloAperto = (tavoloAperto === idx) ? null : idx;
-    renderizzaTavoli();
-  }
-
-  function etaTavoloHTML(nome) {
-    const eta = getEtaAnni(nome);
-    const r = (window.datiInvitati||[]).find(inv => normalizeText(inv.nome) === normalizeText(nome));
-    let iconaPart = '';
-    if (r && r.secondo) {
-      const tipo = detectSecondo(r.secondo);
-      const m = { veg:'V', carne:'C', pesce:'P', baby:'B' };
-      const c = { veg:'#2d6040', carne:'#a83230', pesce:'#c8a000', baby:'#2980b9' };
-      if (m[tipo]) iconaPart = ` <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:${c[tipo]};color:#ffffff;font-size:10px;font-weight:900;text-align:center;line-height:18px;vertical-align:middle;font-family:Arial,sans-serif">${m[tipo]}</span>`;
-    }
-    return (eta !== null ? ' <span style="font-weight:500;font-size:16px;color:#000000">('+eta+')</span>' : '') + iconaPart;
   }
 
   function getEtaAnni(nome) {
@@ -1533,9 +615,10 @@
       });
     }
     if (!dataN) return null;
+    const d = dataN.trim();
     const matrimonio = new Date(2026,5,21);
     let nascita = null;
-    const dmY=dataN.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+    const dmY=d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
     if(dmY) nascita=new Date(parseInt(dmY[3]),parseInt(dmY[2])-1,parseInt(dmY[1]));
     if(!nascita) return null;
     let anni = matrimonio.getFullYear()-nascita.getFullYear();
@@ -1549,23 +632,147 @@
     const tokens = nome.trim().split(/\s+/);
     let nomeStr = nome;
     if (activeOrdine !== 'nome' && tokens.length >= 2) {
-      // COGNOME = primo token; NOME = resto
+      // Cognome (primo) + Nome (resto)
       nomeStr = tokens[0] + ' ' + tokens.slice(1).join(' ');
     }
     const eta = getEtaAnni(nome);
     return nomeStr + (eta !== null ? '&nbsp;<span style="font-weight:400;font-size:14px;color:#555">(' + eta + ')</span>' : '');
   }
 
-  // --- ORDINAMENTO ---
-  let activeOrdine = 'inserimento';
+  function renderizzaDati() {
+    const box = document.getElementById('sposi-table');
+    const testi = dizionario[currentLang];
+    let totPresenti=0, totAssenti=0, totAllergie=0, totVeg=0, totCarne=0, totPesce=0, totBaby=0, totSegnaposto=0;
+
+    window.datiInvitati.forEach(r => {
+      const assente = isAbsent(r.presenza, r.secondo);
+      if (assente) totAssenti++;
+      else {
+        totPresenti++;
+        if (hasAllergy(r.allergie)) totAllergie++;
+        const tipo = detectSecondo(r.secondo);
+        if (tipo==='veg') totVeg++; else if (tipo==='carne') totCarne++; else if (tipo==='pesce') totPesce++; else if (tipo==='baby') totBaby++; else if (tipo==='segnaposto') totSegnaposto++;
+      }
+    });
+
+    window.kpiSnapshot = { totPresenti, totAssenti, totVeg, totCarne, totPesce, totBaby, totSegnaposto, totRisposte: window.datiInvitati.length, aggiornatoAlle: new Date() };
+
+    let html = `<table class="sposi-kpi">
+      <tr><td><div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-label">${testi.kpiPresenti}</div><div class="kpi-num">${totPresenti}</div></div></td><td><div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-label">${testi.kpiVeg}</div><div class="kpi-num">${totVeg}</div></div></td></tr>
+      <tr><td><div class="kpi-box ${activeFilter==='assenti'?'active-filter':''}" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-label">${testi.kpiAssenti}</div><div class="kpi-num">${totAssenti}</div></div></td><td><div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-label">${testi.kpiCarne}</div><div class="kpi-num">${totCarne}</div></div></td></tr>
+      <tr><td><div class="kpi-box ${activeFilter==='baby'?'active-filter':''}" id="btn-baby" onclick="filtraLista('baby')"><div class="kpi-label">${testi.kpiBaby}</div><div class="kpi-num">${totBaby}</div></div></td><td><div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-label">${testi.kpiPesce}</div><div class="kpi-num">${totPesce}</div></div></td></tr>
+      <tr><td><div class="kpi-box ${activeFilter==='segnaposto'?'active-filter':''}" id="btn-segnaposto" onclick="filtraLista('segnaposto')"><div class="kpi-label">${testi.kpiSegnaposto}</div><div class="kpi-num">${totSegnaposto}</div></div></td><td><div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-label">${testi.kpiAllergie}</div><div class="kpi-num">${totAllergie}</div></div></td></tr>
+    </table>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+      <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; font-size:13px;padding:12px 6px;">${testi.btnAggiorna}</button>
+      <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); font-size:13px;padding:12px 6px;color:#fff;">${testi.btnPDF}</button>
+      <button class="btn-submit" onclick="scaricaBackupCSV()" style="margin-top:0; background: linear-gradient(135deg, #2980b9, #3d9dd1); font-size:13px;padding:12px 6px;color:#fff;">${testi.btnBackup}</button>
+      <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); font-size:13px;padding:12px 6px;color:#fff;">${testi.btnTavoli}</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:8px 4px;">
+      <span style="font-size:13px;color:#5a4a2a;">${testi.ordinaPer}</span>
+      <button id="btn-ordina" onclick="apriSceltaOrdine()" style="background:#f5ede0;border:1.5px solid #b8893a;border-radius:20px;padding:5px 14px;font-size:13px;font-weight:700;color:#7a5c3a;">${labelOrdineCorrente()}</button>
+    </div>
+    <div id="lista-invitati">`;
+
+    function cardRispondente(r) {
+      const riga = r.indiceOriginale;
+      const assente = isAbsent(r.presenza, r.secondo);
+      const tipoSecondo = detectSecondo(r.secondo);
+      let cf = ['ha-risposto'];
+      if (assente) cf.push('cat-assenti');
+      else {
+        cf.push('cat-presenti');
+        if (hasAllergy(r.allergie)) cf.push('cat-allergie');
+        const mapCat = { veg: 'cat-veg', carne: 'cat-carne', pesce: 'cat-pesce', baby: 'cat-baby', segnaposto: 'cat-segnaposto' };
+        if (mapCat[tipoSecondo]) cf.push(mapCat[tipoSecondo]);
+      }
+      const ds = (activeFilter && !cf.includes('cat-'+activeFilter)) ? 'display:none;' : 'display:block;';
+      const ico = assente ? '' : (tipoSecondo==='veg'?'🥦':tipoSecondo==='carne'?'🥩':tipoSecondo==='pesce'?'🐟':tipoSecondo==='baby'?'🍼':'');
+      const iceA = iconaAllergie(r.allergie);
+      const tavN = trovaTavoloNum(r.nome);
+      const nomDisp = formatNomeDisplay(r.nome);
+      return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}">
+        <div class="risposta-nome" onclick="window._apriGalleria && window._apriGalleria('${(r.nome||'').replace(/'/g,"\\'")}')">
+          ${tavN?`<span style="font-size:14px;margin-right:6px;">${tavN}</span>`:''}
+          <span style="color:#000;font-weight:600;flex:1;">${nomDisp}${ico?`&nbsp;<span style="font-size:16px">${ico}</span>`:''}</span>
+          <span class="icone-destra">${iceA?`<span style="font-size:15px">${iceA}</span>`:''}</span>
+          <span onclick="event.stopPropagation();toggleDettagli(${riga})" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #c0392b;margin-left:8px;"><span style="color:#c0392b;font-size:18px;font-weight:900;">›</span></span>
+        </div>
+        <div class="dettagli-scheda" id="dettagli-${riga}">
+          <div class="risposta-row"><span class="risposta-label">${testi.lblTavolo}</span><span class="risposta-val">${trovaTavolo(r.nome)}</span></div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblSecondo}</span><span class="risposta-val">${secondBadge(r.secondo,assente)}</span></div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span><span class="risposta-val ${hasAllergy(r.allergie)?'allergia':''}">${r.allergie||testi.lblNessuna}</span></div>
+          <div class="risposta-row"><span class="risposta-label">${testi.lblNote}</span><span class="risposta-val">${r.note||'—'}</span></div>
+          <div class="risposta-data">${r.data||''}</div>
+          <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
+        </div>
+      </div>`;
+    }
+
+    function cardNonRispondente(nomeCSV) {
+      const ds = (activeFilter && activeFilter!=='assenti') ? 'display:none;' : 'display:block;';
+      const nomDisp = formatNomeDisplay(nomeCSV);
+      const tavN = trovaTavoloNum(nomeCSV);
+      return `<div class="risposta-card non-risposto" style="${ds}border-color:#ccc;">
+        <div class="risposta-nome" onclick="window._apriGalleria && window._apriGalleria('${nomeCSV.replace(/'/g,"\\'")}')">
+          ${tavN?`<span style="font-size:14px;margin-right:6px;">${tavN}</span>`:''}
+          <span style="color:#888;font-weight:600;flex:1;">${nomDisp}</span>
+          <span style="opacity:0.3;font-size:18px;">—</span>
+        </div>
+      </div>`;
+    }
+
+    const _tuttiCSV = window.tuttiInvitatiCsvRaw || [];
+    const _risposti = window.datiInvitati || [];
+    const _nonRisp = _tuttiCSV.filter(inv => !_risposti.some(r => normalizeText(inv.nome) === normalizeText(r.nome)));
+
+    if (activeOrdine === 'gruppi') {
+      (window.gruppiCsvOrdinati || []).forEach((g, idx) => {
+        if (idx > 0) html += `<div style="height:40px;"></div>`;
+        g.forEach(nc => {
+          const r = _risposti.find(inv => normalizeText(nc) === normalizeText(inv.nome));
+          html += r ? cardRispondente(r) : cardNonRispondente(nc);
+        });
+      });
+    } else if (activeOrdine === 'attesa') {
+      _nonRisp.forEach(inv => { html += cardNonRispondente(inv.nome); });
+      if (_risposti.length > 0) {
+        html += `<div style="margin:20px 0; border-top:1px solid #b8893a; opacity:0.3;"></div>`;
+        _risposti.forEach(r => { html += cardRispondente(r); });
+      }
+    } else {
+      _risposti.forEach(r => { html += cardRispondente(r); });
+      if (_nonRisp.length > 0) {
+        html += `<div style="margin:20px 0; border-top:1px solid #b8893a; opacity:0.3;"></div>`;
+        _nonRisp.forEach(inv => { html += cardNonRispondente(inv.nome); });
+      }
+    }
+
+    html += `</div>
+    <div style="text-align:center; margin: 16px 0 8px; display:flex; justify-content:center; align-items:center; gap:10px;">
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="background:linear-gradient(135deg,#7a5c3a,#9e7f5b);color:#ffffff;border:none;border-radius:12px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(122,92,58,0.3);">${testi.btnHome}</button>
+      <button onclick="gestisciContatore()" id="btn-contatore" style="display:none;background:linear-gradient(135deg,#3a6b7a,#5b9eb5);color:#ffffff;border:none;border-radius:12px;padding:12px 20px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;box-shadow:0 2px 10px rgba(58,107,122,0.3);min-width:56px;">${leggiContatore()}</button>
+    </div>
+    <div id="sezione-tavoli"></div>`;
+    box.innerHTML = html;
+    const btnC = document.getElementById('btn-contatore');
+    if (btnC) btnC.textContent = leggiContatore();
+    renderizzaTavoli();
+  }
+
+  function labelOrdineCorrente() {
+    const t = dizionario[currentLang];
+    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA, gruppi: t.lbl_GRUPPI };
+    return labels[activeOrdine] || t.lbl_COGNOME;
+  }
 
   function ordinaInvitati(arr, criterio) {
     const a2z = (a,b) => a.localeCompare(b, 'it', {sensitivity:'base'});
     const cp = v => normalizeText(v);
     const arr2 = [...arr];
-    if (criterio === 'inserimento') {
-      arr2.sort((a,b) => (b.indiceOriginale||0) - (a.indiceOriginale||0));
-    } else if (criterio === 'nome') {
+    if (criterio === 'inserimento') arr2.sort((a,b) => (b.indiceOriginale||0) - (a.indiceOriginale||0));
+    else if (criterio === 'nome') {
       arr2.sort((a,b) => {
         const ta = (a.nome||'').trim().split(/\s+/);
         const tb = (b.nome||'').trim().split(/\s+/);
@@ -1580,43 +787,97 @@
     } else if (criterio === 'cibo') {
       const ord = { baby:0, veg:1, carne:2, pesce:3 };
       arr2.sort((a,b) => (ord[detectSecondo(a.secondo)] ?? 9) - (ord[detectSecondo(b.secondo)] ?? 9));
+    } else if (criterio === 'eta') {
+      arr2.sort((a,b) => (getEtaAnni(b.nome) ?? -1) - (getEtaAnni(a.nome) ?? -1));
     } else if (criterio === 'tavolo') {
       arr2.sort((a,b) => a2z(trovaTavoloNum(a.nome), trovaTavoloNum(b.nome)));
     }
     return arr2;
   }
 
-  function labelOrdineCorrente() {
-    const t = dizionario[currentLang];
-    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA, gruppi: t.lbl_GRUPPI };
-    return labels[activeOrdine] || t.lbl_COGNOME;
-  }
-
   function apriSceltaOrdine() {
     const t = dizionario[currentLang];
-    const opzioni = [
-      {val:'inserimento', lbl: t.btnOrdina_inserimento},
-      {val:'nome',        lbl: t.btnOrdina_nome},
-      {val:'cognome',     lbl: t.btnOrdina_cognome},
-      {val:'tavolo',      lbl: t.btnOrdina_tavolo},
-      {val:'cibo',        lbl: t.btnOrdina_cibo}
-    ];
+    const opzioni = [ {val:'inserimento', lbl: t.btnOrdina_inserimento}, {val:'nome', lbl: t.btnOrdina_nome}, {val:'cognome', lbl: t.btnOrdina_cognome}, {val:'tavolo', lbl: t.btnOrdina_tavolo}, {val:'cibo', lbl: t.btnOrdina_cibo}, {val:'eta', lbl: t.btnOrdina_eta}, {val:'attesa', lbl: t.btnOrdina_attesa}, {val:'gruppi', lbl: t.btnOrdina_gruppi} ];
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;display:flex;align-items:center;justify-content:center;';
     const box = document.createElement('div');
-    box.style.cssText = 'background:#fff;border-radius:16px;padding:20px;width:88%;max-width:340px;';
-    box.innerHTML = '<div style="text-align:center;font-weight:700;margin-bottom:15px;">' + t.lblOrdinaPer + '</div>';
+    box.style.cssText = 'background:#fff;border-radius:16px;padding:20px;width:90%;max-width:340px;';
+    box.innerHTML = `<h3 style="text-align:center;margin-bottom:15px;color:#8a5e1e;">${t.lblOrdinaPer}</h3>`;
     opzioni.forEach(o => {
       const btn = document.createElement('button');
       btn.innerHTML = o.lbl;
-      btn.style.cssText = 'display:block;width:100%;margin-bottom:8px;padding:12px;border:1px solid #ccc;border-radius:8px;background:' + (o.val===activeOrdine?'#f5ede0':'#fff');
-      btn.onclick = () => { activeOrdine = o.val; window.datiInvitati = ordinaInvitati(window.datiInvitati, o.val); renderizzaDati(); document.body.removeChild(overlay); };
+      btn.style.cssText = `display:block;width:100%;padding:12px;margin-bottom:8px;border-radius:8px;border:1px solid ${o.val===activeOrdine?'#b8893a':'#ccc'};background:${o.val===activeOrdine?'#f5ede0':'#fff'};text-align:left;`;
+      btn.onclick = () => { activeOrdine=o.val; window.datiInvitati=ordinaInvitati(window.datiInvitati, activeOrdine); renderizzaDati(); document.body.removeChild(overlay); };
       box.appendChild(btn);
     });
+    const ann = document.createElement('button');
+    ann.textContent = t.lblAnnulla;
+    ann.style.cssText = 'width:100%;padding:10px;margin-top:10px;background:#eee;border:none;border-radius:8px;';
+    ann.onclick = () => document.body.removeChild(overlay);
+    box.appendChild(ann);
     overlay.appendChild(box);
-    overlay.onclick = e => { if (e.target === overlay) document.body.removeChild(overlay); };
     document.body.appendChild(overlay);
   }
+
+  function toggleTavolo(idx) {
+    tavoloAperto = (tavoloAperto === idx) ? null : idx;
+    renderizzaTavoli();
+  }
+
+  function renderizzaTavoli() {
+    const sez = document.getElementById('sezione-tavoli');
+    if (!sez) return;
+    let html = `<div style="margin-top:20px;">`;
+    TAVOLI.forEach((t, i) => {
+      const risposti = t.persone.filter(p => (window.datiInvitati||[]).some(r => normalizeText(r.nome) === normalizeText(p))).length;
+      const isOpen = tavoloAperto === i;
+      html += `<div style="margin-bottom:8px;">
+        <button onclick="toggleTavolo(${i})" style="width:100%;padding:15px;background:#e0e8d0;border:1.5px solid #a5b589;border-radius:12px;text-align:left;font-weight:600;display:flex;justify-content:space-between;">
+          <span>${t.nome.replace(/^Tavolo \d+ - /,'')}</span>
+          <span style="background:#fff;padding:2px 8px;border-radius:10px;font-size:12px;">${risposti}/${t.persone.length}</span>
+        </button>
+        <div style="display:${isOpen?'block':'none'};padding:10px;background:#f9fff0;border:1px solid #a5b589;border-top:none;border-radius:0 0 12px 12px;">
+          ${t.persone.map(p => `<div style="padding:4px 0;font-size:15px;">${p} ${etaTavoloHTML(p)}</div>`).join('')}
+        </div>
+      </div>`;
+    });
+    sez.innerHTML = html + '</div>';
+  }
+
+  function etaTavoloHTML(nome) {
+    const eta = getEtaAnni(nome);
+    const r = (window.datiInvitati||[]).find(inv => normalizeText(inv.nome) === normalizeText(nome));
+    let icon = '';
+    if (r) {
+      const t = detectSecondo(r.secondo);
+      const m = { veg:'V', carne:'C', pesce:'P', baby:'B' };
+      const c = { veg:'#2d6040', carne:'#a83230', pesce:'#c8a000', baby:'#2980b9' };
+      if (m[t]) icon = ` <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:${c[t]};color:#fff;font-size:10px;text-align:center;line-height:18px;font-weight:900;">${m[t]}</span>`;
+    }
+    return (eta !== null ? ` <small>(${eta})</small>` : '') + icon;
+  }
+
+  function leggiContatore() {
+    return '👁 ' + (parseInt(localStorage.getItem('matrimonio_visite') || '0', 10));
+  }
+
+  function gestisciContatore() {
+    const n = parseInt(localStorage.getItem('matrimonio_visite') || '0', 10);
+    if (confirm('Visite registrate: ' + n + '\n\nAzzerare il contatore?')) {
+      localStorage.setItem('matrimonio_visite', 0);
+      const btn = document.getElementById('btn-contatore');
+      if (btn) btn.textContent = '👁 0';
+    }
+  }
+
+  window.addEventListener('focus', function() {
+    const btn = document.getElementById('btn-contatore');
+    if (btn) btn.textContent = leggiContatore();
+  });
+  setInterval(function() {
+    const btn = document.getElementById('btn-contatore');
+    if (btn) btn.textContent = leggiContatore();
+  }, 30000);
 
   function calcolaInAttesa() {
     const tutti = window.tuttiInvitatiCsvRaw || [];
@@ -1624,62 +885,87 @@
     return tutti.filter(inv => !risposti.some(r => normalizeText(r.nome) === normalizeText(inv.nome)));
   }
 
-  function mostraFotoPopup(nomeFile) {
-    const foto = window.fotoDisponibili || [];
-    let idx = foto.findIndex(f => f && (f.file === nomeFile || f.nome === nomeFile));
-    if (idx < 0) idx = 0;
-    if (foto.length === 0) return;
-
-    let playTimer = null;
-    const PLAY_INTERVAL = 6000;
-
-    const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;background:#2d3a0e;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;';
-    
-    const stage = document.createElement('div');
-    stage.style.cssText = 'position:relative;width:95%;height:70%;display:flex;align-items:center;justify-content:center;';
-    
-    const imgA = document.createElement('img'); imgA.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;';
-    stage.appendChild(imgA);
-
-    const caption = document.createElement('div');
-    caption.style.cssText = 'color:#fff;font-family:Inter;font-size:20px;font-weight:700;margin-top:20px;text-align:center;';
-    
-    const sidebar = document.createElement('div');
-    sidebar.style.cssText = 'color:#d4b07a;font-family:Inter;font-size:16px;text-align:center;margin-top:10px;';
-
-    function aggiornaContenuto(i) {
-      const voce = foto[i];
-      const src = voce.file ? 'Foto/' + voce.file : '';
-      imgA.src = src;
-      imgA.onerror = () => { imgA.src = ''; caption.textContent = '📷 ' + voce.nome; };
-      caption.textContent = (i+1) + ' / ' + foto.length;
-      
-      const parti = (voce.nome||'').trim().split(/\s+/);
-      const cognome = parti[0];
-      const nomeResto = parti.slice(1).join(' ');
-      const eta = getEtaAnni(voce.nome);
-      sidebar.innerHTML = `<strong>${cognome}</strong> ${nomeResto} ${eta?'('+eta+')':''}`;
+  async function generaPDF() {
+    const testi = dizionario[currentLang];
+    if (!window.datiInvitati || window.datiInvitati.length === 0) {
+      alert(testi.msgNessunDato);
+      return;
     }
+    const btnPdf = document.getElementById('btn-pdf-gen');
+    if (btnPdf) btnPdf.disabled = true;
 
-    const next = () => { idx = (idx + 1) % foto.length; aggiornaContenuto(idx); };
-    const prev = () => { idx = (idx - 1 + foto.length) % foto.length; aggiornaContenuto(idx); };
+    const pdfToast = document.createElement('div');
+    pdfToast.id = 'pdf-toast';
+    pdfToast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2d6040;color:#fff;padding:18px 32px;border-radius:14px;z-index:99999;';
+    pdfToast.textContent = 'Creazione PDF in corso...';
+    document.body.appendChild(pdfToast);
 
-    // Frecce
-    const btnSx = document.createElement('button'); btnSx.innerHTML = '‹'; btnSx.style.cssText = 'position:absolute;left:20px;background:none;border:none;color:#fff;font-size:60px;';
-    btnSx.onclick = e => { e.stopPropagation(); prev(); };
-    const btnDx = document.createElement('button'); btnDx.innerHTML = '›'; btnDx.style.cssText = 'position:absolute;right:20px;background:none;border:none;color:#fff;font-size:60px;';
-    btnDx.onclick = e => { e.stopPropagation(); next(); };
+    let totPresenti=0, totAssenti=0, totAllergie=0, totVeg=0, totCarne=0, totPesce=0, totBaby=0, totSegnaposto=0;
+    let presentiRows = [];
+    window.datiInvitati.forEach(r => {
+      const assente = isAbsent(r.presenza, r.secondo);
+      if (!assente) {
+        totPresenti++; presentiRows.push(r);
+        if (hasAllergy(r.allergie)) totAllergie++;
+        const tipo = detectSecondo(r.secondo);
+        if (tipo==='veg') totVeg++; else if (tipo==='carne') totCarne++; else if (tipo==='pesce') totPesce++; else if (tipo==='baby') totBaby++; else if (tipo==='segnaposto') totSegnaposto++;
+      } else { totAssenti++; }
+    });
 
-    overlay.appendChild(btnSx);
-    overlay.appendChild(stage);
-    overlay.appendChild(btnDx);
-    overlay.appendChild(caption);
-    overlay.appendChild(sidebar);
+    const container = document.createElement('div');
+    container.style.width = '740px'; container.style.background = '#fff';
+    let htmlPDF = `<h1 style="text-align:center;">${testi.titolo}</h1><h2 style="text-align:center;">Giulia & Onofrio</h2>`;
+    htmlPDF += `<table style="width:100%;border-collapse:collapse;margin-top:20px;border:1px solid #000;">
+      <thead><tr style="background:#eee;"><th>${testi.pdfNome}</th><th>Secondo</th><th>Allergie</th></tr></thead><tbody>`;
+    presentiRows.forEach(r => {
+      htmlPDF += `<tr style="border:1px solid #000;"><td style="padding:5px;">${r.nome}</td><td style="padding:5px;">${r.secondo||'-'}</td><td style="padding:5px;">${r.allergie||'-'}</td></tr>`;
+    });
+    htmlPDF += `</tbody></table>`;
+    container.innerHTML = htmlPDF;
+
+    const opt = { margin: 10, filename: 'ListaInvitati.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+    html2pdf().set(opt).from(container).save().then(() => {
+      document.body.removeChild(pdfToast);
+      if (btnPdf) btnPdf.disabled = false;
+    });
+  }
+
+  window._apriGalleria = function(nomeSelezionato) {
+    const domEls = [...document.querySelectorAll('.risposta-nome[data-nomefile]')].filter(el => el.closest('.risposta-card') && el.closest('.risposta-card').style.display !== 'none');
+    const fotoArr = domEls.map(el => ({ nome: el.getAttribute('data-nomefile'), file: el.getAttribute('data-foto-file') || null }));
+    let idx = fotoArr.findIndex(f => normalizeText(f.nome) === normalizeText(nomeSelezionato));
+    if (idx < 0) idx = 0;
+    mostraFotoPopup(fotoArr, idx);
+  };
+
+  function mostraFotoPopup(foto, initialIdx) {
+    let idx = initialIdx;
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;';
+    const img = document.createElement('img');
+    img.style.cssText = 'max-width:90%;max-height:80%;object-fit:contain;';
+    const cap = document.createElement('div');
+    cap.style.cssText = 'margin-top:20px;font-size:20px;';
     
+    const update = () => {
+      const f = foto[idx];
+      img.src = f.file ? 'Foto/' + f.file : '';
+      img.onerror = () => { img.src = ''; cap.innerHTML = '📷 ' + f.nome; };
+      cap.innerHTML = (idx+1) + ' / ' + foto.length + '<br>' + f.nome;
+    };
+
+    const next = () => { idx = (idx + 1) % foto.length; update(); };
+    const prev = () => { idx = (idx - 1 + foto.length) % foto.length; update(); };
+
+    const bSx = document.createElement('button'); bSx.innerHTML = '‹'; bSx.style.cssText = 'position:absolute;left:20px;font-size:50px;background:none;color:#fff;border:none;';
+    bSx.onclick = e => { e.stopPropagation(); prev(); };
+    const bDx = document.createElement('button'); bDx.innerHTML = '›'; bDx.style.cssText = 'position:absolute;right:20px;font-size:50px;background:none;color:#fff;border:none;';
+    bDx.onclick = e => { e.stopPropagation(); next(); };
+
+    overlay.appendChild(bSx); overlay.appendChild(img); overlay.appendChild(bDx); overlay.appendChild(cap);
     overlay.onclick = () => document.body.removeChild(overlay);
     document.body.appendChild(overlay);
-    aggiornaContenuto(idx);
+    update();
   }
 
   function eliminaRiga(riga) {
@@ -1695,9 +981,11 @@
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Backup_Invitati.csv';
-    a.click();
+    a.href = url; a.download = 'Backup_Invitati.csv'; a.click();
+  }
+
+  function scorriTavoli() {
+    document.getElementById('sezione-tavoli').scrollIntoView({ behavior: 'smooth' });
   }
 </script>
 </body>

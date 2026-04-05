@@ -361,7 +361,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v184 · 05/04/2026 · 10:09:06'; // aggiornato da Matr.py al push
+  const APP_VERSION = 'v184 · 05/04/2026 · 10:20:56'; // aggiornato da Matr.py al push
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -460,6 +460,8 @@
       lbl_ATTESA: "IN ATTESA di registrazione",
       btnOrdina_tutti: "<b>TUTTI</b> in ordine di cognome",
       lbl_TUTTI: "TUTTI in ordine di cognome",
+      btnOrdina_gruppi: "<b>GRUPPI</b> per cognome",
+      lbl_GRUPPI: "GRUPPI",
       titoloAttesa: "In attesa di risposta",
       titoloConferma: "In attesa di conferma",
       msgAttesaVuota: "Tutti gli invitati hanno risposto.",
@@ -546,6 +548,8 @@
       lbl_ATTESA: "EN ESPERA",
       btnOrdina_tutti: "<b>TODOS</b> por apellido",
       lbl_TUTTI: "TODOS por apellido",
+      btnOrdina_gruppi: "<b>GRUPOS</b> por apellido",
+      lbl_GRUPPI: "GRUPOS",
       titoloAttesa: "En espera de respuesta",
       titoloConferma: "En espera de confirmación",
       msgAttesaVuota: "Todos los invitados han respondido.",
@@ -1163,6 +1167,68 @@
           if (spans.length === 0) window.fotoDisponibili = [];
         }, 50);
       }
+    } else if (activeOrdine === 'gruppi') {
+      // === MODALITÀ GRUPPI: rispondenti raggruppati per cognome con intestazione ===
+      const acc0 = /[\u0300-\u036f]/g;
+      const norm0 = s => (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim();
+      const perCognome = [...window.datiInvitati].sort((a,b) => {
+        const ca = norm0(ultimoToken(a.nome)), cb = norm0(ultimoToken(b.nome));
+        const res = ca.localeCompare(cb, 'it', {sensitivity:'base'});
+        if (res !== 0) return res;
+        return norm0(primoToken(a.nome)).localeCompare(norm0(primoToken(b.nome)), 'it', {sensitivity:'base'});
+      });
+      let ultimoCognome = null;
+      perCognome.forEach((r, idxV) => {
+        const riga = r.indiceOriginale;
+        const presenza = r.presenza || '';
+        const assente = isAbsent(presenza, r.secondo);
+        const tipoSecondo = detectSecondo(r.secondo);
+        let classiFiltro = [];
+        if (assente) { classiFiltro.push('cat-assenti'); }
+        else {
+          classiFiltro.push('cat-presenti');
+          if (hasAllergy(r.allergie))      classiFiltro.push('cat-allergie');
+          if (tipoSecondo === 'veg')        classiFiltro.push('cat-veg');
+          if (tipoSecondo === 'carne')      classiFiltro.push('cat-carne');
+          if (tipoSecondo === 'pesce')      classiFiltro.push('cat-pesce');
+          if (tipoSecondo === 'baby')       classiFiltro.push('cat-baby');
+          if (tipoSecondo === 'segnaposto') classiFiltro.push('cat-segnaposto');
+        }
+        const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
+        const cognomeCorrente = ultimoToken(r.nome);
+        const cognomeNorm = norm0(cognomeCorrente);
+        if (cognomeNorm !== ultimoCognome) {
+          ultimoCognome = cognomeNorm;
+          html += `<div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:#8a5e1e;padding:10px 6px 3px;letter-spacing:1px;border-bottom:1px solid #d4b07a;margin-bottom:4px;margin-top:${idxV===0?'0':'10px'};">${cognomeCorrente.toUpperCase()}</div>`;
+        }
+        const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : tipoSecondo === 'baby' ? '🍼' : '');
+        const haAllergia = hasAllergy(r.allergie);
+        const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
+        const iconeAllergie = iconaAllergie(r.allergie);
+        const tavNum = trovaTavoloNum(r.nome);
+        const nomeDisplay = formatNomeDisplay(r.nome);
+        const allergieHtml = hasAllergy(r.allergie) ? `<span class="risposta-val allergia">${r.allergie}</span>` : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
+        const note = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
+        const idSafe = 'g_' + riga;
+        const parti = (r.nome||'').trim().split(/\s+/);
+        const nomeFileFoto = parti.length >= 2 ? parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' ') : (r.nome||'');
+        html += `<div class="risposta-card ${classiFiltro.join(' ')}" style="${displayStyle}" id="${idSafe}">
+          <div class="risposta-nome" onclick="toggleDettagli(${riga})">
+            ${tavNum ? `<span style="margin-right:4px;font-size:14px">${tavNum}</span>` : ''}<span id="nomefoto-${riga}" data-nomefile="${nomeFileFoto}">${nomeDisplay}</span>${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}
+            <span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span>
+            <span class="${classFreccia}">›</span>
+          </div>
+          <div class="dettagli-scheda" id="det-${riga}">
+            <div class="risposta-row"><span class="risposta-label">${testi.lblPresenza}</span><span class="risposta-val">${r.presenza||'—'}</span></div>
+            <div class="risposta-row"><span class="risposta-label">${testi.lblSecondo}</span>${r.secondo ? `<span class="risposta-val">${r.secondo}</span>` : `<span class="risposta-val muted">—</span>`}</div>
+            <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span>${allergieHtml}</div>
+            <div class="risposta-row"><span class="risposta-label">${testi.lblNote}</span>${note}</div>
+            <div class="risposta-data">${r.data||''}</div>
+            <button class="delete-btn" onclick="eliminaScheda(${riga})">${testi.btnElimina}</button>
+          </div>
+        </div>`;
+      });
+
     } else {
 
 
@@ -2679,7 +2745,7 @@
 
   function labelOrdineCorrente() {
     const t = dizionario[currentLang];
-    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA, tutti: t.lbl_TUTTI };
+    const labels = { inserimento: t.lbl_INSERIMENTO, nome: t.lbl_NOME, cognome: t.lbl_COGNOME, cibo: t.lbl_CIBO, eta: t.lbl_ETA, tavolo: t.lbl_TAVOLO, attesa: t.lbl_ATTESA, tutti: t.lbl_TUTTI, gruppi: t.lbl_GRUPPI };
     const base = labels[activeOrdine] || t.lbl_COGNOME;
     const totInv = window.totInvitatiCsv || null;
     if (!totInv) return base;
@@ -2895,7 +2961,8 @@
       {val:'cibo',        lbl: t.btnOrdina_cibo},
       {val:'eta',         lbl: t.btnOrdina_eta},
       {val:'attesa',      lbl: t.btnOrdina_attesa},
-      {val:'tutti',       lbl: t.btnOrdina_tutti}
+      {val:'tutti',       lbl: t.btnOrdina_tutti},
+      {val:'gruppi',      lbl: t.btnOrdina_gruppi}
     ];
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:3000;display:flex;align-items:center;justify-content:center;';
@@ -2970,7 +3037,7 @@
         @media (max-width:1024px) { .fp-group-row { margin-bottom:10px; } }
         .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 2px); min-width:0; }
         .fp-group-thumb-wrap { width:100%; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
-        .fp-group-thumb-wrap.highlight { border:4px solid #f5d78a; }
+        .fp-group-thumb-wrap.highlight { border:4px solid #d4b07a; }
         .fp-group-thumb { width:100%; height:100%; object-fit:cover; display:block; }
         .fp-group-placeholder { font-size:16pt; line-height:1; }
         .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(7px,1.4vw,12px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
@@ -3013,8 +3080,8 @@
     // stage (foto)
     const stage = document.createElement('div');
     stage.className = 'fp-stage';
-    const imgA = document.createElement('img'); imgA.className = 'fp-img front'; imgA.style.pointerEvents='auto';
-    const imgB = document.createElement('img'); imgB.className = 'fp-img';       imgB.style.pointerEvents='none';
+    const imgA = document.createElement('img'); imgA.className = 'fp-img front';
+    const imgB = document.createElement('img'); imgB.className = 'fp-img';
     stage.appendChild(imgA); stage.appendChild(imgB);
     let imgFront = imgA, imgBack = imgB;
 
@@ -3298,7 +3365,6 @@
           stage.appendChild(sph);
           imgFront.src = ''; imgBack.src = '';
           [imgFront, imgBack] = [imgBack, imgFront];
-          imgFront.style.pointerEvents='auto'; imgBack.style.pointerEvents='none';
           noFotoTimer = null;
         }, 0);
         return;
@@ -3319,14 +3385,13 @@
           setTimeout(()=>{
             if (currentGen !== gen) return;
             [imgFront,imgBack]=[imgBack,imgFront];
-            imgFront.style.pointerEvents='auto'; imgBack.style.pointerEvents='none';
           }, 1000);
         }));
       };
       preload.src = src;
     }
 
-    function vai(i) { idx=i; nascondiFocusFrame(); aggiornaContenuto(idx,false); }
+    function vai(i) { idx=i; aggiornaContenuto(idx,false); }
 
     // ── Play / Pausa ──────────────────────────────────────────────────────
     function playing() { return playTimer!==null; }
@@ -3429,66 +3494,8 @@
       chiudiPopup();
     }, {passive:true});
 
-    // ── Cornice di focus sulla foto grande ────────────────────────────────
-    // Il div viene aggiunto al body (fuori dallo stage con overflow:hidden)
-    // e posizionato con position:fixed sulle dimensioni reali della foto
-    const focusFrame = document.createElement('div');
-    focusFrame.style.cssText = [
-      'position:fixed', 'pointer-events:none', 'z-index:10000',
-      'border:3px solid rgba(245,215,138,0.9)', 'box-sizing:border-box',
-      'opacity:0', 'transition:opacity 0.2s', 'display:none'
-    ].join(';');
-    document.body.appendChild(focusFrame);
-    let focusTimer = null;
-
-    function getFotoRect() {
-      const sr = stage.getBoundingClientRect();
-      if (!imgFront.naturalWidth || !imgFront.naturalHeight) return sr;
-      const scale = Math.min(sr.width / imgFront.naturalWidth, sr.height / imgFront.naturalHeight);
-      const fw = imgFront.naturalWidth * scale;
-      const fh = imgFront.naturalHeight * scale;
-      return {
-        left:   sr.left   + (sr.width  - fw) / 2,
-        top:    sr.top    + (sr.height - fh) / 2,
-        width:  fw,
-        height: fh
-      };
-    }
-
-    function mostraFocusFrame() {
-      const r = getFotoRect();
-      focusFrame.style.left   = r.left   + 'px';
-      focusFrame.style.top    = r.top    + 'px';
-      focusFrame.style.width  = r.width  + 'px';
-      focusFrame.style.height = r.height + 'px';
-      focusFrame.style.display = 'block';
-      void focusFrame.offsetWidth; // forza reflow per riavviare la transizione
-      focusFrame.style.opacity = '1';
-      if (focusTimer) clearTimeout(focusTimer);
-      focusTimer = setTimeout(() => {
-        focusFrame.style.opacity = '0';
-        setTimeout(() => { focusFrame.style.display = 'none'; }, 250);
-        focusTimer = null;
-      }, 1800);
-    }
-
-    function nascondiFocusFrame() {
-      if (focusTimer) { clearTimeout(focusTimer); focusTimer = null; }
-      focusFrame.style.opacity = '0';
-      focusFrame.style.display = 'none';
-    }
-
-    // Click sulla foto grande → mostra cornice (listener sullo stage, funziona sempre)
-    stage.addEventListener('click', function(e) {
-      // Ignora click su frecce e pulsanti sovrapposti
-      if (e.target.closest && (e.target.closest('[data-arrow]') || e.target.closest('button'))) return;
-      mostraFocusFrame();
-    });
-
     // ── Chiusura ──────────────────────────────────────────────────────────
     function chiudiPopup() {
-      nascondiFocusFrame();
-      if (document.body.contains(focusFrame)) document.body.removeChild(focusFrame);
       stopPlay(true);
       releaseWakeLock();
       document.removeEventListener('keydown', onKey);
@@ -3541,5 +3548,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v184 - 05/04/2026 - Fix: APP_VERSION in cima; focusFrame fixed sul body (non tagliato da overflow:hidden); click su imgFront/imgBack; pointer-events swap; cornice miniatura #f5d78a -->
+<!-- Lista.html v184 - 05/04/2026 - Nuovo ordine GRUPPI per cognome con intestazioni; APP_VERSION in cima; ver-label; miniatura giallo chiaro; focusFrame; pointer-events imgFront -->
 

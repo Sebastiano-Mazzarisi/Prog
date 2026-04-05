@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 06/04/2026 · 00:53:17';
+  const APP_VERSION = 'v196 · 06/04/2026 · 01:01:45';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2236,11 +2236,13 @@
              </div>`
           : '';
         const DASH_W = 2;
+        const DASH_BG = '#fffde7';
+        const DASH_BG_W = FRAME_W + 2;
         const edgeDx = flags.ponteRigaDestra
-          ? `<div style="position:absolute;top:${FRAME_W}px;right:${Math.max(1, FRAME_W - DASH_W)}px;width:0;height:${IMG_SIZE - (FRAME_W * 2)}px;border-right:${DASH_W}px dashed ${FRAME_COLOR};box-sizing:border-box;pointer-events:none;z-index:6;"></div>`
+          ? `<div style="position:absolute;top:${FRAME_W}px;right:${Math.max(1, FRAME_W - DASH_BG_W)}px;width:${DASH_BG_W}px;height:${IMG_SIZE - (FRAME_W * 2)}px;background:${DASH_BG};box-sizing:border-box;pointer-events:none;z-index:5;"></div><div style="position:absolute;top:${FRAME_W}px;right:${Math.max(1, FRAME_W - DASH_W)}px;width:0;height:${IMG_SIZE - (FRAME_W * 2)}px;border-right:${DASH_W}px dashed ${FRAME_COLOR};box-sizing:border-box;pointer-events:none;z-index:6;"></div>`
           : '';
         const edgeSx = flags.ponteRigaSinistra
-          ? `<div style="position:absolute;top:${FRAME_W}px;left:${Math.max(1, FRAME_W - DASH_W)}px;width:0;height:${IMG_SIZE - (FRAME_W * 2)}px;border-left:${DASH_W}px dashed ${FRAME_COLOR};box-sizing:border-box;pointer-events:none;z-index:6;"></div>`
+          ? `<div style="position:absolute;top:${FRAME_W}px;left:${Math.max(1, FRAME_W - DASH_BG_W)}px;width:${DASH_BG_W}px;height:${IMG_SIZE - (FRAME_W * 2)}px;background:${DASH_BG};box-sizing:border-box;pointer-events:none;z-index:5;"></div><div style="position:absolute;top:${FRAME_W}px;left:${Math.max(1, FRAME_W - DASH_W)}px;width:0;height:${IMG_SIZE - (FRAME_W * 2)}px;border-left:${DASH_W}px dashed ${FRAME_COLOR};box-sizing:border-box;pointer-events:none;z-index:6;"></div>`
           : '';
         const frameOlive = (flags.frameTop || flags.frameBottom || flags.frameLeft || flags.frameRight)
           ? `<div style="position:absolute;top:0;left:0;width:${IMG_SIZE}px;height:${IMG_SIZE}px;box-sizing:border-box;border-top:${flags.frameTop ? FRAME_W : 0}px solid ${FRAME_COLOR};border-bottom:${flags.frameBottom ? FRAME_W : 0}px solid ${FRAME_COLOR};border-left:${flags.frameLeft ? FRAME_W : 0}px solid ${FRAME_COLOR};border-right:${flags.frameRight ? FRAME_W : 0}px solid ${FRAME_COLOR};border-radius:4px;pointer-events:none;z-index:4;"></div>`

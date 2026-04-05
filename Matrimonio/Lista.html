@@ -1,4 +1,4 @@
-<!-- Lista.html v194 - 05/04/2026 -->
+<!-- Lista.html v195 - 05/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v194 · 05/04/2026 · 18:11:04';
+  const APP_VERSION = 'v195 · 05/04/2026 · 18:24:42';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2106,7 +2106,7 @@
 
     htmlPDF += `</div>`; // Chiude pagina grafici
 
-    // ===== PAGINA FOTOGRAFIE: miniature 2x2cm in griglia =====
+    // ===== PAGINE FOTOGRAFIE: miniature 2x2cm in griglia =====
 
     // Carica Identificativi.csv per label personalizzati
     const mapIdentificativi = {};
@@ -2132,24 +2132,22 @@
       function norm(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc,'').trim(); }
       const k = norm(cognomeNome);
       if (mapIdentificativi[k]) return mapIdentificativi[k];
-      // fallback: prova senza accenti nel confronto
       for (const mk of Object.keys(mapIdentificativi)) {
         if (norm(mk) === k) return mapIdentificativi[mk];
       }
-      // fallback: primo nome
       const parti = cognomeNome.trim().split(/\s+/);
       return parti.length >= 2 ? parti.slice(1).join(' ') : cognomeNome;
     }
 
-    htmlPDF += `<div class="html2pdf__page-break"></div>`;
-    htmlPDF += `<div style="width:740px;padding:0 0 20mm 0;font-family:'Inter',sans-serif;">`;
-    htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;margin-top:0;margin-bottom:2px;color:#000;">Fotografie</h1>`;
-    htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:#8a5e1e;margin-bottom:10px;">Giulia &amp; Onofrio</h2>`;
+    function trovaCognomeNome(nomeInv) {
+      const base = (nomeInv || '').trim();
+      if (!base) return '';
+      if (typeof chiaveCognomeNome === 'function') {
+        return chiaveCognomeNome(base) || base;
+      }
+      return base;
+    }
 
-    // Costruisce lista ordinata da fotoDisponibili o datiInvitati come fallback
-    // Costruisce mappa CognomeNome → file foto da fotoDisponibili
-    // Costruisce mappa CognomeNome → file foto con fetch HEAD diretto per tutti gli invitati
-    // (non dipende da fotoDisponibili che potrebbe essere incompleto)
     const acc0 = /[\u0300-\u036f]/g;
     function norm0(s) { return (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim(); }
     function variantiNomePDF(n) {
@@ -2161,22 +2159,10 @@
       return [...v];
     }
 
-    function trovaCognomeNome(nomeInv) {
-      const base = (nomeInv || '').trim();
-      if (!base) return '';
-      // I dati CSV sono già nel formato "Cognome Nome".
-      // Se arriva un nome invertito dal flusso risposte, usa la funzione canonica globale.
-      if (typeof chiaveCognomeNome === 'function') {
-        return chiaveCognomeNome(base) || base;
-      }
-      return base;
-    }
-
     const tuttiCsv = window.tuttiInvitatiCsvRaw || [];
     const fonteBase = tuttiCsv.length > 0 ? tuttiCsv : (window.datiInvitati || []);
-
-    // Fetch HEAD in parallelo per tutti gli invitati
     const estensioni = ['jpg', 'JPG', 'jpeg', 'JPEG'];
+
     async function cercaFotoPDF(cognomeNome) {
       for (const variante of variantiNomePDF(cognomeNome)) {
         for (const ext of estensioni) {
@@ -2189,13 +2175,13 @@
       return null;
     }
 
-    // Aggiorna pulsante durante attesa
     if (btnPdf) { /* foto in caricamento, toast già visibile */ }
 
     const mapFotoFile = {};
     await Promise.all(fonteBase.map(async r => {
       const nomeInv = r.nome || '';
       const cognomeNome = trovaCognomeNome(nomeInv);
+      if (!cognomeNome) return;
       const file = await cercaFotoPDF(cognomeNome);
       if (file) mapFotoFile[norm0(cognomeNome)] = file;
     }));
@@ -2206,45 +2192,134 @@
       }
       return null;
     }
-    const fotoPagina = [];
-    fonteBase.forEach(r => {
-      const nomeInv = r.nome || ''; // formato "Nome Cognome"
-      const cognomeNome = trovaCognomeNome(nomeInv);
+
+    function buildVoceFoto(nomeCanonico) {
+      const cognomeNome = trovaCognomeNome(nomeCanonico);
       const id = getIdentificativo(cognomeNome);
       const label = id || cognomeNome;
       const file = trovFoto(cognomeNome);
-      fotoPagina.push({ nome: cognomeNome, file, label });
-    });
+      return { nome: cognomeNome, file, label };
+    }
 
-    // Ordina per identificativo (alfabetico, case-insensitive)
-    fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));
+    function renderPaginaMiniature(titolo, vociOrRows, groupedMode) {
+      const COLS = 8;
+      const CELL_W = 88;
+      const IMG_SIZE = 80;
+      const GAP_W = CELL_W - IMG_SIZE;
+      const CONN_W = GAP_W;
+      const CONN_H = GAP_W;
+      const olive = '#6f7f3f';
 
-    // Griglia: 8 colonne con margini stretti
-    const COLS = 8;
-    const CELL_W = 88;
-    const IMG_SIZE = 80; // px DOM
-
-    htmlPDF += `<table style="border-collapse:collapse;width:100%;table-layout:fixed;">`;
-    for (let row = 0; row < Math.ceil(fotoPagina.length / COLS); row++) {
-      htmlPDF += `<tr>`;
-      for (let col = 0; col < COLS; col++) {
-        const i = row * COLS + col;
-        if (i >= fotoPagina.length) {
-          htmlPDF += `<td style="width:${CELL_W}px;padding:4px 0px;"></td>`;
-          continue;
-        }
-        const voce = fotoPagina[i];
+      function cellMiniatura(voce, connectRight) {
         const imgSrc = voce.file ? 'Foto/' + voce.file : null;
-        htmlPDF += `<td style="width:${CELL_W}px;padding:2px 0px;text-align:center;vertical-align:top;">
+        return `<td style="width:${CELL_W}px;padding:2px 0px;text-align:center;vertical-align:top;position:relative;overflow:visible;">
           ${imgSrc
-            ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;border:1.5px solid #cccccc;box-sizing:border-box;" crossorigin="anonymous" /><div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>`
+            ? `<img src="${imgSrc}" style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;object-fit:cover;border-radius:4px;display:block;margin:0 auto;border:1.5px solid #cccccc;box-sizing:border-box;background:#fff;" crossorigin="anonymous" /><div style="font-size:8px;font-family:'Inter',sans-serif;color:#222;margin-top:2px;line-height:1.2;word-break:break-word;">${voce.label}</div>`
             : `<div style="width:${IMG_SIZE}px;height:${IMG_SIZE}px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;font-size:${IMG_SIZE*0.28}px;line-height:1;border:1.5px solid #cccccc;border-radius:4px;box-sizing:border-box;background:#fffde7;gap:3px;"><span>📷</span><span style="font-size:11px;font-weight:700;font-family:'Inter',sans-serif;color:#333;line-height:1.1;text-align:center;word-break:break-word;padding:0 2px;">${voce.label}</span></div>`}
+          ${connectRight ? `<div style="position:absolute;left:calc(50% + ${IMG_SIZE/2}px);top:${Math.round(IMG_SIZE/2)+2}px;transform:translateY(-50%);width:${CONN_W}px;height:${CONN_H}px;background:${olive};border-radius:2px;"></div>` : ''}
         </td>`;
       }
-      htmlPDF += `</tr>`;
+
+      htmlPDF += `<div class="html2pdf__page-break"></div>`;
+      htmlPDF += `<div style="width:740px;padding:0 0 20mm 0;font-family:'Inter',sans-serif;">`;
+      htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;margin-top:0;margin-bottom:2px;color:#000;">${titolo}</h1>`;
+      htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:#8a5e1e;margin-bottom:10px;">Giulia &amp; Onofrio</h2>`;
+      htmlPDF += `<table style="border-collapse:collapse;width:100%;table-layout:fixed;">`;
+
+      if (!groupedMode) {
+        const voci = vociOrRows;
+        for (let row = 0; row < Math.ceil(voci.length / COLS); row++) {
+          htmlPDF += `<tr>`;
+          for (let col = 0; col < COLS; col++) {
+            const i = row * COLS + col;
+            if (i >= voci.length) {
+              htmlPDF += `<td style="width:${CELL_W}px;padding:4px 0px;"></td>`;
+              continue;
+            }
+            htmlPDF += cellMiniatura(voci[i], false);
+          }
+          htmlPDF += `</tr>`;
+        }
+      } else {
+        const righe = vociOrRows;
+        righe.forEach(riga => {
+          htmlPDF += `<tr>`;
+          for (let col = 0; col < COLS; col++) {
+            const voce = riga[col];
+            if (!voce) {
+              htmlPDF += `<td style="width:${CELL_W}px;padding:4px 0px;"></td>`;
+              continue;
+            }
+            htmlPDF += cellMiniatura(voce, !!voce.connectRight);
+          }
+          htmlPDF += `</tr>`;
+        });
+      }
+
+      htmlPDF += `</table>`;
+      htmlPDF += `</div>`;
     }
-    htmlPDF += `</table>`;
-    htmlPDF += `</div>`;
+
+    const fotoPagina = [];
+    fonteBase.forEach(r => {
+      const nomeInv = r.nome || '';
+      const cognomeNome = trovaCognomeNome(nomeInv);
+      if (!cognomeNome) return;
+      fotoPagina.push(buildVoceFoto(cognomeNome));
+    });
+    fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));
+    renderPaginaMiniature('Fotografie', fotoPagina, false);
+
+    // ===== PAGINA FOTOGRAFIE PER GRUPPI =====
+    const gruppiPdfSorgente = (window.gruppiCsvOrdinati && window.gruppiCsvOrdinati.length > 0)
+      ? window.gruppiCsvOrdinati
+      : [fonteBase.map(r => r.nome || '').filter(Boolean)];
+
+    const COLS_GRUPPI = 8;
+    const righeGruppi = [];
+    let rigaCorrente = [];
+
+    function flushRigaGruppi() {
+      if (rigaCorrente.length === 0) return;
+      while (rigaCorrente.length < COLS_GRUPPI) rigaCorrente.push(null);
+      righeGruppi.push(rigaCorrente);
+      rigaCorrente = [];
+    }
+
+    gruppiPdfSorgente.forEach(gruppo => {
+      const vociGruppo = (gruppo || [])
+        .map(n => buildVoceFoto(trovaCognomeNome(n)))
+        .filter(v => v && v.nome);
+
+      if (vociGruppo.length === 0) return;
+
+      if (vociGruppo.length > COLS_GRUPPI) {
+        flushRigaGruppi();
+        for (let i = 0; i < vociGruppo.length; i += COLS_GRUPPI) {
+          const chunk = vociGruppo.slice(i, i + COLS_GRUPPI).map((v, idx, arr) => ({
+            ...v,
+            connectRight: idx < arr.length - 1
+          }));
+          while (chunk.length < COLS_GRUPPI) chunk.push(null);
+          righeGruppi.push(chunk);
+        }
+        return;
+      }
+
+      if (rigaCorrente.length > 0 && rigaCorrente.length + vociGruppo.length > COLS_GRUPPI) {
+        flushRigaGruppi();
+      }
+
+      vociGruppo.forEach((v, idx) => {
+        rigaCorrente.push({
+          ...v,
+          connectRight: idx < vociGruppo.length - 1
+        });
+      });
+    });
+
+    flushRigaGruppi();
+    renderPaginaMiniature('Fotografie per gruppi', righeGruppi, true);
 
     container.innerHTML = htmlPDF;
 

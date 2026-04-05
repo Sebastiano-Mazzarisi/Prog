@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 06/04/2026 · 00:18:27';
+  const APP_VERSION = 'v196 · 06/04/2026 · 00:25:18';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2206,13 +2206,13 @@
       const CELL_W = 88;
       const IMG_SIZE = 80;
       const GAP_W = CELL_W - IMG_SIZE;
-      const LINK_H = 24;
-      const LINK_W = GAP_W + 9;
+      const LINK_H = 19;
+      const LINK_W = GAP_W + 4;
       const LINK_RIGHT = -LINK_W;
-      const LINK_COLOR = '#ff0000';
-      const EDGE_COLOR = '#ff0000';
-      const EDGE_W = 5;
       const FRAME_COLOR = '#6b8e23';
+      const LINK_COLOR = FRAME_COLOR;
+      const EDGE_COLOR = FRAME_COLOR;
+      const EDGE_W = 5;
       const FRAME_W = 4;
       const breakCss = opts.breakBefore ? 'page-break-before:always;break-before:page;' : '';
 

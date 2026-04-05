@@ -361,7 +361,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v185 · 05/04/2026 · 11:10:53';
+  const APP_VERSION = 'v185 · 05/04/2026 · 11:23:15';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -712,6 +712,19 @@
           gruppoCorrente.push(nomeConv);
         }
         flushGruppo();
+        // Array ordinato dei gruppi (stesso ordine del CSV) per la vista GRUPPI
+        window.gruppiCsvOrdinati = [];
+        let _gc = [];
+        for (let i = startInv; i < righeInv.length; i++) {
+          const _r = righeInv[i];
+          if (!_r) { if (_gc.length) { window.gruppiCsvOrdinati.push([..._gc]); _gc = []; } continue; }
+          const _c = _r.split(sepInv);
+          const _nr = _c[0] ? _c[0].replace(/['"]/g,'').trim() : '';
+          if (!_nr) { if (_gc.length) { window.gruppiCsvOrdinati.push([..._gc]); _gc = []; } continue; }
+          const _p = _nr.split(/\s+/).filter(Boolean);
+          _gc.push(_p.length >= 2 ? _p.slice(1).join(' ') + ' ' + _p[0] : _nr);
+        }
+        if (_gc.length) window.gruppiCsvOrdinati.push(_gc);
       }
     } catch(e) { console.log('mapNascita: Invitati.csv non disponibile', e); }
   }
@@ -1168,7 +1181,7 @@
         }, 50);
       }
     } else if (activeOrdine === 'gruppi') {
-      // === MODALITÀ GRUPPI: TUTTI gli invitati in ordine CSV, linea tra gruppi ===
+      // === MODALITÀ GRUPPI: tutti gli invitati, ordine CSV, linea grigio doppia tra gruppi ===
       const acc0 = /[\u0300-\u036f]/g;
       const norm0 = s => (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim();
       function tokG(n) { return norm0(n).split(/\s+/).filter(Boolean); }
@@ -1176,33 +1189,19 @@
         const ta=tokG(a), tb=tokG(b);
         return ta.every(w=>tb.includes(w)) || tb.every(w=>ta.includes(w));
       }
-      // Ricostruisce gruppi nell'ordine originale del CSV
-      const vistiG = new Set();
-      const gruppiOrdinati = [];
-      (window.tuttiInvitatiCsvRaw || []).forEach(inv => {
-        const k = norm0(inv.nome);
-        if (vistiG.has(k)) return;
-        const gruppo = (window.mapGruppo || {})[k];
-        if (gruppo) {
-          gruppo.forEach(n => vistiG.add(norm0(n)));
-          gruppiOrdinati.push(gruppo);
-        } else {
-          vistiG.add(k);
-          gruppiOrdinati.push([inv.nome]);
-        }
-      });
+      // Usa direttamente i gruppi già costruiti dal CSV (include tutti, nessuno perso)
+      const gruppiDaUsare = window.gruppiCsvOrdinati || [];
 
       let primoG = true;
-      gruppiOrdinati.forEach(gruppoNomi => {
-        // Separa tra gruppi con spazio + linea
+      gruppiDaUsare.forEach(gruppoNomi => {
+        // Separatore grigio scuro tra gruppi (non prima del primo)
         if (!primoG) {
-          html += `<div style="margin-top:14px;border-bottom:1px solid #d4b07a;margin-bottom:14px;"></div>`;
+          html += `<div style="margin-top:10px;border-bottom:2px solid #555;margin-bottom:10px;"></div>`;
         }
         primoG = false;
 
-        // Mostra TUTTI i membri del gruppo, rispondenti e non
+        // Mostra TUTTI i membri del gruppo (rispondenti e non)
         gruppoNomi.forEach(nomeCSV => {
-          // Cerca il corrispondente tra i rispondenti
           const r = (window.datiInvitati||[]).find(inv => matchG(nomeCSV, inv.nome||''));
 
           if (r) {
@@ -1264,17 +1263,13 @@
             </div>`;
           } else {
             // ── Non rispondente: riga grigia non espandibile ───────────
-            const displayStyle = (activeFilter && activeFilter !== 'presenti' && activeFilter !== 'assenti') ? 'display:none;' : 'display:block;';
+            const safeId = norm0(nomeCSV).replace(/[^a-z0-9]/g,'_');
             const partiCSV = nomeCSV.trim().split(/\s+/);
-            // Il nome nel CSV è "Nome Cognome" (già convertito da caricaTavoli)
-            const nomeDisplayCSV = partiCSV.length >= 2
-              ? partiCSV[partiCSV.length-1] + ' ' + partiCSV.slice(0,-1).join(' ')
-              : nomeCSV;
-            const tavNum = trovaTavoloNum(nomeCSV);
             const nomeFileFoto = partiCSV.length>=2 ? partiCSV[partiCSV.length-1]+' '+partiCSV.slice(0,-1).join(' ') : nomeCSV;
-            html += `<div class="risposta-card cat-assenti" style="border-color:#b0c8ee;opacity:0.6;${displayStyle}" id="attesa-${norm0(nomeCSV).replace(/\s+/g,'_')}">
-              <div class="risposta-nome" style="cursor:default;color:#888;">
-                ${tavNum?`<span style="margin-right:4px;font-size:14px">${tavNum}</span>`:''}<span id="nomefoto-csv-${norm0(nomeCSV).replace(/\s+/g,'_')}" data-nomefile="${nomeFileFoto}" style="color:#aaa;">${nomeDisplayCSV}</span>
+            const tavNum = trovaTavoloNum(nomeCSV);
+            html += `<div class="risposta-card" style="border-color:#b0bec5;opacity:0.55;" id="attesa-${safeId}">
+              <div class="risposta-nome" style="cursor:default;">
+                ${tavNum?`<span style="margin-right:4px;font-size:14px">${tavNum}</span>`:''}<span id="nomefoto-csv-${safeId}" data-nomefile="${nomeFileFoto}" style="color:#999;">${nomeCSV}</span>
                 <span class="icone-destra"></span>
                 <span class="freccia" style="color:#ccc;">—</span>
               </div>
@@ -1283,86 +1278,55 @@
         });
       });
 
-      // Fetch foto: rende i nomi cliccabili (solo rispondenti con id nomefoto-)
+      // Fetch foto: rispondenti + non rispondenti con foto
       window.fotoDisponibili = [];
       setTimeout(() => {
-        const spans = [...document.querySelectorAll('[id^="nomefoto-"]:not([id^="nomefoto-csv-"])').length
-          ? document.querySelectorAll('[id^="nomefoto-"]:not([id^="nomefoto-csv-"])')
-          : document.querySelectorAll('[id^="nomefoto-"]')];
-        // Usa solo i nomefoto- dei rispondenti (non csv)
-        const spansRisp = [...document.querySelectorAll('[id^="nomefoto-"]')].filter(s => !s.id.startsWith('nomefoto-csv-'));
-        const risultati = new Array(spansRisp.length).fill(null);
-        let completati = 0;
-        function controllaCompletoG() {
-          completati++;
-          if (completati === spansRisp.length) window.fotoDisponibili = risultati;
-        }
         function variantiNomeG(n) {
-          const v = new Set();
-          v.add(n);
-          v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
+          const v=new Set();
+          v.add(n); v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
           v.add(n.replace(/u'$/,'\u00f9').replace(/a'$/,'\u00e0').replace(/e'$/,'\u00e8').replace(/i'$/,'\u00ec').replace(/o'$/,'\u00f2'));
-          v.add(n.replace(/'$/,''));
-          return [...v];
+          v.add(n.replace(/'$/,'')); return [...v];
         }
-        spansRisp.forEach((span, posizione) => {
-          const nomeFile = span.getAttribute('data-nomefile');
-          if (!nomeFile) { controllaCompletoG(); return; }
-          risultati[posizione] = { nome: nomeFile, file: null };
-          const varianti = variantiNomeG(nomeFile);
-          const estensioni = ['jpg','JPG','jpeg','JPEG'];
-          let trovata = false;
-          function provaComboG(vi, ei) {
-            if (trovata) return;
-            if (vi >= varianti.length) { controllaCompletoG(); return; }
-            if (ei >= estensioni.length) { provaComboG(vi+1,0); return; }
-            fetch('Foto/'+varianti[vi]+'.'+estensioni[ei]+'?t='+Date.now(), {method:'HEAD'})
-              .then(res => {
-                if (res.ok && !trovata) {
-                  trovata = true;
-                  risultati[posizione] = { nome: nomeFile, file: varianti[vi]+'.'+estensioni[ei] };
-                  span.style.color = '#1a4fa0';
-                  span.style.fontWeight = '700';
-                  span.style.cursor = 'pointer';
-                  span.title = 'Clicca per vedere la foto';
-                  const nf = varianti[vi]+'.'+estensioni[ei];
-                  span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nf); };
-                  controllaCompletoG();
-                } else { provaComboG(vi, ei+1); }
-              })
-              .catch(() => provaComboG(vi, ei+1));
+        function fetchFoto(span, onTrovata) {
+          const nomeFile=span.getAttribute('data-nomefile'); if(!nomeFile) return;
+          const varianti=variantiNomeG(nomeFile), estensioni=['jpg','JPG','jpeg','JPEG'];
+          let trovata=false;
+          function prova(vi,ei) {
+            if(trovata) return;
+            if(vi>=varianti.length) return;
+            if(ei>=estensioni.length){prova(vi+1,0);return;}
+            fetch('Foto/'+varianti[vi]+'.'+estensioni[ei]+'?t='+Date.now(),{method:'HEAD'})
+              .then(res=>{if(res.ok&&!trovata){trovata=true;onTrovata(varianti[vi]+'.'+estensioni[ei]);}else prova(vi,ei+1);})
+              .catch(()=>prova(vi,ei+1));
           }
-          provaComboG(0,0);
+          prova(0,0);
+        }
+        const spansRisp=[...document.querySelectorAll('[id^="nomefoto-"]')].filter(s=>!s.id.startsWith('nomefoto-csv-'));
+        const risultati=new Array(spansRisp.length).fill(null);
+        let completati=0;
+        function done(){completati++;if(completati===spansRisp.length)window.fotoDisponibili=risultati;}
+        spansRisp.forEach((span,pos)=>{
+          const nf=span.getAttribute('data-nomefile');
+          if(!nf){done();return;}
+          risultati[pos]={nome:nf,file:null};
+          fetchFoto(span,nomeFile=>{
+            risultati[pos]={nome:nf,file:nomeFile};
+            span.style.color='#1a4fa0';span.style.fontWeight='700';span.style.cursor='pointer';
+            span.title='Clicca per vedere la foto';
+            span.onclick=e=>{e.stopPropagation();mostraFotoPopup(nomeFile);};
+            done();
+          });
+          // conta come completato anche se non trova foto
+          setTimeout(()=>{if(!risultati[pos]?.file)done();},5000);
         });
-        if (spansRisp.length === 0) window.fotoDisponibili = [];
-
-        // Fetch foto anche per i non-rispondenti (solo per rendere il nome cliccabile)
-        [...document.querySelectorAll('[id^="nomefoto-csv-"]')].forEach(span => {
-          const nomeFile = span.getAttribute('data-nomefile');
-          if (!nomeFile) return;
-          const varianti = variantiNomeG(nomeFile);
-          const estensioni = ['jpg','JPG','jpeg','JPEG'];
-          let trovata = false;
-          function provaCSV(vi, ei) {
-            if (trovata) return;
-            if (vi >= varianti.length) return;
-            if (ei >= estensioni.length) { provaCSV(vi+1,0); return; }
-            fetch('Foto/'+varianti[vi]+'.'+estensioni[ei]+'?t='+Date.now(), {method:'HEAD'})
-              .then(res => {
-                if (res.ok && !trovata) {
-                  trovata = true;
-                  span.style.color = '#1a4fa0';
-                  span.style.fontWeight = '700';
-                  span.style.cursor = 'pointer';
-                  span.style.opacity = '1';
-                  span.title = 'Clicca per vedere la foto';
-                  const nf = varianti[vi]+'.'+estensioni[ei];
-                  span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nf); };
-                } else { provaCSV(vi, ei+1); }
-              })
-              .catch(() => provaCSV(vi, ei+1));
-          }
-          provaCSV(0,0);
+        if(spansRisp.length===0) window.fotoDisponibili=[];
+        // Foto anche per non-rispondenti
+        [...document.querySelectorAll('[id^="nomefoto-csv-"]')].forEach(span=>{
+          fetchFoto(span,nomeFile=>{
+            span.style.color='#1a4fa0';span.style.fontWeight='700';span.style.cursor='pointer';span.style.opacity='1';
+            span.title='Clicca per vedere la foto';
+            span.onclick=e=>{e.stopPropagation();mostraFotoPopup(nomeFile);};
+          });
         });
       }, 50);
 
@@ -3230,7 +3194,7 @@
     const sideEmoji   = document.createElement('div'); sideEmoji.className   = 'fp-side-emoji';
     const sideDesc    = document.createElement('div'); sideDesc.className    = 'fp-side-desc';
     const sideGap = document.createElement('div'); sideGap.style.cssText = 'height:clamp(6px,1.2vh,20px);'; 
-    sidebar.append(sideNum, sideCognome, sideNome, sideEmoji, sideGap, sideDesc);
+    sidebar.append(sideNum, sideCognome, sideNome, sideEmoji, sideDesc, sideGap);
 
     const colLeft = document.createElement('div'); colLeft.className = 'fp-col-left';
     layout.appendChild(colLeft);
@@ -3716,5 +3680,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v185 - 05/04/2026 - GRUPPI: tutti gli invitati; sidebar grassetto+riga vuota; fetch foto -->
+<!-- Lista.html v185 - 05/04/2026 - GRUPPI da gruppiCsvOrdinati (nessuno perso); linea grigio 2px; sidebar grassetto+gap dopo desc -->
 

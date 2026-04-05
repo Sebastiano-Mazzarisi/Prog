@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 06/04/2026 · 00:01:15';
+  const APP_VERSION = 'v196 · 06/04/2026 · 00:18:27';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2206,8 +2206,8 @@
       const CELL_W = 88;
       const IMG_SIZE = 80;
       const GAP_W = CELL_W - IMG_SIZE;
-      const LINK_H = 19;
-      const LINK_W = GAP_W + 4;
+      const LINK_H = 24;
+      const LINK_W = GAP_W + 9;
       const LINK_RIGHT = -LINK_W;
       const LINK_COLOR = '#ff0000';
       const EDGE_COLOR = '#ff0000';
@@ -2227,7 +2227,11 @@
         const cognomeMini = partiMini.cognome || '';
         const labelSotto = voce.label || '';
         const linkDx = flags.collegaDestra
-          ? `<div style="position:absolute;right:${LINK_RIGHT}px;top:${Math.round((IMG_SIZE-LINK_H)/2)}px;width:${LINK_W}px;height:${LINK_H}px;background:${LINK_COLOR};z-index:5;"></div>`
+          ? `<div style="position:absolute;right:${LINK_RIGHT}px;top:0;width:${LINK_W}px;height:${IMG_SIZE}px;pointer-events:none;z-index:5;">
+               <div style="position:absolute;left:0;top:0;width:${LINK_W}px;height:${FRAME_W}px;background:${FRAME_COLOR};"></div>
+               <div style="position:absolute;left:0;bottom:0;width:${LINK_W}px;height:${FRAME_W}px;background:${FRAME_COLOR};"></div>
+               <div style="position:absolute;left:0;top:${Math.round((IMG_SIZE-LINK_H)/2)}px;width:${LINK_W}px;height:${LINK_H}px;background:${LINK_COLOR};"></div>
+             </div>`
           : '';
         const edgeDx = flags.ponteRigaDestra
           ? `<div style="position:absolute;top:0;right:0;width:${EDGE_W}px;height:${IMG_SIZE}px;background:${EDGE_COLOR};z-index:6;border-top-right-radius:4px;border-bottom-right-radius:4px;"></div>`

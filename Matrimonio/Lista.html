@@ -361,7 +361,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v185 · 05/04/2026 · 10:43:01'; // aggiornato da Matr.py al push
+  const APP_VERSION = 'v185 · 05/04/2026 · 10:49:41';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1168,48 +1168,46 @@
         }, 50);
       }
     } else if (activeOrdine === 'gruppi') {
-      // === MODALITÀ GRUPPI: stesso ordine di Invitati.csv, linea tra gruppi ===
+      // === MODALITÀ GRUPPI: ordine Invitati.csv, linea+spazio tra gruppi, tutto funzionante ===
       const acc0 = /[\u0300-\u036f]/g;
       const norm0 = s => (s||'').toLowerCase().normalize('NFD').replace(acc0,'').trim();
       function tokG(n) { return norm0(n).split(/\s+/).filter(Boolean); }
       function matchG(a, b) {
-        const ta = tokG(a), tb = tokG(b);
-        return ta.every(w => tb.includes(w)) || tb.every(w => ta.includes(w));
+        const ta=tokG(a), tb=tokG(b);
+        return ta.every(w=>tb.includes(w)) || tb.every(w=>ta.includes(w));
       }
-
-      // Ricostruisce i gruppi nell'ordine originale del CSV
-      const visti = new Set();
+      // Ricostruisce gruppi nell'ordine originale del CSV
+      const vistiG = new Set();
       const gruppiOrdinati = [];
       (window.tuttiInvitatiCsvRaw || []).forEach(inv => {
         const k = norm0(inv.nome);
-        if (visti.has(k)) return;
+        if (vistiG.has(k)) return;
         const gruppo = (window.mapGruppo || {})[k];
         if (gruppo) {
-          gruppo.forEach(n => visti.add(norm0(n)));
+          gruppo.forEach(n => vistiG.add(norm0(n)));
           gruppiOrdinati.push(gruppo);
         } else {
-          visti.add(k);
+          vistiG.add(k);
           gruppiOrdinati.push([inv.nome]);
         }
       });
 
-      let primoGruppoConRispondenti = true;
+      let primoG = true;
       gruppiOrdinati.forEach(gruppoNomi => {
-        // Rispondenti di questo gruppo nell'ordine del CSV
-        const rispondentiGruppo = gruppoNomi
-          .map(nomeCSV => (window.datiInvitati || []).find(r => matchG(nomeCSV, r.nome || '')))
+        const rispondenti = gruppoNomi
+          .map(nCSV => (window.datiInvitati||[]).find(r => matchG(nCSV, r.nome||'')))
           .filter(Boolean);
-        if (rispondentiGruppo.length === 0) return;
+        if (rispondenti.length === 0) return;
 
-        // Linea separatrice tra gruppi (non prima del primo)
-        if (!primoGruppoConRispondenti) {
-          html += `<div style="border-bottom:1px solid #d4b07a;margin:8px 0 6px;"></div>`;
+        // Separatore con spazio verticale tra gruppi
+        if (!primoG) {
+          html += `<div style="margin-top:14px;border-bottom:1px solid #d4b07a;margin-bottom:14px;"></div>`;
         }
-        primoGruppoConRispondenti = false;
+        primoG = false;
 
-        rispondentiGruppo.forEach(r => {
+        rispondenti.forEach(r => {
           const riga = r.indiceOriginale;
-          const presenza = r.presenza || '';
+          const presenza = r.presenza||'';
           const assente = isAbsent(presenza, r.secondo);
           const tipoSecondo = detectSecondo(r.secondo);
           let classiFiltro = [];
@@ -1217,40 +1215,104 @@
           else {
             classiFiltro.push('cat-presenti');
             if (hasAllergy(r.allergie))       classiFiltro.push('cat-allergie');
-            if (tipoSecondo === 'veg')         classiFiltro.push('cat-veg');
-            if (tipoSecondo === 'carne')       classiFiltro.push('cat-carne');
-            if (tipoSecondo === 'pesce')       classiFiltro.push('cat-pesce');
-            if (tipoSecondo === 'baby')        classiFiltro.push('cat-baby');
-            if (tipoSecondo === 'segnaposto')  classiFiltro.push('cat-segnaposto');
+            if (tipoSecondo==='veg')           classiFiltro.push('cat-veg');
+            if (tipoSecondo==='carne')         classiFiltro.push('cat-carne');
+            if (tipoSecondo==='pesce')         classiFiltro.push('cat-pesce');
+            if (tipoSecondo==='baby')          classiFiltro.push('cat-baby');
+            if (tipoSecondo==='segnaposto')    classiFiltro.push('cat-segnaposto');
           }
-          const displayStyle = (activeFilter && !classiFiltro.includes('cat-' + activeFilter)) ? 'display:none;' : 'display:block;';
-          const iconaSecondo = assente ? '' : (tipoSecondo === 'veg' ? '🥦' : tipoSecondo === 'carne' ? '🥩' : tipoSecondo === 'pesce' ? '🐟' : tipoSecondo === 'baby' ? '🍼' : '');
+          const displayStyle = (activeFilter && !classiFiltro.includes('cat-'+activeFilter)) ? 'display:none;' : 'display:block;';
+          const iconaSecondo = assente ? '' : (tipoSecondo==='veg'?'🥦':tipoSecondo==='carne'?'🥩':tipoSecondo==='pesce'?'🐟':tipoSecondo==='baby'?'🍼':'');
           const haAllergia = hasAllergy(r.allergie);
           const classFreccia = haAllergia ? 'freccia allergia-alert' : 'freccia';
           const iconeAllergie = iconaAllergie(r.allergie);
           const tavNum = trovaTavoloNum(r.nome);
           const nomeDisplay = formatNomeDisplay(r.nome);
-          const allergieHtml = hasAllergy(r.allergie) ? `<span class="risposta-val allergia">${r.allergie}</span>` : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
-          const note = r.note ? `<span class="risposta-val">${r.note}</span>` : `<span class="risposta-val muted">—</span>`;
+          const allergieHtml = hasAllergy(r.allergie)
+            ? `<span class="risposta-val allergia">${r.allergie}</span>`
+            : `<span class="risposta-val muted">${testi.lblNessuna}</span>`;
+          const note = r.note
+            ? `<span class="risposta-val">${r.note}</span>`
+            : `<span class="risposta-val muted">—</span>`;
           const parti = (r.nome||'').trim().split(/\s+/);
-          const nomeFileFoto = parti.length >= 2 ? parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' ') : (r.nome||'');
-          html += `<div class="risposta-card ${classiFiltro.join(' ')}" style="${displayStyle}" id="g_${riga}">
+          const nomeFileFoto = parti.length>=2 ? parti[parti.length-1]+' '+parti.slice(0,-1).join(' ') : (r.nome||'');
+          html += `<div class="risposta-card ${classiFiltro.join(' ')}" style="${displayStyle}" id="card-${riga}">
             <div class="risposta-nome" onclick="toggleDettagli(${riga})">
-              ${tavNum ? `<span style="margin-right:4px;font-size:14px">${tavNum}</span>` : ''}<span id="nomefoto-${riga}" data-nomefile="${nomeFileFoto}">${nomeDisplay}</span>${iconaSecondo ? `<span class="icona-secondo">${iconaSecondo}</span>` : ''}
-              <span class="icone-destra">${iconeAllergie ? `<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>` : ''}</span>
+              ${tavNum?`<span style="margin-right:4px;font-size:14px">${tavNum}</span>`:''}<span id="nomefoto-${riga}" data-nomefile="${nomeFileFoto}">${nomeDisplay}</span>${iconaSecondo?`<span class="icona-secondo">${iconaSecondo}</span>`:''}
+              <span class="icone-destra">${iconeAllergie?`<span style="font-size:15px;letter-spacing:1px">${iconeAllergie}</span>`:''}</span>
               <span class="${classFreccia}">›</span>
             </div>
-            <div class="dettagli-scheda" id="det-${riga}">
-              <div class="risposta-row"><span class="risposta-label">${testi.lblPresenza}</span><span class="risposta-val">${r.presenza||'—'}</span></div>
-              <div class="risposta-row"><span class="risposta-label">${testi.lblSecondo}</span>${r.secondo ? `<span class="risposta-val">${r.secondo}</span>` : `<span class="risposta-val muted">—</span>`}</div>
+            <div class="dettagli-scheda" id="dettagli-${riga}">
+              <div class="risposta-row">
+                <span class="risposta-label">${testi.lblTavolo}</span>
+                <span class="risposta-val" style="font-weight:600;font-size:15px;">${trovaTavolo(r.nome)}</span>
+              </div>
+              <div class="risposta-row">
+                <span class="risposta-label">${testi.lblPresenza}</span>
+                <span class="risposta-val" style="font-weight:600;">${assente ? '0' : '1'}</span>
+              </div>
+              <div class="risposta-row">
+                <span class="risposta-label">${testi.lblSecondo}</span>
+                <span class="risposta-val">${secondBadge(r.secondo, assente)}</span>
+              </div>
               <div class="risposta-row"><span class="risposta-label">${testi.lblAllergie}</span>${allergieHtml}</div>
               <div class="risposta-row"><span class="risposta-label">${testi.lblNote}</span>${note}</div>
               <div class="risposta-data">${r.data||''}</div>
-              <button class="delete-btn" onclick="eliminaScheda(${riga})">${testi.btnElimina}</button>
+              <button onclick="eliminaRiga(${riga})" class="delete-btn">${testi.btnElimina}</button>
             </div>
           </div>`;
         });
       });
+
+      // Fetch foto: rende i nomi cliccabili come negli altri ordinamenti
+      window.fotoDisponibili = [];
+      setTimeout(() => {
+        const spans = [...document.querySelectorAll('[id^="nomefoto-"]')];
+        const risultati = new Array(spans.length).fill(null);
+        let completati = 0;
+        function controllaCompletoG() {
+          completati++;
+          if (completati === spans.length) window.fotoDisponibili = risultati;
+        }
+        function variantiNomeG(n) {
+          const v = new Set();
+          v.add(n);
+          v.add(n.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
+          v.add(n.replace(/u'$/,'\u00f9').replace(/a'$/,'\u00e0').replace(/e'$/,'\u00e8').replace(/i'$/,'\u00ec').replace(/o'$/,'\u00f2'));
+          v.add(n.replace(/'$/,''));
+          return [...v];
+        }
+        spans.forEach((span, posizione) => {
+          const nomeFile = span.getAttribute('data-nomefile');
+          if (!nomeFile) { controllaCompletoG(); return; }
+          risultati[posizione] = { nome: nomeFile, file: null };
+          const varianti = variantiNomeG(nomeFile);
+          const estensioni = ['jpg','JPG','jpeg','JPEG'];
+          let trovata = false;
+          function provaComboG(vi, ei) {
+            if (trovata) return;
+            if (vi >= varianti.length) { controllaCompletoG(); return; }
+            if (ei >= estensioni.length) { provaComboG(vi+1,0); return; }
+            fetch('Foto/'+varianti[vi]+'.'+estensioni[ei]+'?t='+Date.now(), {method:'HEAD'})
+              .then(res => {
+                if (res.ok && !trovata) {
+                  trovata = true;
+                  risultati[posizione] = { nome: nomeFile, file: varianti[vi]+'.'+estensioni[ei] };
+                  span.style.color = '#1a4fa0';
+                  span.style.fontWeight = '700';
+                  span.style.cursor = 'pointer';
+                  span.title = 'Clicca per vedere la foto';
+                  const nf = varianti[vi]+'.'+estensioni[ei];
+                  span.onclick = e => { e.stopPropagation(); mostraFotoPopup(nf); };
+                  controllaCompletoG();
+                } else { provaComboG(vi, ei+1); }
+              })
+              .catch(() => provaComboG(vi, ei+1));
+          }
+          provaComboG(0,0);
+        });
+        if (spans.length === 0) window.fotoDisponibili = [];
+      }, 50);
 
     } else {
 
@@ -3519,48 +3581,38 @@
       chiudiPopup();
     }, {passive:true});
 
-    // ── Cornice di focus sulla foto grande ────────────────────────────────
+    // ── Cornice focus foto grande ─────────────────────────────────────────
     const focusFrame = document.createElement('div');
     focusFrame.style.cssText = 'position:fixed;pointer-events:none;z-index:10000;border:3px solid rgba(245,215,138,0.9);box-sizing:border-box;opacity:0;transition:opacity 0.2s;display:none;';
     document.body.appendChild(focusFrame);
     let focusTimer = null;
-
     function getFotoRect() {
       const sr = stage.getBoundingClientRect();
-      if (!imgFront.naturalWidth || !imgFront.naturalHeight) return sr;
-      const scale = Math.min(sr.width / imgFront.naturalWidth, sr.height / imgFront.naturalHeight);
-      const fw = imgFront.naturalWidth * scale, fh = imgFront.naturalHeight * scale;
-      return { left: sr.left + (sr.width-fw)/2, top: sr.top + (sr.height-fh)/2, width: fw, height: fh };
+      if (!imgFront.naturalWidth||!imgFront.naturalHeight) return sr;
+      const scale=Math.min(sr.width/imgFront.naturalWidth,sr.height/imgFront.naturalHeight);
+      const fw=imgFront.naturalWidth*scale,fh=imgFront.naturalHeight*scale;
+      return {left:sr.left+(sr.width-fw)/2,top:sr.top+(sr.height-fh)/2,width:fw,height:fh};
     }
     function mostraFocusFrame() {
-      const r = getFotoRect();
-      focusFrame.style.left = r.left+'px'; focusFrame.style.top = r.top+'px';
-      focusFrame.style.width = r.width+'px'; focusFrame.style.height = r.height+'px';
-      focusFrame.style.display = 'block';
-      void focusFrame.offsetWidth;
-      focusFrame.style.opacity = '1';
-      if (focusTimer) clearTimeout(focusTimer);
-      focusTimer = setTimeout(() => {
-        focusFrame.style.opacity = '0';
-        setTimeout(() => { focusFrame.style.display = 'none'; }, 250);
-        focusTimer = null;
-      }, 1800);
+      const r=getFotoRect();
+      Object.assign(focusFrame.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',display:'block'});
+      void focusFrame.offsetWidth; focusFrame.style.opacity='1';
+      if(focusTimer) clearTimeout(focusTimer);
+      focusTimer=setTimeout(()=>{focusFrame.style.opacity='0';setTimeout(()=>{focusFrame.style.display='none';},250);focusTimer=null;},1800);
     }
     function nascondiFocusFrame() {
-      if (focusTimer) { clearTimeout(focusTimer); focusTimer = null; }
-      focusFrame.style.opacity = '0'; focusFrame.style.display = 'none';
+      if(focusTimer){clearTimeout(focusTimer);focusTimer=null;}
+      focusFrame.style.opacity='0'; focusFrame.style.display='none';
     }
-    stage.addEventListener('click', e => {
-      if (e.target.closest && (e.target.closest('[data-arrow]') || e.target.closest('button'))) return;
+    stage.addEventListener('click',e=>{
+      if(e.target.closest&&(e.target.closest('[data-arrow]')||e.target.closest('button'))) return;
       mostraFocusFrame();
     });
-
     // ── Chiusura ──────────────────────────────────────────────────────────
     function chiudiPopup() {
       nascondiFocusFrame();
-      if (document.body.contains(focusFrame)) document.body.removeChild(focusFrame);
-      stopPlay(true);
-      releaseWakeLock();
+      if(document.body.contains(focusFrame)) document.body.removeChild(focusFrame);
+      stopPlay(true); releaseWakeLock();
       document.removeEventListener('keydown', onKey);
       window.removeEventListener('resize', aggiornaOrientamento);
       window.removeEventListener('orientationchange', aggiornaOrientamento);
@@ -3611,5 +3663,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v185 - 05/04/2026 - GRUPPI senza titolo, linea tra gruppi, ordine Invitati.csv; APP_VERSION con data/ora; focusFrame; pointer-events imgFront -->
+<!-- Lista.html v185 - 05/04/2026 - GRUPPI: click rigo funzionante, spazio tra gruppi, fetch foto -->
 

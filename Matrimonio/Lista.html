@@ -2967,6 +2967,8 @@
         .fp-group-cell { display:flex; flex-direction:column; align-items:center; gap:2px; flex:0 0 calc(33.33% - 2px); min-width:0; }
         .fp-group-thumb-wrap { width:100%; aspect-ratio:1; border-radius:4px; border:2px solid transparent; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#4a6a2a; }
         .fp-group-thumb-wrap.highlight { border:4px solid #f5d78a; }
+        .fp-stage.focused::after { content:''; position:absolute; inset:0; border:3px solid rgba(245,215,138,0.75); pointer-events:none; z-index:5; border-radius:2px; animation:fp-focus-fade 1.8s ease forwards; }
+        @keyframes fp-focus-fade { 0%{opacity:1} 70%{opacity:1} 100%{opacity:0} }
         .fp-group-thumb { width:100%; height:100%; object-fit:cover; display:block; }
         .fp-group-placeholder { font-size:16pt; line-height:1; }
         .fp-group-label { font-family:'Inter',sans-serif; font-size:clamp(7px,1.4vw,12px); color:#c8d8a0; text-align:center; line-height:1.2; word-break:break-word; width:100%; }
@@ -3320,7 +3322,7 @@
       preload.src = src;
     }
 
-    function vai(i) { idx=i; aggiornaContenuto(idx,false); }
+    function vai(i) { idx=i; stage.classList.remove('focused'); if(focusTimer){clearTimeout(focusTimer);focusTimer=null;} aggiornaContenuto(idx,false); }
 
     // ── Play / Pausa ──────────────────────────────────────────────────────
     function playing() { return playTimer!==null; }
@@ -3423,17 +3425,28 @@
       chiudiPopup();
     }, {passive:true});
 
-    // ── Tasto destro sulla foto: assicura che il menu usi sempre imgFront ──
+    // ── Click sulla foto grande: focus visivo + tasto destro sul src corretto ──
+    let focusTimer = null;
+    stage.addEventListener('click', e => {
+      // Non triggerare il focus se è un pulsante o freccia
+      if (e.target.closest('[data-arrow]') || e.target.closest('.fp-btn-play') || e.target.closest('.fp-close')) return;
+      // Mostra cornice gialla con animazione fade
+      stage.classList.remove('focused');
+      void stage.offsetWidth; // forza reflow per riavviare animazione
+      stage.classList.add('focused');
+      if (focusTimer) clearTimeout(focusTimer);
+      focusTimer = setTimeout(() => stage.classList.remove('focused'), 1900);
+    });
+
+    // Tasto destro: garantisce che il menu contestuale usi sempre imgFront (visibile)
     stage.addEventListener('contextmenu', e => {
-      // Se il click è su imgBack (quella nascosta), reindirizziamo su imgFront
-      if (e.target === imgBack) {
+      if (e.target === imgBack && imgFront.src) {
         e.preventDefault();
-        const ev = new MouseEvent('contextmenu', {
+        imgFront.dispatchEvent(new MouseEvent('contextmenu', {
           bubbles: true, cancelable: true,
           clientX: e.clientX, clientY: e.clientY,
           screenX: e.screenX, screenY: e.screenY
-        });
-        imgFront.dispatchEvent(ev);
+        }));
       }
     });
 
@@ -3491,5 +3504,5 @@
 </script>
 </body>
 </html>
-<!-- Lista.html v184 - 05/04/2026 - Fix: cornice miniatura attiva giallo chiaro; fix tasto destro su foto grande -->
+<!-- Lista.html v184 - 05/04/2026 - Fix: cornice miniatura giallo chiaro; click foto grande = focus con bordo giallo animato che svanisce; tasto destro agganciato a imgFront -->
 

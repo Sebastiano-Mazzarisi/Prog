@@ -1,4 +1,4 @@
-<!-- Lista.html v186 - 05/04/2026 -->
+<!-- Lista.html v187 - 05/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -362,7 +362,7 @@
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
         <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
-        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v186</small>
+        <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v187</small>
       </p>
     </div>
   </div>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v186 · 05/04/2026 · 14:59:56';
+  const APP_VERSION = 'v187 · 05/04/2026 · 15:47:46';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1175,6 +1175,35 @@
         html += _sep;
         ordinaInvitati([...(window.datiInvitati||[])], 'cognome').forEach(r => { html += cardRispondente(r); });
       }
+
+    } else if (activeOrdine === 'cognome') {
+      // Ordine unificato per cognome: tutti i nominativi in un solo elenco, senza dividerli in due gruppi
+      const combinati = [
+        ...(window.datiInvitati || []).map(r => ({ tipo: 'r', nome: r.nome || '', valore: r })),
+        ..._nonRisp.map(inv => ({ tipo: 'n', nome: inv.nome || '', valore: inv.nome }))
+      ];
+
+      const chiaveCognome = (nome) => {
+        const tokens = _normNR(nome).split(/\s+/).filter(Boolean);
+        if (!tokens.length) return '';
+        const cognome = tokens[tokens.length - 1] || '';
+        const resto = tokens.slice(0, -1).join(' ');
+        return cognome + ' ' + resto;
+      };
+
+      combinati.sort((a, b) => {
+        const ka = chiaveCognome(a.nome);
+        const kb = chiaveCognome(b.nome);
+        const cmp = ka.localeCompare(kb, 'it', { sensitivity: 'base' });
+        if (cmp !== 0) return cmp;
+        return _normNR(a.nome).localeCompare(_normNR(b.nome), 'it', { sensitivity: 'base' });
+      });
+
+      combinati.forEach(item => {
+        html += item.tipo === 'r'
+          ? cardRispondente(item.valore)
+          : cardNonRispondente(item.valore, 'cg-');
+      });
 
     } else {
       // Tutti gli altri ordini: rispondenti già ordinati + non-rispondenti con stesso criterio

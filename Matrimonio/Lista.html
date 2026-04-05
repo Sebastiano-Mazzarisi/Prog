@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 06/04/2026 · 00:46:59';
+  const APP_VERSION = 'v196 · 06/04/2026 · 00:53:17';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2235,11 +2235,12 @@
                <div style="position:absolute;left:0;top:${Math.round((IMG_SIZE-LINK_H)/2)}px;width:${LINK_W}px;height:${LINK_H}px;background:${LINK_COLOR};"></div>
              </div>`
           : '';
+        const DASH_W = 2;
         const edgeDx = flags.ponteRigaDestra
-          ? `<div style="position:absolute;top:0;right:0;width:${FRAME_W}px;height:${IMG_SIZE}px;background:${FRAME_COLOR};z-index:6;border-top-right-radius:4px;border-bottom-right-radius:4px;"></div>`
+          ? `<div style="position:absolute;top:${FRAME_W}px;right:${Math.max(1, FRAME_W - DASH_W)}px;width:0;height:${IMG_SIZE - (FRAME_W * 2)}px;border-right:${DASH_W}px dashed ${FRAME_COLOR};box-sizing:border-box;pointer-events:none;z-index:6;"></div>`
           : '';
         const edgeSx = flags.ponteRigaSinistra
-          ? `<div style="position:absolute;top:0;left:0;width:${FRAME_W}px;height:${IMG_SIZE}px;background:${FRAME_COLOR};z-index:6;border-top-left-radius:4px;border-bottom-left-radius:4px;"></div>`
+          ? `<div style="position:absolute;top:${FRAME_W}px;left:${Math.max(1, FRAME_W - DASH_W)}px;width:0;height:${IMG_SIZE - (FRAME_W * 2)}px;border-left:${DASH_W}px dashed ${FRAME_COLOR};box-sizing:border-box;pointer-events:none;z-index:6;"></div>`
           : '';
         const frameOlive = (flags.frameTop || flags.frameBottom || flags.frameLeft || flags.frameRight)
           ? `<div style="position:absolute;top:0;left:0;width:${IMG_SIZE}px;height:${IMG_SIZE}px;box-sizing:border-box;border-top:${flags.frameTop ? FRAME_W : 0}px solid ${FRAME_COLOR};border-bottom:${flags.frameBottom ? FRAME_W : 0}px solid ${FRAME_COLOR};border-left:${flags.frameLeft ? FRAME_W : 0}px solid ${FRAME_COLOR};border-right:${flags.frameRight ? FRAME_W : 0}px solid ${FRAME_COLOR};border-radius:4px;pointer-events:none;z-index:4;"></div>`
@@ -2292,14 +2293,16 @@
             const prossima = (col < COLS - 1) ? riga[col + 1] : null;
             const precedenteRiga = rowIndex > 0 ? lastTruthy(righe[rowIndex - 1]) : null;
             const prossimaRiga = rowIndex < righe.length - 1 ? righe[rowIndex + 1][0] : null;
+            const ponteRigaDestra = (col === COLS - 1) && stessaFamiglia(voce, prossimaRiga);
+            const ponteRigaSinistra = (col === 0) && stessaFamiglia(precedenteRiga, voce);
             const flags = {
               collegaDestra: stessaFamiglia(voce, prossima),
-              ponteRigaDestra: (col === COLS - 1) && stessaFamiglia(voce, prossimaRiga),
-              ponteRigaSinistra: (col === 0) && stessaFamiglia(precedenteRiga, voce),
+              ponteRigaDestra,
+              ponteRigaSinistra,
               frameTop: !!opts.groupFrame,
               frameBottom: !!opts.groupFrame,
-              frameLeft: !!opts.groupFrame && !stessaFamiglia(sinistra, voce),
-              frameRight: !!opts.groupFrame && !stessaFamiglia(voce, prossima)
+              frameLeft: !!opts.groupFrame && !stessaFamiglia(sinistra, voce) && !ponteRigaSinistra,
+              frameRight: !!opts.groupFrame && !stessaFamiglia(voce, prossima) && !ponteRigaDestra
             };
             htmlPDF += cellMiniatura(voce, flags);
           }

@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v189 · 05/04/2026 · 17:15:48';
+  const APP_VERSION = 'v189 · 05/04/2026 · 17:34:28';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2940,9 +2940,8 @@
         .fp-img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; opacity:0; transition:opacity 1s ease; }
         .fp-img.front { opacity:1; }
         .fp-stage-placeholder { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1; }
-        .fp-stage-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:clamp(6px,1.2vh,18px); padding:3vh 2vw; width:100%; height:100%; box-sizing:border-box; }
-        .fp-stage-empty-emoji { font-size:clamp(44px,6vw,96px); line-height:1; }
-        .fp-stage-empty-cognome, .fp-stage-empty-nome { font-family:'Inter',sans-serif; font-size:clamp(24px,3.6vw,56px); font-weight:800; color:#ffffff; line-height:1.08; text-align:center; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 1vw; }
+        .fp-stage-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:clamp(10px,1.8vh,28px); padding:3vh 2vw; width:100%; height:100%; box-sizing:border-box; }
+        .fp-stage-empty-cognome, .fp-stage-empty-nome { font-family:'Inter',sans-serif; font-size:clamp(36px,5.4vw,84px); font-weight:800; color:#ffffff; line-height:1.05; text-align:center; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 1vw; }
         .fp-stage-empty-nome { color:#eef4d2; }
         .fp-sidebar { display:none; background:#2d3a0e; flex-direction:column; justify-content:center; align-items:stretch; text-align:center; gap:1.2vh; padding:1.5vh 0; box-sizing:border-box; min-width:0; overflow:hidden; }
         .fp-overlay.landscape .fp-sidebar { display:flex; }
@@ -2959,10 +2958,10 @@
         .fp-arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:48px; height:48px; font-size:32px; color:#fff; cursor:pointer; z-index:11; display:flex; align-items:center; justify-content:center; }
         .fp-arrow.left  { left:12px; }
         .fp-arrow.right { right:12px; }
-        .fp-ctrl-bar { display:none; flex-direction:column; justify-content:center; align-items:center; gap:6px; margin-top:1.5vh; align-self:center; }
+        .fp-ctrl-bar { display:none; flex-direction:column; justify-content:center; align-items:center; gap:10px; margin-top:1.5vh; align-self:center; }
         .fp-overlay.landscape .fp-ctrl-bar { display:flex; }
-        .fp-ctrl-row { display:flex; flex-direction:row; gap:8px; justify-content:center; }
-        .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:10px; width:44px; height:38px; font-size:20px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .fp-ctrl-row { display:flex; flex-direction:column; gap:10px; justify-content:center; }
+        .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:14px; width:66px; height:57px; font-size:30px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
         .fp-ctrl-btn:hover { background:rgba(255,255,255,0.35); }
       `;
       document.head.appendChild(st);
@@ -3013,12 +3012,11 @@
     const ctrlDx   = document.createElement('button'); ctrlDx.className   = 'fp-ctrl-btn'; ctrlDx.textContent = '›';
     ctrlDx.onclick = e => { e.stopPropagation(); stopPlay(false); vai((idx+1)%foto.length); };
     // blocca propagazione touch su tutti i pulsanti per evitare chiusura accidentale su mobile
-    [ctrlPlay, ctrlStop, ctrlSx, ctrlDx, ctrlRow, ctrlBar].forEach(el => {
+    [ctrlPlay, ctrlStop, ctrlSx, ctrlDx, ctrlBar].forEach(el => {
       el.addEventListener('touchstart', e => e.stopPropagation(), {passive:false});
       el.addEventListener('touchend',   e => e.stopPropagation(), {passive:false});
     });
-    ctrlRow.appendChild(ctrlSx); ctrlRow.appendChild(ctrlDx);
-    ctrlBar.appendChild(ctrlPlay); ctrlBar.appendChild(ctrlStop); ctrlBar.appendChild(ctrlRow);
+    ctrlBar.appendChild(ctrlPlay); ctrlBar.appendChild(ctrlStop); ctrlBar.appendChild(ctrlSx); ctrlBar.appendChild(ctrlDx);
     sidebar.appendChild(ctrlBar);
 
     // barra inferiore portrait
@@ -3057,6 +3055,28 @@
       const match = (window.fotoDisponibili||[]).find(f => f && normKG(f.nome)===normKG(cognomeNome));
       return match && match.file ? 'Foto/'+match.file : null;
     }
+    function aggiornaFotoDisponibilePerNome(nomeRef, file) {
+      const keyRef = normKG(nomeRef);
+      [window.fotoDisponibili || [], foto || []].forEach(lista => {
+        lista.forEach(item => {
+          if (!item) return;
+          const itemKey = normKG(nomeToFilename(item.nome || '') || item.nome || '');
+          const itemKey2 = normKG(item.nome || '');
+          if (itemKey === keyRef || itemKey2 === keyRef) item.file = file;
+        });
+      });
+      document.querySelectorAll('.risposta-nome[data-nomefile]').forEach(el => {
+        const elKey = normKG(el.getAttribute('data-nomefile') || '');
+        if (elKey === keyRef) el.setAttribute('data-foto-file', file);
+      });
+    }
+    function srcForVoce(voce) {
+      if (voce && voce.file) return 'Foto/' + voce.file;
+      const nomeCanonico = nomeToFilename(voce && voce.nome ? voce.nome : '');
+      const cachedImg = thumbCache.get(normKG(nomeCanonico));
+      if (cachedImg && cachedImg.src) return cachedImg.src;
+      return null;
+    }
 
     // Fetch diretto con varianti nome+estensione, aggiorna cache e DOM quando trova
     function cercaFotoDirectly(cn, key) {
@@ -3082,10 +3102,15 @@
           .then(r => {
             if (r.ok && !trovata) {
               trovata = true;
+              const file = varianti[vi]+'.'+estensioni[ei];
               const im = new Image();
               im.onload = () => {
                 im._ready = true;
                 thumbCache.set(key, im);
+                aggiornaFotoDisponibilePerNome(cn, file);
+                if (typeof window.__notifyPhotoResolved === 'function') {
+                  window.__notifyPhotoResolved(cn, file);
+                }
                 // aggiorna wrap già nel DOM per questo nome (attributo data-ck)
                 document.querySelectorAll('[data-ck="'+key+'"]').forEach(wrap => {
                   wrap.innerHTML = '';
@@ -3224,7 +3249,6 @@
       sph.className = 'fp-stage-placeholder';
       sph.innerHTML =
         '<div class="fp-stage-empty">' +
-          '<div class="fp-stage-empty-emoji">' + escapeHtml(icona || '📷') + '</div>' +
           '<div class="fp-stage-empty-cognome">' + escapeHtml(partiPh.cognome || (voce && voce.nome) || '') + '</div>' +
           '<div class="fp-stage-empty-nome">' + escapeHtml(partiPh.nome || '') + '</div>' +
         '</div>';
@@ -3234,18 +3258,17 @@
     function aggiornaContenuto(i, immediato) {
       const gen = ++currentGen; // ogni chiamata ha la sua generazione
       const voce = foto[i] || { nome: nomeFile, file: null };
-      const src = voce.file ? 'Foto/'+voce.file : null;
+      const src = srcForVoce(voce);
       const {icona,desc} = infoSecondo(voce.nome);
-      const eta = getEtaAnni(voce.nome);
 
       // barra inferiore portrait
       infoBar.textContent = (i+1)+' / '+foto.length+' \u2013 '+voce.nome+(icona?'  '+icona:'');
 
-      // sidebar destra: numero, cognome, nome (età), emoji, descrizione
+      // sidebar destra: numero, cognome, nome, emoji, descrizione
       sideNum.textContent = (i+1)+' / '+foto.length;
       const parti = partiNomeRaw(voce.nome||'');
       sideCognome.textContent = parti.cognome || voce.nome;
-      sideNome.textContent = (parti.nome || '') + (eta!==null?' ('+eta+')':'');
+      sideNome.textContent = parti.nome || '';
       sideEmoji.textContent = icona;
       sideDesc.textContent  = desc;
 
@@ -3439,6 +3462,16 @@
       if(e.target.closest&&(e.target.closest('[data-arrow]')||e.target.closest('button'))) return;
       mostraFocusFrame();
     });
+    const notifyPhotoResolved = (nomeRef, file) => {
+      aggiornaFotoDisponibilePerNome(nomeRef, file);
+      const corrente = foto[idx];
+      if (!corrente) return;
+      const keyCorrente = normKG(nomeToFilename(corrente.nome || '') || corrente.nome || '');
+      const keyRisolto = normKG(nomeToFilename(nomeRef || '') || nomeRef || '');
+      if (keyCorrente === keyRisolto) aggiornaContenuto(idx, true);
+    };
+    window.__notifyPhotoResolved = notifyPhotoResolved;
+
     const refreshPopupFromAssets = () => {
       const nomeCorrente = (foto[idx] && foto[idx].nome) || nomeFile || '';
       const domEls = [...document.querySelectorAll('.risposta-nome[data-nomefile]')]
@@ -3469,6 +3502,7 @@
       window.removeEventListener('orientationchange', aggiornaOrientamento);
       if (screen.orientation) screen.orientation.removeEventListener('change', aggiornaOrientamento);
       if (window.__refreshPopupFromAssets === refreshPopupFromAssets) window.__refreshPopupFromAssets = null;
+      if (window.__notifyPhotoResolved === notifyPhotoResolved) window.__notifyPhotoResolved = null;
       document.body.removeChild(overlay);
     }
     overlay.onclick = e=>{ if (e.target===overlay || e.target===stage || e.target===layout) chiudiPopup(); };

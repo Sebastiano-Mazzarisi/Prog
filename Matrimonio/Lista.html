@@ -1,4 +1,4 @@
-<!-- Lista.html v196 - 05/04/2026 -->
+<!-- Lista.html v197 - 07/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v196 · 06/04/2026 · 23:05:54';
+  const APP_VERSION = 'v197 · 07/04/2026 · 14:14:25';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -3067,10 +3067,10 @@
         .fp-arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:48px; height:48px; font-size:32px; color:#fff; cursor:pointer; z-index:11; display:flex; align-items:center; justify-content:center; }
         .fp-arrow.left  { left:12px; }
         .fp-arrow.right { right:12px; }
-        .fp-ctrl-bar { display:none; flex-direction:column; justify-content:center; align-items:center; gap:10px; margin-top:1.5vh; align-self:center; }
-        .fp-overlay.landscape .fp-ctrl-bar { display:flex; }
-        .fp-ctrl-row { display:flex; flex-direction:column; gap:10px; justify-content:center; }
-        .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:14px; width:66px; height:57px; font-size:30px; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .fp-ctrl-bar { display:none; flex-direction:row; flex-wrap:nowrap; justify-content:center; align-items:center; gap:6px; margin-top:1.5vh; align-self:center; }
+        .fp-overlay.landscape .fp-ctrl-bar { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:5px; width:min(22vw,130px); flex-shrink:0; }
+        .fp-ctrl-row { display:contents; }
+        .fp-ctrl-btn { background:rgba(255,255,255,0.18); border:none; border-radius:10px; width:100%; aspect-ratio:1; font-size:clamp(18px,2.8vw,36px); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; white-space:nowrap; min-width:0; box-sizing:border-box; }
         .fp-ctrl-btn:hover { background:rgba(255,255,255,0.35); }
       `;
       document.head.appendChild(st);

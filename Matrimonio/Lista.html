@@ -1,4 +1,4 @@
-<!-- Lista.html v199 - 07/04/2026 -->
+<!-- Lista.html v200 - 07/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v199 · 07/04/2026 · 14:57:48';
+  const APP_VERSION = 'v200 · 07/04/2026 · 22:13:14';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -3552,15 +3552,10 @@
     }
 
     // ── Orientamento ──────────────────────────────────────────────────────
+    // Usa sempre il rapporto larghezza/altezza della viewport:
+    // se < 1 → portrait (vale anche su monitor con finestra stretta)
     function aggiornaOrientamento() {
-      let landscape;
-      if (screen.orientation && screen.orientation.type) {
-        landscape = screen.orientation.type.includes('landscape');
-      } else if (typeof window.orientation !== 'undefined') {
-        landscape = Math.abs(window.orientation) === 90;
-      } else {
-        landscape = window.innerWidth > window.innerHeight;
-      }
+      const landscape = window.innerWidth / window.innerHeight >= 1;
       overlay.classList.toggle('landscape', landscape);
       overlay.classList.toggle('portrait', !landscape);
     }

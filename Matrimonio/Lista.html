@@ -1,4 +1,4 @@
-<!-- Lista.html v198 - 07/04/2026 -->
+<!-- Lista.html v199 - 07/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v198 · 07/04/2026 · 14:23:30';
+  const APP_VERSION = 'v199 · 07/04/2026 · 14:38:05';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -3057,7 +3057,9 @@
         .fp-side-num    { font-family:'Inter',sans-serif; font-size:clamp(13px,2.2vw,40px); font-weight:700; color:#d4b07a; line-height:1; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
         .fp-side-cognome, .fp-side-nome, .fp-side-desc { font-family:'Inter',sans-serif; font-size:clamp(10px,1.7vw,28px); font-weight:700; color:#fff; line-height:1.2; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; }
         .fp-side-cognome { display:flex; flex-direction:column; align-items:center; gap:0; }
-        .fp-side-cognome-token { display:block; font-family:'Inter',sans-serif; font-weight:800; color:#fff; line-height:1.1; text-align:center; padding:0 4px; min-width:0; overflow-wrap:break-word; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+        .fp-side-nome    { display:flex; flex-direction:column; align-items:center; gap:0; }
+        .fp-side-cognome-token, .fp-side-nome-token { display:block; font-family:'Inter',sans-serif; font-weight:800; color:#fff; line-height:1.15; text-align:center; padding:0 4px; min-width:0; white-space:nowrap; max-width:100%; }
+        .fp-side-nome-token { font-weight:600; }
         .fp-side-emoji  { font-size:clamp(13px,2.5vw,42px); line-height:1; text-align:center; padding:0 4px; min-width:0; }
         .fp-overlay.landscape .fp-bar,
         .fp-overlay.landscape .fp-close,
@@ -3078,6 +3080,22 @@
         .fp-ctrl-btn:hover { background:rgba(255,255,255,0.35); }
       `;
       document.head.appendChild(st);
+    }
+
+    // ── fitSidebarTokens: riduce font-size di ogni token se supera la colonna ──
+    function fitSidebarTokens(sb) {
+      const available = sb.clientWidth - 8; // 4px padding per lato
+      if (available <= 0) return;
+      sb.querySelectorAll('.fp-side-cognome-token, .fp-side-nome-token').forEach(span => {
+        // Legge il font-size corrente calcolato dal browser
+        let fs = parseFloat(window.getComputedStyle(span).fontSize);
+        const minFs = 9;
+        // Riduce finché entra oppure raggiunge il minimo
+        while (span.scrollWidth > available && fs > minFs) {
+          fs -= 0.5;
+          span.style.fontSize = fs + 'px';
+        }
+      });
     }
 
     // ── DOM ───────────────────────────────────────────────────────────────
@@ -3457,22 +3475,31 @@
       // barra inferiore portrait
       infoBar.textContent = (i+1)+' / '+foto.length+' – '+voce.nome+(icona?'  '+icona:'');
 
-      // sidebar destra: numero, cognome (ogni parte su riga separata), nome, no emoji, no desc
+      // sidebar destra: numero, cognome (ogni parola su riga separata), nome (idem), no emoji, no desc
       sideNum.textContent = (i+1)+' / '+foto.length;
       const parti = partiNomeRaw(voce.nome||'');
-      // Cognome: split ulteriore per doppi cognomi (es. "De Santis" → 2 righe)
+      // Cognome: ogni parola su riga separata, font auto-scalato
       const cognomeParts = (parti.cognome || voce.nome || '').split(/\s+/).filter(Boolean);
-      const nTokens = cognomeParts.length;
-      // Font size inversamente proporzionale al numero di token, min clamp a 10px
-      const fsBase = nTokens >= 3 ? '2.4vw' : nTokens === 2 ? '2.8vw' : '3.2vw';
-      const fsMin  = nTokens >= 3 ? '12px' : nTokens === 2 ? '14px' : '16px';
-      const fsMax  = nTokens >= 3 ? '34px' : nTokens === 2 ? '40px' : '48px';
+      const nCog = cognomeParts.length;
+      const cfBase = nCog >= 3 ? '2.4vw' : nCog === 2 ? '2.8vw' : '3.4vw';
+      const cfMin  = nCog >= 3 ? '11px'  : nCog === 2 ? '13px'  : '16px';
+      const cfMax  = nCog >= 3 ? '34px'  : nCog === 2 ? '42px'  : '54px';
       sideCognome.innerHTML = cognomeParts.map(tok =>
-        `<span class="fp-side-cognome-token" style="font-size:clamp(${fsMin},${fsBase},${fsMax})">${escapeHtml(tok)}</span>`
+        `<span class="fp-side-cognome-token" style="font-size:clamp(${cfMin},${cfBase},${cfMax})">${escapeHtml(tok)}</span>`
       ).join('');
-      sideNome.textContent = parti.nome || '';
+      // Nome: ogni parola su riga separata (es. "Maria Antonietta" → 2 righe)
+      const nomeParts = (parti.nome || '').split(/\s+/).filter(Boolean);
+      const nNom = nomeParts.length;
+      const nfBase = nNom >= 3 ? '2.0vw' : nNom === 2 ? '2.2vw' : '2.4vw';
+      const nfMin  = nNom >= 3 ? '10px'  : nNom === 2 ? '11px'  : '12px';
+      const nfMax  = nNom >= 3 ? '26px'  : nNom === 2 ? '30px'  : '34px';
+      sideNome.innerHTML = nomeParts.map(tok =>
+        `<span class="fp-side-nome-token" style="font-size:clamp(${nfMin},${nfBase},${nfMax})">${escapeHtml(tok)}</span>`
+      ).join('');
       sideEmoji.textContent = '';
       sideDesc.textContent  = '';
+      // Auto-scala ogni token che eccede la larghezza disponibile della sidebar
+      requestAnimationFrame(() => fitSidebarTokens(sidebar));
 
       // colonna sinistra: miniature gruppo
       costruisciMiniature(voce);

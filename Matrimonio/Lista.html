@@ -1,4 +1,4 @@
-<!-- Lista.html v200 - 07/04/2026 -->
+<!-- Lista.html v201 - 07/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v200 · 07/04/2026 · 22:13:14';
+  const APP_VERSION = 'v201 · 07/04/2026 · 22:22:27';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -3422,6 +3422,8 @@
           imgBack.classList.remove('front');
           imgFront.style.pointerEvents = 'auto';
           imgBack.style.pointerEvents = 'none';
+          // Ricalcola posizione barra portrait con dimensioni reali foto
+          requestAnimationFrame(aggiornaOrientamento);
           return;
         }
         imgBack.src = src;
@@ -3435,6 +3437,8 @@
             [imgFront, imgBack] = [imgBack, imgFront];
             imgFront.style.pointerEvents = 'auto';
             imgBack.style.pointerEvents = 'none';
+            // Ricalcola posizione barra portrait con dimensioni reali foto
+            requestAnimationFrame(aggiornaOrientamento);
           }, 1000);
         }));
       };
@@ -3558,6 +3562,30 @@
       const landscape = window.innerWidth / window.innerHeight >= 1;
       overlay.classList.toggle('landscape', landscape);
       overlay.classList.toggle('portrait', !landscape);
+      // In portrait: posiziona la barra a metà tra il bordo inferiore
+      // della foto (object-fit:contain) e il fondo della viewport.
+      if (!landscape) {
+        const sr = stage.getBoundingClientRect();
+        const natW = imgFront.naturalWidth  || 0;
+        const natH = imgFront.naturalHeight || 0;
+        let fotoBottom;
+        if (natW && natH) {
+          const scale = Math.min(sr.width / natW, sr.height / natH);
+          const fotoH = natH * scale;
+          fotoBottom = sr.top + (sr.height + fotoH) / 2; // px dal top della viewport
+        } else {
+          fotoBottom = sr.bottom; // fallback: nessuna immagine ancora caricata
+        }
+        const vH = window.innerHeight;
+        const spazio = vH - fotoBottom; // spazio libero sotto la foto
+        const barH = bar.offsetHeight || 56;
+        const bottomPos = spazio / 2 - barH / 2;
+        bar.style.bottom = Math.max(8, Math.round(bottomPos)) + 'px';
+        bar.style.background = 'none';
+      } else {
+        bar.style.bottom = '';
+        bar.style.background = '';
+      }
     }
     window.addEventListener('resize', aggiornaOrientamento);
     window.addEventListener('orientationchange', () => {

@@ -1,4 +1,4 @@
-<!-- Lista.html v205 - 09/04/2026 -->
+<!-- Lista.html v206 - 09/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v205 · 09/04/2026 · 23:50:47';
+  const APP_VERSION = 'v206 · 10/04/2026 · 00:04:37';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2073,27 +2073,27 @@
       + '<text x="'+(W1/2)+'" y="20" text-anchor="middle" font-size="26" font-weight="700" font-family="Arial" fill="#2d6040">'+testi.grafico_registrazioni+'</text>'
       // Linea rossa tratteggiata = totale invitati
       + '<line x1="'+p1L+'" y1="'+g1yTarget.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+g1yTarget.toFixed(1)+'" stroke="#a83230" stroke-width="1.5" stroke-dasharray="5,4"/>'
-      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="10" fill="#a83230" font-family="Arial" font-weight="700">'+g1TotInv+'</text>'
+      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yTarget+5).toFixed(1)+'" font-size="14" fill="#a83230" font-family="Arial" font-weight="700">'+g1TotInv+'</text>'
       // Griglia Y: 0,10,20,...,80
       + [0,10,20,30,40,50,60,70,80].map(function(v){
           var yy=g1y(v);
           return '<line x1="'+p1L+'" y1="'+yy.toFixed(1)+'" x2="'+(W1-p1R)+'" y2="'+yy.toFixed(1)+'" stroke="#dde8cc" stroke-width="0.7"/>'
-               + '<text x="'+(p1L-4)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10" font-family="Arial" fill="#666">'+v+'</text>';
+               + '<text x="'+(p1L-4)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="14" font-family="Arial" fill="#666">'+v+'</text>';
         }).join('')
       // Area riempita fino a oggi
       + '<polygon points="'+g1AreaPts+'" fill="rgba(45,96,64,0.2)"/>'
       // Linea verde intera
       + '<polyline points="'+g1ptsFull+'" fill="none" stroke="#2d6040" stroke-width="2.5" stroke-linejoin="round"/>'
       // Numero compilatori a destra della linea verde
-      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yCompil+5).toFixed(1)+'" font-size="10" fill="#2d6040" font-family="Arial" font-weight="700">'+g1Total+'</text>'
+      + '<text x="'+(W1-p1R+3)+'" y="'+(g1yCompil+5).toFixed(1)+'" font-size="14" fill="#2d6040" font-family="Arial" font-weight="700">'+g1Total+'</text>'
       // Linea verticale arancione "oggi" con data
       + '<line x1="'+g1TodayX+'" y1="'+p1T+'" x2="'+g1TodayX+'" y2="'+(p1T+g1ChartH)+'" stroke="#b8893a" stroke-width="1.2" stroke-dasharray="3,3"/>'
-      + '<text x="'+g1TodayX+'" y="'+(p1T-4)+'" text-anchor="middle" font-size="9" font-family="Arial" fill="#b8893a" font-weight="700">'+g1TodayLbl+'</text>'
+      + '<text x="'+g1TodayX+'" y="'+(p1T-4)+'" text-anchor="middle" font-size="13" font-family="Arial" fill="#b8893a" font-weight="700">'+g1TodayLbl+'</text>'
       // Asse X fisso: 21/03, 21/04, 21/05, 21/06
       + g1AxisX.map(function(m){
           var mx = (p1L + m.dayOffset*g1xStep).toFixed(1);
           return '<line x1="'+mx+'" y1="'+(p1T+g1ChartH)+'" x2="'+mx+'" y2="'+(p1T+g1ChartH+5)+'" stroke="#999" stroke-width="0.7"/>'
-               + '<text x="'+mx+'" y="'+(p1T+g1ChartH+17)+'" text-anchor="middle" font-size="10" font-family="Arial" fill="#555">'+m.label+'</text>';
+               + '<text x="'+mx+'" y="'+(p1T+g1ChartH+20)+'" text-anchor="middle" font-size="14" font-family="Arial" fill="#555">'+m.label+'</text>';
         }).join('')
       // Assi
       + '<line x1="'+p1L+'" y1="'+p1T+'" x2="'+p1L+'" y2="'+(p1T+g1ChartH)+'" stroke="#333" stroke-width="1.5"/>'

@@ -1,4 +1,4 @@
-<!-- Lista.html v203 - 09/04/2026 -->
+<!-- Lista.html v204 - 09/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v203 · 09/04/2026 · 23:38:58';
+  const APP_VERSION = 'v204 · 09/04/2026 · 23:47:38';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1004,26 +1004,7 @@
       aggiornatoAlle: new Date()
     };
 
-    let html = `<table class="sposi-kpi">
-      <tr>
-        <td><div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-label">${testi.kpiPresenti}</div><div class="kpi-num">${totPresenti}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-label">${testi.kpiVeg}</div><div class="kpi-num">${totVeg}</div></div></td>
-      </tr>
-      <tr>
-        <td><div class="kpi-box ${activeFilter==='assenti'?'active-filter':''}" id="btn-assenti" onclick="filtraLista('assenti')"><div class="kpi-label">${testi.kpiAssenti}</div><div class="kpi-num">${totAssenti}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-label">${testi.kpiCarne}</div><div class="kpi-num">${totCarne}</div></div></td>
-      </tr>
-      <tr>
-        <td><div class="kpi-box ${activeFilter==='baby'?'active-filter':''}" id="btn-baby" onclick="filtraLista('baby')"><div class="kpi-label">${testi.kpiBaby}</div><div class="kpi-num">${totBaby}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-label">${testi.kpiPesce}</div><div class="kpi-num">${totPesce}</div></div></td>
-      </tr>
-      <tr>
-        <td><div class="kpi-box ${activeFilter==='segnaposto'?'active-filter':''}" id="btn-segnaposto" onclick="filtraLista('segnaposto')"><div class="kpi-label">${testi.kpiSegnaposto}</div><div class="kpi-num">${totSegnaposto}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-label">${testi.kpiAllergie}</div><div class="kpi-num">${totAllergie}</div></div></td>
-      </tr>
-    </table>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+    let html = `<div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-top:10px; margin-bottom: 8px;">
       <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">${testi.btnAggiorna}</button>
       <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnPDF}</button>
       <button class="btn-submit" onclick="scaricaBackupCSV()" style="margin-top:0; background: linear-gradient(135deg, #2980b9, #3d9dd1); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnBackup}</button>

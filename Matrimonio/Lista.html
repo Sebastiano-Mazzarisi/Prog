@@ -1,4 +1,4 @@
-<!-- Lista.html v202 - 09/04/2026 -->
+<!-- Lista.html v203 - 09/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v202 · 09/04/2026 · 23:27:00';
+  const APP_VERSION = 'v203 · 09/04/2026 · 23:38:58';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1463,11 +1463,11 @@
     });
 
     let htmlPDF = `
-      <div style="font-family:'Inter',sans-serif;">
-      <h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:26px;margin-top:0;margin-bottom:2px;color:#000;">Riepilogo Inviti</h1>
-      <h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#b8893a;font-style:italic;margin-bottom:18px;">Giulia &amp; Onofrio</h2>
+      <div style="font-family:'Inter',sans-serif;font-size:11px;">
+      <h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Riepilogo Inviti</h1>
+      <h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:8px;">Giulia &amp; Onofrio</h2>
 
-      <table style="width:100%;border-collapse:collapse;margin-bottom:6px;table-layout:fixed;">
+      <table style="width:100%;border-collapse:collapse;margin-bottom:10px;table-layout:fixed;">
         <tr>
           ${_kpiBox('Invitati', totInvitatiCsv)}
           ${_kpiBox('Confermati', totPresenti)}
@@ -1482,12 +1482,12 @@
         </tr>
       </table>
 
-      <h3 style="font-size:13px;margin-top:14px;margin-bottom:6px;color:#b8893a;font-weight:700;">In attesa di risposta (${inAttesaRiep.length}) &ndash; ${_dataOggi}</h3>
+      <h3 style="font-size:13px;margin-top:10px;margin-bottom:4px;color:#8a5e1e;font-weight:600;text-align:center;">In attesa di risposta (${inAttesaRiep.length}) &ndash; ${_dataOggi}</h3>
       <table style="width:60%;border-collapse:collapse;font-size:11px;margin:0 auto;">
         <thead>
           <tr style="background:#f5ede0;">
-            <th style="padding:5px 8px;text-align:left;border:0.5px solid #999;font-weight:700;color:#000;">COGNOME E NOME</th>
-            <th style="padding:5px 8px;text-align:left;border:0.5px solid #999;font-weight:700;color:#000;">CELLULARE</th>
+            <th style="padding:4px 6px;text-align:left;border:0.5px solid #000;font-weight:600;color:#000;font-size:10px;letter-spacing:0.5px;">COGNOME E NOME</th>
+            <th style="padding:4px 6px;text-align:left;border:0.5px solid #000;font-weight:600;color:#000;font-size:10px;letter-spacing:0.5px;">CELLULARE</th>
           </tr>
         </thead>
         <tbody>${righeRiep}</tbody>
@@ -1670,7 +1670,11 @@
       // Misura l'altezza di tutto ciò che è già nella pagina 1 prima delle righe presenti
       const misPage1 = document.createElement('div');
       misPage1.style.cssText = 'position:fixed;left:-9999px;top:0;width:740px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
-      misPage1.innerHTML = htmlPDF; // tutto quello costruito finora (KPI + assenti)
+      // Misura solo l'HTML della pagina 2 (dopo l'ultimo page-break del Riepilogo)
+      const _pbMarker = 'html2pdf__page-break';
+      const _pbLastIdx = htmlPDF.lastIndexOf(_pbMarker);
+      const _htmlPag2 = _pbLastIdx >= 0 ? htmlPDF.slice(htmlPDF.indexOf('>', _pbLastIdx) + 1) : htmlPDF;
+      misPage1.innerHTML = _htmlPag2;
       document.body.appendChild(misPage1);
       const altezzaPagina1Usata = misPage1.getBoundingClientRect().height;
       document.body.removeChild(misPage1);
@@ -1712,72 +1716,8 @@
       htmlPDF += `</tbody></table>`;
     }
 
-    // Tabella "In attesa di conferma" — chi è nel CSV ma non ha ancora risposto
-    const inAttesaPdf = calcolaInAttesa();
-    if (inAttesaPdf.length > 0) {
-      const acc3 = /[\u0300-\u036f]/g;
-      const cp3 = v => (v||'').toLowerCase().normalize('NFD').replace(acc3,'');
-      inAttesaPdf.sort((a, b) => {
-        const tokA = (a.nome||'').trim().split(/\s+/);
-        const tokB = (b.nome||'').trim().split(/\s+/);
-        const cogA = cp3(chiaveCognomeNome(a.nome||''));
-        const cogB = cp3(chiaveCognomeNome(b.nome||''));
-        return cogA.localeCompare(cogB, 'it', {sensitivity:'base'});
-      });
 
-      const accF = /[\u0300-\u036f]/g;
-      const normF = s => (s||'').toLowerCase().normalize('NFD').replace(accF,'').trim();
-      function cercaTelPdf(nomeDisplay) {
-        const k1 = normF(nomeDisplay);
-        if (mapTelefoni[k1]) return mapTelefoni[k1];
-        const parti = nomeDisplay.trim().split(/\s+/);
-        if (parti.length >= 2) {
-          const k2 = normF(parti[parti.length-1] + ' ' + parti.slice(0,-1).join(' '));
-          if (mapTelefoni[k2]) return mapTelefoni[k2];
-        }
-        return '';
-      }
-      function formattaNumPdf(raw) {
-        const digits = raw.replace(/\D/g,'');
-        if (digits.length === 10)
-          return digits.slice(0,3) + '-' + digits.slice(3,5) + '.' + digits.slice(5,7) + '.' + digits.slice(7);
-        if (digits.length === 12 && digits.startsWith('39')) {
-          const loc = digits.slice(2);
-          return '+39 ' + loc.slice(0,3) + '-' + loc.slice(3,5) + '.' + loc.slice(5,7) + '.' + loc.slice(7);
-        }
-        return raw;
-      }
-      function buildCellaAttesa(inv) {
-        const tokN = (inv.nome||'').trim().split(/\s+/);
-        let nomeFmt = partiNomeRaw(inv.nome||'').display || (inv.nome||'');
-        const cell = cercaTelPdf(inv.nome);
-        const testo = cell
-          ? `<span>${nomeFmt}</span><span style="float:right;">${formattaNumPdf(cell)}</span>`
-          : nomeFmt;
-        return `<td style="padding:5px 6px;font-size:10px;color:#000;vertical-align:top;">${testo}</td>`;
-      }
-      let righeAttesa = '';
-      for (let i = 0; i < inAttesaPdf.length; i += 3) {
-        righeAttesa += '<tr>';
-        for (let c = 0; c < 3; c++) {
-          const inv = inAttesaPdf[i + c];
-          righeAttesa += inv ? buildCellaAttesa(inv) : '<td></td>';
-        }
-        righeAttesa += '</tr>';
-      }
-      htmlPDF += `<div style="page-break-inside:avoid;">`;
-      htmlPDF += `<h3 style="font-size:13px;margin-top:10px;margin-bottom:4px;color:#8a5e1e;font-weight:600;">${testi.titoloConferma} (${inAttesaPdf.length})</h3>`;
-      htmlPDF += `<table class="pdf-table" style="width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed;">
-        <thead><tr style="background-color:#f5ede0;">
-          <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
-          <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
-          <th style="padding:3px 6px;width:33.3%;color:#000;">${testi.pdfNome}</th>
-        </tr></thead>
-        <tbody>${righeAttesa}</tbody>
-      </table></div>`;
-    }
-
-    // Tabella Assenti - dopo i presenti, non spezzare header dal primo rigo
+        // Tabella Assenti - dopo i presenti, non spezzare header dal primo rigo
     if (assentiRows.length > 0) {
       htmlPDF += `<div style="page-break-inside: avoid;">`;
       htmlPDF += `<h3 style="font-size: 13px; margin-top: 18px; margin-bottom: 6px; color: #8a5e1e; font-weight: 600;">${testi.titoloAssenti} (${totAssenti})</h3>

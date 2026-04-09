@@ -1,4 +1,4 @@
-<!-- Lista.html v212 - 10/04/2026 -->
+<!-- Lista.html v213 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v212 · 10/04/2026 · 00:42:43';
+  const APP_VERSION = 'v213 · 10/04/2026 · 00:51:24';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1481,32 +1481,32 @@
 
       <div style="display:flex;gap:16px;margin-bottom:20px;">
 
-        <!-- Card sinistra: presenze -->
+        <!-- Card sinistra: Totale Cenanti + Completi/Baby/Segnaposto -->
         <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totPresenti}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Confermati</div>
+            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totSegnaposto}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Totale Cenanti</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totInAttesa}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">In Attesa</div>
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totBaby - totSegnaposto}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totAssenti}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Assenti</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totBaby}</div>
               <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Baby</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:10px 8px;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totSegnaposto}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Segnaposto</div>
             </div>
           </div>
         </div>
 
-        <!-- Card destra: menu -->
+        <!-- Card destra: Completi + Carne/Pesce/Veg -->
         <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCarne+totPesce+totVeg}<span style="font-size:22px;font-weight:500;color:#555;">/${totPresenti}</span></div>
+            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totBaby - totSegnaposto}<span style="font-size:22px;font-weight:500;color:#555;">/${totPresenti - totSegnaposto}</span></div>
             <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">

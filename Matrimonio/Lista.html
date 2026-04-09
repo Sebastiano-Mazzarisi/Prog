@@ -1,4 +1,4 @@
-<!-- Lista.html v213 - 10/04/2026 -->
+<!-- Lista.html v214 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v213 · 10/04/2026 · 00:51:24';
+  const APP_VERSION = 'v214 · 10/04/2026 · 00:59:40';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -2003,55 +2003,6 @@
     const bgTavoloR = '#e0e8d0';
     const borderTavoloR = '#a5b589';
     htmlPDF += `</div>`; // Chiude flex wrap tavoli
-    htmlPDF += `
-      <div style="display:flex;gap:16px;margin-top:30px;">
-
-        <!-- BOX SINISTRA: Totale cenanti + Baby + Segnaposto -->
-        <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
-          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCenanti}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblTotaleCenanti}</div>
-          </div>
-          <div style="display:flex;background:#c8d5a8;">
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCompleti}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totBaby}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblBaby}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totSegnaposto}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblSegnaposto}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BOX DESTRA: Menu completi + Veg/Carne/Pesce -->
-        <div style="flex:1;box-sizing:border-box;border:2px solid ${borderTavoloR};border-radius:10px;overflow:hidden;background:#e0e8d0;">
-          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid ${borderTavoloR};">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totCompleti}<span style="font-size:22px;font-weight:500;color:#555;">/${totCenanti}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
-          </div>
-          <div style="display:flex;background:#c8d5a8;">
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totVeg}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblVegetariano}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid ${borderTavoloR};">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCarne}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCarne}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totPesce}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblPesce}</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    `;
 
     htmlPDF += `<div style="margin-bottom:-15mm;"></div>`; // riduci spazio fondo pag2
     htmlPDF += `</div>`; // Chiude div contenitore pagina

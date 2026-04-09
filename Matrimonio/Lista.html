@@ -1,4 +1,4 @@
-<!-- Lista.html v206 - 09/04/2026 -->
+<!-- Lista.html v207 - 09/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v206 · 10/04/2026 · 00:04:37';
+  const APP_VERSION = 'v207 · 10/04/2026 · 00:12:30';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1493,6 +1493,61 @@
         <tbody>${righeRiep}</tbody>
       </table>
       </div>
+
+      <div style="margin-top:18px;">
+      <h3 style="font-size:13px;margin-top:0;margin-bottom:8px;color:#8a5e1e;font-weight:700;text-align:center;letter-spacing:1px;text-transform:uppercase;">Previsioni</h3>
+      <table style="width:100%;border-collapse:separate;border-spacing:8px 0;table-layout:fixed;">
+        <tr>
+          <!-- Card sinistra: Totale Cenanti previsto -->
+          <td style="background:#c8d5a8;border:1.5px solid #8fa668;border-radius:10px;padding:0;overflow:hidden;vertical-align:top;">
+            <div style="text-align:center;padding:10px 8px 6px;">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#2a3a18;line-height:1;">${totPresenti + Math.max(0, totInAttesa - 2)}</span><span style="font-size:14px;font-weight:600;color:#5a7a38;">/${totInvitatiCsv}</span>
+              <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#2a3a18;font-weight:700;margin-top:3px;">Totale Cenanti</div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;border-top:1px solid #8fa668;">
+              <tr>
+                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
+                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totPresenti - totBaby - totSegnaposto + Math.max(0, totInAttesa - 2)}</div>
+                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Completi</div>
+                </td>
+                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
+                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totBaby}</div>
+                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Baby</div>
+                </td>
+                <td style="text-align:center;padding:6px 4px;">
+                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totSegnaposto}</div>
+                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Segnaposto</div>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <!-- Card destra: Completi con dettaglio cibo -->
+          <td style="background:#c8d5a8;border:1.5px solid #8fa668;border-radius:10px;padding:0;overflow:hidden;vertical-align:top;">
+            <div style="text-align:center;padding:10px 8px 6px;">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#2a3a18;line-height:1;">${totPresenti - totBaby - totSegnaposto + Math.max(0, totInAttesa - 2)}</span><span style="font-size:14px;font-weight:600;color:#5a7a38;">/${totPresenti + Math.max(0, totInAttesa - 2)}</span>
+              <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#2a3a18;font-weight:700;margin-top:3px;">Completi</div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;border-top:1px solid #8fa668;">
+              <tr>
+                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
+                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totVeg}</div>
+                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Vegetariano</div>
+                </td>
+                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
+                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totCarne + Math.max(0, totInAttesa - 2)}</div>
+                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Carne</div>
+                </td>
+                <td style="text-align:center;padding:6px 4px;">
+                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totPesce}</div>
+                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Pesce</div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      </div>
+
       <div class="html2pdf__page-break"></div>
 
       <div style="margin-bottom:-8mm;">

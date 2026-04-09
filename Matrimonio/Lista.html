@@ -1,4 +1,4 @@
-<!-- Lista.html v201 - 07/04/2026 -->
+<!-- Lista.html v202 - 09/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v201 · 07/04/2026 · 22:22:27';
+  const APP_VERSION = 'v202 · 09/04/2026 · 23:27:00';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1400,7 +1400,101 @@
     container.style.color = "#000000";
     container.style.backgroundColor = "#ffffff"; // Previene sfondi indesiderati su html2canvas
 
+    // ── PAGINA 1: RIEPILOGO ─────────────────────────────────────────────────
+    const _oggi = new Date();
+    const _dataOggi = _oggi.toLocaleDateString('it-IT', {day:'numeric', month:'long', year:'numeric'});
+    const totInAttesa = Math.max(0, totInvitatiCsv - window.datiInvitati.length);
+
+    // Calcola lista In Attesa con telefoni per la pagina riepilogo
+    const inAttesaRiep = calcolaInAttesa();
+    {
+      const acc_r = /[\u0300-\u036f]/g;
+      const cp_r = v => (v||'').toLowerCase().normalize('NFD').replace(acc_r,'');
+      inAttesaRiep.sort((a,b) => {
+        const cogA = cp_r(chiaveCognomeNome(a.nome||''));
+        const cogB = cp_r(chiaveCognomeNome(b.nome||''));
+        return cogA.localeCompare(cogB,'it',{sensitivity:'base'});
+      });
+    }
+    function cercaTelRiep(nomeDisplay) {
+      const accR = /[\u0300-\u036f]/g;
+      const normR = s => (s||'').toLowerCase().normalize('NFD').replace(accR,'').trim();
+      const k1 = normR(nomeDisplay);
+      if (mapTelefoni[k1]) return mapTelefoni[k1];
+      const parti = nomeDisplay.trim().split(/\s+/);
+      if (parti.length >= 2) {
+        const k2 = normR(parti[parti.length-1]+' '+parti.slice(0,-1).join(' '));
+        if (mapTelefoni[k2]) return mapTelefoni[k2];
+      }
+      return '';
+    }
+    function formattaNumRiep(raw) {
+      const digits = (raw||'').replace(/\D/g,'');
+      if (digits.length===10) return digits.slice(0,3)+'-'+digits.slice(3,5)+'.'+digits.slice(5,7)+'.'+digits.slice(7);
+      if (digits.length===12 && digits.startsWith('39')) {
+        const loc=digits.slice(2);
+        return '+39 '+loc.slice(0,3)+'-'+loc.slice(3,5)+'.'+loc.slice(5,7)+'.'+loc.slice(7);
+      }
+      return raw||'-';
+    }
+
+    function _kpiBox(label, value) {
+      return `<td style="padding:3px 4px;">
+        <table style="width:100%;background:#c8d5a8;border:1.5px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+          <tr>
+            <td style="padding:6px 10px;font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:700;">${label}</td>
+            <td style="padding:6px 10px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;white-space:nowrap;">${value}</td>
+          </tr>
+        </table>
+      </td>`;
+    }
+
+    let righeRiep = '';
+    inAttesaRiep.forEach(inv => {
+      const cell = cercaTelRiep(inv.nome);
+      const telFmt = cell ? formattaNumRiep(cell) : '-';
+      const nomeFmt = partiNomeRaw(inv.nome||'').display || (inv.nome||'');
+      const telColor = cell ? '#2f5c9a' : '#000';
+      const telWeight = cell ? '700' : '400';
+      righeRiep += `<tr>
+        <td style="padding:5px 8px;font-size:11px;color:#000;border:0.5px solid #999;">${nomeFmt}</td>
+        <td style="padding:5px 8px;font-size:11px;color:${telColor};font-weight:${telWeight};border:0.5px solid #999;">${telFmt}</td>
+      </tr>`;
+    });
+
     let htmlPDF = `
+      <div style="font-family:'Inter',sans-serif;">
+      <h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:26px;margin-top:0;margin-bottom:2px;color:#000;">Riepilogo Inviti</h1>
+      <h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#b8893a;font-style:italic;margin-bottom:18px;">Giulia &amp; Onofrio</h2>
+
+      <table style="width:100%;border-collapse:collapse;margin-bottom:6px;table-layout:fixed;">
+        <tr>
+          ${_kpiBox('Invitati', totInvitatiCsv)}
+          ${_kpiBox('Confermati', totPresenti)}
+          ${_kpiBox('In Attesa', totInAttesa)}
+          ${_kpiBox('Assenti', totAssenti)}
+        </tr>
+        <tr>
+          ${_kpiBox('Carne', totCarne)}
+          ${_kpiBox('Pesce', totPesce)}
+          ${_kpiBox('Vegetariano', totVeg)}
+          ${_kpiBox('Baby', totBaby)}
+        </tr>
+      </table>
+
+      <h3 style="font-size:13px;margin-top:14px;margin-bottom:6px;color:#b8893a;font-weight:700;">In attesa di risposta (${inAttesaRiep.length}) &ndash; ${_dataOggi}</h3>
+      <table style="width:60%;border-collapse:collapse;font-size:11px;margin:0 auto;">
+        <thead>
+          <tr style="background:#f5ede0;">
+            <th style="padding:5px 8px;text-align:left;border:0.5px solid #999;font-weight:700;color:#000;">COGNOME E NOME</th>
+            <th style="padding:5px 8px;text-align:left;border:0.5px solid #999;font-weight:700;color:#000;">CELLULARE</th>
+          </tr>
+        </thead>
+        <tbody>${righeRiep}</tbody>
+      </table>
+      </div>
+      <div class="html2pdf__page-break"></div>
+
       <div style="margin-bottom:-8mm;">
       <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo} <span style="font-size:12px;font-weight:700;color:#000000;">(${totInvitatiCsv})</span></h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 8px;">Giulia & Onofrio</h2>

@@ -1,4 +1,4 @@
-<!-- Lista.html v207 - 09/04/2026 -->
+<!-- Lista.html v208 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v207 · 10/04/2026 · 00:12:30';
+  const APP_VERSION = 'v208 · 10/04/2026 · 00:24:06';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1465,9 +1465,9 @@
     let htmlPDF = `
       <div style="font-family:'Inter',sans-serif;font-size:11px;">
       <h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Riepilogo Inviti</h1>
-      <h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:8px;">Giulia &amp; Onofrio</h2>
+      <h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:16px;">Giulia &amp; Onofrio</h2>
 
-      <table style="width:100%;border-collapse:collapse;margin-bottom:10px;table-layout:fixed;">
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;table-layout:fixed;">
         <tr>
           ${_kpiBox('Invitati', totInvitatiCsv)}
           ${_kpiBox('Confermati', totPresenti)}
@@ -1482,7 +1482,7 @@
         </tr>
       </table>
 
-      <h3 style="font-size:13px;margin-top:10px;margin-bottom:4px;color:#8a5e1e;font-weight:600;text-align:center;">In attesa di risposta (${inAttesaRiep.length}) &ndash; ${_dataOggi}</h3>
+      <h3 style="font-size:13px;margin-top:0;margin-bottom:8px;color:#8a5e1e;font-weight:600;text-align:center;">In attesa di risposta (${inAttesaRiep.length}) &ndash; ${_dataOggi}</h3>
       <table style="width:60%;border-collapse:collapse;font-size:11px;margin:0 auto;">
         <thead>
           <tr style="background:#f5ede0;">
@@ -1494,53 +1494,71 @@
       </table>
       </div>
 
-      <div style="margin-top:18px;">
-      <h3 style="font-size:13px;margin-top:0;margin-bottom:8px;color:#8a5e1e;font-weight:700;text-align:center;letter-spacing:1px;text-transform:uppercase;">Previsioni</h3>
+      <div style="margin-top:28px;">
+      <h3 style="font-size:13px;margin-top:0;margin-bottom:10px;color:#8a5e1e;font-weight:700;text-align:center;letter-spacing:1px;text-transform:uppercase;">Previsioni</h3>
       <table style="width:100%;border-collapse:separate;border-spacing:8px 0;table-layout:fixed;">
         <tr>
           <!-- Card sinistra: Totale Cenanti previsto -->
           <td style="background:#c8d5a8;border:1.5px solid #8fa668;border-radius:10px;padding:0;overflow:hidden;vertical-align:top;">
             <div style="text-align:center;padding:10px 8px 6px;">
-              <span style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#2a3a18;line-height:1;">${totPresenti + Math.max(0, totInAttesa - 2)}</span><span style="font-size:14px;font-weight:600;color:#5a7a38;">/${totInvitatiCsv}</span>
-              <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#2a3a18;font-weight:700;margin-top:3px;">Totale Cenanti</div>
+              ${(function(){
+                var _nv=Math.max(0,totInAttesa-2);
+                var _tp=totPresenti+_nv;
+                var _cb=totCarne+totPesce+totVeg||1;
+                var _tc=totPresenti-totBaby-totSegnaposto+_nv;
+                return '<span style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#2a3a18;line-height:1;">'+_tp+'</span>'
+                      +'<span style="font-size:14px;font-weight:600;color:#5a7a38;">/'+totInvitatiCsv+'</span>'
+                      +'<div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#2a3a18;font-weight:700;margin-top:3px;">Totale Cenanti</div>';
+              })()}
             </div>
             <table style="width:100%;border-collapse:collapse;border-top:1px solid #8fa668;">
               <tr>
-                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totPresenti - totBaby - totSegnaposto + Math.max(0, totInAttesa - 2)}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Completi</div>
-                </td>
-                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totBaby}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Baby</div>
-                </td>
-                <td style="text-align:center;padding:6px 4px;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totSegnaposto}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Segnaposto</div>
-                </td>
+                ${(function(){
+                  var _nv=Math.max(0,totInAttesa-2);
+                  var _tc=totPresenti-totBaby-totSegnaposto+_nv;
+                  return '<td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">'
+                        +'<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">'+_tc+'</div>'
+                        +'<div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Completi</div></td>'
+                        +'<td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">'
+                        +'<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">'+totBaby+'</div>'
+                        +'<div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Baby</div></td>'
+                        +'<td style="text-align:center;padding:6px 4px;">'
+                        +'<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">'+totSegnaposto+'</div>'
+                        +'<div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Segnaposto</div></td>';
+                })()}
               </tr>
             </table>
           </td>
-          <!-- Card destra: Completi con dettaglio cibo -->
+          <!-- Card destra: Completi con carne/pesce/veg proporzionali -->
           <td style="background:#c8d5a8;border:1.5px solid #8fa668;border-radius:10px;padding:0;overflow:hidden;vertical-align:top;">
             <div style="text-align:center;padding:10px 8px 6px;">
-              <span style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#2a3a18;line-height:1;">${totPresenti - totBaby - totSegnaposto + Math.max(0, totInAttesa - 2)}</span><span style="font-size:14px;font-weight:600;color:#5a7a38;">/${totPresenti + Math.max(0, totInAttesa - 2)}</span>
-              <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#2a3a18;font-weight:700;margin-top:3px;">Completi</div>
+              ${(function(){
+                var _nv=Math.max(0,totInAttesa-2);
+                var _tp=totPresenti+_nv;
+                var _tc=totPresenti-totBaby-totSegnaposto+_nv;
+                return '<span style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#2a3a18;line-height:1;">'+_tc+'</span>'
+                      +'<span style="font-size:14px;font-weight:600;color:#5a7a38;">/'+_tp+'</span>'
+                      +'<div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#2a3a18;font-weight:700;margin-top:3px;">Completi</div>';
+              })()}
             </div>
             <table style="width:100%;border-collapse:collapse;border-top:1px solid #8fa668;">
               <tr>
-                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totVeg}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Vegetariano</div>
-                </td>
-                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totCarne + Math.max(0, totInAttesa - 2)}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Carne</div>
-                </td>
-                <td style="text-align:center;padding:6px 4px;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totPesce}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Pesce</div>
-                </td>
+                ${(function(){
+                  var _nv=Math.max(0,totInAttesa-2);
+                  var _cb=(totCarne+totPesce+totVeg)||1;
+                  var _pVeg=Math.round(totVeg/_cb*_nv);
+                  var _pCarne=Math.round(totCarne/_cb*_nv);
+                  var _pPesce=_nv-_pVeg-_pCarne;
+                  return '<td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">'
+                        +'<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">'+(totVeg+_pVeg)+'</div>'
+                        +'<div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Vegetariano</div></td>'
+                        +'<td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">'
+                        +'<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">'+(totCarne+_pCarne)+'</div>'
+                        +'<div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Carne</div></td>'
+                        +'<td style="text-align:center;padding:6px 4px;">'
+                        +'<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">'+(totPesce+_pPesce)+'</div>'
+                        +'<div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Pesce</div></td>';
+                })()}
               </tr>
             </table>
           </td>

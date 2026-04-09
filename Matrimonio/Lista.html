@@ -1,4 +1,4 @@
-<!-- Lista.html v209 - 10/04/2026 -->
+<!-- Lista.html v211 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v209 · 10/04/2026 · 00:26:49';
+  const APP_VERSION = 'v211 · 10/04/2026 · 00:35:38';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1508,54 +1508,53 @@
 
       <div style="margin-top:28px;">
       <h3 style="font-size:13px;margin-top:0;margin-bottom:10px;color:#8a5e1e;font-weight:700;text-align:center;letter-spacing:1px;text-transform:uppercase;">Previsioni</h3>
-      <table style="width:100%;border-collapse:separate;border-spacing:8px 0;table-layout:fixed;">
-        <tr>
-          <td style="background:#c8d5a8;border:1.5px solid #8fa668;border-radius:10px;padding:0;overflow:hidden;vertical-align:top;">
-            <div style="text-align:center;padding:10px 8px 6px;">
-              <span style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#2a3a18;line-height:1;">${_prevTp}</span><span style="font-size:14px;font-weight:600;color:#5a7a38;">/${totInvitatiCsv}</span>
-              <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#2a3a18;font-weight:700;margin-top:3px;">Totale Cenanti</div>
+      <div style="display:flex;gap:16px;">
+
+        <!-- BOX SINISTRA: Totale cenanti previsto -->
+        <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
+          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
+            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${_prevTp}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Totale Cenanti</div>
+          </div>
+          <div style="display:flex;background:#c8d5a8;">
+            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevTc}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
             </div>
-            <table style="width:100%;border-collapse:collapse;border-top:1px solid #8fa668;">
-              <tr>
-                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${_prevTc}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Completi</div>
-                </td>
-                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totBaby}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Baby</div>
-                </td>
-                <td style="text-align:center;padding:6px 4px;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${totSegnaposto}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Segnaposto</div>
-                </td>
-              </tr>
-            </table>
-          </td>
-          <td style="background:#c8d5a8;border:1.5px solid #8fa668;border-radius:10px;padding:0;overflow:hidden;vertical-align:top;">
-            <div style="text-align:center;padding:10px 8px 6px;">
-              <span style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#2a3a18;line-height:1;">${_prevTc}</span><span style="font-size:14px;font-weight:600;color:#5a7a38;">/${_prevTp}</span>
-              <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#2a3a18;font-weight:700;margin-top:3px;">Completi</div>
+            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totBaby}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Baby</div>
             </div>
-            <table style="width:100%;border-collapse:collapse;border-top:1px solid #8fa668;">
-              <tr>
-                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${_prevVeg}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Vegetariano</div>
-                </td>
-                <td style="text-align:center;padding:6px 4px;border-right:1px solid #8fa668;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${_prevCarne}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Carne</div>
-                </td>
-                <td style="text-align:center;padding:6px 4px;">
-                  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#2a3a18;">${_prevPesce}</div>
-                  <div style="font-size:9px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">Pesce</div>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
+            <div style="flex:1;text-align:center;padding:10px 8px;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totSegnaposto}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Segnaposto</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX DESTRA: Completi previsti + Carne/Pesce/Veg proporzionali -->
+        <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
+          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
+            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${_prevTc}<span style="font-size:22px;font-weight:500;color:#555;">/${_prevTp}</span></div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+          </div>
+          <div style="display:flex;background:#c8d5a8;">
+            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevCarne}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Carne</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevPesce}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Pesce</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:10px 8px;">
+              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevVeg}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Vegetariano</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
       </div>
 
       <div class="html2pdf__page-break"></div>

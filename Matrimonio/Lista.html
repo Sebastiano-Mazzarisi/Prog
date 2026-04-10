@@ -1,4 +1,4 @@
-<!-- Lista.html v223 - 10/04/2026 -->
+<!-- Lista.html v224 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v223 · 10/04/2026 · 10:14:19';
+  const APP_VERSION = 'v224 · 10/04/2026 · 10:18:01';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -1471,14 +1471,14 @@
     inAttesaRiep.forEach(inv => {
       const cell = cercaTelRiep(inv.nome);
       const isTelNum = cell && /\d{9,}/.test(cell.replace(/\D/g,''));
-      const _escHtml = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const _escHtml = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
       const telFmt = cell ? (isTelNum ? formattaNumRiep(cell) : _escHtml(cell)) : '-';
       const nomeFmt = partiNomeRaw(inv.nome||'').display || (inv.nome||'');
       const telColor = isTelNum ? '#2f5c9a' : '#000';
       const telWeight = isTelNum ? '700' : '400';
       righeRiep += `<tr>
         <td style="padding:5px 8px;font-size:11px;color:#000;border:0.5px solid #999;">${nomeFmt}</td>
-        <td style="padding:5px 8px;font-size:11px;color:${telColor};font-weight:${telWeight};border:0.5px solid #999;">${telFmt}</td>
+        <td style="padding:5px 8px;font-size:11px;color:${telColor};font-weight:${telWeight};border:0.5px solid #999;white-space:pre;">${telFmt}</td>
       </tr>`;
     });
 

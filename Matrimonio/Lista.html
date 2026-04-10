@@ -1,4 +1,4 @@
-<!-- Lista.html v220 - 10/04/2026 -->
+<!-- Lista.html v221 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v220 · 10/04/2026 · 09:58:37';
+  const APP_VERSION = 'v221 · 10/04/2026 · 10:04:27';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -643,7 +643,7 @@
       txt.split(/\r?\n/).forEach(riga => {
         if (/^[-\s]/.test(riga) || /^[A-Z\s]+$/.test(riga.split(/\s{2,}/)[0]||'') || /^(Totale|Con |Senza )/i.test(riga)) return; const m = riga.match(/^(.+?)\s{2,}(.+)$/);
         if (!m) return;
-        const nome = m[1].trim(); const cell = m[2].trim().replace(/\s+/g,' ');
+        const nome = m[1].trim(); const cell = m[2].trim();
         window.mapTelefoni[norm(nome)] = cell;
         const parti = nome.split(/\s+/);
         if (parti.length >= 2)
@@ -1355,7 +1355,7 @@
           if (/^[-\s]/.test(riga) || /^[A-Z\s]+$/.test(riga.split(/\s{2,}/)[0]||'') || /^(Totale|Con |Senza )/i.test(riga)) return; const m = riga.match(/^(.+?)\s{2,}(.+)$/);
           if (m) {
             const nome = m[1].trim();
-            const cell = m[2].trim().replace(/\s+/g,' ');
+            const cell = m[2].trim();
             mapTelefoni[normTel(nome)] = cell;
               const parti = nome.split(/\s+/);
               if (parti.length >= 2) {
@@ -2949,7 +2949,7 @@
           if (i < 5) console.log('[Telefoni] riga ' + i + ':', JSON.stringify(riga));
           if (/^[-\s]/.test(riga) || /^[A-Z\s]+$/.test(riga.split(/\s{2,}/)[0]||'') || /^(Totale|Con |Senza )/i.test(riga)) return; const m = riga.match(/^(.+?)\s{2,}(.+)$/);
           if (m) {
-            const nome = m[1].trim(); const cell = m[2].trim().replace(/\s+/g,' ');
+            const nome = m[1].trim(); const cell = m[2].trim();
             mapTelVideo[normV(nome)] = cell;
             const parti = nome.split(/\s+/);
             if (parti.length >= 2) mapTelVideo[normV(parti.slice(1).join(' ') + ' ' + parti[0])] = cell;

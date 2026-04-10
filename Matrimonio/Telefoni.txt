@@ -1,10 +1,10 @@
 NOME                     CELLULARE
 -----------------------------------------
-Acerbi Silvia            —
+Silvia Acerbi            ---> Giulia
 Alessandra Mazzarisi     +393403735401
 Alessandro Lorusso       +393347511975
-Alice Lorusso            (Figlia di Benny)
-Ana Pérez                (Sorella di Giulia)
+Alice Lorusso            —
+Ana Pérez                —
 Andrea Mazzarisi         +393392588991
 Angela Pricci            +393386726240
 Angelo Casulli           +393391586056
@@ -13,7 +13,7 @@ Anna Trivisani           +393398259343
 Anna Vinella             +393803741855
 Asia Pricci              +393342809332
 Benny Lorusso            +393468002051
-Bove Camilla             —
+Camilla Bove             —
 Cinzia Lorusso           +393884703343
 Clara Pérez              —
 Cristiano Chiarappa      +393348726967
@@ -23,10 +23,10 @@ Domenico Lefemine        +393272010026
 Domenico Mazzarisi       +393389896564
 Donatello Casulli        —
 Dulce Pérez              —
-Edoardo Casulli          —
+Edoardo Casulli          ---> Gianluca
 Enza Nitti               +393206776244
 Flavia Lefemine          +393803741880
-Flavio Casulli           —
+Flavio Casulli           ---> Gianluca
 Francesco Lefemine       +393388076187
 Francesco Mazzarisi      +393383015596
 Genny Lepore             +393334433476
@@ -48,8 +48,8 @@ Mariella Mazzarisi       +393395963910
 Marilù Mazzarisi         +393662189546
 Marta Pérez              —
 Martino Chiarappa        +393388219149
-Mino Alessandro          —
-Mino Carlotta            —
+Alessandro Mino          ---> Giulia
+Carlotta Mino            ---> Giulia
 Nicola Minerva           +393931048294
 Nicoletta Rotondi        —
 Nina Lorusso             —
@@ -63,17 +63,17 @@ Saverio Chiarappa        +393683218240
 Sebastiano Mazzarisi     +393356276262
 Sergio Vatta             +393345358392
 Silvia Guarneri          —
-Stefania Bruni           —
+Stefania Bruni           ---> Marco
 Stefano Pacello          +393333428049
 Teresa Mazzarisi         +393891309424
 Tiziana Pricci           +393389801540
 Tomás Bencomo            —
-Tosini Marta             —
+Marta Tosini             —
 Valentina Ladogana       —
 Vanna Pricci             +39330630303
 Vito Mazzarisi           +393313960960
-Zani Paola               —
-Zappella Chiara          —
+Paola Zani               ---> Giulia
+Chiara Zappella          —
 
 Totale invitati  : 74
 Con cellulare    : 48

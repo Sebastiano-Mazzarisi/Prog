@@ -1,4 +1,4 @@
-<!-- Lista.html v214 - 10/04/2026 -->
+<!-- Lista.html v215 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v214 · 10/04/2026 · 00:59:40';
+  const APP_VERSION = 'v215 · 10/04/2026 · 08:49:47';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -496,6 +496,14 @@
       lbl_CIBO: "CIBO",
       lbl_ETA: "ETÀ",
       lbl_TAVOLO: "TAVOLO",
+      titoloRiepilogo: "Riepilogo Inviti",
+      lblCognomeNome: "COGNOME E NOME",
+      lblCellulare: "CELLULARE",
+      titoloPrevisioni: "PREVISIONI",
+      lblInAttesa: "In Attesa",
+      lblConfermati: "Confermati",
+      lblStatistiche: "Statistiche",
+      lblControlloModuli: "Controllo moduli",
       grafico_registrazioni: "Registrazioni nel tempo",
       grafico_fasce: "Fasce d'et\u00e0",
       grafico_cibo: "Scelta del cibo",
@@ -582,6 +590,15 @@
       lbl_CIBO: "COMIDA",
       lbl_ETA: "EDAD",
       lbl_TAVOLO: "MESA",
+      titoloRiepilogo: "Resumen de Invitados",
+      lblCognomeNome: "APELLIDO Y NOMBRE",
+      lblCellulare: "CELULAR",
+      titoloPrevisioni: "PREVISIONES",
+      lblInAttesa: "En Espera",
+      lblInAttesa: "En Espera",
+      lblConfermati: "Confirmados",
+      lblStatistiche: "Estadísticas",
+      lblControlloModuli: "Control de formularios",
       grafico_registrazioni: "Registros en el tiempo",
       grafico_fasce: "Grupos de edad",
       grafico_cibo: "Elecci\u00f3n del men\u00fa",
@@ -1476,7 +1493,7 @@
 
     let htmlPDF = `
       <div style="font-family:'Inter',sans-serif;font-size:11px;">
-      <h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Riepilogo Inviti</h1>
+      <h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">${testi.titoloRiepilogo}</h1>
       <h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:16px;">Giulia &amp; Onofrio</h2>
 
       <div style="display:flex;gap:16px;margin-bottom:20px;">
@@ -1485,20 +1502,20 @@
         <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totSegnaposto}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Totale Cenanti</div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblTotaleCenanti}</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totBaby - totSegnaposto}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totBaby}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Baby</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblBaby}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totSegnaposto}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Segnaposto</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblSegnaposto}</div>
             </div>
           </div>
         </div>
@@ -1507,32 +1524,32 @@
         <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totBaby - totSegnaposto}<span style="font-size:22px;font-weight:500;color:#555;">/${totPresenti - totSegnaposto}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCarne}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Carne</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCarne}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totPesce}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Pesce</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblPesce}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totVeg}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Vegetariano</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblVegetariano}</div>
             </div>
           </div>
         </div>
 
       </div>
 
-      <h3 style="font-size:13px;margin-top:0;margin-bottom:8px;color:#8a5e1e;font-weight:600;text-align:center;">In attesa di risposta (${inAttesaRiep.length}) &ndash; ${_dataOggi}</h3>
+      <h3 style="font-size:13px;margin-top:0;margin-bottom:8px;color:#8a5e1e;font-weight:600;text-align:center;">${testi.titoloAttesa} (${inAttesaRiep.length}) &ndash; ${_dataOggi}</h3>
       <table style="width:60%;border-collapse:collapse;font-size:11px;margin:0 auto;">
         <thead>
           <tr style="background:#f5ede0;">
-            <th style="padding:4px 6px;text-align:left;border:0.5px solid #000;font-weight:600;color:#000;font-size:10px;letter-spacing:0.5px;">COGNOME E NOME</th>
-            <th style="padding:4px 6px;text-align:left;border:0.5px solid #000;font-weight:600;color:#000;font-size:10px;letter-spacing:0.5px;">CELLULARE</th>
+            <th style="padding:4px 6px;text-align:left;border:0.5px solid #000;font-weight:600;color:#000;font-size:10px;letter-spacing:0.5px;">${testi.lblCognomeNome}</th>
+            <th style="padding:4px 6px;text-align:left;border:0.5px solid #000;font-weight:600;color:#000;font-size:10px;letter-spacing:0.5px;">${testi.lblCellulare}</th>
           </tr>
         </thead>
         <tbody>${righeRiep}</tbody>
@@ -1540,27 +1557,27 @@
       </div>
 
       <div style="margin-top:28px;">
-      <h3 style="font-size:13px;margin-top:0;margin-bottom:10px;color:#8a5e1e;font-weight:700;text-align:center;letter-spacing:1px;text-transform:uppercase;">Previsioni</h3>
+      <h3 style="font-size:13px;margin-top:0;margin-bottom:10px;color:#8a5e1e;font-weight:700;text-align:center;letter-spacing:1px;text-transform:uppercase;">${testi.titoloPrevisioni}</h3>
       <div style="display:flex;gap:16px;">
 
         <!-- BOX SINISTRA: Totale cenanti previsto -->
         <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${_prevTp}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Totale Cenanti</div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblTotaleCenanti}</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevTc}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totBaby}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Baby</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblBaby}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totSegnaposto}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Segnaposto</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblSegnaposto}</div>
             </div>
           </div>
         </div>
@@ -1569,20 +1586,20 @@
         <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
           <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
             <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${_prevTc}<span style="font-size:22px;font-weight:500;color:#555;">/${_prevTp}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Completi</div>
+            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
           </div>
           <div style="display:flex;background:#c8d5a8;">
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevCarne}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Carne</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCarne}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevPesce}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Pesce</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblPesce}</div>
             </div>
             <div style="flex:1;text-align:center;padding:10px 8px;">
               <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevVeg}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Vegetariano</div>
+              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblVegetariano}</div>
             </div>
           </div>
         </div>
@@ -1840,7 +1857,7 @@
       htmlPDF += `<div style="margin-bottom:-15mm;"></div>`; // riduci spazio fondo pag1
       htmlPDF += `<div class="html2pdf__page-break"></div>`;
       htmlPDF += `<div>`;
-      htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Controllo moduli</h1>`;
+      htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;>${testi.lblControlloModuli}</h1>`;
       htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:8px;">Giulia &amp; Onofrio</h2>`;
 
       // Calcola numero bambini (< 11 anni) per il titolo
@@ -2010,7 +2027,7 @@
     // ===== PAGINA GRAFICI =====
     htmlPDF += `<div class="html2pdf__page-break"></div>`;
     htmlPDF += `<div style="width:740px;padding:0;font-family:'Inter',sans-serif;">`;
-    htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#000;margin:0 0 14px 0;">Statistiche</h2>`;
+    htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#000;margin:0 0 14px 0;>${testi.lblStatistiche}</h2>`;
 
     // ── Calcoli comuni ──────────────────────────────────────────────────────
 
@@ -2162,7 +2179,7 @@
     ];
     var svg2 = '<svg width="'+GW+'" height="'+GH+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+GW+'" height="'+GH+'" fill="#f9fdf5" rx="8"/>'
-      + '<text x="'+(GW/2)+'" y="20" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">Fasce d’età</text>'
+      + '<text x="'+(GW/2)+'" y="20" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">${testi.grafico_fasce}</text>'
       + svgBars(GW,GH,gPadL,gPadR,gPadT,gPadB,g2Data)
       + '</svg>';
 

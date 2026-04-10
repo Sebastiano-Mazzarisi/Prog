@@ -1,4 +1,4 @@
-<!-- Lista.html v215 - 10/04/2026 -->
+<!-- Lista.html v216 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v215 · 10/04/2026 · 08:49:47';
+  const APP_VERSION = 'v216 · 10/04/2026 · 08:56:59';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -504,6 +504,8 @@
       lblConfermati: "Confermati",
       lblStatistiche: "Statistiche",
       lblControlloModuli: "Controllo moduli",
+      lblFotografie: "Fotografie",
+      lblFotografieGruppi: "Fotografie per gruppi",
       grafico_registrazioni: "Registrazioni nel tempo",
       grafico_fasce: "Fasce d'et\u00e0",
       grafico_cibo: "Scelta del cibo",
@@ -599,6 +601,8 @@
       lblConfermati: "Confirmados",
       lblStatistiche: "Estadísticas",
       lblControlloModuli: "Control de formularios",
+      lblFotografie: "Fotografías",
+      lblFotografieGruppi: "Fotografías por grupos",
       grafico_registrazioni: "Registros en el tiempo",
       grafico_fasce: "Grupos de edad",
       grafico_cibo: "Elecci\u00f3n del men\u00fa",
@@ -2179,7 +2183,7 @@
     ];
     var svg2 = '<svg width="'+GW+'" height="'+GH+'" xmlns="http://www.w3.org/2000/svg">'
       + '<rect width="'+GW+'" height="'+GH+'" fill="#f9fdf5" rx="8"/>'
-      + '<text x="'+(GW/2)+'" y="20" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">${testi.grafico_fasce}</text>'
+      + '<text x="'+(GW/2)+'" y="20" text-anchor="middle" font-size="22" font-weight="700" font-family="Arial" fill="#2d6040">'+testi.grafico_fasce+'</text>'
       + svgBars(GW,GH,gPadL,gPadR,gPadT,gPadB,g2Data)
       + '</svg>';
 
@@ -2423,7 +2427,7 @@
       fotoPagina.push(buildVoceFoto(cognomeNome));
     });
     fotoPagina.sort((a, b) => a.label.localeCompare(b.label, 'it', { sensitivity: 'base' }));
-    renderPaginaMiniature('Fotografie', fotoPagina, false, { breakBefore: true });
+    renderPaginaMiniature(testi.lblFotografie, fotoPagina, false, { breakBefore: true });
 
     // ===== PAGINA FOTOGRAFIE PER GRUPPI =====
     // Stessa identica griglia e stessa spaziatura della pagina precedente:
@@ -2448,7 +2452,7 @@
       fotoPaginaGruppiRighe.push(fotoPaginaGruppiFlat.slice(i, i + 8));
     }
 
-    renderPaginaMiniature('Fotografie per gruppi', fotoPaginaGruppiRighe, true, { breakBefore: true, groupFrame: true });
+    renderPaginaMiniature(testi.lblFotografieGruppi, fotoPaginaGruppiRighe, true, { breakBefore: true, groupFrame: true });
 
     container.innerHTML = htmlPDF;
 

@@ -1,9 +1,10 @@
 NOME                     CELLULARE
 -----------------------------------------
+Acerbi Silvia            —
 Alessandra Mazzarisi     +393403735401
 Alessandro Lorusso       +393347511975
-Alice Lorusso            —
-Ana Pérez                —
+Alice Lorusso            (Figlia di Benny)
+Ana Pérez                (Sorella di Giulia)
 Andrea Mazzarisi         +393392588991
 Angela Pricci            +393386726240
 Angelo Casulli           +393391586056
@@ -12,6 +13,7 @@ Anna Trivisani           +393398259343
 Anna Vinella             +393803741855
 Asia Pricci              +393342809332
 Benny Lorusso            +393468002051
+Bove Camilla             —
 Cinzia Lorusso           +393884703343
 Clara Pérez              —
 Cristiano Chiarappa      +393348726967
@@ -46,13 +48,15 @@ Mariella Mazzarisi       +393395963910
 Marilù Mazzarisi         +393662189546
 Marta Pérez              —
 Martino Chiarappa        +393388219149
+Mino Alessandro          —
+Mino Carlotta            —
 Nicola Minerva           +393931048294
 Nicoletta Rotondi        —
 Nina Lorusso             —
 Oletta Chiarappa         —
 Onofrio Lorusso          +393384841822
 Onofrio Mazzarisi        +393335443537
-Ramón Pérez              —
+Ramòn Pérez              —
 Riccardo Dalena          +393473485333
 Roberta Lovece           —
 Saverio Chiarappa        +393683218240
@@ -64,10 +68,13 @@ Stefano Pacello          +393333428049
 Teresa Mazzarisi         +393891309424
 Tiziana Pricci           +393389801540
 Tomás Bencomo            —
+Tosini Marta             —
 Valentina Ladogana       —
 Vanna Pricci             +39330630303
 Vito Mazzarisi           +393313960960
+Zani Paola               —
+Zappella Chiara          —
 
-Totale invitati  : 67
+Totale invitati  : 74
 Con cellulare    : 48
-Senza cellulare  : 19
+Senza cellulare  : 26

@@ -1,4 +1,4 @@
-<!-- Lista.html v216 - 10/04/26 -->
+<!-- Lista.html v217 - 10/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v216 · 10/04/2026 · 08:56:59';
+  const APP_VERSION = 'v217 · 10/04/2026 · 09:16:50';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -644,7 +644,6 @@
         const m = riga.match(/^(.+?)\s{2,}(\S+)$/);
         if (!m) return;
         const nome = m[1].trim(); const cell = m[2].trim();
-        if (cell === '\u2014' || cell === '-') return;
         window.mapTelefoni[norm(nome)] = cell;
         const parti = nome.split(/\s+/);
         if (parti.length >= 2)
@@ -1357,14 +1356,12 @@
           if (m) {
             const nome = m[1].trim();
             const cell = m[2].trim();
-            if (cell !== '—' && cell !== '-') {
-              mapTelefoni[normTel(nome)] = cell;
+            mapTelefoni[normTel(nome)] = cell;
               const parti = nome.split(/\s+/);
               if (parti.length >= 2) {
                 const inv = parti.slice(1).join(' ') + ' ' + parti[0];
                 mapTelefoni[normTel(inv)] = cell;
               }
-            }
           }
         });
       }
@@ -1473,10 +1470,11 @@
     let righeRiep = '';
     inAttesaRiep.forEach(inv => {
       const cell = cercaTelRiep(inv.nome);
-      const telFmt = cell ? formattaNumRiep(cell) : '-';
+      const isTelNum = cell && /\d{9,}/.test(cell.replace(/\D/g,''));
+      const telFmt = cell ? (isTelNum ? formattaNumRiep(cell) : cell) : '-';
       const nomeFmt = partiNomeRaw(inv.nome||'').display || (inv.nome||'');
-      const telColor = cell ? '#2f5c9a' : '#000';
-      const telWeight = cell ? '700' : '400';
+      const telColor = isTelNum ? '#2f5c9a' : '#000';
+      const telWeight = isTelNum ? '700' : '400';
       righeRiep += `<tr>
         <td style="padding:5px 8px;font-size:11px;color:#000;border:0.5px solid #999;">${nomeFmt}</td>
         <td style="padding:5px 8px;font-size:11px;color:${telColor};font-weight:${telWeight};border:0.5px solid #999;">${telFmt}</td>
@@ -2952,11 +2950,9 @@
           const m = riga.match(/^(.+?)\s{2,}(\S+)$/);
           if (m) {
             const nome = m[1].trim(); const cell = m[2].trim();
-            if (cell !== '\u2014' && cell !== '-') {
-              mapTelVideo[normV(nome)] = cell;
-              const parti = nome.split(/\s+/);
-              if (parti.length >= 2) mapTelVideo[normV(parti.slice(1).join(' ') + ' ' + parti[0])] = cell;
-            }
+            mapTelVideo[normV(nome)] = cell;
+            const parti = nome.split(/\s+/);
+            if (parti.length >= 2) mapTelVideo[normV(parti.slice(1).join(' ') + ' ' + parti[0])] = cell;
           }
         });
         console.log('[Telefoni] Voci mappa:', Object.keys(mapTelVideo).length, '- prime chiavi:', Object.keys(mapTelVideo).slice(0,5));
@@ -3027,8 +3023,9 @@
         const tavNum = trovaTavoloNum(inv.nome || '');
         const bg = idx % 2 === 0 ? '#fafafa' : '#ffffff';
         const cell = cercaTelVideo(inv.nome);
-        const cellStr = cell
-          ? ' <span style="font-size:12px;color:#1a4fa0;font-weight:500;margin-left:4px;">\ud83d\udcf1\u00a0' + formattaNumVideo(cell) + '</span>'
+        const isCellNum = cell && /\d{9,}/.test(cell.replace(/\D/g,''));
+        const cellStr = cell && cell !== '-' && cell !== '\u2014'
+          ? ' <span style="font-size:12px;color:' + (isCellNum ? '#1a4fa0' : '#555') + ';font-weight:500;margin-left:4px;">' + (isCellNum ? '\ud83d\udcf1\u00a0' + formattaNumVideo(cell) : cell) + '</span>'
           : '';
         html += '<div style="padding:7px 10px;border-radius:8px;background:' + bg + ';margin-bottom:3px;display:flex;align-items:center;gap:6px;">'
           + (tavNum ? '<span style="font-size:13px;flex-shrink:0">' + tavNum + '</span>' : '<span style="width:18px;flex-shrink:0"></span>')

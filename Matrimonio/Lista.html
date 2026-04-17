@@ -1,4 +1,4 @@
-<!-- Lista.html v226 - 17/04/2026 -->
+<!-- Lista.html v227 - 17/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -361,7 +361,7 @@
   <div class="card">
     <div id="sposi-table">
       <p id="txt-caricamento" style="text-align:center;padding:20px">
-        <span style="font-size:24px;font-weight:700">Caricamento...</span><br>
+        <span style="font-size:24px;font-weight:700">Caricamento<span id="loading-dots">·</span></span><br>
         <small id="ver-label" style="color:#b8893a;font-size:13px;font-weight:600">v190</small>
       </p>
     </div>
@@ -370,8 +370,35 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v226 · 17/04/2026 · 17:44:01';
+  const APP_VERSION = 'v227 · 17/04/2026 · 17:44:41';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
+
+  // ── Animazione puntini di caricamento ────────────────────────────────────
+  let _loadingDots = '·';
+  const _loadingDotsSeq = ['·', '··', '···', '····', '·····'];
+  let _loadingDotsIdx = 0;
+  let _loadingDotsTimer = null;
+  function _startLoadingDots() {
+    _loadingDotsIdx = 0;
+    const el = document.getElementById('loading-dots');
+    if (el) el.textContent = _loadingDotsSeq[0];
+    if (_loadingDotsTimer) clearInterval(_loadingDotsTimer);
+    _loadingDotsTimer = setInterval(function() {
+      _loadingDotsIdx = (_loadingDotsIdx + 1) % _loadingDotsSeq.length;
+      const e = document.getElementById('loading-dots');
+      if (e) e.textContent = _loadingDotsSeq[_loadingDotsIdx];
+    }, 500);
+  }
+  function avanzaLoading() {
+    _loadingDotsIdx = Math.min(_loadingDotsIdx + 1, _loadingDotsSeq.length - 1);
+    const el = document.getElementById('loading-dots');
+    if (el) el.textContent = _loadingDotsSeq[_loadingDotsIdx];
+  }
+  function _stopLoadingDots() {
+    if (_loadingDotsTimer) { clearInterval(_loadingDotsTimer); _loadingDotsTimer = null; }
+  }
+  _startLoadingDots();
+  // ─────────────────────────────────────────────────────────────────────────
 
   function getCurrentDateTime() {
     const now = new Date();
@@ -431,7 +458,7 @@
   const dizionario = {
     it: {
       titolo: "Lista Invitati",
-      caricamento: "Caricamento...",
+      caricamento: "Caricamento",
       nessunaRisposta: "Nessuna risposta ancora.",
       aggiorna: "↻ Aggiorna",
       btnAggiorna: "AGGIORNA",
@@ -527,7 +554,7 @@
     },
     es: {
       titolo: "Lista de Invitados",
-      caricamento: "Cargando...",
+      caricamento: "Cargando",
       nessunaRisposta: "Ninguna respuesta todavía.",
       aggiorna: "↻ Actualizar",
       btnAggiorna: "ACTUALIZAR",
@@ -650,6 +677,7 @@
           window.mapTelefoni[norm(parti.slice(1).join(' ') + ' ' + parti[0])] = cell;
       });
     } catch(e) {}
+    avanzaLoading();
   }
 
   function cercaTelefono(nomeDisplay) {
@@ -769,7 +797,7 @@
         };
         for (let i = startInv; i < righeInv.length; i++) {
           const riga = righeInv[i];
-          if (!riga) { flushGruppo(); continue; }
+          if (!riga || riga.startsWith('#')) { flushGruppo(); continue; }
           const cols = riga.split(sepInv);
           const nomeRaw = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
           if (!nomeRaw) { flushGruppo(); continue; }
@@ -781,7 +809,7 @@
         let _gc = [];
         for (let i = startInv; i < righeInv.length; i++) {
           const _r = righeInv[i];
-          if (!_r) { if (_gc.length) { window.gruppiCsvOrdinati.push([..._gc]); _gc = []; } continue; }
+          if (!_r || _r.startsWith('#')) { if (_gc.length) { window.gruppiCsvOrdinati.push([..._gc]); _gc = []; } continue; }
           const _c = _r.split(sepInv);
           const _nr = _c[0] ? _c[0].replace(/['"]/g,'').trim() : '';
           if (!_nr) { if (_gc.length) { window.gruppiCsvOrdinati.push([..._gc]); _gc = []; } continue; }
@@ -790,6 +818,7 @@
         if (_gc.length) window.gruppiCsvOrdinati.push(_gc);
       }
     } catch(e) { console.log('mapNascita: Invitati.csv non disponibile', e); }
+    avanzaLoading();
   }
 
   function cambiaLingua(lang) {
@@ -920,7 +949,8 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '</span><br><small style="color:#b8893a;font-size:13px;font-weight:600">' + APP_VERSION + '</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '<span id="loading-dots">·</span></span><br><small style="color:#b8893a;font-size:13px;font-weight:600">' + APP_VERSION + '</small></p>';
+    _startLoadingDots();
     activeFilter = null;
 
     fetch(SCRIPT_URL + '?t=' + Date.now())
@@ -946,6 +976,7 @@
         }));
         righeMappate = ordinaInvitati(righeMappate, activeOrdine);
         window.datiInvitati = righeMappate;
+        avanzaLoading();
         renderizzaDati();
       })
       .catch((err) => {
@@ -993,6 +1024,7 @@
   }
 
   function renderizzaDati() {
+    _stopLoadingDots();
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
     let totPresenti = 0, totAssenti = 0, totAllergie = 0, totVeg = 0, totCarne = 0, totPesce = 0, totBaby = 0, totSegnaposto = 0;
@@ -1383,7 +1415,14 @@
 
         let gruppoCorrente = [];
         for (let i = startIndex; i < righe.length; i++) {
-          if (righe[i].startsWith('#')) continue;
+          if (righe[i].startsWith('#')) {
+            if (gruppoCorrente.length > 0) {
+              gruppiInvitati.push(gruppoCorrente);
+              totInvitatiCsv += gruppoCorrente.length;
+              gruppoCorrente = [];
+            }
+            continue;
+          }
           let cols = righe[i].split(sep);
           let nomeRawPdf = cols[0] ? cols[0].replace(/['"]/g, '').trim() : '';
           let dataNascita = cols[1] ? cols[1].replace(/['"]/g, '').trim() : '';

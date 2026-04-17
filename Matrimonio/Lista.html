@@ -1,4 +1,4 @@
-<!-- Lista.html v225 - 10/04/2026 -->
+<!-- Lista.html v226 - 17/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v225 · 10/04/2026 · 10:22:39';
+  const APP_VERSION = 'v226 · 17/04/2026 · 15:58:51';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   function getCurrentDateTime() {
@@ -725,6 +725,7 @@
         let totCsv = 0;
         let startInv = (righeInv.length > 0 && righeInv[0].toLowerCase().includes('nom')) ? 1 : 0;
         for (let i = startInv; i < righeInv.length; i++) {
+          if (righeInv[i].startsWith('#')) continue;
           const cols = righeInv[i].split(sepInv);
           const nomeRaw = cols[0] ? cols[0].replace(/['"]/g,'').trim() : '';
           const dataN = cols[1] ? cols[1].replace(/['"]/g,'').trim() : '';
@@ -1382,6 +1383,7 @@
 
         let gruppoCorrente = [];
         for (let i = startIndex; i < righe.length; i++) {
+          if (righe[i].startsWith('#')) continue;
           let cols = righe[i].split(sep);
           let nomeRawPdf = cols[0] ? cols[0].replace(/['"]/g, '').trim() : '';
           let dataNascita = cols[1] ? cols[1].replace(/['"]/g, '').trim() : '';

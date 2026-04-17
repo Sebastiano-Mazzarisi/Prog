@@ -1,20 +1,20 @@
-Cognome e Nome;Identificativo;Descrizione
+﻿Cognome e Nome;Identificativo;Descrizione
 Acerbi Silvia;Silvia;Amica di Giulia
 Bencomo Tomás;Tomás;Cugino di Giulia
 Bove Camilla;Camilla;Amica di Giulia
 Bruni Stefania;Stefania;Compagna di Marco Mazzarisi
-Casulli Angelo;Angelo;Compare di Onofrio, moglie di Maria Marchione
+Casulli Angelo;Angelo;Compare di Onofrio, marito di Maria Marchione
 Casulli Daniele;Daniele;Figlio di Angelo e Maria
 Casulli Donatello;Donatello;Figlio di Daniele Casulli
-Casulli Edoardo;Edoardo;Figlio di Gianluca ed Anna
-Casulli Flavio;Flavio;Figlio di Gianluca ed Ann
-Casulli Gianluca;Gianluca;Figlio di Angelo e Maria
+Casulli Edoardo;Edoardo;Figlio di Gianluca ed Anna Vinella
+Casulli Flavio;Flavio;Figlio di Gianluca ed Anna Vinella
+Casulli Gianluca;Gianluca;Figlio di Angelo e Maria Marchione
 Chiarappa Cristiano;Cristiano;Cugino, figlio di Saverio e Maria Antonietta
 Chiarappa Martino;Martino;Cugino, figlio di Saverio e Maria Antonietta
 Chiarappa Oletta;Oletta;Amica di Trieste, moglie di Sergio Vatta
 Chiarappa Saverio;Saverio;Zio, marito di Maria Antonietta
 Dalena Riccardo;Riccardo;Zio, marito di Tiziana Pricci
-Guarneri Lucia;Lucia;Madre della sposa
+Guarneri Lucia;Lucia;Madre di Giulia
 Guarneri Silvia;Silvia;Zia di Giulia, sorella di Lucia Guarneri
 Guazzaroni Giulia;Giulia;Zia, moglie di Francesco Mazzarisi
 Ladogana Valentina;Valentina;Amica, fotografa del matrimonio
@@ -24,7 +24,7 @@ Lefemine Francesco;Ciccio;Cugino, figlio di Domenico e Vanna
 Lepore Genny;Genny;Cugina, moglie di Benny Lorusso
 Lorusso Alessandro;Ale;Figlio di Benny e Genny
 Lorusso Alice;Alice;Figlia di Benny e Genny
-Lorusso Benny;Benny;Figlia di Benny e Genny
+Lorusso Benny;Benny;Cugino, marito di Genny Lepore
 Lorusso Cinzia;Cinzia;Cugina, figlia di Onofrio e Angela Pricci
 Lorusso Nina;Nina;Figlia di Benny e Genny
 Lorusso Onofrio;Onofrio;Zio, marito di Angela Pricci
@@ -32,10 +32,10 @@ Lovece Roberta;Roberta;Moglie di Daniele Casulli
 Marchione Maria;Maria;Moglie di Angelo Casulli
 Mazzarisi Alessandra;Alessandra;Cugina, figlia di Francesco e Giulia Guazzaroni
 Mazzarisi Andrea;Andrea;Cugino, figlio di Francesco e Giulia Guazzaroni
-Mazzarisi Domenico;Domenico;Zio, moglie di Anna Sabatelli
+Mazzarisi Domenico;Domenico;Zio, marito di Anna Sabatelli
 Mazzarisi Francesco;Franco;Zio, marito di Giulia Guazzaroni
 Mazzarisi Marco;Marco;Cugino, figlio di Vito Mazzarisi
-Mazzarisi Maria Grazia;Mary; sorella di Onofrio e Teresa
+Mazzarisi Maria Grazia;Mary;Sorella di Onofrio e Teresa
 Mazzarisi Mariella;Mariella;Zia, moglie di Stefano Pacello
 Mazzarisi Marilù;Marilù;Cugina, figlia di Domenico e Anna Sabatelli
 Mazzarisi Onofrio;Onofrio;Sposo
@@ -48,10 +48,10 @@ Nitti Enza;Enza;Compagna di Vito Mazzarisi
 Pacello Stefano;Stefano;Zio, marito di Mariella Mazzarisi
 Pérez Ana;Ana;Sorella della sposa
 Pérez Clara;Clara;Sorella della sposa e testimone
-Pérez Dulce;Dulce; Zia della sposa
-Pérez Giulia;Giulia; Sposa
-Pérez Juani;Juani; Zia della sposa
-Pérez Marta;Marta;Cugina della sposa
+Pérez Dulce;Dulce;Zia di Giulia
+Pérez Giulia;Giulia;Sposa
+Pérez Juani;Juani;Zia di Giulia
+Pérez Marta;Marta;Cugina di Giulia
 Pérez Ramòn;Ramòn;Padre della sposa
 Pricci Angela;Angela;Zia, moglie di Onofrio Lorusso
 Pricci Asia;Asia;Cugina, figlia di Giuseppe e Anna Trivisani
@@ -67,7 +67,7 @@ Rotondi Nicoletta;Nicoletta;Figlia di Gianni e Cinzia Lorusso
 Sabatelli Anna;Sabatelli;Zia, moglie di Domenico Mazzarisi
 Tosini Marta;Marta;Amica di Giulia
 Trivisani Anna;Anna;Zia, moglie di Giuseppe Pricci
-Vatta Sergio;Sergio;Amici di Trieste, marito di Oletta Chiarappa
+Vatta Sergio;Sergio;Amico di Trieste, marito di Oletta Chiarappa
 Vinella Anna;Vinella;Moglie di Gianluca Casulli
 Zani Paola;Paola;Amica di Giulia
-Zappella Chiara;Chiara;Amica di Giulia e moglie di Alessandro Mimo
+Zappella Chiara;Chiara;Amica di Giulia e moglie di Alessandro Mino

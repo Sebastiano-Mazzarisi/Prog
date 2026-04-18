@@ -1,4 +1,4 @@
-<!-- Lista.html v239 - 18/04/2026 -->
+<!-- Lista.html v240 - 18/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v239 · 18/04/2026 · 18:36:17';
+  const APP_VERSION = 'v240 · 18/04/2026 · 18:40:39';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -1691,25 +1691,18 @@
           + '</tr>';
       }
 
-      // === MISURA DOM ===
-      // A4 in px a 96dpi con margini 5+20mm: area utile = (297-25)*3.7795 = 1028px
-      // Il container PDF è 740px wide, scale:2 → la misura DOM è a scala 1x
-      // Usiamo 740px per il misuratore, stessa larghezza del container PDF
-      const AREA_PAGINA = 960; // px DOM, calibrato per evitare pagine bianche
+      // === CALCOLO RIGHE PER PAGINA ===
+      // A4: 297mm, margini top+bottom = 20mm → area utile = 277mm
+      // Scala html2pdf: container 740px → A4 210mm → 1px = 210/740 mm = 0.2838mm
+      // Altezza riga tabella a font 11px ≈ 18px → 18 * 0.2838 = 5.1mm
+      // Header KPI + titoli sulla prima pagina: stimati 55mm → restano 222mm ≈ 43 righe
+      // Pagine successive: area intera 277mm meno header tabella 8mm → 269mm ≈ 52 righe
+      const MM_PER_PX = 210 / 740;           // 0.2838 mm per pixel DOM
+      const A4_H_MM = 277;                    // area utile A4 con margini 10mm
+      const HEADER_PAGE1_MM = 58;             // KPI + titoli + thead prima pagina
+      const HEADER_PAGEN_MM = 10;             // solo thead pagine successive
 
-      // Misura l'altezza di tutto ciò che è già nella pagina 1 prima delle righe presenti
-      const misPage1 = document.createElement('div');
-      misPage1.style.cssText = 'position:fixed;left:-9999px;top:0;width:740px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
-      // Misura solo l'HTML della pagina 2 (dopo l'ultimo page-break del Riepilogo)
-      const _pbMarker = 'html2pdf__page-break';
-      const _pbLastIdx = htmlPDF.lastIndexOf(_pbMarker);
-      const _htmlPag2 = _pbLastIdx >= 0 ? htmlPDF.slice(htmlPDF.indexOf('>', _pbLastIdx) + 1) : htmlPDF;
-      misPage1.innerHTML = _htmlPag2;
-      document.body.appendChild(misPage1);
-      const altezzaPagina1Usata = misPage1.getBoundingClientRect().height;
-      document.body.removeChild(misPage1);
-
-      // Misura le singole righe presenti + header
+      // Misura altezze reali delle righe (device-independent: forziamo width fissa)
       const misTabel = document.createElement('div');
       misTabel.style.cssText = 'position:fixed;left:-9999px;top:0;width:740px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
       const tabTemp = document.createElement('table');
@@ -1718,27 +1711,26 @@
       misTabel.appendChild(tabTemp);
       document.body.appendChild(misTabel);
       const altezzaTheadH3 = 24 + (tabTemp.querySelector('thead tr') ? tabTemp.querySelector('thead tr').getBoundingClientRect().height : 20);
-      const altezzeRighe = Array.from(tabTemp.querySelectorAll('tbody tr')).map(tr => tr.getBoundingClientRect().height);
+      const altezzeRighePx = Array.from(tabTemp.querySelectorAll('tbody tr')).map(tr => tr.getBoundingClientRect().height);
       document.body.removeChild(misTabel);
 
-      // Spazio disponibile nella pagina 1 per le righe presenti
-      let spazioPagina1 = AREA_PAGINA - altezzaPagina1Usata - altezzaTheadH3;
-      const spazioPaginaN = AREA_PAGINA - altezzaTheadH3;
+      // Converti in mm e calcola spazi disponibili
+      const altezzeRigheMm = altezzeRighePx.map(h => h * MM_PER_PX);
+      const spazioPagina1Mm = A4_H_MM - HEADER_PAGE1_MM - altezzaTheadH3 * MM_PER_PX;
+      const spazioPaginaNMm = A4_H_MM - HEADER_PAGEN_MM - altezzaTheadH3 * MM_PER_PX;
 
       htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 3px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti}</h3>`;
       htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
 
-      let spazioRimanente = spazioPagina1;
-      let primaPagina = true;
+      let spazioRimanente = spazioPagina1Mm;
 
       presentiRows.forEach((r, idx) => {
-        const h = altezzeRighe[idx] || 18;
+        const h = altezzeRigheMm[idx] || (18 * MM_PER_PX);
         if (spazioRimanente - h < 0 && idx > 0) {
           htmlPDF += `</tbody></table>`;
           htmlPDF += `<div style="page-break-after:always;height:0;line-height:0;overflow:hidden;border:none;margin:0;padding:0;font-size:0;"></div>`;
           htmlPDF += `<table class="pdf-table" style="${tableStyle}margin-top:10px;">${theadHTML}<tbody>`;
-          spazioRimanente = spazioPaginaN;
-          primaPagina = false;
+          spazioRimanente = spazioPaginaNMm;
         }
         htmlPDF += buildRowHTML(r, idx);
         spazioRimanente -= h;

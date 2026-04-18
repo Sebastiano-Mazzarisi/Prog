@@ -1,4 +1,4 @@
-<!-- Lista.html v227 - 17/04/2026 -->
+<!-- Lista.html v228 - 18/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v227 · 17/04/2026 · 17:44:41';
+  const APP_VERSION = 'v228 · 18/04/2026 · 17:01:30';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -1414,13 +1414,15 @@
         if (righe.length > 0 && righe[0].toLowerCase().includes('nom')) startIndex = 1;
 
         let gruppoCorrente = [];
+        let nomeGruppoCorrente = '';
         for (let i = startIndex; i < righe.length; i++) {
           if (righe[i].startsWith('#')) {
             if (gruppoCorrente.length > 0) {
-              gruppiInvitati.push(gruppoCorrente);
+              gruppiInvitati.push({ nomeGruppo: nomeGruppoCorrente, invitati: gruppoCorrente });
               totInvitatiCsv += gruppoCorrente.length;
               gruppoCorrente = [];
             }
+            nomeGruppoCorrente = righe[i].substring(1).trim();
             continue;
           }
           let cols = righe[i].split(sep);
@@ -1430,22 +1432,23 @@
 
           if (!nome) {
             if (gruppoCorrente.length > 0) {
-              gruppiInvitati.push(gruppoCorrente);
+              gruppiInvitati.push({ nomeGruppo: nomeGruppoCorrente, invitati: gruppoCorrente });
               totInvitatiCsv += gruppoCorrente.length;
               gruppoCorrente = [];
+              nomeGruppoCorrente = '';
             }
           } else {
             gruppoCorrente.push({ nome, dataNascita });
           }
         }
         if (gruppoCorrente.length > 0) {
-          gruppiInvitati.push(gruppoCorrente);
+          gruppiInvitati.push({ nomeGruppo: nomeGruppoCorrente, invitati: gruppoCorrente });
           totInvitatiCsv += gruppoCorrente.length;
         }
         // Salva mappa nome→dataNascita globalmente per etaTavoloHTML
         window.mapNascita = {};
         window.totInvitatiCsv = totInvitatiCsv;
-        gruppiInvitati.forEach(function(g){ g.forEach(function(inv){ if(inv.dataNascita){ var k=inv.nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim(); window.mapNascita[k]=inv.dataNascita; } }); });
+        gruppiInvitati.forEach(function(g){ (g.invitati||g).forEach(function(inv){ if(inv.dataNascita){ var k=inv.nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim(); window.mapNascita[k]=inv.dataNascita; } }); });
       }
     } catch (err) {
       console.log('File Invitati.csv non trovato o errore di caricamento.', err);
@@ -1908,7 +1911,7 @@
       let totBambini = 0;
       const matrimonioCnt = new Date(2026, 5, 21);
       gruppiInvitati.forEach(gruppo => {
-        gruppo.forEach(inv => {
+        (gruppo.invitati || gruppo).forEach(inv => {
           if (inv.dataNascita) {
             let nascitaCnt = null;
             const dCnt = inv.dataNascita.trim();
@@ -1942,72 +1945,24 @@
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
       htmlPDF += `
-        <div style="border:1.5px solid #a5b589;border-radius:8px;background:#eef4e8;margin-top:14px;margin-bottom:12px;overflow:hidden;"><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:4px 10px;text-align:left;white-space:nowrap;border-right:1px solid #a5b589;"><span style="display:inline-flex;align-items:center;justify-content:center;background:#fff176;border-radius:16px;padding:0 14px;height:32px;font-family:Arial,sans-serif;font-size:14px;font-weight:900;color:#000000;">${totInvitatiCsv}&nbsp;&#8722;&nbsp;${window.datiInvitati.length}&nbsp;&#61;&nbsp;${totNonRisposto}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:20px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">V</span><span style="font-family:Arial,sans-serif;font-size:16px;font-weight:900;color:#2a5a18;margin-right:2px">${totVeg}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">VEGET</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:20px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">C</span><span style="font-family:Arial,sans-serif;font-size:16px;font-weight:900;color:#2a5a18;margin-right:2px">${totCarne}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiCarne}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#1a4fa0;color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:20px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">P</span><span style="font-family:Arial,sans-serif;font-size:16px;font-weight:900;color:#2a5a18;margin-right:2px">${totPesce}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiPesce}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#2d6040;color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:20px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">B</span><span style="font-family:Arial,sans-serif;font-size:16px;font-weight:900;color:#2a5a18;margin-right:2px">${totBaby}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiBaby}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#8a6000;color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:20px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">S</span><span style="font-family:Arial,sans-serif;font-size:16px;font-weight:900;color:#2a5a18;margin-right:2px">${totSegnaposto}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiSegnaposto}</span></td><td style="padding:4px 7px;text-align:center;white-space:nowrap;"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#a83230;color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:20px;vertical-align:middle;font-family:Arial,sans-serif;margin-right:3px">A</span><span style="font-family:Arial,sans-serif;font-size:16px;font-weight:900;color:#2a5a18;margin-right:2px">${totAssenti}</span><span style="font-family:Arial,sans-serif;font-size:8px;font-weight:600;color:#2a5a18;text-transform:uppercase;letter-spacing:0.5px">${testi.kpiAssenti}</span></td></tr></table></div>
-                <div style="column-count: 3; column-gap: 20px; font-size: 13px; width: 100%; margin-top: 16px;">
+        <div style="border:1px solid #000;border-radius:0;background:#fff;margin-top:10px;margin-bottom:10px;padding:6px 12px;font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#000;text-align:center;letter-spacing:0.5px;">
+          Totale: ${totInvitatiCsv}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Pesce: ${totPesce}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Carne: ${totCarne}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Vegetariano: ${totVeg}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Baby: ${totBaby}
+        </div>
+        <div style="column-count: 3; column-gap: 20px; font-size: 13px; width: 100%; margin-top: 8px;">
       `;
 
-      gruppiInvitati.forEach((gruppo, index) => {
+      gruppiInvitati.forEach((gruppoObj, index) => {
+        const nomeGruppo = gruppoObj.nomeGruppo || '';
+        const gruppo = gruppoObj.invitati || gruppoObj;
         htmlPDF += `<div style="break-inside: avoid-column; page-break-inside: avoid; -webkit-column-break-inside: avoid; margin-bottom: 10px;">`;
 
+        if (nomeGruppo) {
+          htmlPDF += `<div style="border-bottom:1px solid #000;margin-bottom:5px;padding-bottom:3px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#000;letter-spacing:0.3px;">${nomeGruppo}</div>`;
+        }
+
         gruppo.forEach(inv => {
-          let eta = "";
-          if (inv.dataNascita) {
-            const matrimonio = new Date(2026, 5, 21);
-            let nascita = null;
-            const d = inv.dataNascita.trim();
-            const dmY = d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-            const Ymd = d.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
-            const soloAnno = d.match(/^(\d{4})$/);
-            if (dmY) nascita = new Date(parseInt(dmY[3]), parseInt(dmY[2])-1, parseInt(dmY[1]));
-            else if (Ymd) nascita = new Date(parseInt(Ymd[1]), parseInt(Ymd[2])-1, parseInt(Ymd[3]));
-            else if (soloAnno) nascita = new Date(parseInt(soloAnno[1]), 0, 1);
-            if (nascita) {
-              let anni = matrimonio.getFullYear() - nascita.getFullYear();
-              const cp = (nascita.getMonth() < matrimonio.getMonth()) ||
-                (nascita.getMonth() === matrimonio.getMonth() && nascita.getDate() <= matrimonio.getDate());
-              if (!cp) anni--;
-              eta = String(anni);
-            }
-          }
-          // Matching intelligente: tutti i token del CSV devono essere nei token della risposta
-          function tokensOf(n) {
-            return (n||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().split(/\s+/).filter(Boolean);
-          }
-          function matchNomi(nCSV, nRisp) {
-            const tC = tokensOf(nCSV), tR = tokensOf(nRisp);
-            return tC.every(t => tR.includes(t)) || tR.every(t => tC.includes(t));
-          }
-          const matches = window.datiInvitati.filter(r => matchNomi(inv.nome, r.nome || ""));
-          let nomeStyle = "";
-          let nomeExtra = "";
-          if (matches.length === 1) {
-            const m = matches[0];
-            const tipoM = detectSecondo(m.secondo || "");
-            function badge(lettera, colore) {
-              return ' <span style="display:inline-block;width:16px;height:16px;border-radius:50%;background:' + colore + ';color:#fff;font-size:10px;font-weight:700;text-align:center;line-height:16px;vertical-align:middle;font-family:Arial,sans-serif">' + lettera + '</span>';
-            }
-            if (tipoM === 'segnaposto') {
-              nomeStyle = "font-weight:700;color:#8a6000";
-              nomeExtra = badge('S', '#8a6000');
-            } else if (tipoM === 'baby') {
-              nomeStyle = "font-weight:700;color:#2d6040";
-              nomeExtra = badge('B', '#2d6040');
-            } else if (isAbsent(m.presenza||"", m.secondo||"")) {
-              nomeStyle = "font-weight:700;color:#a83230";
-              nomeExtra = badge('A', '#a83230');
-            } else {
-              nomeStyle = "font-weight:700;color:#1a4fa0";
-              if (tipoM === 'carne') nomeExtra = badge('C', '#1a4fa0');
-              else if (tipoM === 'pesce') nomeExtra = badge('P', '#1a4fa0');
-              else if (tipoM === 'veg') nomeExtra = badge('V', '#1a4fa0');
-            }
-          }
-          const tavoloEmoji = trovaTavoloNum(inv.nome);
-          htmlPDF += '<div style="margin-bottom:3px;line-height:1.3">'
-            + (tavoloEmoji ? '<span style="margin-right:3px;font-size:11px">' + tavoloEmoji + '</span>' : '')
-            + '<span style="' + nomeStyle + '">' + inv.nome + '</span>'
-            + (eta ? ' <span style="font-weight:400">('+eta+')</span>' : '')
-            + nomeExtra
+          htmlPDF += '<div style="margin-bottom:2px;line-height:1.4;font-family:Arial,sans-serif;font-size:12px;color:#000;">'
+            + inv.nome
             + '</div>';
         });
 

@@ -1,4 +1,4 @@
-<!-- Lista.html v232 - 18/04/2026 -->
+<!-- Lista.html v233 - 18/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v232 · 18/04/2026 · 17:41:15';
+  const APP_VERSION = 'v233 · 18/04/2026 · 17:48:13';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -1560,16 +1560,16 @@
           <td style="width: 33.3%; padding: 3px 4px;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
               <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiBaby}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totBaby}</td>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAllergie}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAllergie}</td>
               </tr>
             </table>
           </td>
           <td style="width: 33.3%; padding: 3px 0 3px 4px;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
               <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAllergie}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAllergie}</td>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiBaby}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totBaby}</td>
               </tr>
             </table>
           </td>
@@ -1578,8 +1578,8 @@
           <td style="padding: 3px 4px 3px 0;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
               <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiVeg}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totVeg}</td>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiPesce}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totPesce}</td>
               </tr>
             </table>
           </td>
@@ -1594,8 +1594,8 @@
           <td style="padding: 3px 0 3px 4px;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
               <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiPesce}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totPesce}</td>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiVeg}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totVeg}</td>
               </tr>
             </table>
           </td>
@@ -1815,13 +1815,58 @@
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
       htmlPDF += `
-        <table style="width:100%;border-collapse:collapse;margin-top:10px;margin-bottom:10mm;font-family:Arial,sans-serif;background:#eef4e8;">
+        <table style="width:100%;border-collapse:collapse;margin-top:10px;margin-bottom:10mm;font-family:'Inter',sans-serif;table-layout:fixed;">
           <tr>
-            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Totale<br><span style="font-size:26px;">${totInvitatiCsv}</span></td>
-            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Pesce<br><span style="font-size:26px;">${totPesce}</span></td>
-            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Carne<br><span style="font-size:26px;">${totCarne}</span></td>
-            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Vegetariano<br><span style="font-size:26px;">${totVeg}</span></td>
-            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Baby<br><span style="font-size:26px;">${totBaby}</span></td>
+            <td style="width:33.3%;padding:3px 4px 3px 0;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;text-align:left;">${testi.kpiPresenti}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totPresenti}</td>
+                </tr>
+              </table>
+            </td>
+            <td style="width:33.3%;padding:3px 4px;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;text-align:left;">${testi.kpiAllergie}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totAllergie}</td>
+                </tr>
+              </table>
+            </td>
+            <td style="width:33.3%;padding:3px 0 3px 4px;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;text-align:left;">${testi.kpiBaby}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totBaby}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:3px 4px 3px 0;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;text-align:left;">${testi.kpiPesce}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totPesce}</td>
+                </tr>
+              </table>
+            </td>
+            <td style="padding:3px 4px;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;text-align:left;">${testi.kpiCarne}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totCarne}</td>
+                </tr>
+              </table>
+            </td>
+            <td style="padding:3px 0 3px 4px;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;text-align:left;">${testi.kpiVeg}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totVeg}</td>
+                </tr>
+              </table>
+            </td>
           </tr>
         </table>
         <div style="column-count: 3; column-gap: 20px; font-size: 13px; width: 100%; margin-top: 0;">

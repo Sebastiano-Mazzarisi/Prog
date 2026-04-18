@@ -1,4 +1,4 @@
-<!-- Lista.html v236 - 18/04/2026 -->
+<!-- Lista.html v237 - 18/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v236 · 18/04/2026 · 18:18:51';
+  const APP_VERSION = 'v237 · 18/04/2026 · 18:24:02';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -1072,10 +1072,9 @@
       </tr>
     </table>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-top:10px; margin-bottom: 8px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top:10px; margin-bottom: 8px;">
       <button class="btn-submit" onclick="caricaRisposte()" style="margin-top:0; background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #ffffff; font-size:13px;padding:12px 6px;">${testi.btnAggiorna}</button>
       <button class="btn-submit" id="btn-pdf-gen" onclick="generaPDF()" style="margin-top:0; background: linear-gradient(135deg, #2d6040, #4c7b5d); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnPDF}</button>
-      <button class="btn-submit" onclick="scaricaBackupCSV()" style="margin-top:0; background: linear-gradient(135deg, #2980b9, #3d9dd1); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnBackup}</button>
       <button class="btn-submit" id="btn-tavoli-nav" onclick="scorriTavoli()" style="margin-top:0; background: linear-gradient(135deg, #7a5c3a, #9e7f5b); color: #ffffff;font-size:13px;padding:12px 6px;">${testi.btnTavoli}</button>
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:8px 4px;">
@@ -1922,7 +1921,7 @@
 
           <div style="background-color: ${bgTavolo}; color: #000000; padding: 7px 12px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid ${borderTavolo};">
             <span>${label}</span>
-            <span style="background-color:${bgCerchioPdf}; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700;color:#000000;">${rispostiPdf}/${t.persone.length}</span>
+            <span style="background-color:${bgCerchioPdf}; border:1px solid ${borderTavolo}; border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700;color:#000000;">${t.persone.length}</span>
           </div>
 
           <div style="padding: 6px 12px; column-count: 2; column-gap: 12px; background-color: transparent;">

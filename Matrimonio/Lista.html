@@ -1,4 +1,4 @@
-<!-- Lista.html v229 - 18/04/2026 -->
+<!-- Lista.html v230 - 18/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v229 · 18/04/2026 · 17:10:52';
+  const APP_VERSION = 'v230 · 18/04/2026 · 17:22:44';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -1911,7 +1911,7 @@
       htmlPDF += `<div style="margin-bottom:-15mm;"></div>`; // riduci spazio fondo pag1
       htmlPDF += `<div class="html2pdf__page-break"></div>`;
       htmlPDF += `<div>`;
-      htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">${testi.lblControlloModuli}</h1>`;
+      htmlPDF += `<h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">Gruppi di invitati</h1>`;
       htmlPDF += `<h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:8px;">Giulia &amp; Onofrio</h2>`;
 
       // Calcola numero bambini (< 11 anni) per il titolo
@@ -1952,36 +1952,35 @@
       const titoloBambini = totBambini > 0 ? ` [${totAdultiCsv} + ${totBambini}]` : '';
 
       htmlPDF += `
-        <table style="width:100%;border-collapse:collapse;margin-top:10px;margin-bottom:12px;font-family:Arial,sans-serif;">
+        <table style="width:100%;border-collapse:collapse;margin-top:10px;margin-bottom:10mm;font-family:Arial,sans-serif;background:#eef4e8;">
           <tr>
-            <td style="border:1.5px solid #000;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Totale<br><span style="font-size:26px;">${totInvitatiCsv}</span></td>
-            <td style="border:1.5px solid #000;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#2f5c9a;white-space:nowrap;">Pesce<br><span style="font-size:26px;">${totPesce}</span></td>
-            <td style="border:1.5px solid #000;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#8a5e1e;white-space:nowrap;">Carne<br><span style="font-size:26px;">${totCarne}</span></td>
-            <td style="border:1.5px solid #000;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#2d6040;white-space:nowrap;">Vegetariano<br><span style="font-size:26px;">${totVeg}</span></td>
-            <td style="border:1.5px solid #000;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#555;white-space:nowrap;">Baby<br><span style="font-size:26px;">${totBaby}</span></td>
+            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Totale<br><span style="font-size:26px;">${totInvitatiCsv}</span></td>
+            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Pesce<br><span style="font-size:26px;">${totPesce}</span></td>
+            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Carne<br><span style="font-size:26px;">${totCarne}</span></td>
+            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Vegetariano<br><span style="font-size:26px;">${totVeg}</span></td>
+            <td style="border:1.5px solid #8fa668;padding:8px 10px;text-align:center;font-size:16px;font-weight:900;color:#000;white-space:nowrap;">Baby<br><span style="font-size:26px;">${totBaby}</span></td>
           </tr>
         </table>
-        <div style="column-count: 3; column-gap: 20px; font-size: 13px; width: 100%; margin-top: 8px;">
+        <div style="column-count: 3; column-gap: 20px; font-size: 13px; width: 100%; margin-top: 0;">
       `;
 
       gruppiInvitati.forEach((gruppoObj, index) => {
         const nomeGruppo = gruppoObj.nomeGruppo || '';
         const gruppo = gruppoObj.invitati || gruppoObj;
-        htmlPDF += `<div style="break-inside: avoid-column; page-break-inside: avoid; -webkit-column-break-inside: avoid; margin-bottom: 10px;">`;
+        // Wrapper con break-inside avoid per tenere titolo+lista insieme (no vedove/orfani)
+        htmlPDF += `<div style="break-inside: avoid-column; page-break-inside: avoid; -webkit-column-break-inside: avoid; margin-bottom: 5mm;">`;
 
         if (nomeGruppo) {
-          htmlPDF += `<div style="display:inline-block;background:#c8d5a8;border:1.5px solid #8fa668;border-radius:16px;padding:3px 12px;margin-bottom:6px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#2a3a18;letter-spacing:0.3px;">${nomeGruppo} <span style="font-weight:400;color:#3a5a18;">(${gruppo.length})</span></div>`;
+          htmlPDF += `<div style="display:inline-block;background:#c8d5a8;border:1.5px solid #8fa668;border-radius:16px;padding:3px 12px;margin-bottom:4px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#2a3a18;letter-spacing:0.3px;">${nomeGruppo} <span style="font-weight:400;color:#3a5a18;">(${gruppo.length})</span></div>`;
         }
 
+        htmlPDF += `<div style="padding-left:5mm;">`;
         gruppo.forEach(inv => {
           htmlPDF += '<div style="margin-bottom:2px;line-height:1.4;font-family:Arial,sans-serif;font-size:12px;color:#000;">'
             + inv.nome
             + '</div>';
         });
-
-        if (index < gruppiInvitati.length - 1) {
-          htmlPDF += `<div style="border-bottom: 1px solid #000000; margin-top: 8px; margin-bottom: 6px;"></div>`;
-        }
+        htmlPDF += `</div>`;
 
         htmlPDF += `</div>`;
       });

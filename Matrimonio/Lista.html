@@ -1,4 +1,4 @@
-<!-- Lista.html v230 - 18/04/2026 -->
+<!-- Lista.html v231 - 18/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v230 · 18/04/2026 · 17:22:44';
+  const APP_VERSION = 'v231 · 18/04/2026 · 17:32:43';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -1546,123 +1546,6 @@
     const _prevPesce = totPesce + _prevDPesce;
 
     let htmlPDF = `
-      <div style="font-family:'Inter',sans-serif;font-size:11px;">
-      <h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">${testi.titoloRiepilogo}</h1>
-      <h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:16px;">Giulia &amp; Onofrio</h2>
-
-      <div style="display:flex;gap:16px;margin-bottom:20px;width:90%;margin-left:auto;margin-right:auto;">
-
-        <!-- Card sinistra: Totale Cenanti + Completi/Baby/Segnaposto -->
-        <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
-          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totSegnaposto}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblTotaleCenanti}</div>
-          </div>
-          <div style="display:flex;background:#c8d5a8;">
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totBaby - totSegnaposto}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totBaby}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblBaby}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totSegnaposto}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblSegnaposto}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card destra: Completi + Carne/Pesce/Veg -->
-        <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
-          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${totPresenti - totBaby - totSegnaposto}<span style="font-size:22px;font-weight:500;color:#555;">/${totPresenti - totSegnaposto}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
-          </div>
-          <div style="display:flex;background:#c8d5a8;">
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totCarne}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCarne}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totPesce}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblPesce}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totVeg}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblVegetariano}</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <h3 style="font-size:13px;margin-top:0;margin-bottom:8px;color:#8a5e1e;font-weight:600;text-align:center;">${testi.titoloAttesa} (${inAttesaRiep.length}) &ndash; ${_dataOggi}</h3>
-      <table style="width:60%;border-collapse:collapse;font-size:11px;margin:0 auto;">
-        <thead>
-          <tr style="background:#f5ede0;">
-            <th style="padding:4px 6px;text-align:left;border:0.5px solid #000;font-weight:600;color:#000;font-size:10px;letter-spacing:0.5px;">${testi.lblCognomeNome}</th>
-            <th style="padding:4px 6px;text-align:left;border:0.5px solid #000;font-weight:600;color:#000;font-size:10px;letter-spacing:0.5px;">${testi.lblCellulare}</th>
-          </tr>
-        </thead>
-        <tbody>${righeRiep}</tbody>
-      </table>
-      </div>
-
-      <div style="margin-top:28px;">
-      <h3 style="font-size:13px;margin-top:0;margin-bottom:10px;color:#8a5e1e;font-weight:700;text-align:center;letter-spacing:1px;text-transform:uppercase;">${testi.titoloPrevisioni}</h3>
-      <div style="display:flex;gap:16px;width:90%;margin-left:auto;margin-right:auto;">
-
-        <!-- BOX SINISTRA: Totale cenanti previsto -->
-        <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
-          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${_prevTp}<span style="font-size:22px;font-weight:500;color:#555;">/${totInvitatiCsv}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblTotaleCenanti}</div>
-          </div>
-          <div style="display:flex;background:#c8d5a8;">
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevTc}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totBaby}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblBaby}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${totSegnaposto}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblSegnaposto}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BOX DESTRA: Completi previsti + Carne/Pesce/Veg proporzionali -->
-        <div style="flex:1;box-sizing:border-box;border:2px solid #a5b589;border-radius:10px;overflow:hidden;background:#e0e8d0;">
-          <div style="text-align:center;padding:14px 12px 8px;border-bottom:1px solid #a5b589;">
-            <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;color:#000000;line-height:1;">${_prevTc}<span style="font-size:22px;font-weight:500;color:#555;">/${_prevTp}</span></div>
-            <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCompleti}</div>
-          </div>
-          <div style="display:flex;background:#c8d5a8;">
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevCarne}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblCarne}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;border-right:1px solid #a5b589;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevPesce}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblPesce}</div>
-            </div>
-            <div style="flex:1;text-align:center;padding:10px 8px;">
-              <div style="font-family:'Inter',sans-serif;font-size:30px;font-weight:900;color:#000000;line-height:1;">${_prevVeg}</div>
-              <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#2a3a18;letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${testi.lblVegetariano}</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      </div>
-
-      <div class="html2pdf__page-break"></div>
-
       <div style="margin-bottom:-8mm;">
       <h1 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 0; margin-bottom: 3px; color: #000;">${testi.titolo} <span style="font-size:12px;font-weight:700;color:#000000;">(${totInvitatiCsv})</span></h1>
       <h2 style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #8a5e1e; margin-bottom: 8px;">Giulia & Onofrio</h2>
@@ -1670,7 +1553,7 @@
 
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; table-layout: fixed;">
         <tr>
-          <td style="width: 25%; padding: 3px 4px 3px 0;">
+          <td style="width: 33.3%; padding: 3px 4px 3px 0;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
               <tr>
                 <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiPresenti}</td>
@@ -1678,15 +1561,7 @@
               </tr>
             </table>
           </td>
-          <td style="width: 25%; padding: 3px 4px;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAssenti}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAssenti}</td>
-              </tr>
-            </table>
-          </td>
-          <td style="width: 25%; padding: 3px 4px;">
+          <td style="width: 33.3%; padding: 3px 4px;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
               <tr>
                 <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiBaby}</td>
@@ -1694,11 +1569,11 @@
               </tr>
             </table>
           </td>
-          <td style="width: 25%; padding: 3px 0 3px 4px;">
+          <td style="width: 33.3%; padding: 3px 0 3px 4px;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
               <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiSegnaposto}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totSegnaposto}</td>
+                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAllergie}</td>
+                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAllergie}</td>
               </tr>
             </table>
           </td>
@@ -1720,19 +1595,11 @@
               </tr>
             </table>
           </td>
-          <td style="padding: 3px 4px;">
+          <td style="padding: 3px 0 3px 4px;">
             <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
               <tr>
                 <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiPesce}</td>
                 <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totPesce}</td>
-              </tr>
-            </table>
-          </td>
-          <td style="padding: 3px 0 3px 4px;">
-            <table style="width: 100%; background: #c8d5a8; border: 1px solid #8fa668; border-radius: 8px; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 5px 8px; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #2a3a18; font-weight: 600; text-align: left;">${testi.kpiAllergie}</td>
-                <td style="padding: 5px 8px; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #3a5a18; line-height: 1; text-align: right; width: 40px;">${totAllergie}</td>
               </tr>
             </table>
           </td>

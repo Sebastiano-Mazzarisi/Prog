@@ -1,4 +1,4 @@
-<!-- Lista.html v253 - 19/04/2026 -->
+<!-- Lista.html v254 - 19/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v253 · 19/04/2026 · 11:01:20';
+  const APP_VERSION = 'v254 · 19/04/2026 · 11:17:44';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -417,6 +417,13 @@
 
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
   let activeFilter = null;
+  let audioSpeciale = false;
+
+  function toggleAudioSpeciale() {
+    audioSpeciale = !audioSpeciale;
+    const btn = document.getElementById('btn-audio-speciale');
+    if (btn) btn.style.background = audioSpeciale ? '#c8d4b0' : '#f5ede0';
+  }
   window.datiInvitati = [];
 
   let currentLang = 'it';
@@ -1161,6 +1168,8 @@
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:8px 4px;">
       <span style="font-family:'Inter',sans-serif;font-size:13px;color:#5a4a2a;white-space:nowrap;">${testi.ordinaPer}</span>
       <button id="btn-ordina" onclick="apriSceltaOrdine()" style="background:#f5ede0;border:1.5px solid #b8893a;border-radius:20px;padding:5px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#7a5c3a;cursor:pointer;letter-spacing:0.5px;white-space:normal;text-align:left;">${labelOrdineCorrente()}</button>
+      <div style="flex:1;"></div>
+      <button id="btn-audio-speciale" onclick="toggleAudioSpeciale()" title="Audio speciale" style="background:${audioSpeciale?'#c8d4b0':'#f5ede0'};border:1.5px solid #b8893a;border-radius:20px;padding:5px 12px;font-size:17px;cursor:pointer;line-height:1;transition:background 0.2s;display:flex;align-items:center;gap:4px;">🎵</button>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:0 4px;">
       <div style="position:relative;flex:1;">
@@ -2681,7 +2690,7 @@
 
     // ── Audio — dipende dalla lingua impostata ───────────────────────────
     const _baseUrl = 'https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/';
-    const _audioFile = (currentLang === 'es') ? 'Spagnolo.mp3' : 'Italiano.mp3';
+    const _audioFile = audioSpeciale ? 'Onofrio.mp3' : ((currentLang === 'es') ? 'Spagnolo.mp3' : 'Italiano.mp3');
     const audio = new Audio(_baseUrl + _audioFile);
     audio.loop = true;
 

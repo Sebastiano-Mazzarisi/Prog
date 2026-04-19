@@ -378,7 +378,8 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v257 · 19/04/2026 · 22:41:45';
+  const APP_VERSION = 'v257 · 19/04/2026 · 22:45:40';
+  let APP_VERSION_LABEL = APP_VERSION; // aggiornato dal contatore
   (function(){
     try {
       const skipCount = new URLSearchParams(window.location.search).get('v') === '17';
@@ -387,8 +388,9 @@
       if (isNaN(count) || count < 0) count = 0;
       count++;
       localStorage.setItem('lista_run_count', String(count));
+      APP_VERSION_LABEL = 'v' + count + ' · ' + APP_VERSION;
       var el = document.getElementById('ver-label');
-      if (el) el.textContent = 'v' + count + ' · ' + APP_VERSION;
+      if (el) el.textContent = APP_VERSION_LABEL;
     } catch(e) {
       var el = document.getElementById('ver-label');
       if (el) el.textContent = APP_VERSION;
@@ -1060,7 +1062,7 @@
   function caricaRisposte() {
     const box = document.getElementById('sposi-table');
     const testi = dizionario[currentLang];
-    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '<span id="loading-dots">·</span></span><br><small style="color:#b8893a;font-size:13px;font-weight:600">' + APP_VERSION + '</small></p>';
+    box.innerHTML = '<p id="txt-caricamento" style="text-align:center;padding:20px"><span style="font-size:24px;font-weight:700">' + testi.caricamento + '<span id="loading-dots">·</span></span><br><small style="color:#b8893a;font-size:13px;font-weight:600">' + APP_VERSION_LABEL + '</small></p>';
     _startLoadingDots();
     activeFilter = null;
     const _ci = document.getElementById('cerca-input'); if (_ci) _ci.value = '';

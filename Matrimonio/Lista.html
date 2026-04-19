@@ -1,4 +1,4 @@
-<!-- Lista.html v251 - 19/04/2026 -->
+<!-- Lista.html v252 - 19/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v251 · 19/04/2026 · 10:39:59';
+  const APP_VERSION = 'v252 · 19/04/2026 · 10:54:20';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -812,18 +812,22 @@
           gruppoCorrente.push(nomeRaw);
         }
         flushGruppo();
-        // Salva gruppi ordinati per la vista GRUPPI
+        // Salva gruppi ordinati per la vista GRUPPI (con nomi dei gruppi)
         window.gruppiCsvOrdinati = [];
-        let _gc = [];
+        let _gc = [], _gcNome = '';
         for (let i = startInv; i < righeInv.length; i++) {
           const _r = righeInv[i];
-          if (!_r || _r.startsWith('#')) { if (_gc.length) { window.gruppiCsvOrdinati.push([..._gc]); _gc = []; } continue; }
+          if (!_r || _r.startsWith('#')) {
+            if (_gc.length) { window.gruppiCsvOrdinati.push({ nome: _gcNome, membri: [..._gc] }); _gc = []; }
+            _gcNome = _r ? _r.substring(1).trim() : '';
+            continue;
+          }
           const _c = _r.split(sepInv);
           const _nr = _c[0] ? _c[0].replace(/['"]/g,'').trim() : '';
-          if (!_nr) { if (_gc.length) { window.gruppiCsvOrdinati.push([..._gc]); _gc = []; } continue; }
+          if (!_nr) { if (_gc.length) { window.gruppiCsvOrdinati.push({ nome: _gcNome, membri: [..._gc] }); _gc = []; _gcNome = ''; } continue; }
           _gc.push(_nr);
         }
-        if (_gc.length) window.gruppiCsvOrdinati.push(_gc);
+        if (_gc.length) window.gruppiCsvOrdinati.push({ nome: _gcNome, membri: _gc });
       }
     } catch(e) { console.log('mapNascita: Invitati.csv non disponibile', e); }
     avanzaLoading();
@@ -1335,14 +1339,19 @@
     const _sep = `<div style="margin-top:12px;border-bottom:1px solid #b8893a;margin-bottom:8px;opacity:0.4;"></div>`;
 
     if (activeOrdine === 'gruppi') {
-      // Ordine CSV con tutti i membri e separatore grafico tra i gruppi
+      // Ordine CSV con tutti i membri, con bottone nome gruppo prima di ogni gruppo
       const gList = window.gruppiCsvOrdinati || [];
-      const sepGruppi = `<div style="display:flex;justify-content:center;align-items:center;margin:10px 0 12px;color:#c6a055;font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:8px;line-height:1;background:transparent;">✦ ✦ ✦</div>`;
-      let primoG = true;
-      gList.forEach(gNomi => {
-        if (!primoG) html += sepGruppi;
-        primoG = false;
-        gNomi.forEach(nc => {
+      gList.forEach((g, gi) => {
+        const nomeG = (g.nome || g[0] || '');
+        const membri = g.membri || g;
+        if (nomeG) {
+          html += `<div style="display:flex;justify-content:center;margin:${gi===0?'4px':' 14px'} 0 8px;">
+            <div style="background:#fff9c4;border:1.5px solid #d4b07a;border-radius:20px;padding:5px 18px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#7a5c3a;letter-spacing:1px;">
+              ✦ ${nomeG} ✦
+            </div>
+          </div>`;
+        }
+        membri.forEach(nc => {
           const r = (window.datiInvitati||[]).find(inv => _matchNR(nc, inv.nome||''));
           html += r ? cardRispondente(r) : cardNonRispondente(nc, 'g-');
         });
@@ -2624,7 +2633,6 @@
       {val:'tavolo',      lbl: t.btnOrdina_tavolo},
       {val:'cibo',        lbl: t.btnOrdina_cibo},
       {val:'eta',         lbl: t.btnOrdina_eta},
-      {val:'attesa',      lbl: t.btnOrdina_attesa},
       {val:'gruppi',      lbl: t.btnOrdina_gruppi}
     ];
     const overlay = document.createElement('div');

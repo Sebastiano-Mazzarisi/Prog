@@ -1,4 +1,4 @@
-<!-- Lista.html v248 - 19/04/2026 -->
+<!-- Lista.html v249 - 19/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v248 · 19/04/2026 · 10:22:46';
+  const APP_VERSION = 'v249 · 19/04/2026 · 10:27:24';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -1387,6 +1387,8 @@
     const btnC = document.getElementById('btn-contatore');
     if (btnC) btnC.textContent = leggiContatore();
     renderizzaTavoli();
+    // Mostra subito il contatore delle schede visibili
+    setTimeout(applicaVisibilitaCard, 0);
   }
 
   async function generaPDF() {

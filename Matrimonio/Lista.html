@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v257 · 19/04/2026 · 11:47:59';
+  const APP_VERSION = 'v257 · 19/04/2026 · 18:25:13';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -417,13 +417,25 @@
 
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfKImnIRNz0d-01K4KYomyAKpy_oiVZZtcnhPdf-8sKb0ZZSHymdb4UNV7LFNDOG-P3w/exec';
   let activeFilter = null;
-  let audioSpeciale = false;
+  let audioMode = 'ITA'; // ciclo: ITA → ESP → ONY → ITA
+
+  const _audioModeLabel = { ITA: '🎵 ITA', ESP: '🎵 ESP', ONY: '🎵 ONY' };
+  const _audioModeBg    = { ITA: '#f5ede0', ESP: '#f5ede0', ONY: '#c8d4b0' };
 
   function toggleAudioSpeciale() {
-    audioSpeciale = !audioSpeciale;
+    if (audioMode === 'ITA') audioMode = 'ESP';
+    else if (audioMode === 'ESP') audioMode = 'ONY';
+    else audioMode = 'ITA';
     const btn = document.getElementById('btn-audio-speciale');
-    if (btn) btn.style.background = audioSpeciale ? '#c8d4b0' : '#f5ede0';
+    if (btn) {
+      btn.style.background = _audioModeBg[audioMode];
+      btn.textContent = _audioModeLabel[audioMode];
+      btn.title = 'Audio: ' + audioMode;
+    }
   }
+
+  // Retrocompatibilità: audioSpeciale usato altrove
+  Object.defineProperty(window, 'audioSpeciale', { get: () => audioMode === 'ONY' });
   window.datiInvitati = [];
 
   let currentLang = 'it';
@@ -1179,7 +1191,7 @@
       <span style="font-family:'Inter',sans-serif;font-size:13px;color:#5a4a2a;white-space:nowrap;">${testi.ordinaPer}</span>
       <button id="btn-ordina" onclick="apriSceltaOrdine()" style="background:#f5ede0;border:1.5px solid #b8893a;border-radius:20px;padding:5px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#7a5c3a;cursor:pointer;letter-spacing:0.5px;white-space:normal;text-align:left;">${labelOrdineCorrente()}</button>
       <div style="flex:1;"></div>
-      <button id="btn-audio-speciale" onclick="toggleAudioSpeciale()" title="Audio speciale" style="background:${audioSpeciale?'#c8d4b0':'#f5ede0'};border:1.5px solid #b8893a;border-radius:20px;padding:5px 12px;font-size:17px;cursor:pointer;line-height:1;transition:background 0.2s;display:flex;align-items:center;gap:4px;">🎵</button>
+      <button id="btn-audio-speciale" onclick="toggleAudioSpeciale()" title="Audio: ${audioMode}" style="background:${_audioModeBg[audioMode]};border:1.5px solid #b8893a;border-radius:20px;padding:5px 12px;font-size:17px;cursor:pointer;line-height:1;transition:background 0.2s;display:flex;align-items:center;gap:4px;">${_audioModeLabel[audioMode]}</button>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:0 4px;">
       <div style="position:relative;flex:1;">
@@ -2704,7 +2716,7 @@
 
     // ── Audio — dipende dalla lingua impostata ───────────────────────────
     const _baseUrl = 'https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/';
-    const _audioFile = audioSpeciale ? 'Onofrio.mp3' : ((currentLang === 'es') ? 'Spagnolo.mp3' : 'Italiano.mp3');
+    const _audioFile = audioMode === 'ONY' ? 'Onofrio.mp3' : (audioMode === 'ESP' ? 'Spagnolo.mp3' : 'Italiano.mp3');
     const audio = new Audio(_baseUrl + _audioFile);
     audio.loop = true;
 

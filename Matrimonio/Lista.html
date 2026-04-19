@@ -1,4 +1,4 @@
-<!-- Lista.html v244 - 19/04/2026 -->
+<!-- Lista.html v245 - 19/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v244 · 19/04/2026 · 10:02:49';
+  const APP_VERSION = 'v245 · 19/04/2026 · 10:09:07';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -931,16 +931,40 @@
     return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
   }
 
+  function _buildCercaAttr(r, nomeCanonico) {
+    // Campi ricercabili: nome, secondo, allergie, note, data — escluso tavolo
+    const parti = [
+      nomeCanonico || '',
+      r.nome || '',
+      r.secondo || '',
+      r.allergie || '',
+      r.note || '',
+      r.data || '',
+      r.presenza || ''
+    ];
+    return _normCerca(parti.join(' ')).replace(/"/g, '&quot;');
+  }
+
   function _testoCard(card) {
-    return _normCerca(card.textContent || '');
+    // Usa data-cerca se disponibile, altrimenti fallback su textContent
+    const dc = card.getAttribute('data-cerca');
+    return dc ? dc : _normCerca(card.textContent || '');
   }
 
   function applicaVisibilitaCard() {
-    const query = _normCerca(document.getElementById('cerca-input') ? document.getElementById('cerca-input').value : '');
-    const termini = query.split(/\s+/).filter(Boolean);
+    const rawQuery = (document.getElementById('cerca-input') ? document.getElementById('cerca-input').value : '').trim();
+    // Parsa i termini: quelli che iniziano con - sono NOT
+    const termini = rawQuery.split(/\s+/).filter(Boolean).map(t => {
+      if (t.startsWith('-') && t.length > 1) return { testo: _normCerca(t.slice(1)), not: true };
+      return { testo: _normCerca(t), not: false };
+    });
     document.querySelectorAll('.risposta-card').forEach(card => {
       const passaCategoria = !activeFilter || card.classList.contains('cat-' + activeFilter);
-      const passaRicerca = termini.length === 0 || termini.every(t => _testoCard(card).includes(t));
+      let passaRicerca = true;
+      if (termini.length > 0) {
+        const testo = _testoCard(card);
+        passaRicerca = termini.every(t => t.not ? !testo.includes(t.testo) : testo.includes(t.testo));
+      }
       card.style.display = (passaCategoria && passaRicerca) ? 'block' : 'none';
     });
   }
@@ -1165,7 +1189,7 @@
       const nff = nomeCanonico || (r.nome||'');
       // Cerchietto bianco con freccia rossa per aprire la scheda
       const btnScheda = `<span onclick="event.stopPropagation();toggleDettagli(${riga})" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #c0392b;flex-shrink:0;cursor:pointer;" title="Apri scheda"><span style="color:#c0392b;font-size:18px;font-weight:900;line-height:1;">›</span></span>`;
-      return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}">
+      return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}" data-cerca="${_buildCercaAttr(r, nomeCanonico)}">
         <div class="risposta-nome" id="nomefoto-${riga}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
           ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
           <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}${ico?`&nbsp;<span style="font-size:16px">${ico}</span>`:''}${dataOraInvio?`&nbsp;<span style="font-size:11px;font-weight:400;color:#5a6e3a;white-space:nowrap">${dataOraInvio}</span>`:''}</span>
@@ -1192,7 +1216,7 @@
       const nomDisp = formatNomeDisplay(nomeCanonico);
       const tavN = trovaTavoloNum(nomeCanonico);
       const ds = (activeFilter && activeFilter!=='assenti') ? 'display:none;' : 'display:block;';
-      return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}">
+      return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}" data-cerca="${_normCerca(nomeCanonico)}">
         <div class="risposta-nome" id="nomefoto-csv-${safeId}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
           ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
           <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}</span>

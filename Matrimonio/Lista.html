@@ -1,4 +1,4 @@
-<!-- Lista.html v245 - 19/04/2026 -->
+<!-- Lista.html v246 - 19/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -370,7 +370,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v245 · 19/04/2026 · 10:09:07';
+  const APP_VERSION = 'v246 · 19/04/2026 · 10:15:47';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -958,6 +958,7 @@
       if (t.startsWith('-') && t.length > 1) return { testo: _normCerca(t.slice(1)), not: true };
       return { testo: _normCerca(t), not: false };
     });
+    let visibili = 0;
     document.querySelectorAll('.risposta-card').forEach(card => {
       const passaCategoria = !activeFilter || card.classList.contains('cat-' + activeFilter);
       let passaRicerca = true;
@@ -965,8 +966,13 @@
         const testo = _testoCard(card);
         passaRicerca = termini.every(t => t.not ? !testo.includes(t.testo) : testo.includes(t.testo));
       }
-      card.style.display = (passaCategoria && passaRicerca) ? 'block' : 'none';
+      const visibile = passaCategoria && passaRicerca;
+      card.style.display = visibile ? 'block' : 'none';
+      if (visibile) visibili++;
     });
+    // Aggiorna contatore
+    const el = document.getElementById('cerca-count');
+    if (el) el.textContent = (rawQuery || activeFilter) ? '[' + visibili + ']' : '';
   }
 
   function filtraLista(categoria) {
@@ -1128,9 +1134,12 @@
       <span style="font-family:'Inter',sans-serif;font-size:13px;color:#5a4a2a;white-space:nowrap;">${testi.ordinaPer}</span>
       <button id="btn-ordina" onclick="apriSceltaOrdine()" style="background:#f5ede0;border:1.5px solid #b8893a;border-radius:20px;padding:5px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#7a5c3a;cursor:pointer;letter-spacing:0.5px;white-space:normal;text-align:left;">${labelOrdineCorrente()}</button>
     </div>
-    <div style="position:relative;margin-bottom:16px;padding:0 4px;">
-      <input id="cerca-input" type="text" placeholder="🔍 Cerca..." oninput="applicaCercaFiltro()" style="width:100%;box-sizing:border-box;padding:9px 36px 9px 14px;font-family:'Inter',sans-serif;font-size:14px;border:1.5px solid #b8893a;border-radius:20px;background:#f5ede0;color:#3a2a0a;outline:none;" />
-      <button onclick="svuotaCerca()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;color:#9e7f5b;cursor:pointer;line-height:1;padding:0 2px;" title="Svuota">✕</button>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px;">
+      <div style="position:relative;flex:0 0 60%;">
+        <input id="cerca-input" type="text" placeholder="🔍 Cerca..." oninput="applicaCercaFiltro()" style="width:100%;box-sizing:border-box;padding:9px 36px 9px 14px;font-family:'Inter',sans-serif;font-size:14px;border:1.5px solid #b8893a;border-radius:20px;background:#f5ede0;color:#3a2a0a;outline:none;" />
+        <button onclick="svuotaCerca()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;color:#9e7f5b;cursor:pointer;line-height:1;padding:0 2px;" title="Svuota">✕</button>
+      </div>
+      <span id="cerca-count" style="font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:#5a4a2a;white-space:nowrap;"></span>
     </div>
 
 

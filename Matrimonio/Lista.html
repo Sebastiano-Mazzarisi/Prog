@@ -378,22 +378,35 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v257 · 19/04/2026 · 22:45:40';
-  let APP_VERSION_LABEL = APP_VERSION; // aggiornato dal contatore
+  const APP_VERSION = 'v257 · 19/04/2026 · 22:57:23';
+  let APP_VERSION_LABEL = APP_VERSION;
   (function(){
     try {
-      const skipCount = new URLSearchParams(window.location.search).get('v') === '17';
-      if (skipCount) localStorage.removeItem('lista_run_count');
+      const vParam = new URLSearchParams(window.location.search).get('v');
       let count = parseInt(localStorage.getItem('lista_run_count') || '0', 10);
       if (isNaN(count) || count < 0) count = 0;
-      count++;
-      localStorage.setItem('lista_run_count', String(count));
-      APP_VERSION_LABEL = 'v' + count + ' · ' + APP_VERSION;
+
+      if (vParam === '18') {
+        // Reset con conferma
+        if (confirm('Azzerare il contatore di avvii (attualmente c=' + count + ')?')) {
+          count = 1;
+          localStorage.setItem('lista_run_count', '1');
+        }
+        APP_VERSION_LABEL = 'c=' + count + ' · ' + APP_VERSION;
+      } else if (vParam === '17') {
+        // Solo visualizza, non incrementa
+        APP_VERSION_LABEL = 'c=' + count + ' · ' + APP_VERSION;
+      } else {
+        // Normale: incrementa
+        count++;
+        localStorage.setItem('lista_run_count', String(count));
+        APP_VERSION_LABEL = APP_VERSION;
+      }
+
       var el = document.getElementById('ver-label');
       if (el) el.textContent = APP_VERSION_LABEL;
     } catch(e) {
-      var el = document.getElementById('ver-label');
-      if (el) el.textContent = APP_VERSION;
+      APP_VERSION_LABEL = APP_VERSION;
     }
   })();
 

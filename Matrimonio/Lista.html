@@ -1,4 +1,4 @@
-<!-- Lista.html v254 - 19/04/2026 -->
+<!-- Lista.html v255 - 19/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v254 · 19/04/2026 · 11:17:44';
+  const APP_VERSION = 'v255 · 19/04/2026 · 11:22:55';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -1354,8 +1354,12 @@
         const nomeG = (g.nome || g[0] || '');
         const membri = g.membri || g;
         if (nomeG) {
+          // Trova il nome canonico del primo membro per aprire la galleria
+          const primoMembro = membri[0] || '';
+          const primoCanon = (trovaNomeCanonico && trovaNomeCanonico(primoMembro)) || primoMembro;
+          const primoClick = primoCanon ? `onclick="window._apriGalleria && window._apriGalleria('${primoCanon.replace(/'/g,"\\'")}')"` : '';
           html += `<div style="display:flex;justify-content:center;margin:${gi===0?'4px':'5mm'} 0 8px;">
-            <div style="background:#fff9c4;border:1.5px solid #d4b07a;border-radius:20px;padding:5px 18px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#7a5c3a;letter-spacing:1px;">
+            <div ${primoClick} style="background:#fff9c4;border:1.5px solid #d4b07a;border-radius:20px;padding:5px 18px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#7a5c3a;letter-spacing:1px;${primoClick?'cursor:pointer;':''}">
               ✦ ${nomeG} ✦
             </div>
           </div>`;

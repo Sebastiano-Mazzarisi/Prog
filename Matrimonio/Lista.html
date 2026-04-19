@@ -1,4 +1,4 @@
-<!-- Lista.html v250 - 19/04/2026 -->
+<!-- Lista.html v251 - 19/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -155,6 +155,14 @@
   }
   .sposi-kpi td {
     padding: 0;
+  }
+  /* Desktop: mostra righe a 3 colonne, nascondi righe a 2 colonne */
+  .kpi-row-mobile { display: none; }
+  .kpi-row-desktop { display: table-row; }
+  /* Mobile: inverti */
+  @media (max-width: 520px) {
+    .kpi-row-mobile { display: table-row; }
+    .kpi-row-desktop { display: none; }
   }
   .kpi-box {
     background: #c8d5a8;
@@ -370,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v250 · 19/04/2026 · 10:31:47';
+  const APP_VERSION = 'v251 · 19/04/2026 · 10:39:59';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -983,7 +991,11 @@
     }
     document.querySelectorAll('.kpi-box').forEach(el => el.classList.remove('active-filter'));
     if (activeFilter) {
-      document.getElementById('btn-' + activeFilter).classList.add('active-filter');
+      // Applica active-filter a tutti i bottoni con questa categoria (desktop + mobile)
+      ['', '-d', '-m'].forEach(sfx => {
+        const el = document.getElementById('btn-' + activeFilter + sfx);
+        if (el) el.classList.add('active-filter');
+      });
     }
     applicaVisibilitaCard();
   }
@@ -1111,15 +1123,29 @@
     };
 
     let html = `<table class="sposi-kpi">
-      <tr>
+      <!-- Desktop: 3 colonne, 2 righe -->
+      <tr class="kpi-row-desktop">
         <td><div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti" onclick="filtraLista('presenti')"><div class="kpi-label">${testi.kpiPresenti}</div><div class="kpi-num">${totPresenti}</div></div></td>
         <td><div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie" onclick="filtraLista('allergie')"><div class="kpi-label">${testi.kpiAllergie}</div><div class="kpi-num">${totAllergie}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='baby'?'active-filter':''}" id="btn-baby" onclick="filtraLista('baby')"><div class="kpi-label">${testi.kpiBaby}</div><div class="kpi-num">${totBaby}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='baby'?'active-filter':''}" id="btn-baby-d" onclick="filtraLista('baby')"><div class="kpi-label">${testi.kpiBaby}</div><div class="kpi-num">${totBaby}</div></div></td>
       </tr>
-      <tr>
+      <tr class="kpi-row-desktop">
         <td><div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce" onclick="filtraLista('pesce')"><div class="kpi-label">${testi.kpiPesce}</div><div class="kpi-num">${totPesce}</div></div></td>
         <td><div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne" onclick="filtraLista('carne')"><div class="kpi-label">${testi.kpiCarne}</div><div class="kpi-num">${totCarne}</div></div></td>
-        <td><div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg" onclick="filtraLista('veg')"><div class="kpi-label">${testi.kpiVeg}</div><div class="kpi-num">${totVeg}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg-d" onclick="filtraLista('veg')"><div class="kpi-label">${testi.kpiVeg}</div><div class="kpi-num">${totVeg}</div></div></td>
+      </tr>
+      <!-- Mobile: 2 colonne, 3 righe -->
+      <tr class="kpi-row-mobile">
+        <td><div class="kpi-box ${activeFilter==='presenti'?'active-filter':''}" id="btn-presenti-m" onclick="filtraLista('presenti')"><div class="kpi-label">${testi.kpiPresenti}</div><div class="kpi-num">${totPresenti}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='allergie'?'active-filter':''}" id="btn-allergie-m" onclick="filtraLista('allergie')"><div class="kpi-label">${testi.kpiAllergie}</div><div class="kpi-num">${totAllergie}</div></div></td>
+      </tr>
+      <tr class="kpi-row-mobile">
+        <td><div class="kpi-box ${activeFilter==='pesce'?'active-filter':''}" id="btn-pesce-m" onclick="filtraLista('pesce')"><div class="kpi-label">${testi.kpiPesce}</div><div class="kpi-num">${totPesce}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='carne'?'active-filter':''}" id="btn-carne-m" onclick="filtraLista('carne')"><div class="kpi-label">${testi.kpiCarne}</div><div class="kpi-num">${totCarne}</div></div></td>
+      </tr>
+      <tr class="kpi-row-mobile">
+        <td><div class="kpi-box ${activeFilter==='veg'?'active-filter':''}" id="btn-veg-m" onclick="filtraLista('veg')"><div class="kpi-label">${testi.kpiVeg}</div><div class="kpi-num">${totVeg}</div></div></td>
+        <td><div class="kpi-box ${activeFilter==='baby'?'active-filter':''}" id="btn-baby-m" onclick="filtraLista('baby')"><div class="kpi-label">${testi.kpiBaby}</div><div class="kpi-num">${totBaby}</div></div></td>
       </tr>
     </table>
 

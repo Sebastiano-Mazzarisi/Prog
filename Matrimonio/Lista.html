@@ -1,4 +1,4 @@
-<!-- Lista.html v255 - 19/04/2026 -->
+<!-- Lista.html v257 - 19/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v255 · 19/04/2026';
+  const APP_VERSION = 'v257 · 19/04/2026 · 11:47:59';
   (function(){ var el=document.getElementById('ver-label'); if(el) el.textContent=APP_VERSION; })();
 
   // ── Animazione puntini di caricamento ────────────────────────────────────
@@ -989,6 +989,16 @@
       card.style.display = visibile ? 'block' : 'none';
       if (visibile) visibili++;
     });
+
+    // Nascondi i bottoni dei gruppi se tutti i componenti sono invisibili
+    document.querySelectorAll('.gruppo-header-wrap').forEach(wrap => {
+      const gi = wrap.getAttribute('data-gruppo');
+      if (gi === null) return;
+      const cards = document.querySelectorAll(`.risposta-card[data-gruppo="${gi}"]`);
+      const haVisibili = Array.from(cards).some(c => c.style.display !== 'none');
+      wrap.style.display = haVisibili ? 'flex' : 'none';
+    });
+
     // Aggiorna contatore
     const el = document.getElementById('cerca-count');
     if (el) el.textContent = '[' + visibili + ']';
@@ -1193,7 +1203,7 @@
       v.add(n.replace(/'$/,'')); return [...v];
     }
 
-    function cardRispondente(r) {
+    function cardRispondente(r, gruppoIdx) {
       const riga = r.indiceOriginale;
       const presenza = r.presenza||'';
       const assente = isAbsent(presenza, r.secondo);
@@ -1235,7 +1245,7 @@
       const nff = nomeCanonico || (r.nome||'');
       // Cerchietto bianco con freccia rossa per aprire la scheda
       const btnScheda = `<span onclick="event.stopPropagation();toggleDettagli(${riga})" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #c0392b;flex-shrink:0;cursor:pointer;" title="Apri scheda"><span style="color:#c0392b;font-size:18px;font-weight:900;line-height:1;">›</span></span>`;
-      return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}" data-cerca="${_buildCercaAttr(r, nomeCanonico)}">
+      return `<div class="risposta-card ${cf.join(' ')}" style="${ds}" id="card-${riga}" data-cerca="${_buildCercaAttr(r, nomeCanonico)}"${gruppoIdx!=null?' data-gruppo="'+gruppoIdx+'"':''}>
         <div class="risposta-nome" id="nomefoto-${riga}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
           ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
           <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}${ico?`&nbsp;<span style="font-size:16px">${ico}</span>`:''}${dataOraInvio?`&nbsp;<span style="font-size:11px;font-weight:400;color:#5a6e3a;white-space:nowrap">${dataOraInvio}</span>`:''}</span>
@@ -1254,7 +1264,7 @@
       </div>`;
     }
 
-    function cardNonRispondente(nomeCSV, pfx) {
+    function cardNonRispondente(nomeCSV, pfx, gruppoIdx) {
       const safeId = pfx + nomeCSV.replace(/[^a-zA-Z0-9]/g,'_');
       const nomeCanonico = trovaNomeCanonico(nomeCSV) || nomeCSV;
       const nff = nomeCanonico;
@@ -1262,7 +1272,7 @@
       const nomDisp = formatNomeDisplay(nomeCanonico);
       const tavN = trovaTavoloNum(nomeCanonico);
       const ds = (activeFilter && activeFilter!=='assenti') ? 'display:none;' : 'display:block;';
-      return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}" data-cerca="${_normCerca(nomeCanonico)}">
+      return `<div class="risposta-card non-risposto" style="${ds}border-color:#b0bec5;" id="${safeId}" data-cerca="${_normCerca(nomeCanonico)}"${gruppoIdx!=null?' data-gruppo="'+gruppoIdx+'"':''}>
         <div class="risposta-nome" id="nomefoto-csv-${safeId}" data-nomefile="${nff}" style="cursor:pointer;display:flex;align-items:center;padding:10px 14px;gap:6px;" onclick="window._apriGalleria && window._apriGalleria('${nff.replace(/'/g,"\\'")}')">
           ${tavN?`<span style="font-size:14px;flex-shrink:0">${tavN}</span>`:''}
           <span style="color:#000;font-weight:600;flex:1;min-width:0;">${nomDisp}</span>
@@ -1358,15 +1368,15 @@
           const primoMembro = membri[0] || '';
           const primoCanon = (trovaNomeCanonico && trovaNomeCanonico(primoMembro)) || primoMembro;
           const primoClick = primoCanon ? `onclick="window._apriGalleria && window._apriGalleria('${primoCanon.replace(/'/g,"\\'")}')"` : '';
-          html += `<div style="display:flex;justify-content:center;margin:${gi===0?'4px':'5mm'} 0 8px;">
-            <div ${primoClick} style="background:#fff9c4;border:1.5px solid #d4b07a;border-radius:20px;padding:5px 18px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#7a5c3a;letter-spacing:1px;${primoClick?'cursor:pointer;':''}">
+          html += `<div class="gruppo-header-wrap" data-gruppo="${gi}" style="display:flex;justify-content:center;margin:${gi===0?'4px':'5mm'} 0 8px;">
+            <div class="gruppo-header-btn" ${primoClick} style="background:#fff9c4;border:1.5px solid #d4b07a;border-radius:20px;padding:5px 18px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#7a5c3a;letter-spacing:1px;${primoClick?'cursor:pointer;':''}">
               ✦ ${nomeG} ✦
             </div>
           </div>`;
         }
         membri.forEach(nc => {
           const r = (window.datiInvitati||[]).find(inv => _matchNR(nc, inv.nome||''));
-          html += r ? cardRispondente(r) : cardNonRispondente(nc, 'g-');
+          html += r ? cardRispondente(r, gi) : cardNonRispondente(nc, 'g-', gi);
         });
       });
 
@@ -3098,7 +3108,7 @@
       cancellaAttesaStage();
       stageWaitTimer = setTimeout(() => {
         if (currentGen !== gen) return;
-        mostraStagePlaceholder(voce);
+        mostraStagePlaceholder(voce, null, false); // no nome durante caricamento
       }, delay || 220);
     }
 
@@ -3110,7 +3120,7 @@
       imgFront.classList.add('front');
       imgBack.classList.remove('front');
       stage.style.background = '#4a6a2a';
-      mostraStagePlaceholder(voce);
+      mostraStagePlaceholder(voce, null, true); // mostra nome: nessuna foto disponibile
     }
 
     function caricaEVisualizzaFoto(src, voce, gen, immediato) {
@@ -3162,9 +3172,10 @@
       if (oldSph) stage.removeChild(oldSph);
     }
 
-    function mostraStagePlaceholder(voce, icona) {
+    function mostraStagePlaceholder(voce, icona, mostraNome) {
       rimuoviStagePlaceholder();
       stage.style.background = '#4a6a2a';
+      if (!mostraNome) return; // niente nome durante le transizioni
       const partiPh = partiNomeRaw(voce && voce.nome ? voce.nome : '');
       const sph = document.createElement('div');
       sph.className = 'fp-stage-placeholder';

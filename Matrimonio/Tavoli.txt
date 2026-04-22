@@ -10,6 +10,7 @@ Mazzarisi Teresa
 Ladogana Valentina
 
 # Tav. 2 - Pérez-Pricci-Lorusso
+@ 5 tavoli, Orizzontali, Alto-Basso,15,4
 Pérez Ramón
 Pérez Ana
 Guarneri Silvia
@@ -48,6 +49,7 @@ Chiarappa Oletta
 Vatta Sergio
 
 # Tav. 3 - Pricci-Mazzarisi-Casulli
+@ 5 tavoli, Orizzontali, Alto-Basso,15,30
 Pricci Vanna
 Lefemine Domenico
 Lefemine Flavia

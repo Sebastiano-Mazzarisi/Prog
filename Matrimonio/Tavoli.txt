@@ -1,5 +1,5 @@
 # Tav. 1 - Sposi
-# 2 tavoli, Verticali, Sinistra,5,12
+@ 2 tavoli, Verticali, Sinistra,5,12
 Mazzarisi Onofrio
 Pérez Giulia
 Guarneri Lucia

@@ -1,4 +1,4 @@
-<!-- Lista.html v257 - 19/04/2026 -->
+<!-- Lista.html v258 - 22/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v257 · 22/04/2026 · 09:07:45';
+  const APP_VERSION = 'v258 · 22/04/2026 · 09:15:54';
   let APP_VERSION_LABEL = APP_VERSION;
   (function(){
     try {
@@ -777,6 +777,7 @@
         righe.forEach(riga => {
           const r = riga.trim();
           if (!r) return; // Ignora le righe vuote
+          if (r.startsWith('@')) return; // Ignora i commenti
 
           if (r.startsWith('#')) {
             // Nuovo tavolo identificato (rimuove il '#' e gli spazi)

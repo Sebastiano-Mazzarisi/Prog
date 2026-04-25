@@ -1,4 +1,4 @@
-<!-- Lista.html v260 - 25/04/2026 -->
+<!-- Lista.html v261 - 25/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v260 · 25/04/2026 · 16:03:16';
+  const APP_VERSION = 'v261 · 25/04/2026 · 16:13:41';
   let APP_VERSION_LABEL = APP_VERSION;
   (function(){
     try {
@@ -1844,12 +1844,11 @@
           : isBabyRow ? '<span style="color:#a83230;font-weight:600">' + testi.kpiBaby + '</span>'
           : (noteOverflow ? noteOverflow : (r.note ? r.note : '-'));
 
-        const nTavPres = trovaTavoloNum(r.nome || '');
         const isDup = nomeDuplicato.has(idx);
-        const nomeBg = isDup ? 'background:#fff176;' : (!nTavPres ? 'background:#ffd6e0;' : '');
+        const nomeBg = isDup ? 'background:#fff176;' : '';
         const dataStr = isDup && r.data ? '<br><span style="font-size:9px;font-weight:400;color:#7a5a00">' + r.data + '</span>' : '';
         return '<tr>'
-          + '<td style="padding:4px 6px;font-weight:600;color:#000;' + nomeBg + '">' + (nTavPres ? '<span style="margin-right:3px">' + nTavPres + '</span>' : '') + nomeFormattato + etaStr + dataStr + '</td>'
+          + '<td style="padding:4px 6px;font-weight:600;color:#000;' + nomeBg + '">' + nomeFormattato + etaStr + dataStr + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + secondoStr + '</td>'
           + '<td style="padding:4px 6px;' + (hasAllergy(r.allergie) ? 'color:#a83230;font-weight:600' : 'color:#000;') + '">' + allergieDisplay + '</td>'
           + '<td style="padding:4px 6px;color:#000;">' + notaCell + '</td>'
@@ -2173,9 +2172,8 @@
         else if (secondoStr === 'baby')  secondoStr = '🍼 ' + testi.kpiBaby;
         else secondoStr = '-';
         const nTav = trovaTavoloNum(r.nome||'');
-        const tavoloPrefix = nTav ? `<span style="margin-right:3px">${nTav}</span>` : '';
         htmlPDF += `<tr>
-          <td style="padding:5px 8px;font-weight:600;color:#000;">${tavoloPrefix}${nomeDisp}</td>
+          <td style="padding:5px 8px;font-weight:600;color:#000;">${nomeDisp}</td>
           <td style="padding:5px 8px;color:#000;">${secondoStr}</td>
           <td style="padding:5px 8px;color:#a83230;font-weight:600;">${(r.allergie||'').trim()}</td>
         </tr>`;
@@ -2191,7 +2189,7 @@
     const _d = new Date(), _p = n => String(n).padStart(2,'0');
     const _ts = _d.getFullYear()+'-'+_p(_d.getMonth()+1)+'-'+_p(_d.getDate())+'-'+_p(_d.getHours())+'-'+_p(_d.getMinutes())+'-'+_p(_d.getSeconds());
     const opt = {
-      margin:       [10, 5, 10, 5],
+      margin:       [10, 10, 10, 10],
       filename:     'Lista-' + _ts + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, scrollY: 0, windowHeight: 99999 },

@@ -1,4 +1,4 @@
-<!-- Lista.html v259 - 25/04/2026 -->
+<!-- Lista.html v260 - 25/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v259 · 25/04/2026 · 11:41:17';
+  const APP_VERSION = 'v260 · 25/04/2026 · 16:03:16';
   let APP_VERSION_LABEL = APP_VERSION;
   (function(){
     try {
@@ -2076,6 +2076,113 @@
     htmlPDF += `</div>`; // Chiude flex wrap tavoli
     htmlPDF += `</div>`; // Chiude div contenitore pagina
 
+    // ===== PAGINA ALLERGIE =====
+    const conAllergiePdf = presentiRows.filter(r => hasAllergy(r.allergie));
+    if (conAllergiePdf.length > 0) {
+      // Ordina per cognome+nome
+      const accAl = /[\u0300-\u036f]/g;
+      const normAl = s => (s||'').toLowerCase().normalize('NFD').replace(accAl,'').trim();
+      conAllergiePdf.sort((a, b) => {
+        const cA = normAl(chiaveCognomeNome(a.nome||''));
+        const cB = normAl(chiaveCognomeNome(b.nome||''));
+        return cA.localeCompare(cB, 'it', {sensitivity:'base'});
+      });
+
+      htmlPDF += `<div class="html2pdf__page-break"></div>`;
+      htmlPDF += `<div>`;
+      // Testata identica alle altre pagine
+      htmlPDF += `
+        <h1 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;margin-top:0;margin-bottom:3px;color:#000;">${testi.kpiAllergie}</h1>
+        <h2 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:#8a5e1e;margin-bottom:10px;">Giulia &amp; Onofrio</h2>
+      `;
+      // KPI: stessa griglia verde della pagina 1 (6 box: Confermati, Allergie, Baby, Pesce, Carne, Veg)
+      htmlPDF += `
+        <table style="width:100%;border-collapse:collapse;margin-bottom:14px;table-layout:fixed;">
+          <tr>
+            <td style="width:33.3%;padding:3px 4px 3px 0;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">${testi.kpiPresenti}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totPresenti}</td>
+                </tr>
+              </table>
+            </td>
+            <td style="width:33.3%;padding:3px 4px;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">${testi.kpiAllergie}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totAllergie}</td>
+                </tr>
+              </table>
+            </td>
+            <td style="width:33.3%;padding:3px 0 3px 4px;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">${testi.kpiBaby}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totBaby}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:3px 4px 3px 0;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">${testi.kpiPesce}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totPesce}</td>
+                </tr>
+              </table>
+            </td>
+            <td style="padding:3px 4px;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">${testi.kpiCarne}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totCarne}</td>
+                </tr>
+              </table>
+            </td>
+            <td style="padding:3px 0 3px 4px;">
+              <table style="width:100%;background:#c8d5a8;border:1px solid #8fa668;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:5px 8px;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#2a3a18;font-weight:600;">${testi.kpiVeg}</td>
+                  <td style="padding:5px 8px;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#3a5a18;line-height:1;text-align:right;width:40px;">${totVeg}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      `;
+      // Tabella elenco allergie
+      htmlPDF += `
+        <table class="pdf-table" style="width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;">
+          <thead>
+            <tr style="background-color:#f5ede0;">
+              <th style="padding:5px 8px;width:40%;text-align:left;color:#000;font-weight:700;">${testi.pdfNome}</th>
+              <th style="padding:5px 8px;width:20%;text-align:left;color:#000;font-weight:700;">${testi.lblSecondo}</th>
+              <th style="padding:5px 8px;width:40%;text-align:left;color:#000;font-weight:700;">${testi.lblAllergie}</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      conAllergiePdf.forEach(r => {
+        const nomeDisp = partiNomeRaw(r.nome||'').display || (r.nome||'');
+        let secondoStr = detectSecondo(r.secondo);
+        if (secondoStr === 'veg')       secondoStr = testi.kpiVeg;
+        else if (secondoStr === 'carne') secondoStr = testi.kpiCarne;
+        else if (secondoStr === 'pesce') secondoStr = testi.kpiPesce;
+        else if (secondoStr === 'baby')  secondoStr = '🍼 ' + testi.kpiBaby;
+        else secondoStr = '-';
+        const nTav = trovaTavoloNum(r.nome||'');
+        const tavoloPrefix = nTav ? `<span style="margin-right:3px">${nTav}</span>` : '';
+        htmlPDF += `<tr>
+          <td style="padding:5px 8px;font-weight:600;color:#000;">${tavoloPrefix}${nomeDisp}</td>
+          <td style="padding:5px 8px;color:#000;">${secondoStr}</td>
+          <td style="padding:5px 8px;color:#a83230;font-weight:600;">${(r.allergie||'').trim()}</td>
+        </tr>`;
+      });
+      htmlPDF += `</tbody></table>`;
+      htmlPDF += `</div>`; // Chiude pagina allergie
+    }
 
     container.innerHTML = htmlPDF;
 
@@ -2100,51 +2207,6 @@
         btnPdf.innerText = testi.btnPDF;
         btnPdf.disabled = false;
       }
-
-      // ── Genera Allergie.txt ──────────────────────────────────────────────
-      try {
-        // Raccolta persone con allergie (solo presenti)
-        const conAllergie = presentiRows.filter(r => hasAllergy(r.allergie));
-
-        // Ordina per cognome+nome
-        const accA = /[\u0300-\u036f]/g;
-        const normA = s => (s||'').toLowerCase().normalize('NFD').replace(accA,'').trim();
-        conAllergie.sort((a, b) => {
-          const chiaveA = normA(chiaveCognomeNome(a.nome||''));
-          const chiaveB = normA(chiaveCognomeNome(b.nome||''));
-          return chiaveA.localeCompare(chiaveB, 'it', {sensitivity:'base'});
-        });
-
-        // Intestazione riepilogo
-        let righeAll = [];
-        righeAll.push('Ospiti confermati: ' + totPresenti);
-        righeAll.push('Allergie: ' + totAllergie);
-        righeAll.push('Menu Baby: ' + totBaby);
-        righeAll.push('Pesce: ' + totPesce);
-        righeAll.push('Carne: ' + totCarne);
-        righeAll.push('Vegetariano: ' + totVeg);
-        righeAll.push('');
-
-        // Elenco persone con allergie
-        conAllergie.forEach(r => {
-          const nomeDisp = partiNomeRaw(r.nome||'').display || (r.nome||'');
-          righeAll.push(nomeDisp + ': ' + (r.allergie||'').trim());
-        });
-
-        const testoAll = righeAll.join('\r\n');
-        const blobAll = new Blob(['\uFEFF' + testoAll], {type:'text/plain;charset=utf-8;'});
-        const urlAll = URL.createObjectURL(blobAll);
-        const aAll = document.createElement('a');
-        aAll.href = urlAll;
-        aAll.download = 'Allergie.txt';
-        document.body.appendChild(aAll);
-        aAll.click();
-        document.body.removeChild(aAll);
-        setTimeout(() => URL.revokeObjectURL(urlAll), 5000);
-      } catch(eAll) {
-        console.log('Errore generazione Allergie.txt', eAll);
-      }
-      // ────────────────────────────────────────────────────────────────────
     });
   }
   function scorriTavoli() {

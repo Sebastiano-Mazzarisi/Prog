@@ -1,4 +1,4 @@
-<!-- Lista.html v261 - 25/04/2026 -->
+<!-- Lista.html v262 - 25/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v261 · 25/04/2026 · 16:13:41';
+  const APP_VERSION = 'v262 · 25/04/2026 · 16:17:35';
   let APP_VERSION_LABEL = APP_VERSION;
   (function(){
     try {
@@ -1623,7 +1623,7 @@
 
     const container = document.createElement('div');
     container.style.padding = '0';
-    container.style.width = '740px';
+    container.style.width = '700px';
     container.style.fontSize = '11px';
     container.style.fontFamily = "'Inter', sans-serif";
     container.style.color = "#000000";
@@ -1857,18 +1857,18 @@
 
       // === CALCOLO RIGHE PER PAGINA ===
       // A4: 297mm, margini top+bottom = 20mm → area utile = 277mm
-      // Scala html2pdf: container 740px → A4 210mm → 1px = 210/740 mm = 0.2838mm
-      // Altezza riga tabella a font 11px ≈ 18px → 18 * 0.2838 = 5.1mm
+      // Scala html2pdf: container 700px → A4 190mm (margini 10mm) → 1px = 190/700 mm = 0.2714mm
+      // Altezza riga tabella a font 11px ≈ 18px → 18 * 0.2714 = 4.9mm
       // Header KPI + titoli sulla prima pagina: stimati 55mm → restano 222mm ≈ 43 righe
       // Pagine successive: area intera 277mm meno header tabella 8mm → 269mm ≈ 52 righe
-      const MM_PER_PX = 210 / 740;           // 0.2838 mm per pixel DOM
+      const MM_PER_PX = 190 / 700;           // 0.2714 mm per pixel DOM
       const A4_H_MM = 297;                    // area utile A4
       const HEADER_PAGE1_MM = 58;             // KPI + titoli + thead prima pagina
       const HEADER_PAGEN_MM = 10;             // solo thead pagine successive
 
       // Misura altezze reali delle righe (device-independent: forziamo width fissa)
       const misTabel = document.createElement('div');
-      misTabel.style.cssText = 'position:fixed;left:-9999px;top:0;width:740px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
+      misTabel.style.cssText = 'position:fixed;left:-9999px;top:0;width:700px;visibility:hidden;font-size:11px;font-family:Inter,sans-serif;color:#000;';
       const tabTemp = document.createElement('table');
       tabTemp.style.cssText = tableStyle;
       tabTemp.innerHTML = theadHTML + '<tbody>' + presentiRows.map((r,i) => buildRowHTML(r,i)).join('') + '</tbody>';

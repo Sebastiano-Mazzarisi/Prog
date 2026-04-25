@@ -1,5 +1,4 @@
-# Tav. 1 - Sposi
-@ 2 tavoli, Verticali, Sinistra,5,12
+# Tavolo 1 - Giulia & Onofrio
 Mazzarisi Onofrio
 Pérez Giulia
 Guarneri Lucia
@@ -9,8 +8,7 @@ Mazzarisi Sebastiano
 Mazzarisi Teresa
 Ladogana Valentina
 
-# Tav. 2 - Pérez-Pricci-Lorusso
-@ 5 tavoli, Orizzontali, Alto-Basso,15,4
+# Tavolo 2 - Pérez
 Pérez Ramón
 Pérez Ana
 Guarneri Silvia
@@ -19,13 +17,7 @@ Pérez Juani
 Pérez Marta
 Bencomo Tomás
 
-Bove Camilla
-Tosini Marta
-Zappella Chiara
-Mino Alessandro
-Zani Paola
-Acerbi Silvia
-
+# Tavolo 3 - Lorusso
 Pricci Angela
 Lorusso Onofrio
 Lorusso Benny
@@ -37,6 +29,7 @@ Lorusso Cinzia
 Rotondi Gianni
 Rotondi Nicoletta
 
+# Tavolo 4 - Antonietta
 Pricci Maria Antonietta
 Chiarappa Saverio
 Chiarappa Martino
@@ -48,8 +41,7 @@ Pricci Asia
 Chiarappa Oletta
 Vatta Sergio
 
-# Tav. 3 - Pricci-Mazzarisi-Casulli
-@ 5 tavoli, Orizzontali, Alto-Basso,15,30
+# Tavolo 5 - Vanna
 Pricci Vanna
 Lefemine Domenico
 Lefemine Flavia
@@ -60,8 +52,10 @@ Pricci Giovanni
 Pricci Tiziana
 Dalena Riccardo
 
+# Tavolo 6 - Mazzarisi
 Mazzarisi Vito
 Nitti Enza
+Mazzarisi Daniele
 Mazzarisi Marco
 Bruni Stefania
 Mazzarisi Mariella
@@ -74,6 +68,7 @@ Mazzarisi Domenico
 Sabatelli Anna
 Mazzarisi Marilù
 
+# Tavolo 7 - Casulli
 Casulli Angelo
 Marchione Maria
 Casulli Gianluca
@@ -83,4 +78,3 @@ Casulli Flavio
 Casulli Daniele
 Lovece Roberta
 Casulli Donatello
-

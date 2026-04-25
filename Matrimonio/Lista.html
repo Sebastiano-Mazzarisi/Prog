@@ -1,4 +1,4 @@
-<!-- Lista.html v258 - 22/04/2026 -->
+<!-- Lista.html v259 - 25/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v258 · 22/04/2026 · 09:15:54';
+  const APP_VERSION = 'v259 · 25/04/2026 · 11:41:17';
   let APP_VERSION_LABEL = APP_VERSION;
   (function(){
     try {
@@ -2100,6 +2100,51 @@
         btnPdf.innerText = testi.btnPDF;
         btnPdf.disabled = false;
       }
+
+      // ── Genera Allergie.txt ──────────────────────────────────────────────
+      try {
+        // Raccolta persone con allergie (solo presenti)
+        const conAllergie = presentiRows.filter(r => hasAllergy(r.allergie));
+
+        // Ordina per cognome+nome
+        const accA = /[\u0300-\u036f]/g;
+        const normA = s => (s||'').toLowerCase().normalize('NFD').replace(accA,'').trim();
+        conAllergie.sort((a, b) => {
+          const chiaveA = normA(chiaveCognomeNome(a.nome||''));
+          const chiaveB = normA(chiaveCognomeNome(b.nome||''));
+          return chiaveA.localeCompare(chiaveB, 'it', {sensitivity:'base'});
+        });
+
+        // Intestazione riepilogo
+        let righeAll = [];
+        righeAll.push('Ospiti confermati: ' + totPresenti);
+        righeAll.push('Allergie: ' + totAllergie);
+        righeAll.push('Menu Baby: ' + totBaby);
+        righeAll.push('Pesce: ' + totPesce);
+        righeAll.push('Carne: ' + totCarne);
+        righeAll.push('Vegetariano: ' + totVeg);
+        righeAll.push('');
+
+        // Elenco persone con allergie
+        conAllergie.forEach(r => {
+          const nomeDisp = partiNomeRaw(r.nome||'').display || (r.nome||'');
+          righeAll.push(nomeDisp + ': ' + (r.allergie||'').trim());
+        });
+
+        const testoAll = righeAll.join('\r\n');
+        const blobAll = new Blob(['\uFEFF' + testoAll], {type:'text/plain;charset=utf-8;'});
+        const urlAll = URL.createObjectURL(blobAll);
+        const aAll = document.createElement('a');
+        aAll.href = urlAll;
+        aAll.download = 'Allergie.txt';
+        document.body.appendChild(aAll);
+        aAll.click();
+        document.body.removeChild(aAll);
+        setTimeout(() => URL.revokeObjectURL(urlAll), 5000);
+      } catch(eAll) {
+        console.log('Errore generazione Allergie.txt', eAll);
+      }
+      // ────────────────────────────────────────────────────────────────────
     });
   }
   function scorriTavoli() {

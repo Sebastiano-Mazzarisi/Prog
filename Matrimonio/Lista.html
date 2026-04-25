@@ -1,4 +1,4 @@
-<!-- Lista.html v262 - 25/04/2026 -->
+<!-- Lista.html v263 - 25/04/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -378,7 +378,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v262 · 25/04/2026 · 16:17:35';
+  const APP_VERSION = 'v263 · 25/04/2026 · 16:23:18';
   let APP_VERSION_LABEL = APP_VERSION;
   (function(){
     try {
@@ -1863,8 +1863,8 @@
       // Pagine successive: area intera 277mm meno header tabella 8mm → 269mm ≈ 52 righe
       const MM_PER_PX = 190 / 700;           // 0.2714 mm per pixel DOM
       const A4_H_MM = 297;                    // area utile A4
-      const HEADER_PAGE1_MM = 58;             // KPI + titoli + thead prima pagina
-      const HEADER_PAGEN_MM = 10;             // solo thead pagine successive
+      const HEADER_PAGE1_MM = 68;             // KPI + titoli + thead prima pagina (conservativo)
+      const HEADER_PAGEN_MM = 18;             // solo thead pagine successive (conservativo)
 
       // Misura altezze reali delle righe (device-independent: forziamo width fissa)
       const misTabel = document.createElement('div');
@@ -1883,7 +1883,6 @@
       const spazioPagina1Mm = A4_H_MM - HEADER_PAGE1_MM - altezzaTheadH3 * MM_PER_PX;
       const spazioPaginaNMm = A4_H_MM - HEADER_PAGEN_MM - altezzaTheadH3 * MM_PER_PX;
 
-      htmlPDF += `<h3 style="font-size: 13px; margin-bottom: 3px; color: #8a5e1e; font-weight: 600;">${testi.titoloPresenti}</h3>`;
       htmlPDF += `<table class="pdf-table" style="${tableStyle}">${theadHTML}<tbody>`;
 
       let spazioRimanente = spazioPagina1Mm;

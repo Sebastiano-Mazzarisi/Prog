@@ -1,4 +1,4 @@
-# Tavolo 1 - Giulia & Onofrio
+# Tavolo sposi (8)
 Mazzarisi Onofrio
 Pérez Giulia
 Guarneri Lucia
@@ -8,7 +8,7 @@ Mazzarisi Sebastiano
 Mazzarisi Teresa
 Ladogana Valentina
 
-# Tavolo 2 - Pérez
+# Parenti Giulia (7)
 Pérez Ramón
 Pérez Ana
 Guarneri Silvia
@@ -17,7 +17,15 @@ Pérez Juani
 Pérez Marta
 Bencomo Tomás
 
-# Tavolo 3 - Lorusso
+# Amiche Giulia (6)
+Acerbi Silvia
+Bove Camilla
+Mino Alessandro
+Tosini Marta
+Zani Paola
+Zappella Chiara
+
+# Lorusso (10)
 Pricci Angela
 Lorusso Onofrio
 Lorusso Benny
@@ -29,7 +37,7 @@ Lorusso Cinzia
 Rotondi Gianni
 Rotondi Nicoletta
 
-# Tavolo 4 - Antonietta
+# Antonietta (10)
 Pricci Maria Antonietta
 Chiarappa Saverio
 Chiarappa Martino
@@ -41,7 +49,7 @@ Pricci Asia
 Chiarappa Oletta
 Vatta Sergio
 
-# Tavolo 5 - Vanna
+# Vanna (9)
 Pricci Vanna
 Lefemine Domenico
 Lefemine Flavia
@@ -52,10 +60,9 @@ Pricci Giovanni
 Pricci Tiziana
 Dalena Riccardo
 
-# Tavolo 6 - Mazzarisi
+# Mazzarisi (13)
 Mazzarisi Vito
 Nitti Enza
-Mazzarisi Daniele
 Mazzarisi Marco
 Bruni Stefania
 Mazzarisi Mariella
@@ -68,7 +75,7 @@ Mazzarisi Domenico
 Sabatelli Anna
 Mazzarisi Marilù
 
-# Tavolo 7 - Casulli
+# Casulli (9)
 Casulli Angelo
 Marchione Maria
 Casulli Gianluca

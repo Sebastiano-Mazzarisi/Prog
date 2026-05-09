@@ -57,7 +57,7 @@
   <div class="subtitle">Roma 2026 — Italiani</div>
   <div class="finale">Finale: 17/05/2026</div>
 </div>
-<div class="agg"><div class="dot"></div><span id="agg-ora">aggiornato alle 17:25 del 09/05/2026</span></div>
+<div class="agg"><div class="dot"></div><span id="agg-ora">aggiornato alle 21:14 del 09/05/2026</span></div>
 <div id="container"></div>
 <script>
 function renderCard(g){
@@ -95,7 +95,7 @@ function carica(){
       render(DATA);
       const isLive = DATA.some(g => g.stato === "live");
       const intervallo = isLive ? 5000 : 600000;
-      document.getElementById("agg-ora").textContent = "aggiornato alle 17:25 del 09/05/2026";
+      document.getElementById("agg-ora").textContent = "aggiornato alle 21:14 del 09/05/2026";
       setTimeout(carica, intervallo);
     })
     .catch(() => setTimeout(carica, 10000));

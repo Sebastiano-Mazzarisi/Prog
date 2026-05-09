@@ -13,113 +13,515 @@
 <title>🎾 Tennis Roma</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;600;700;800&display=swap');
-  :root{--clay:#C1440E;--clay2:#E8622A;--dark:#F5F0EB;--card:#FFFFFF;--line:#E0D8D0;--text:#1A1410;--muted:#8A7F74;--win:#1A7A40;--lose:#C0392B;--next:#B8860B}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--dark);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding-bottom:50px;font-size:18px}
-  .header{background:linear-gradient(135deg,var(--clay) 0%,var(--clay2) 60%,#F07840 100%);padding:24px 18px 18px;position:relative;overflow:hidden}
-  .header::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.07)}
-  .header::after{content:'🎾';position:absolute;font-size:90px;right:8px;top:-10px;opacity:0.18;transform:rotate(20deg)}
-  .header h1{font-size:34px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.3)}
-  .header .subtitle{font-size:16px;opacity:.85;margin-top:5px;font-family:'DM Mono',monospace}
-  .header .finale{display:inline-block;margin-top:10px;background:rgba(0,0,0,.25);border-radius:4px;padding:4px 12px;font-size:14px;font-family:'DM Mono',monospace}
-  .agg{background:#FFF8F3;border-bottom:1px solid var(--line);padding:10px 18px;font-size:14px;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:8px}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--win);animation:pulse 2s infinite;flex-shrink:0}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-  .section-label{padding:14px 16px 6px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay);font-family:'DM Mono',monospace}
-  .card{margin:0 10px 10px;background:var(--card);border-radius:12px;border:1px solid var(--line);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)}
-  .card.live{border-color:var(--clay2);box-shadow:0 0 0 1px var(--clay2),0 4px 20px rgba(194,68,14,.2)}
-  .card.eliminato{opacity:.4;border-color:#222}
-  .card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 13px;border-bottom:1px solid var(--line);gap:8px;background:#FDFAF7}
-  .nome{font-size:32px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1;color:#1A1410}
-  .badge{font-size:11px;font-weight:700;letter-spacing:.05em;padding:4px 10px;border-radius:20px;text-transform:uppercase;font-family:'DM Mono',monospace;white-space:nowrap}
-  .badge.live{background:var(--clay);color:#fff;animation:pulse 1.5s infinite}
-  .badge.next{background:#FFF8DC;color:#8B6914;border:1px solid #D4A800}
-  .badge.elim{background:#FDECEA;color:#C0392B;border:1px solid #E57373}
-  .badge.ok{background:#EBF7F0;color:#1A7A40;border:1px solid #4CAF78}
-  .card-body{padding:14px 16px 16px;background:#FFFFFF}
-  .match-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.06)}
-  .match-row:last-child{border-bottom:none}
-  .match-date{color:var(--muted);font-family:'DM Mono',monospace;font-size:15px;min-width:46px}
-  .match-esito{font-size:18px;min-width:22px}
-  .match-avv{flex:1;font-weight:700;font-size:20px;letter-spacing:.02em}
-  .match-score{color:var(--muted);font-family:'DM Mono',monospace;font-size:17px;font-weight:500}
-  .prossimo{margin-top:10px;background:#FFFBEE;border-radius:8px;padding:14px 16px;border-left:4px solid var(--next)}
-  .prossimo .vs{font-size:26px;font-weight:800;letter-spacing:.02em;color:#1A1410}
-  .prossimo .orario{font-family:'DM Mono',monospace;font-size:17px;color:#996600;margin-top:5px;font-weight:500}
-  .live-score{margin-top:10px;background:#FEF0E8;border-radius:8px;padding:14px 16px;border-left:4px solid var(--clay2)}
-  .live-score .vs{font-size:26px;font-weight:800;color:#1A1410}
-  .live-score .score{font-family:'DM Mono',monospace;font-size:30px;font-weight:500;color:var(--clay);margin-top:5px}
+
+  :root {
+    --clay:#C1440E;
+    --clay2:#E8622A;
+    --bg:#F5F0EB;
+    --card:#FFFFFF;
+    --line:#E0D8D0;
+    --text:#1A1410;
+    --muted:#8A7F74;
+    --win:#1A7A40;
+    --lose:#C0392B;
+    --next:#B8860B;
+    --live:#D60000;
+  }
+
+  * {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+  }
+
+  body {
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Barlow Condensed',sans-serif;
+    min-height:100vh;
+    padding-bottom:50px;
+    font-size:18px;
+  }
+
+  .header {
+    background:linear-gradient(135deg,var(--clay) 0%,var(--clay2) 60%,#F07840 100%);
+    padding:24px 18px 18px;
+    position:relative;
+    overflow:hidden;
+    color:#fff;
+  }
+
+  .header::before {
+    content:'';
+    position:absolute;
+    top:-30px;
+    right:-30px;
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.07);
+  }
+
+  .header::after {
+    content:'🎾';
+    position:absolute;
+    font-size:90px;
+    right:8px;
+    top:-10px;
+    opacity:0.18;
+    transform:rotate(20deg);
+  }
+
+  .header h1 {
+    font-size:34px;
+    font-weight:800;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    line-height:1;
+    text-shadow:0 2px 8px rgba(0,0,0,.25);
+  }
+
+  .header .subtitle {
+    font-size:16px;
+    opacity:.9;
+    margin-top:5px;
+    font-family:'DM Mono',monospace;
+  }
+
+  .header .finale {
+    display:inline-block;
+    margin-top:10px;
+    background:rgba(0,0,0,.25);
+    border-radius:4px;
+    padding:4px 12px;
+    font-size:14px;
+    font-family:'DM Mono',monospace;
+  }
+
+  .agg {
+    background:#FFF8F3;
+    border-bottom:1px solid var(--line);
+    padding:10px 18px;
+    font-size:14px;
+    font-family:'DM Mono',monospace;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .dot {
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--win);
+    flex-shrink:0;
+  }
+
+  .dot.live-dot {
+    background:var(--live);
+    animation:blinkLive .8s infinite;
+  }
+
+  @keyframes blinkLive {
+    0%, 100% { opacity:1; transform:scale(1); }
+    50% { opacity:.20; transform:scale(.75); }
+  }
+
+  .section-label {
+    padding:16px 16px 7px;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--clay);
+    font-family:'DM Mono',monospace;
+  }
+
+  .card {
+    margin:0 10px 10px;
+    background:var(--card);
+    border-radius:12px;
+    border:1px solid var(--line);
+    overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.07);
+  }
+
+  .card.live {
+    border-color:var(--live);
+    box-shadow:0 0 0 2px var(--live),0 4px 20px rgba(214,0,0,.22);
+  }
+
+  .card.eliminato {
+    opacity:.55;
+  }
+
+  .card-head {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 16px 13px;
+    border-bottom:1px solid var(--line);
+    gap:8px;
+    background:#FDFAF7;
+  }
+
+  .nome {
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    line-height:1;
+    color:#1A1410;
+  }
+
+  .badge {
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.05em;
+    padding:5px 10px;
+    border-radius:20px;
+    text-transform:uppercase;
+    font-family:'DM Mono',monospace;
+    white-space:nowrap;
+  }
+
+  .badge.live {
+    background:var(--live);
+    color:#fff;
+    animation:blinkBadge .75s infinite;
+    box-shadow:0 0 12px rgba(214,0,0,.45);
+  }
+
+  @keyframes blinkBadge {
+    0%, 100% { opacity:1; }
+    50% { opacity:.25; }
+  }
+
+  .badge.next {
+    background:#FFF8DC;
+    color:#8B6914;
+    border:1px solid #D4A800;
+  }
+
+  .badge.elim {
+    background:#FDECEA;
+    color:#C0392B;
+    border:1px solid #E57373;
+  }
+
+  .badge.ok {
+    background:#EBF7F0;
+    color:#1A7A40;
+    border:1px solid #4CAF78;
+  }
+
+  .card-body {
+    padding:14px 16px 16px;
+    background:#FFFFFF;
+  }
+
+  .live-score {
+    margin-bottom:10px;
+    background:#FFF0F0;
+    border-radius:8px;
+    padding:14px 16px;
+    border-left:5px solid var(--live);
+  }
+
+  .live-score .vs {
+    font-size:26px;
+    font-weight:800;
+    color:#1A1410;
+  }
+
+  .live-score .score {
+    font-family:'DM Mono',monospace;
+    font-size:30px;
+    font-weight:500;
+    color:var(--live);
+    margin-top:5px;
+  }
+
+  .prossimo {
+    margin-bottom:10px;
+    background:#FFFBEE;
+    border-radius:8px;
+    padding:14px 16px;
+    border-left:4px solid var(--next);
+  }
+
+  .prossimo .vs {
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:.02em;
+    color:#1A1410;
+  }
+
+  .prossimo .orario {
+    font-family:'DM Mono',monospace;
+    font-size:17px;
+    color:#996600;
+    margin-top:5px;
+    font-weight:500;
+  }
+
+  .match-row {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+
+  .match-row:last-child {
+    border-bottom:none;
+  }
+
+  .match-date {
+    color:var(--muted);
+    font-family:'DM Mono',monospace;
+    font-size:15px;
+    min-width:46px;
+  }
+
+  .match-esito {
+    font-size:18px;
+    min-width:22px;
+  }
+
+  .match-avv {
+    flex:1;
+    font-weight:700;
+    font-size:20px;
+    letter-spacing:.02em;
+  }
+
+  .match-score {
+    color:var(--muted);
+    font-family:'DM Mono',monospace;
+    font-size:17px;
+    font-weight:500;
+    text-align:right;
+  }
+
+  .empty {
+    margin:20px 14px;
+    padding:18px;
+    border-radius:12px;
+    background:#fff;
+    border:1px solid var(--line);
+    font-family:'DM Mono',monospace;
+    font-size:14px;
+    color:var(--muted);
+  }
 </style>
 </head>
+
 <body>
 <div class="header">
   <h1>Internazionali d'Italia</h1>
   <div class="subtitle">Roma 2026 — Italiani</div>
   <div class="finale">Finale: 17/05/2026</div>
 </div>
-<div class="agg"><div class="dot"></div><span id="agg-ora">aggiornato alle 22:04 del 09/05/2026</span></div>
-<div id="container"></div>
-<script>
-function renderCard(g){
-  const isLive=g.stato==="live",isElim=g.stato==="elim";
-  let badge="";
-  if(isLive)badge='<span class="badge live">● LIVE</span>';
-  else if(isElim)badge='<span class="badge elim">ELIMINATO</span>';
-  else if(g.prossimo)badge='<span class="badge next">PROSSIMO: '+g.prossimo.data+'</span>';
-  else badge='<span class="badge ok">✓ AVANZA</span>';
-  let body="";
-  if(isLive&&g.live)body+='<div class="live-score"><div class="vs">vs '+g.live.avv+'</div><div class="score">'+g.live.score+'</div></div>';
-  (g.storico||[]).forEach(m=>{
-    const sym=m.esito==="W"?"✓":"✗",col=m.esito==="W"?"var(--win)":"var(--lose)";
-    body+='<div class="match-row"><span class="match-date">'+m.data+'</span><span class="match-esito" style="color:'+col+'">'+sym+'</span><span class="match-avv">'+m.avv+'</span><span class="match-score">'+m.score+'</span></div>';
-  });
-  if(g.prossimo&&!isElim)body+='<div class="prossimo"><div class="vs">vs '+g.prossimo.avv+'</div><div class="orario">'+g.prossimo.orario+' · '+g.prossimo.data+'</div></div>';
-  if(!body)body='<div style="font-size:14px;color:var(--lose);font-family:DM Mono,monospace;padding:4px 0">Eliminato</div>';
-  return '<div class="card'+(isLive?' live':'')+' '+(isElim?' eliminato':'')+'"><div class="card-head"><div class="nome">'+g.nome+'</div>'+badge+'</div><div class="card-body">'+body+'</div></div>';
-}
-function render(DATA){
-  const groups=[["● In corso","live"],["Oggi in campo","next"],["Avanzano","ok"],["Eliminati","elim"]];
-  let html="";
-  groups.forEach(([label,stato])=>{
-    const items=DATA.filter(g=>g.stato===stato);
-    if(items.length){html+='<div class="section-label">'+label+'</div>';items.forEach(g=>html+=renderCard(g));}
-  });
-  document.getElementById("container").innerHTML=html;
-}
 
+<div class="agg">
+  <div id="live-dot" class="dot"></div>
+  <span id="agg-ora">aggiornato alle 22:17 del 09/05/2026</span>
+</div>
+
+<div id="container"></div>
+
+<script>
 let timerRefresh = null;
 
-function carica(){
+function dataKey(data) {
+  if(!data) return 99999999;
+  const p = String(data).split("/");
+  if(p.length === 2) {
+    const g = parseInt(p[0],10);
+    const m = parseInt(p[1],10);
+    const a = new Date().getFullYear();
+    if(!isNaN(g) && !isNaN(m)) return a*10000 + m*100 + g;
+  }
+  return 99999999;
+}
+
+function orarioKey(orario) {
+  if(!orario) return 9999;
+  const testo = String(orario).toLowerCase().replace(".", ":");
+  const m = testo.match(/(\d{1,2}):(\d{2})/);
+  if(m) return parseInt(m[1],10) * 60 + parseInt(m[2],10);
+  return 9999;
+}
+
+function ordineGiocatore(g) {
+  const stato = g.stato || "";
+  const p = g.prossimo || {};
+
+  if(stato === "live") return [0, dataKey(p.data), -1, g.nome || ""];
+  if(stato === "next" || stato === "ok") return [1, dataKey(p.data), orarioKey(p.orario), g.nome || ""];
+  if(stato === "elim") return [9, 99999999, 9999, g.nome || ""];
+  return [5, 99999999, 9999, g.nome || ""];
+}
+
+function confronta(a,b) {
+  const ka = ordineGiocatore(a);
+  const kb = ordineGiocatore(b);
+  for(let i=0;i<ka.length;i++) {
+    if(ka[i] < kb[i]) return -1;
+    if(ka[i] > kb[i]) return 1;
+  }
+  return 0;
+}
+
+function esc(s) {
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;");
+}
+
+function renderCard(g) {
+  const stato = g.stato || "";
+  const isLive = stato === "live";
+  const isElim = stato === "elim";
+
+  let badge = "";
+  if(isLive) {
+    badge = '<span class="badge live">LIVE</span>';
+  } else if(isElim) {
+    badge = '<span class="badge elim">ELIMINATO</span>';
+  } else if(g.prossimo) {
+    badge = '<span class="badge next">' + esc(g.prossimo.data) + '</span>';
+  } else {
+    badge = '<span class="badge ok">IN GARA</span>';
+  }
+
+  let body = "";
+
+  if(isLive && g.live) {
+    body += '<div class="live-score">' +
+            '<div class="vs">vs ' + esc(g.live.avv) + '</div>' +
+            '<div class="score">' + esc(g.live.score) + '</div>' +
+            '</div>';
+  }
+
+  if(g.prossimo && !isElim && !isLive) {
+    body += '<div class="prossimo">' +
+            '<div class="vs">vs ' + esc(g.prossimo.avv) + '</div>' +
+            '<div class="orario">' + esc(g.prossimo.orario) + ' · ' + esc(g.prossimo.data) + '</div>' +
+            '</div>';
+  }
+
+  (g.storico || []).forEach(m => {
+    const sym = m.esito === "W" ? "✓" : "✗";
+    const col = m.esito === "W" ? "var(--win)" : "var(--lose)";
+    body += '<div class="match-row">' +
+            '<span class="match-date">' + esc(m.data) + '</span>' +
+            '<span class="match-esito" style="color:' + col + '">' + sym + '</span>' +
+            '<span class="match-avv">' + esc(m.avv) + '</span>' +
+            '<span class="match-score">' + esc(m.score) + '</span>' +
+            '</div>';
+  });
+
+  if(!body) {
+    body = '<div style="font-size:14px;color:var(--muted);font-family:DM Mono,monospace;padding:4px 0">Nessun dettaglio disponibile</div>';
+  }
+
+  return '<div class="card' + (isLive ? ' live' : '') + (isElim ? ' eliminato' : '') + '">' +
+         '<div class="card-head"><div class="nome">' + esc(g.nome) + '</div>' + badge + '</div>' +
+         '<div class="card-body">' + body + '</div>' +
+         '</div>';
+}
+
+function render(DATA) {
+  const ordinati = [...DATA].sort(confronta);
+  const inGara = ordinati.filter(g => g.stato !== "elim");
+  const eliminati = ordinati.filter(g => g.stato === "elim");
+  const isLive = DATA.some(g => g.stato === "live");
+
+  document.getElementById("live-dot").className = isLive ? "dot live-dot" : "dot";
+
+  let html = "";
+
+  if(inGara.length) {
+    html += '<div class="section-label">Italiani ancora in gara</div>';
+    inGara.forEach(g => html += renderCard(g));
+  }
+
+  if(eliminati.length) {
+    html += '<div class="section-label">Italiani fuori dai giochi</div>';
+    eliminati.forEach(g => html += renderCard(g));
+  }
+
+  if(!html) {
+    html = '<div class="empty">Nessun dato disponibile.</div>';
+  }
+
+  document.getElementById("container").innerHTML = html;
+}
+
+function carica() {
   if(timerRefresh) clearTimeout(timerRefresh);
 
-  const url = "dati.json?t=" + Date.now();
-  fetch(url, { cache: "no-store" })
+  fetch("dati.json?t=" + Date.now(), { cache: "no-store" })
     .then(r => r.json())
     .then(DATA => {
       render(DATA);
+
       const isLive = DATA.some(g => g.stato === "live");
-      const intervallo = isLive ? 5000 : 600000;
-      document.getElementById("agg-ora").textContent = "aggiornato alle 22:04 del 09/05/2026";
+      const intervallo = isLive ? 5000 : 300000;
+
+      document.getElementById("agg-ora").textContent =
+        "aggiornato alle 22:17 del 09/05/2026" + (isLive ? " · refresh 5 sec" : " · refresh 5 min");
+
       timerRefresh = setTimeout(carica, intervallo);
     })
     .catch(() => {
       timerRefresh = setTimeout(carica, 10000);
     });
 }
+
 carica();
-(function(){
-  let startY=0, pulling=false;
-  const ind=document.createElement("div");
-  ind.style.cssText="position:fixed;top:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:center;font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#C1440E;background:#FFF8F3;border-bottom:1px solid #E0D8D0;transform:translateY(-100%);transition:transform .2s ease;z-index:9999";
+
+(function() {
+  let startY = 0;
+  let pulling = false;
+
+  const ind = document.createElement("div");
+  ind.style.cssText =
+    "position:fixed;top:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:center;" +
+    "font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#C1440E;background:#FFF8F3;" +
+    "border-bottom:1px solid #E0D8D0;transform:translateY(-100%);transition:transform .2s ease;z-index:9999";
+
   document.body.prepend(ind);
-  document.addEventListener("touchstart",e=>{if(window.scrollY===0){startY=e.touches[0].clientY;pulling=true;}},{passive:true});
-  document.addEventListener("touchmove",e=>{if(!pulling)return;const dy=e.touches[0].clientY-startY;if(dy>10){ind.style.transform="translateY("+Math.min(dy-10,60)+"px)";ind.innerHTML=dy>70?"↑ Rilascia per aggiornare":"↓ Trascina per aggiornare";}},{passive:true});
-  document.addEventListener("touchend",e=>{
-    if(!pulling)return;pulling=false;
-    const dy=e.changedTouches[0].clientY-startY;
-    ind.style.transform="translateY(-100%)";
-    if(dy>70){ carica(); }
-  },{passive:true});
+
+  document.addEventListener("touchstart", e => {
+    if(window.scrollY === 0) {
+      startY = e.touches[0].clientY;
+      pulling = true;
+    }
+  }, { passive:true });
+
+  document.addEventListener("touchmove", e => {
+    if(!pulling) return;
+    const dy = e.touches[0].clientY - startY;
+    if(dy > 10) {
+      ind.style.transform = "translateY(" + Math.min(dy - 10, 60) + "px)";
+      ind.innerHTML = dy > 70 ? "↑ Rilascia per aggiornare" : "↓ Trascina per aggiornare";
+    }
+  }, { passive:true });
+
+  document.addEventListener("touchend", e => {
+    if(!pulling) return;
+    pulling = false;
+
+    const dy = e.changedTouches[0].clientY - startY;
+    ind.style.transform = "translateY(-100%)";
+
+    if(dy > 70) carica();
+  }, { passive:true });
 })();
 </script>
 </body>

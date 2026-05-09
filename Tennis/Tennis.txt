@@ -4,20 +4,29 @@ Italiani
 Finale: 17/05/2026
 Dati aggiornati: 23:19:10 del 09/05/2026
 Fonte dati: ESPN
-Pubblicato: 23:19:28 del 09/05/2026
+Pubblicato: 23:27:12 del 09/05/2026
 --------------------------------------------------
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
-ARNALDI - JODAR
-da definire - 09/05
+ARNALDI - da definire
+da definire - 10/05
+  09/05  V  JODAR  da verificare
   08/05  V  DE MINAUR  4-6 7-6 6-4
-  06/05  V  MUNAR  6-3 3-6 6-3
 --------------------------------------------------
-COCCIARETTO - SWIATEK
-da definire - 09/05
+BELLUCCI - da definire
+da definire - 10/05
+  09/05  V  ETCHEVERRY  5-7 6-2 6-3
+  07/05  V  BURRUCHAGA  6-4 6-4
+--------------------------------------------------
+COBOLLI - da definire
+da definire - 10/05
+  09/05  V  ATMANE  da verificare
+--------------------------------------------------
+COCCIARETTO - da definire
+da definire - 10/05
+  09/05  X  SWIATEK  da verificare
   08/05  V  NAVARRO  6-3 6-3
-  06/05  V  KRAUS  6-2 6-4
 --------------------------------------------------
 DARDERI - PAUL
 da definire - 10/05
@@ -27,19 +36,9 @@ MUSETTI - CERUNDOLO
 da definire - 10/05
   08/05  V  MPETSHI PERRICARD  6-4 6-4
 --------------------------------------------------
-BELLUCCI - ancora in gara, prossimo incontro da definire
-  09/05  V  TOMAS MARTIN ETCHEVERRY  5-7 6-2 6-3
-  07/05  V  BURRUCHAGA  6-4 6-4
---------------------------------------------------
-COBOLLI - ancora in gara, prossimo incontro da definire
-  09/05  V  TERENCE ATMANE  7-6 6-3
---------------------------------------------------
-PELLEGRINO - ancora in gara, prossimo incontro da definire
-  09/05  V  ARTHUR FILS  4-0 rit.
-  07/05  V  NARDI  4-6 6-3 6-3
---------------------------------------------------
-SINNER - ancora in gara, prossimo incontro da definire
-  09/05  V  SEBASTIAN OFNER  6-3 -4
+SINNER - da definire
+da definire - 10/05
+  09/05  V  OFNER  6-3 6-4
 --------------------------------------------------
 
 ITALIANI FUORI DAI GIOCHI
@@ -56,6 +55,10 @@ GRANT
 PAOLINI
   09/05  X  MERTENS  6-4 6-7 3-6
   07/05  V  JEANJEAN  6-7 6-2 6-4
+--------------------------------------------------
+PELLEGRINO
+  09/05  X  FILS  4-0 rit.
+  07/05  V  NARDI  4-6 6-3 6-3
 --------------------------------------------------
 SONEGO
   07/05  X  BUSE  3-6 3-6

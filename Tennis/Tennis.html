@@ -236,12 +236,11 @@
   <div class="finale">Finale: 17/05/2026</div>
 </div>
 
-<div class="agg">
+<div class="agg" id="barra-aggiornamento">
   <div class="agg-top">
     <div id="live-dot" class="dot"></div>
     <span id="pagina-refresh">Pagina: avvio...</span>
   </div>
-  <div id="dati-refresh">Dati: 23:36:07 del 09/05/2026 · ESPN</div>
 </div>
 
 <div id="container"></div>
@@ -255,6 +254,22 @@ function oraLocale() {
   const d = new Date();
   return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) +
          " del " + pad(d.getDate()) + "/" + pad(d.getMonth()+1) + "/" + d.getFullYear();
+}
+
+function sistemaBarraAggiornamento() {
+  // Difesa contro vecchie versioni/cache: deve esistere UNA SOLA barra.
+  const barre = document.querySelectorAll(".agg");
+  barre.forEach((b, i) => { if(i > 0) b.remove(); });
+
+  let barra = document.getElementById("barra-aggiornamento") || document.querySelector(".agg");
+  if(!barra) return;
+
+  barra.id = "barra-aggiornamento";
+  barra.innerHTML =
+    '<div class="agg-top">' +
+    '<div id="live-dot" class="dot"></div>' +
+    '<span id="pagina-refresh">Pagina: avvio...</span>' +
+    '</div>';
 }
 
 function dataKey(data) {
@@ -390,6 +405,7 @@ async function carica() {
     const r = await fetch("dati.json?t=" + Date.now(), { cache: "no-store" });
     const DATA = await r.json();
 
+    sistemaBarraAggiornamento();
     render(DATA);
 
     const isLive = DATA.some(g => g.stato === "live");
@@ -418,6 +434,7 @@ async function carica() {
   }
 }
 
+sistemaBarraAggiornamento();
 carica();
 
 (function() {

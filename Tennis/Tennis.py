@@ -26,28 +26,27 @@ DATA_FINE = "17/05/2026"
 # ── DATI — aggiornati da Claude su richiesta ──────────────────────────────────
 # stato: "live" | "next" | "ok" | "elim"
 DATA = [
+  # ── IN CORSO ─────────────────────────────────────────────────────────────
+  {
+    "nome": "BELLUCCI", "stato": "live",
+    "live": {"avv": "ETCHEVERRY", "score": "5-7  4-1*  (perde 0-1)"},
+    "prossimo": None,
+    "storico": [
+      {"data": "07/05", "esito": "W", "avv": "BURRUCHAGA", "score": "6-4 6-4"},
+    ],
+  },
+  # ── PROGRAMMATI OGGI ─────────────────────────────────────────────────────
+  {
+    "nome": "COBOLLI", "stato": "next",
+    "live": None,
+    "prossimo": {"orario": "16:10", "data": "09/05", "avv": "ATMANE"},
+    "storico": [],
+  },
   {
     "nome": "SINNER", "stato": "next",
     "live": None,
     "prossimo": {"orario": "non prima delle 19:00", "data": "09/05", "avv": "OFNER"},
     "storico": [],
-  },
-  {
-    "nome": "COCCIARETTO", "stato": "next",
-    "live": None,
-    "prossimo": {"orario": "da definire", "data": "09/05", "avv": "SWIATEK"},
-    "storico": [
-      {"data": "08/05", "esito": "W", "avv": "NAVARRO",  "score": "6-3 6-3"},
-      {"data": "06/05", "esito": "W", "avv": "KRAUS",    "score": "6-2 6-4"},
-    ],
-  },
-  {
-    "nome": "PAOLINI", "stato": "next",
-    "live": None,
-    "prossimo": {"orario": "da definire", "data": "09/05", "avv": "MERTENS"},
-    "storico": [
-      {"data": "07/05", "esito": "W", "avv": "JEANJEAN", "score": "6-7 6-2 6-4"},
-    ],
   },
   {
     "nome": "ARNALDI", "stato": "next",
@@ -59,20 +58,6 @@ DATA = [
     ],
   },
   {
-    "nome": "COBOLLI", "stato": "next",
-    "live": None,
-    "prossimo": {"orario": "da definire", "data": "09/05", "avv": "ATMANE"},
-    "storico": [],
-  },
-  {
-    "nome": "BELLUCCI", "stato": "next",
-    "live": None,
-    "prossimo": {"orario": "da definire", "data": "09/05", "avv": "ETCHEVERRY"},
-    "storico": [
-      {"data": "07/05", "esito": "W", "avv": "BURRUCHAGA", "score": "6-4 6-4"},
-    ],
-  },
-  {
     "nome": "PELLEGRINO", "stato": "next",
     "live": None,
     "prossimo": {"orario": "da definire", "data": "09/05", "avv": "FILS"},
@@ -80,6 +65,16 @@ DATA = [
       {"data": "07/05", "esito": "W", "avv": "NARDI", "score": "4-6 6-3 6-3"},
     ],
   },
+  {
+    "nome": "COCCIARETTO", "stato": "next",
+    "live": None,
+    "prossimo": {"orario": "da definire", "data": "09/05", "avv": "SWIATEK"},
+    "storico": [
+      {"data": "08/05", "esito": "W", "avv": "NAVARRO",  "score": "6-3 6-3"},
+      {"data": "06/05", "esito": "W", "avv": "KRAUS",    "score": "6-2 6-4"},
+    ],
+  },
+  # ── AVANZANO (giocano domani) ─────────────────────────────────────────────
   {
     "nome": "MUSETTI", "stato": "ok",
     "live": None,
@@ -94,6 +89,14 @@ DATA = [
     "prossimo": {"orario": "da definire", "data": "10/05", "avv": "PAUL"},
     "storico": [
       {"data": "08/05", "esito": "W", "avv": "HANFMANN", "score": "6-4 6-4"},
+    ],
+  },
+  # ── ELIMINATI ────────────────────────────────────────────────────────────
+  {
+    "nome": "PAOLINI", "stato": "elim", "live": None, "prossimo": None,
+    "storico": [
+      {"data": "09/05", "esito": "L", "avv": "MERTENS", "score": "6-4 6-7 3-6"},
+      {"data": "07/05", "esito": "W", "avv": "JEANJEAN", "score": "6-7 6-2 6-4"},
     ],
   },
   {
@@ -131,6 +134,9 @@ def genera_html():
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tennis Roma">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 """ + icon_tag + """
 <title>🎾 Tennis Roma</title>
 <style>
@@ -218,6 +224,54 @@ function render(){
   document.getElementById("container").innerHTML=html;
 }
 render();
+
+// ── Pull-to-refresh ──────────────────────────────────────────────────────────
+(function(){
+  let startY = 0, pulling = false;
+  const indicator = document.createElement('div');
+  indicator.id = 'ptr';
+  indicator.innerHTML = '↓ Trascina per aggiornare';
+  indicator.style.cssText = [
+    'position:fixed','top:0','left:0','right:0',
+    'height:48px','display:flex','align-items:center','justify-content:center',
+    'font-family:DM Mono,monospace','font-size:13px','font-weight:600',
+    'color:#C1440E','background:#FFF8F3','border-bottom:1px solid #E0D8D0',
+    'transform:translateY(-100%)','transition:transform .2s ease',
+    'z-index:9999','letter-spacing:.05em'
+  ].join(';');
+  document.body.prepend(indicator);
+
+  document.addEventListener('touchstart', e => {
+    if(window.scrollY === 0) { startY = e.touches[0].clientY; pulling = true; }
+  }, {passive:true});
+
+  document.addEventListener('touchmove', e => {
+    if(!pulling) return;
+    const dy = e.touches[0].clientY - startY;
+    if(dy > 10) {
+      indicator.style.transform = `translateY(${Math.min(dy - 10, 60)}px)`;
+      indicator.innerHTML = dy > 70 ? '↑ Rilascia per aggiornare' : '↓ Trascina per aggiornare';
+    }
+  }, {passive:true});
+
+  document.addEventListener('touchend', e => {
+    if(!pulling) return;
+    pulling = false;
+    const dy = e.changedTouches[0].clientY - startY;
+    indicator.style.transform = 'translateY(-100%)';
+    if(dy > 70) {
+      indicator.innerHTML = '⟳ Aggiornamento...';
+      indicator.style.transform = 'translateY(0)';
+      // Svuota cache e ricarica
+      if('caches' in window) {
+        caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
+          .then(() => location.reload(true));
+      } else {
+        location.reload(true);
+      }
+    }
+  }, {passive:true});
+})();
 </script>
 </body>
 </html>"""
@@ -256,12 +310,14 @@ def git_push():
     git = trova_git()
     if not git:
         return
+    # Il repo git è nella cartella padre (Prog), non in Tennis
+    REPO = os.path.dirname(DIR)
     try:
-        subprocess.run(f'"{git}" -C "{DIR}" add Tennis.html Tennis.txt tennis_icon.png', shell=True, check=True)
-        result = subprocess.run(f'"{git}" -C "{DIR}" commit -m "Tennis: aggiorna {ORA_AGG}"', shell=True, capture_output=True, text=True)
+        subprocess.run(f'"{git}" -C "{REPO}" add Tennis/Tennis.html Tennis/Tennis.txt Tennis/tennis_icon.png', shell=True, check=True)
+        result = subprocess.run(f'"{git}" -C "{REPO}" commit -m "Tennis: aggiorna {ORA_AGG}"', shell=True, capture_output=True, text=True)
         if "nothing to commit" in result.stdout + result.stderr:
-            return  # nessuna modifica, non pushare
-        subprocess.run(f'"{git}" -C "{DIR}" push', shell=True, check=True)
+            return
+        subprocess.run(f'"{git}" -C "{REPO}" push', shell=True, check=True)
     except subprocess.CalledProcessError:
         pass
 
@@ -270,7 +326,7 @@ def main():
         f.write(genera_html())
     with open(F_TXT, "w", encoding="utf-8") as f:
         f.write(genera_txt() + "\n")
-    git_push()
+    git_push()  # push immediato dopo salvataggio locale
 
 if __name__ == "__main__":
     main()

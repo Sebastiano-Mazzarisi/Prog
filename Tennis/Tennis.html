@@ -28,11 +28,7 @@
     --live:#D60000;
   }
 
-  * {
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-  }
+  * { box-sizing:border-box; margin:0; padding:0; }
 
   body {
     background:var(--bg);
@@ -49,17 +45,6 @@
     position:relative;
     overflow:hidden;
     color:#fff;
-  }
-
-  .header::before {
-    content:'';
-    position:absolute;
-    top:-30px;
-    right:-30px;
-    width:140px;
-    height:140px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.07);
   }
 
   .header::after {
@@ -102,9 +87,13 @@
     background:#FFF8F3;
     border-bottom:1px solid var(--line);
     padding:10px 18px;
-    font-size:14px;
+    font-size:13px;
     font-family:'DM Mono',monospace;
     color:var(--muted);
+    line-height:1.45;
+  }
+
+  .agg-top {
     display:flex;
     align-items:center;
     gap:8px;
@@ -152,9 +141,7 @@
     box-shadow:0 0 0 2px var(--live),0 4px 20px rgba(214,0,0,.22);
   }
 
-  .card.eliminato {
-    opacity:.55;
-  }
+  .card.eliminato { opacity:.55; }
 
   .card-head {
     display:flex;
@@ -198,28 +185,11 @@
     50% { opacity:.25; }
   }
 
-  .badge.next {
-    background:#FFF8DC;
-    color:#8B6914;
-    border:1px solid #D4A800;
-  }
+  .badge.next { background:#FFF8DC; color:#8B6914; border:1px solid #D4A800; }
+  .badge.elim { background:#FDECEA; color:#C0392B; border:1px solid #E57373; }
+  .badge.ok { background:#EBF7F0; color:#1A7A40; border:1px solid #4CAF78; }
 
-  .badge.elim {
-    background:#FDECEA;
-    color:#C0392B;
-    border:1px solid #E57373;
-  }
-
-  .badge.ok {
-    background:#EBF7F0;
-    color:#1A7A40;
-    border:1px solid #4CAF78;
-  }
-
-  .card-body {
-    padding:14px 16px 16px;
-    background:#FFFFFF;
-  }
+  .card-body { padding:14px 16px 16px; background:#FFFFFF; }
 
   .live-score {
     margin-bottom:10px;
@@ -229,19 +199,8 @@
     border-left:5px solid var(--live);
   }
 
-  .live-score .vs {
-    font-size:26px;
-    font-weight:800;
-    color:#1A1410;
-  }
-
-  .live-score .score {
-    font-family:'DM Mono',monospace;
-    font-size:30px;
-    font-weight:500;
-    color:var(--live);
-    margin-top:5px;
-  }
+  .live-score .vs { font-size:26px; font-weight:800; color:#1A1410; }
+  .live-score .score { font-family:'DM Mono',monospace; font-size:30px; font-weight:500; color:var(--live); margin-top:5px; }
 
   .prossimo {
     margin-bottom:10px;
@@ -251,20 +210,8 @@
     border-left:4px solid var(--next);
   }
 
-  .prossimo .vs {
-    font-size:26px;
-    font-weight:800;
-    letter-spacing:.02em;
-    color:#1A1410;
-  }
-
-  .prossimo .orario {
-    font-family:'DM Mono',monospace;
-    font-size:17px;
-    color:#996600;
-    margin-top:5px;
-    font-weight:500;
-  }
+  .prossimo .vs { font-size:26px; font-weight:800; letter-spacing:.02em; color:#1A1410; }
+  .prossimo .orario { font-family:'DM Mono',monospace; font-size:17px; color:#996600; margin-top:5px; font-weight:500; }
 
   .match-row {
     display:flex;
@@ -274,47 +221,11 @@
     border-bottom:1px solid rgba(0,0,0,.06);
   }
 
-  .match-row:last-child {
-    border-bottom:none;
-  }
-
-  .match-date {
-    color:var(--muted);
-    font-family:'DM Mono',monospace;
-    font-size:15px;
-    min-width:46px;
-  }
-
-  .match-esito {
-    font-size:18px;
-    min-width:22px;
-  }
-
-  .match-avv {
-    flex:1;
-    font-weight:700;
-    font-size:20px;
-    letter-spacing:.02em;
-  }
-
-  .match-score {
-    color:var(--muted);
-    font-family:'DM Mono',monospace;
-    font-size:17px;
-    font-weight:500;
-    text-align:right;
-  }
-
-  .empty {
-    margin:20px 14px;
-    padding:18px;
-    border-radius:12px;
-    background:#fff;
-    border:1px solid var(--line);
-    font-family:'DM Mono',monospace;
-    font-size:14px;
-    color:var(--muted);
-  }
+  .match-row:last-child { border-bottom:none; }
+  .match-date { color:var(--muted); font-family:'DM Mono',monospace; font-size:15px; min-width:46px; }
+  .match-esito { font-size:18px; min-width:22px; }
+  .match-avv { flex:1; font-weight:700; font-size:20px; letter-spacing:.02em; }
+  .match-score { color:var(--muted); font-family:'DM Mono',monospace; font-size:17px; font-weight:500; text-align:right; }
 </style>
 </head>
 
@@ -326,14 +237,26 @@
 </div>
 
 <div class="agg">
-  <div id="live-dot" class="dot"></div>
-  <span id="agg-ora">aggiornato alle 23:07 del 09/05/2026</span>
+  <div class="agg-top">
+    <div id="live-dot" class="dot"></div>
+    <span id="pagina-refresh">Pagina: avvio...</span>
+  </div>
+  <div id="dati-refresh">Dati: 23:19:10 del 09/05/2026 · ESPN</div>
+  <div id="pubblicazione">Pubblicato: 23:19:28 del 09/05/2026</div>
 </div>
 
 <div id="container"></div>
 
 <script>
 let timerRefresh = null;
+
+function pad(n) { return String(n).padStart(2, "0"); }
+
+function oraLocale() {
+  const d = new Date();
+  return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) +
+         " del " + pad(d.getDate()) + "/" + pad(d.getMonth()+1) + "/" + d.getFullYear();
+}
 
 function dataKey(data) {
   if(!data) return 99999999;
@@ -358,7 +281,6 @@ function orarioKey(orario) {
 function ordineGiocatore(g) {
   const stato = g.stato || "";
   const p = g.prossimo || {};
-
   if(stato === "live") return [0, dataKey(p.data), -1, g.nome || ""];
   if(stato === "next" || stato === "ok") return [1, dataKey(p.data), orarioKey(p.orario), g.nome || ""];
   if(stato === "elim") return [9, 99999999, 9999, g.nome || ""];
@@ -456,31 +378,45 @@ function render(DATA) {
   }
 
   if(!html) {
-    html = '<div class="empty">Nessun dato disponibile.</div>';
+    html = '<div style="margin:20px 14px;padding:18px;border-radius:12px;background:#fff;border:1px solid var(--line);font-family:DM Mono,monospace;font-size:14px;color:var(--muted)">Nessun dato disponibile.</div>';
   }
 
   document.getElementById("container").innerHTML = html;
 }
 
-function carica() {
+async function carica() {
   if(timerRefresh) clearTimeout(timerRefresh);
 
-  fetch("dati.json?t=" + Date.now(), { cache: "no-store" })
-    .then(r => r.json())
-    .then(DATA => {
-      render(DATA);
+  try {
+    const r = await fetch("dati.json?t=" + Date.now(), { cache: "no-store" });
+    const DATA = await r.json();
 
-      const isLive = DATA.some(g => g.stato === "live");
-      const intervallo = isLive ? 5000 : 300000;
+    render(DATA);
 
-      document.getElementById("agg-ora").textContent =
-        "aggiornato alle 23:07 del 09/05/2026" + (isLive ? " · refresh 5 sec" : " · refresh 5 min");
+    const isLive = DATA.some(g => g.stato === "live");
+    const intervallo = isLive ? 5000 : 300000;
 
-      timerRefresh = setTimeout(carica, intervallo);
-    })
-    .catch(() => {
-      timerRefresh = setTimeout(carica, 10000);
-    });
+    document.getElementById("pagina-refresh").textContent =
+      "Pagina aggiornata: " + oraLocale() +
+      (isLive ? " · prossimo refresh 5 sec" : " · prossimo refresh 5 min");
+
+    try {
+      const rm = await fetch("meta.json?t=" + Date.now(), { cache: "no-store" });
+      if(rm.ok) {
+        const meta = await rm.json();
+        let txt = "Dati aggiornati: " + (meta.aggiornato || "non disponibile");
+        if(meta.fonte) txt += " · " + meta.fonte;
+        document.getElementById("dati-refresh").textContent = txt;
+      }
+    } catch(e) {}
+
+    timerRefresh = setTimeout(carica, intervallo);
+
+  } catch(e) {
+    document.getElementById("pagina-refresh").textContent =
+      "Errore refresh pagina: " + oraLocale() + " · ritento tra 10 sec";
+    timerRefresh = setTimeout(carica, 10000);
+  }
 }
 
 carica();

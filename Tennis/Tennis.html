@@ -242,7 +242,7 @@
     <span id="pagina-refresh">Pagina: avvio...</span>
   </div>
   <div id="dati-refresh">Dati: 23:19:10 del 09/05/2026 · ESPN</div>
-  <div id="pubblicazione">Pubblicato: 23:19:28 del 09/05/2026</div>
+  <div id="pubblicazione">Pubblicato: 23:27:12 del 09/05/2026</div>
 </div>
 
 <div id="container"></div>
@@ -394,11 +394,11 @@ async function carica() {
     render(DATA);
 
     const isLive = DATA.some(g => g.stato === "live");
-    const intervallo = isLive ? 5000 : 300000;
+    const intervallo = isLive ? 6000 : 60000;
 
     document.getElementById("pagina-refresh").textContent =
       "Pagina aggiornata: " + oraLocale() +
-      (isLive ? " · prossimo refresh 5 sec" : " · prossimo refresh 5 min");
+      (isLive ? " · prossimo refresh 6 sec" : " · prossimo refresh 60 sec");
 
     try {
       const rm = await fetch("meta.json?t=" + Date.now(), { cache: "no-store" });

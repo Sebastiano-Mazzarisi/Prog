@@ -135,45 +135,45 @@ def genera_html():
 <title>🎾 Tennis Roma</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;600;700;800&display=swap');
-  :root{--clay:#C1440E;--clay2:#E8622A;--dark:#111009;--card:#1A1814;--line:#2E2B24;--text:#F0EBE0;--muted:#8A8070;--win:#5DBB7A;--lose:#E05555;--next:#F0C040}
+  :root{--clay:#C1440E;--clay2:#E8622A;--dark:#F5F0EB;--card:#FFFFFF;--line:#E0D8D0;--text:#1A1410;--muted:#8A7F74;--win:#1A7A40;--lose:#C0392B;--next:#B8860B}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--dark);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding-bottom:50px;font-size:16px}
+  body{background:var(--dark);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding-bottom:50px;font-size:18px}
   .header{background:linear-gradient(135deg,var(--clay) 0%,var(--clay2) 60%,#F07840 100%);padding:24px 18px 18px;position:relative;overflow:hidden}
   .header::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.07)}
   .header::after{content:'🎾';position:absolute;font-size:90px;right:8px;top:-10px;opacity:0.18;transform:rotate(20deg)}
   .header h1{font-size:34px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.3)}
   .header .subtitle{font-size:16px;opacity:.85;margin-top:5px;font-family:'DM Mono',monospace}
   .header .finale{display:inline-block;margin-top:10px;background:rgba(0,0,0,.25);border-radius:4px;padding:4px 12px;font-size:14px;font-family:'DM Mono',monospace}
-  .agg{background:var(--card);border-bottom:1px solid var(--line);padding:10px 18px;font-size:13px;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:8px}
+  .agg{background:#FFF8F3;border-bottom:1px solid var(--line);padding:10px 18px;font-size:14px;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:8px}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--win);animation:pulse 2s infinite;flex-shrink:0}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-  .section-label{padding:18px 16px 8px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay2);font-family:'DM Mono',monospace}
-  .card{margin:0 10px 10px;background:var(--card);border-radius:12px;border:1px solid var(--line);overflow:hidden}
+  .section-label{padding:18px 16px 8px;font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay);font-family:'DM Mono',monospace}
+  .card{margin:0 10px 10px;background:var(--card);border-radius:12px;border:1px solid var(--line);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)}
   .card.live{border-color:var(--clay2);box-shadow:0 0 0 1px var(--clay2),0 4px 20px rgba(194,68,14,.2)}
   .card.eliminato{opacity:.4;border-color:#222}
-  .card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;border-bottom:1px solid var(--line);gap:8px}
-  .nome{font-size:28px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1}
-  .badge{font-size:12px;font-weight:700;letter-spacing:.05em;padding:5px 10px;border-radius:20px;text-transform:uppercase;font-family:'DM Mono',monospace;white-space:nowrap}
+  .card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 13px;border-bottom:1px solid var(--line);gap:8px;background:#FDFAF7}
+  .nome{font-size:32px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1;color:#1A1410}
+  .badge{font-size:13px;font-weight:700;letter-spacing:.05em;padding:6px 12px;border-radius:20px;text-transform:uppercase;font-family:'DM Mono',monospace;white-space:nowrap}
   .badge.live{background:var(--clay);color:#fff;animation:pulse 1.5s infinite}
-  .badge.next{background:rgba(240,192,64,.15);color:var(--next);border:1px solid rgba(240,192,64,.4)}
-  .badge.elim{background:rgba(224,85,85,.1);color:var(--lose);border:1px solid rgba(224,85,85,.2)}
-  .badge.ok{background:rgba(93,187,122,.1);color:var(--win);border:1px solid rgba(93,187,122,.2)}
-  .card-body{padding:12px 16px 14px}
-  .match-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .badge.next{background:#FFF8DC;color:#8B6914;border:1px solid #D4A800}
+  .badge.elim{background:#FDECEA;color:#C0392B;border:1px solid #E57373}
+  .badge.ok{background:#EBF7F0;color:#1A7A40;border:1px solid #4CAF78}
+  .card-body{padding:14px 16px 16px;background:#FFFFFF}
+  .match-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.06)}
   .match-row:last-child{border-bottom:none}
-  .match-date{color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;min-width:44px}
+  .match-date{color:var(--muted);font-family:'DM Mono',monospace;font-size:15px;min-width:46px}
   .match-esito{font-size:18px;min-width:22px}
-  .match-avv{flex:1;font-weight:700;font-size:18px;letter-spacing:.02em}
-  .match-score{color:var(--muted);font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
-  .prossimo{margin-top:10px;background:rgba(240,192,64,.07);border-radius:8px;padding:12px 14px;border-left:4px solid var(--next)}
-  .prossimo .vs{font-size:22px;font-weight:800;letter-spacing:.02em}
-  .prossimo .orario{font-family:'DM Mono',monospace;font-size:15px;color:var(--next);margin-top:4px}
-  .live-score{margin-top:10px;background:rgba(194,68,14,.1);border-radius:8px;padding:12px 14px;border-left:4px solid var(--clay2)}
-  .live-score .vs{font-size:22px;font-weight:800}
-  .live-score .score{font-family:'DM Mono',monospace;font-size:26px;font-weight:500;color:var(--clay2);margin-top:4px}
-  .install-bar{background:#1A1814;border:1px solid #2E2B24;border-radius:10px;margin:10px;padding:14px 16px;display:flex;align-items:center;gap:10px}
-  .install-bar span{flex:1;color:#8A8070;font-size:15px;line-height:1.5}
-  .install-bar strong{color:#F0EBE0}
+  .match-avv{flex:1;font-weight:700;font-size:20px;letter-spacing:.02em}
+  .match-score{color:var(--muted);font-family:'DM Mono',monospace;font-size:17px;font-weight:500}
+  .prossimo{margin-top:10px;background:#FFFBEE;border-radius:8px;padding:14px 16px;border-left:4px solid var(--next)}
+  .prossimo .vs{font-size:26px;font-weight:800;letter-spacing:.02em;color:#1A1410}
+  .prossimo .orario{font-family:'DM Mono',monospace;font-size:17px;color:#996600;margin-top:5px;font-weight:500}
+  .live-score{margin-top:10px;background:#FEF0E8;border-radius:8px;padding:14px 16px;border-left:4px solid var(--clay2)}
+  .live-score .vs{font-size:26px;font-weight:800;color:#1A1410}
+  .live-score .score{font-family:'DM Mono',monospace;font-size:30px;font-weight:500;color:var(--clay);margin-top:5px}
+  .install-bar{background:#FFF8F3;border:1px solid #E8DDD4;border-radius:10px;margin:10px;padding:14px 16px;display:flex;align-items:center;gap:10px}
+  .install-bar span{flex:1;color:#8A7F74;font-size:15px;line-height:1.5}
+  .install-bar strong{color:#1A1410}
 </style>
 </head>
 <body>
@@ -257,13 +257,11 @@ def git_push():
     if not git:
         return
     try:
-        cmds = [
-            f'"{git}" -C "{DIR}" add Tennis.html Tennis.txt tennis_icon.png',
-            f'"{git}" -C "{DIR}" commit -m "Tennis: aggiorna {ORA_AGG}"',
-            f'"{git}" -C "{DIR}" push',
-        ]
-        for cmd in cmds:
-            subprocess.run(cmd, shell=True, check=True)
+        subprocess.run(f'"{git}" -C "{DIR}" add Tennis.html Tennis.txt tennis_icon.png', shell=True, check=True)
+        result = subprocess.run(f'"{git}" -C "{DIR}" commit -m "Tennis: aggiorna {ORA_AGG}"', shell=True, capture_output=True, text=True)
+        if "nothing to commit" in result.stdout + result.stderr:
+            return  # nessuna modifica, non pushare
+        subprocess.run(f'"{git}" -C "{DIR}" push', shell=True, check=True)
     except subprocess.CalledProcessError:
         pass
 
@@ -273,11 +271,6 @@ def main():
     with open(F_TXT, "w", encoding="utf-8") as f:
         f.write(genera_txt() + "\n")
     git_push()
-    # Apre nel browser solo se lanciato manualmente (non da Lanciatore)
-    import sys
-    if len(sys.argv) > 1 and sys.argv[1] == "--apri":
-        import webbrowser
-        webbrowser.open(f"file:///{F_HTML.replace(os.sep, '/')}")
 
 if __name__ == "__main__":
     main()

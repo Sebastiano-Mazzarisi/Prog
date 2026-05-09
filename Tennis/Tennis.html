@@ -327,7 +327,7 @@
 
 <div class="agg">
   <div id="live-dot" class="dot"></div>
-  <span id="agg-ora">aggiornato alle 22:18 del 09/05/2026</span>
+  <span id="agg-ora">aggiornato alle 22:46 del 09/05/2026</span>
 </div>
 
 <div id="container"></div>
@@ -474,7 +474,7 @@ function carica() {
       const intervallo = isLive ? 5000 : 300000;
 
       document.getElementById("agg-ora").textContent =
-        "aggiornato alle 22:18 del 09/05/2026" + (isLive ? " · refresh 5 sec" : " · refresh 5 min");
+        "aggiornato alle 22:46 del 09/05/2026" + (isLive ? " · refresh 5 sec" : " · refresh 5 min");
 
       timerRefresh = setTimeout(carica, intervallo);
     })

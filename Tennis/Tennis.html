@@ -10,44 +10,44 @@
 <title>🎾 Tennis Roma</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;600;700;800&display=swap');
-  :root{--clay:#C1440E;--clay2:#E8622A;--dark:#111009;--card:#1A1814;--line:#2E2B24;--text:#F0EBE0;--muted:#7A7060;--win:#5DBB7A;--lose:#E05555;--next:#F0C040}
+  :root{--clay:#C1440E;--clay2:#E8622A;--dark:#111009;--card:#1A1814;--line:#2E2B24;--text:#F0EBE0;--muted:#8A8070;--win:#5DBB7A;--lose:#E05555;--next:#F0C040}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--dark);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding-bottom:40px}
-  .header{background:linear-gradient(135deg,var(--clay) 0%,var(--clay2) 60%,#F07840 100%);padding:20px 16px 16px;position:relative;overflow:hidden}
+  body{background:var(--dark);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding-bottom:50px;font-size:16px}
+  .header{background:linear-gradient(135deg,var(--clay) 0%,var(--clay2) 60%,#F07840 100%);padding:24px 18px 18px;position:relative;overflow:hidden}
   .header::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.07)}
-  .header::after{content:'🎾';position:absolute;font-size:80px;right:8px;top:-10px;opacity:0.18;transform:rotate(20deg)}
-  .header h1{font-size:28px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.3)}
-  .header .subtitle{font-size:14px;opacity:.85;margin-top:4px;font-family:'DM Mono',monospace}
-  .header .finale{display:inline-block;margin-top:8px;background:rgba(0,0,0,.25);border-radius:4px;padding:3px 10px;font-size:12px;font-family:'DM Mono',monospace}
-  .agg{background:var(--card);border-bottom:1px solid var(--line);padding:8px 16px;font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:6px}
-  .dot{width:6px;height:6px;border-radius:50%;background:var(--win);animation:pulse 2s infinite}
+  .header::after{content:'🎾';position:absolute;font-size:90px;right:8px;top:-10px;opacity:0.18;transform:rotate(20deg)}
+  .header h1{font-size:34px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+  .header .subtitle{font-size:16px;opacity:.85;margin-top:5px;font-family:'DM Mono',monospace}
+  .header .finale{display:inline-block;margin-top:10px;background:rgba(0,0,0,.25);border-radius:4px;padding:4px 12px;font-size:14px;font-family:'DM Mono',monospace}
+  .agg{background:var(--card);border-bottom:1px solid var(--line);padding:10px 18px;font-size:13px;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:8px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--win);animation:pulse 2s infinite;flex-shrink:0}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-  .section-label{padding:14px 16px 6px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--clay2);font-family:'DM Mono',monospace}
-  .card{margin:0 12px 8px;background:var(--card);border-radius:10px;border:1px solid var(--line);overflow:hidden}
+  .section-label{padding:18px 16px 8px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay2);font-family:'DM Mono',monospace}
+  .card{margin:0 10px 10px;background:var(--card);border-radius:12px;border:1px solid var(--line);overflow:hidden}
   .card.live{border-color:var(--clay2);box-shadow:0 0 0 1px var(--clay2),0 4px 20px rgba(194,68,14,.2)}
-  .card.eliminato{opacity:.45;border-color:#222}
-  .card-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid var(--line)}
-  .nome{font-size:22px;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
-  .badge{font-size:10px;font-weight:700;letter-spacing:.08em;padding:3px 8px;border-radius:20px;text-transform:uppercase;font-family:'DM Mono',monospace}
+  .card.eliminato{opacity:.4;border-color:#222}
+  .card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;border-bottom:1px solid var(--line);gap:8px}
+  .nome{font-size:28px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1}
+  .badge{font-size:12px;font-weight:700;letter-spacing:.05em;padding:5px 10px;border-radius:20px;text-transform:uppercase;font-family:'DM Mono',monospace;white-space:nowrap}
   .badge.live{background:var(--clay);color:#fff;animation:pulse 1.5s infinite}
-  .badge.next{background:rgba(240,192,64,.15);color:var(--next);border:1px solid rgba(240,192,64,.3)}
+  .badge.next{background:rgba(240,192,64,.15);color:var(--next);border:1px solid rgba(240,192,64,.4)}
   .badge.elim{background:rgba(224,85,85,.1);color:var(--lose);border:1px solid rgba(224,85,85,.2)}
   .badge.ok{background:rgba(93,187,122,.1);color:var(--win);border:1px solid rgba(93,187,122,.2)}
-  .card-body{padding:10px 14px 12px}
-  .match-row{display:flex;align-items:baseline;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+  .card-body{padding:12px 16px 14px}
+  .match-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
   .match-row:last-child{border-bottom:none}
-  .match-date{color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;min-width:38px}
-  .match-esito{font-size:16px;min-width:18px}
-  .match-avv{flex:1;font-weight:600;font-size:15px}
-  .match-score{color:var(--muted);font-family:'DM Mono',monospace;font-size:12px}
-  .prossimo{margin-top:8px;background:rgba(240,192,64,.07);border-radius:6px;padding:8px 10px;border-left:3px solid var(--next)}
-  .prossimo .vs{font-size:17px;font-weight:700}
-  .prossimo .orario{font-family:'DM Mono',monospace;font-size:12px;color:var(--next);margin-top:2px}
-  .live-score{margin-top:8px;background:rgba(194,68,14,.1);border-radius:6px;padding:8px 10px;border-left:3px solid var(--clay2)}
-  .live-score .vs{font-size:17px;font-weight:700}
-  .live-score .score{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--clay2);margin-top:2px}
-  .install-bar{background:#1A1814;border:1px solid #2E2B24;border-radius:10px;margin:12px;padding:12px 14px;display:flex;align-items:center;gap:10px}
-  .install-bar span{flex:1;color:#7A7060;font-size:13px;line-height:1.4}
+  .match-date{color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;min-width:44px}
+  .match-esito{font-size:18px;min-width:22px}
+  .match-avv{flex:1;font-weight:700;font-size:18px;letter-spacing:.02em}
+  .match-score{color:var(--muted);font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
+  .prossimo{margin-top:10px;background:rgba(240,192,64,.07);border-radius:8px;padding:12px 14px;border-left:4px solid var(--next)}
+  .prossimo .vs{font-size:22px;font-weight:800;letter-spacing:.02em}
+  .prossimo .orario{font-family:'DM Mono',monospace;font-size:15px;color:var(--next);margin-top:4px}
+  .live-score{margin-top:10px;background:rgba(194,68,14,.1);border-radius:8px;padding:12px 14px;border-left:4px solid var(--clay2)}
+  .live-score .vs{font-size:22px;font-weight:800}
+  .live-score .score{font-family:'DM Mono',monospace;font-size:26px;font-weight:500;color:var(--clay2);margin-top:4px}
+  .install-bar{background:#1A1814;border:1px solid #2E2B24;border-radius:10px;margin:10px;padding:14px 16px;display:flex;align-items:center;gap:10px}
+  .install-bar span{flex:1;color:#8A8070;font-size:15px;line-height:1.5}
   .install-bar strong{color:#F0EBE0}
 </style>
 </head>
@@ -57,7 +57,7 @@
   <div class="subtitle">Roma 2026 — Italiani</div>
   <div class="finale">Finale: 17/05/2026</div>
 </div>
-<div class="agg"><div class="dot"></div><span>aggiornato alle 08:51 del 09/05/2026</span></div>
+<div class="agg"><div class="dot"></div><span>aggiornato alle 08:59 del 09/05/2026</span></div>
 <div class="install-bar" id="ibar">
   <span>📲 <strong>iPhone:</strong> tocca Condividi → "Aggiungi a Home" per l'icona 🎾</span>
   <button onclick="document.getElementById('ibar').style.display='none'"

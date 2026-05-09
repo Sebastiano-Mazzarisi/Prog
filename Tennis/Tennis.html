@@ -150,7 +150,7 @@
     padding:16px 16px 13px;
     border-bottom:1px solid var(--line);
     gap:8px;
-    background:#DDF1FF;
+    background:#BFE3FF;
   }
 
   .nome {
@@ -413,8 +413,7 @@ async function carica() {
     const intervallo = isLive ? 6000 : 60000;
 
     document.getElementById("pagina-refresh").textContent =
-      "Pagina aggiornata: " + oraLocale() +
-      (isLive ? " · prossimo refresh 6 sec" : " · prossimo refresh 60 sec");
+      "Pagina aggiornata: " + oraLocale();
 
     try {
       const rm = await fetch("meta.json?t=" + Date.now(), { cache: "no-store" });

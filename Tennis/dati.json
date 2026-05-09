@@ -1,11 +1,6 @@
 [
-  {"nome":"BELLUCCI","stato":"live",
-   "live":{"avv":"ETCHEVERRY","score":"7-5  2-6  3-2*"},
-   "prossimo":null,
-   "storico":[{"data":"07/05","esito":"W","avv":"BURRUCHAGA","score":"6-4 6-4"}]},
-
   {"nome":"COBOLLI","stato":"live",
-   "live":{"avv":"ATMANE","score":"0-0*"},
+   "live":{"avv":"ATMANE","score":"1-2*"},
    "prossimo":null,
    "storico":[]},
 
@@ -42,6 +37,11 @@
    "live":null,
    "prossimo":{"orario":"da definire","data":"10/05","avv":"PAUL"},
    "storico":[{"data":"08/05","esito":"W","avv":"HANFMANN","score":"6-4 6-4"}]},
+
+  {"nome":"BELLUCCI","stato":"elim","live":null,"prossimo":null,
+   "storico":[
+     {"data":"09/05","esito":"W","avv":"ETCHEVERRY","score":"5-7 6-2 6-3"},
+     {"data":"07/05","esito":"W","avv":"BURRUCHAGA","score":"6-4 6-4"}]},
 
   {"nome":"PAOLINI","stato":"elim","live":null,"prossimo":null,
    "storico":[

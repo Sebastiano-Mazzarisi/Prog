@@ -2,16 +2,10 @@
 Internazionali d'Italia - Roma
 Italiani
 Finale: 17/05/2026
-Dati aggiornati alle ore 22:18 del 09/05/2026
+Dati aggiornati alle ore 22:46 del 09/05/2026
 --------------------------------------------------
 
 ITALIANI ANCORA IN GARA
---------------------------------------------------
-COBOLLI - ATMANE
->>> LIVE  1-2*
---------------------------------------------------
-SINNER - OFNER
-non prima delle 19:00 - 09/05
 --------------------------------------------------
 ARNALDI - JODAR
 da definire - 09/05
@@ -23,10 +17,6 @@ da definire - 09/05
   08/05  V  NAVARRO  6-3 6-3
   06/05  V  KRAUS  6-2 6-4
 --------------------------------------------------
-PELLEGRINO - FILS
-da definire - 09/05
-  07/05  V  NARDI  4-6 6-3 6-3
---------------------------------------------------
 DARDERI - PAUL
 da definire - 10/05
   08/05  V  HANFMANN  6-4 6-4
@@ -35,6 +25,16 @@ MUSETTI - CERUNDOLO
 da definire - 10/05
   08/05  V  MPETSHI PERRICARD  6-4 6-4
 --------------------------------------------------
+COBOLLI - ancora in gara, prossimo incontro da definire
+  09/05  V  TERENCE ATMANE  77-61 -3
+--------------------------------------------------
+PELLEGRINO - ancora in gara, prossimo incontro da definire
+  09/05  V  ARTHUR FILS  4-0
+  07/05  V  NARDI  4-6 6-3 6-3
+--------------------------------------------------
+SINNER - ancora in gara, prossimo incontro da definire
+  09/05  V  SEBASTIAN OFNER  6-3 -4
+--------------------------------------------------
 
 ITALIANI FUORI DAI GIOCHI
 --------------------------------------------------
@@ -42,6 +42,7 @@ BASILETTI
   08/05  X  SVITOLINA  1-6 3-6
 --------------------------------------------------
 BELLUCCI
+  09/05  X  TOMAS MARTIN ETCHEVERRY  7-5 2-6 -6
   09/05  V  ETCHEVERRY  5-7 6-2 6-3
   07/05  V  BURRUCHAGA  6-4 6-4
 --------------------------------------------------

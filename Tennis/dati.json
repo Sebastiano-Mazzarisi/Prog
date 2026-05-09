@@ -41,7 +41,7 @@
         "data": "09/05",
         "esito": "W",
         "avv": "TERENCE ATMANE",
-        "score": "77-61 -3"
+        "score": "7-6 6-3"
       }
     ]
   },
@@ -88,6 +88,26 @@
     ]
   },
   {
+    "nome": "BELLUCCI",
+    "stato": "ok",
+    "live": null,
+    "prossimo": null,
+    "storico": [
+      {
+        "data": "09/05",
+        "esito": "W",
+        "avv": "TOMAS MARTIN ETCHEVERRY",
+        "score": "5-7 6-2 6-3"
+      },
+      {
+        "data": "07/05",
+        "esito": "W",
+        "avv": "BURRUCHAGA",
+        "score": "6-4 6-4"
+      }
+    ]
+  },
+  {
     "nome": "PELLEGRINO",
     "stato": "ok",
     "live": null,
@@ -97,7 +117,7 @@
         "data": "09/05",
         "esito": "W",
         "avv": "ARTHUR FILS",
-        "score": "4-0"
+        "score": "4-0 rit."
       },
       {
         "data": "07/05",
@@ -156,32 +176,6 @@
         "esito": "L",
         "avv": "BUSE",
         "score": "3-6 3-6"
-      }
-    ]
-  },
-  {
-    "nome": "BELLUCCI",
-    "stato": "elim",
-    "live": null,
-    "prossimo": null,
-    "storico": [
-      {
-        "data": "09/05",
-        "esito": "L",
-        "avv": "TOMAS MARTIN ETCHEVERRY",
-        "score": "7-5 2-6 -6"
-      },
-      {
-        "data": "09/05",
-        "esito": "W",
-        "avv": "ETCHEVERRY",
-        "score": "5-7 6-2 6-3"
-      },
-      {
-        "data": "07/05",
-        "esito": "W",
-        "avv": "BURRUCHAGA",
-        "score": "6-4 6-4"
       }
     ]
   },

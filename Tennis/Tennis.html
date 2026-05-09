@@ -57,7 +57,7 @@
   <div class="subtitle">Roma 2026 — Italiani</div>
   <div class="finale">Finale: 17/05/2026</div>
 </div>
-<div class="agg"><div class="dot"></div><span id="agg-ora">aggiornato alle 21:15 del 09/05/2026</span></div>
+<div class="agg"><div class="dot"></div><span id="agg-ora">aggiornato alle 21:42 del 09/05/2026</span></div>
 <div id="container"></div>
 <script>
 function renderCard(g){
@@ -87,22 +87,27 @@ function render(DATA){
   document.getElementById("container").innerHTML=html;
 }
 
+let timerRefresh = null;
+
 function carica(){
+  if(timerRefresh) clearTimeout(timerRefresh);
+
   const url = "dati.json?t=" + Date.now();
-  fetch(url)
+  fetch(url, { cache: "no-store" })
     .then(r => r.json())
     .then(DATA => {
       render(DATA);
       const isLive = DATA.some(g => g.stato === "live");
       const intervallo = isLive ? 5000 : 600000;
-      document.getElementById("agg-ora").textContent = "aggiornato alle 21:15 del 09/05/2026";
-      setTimeout(carica, intervallo);
+      document.getElementById("agg-ora").textContent = "aggiornato alle 21:42 del 09/05/2026";
+      timerRefresh = setTimeout(carica, intervallo);
     })
-    .catch(() => setTimeout(carica, 10000));
+    .catch(() => {
+      timerRefresh = setTimeout(carica, 10000);
+    });
 }
 carica();
 (function(){
-  // ── Pull-to-refresh manuale ───────────────────────────────────────────────
   let startY=0, pulling=false;
   const ind=document.createElement("div");
   ind.style.cssText="position:fixed;top:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:center;font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#C1440E;background:#FFF8F3;border-bottom:1px solid #E0D8D0;transform:translateY(-100%);transition:transform .2s ease;z-index:9999";

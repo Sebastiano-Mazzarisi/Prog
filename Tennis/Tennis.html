@@ -1,4 +1,4 @@
-<!-- Tennis.html generato da Tennis.py - VERSIONE: 2026-05-10-rank-avversari-v9 - generato: 10:19:49 del 10/05/2026 -->
+<!-- Tennis.html generato da Tennis.py - VERSIONE: 2026-05-10-rank-avversari-v9 - generato: 10:20:03 del 10/05/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -55,7 +55,7 @@
     font-size:90px;
     right:8px;
     top:-10px;
-    opacity:0.18;
+    opacity:0.45;
     transform:rotate(20deg);
   }
 
@@ -264,7 +264,6 @@
 </head>
 
 <body>
-<div class="versione-debug">VERSIONE NUOVA ATTIVA: 2026-05-10-rank-avversari-v9</div>
 <div class="header">
   <h1>Internazionali d'Italia</h1>
   <div class="subtitle">Roma 2026 — Italiani</div>
@@ -272,12 +271,7 @@
 </div>
 
 <div class="agg" id="barra-aggiornamento">
-  <div class="agg-top">
-    <div id="live-dot" class="dot"></div>
-    <span id="pagina-refresh">Pagina: avvio...</span>
-  </div>
-  <div id="dati-refresh" style="margin-top:3px">Dati: avvio...</div>
-  <div id="html-version" style="margin-top:2px;font-size:11px;opacity:.65">Versione: 2026-05-10-rank-avversari-v9</div>
+  <span id="dati-refresh">Aggiornamento: avvio...</span>
 </div>
 
 <div id="container"></div>
@@ -313,13 +307,7 @@ function sistemaBarraAggiornamento() {
   if(!barra) return;
 
   barra.id = "barra-aggiornamento";
-  barra.innerHTML =
-    '<div class="agg-top">' +
-    '<div id="live-dot" class="dot"></div>' +
-    '<span id="pagina-refresh">Pagina: avvio...</span>' +
-    '</div>' +
-    '<div id="dati-refresh" style="margin-top:3px">Dati: avvio...</div>' +
-    '<div id="html-version" style="margin-top:2px;font-size:11px;opacity:.65">Versione: 2026-05-10-rank-avversari-v9</div>';
+  barra.innerHTML = '<span id="dati-refresh">Aggiornamento: avvio...</span>';
 }
 
 function dataKey(data) {
@@ -555,16 +543,12 @@ async function carica() {
     const isLive = DATA.some(g => g.stato === "live");
     const intervallo = isLive ? 6000 : 60000;
 
-    document.getElementById("pagina-refresh").textContent =
-      "Pagina aggiornata: " + oraLocale();
-
     try {
       const rm = await fetch("meta.json?t=" + Date.now(), { cache: "no-store" });
       if(rm.ok) {
         const meta = await rm.json();
-        let txt = "Dati aggiornati: " + (meta.aggiornato || "non disponibile");
-        if(meta.fonte) txt += " · " + meta.fonte;
-        document.getElementById("dati-refresh").textContent = txt;
+        document.getElementById("dati-refresh").textContent =
+          "Aggiornamento: " + (meta.aggiornato || "non disponibile");
         if(meta.html_version && meta.html_version !== HTML_VERSION) {
           const base = window.location.href.split("?")[0];
           window.location.replace(base + "?v=" + Date.now());
@@ -576,8 +560,8 @@ async function carica() {
     timerRefresh = setTimeout(carica, intervallo);
 
   } catch(e) {
-    document.getElementById("pagina-refresh").textContent =
-      "Errore refresh pagina: " + oraLocale() + " · ritento tra 10 sec";
+    document.getElementById("dati-refresh").textContent =
+      "Aggiornamento: errore · ritento tra 10 sec";
     timerRefresh = setTimeout(carica, 10000);
   }
 }

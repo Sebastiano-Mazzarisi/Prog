@@ -1,6 +1,6 @@
 {
-  "aggiornato": "23:14:55 del 10/05/2026",
-  "fonte": "dati.json + Programma.txt + Live.txt manuale + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi",
+  "aggiornato": "23:35:10 del 10/05/2026",
+  "fonte": "ESPN scoreboard automatico",
   "italiani_aggiornati": [
     "BELLUCCI",
     "COBOLLI",
@@ -9,12 +9,12 @@
   "italiani_integrati": [
     "MUSETTI"
   ],
-  "html_version": "2026-05-10-risultati-layout-v45",
+  "html_version": "2026-05-10-auto-fonti-v48",
   "storico_non_giocato_rimosso": [
     "ARNALDI - JODAR",
     "COCCIARETTO - SWIATEK"
   ],
-  "pubblicato": "23:34:33 del 10/05/2026",
+  "pubblicato": "23:35:10 del 10/05/2026",
   "live_aggiornato": "20:50:10 del 10/05/2026",
   "live_controllato": "23:14:55 del 10/05/2026",
   "live_diagnostica": {
@@ -38,5 +38,10 @@
   "programma_non_trovati": [],
   "prossimi_scaduti": [],
   "live_fonte": "Live.txt manuale",
-  "live_applicati": []
+  "live_applicati": [],
+  "automatico_aggiornato": "23:35:10 del 10/05/2026",
+  "automatico_eventi_letti": 0,
+  "automatico_giocatori_aggiornati": [],
+  "automatico_fonti": [],
+  "prossimo_controllo_sec": 60
 }

@@ -1,0 +1,10 @@
+# Programma.txt
+# Formato:
+# NOME;DATA;ORARIO;AVVERSARIO;RISULTATO;ESITO
+#
+# RISULTATO vuoto = prossimo incontro.
+# RISULTATO compilato = partita giocata, viene messa nello storico.
+# ESITO: W oppure L.
+
+MUSETTI;10/05;15:00;CERUNDOLO;7-6(7) 6-4;W
+SINNER;11/05;15:00;POPYRIN;;

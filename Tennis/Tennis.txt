@@ -9,11 +9,11 @@ Fonte dati: ESPN + integrazione prossimi + integrazione prossimi
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
 ARNALDI (ATP n.61) - JODAR (ATP n.165)
->>> LIVE  15-55
+>>> LIVE  12-35
   08/05  V  DE MINAUR (ATP n.6)  4-6 7-6 6-4
 --------------------------------------------------
 COCCIARETTO (WTA n.81) - SWIATEK (WTA n.4)
->>> LIVE  13-05
+>>> LIVE  13-00
   08/05  V  NAVARRO (WTA n.15)  6-3 6-3
 --------------------------------------------------
 DARDERI (ATP n.20) - PAUL (ATP n.20)

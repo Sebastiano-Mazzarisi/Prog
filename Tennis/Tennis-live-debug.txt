@@ -1,5 +1,5 @@
 Tennis.py 2026-05-10-auto-fonti-v48
-Avvio controllo: 23:35:27 del 10/05/2026
+Avvio controllo: 23:36:40 del 10/05/2026
 ESPN ATP 20260509: 0 eventi letti
 ESPN WTA 20260509: 0 eventi letti
 ESPN ATP 20260510: 0 eventi letti

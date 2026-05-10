@@ -1,4 +1,4 @@
-<!-- Tennis.html generato da Tennis.py - VERSIONE: 2026-05-10-risultati-layout-v45 - generato: 23:44:16 del 10/05/2026 -->
+<!-- Tennis.html generato da Tennis.py - VERSIONE: 2026-05-10-live-fix-v43 - generato: 23:44:18 del 10/05/2026 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -169,19 +169,10 @@
 
   .card-head-row {
     display:flex;
-    align-items:flex-end;
+    align-items:center;
     justify-content:space-between;
     width:100%;
     gap:8px;
-  }
-
-  .quando-wrap {
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    justify-content:flex-end;
-    gap:4px;
-    min-width:72px;
   }
 
   .tennista-foto {
@@ -341,9 +332,9 @@
 <div id="container"></div>
 
 <script>
-const DATA_EMBEDDED = [{"nome": "DARDERI", "stato": "ok", "live": null, "prossimo": {"orario": "16:00", "data": "10/05", "avv": "PAUL"}, "storico": [{"data": "08/05", "esito": "W", "avv": "HANFMANN", "score": "6-4 6-4"}], "verifica": {"data": "10/05", "orario": "16:00", "avv": "PAUL", "motivo": "partita programmata ormai passata, risultato da verificare"}}, {"nome": "COCCIARETTO", "stato": "ok", "live": null, "prossimo": {"orario": "19:00", "data": "10/05", "avv": "SWIATEK"}, "storico": [{"data": "08/05", "esito": "W", "avv": "NAVARRO", "score": "6-3 6-3"}], "verifica": {"data": "10/05", "orario": "19:00", "avv": "SWIATEK", "motivo": "partita programmata ormai passata, risultato da verificare"}}, {"nome": "ARNALDI", "stato": "ok", "live": null, "prossimo": {"orario": "20:30", "data": "10/05", "avv": "JODAR"}, "storico": [{"data": "08/05", "esito": "W", "avv": "DE MINAUR", "score": "4-6 7-6 6-4"}], "verifica": {"data": "10/05", "orario": "20:30", "avv": "JODAR", "motivo": "partita programmata ormai passata, risultato da verificare"}}, {"nome": "SINNER", "stato": "ok", "live": null, "prossimo": {"orario": "15:00", "data": "11/05", "avv": "POPYRIN"}, "storico": [{"data": "09/05", "esito": "W", "avv": "OFNER", "score": "6-3 6-4"}]}, {"nome": "COBOLLI", "stato": "ok", "live": null, "prossimo": {"orario": "19:00", "data": "11/05", "avv": "TIRANTE"}, "storico": [{"data": "09/05", "esito": "W", "avv": "TERENCE ATMANE", "score": "7-6 6-3"}]}, {"nome": "BELLUCCI", "stato": "ok", "live": null, "prossimo": {"orario": "da definire", "data": "11/05", "avv": "LANDALUCE"}, "storico": [{"data": "09/05", "esito": "W", "avv": "TOMAS MARTIN ETCHEVERRY", "score": "5-7 6-2 6-3"}, {"data": "07/05", "esito": "W", "avv": "BURRUCHAGA", "score": "6-4 6-4"}]}, {"nome": "PELLEGRINO", "stato": "ok", "live": null, "prossimo": {"orario": "da definire", "data": "11/05", "avv": "TIAFOE"}, "storico": [{"data": "09/05", "esito": "W", "avv": "ARTHUR FILS", "score": "4-0 rit."}, {"data": "07/05", "esito": "W", "avv": "NARDI", "score": "4-6 6-3 6-3"}]}, {"nome": "MUSETTI", "stato": "ok", "live": null, "prossimo": null, "storico": [{"data": "10/05", "esito": "W", "avv": "CERUNDOLO", "score": "7-6(7) 6-4"}, {"data": "08/05", "esito": "W", "avv": "MPETSHI PERRICARD", "score": "6-4 6-4"}], "ultimo_motivo_live_spento": "non confermato dalla fonte live"}, {"nome": "BASILETTI", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "08/05", "esito": "L", "avv": "SVITOLINA", "score": "1-6 3-6"}]}, {"nome": "BERRETTINI", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "07/05", "esito": "L", "avv": "POPYRIN", "score": "2-6 3-6"}]}, {"nome": "GRANT", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "08/05", "esito": "L", "avv": "BARTUNKOVA", "score": "6-4 3-6 4-6"}]}, {"nome": "PAOLINI", "stato": "elim", "live": null, "prossimo": {"orario": "da definire", "data": "11/05", "avv": "PAGANETTI"}, "storico": [{"data": "09/05", "esito": "L", "avv": "MERTENS", "score": "6-4 6-7 3-6"}, {"data": "07/05", "esito": "W", "avv": "JEANJEAN", "score": "6-7 6-2 6-4"}]}, {"nome": "SONEGO", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "07/05", "esito": "L", "avv": "BUSE", "score": "3-6 3-6"}]}];
-const HTML_VERSION = "2026-05-10-risultati-layout-v45";
-const RANKING_EMBEDDED = {};
+const DATA_EMBEDDED = [{"nome": "MUSETTI", "stato": "ok", "live": null, "prossimo": {"orario": "15:00", "data": "10/05", "avv": "CERUNDOLO", "ranking_avv": {"tour": "ATP", "pos": 21, "punti": "2035", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "10/05", "esito": "W", "avv": "CERUNDOLO", "score": "7-6(7) 6-4", "ranking_avv": {"tour": "ATP", "pos": 21, "punti": "2035", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"data": "08/05", "esito": "W", "avv": "MPETSHI PERRICARD", "score": "6-4 6-4", "ranking_avv": {"tour": "ATP", "pos": 62, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "ranking noti"}}], "ultimo_motivo_live_spento": "non confermato dalla fonte live", "tour": "ATP", "ranking": {"tour": "ATP", "pos": 10, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}}, {"nome": "DARDERI", "stato": "ok", "live": null, "prossimo": {"orario": "16:00", "data": "10/05", "avv": "PAUL", "ranking_avv": {"tour": "ATP", "pos": 20, "punti": "2050", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "08/05", "esito": "W", "avv": "HANFMANN", "score": "6-4 6-4", "ranking_avv": {"tour": "ATP", "pos": 102, "punti": "618", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "verifica": {"data": "10/05", "orario": "16:00", "avv": "PAUL", "motivo": "partita programmata ormai passata, risultato da verificare"}, "tour": "ATP", "ranking": {"tour": "ATP", "pos": 20, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}}, {"nome": "COCCIARETTO", "stato": "ok", "live": null, "prossimo": {"orario": "19:00", "data": "10/05", "avv": "SWIATEK", "ranking_avv": {"tour": "WTA", "pos": 4, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}}, "storico": [{"data": "08/05", "esito": "W", "avv": "NAVARRO", "score": "6-3 6-3", "ranking_avv": {"tour": "WTA", "pos": 15, "punti": "2515", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "verifica": {"data": "10/05", "orario": "19:00", "avv": "SWIATEK", "motivo": "partita programmata ormai passata, risultato da verificare"}, "tour": "WTA", "ranking": {"tour": "WTA", "pos": 81, "punti": "837", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"nome": "ARNALDI", "stato": "ok", "live": null, "prossimo": {"orario": "20:30", "data": "10/05", "avv": "JODAR", "ranking_avv": {"tour": "ATP", "pos": 165, "punti": "349", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "08/05", "esito": "W", "avv": "DE MINAUR", "score": "4-6 7-6 6-4", "ranking_avv": {"tour": "ATP", "pos": 6, "punti": "4080", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "verifica": {"data": "10/05", "orario": "20:30", "avv": "JODAR", "motivo": "partita programmata ormai passata, risultato da verificare"}, "tour": "ATP", "ranking": {"tour": "ATP", "pos": 61, "punti": "858", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"nome": "SINNER", "stato": "ok", "live": null, "prossimo": {"orario": "15:00", "data": "11/05", "avv": "POPYRIN", "ranking_avv": {"tour": "ATP", "pos": 50, "punti": "1000", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "W", "avv": "OFNER", "score": "6-3 6-4", "ranking_avv": {"tour": "ATP", "pos": 131, "punti": "463", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "ATP", "ranking": {"tour": "ATP", "pos": 1, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}}, {"nome": "COBOLLI", "stato": "ok", "live": null, "prossimo": {"orario": "19:00", "data": "11/05", "avv": "TIRANTE", "ranking_avv": {"tour": "ATP", "pos": 103, "punti": "605", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "W", "avv": "TERENCE ATMANE", "score": "7-6 6-3", "ranking_avv": {"tour": "ATP", "pos": 62, "punti": "855", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "ATP", "ranking": {"tour": "ATP", "pos": 12, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}}, {"nome": "BELLUCCI", "stato": "ok", "live": null, "prossimo": {"orario": "da definire", "data": "11/05", "avv": "LANDALUCE", "ranking_avv": {"tour": "ATP", "pos": 146, "punti": "420", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "W", "avv": "TOMAS MARTIN ETCHEVERRY", "score": "5-7 6-2 6-3", "ranking_avv": {"tour": "ATP", "pos": 57, "punti": "895", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"data": "07/05", "esito": "W", "avv": "BURRUCHAGA", "score": "6-4 6-4", "ranking_avv": {"tour": "ATP", "pos": 104, "punti": "604", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "ATP", "ranking": {"tour": "ATP", "pos": 73, "punti": "758", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"nome": "PELLEGRINO", "stato": "ok", "live": null, "prossimo": {"orario": "da definire", "data": "11/05", "avv": "TIAFOE", "ranking_avv": {"tour": "ATP", "pos": 30, "punti": "1485", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "W", "avv": "ARTHUR FILS", "score": "4-0 rit.", "ranking_avv": {"tour": "ATP", "pos": 41, "punti": "1210", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"data": "07/05", "esito": "W", "avv": "NARDI", "score": "4-6 6-3 6-3", "ranking_avv": {"tour": "ATP", "pos": 105, "punti": "599", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "ATP", "ranking": {"tour": "ATP", "pos": 139, "punti": "438", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"nome": "BASILETTI", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "08/05", "esito": "L", "avv": "SVITOLINA", "score": "1-6 3-6", "ranking_avv": {"tour": "WTA", "pos": 13, "punti": "2606", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "WTA", "ranking": {"tour": "WTA", "pos": 496, "punti": "106", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"nome": "BERRETTINI", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "07/05", "esito": "L", "avv": "POPYRIN", "score": "2-6 3-6", "ranking_avv": {"tour": "ATP", "pos": 50, "punti": "1000", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "ATP", "ranking": {"tour": "ATP", "pos": 55, "punti": "945", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"nome": "GRANT", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "08/05", "esito": "L", "avv": "BARTUNKOVA", "score": "6-4 3-6 4-6", "ranking_avv": {"tour": "WTA", "pos": 126, "punti": "582", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "WTA", "ranking": {"tour": "WTA", "pos": 234, "punti": "309", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"nome": "PAOLINI", "stato": "elim", "live": null, "prossimo": {"orario": "da definire", "data": "11/05", "avv": "PAGANETTI", "ranking_avv": {"tour": "WTA", "pos": 413, "punti": "144", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "L", "avv": "MERTENS", "score": "6-4 6-7 3-6", "ranking_avv": {"tour": "WTA", "pos": 19, "punti": "1969", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"data": "07/05", "esito": "W", "avv": "JEANJEAN", "score": "6-7 6-2 6-4", "ranking_avv": {"tour": "WTA", "pos": 102, "punti": "760", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "WTA", "ranking": {"tour": "WTA", "pos": 8, "punti": "4236", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"nome": "SONEGO", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "07/05", "esito": "L", "avv": "BUSE", "score": "3-6 3-6", "ranking_avv": {"tour": "ATP", "pos": 100, "punti": "627", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "tour": "ATP", "ranking": {"tour": "ATP", "pos": 39, "punti": "1240", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}];
+const HTML_VERSION = "2026-05-10-live-fix-v43";
+const RANKING_EMBEDDED = {"ATP|ARNALDI": {"tour": "ATP", "pos": 61, "punti": "858", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|JODAR": {"tour": "ATP", "pos": 165, "punti": "349", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|DE MINAUR": {"tour": "ATP", "pos": 6, "punti": "4080", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|BELLUCCI": {"tour": "ATP", "pos": 73, "punti": "758", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|LANDALUCE": {"tour": "ATP", "pos": 146, "punti": "420", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|TOMAS MARTIN ETCHEVERRY": {"tour": "ATP", "pos": 57, "punti": "895", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|BURRUCHAGA": {"tour": "ATP", "pos": 104, "punti": "604", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|COBOLLI": {"tour": "ATP", "pos": 12, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "ATP|TIRANTE": {"tour": "ATP", "pos": 103, "punti": "605", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|TERENCE ATMANE": {"tour": "ATP", "pos": 62, "punti": "855", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|COCCIARETTO": {"tour": "WTA", "pos": 81, "punti": "837", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|SWIATEK": {"tour": "WTA", "pos": 4, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "WTA|NAVARRO": {"tour": "WTA", "pos": 15, "punti": "2515", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|DARDERI": {"tour": "ATP", "pos": 20, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "ATP|PAUL": {"tour": "ATP", "pos": 20, "punti": "2050", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|HANFMANN": {"tour": "ATP", "pos": 102, "punti": "618", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|MUSETTI": {"tour": "ATP", "pos": 10, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "ATP|CERUNDOLO": {"tour": "ATP", "pos": 21, "punti": "2035", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|PELLEGRINO": {"tour": "ATP", "pos": 139, "punti": "438", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|TIAFOE": {"tour": "ATP", "pos": 30, "punti": "1485", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|ARTHUR FILS": {"tour": "ATP", "pos": 41, "punti": "1210", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|NARDI": {"tour": "ATP", "pos": 105, "punti": "599", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|SINNER": {"tour": "ATP", "pos": 1, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "ATP|POPYRIN": {"tour": "ATP", "pos": 50, "punti": "1000", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|OFNER": {"tour": "ATP", "pos": 131, "punti": "463", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|BASILETTI": {"tour": "WTA", "pos": 496, "punti": "106", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|SVITOLINA": {"tour": "WTA", "pos": 13, "punti": "2606", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|BERRETTINI": {"tour": "ATP", "pos": 55, "punti": "945", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|GRANT": {"tour": "WTA", "pos": 234, "punti": "309", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|BARTUNKOVA": {"tour": "WTA", "pos": 126, "punti": "582", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|PAOLINI": {"tour": "WTA", "pos": 8, "punti": "4236", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|PAGANETTI": {"tour": "WTA", "pos": 413, "punti": "144", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|MERTENS": {"tour": "WTA", "pos": 19, "punti": "1969", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|JEANJEAN": {"tour": "WTA", "pos": 102, "punti": "760", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|SONEGO": {"tour": "ATP", "pos": 39, "punti": "1240", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|BUSE": {"tour": "ATP", "pos": 100, "punti": "627", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}};
 const NOMI_PROPRI = {"SINNER": "Jannik", "MUSETTI": "Lorenzo", "COBOLLI": "Flavio", "ARNALDI": "Matteo", "DARDERI": "Luciano", "BELLUCCI": "Mattia", "PELLEGRINO": "Andrea", "BERRETTINI": "Matteo", "SONEGO": "Lorenzo", "PAOLINI": "Jasmine", "COCCIARETTO": "Elisabetta", "GRANT": "Lucrezia", "BASILETTI": "Lisa"};
 let RANKING_MAP = Object.assign({}, RANKING_EMBEDDED);
 let timerRefresh = null;
@@ -441,6 +432,10 @@ function esc(s) {
 }
 
 function rankingHtml(g) {
+  const r = g.ranking || null;
+  const tour = (g.tour || (r && r.tour) || "").trim();
+  if(r && r.pos) return '<span class="ranking">' + esc(r.tour || tour) + ' n.' + esc(r.pos) + '</span>';
+  if(tour) return '<span class="ranking">' + esc(tour) + ' n.d.</span>';
   return "";
 }
 
@@ -470,11 +465,24 @@ function rankingDaMappa(nome, tour) {
 }
 
 function rankingAvvHtml(m, tour) {
+  let r = (m && m.ranking_avv) ? m.ranking_avv : null;
+  if((!r || !r.pos) && m && m.avv) r = rankingDaMappa(m.avv, tour);
+  if(r && r.pos) return '<span class="avv-ranking">' + esc(r.tour || tour || "") + ' n.' + esc(r.pos) + '</span>';
+  if(m && m.avv && tour) return '<span class="avv-ranking">' + esc(tour) + ' n.d.</span>';
   return "";
 }
 
 function applicaCorrezioniClient(DATA) {
-  return DATA || [];
+  // Ultima rete di sicurezza: anche se dati.json contiene una cache vecchia,
+  // il browser corregge i valori noti prima di disegnare la pagina.
+  (DATA || []).forEach(g => {
+    const nome = normalizzaNome(g.nome);
+    if(nome === "SINNER") {
+      g.tour = "ATP";
+      g.ranking = { tour: "ATP", pos: 1, punti: "", fonte: "correzione client" };
+    }
+  });
+  return DATA;
 }
 
 function renderCard(g) {
@@ -540,20 +548,24 @@ function renderCard(g) {
     ? '<span class="nome-primo">' + esc(nomeCompleto) + '</span><span class="nome">' + esc(g.nome) + '</span>'
     : '<span class="nome">' + esc(g.nome) + '</span>';
 
-  // Riga unica: nome a sinistra; giorno e orario allineati a destra, uno sotto l'altro.
+  // Riga 1: nome + cognome a sinistra, badge data a destra
+  const riga1 =
+    '<div class="card-head-row">' +
+    '<div class="nome-wrap">' + nomeHtml + '</div>' +
+    badge +
+    '</div>';
+
+  // Riga 2: ranking a sinistra, orario a destra
   const orarioTesto = (g.prossimo && g.prossimo.orario && g.prossimo.orario !== "da definire")
     ? g.prossimo.orario : "";
   const orarioHtml = orarioTesto
     ? '<span class="orario-ovale">' + esc(orarioTesto) + '</span>'
     : "";
-  const quandoHtml = '<div class="quando-wrap">' + badge + orarioHtml + '</div>';
-  const riga1 =
+  const riga2 =
     '<div class="card-head-row">' +
-    '<div class="nome-wrap">' + nomeHtml + '</div>' +
-    quandoHtml +
+    rankingHtml(g) +
+    orarioHtml +
     '</div>';
-
-  const riga2 = '';
 
   return '<div class="card' + (isLive ? ' live' : '') + (isElim ? ' eliminato' : '') + '">' +
          '<div class="card-head">' +
@@ -629,6 +641,11 @@ async function carica() {
       return 0;
     });
 
+    try {
+      const rr = await fetch("ranking_cache.json?t=" + Date.now(), { cache: "no-store" });
+      if(rr.ok) aggiornaRankingMap(await rr.json());
+    } catch(e) {}
+
     sistemaBarraAggiornamento();
     render(DATA);
 
@@ -643,13 +660,14 @@ async function carica() {
     document.documentElement.setAttribute("data-refresh", String(Date.now()));
 
     const isLive = DATA.some(g => g.stato === "live");
-    const intervallo = isLive ? 6000 : 300000;
+    const haPartitaOggi = DATA.some(g => g.stato !== "elim" && g.prossimo && dataLabel(g.prossimo.data) === "oggi");
+    const intervallo = isLive ? 6000 : (haPartitaOggi ? 30000 : 60000);
 
     try {
       const rm = await fetch("meta.json?t=" + Date.now(), { cache: "no-store" });
       if(rm.ok) {
         const meta = await rm.json();
-        const orario = (meta.pubblicato || meta.aggiornato || "");
+        const orario = (meta.pubblicato || meta.ranking_aggiornato || meta.aggiornato || "");
         const orarioBreve = orario.replace(/^(\d{2}:\d{2}):\d{2}/, "$1");
         document.getElementById("dati-refresh").textContent =
           "Aggiornamento: " + (orarioBreve || "non disponibile") + " (v." + HTML_VERSION.split("-v").pop() + ")";

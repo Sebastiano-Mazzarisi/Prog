@@ -64,7 +64,13 @@
         "ranking_avv": null
       }
     ],
-    "ranking": null,
+    "ranking": {
+      "tour": "ATP",
+      "pos": 15,
+      "punti": "",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "ranking noti"
+    },
     "tour": "ATP"
   },
   {

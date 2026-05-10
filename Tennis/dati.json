@@ -6,14 +6,28 @@
     "prossimo": {
       "orario": "da definire",
       "data": "11/05",
-      "avv": "POPYRIN"
+      "avv": "POPYRIN",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 50,
+        "punti": "1000",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
     },
     "storico": [
       {
         "data": "09/05",
         "esito": "W",
         "avv": "OFNER",
-        "score": "6-3 6-4"
+        "score": "6-3 6-4",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 131,
+          "punti": "463",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -22,7 +36,8 @@
       "punti": "11500",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "ATP"
   },
   {
     "nome": "MUSETTI",
@@ -31,17 +46,26 @@
     "prossimo": {
       "orario": "da definire",
       "data": "10/05",
-      "avv": "CERUNDOLO"
+      "avv": "CERUNDOLO",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 21,
+        "punti": "2035",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
     },
     "storico": [
       {
         "data": "08/05",
         "esito": "W",
         "avv": "MPETSHI PERRICARD",
-        "score": "6-4 6-4"
+        "score": "6-4 6-4",
+        "ranking_avv": null
       }
     ],
-    "ranking": null
+    "ranking": null,
+    "tour": "ATP"
   },
   {
     "nome": "COBOLLI",
@@ -50,14 +74,28 @@
     "prossimo": {
       "orario": "da definire",
       "data": "da definire",
-      "avv": "TIRANTE"
+      "avv": "TIRANTE",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 103,
+        "punti": "605",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
     },
     "storico": [
       {
         "data": "09/05",
         "esito": "W",
         "avv": "TERENCE ATMANE",
-        "score": "7-6 6-3"
+        "score": "7-6 6-3",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 62,
+          "punti": "855",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -66,7 +104,8 @@
       "punti": "1955",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "ATP"
   },
   {
     "nome": "ARNALDI",
@@ -75,20 +114,41 @@
     "prossimo": {
       "orario": "20:30",
       "data": "10/05",
-      "avv": "JODAR"
+      "avv": "JODAR",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 165,
+        "punti": "349",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
     },
     "storico": [
       {
         "data": "09/05",
         "esito": "W",
         "avv": "JODAR",
-        "score": "da verificare"
+        "score": "da verificare",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 165,
+          "punti": "349",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       },
       {
         "data": "08/05",
         "esito": "W",
         "avv": "DE MINAUR",
-        "score": "4-6 7-6 6-4"
+        "score": "4-6 7-6 6-4",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 6,
+          "punti": "4080",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -97,7 +157,8 @@
       "punti": "858",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "ATP"
   },
   {
     "nome": "DARDERI",
@@ -106,14 +167,28 @@
     "prossimo": {
       "orario": "da definire",
       "data": "10/05",
-      "avv": "PAUL"
+      "avv": "PAUL",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 20,
+        "punti": "2050",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
     },
     "storico": [
       {
         "data": "08/05",
         "esito": "W",
         "avv": "HANFMANN",
-        "score": "6-4 6-4"
+        "score": "6-4 6-4",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 102,
+          "punti": "618",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -122,7 +197,8 @@
       "punti": "1579",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "ATP"
   },
   {
     "nome": "BELLUCCI",
@@ -131,20 +207,41 @@
     "prossimo": {
       "orario": "da definire",
       "data": "da definire",
-      "avv": "LANDALUCE"
+      "avv": "LANDALUCE",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 146,
+        "punti": "420",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
     },
     "storico": [
       {
         "data": "09/05",
         "esito": "W",
         "avv": "TOMAS MARTIN ETCHEVERRY",
-        "score": "5-7 6-2 6-3"
+        "score": "5-7 6-2 6-3",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 57,
+          "punti": "895",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       },
       {
         "data": "07/05",
         "esito": "W",
         "avv": "BURRUCHAGA",
-        "score": "6-4 6-4"
+        "score": "6-4 6-4",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 104,
+          "punti": "604",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -153,7 +250,8 @@
       "punti": "758",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "ATP"
   },
   {
     "nome": "PELLEGRINO",
@@ -162,20 +260,41 @@
     "prossimo": {
       "orario": "da definire",
       "data": "da definire",
-      "avv": "TIAFOE"
+      "avv": "TIAFOE",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 30,
+        "punti": "1485",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
     },
     "storico": [
       {
         "data": "09/05",
         "esito": "W",
         "avv": "ARTHUR FILS",
-        "score": "4-0 rit."
+        "score": "4-0 rit.",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 41,
+          "punti": "1210",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       },
       {
         "data": "07/05",
         "esito": "W",
         "avv": "NARDI",
-        "score": "4-6 6-3 6-3"
+        "score": "4-6 6-3 6-3",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 105,
+          "punti": "599",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -184,7 +303,8 @@
       "punti": "438",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "ATP"
   },
   {
     "nome": "COCCIARETTO",
@@ -193,20 +313,41 @@
     "prossimo": {
       "orario": "19:00",
       "data": "10/05",
-      "avv": "SWIATEK"
+      "avv": "SWIATEK",
+      "ranking_avv": {
+        "tour": "WTA",
+        "pos": 2,
+        "punti": "8178",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
     },
     "storico": [
       {
         "data": "09/05",
         "esito": "?",
         "avv": "SWIATEK",
-        "score": "da verificare"
+        "score": "da verificare",
+        "ranking_avv": {
+          "tour": "WTA",
+          "pos": 2,
+          "punti": "8178",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       },
       {
         "data": "08/05",
         "esito": "W",
         "avv": "NAVARRO",
-        "score": "6-3 6-3"
+        "score": "6-3 6-3",
+        "ranking_avv": {
+          "tour": "WTA",
+          "pos": 15,
+          "punti": "2515",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -215,7 +356,8 @@
       "punti": "837",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "WTA"
   },
   {
     "nome": "BERRETTINI",
@@ -227,7 +369,14 @@
         "data": "07/05",
         "esito": "L",
         "avv": "POPYRIN",
-        "score": "2-6 3-6"
+        "score": "2-6 3-6",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 50,
+          "punti": "1000",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -236,7 +385,8 @@
       "punti": "945",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "ATP"
   },
   {
     "nome": "SONEGO",
@@ -245,14 +395,22 @@
     "prossimo": {
       "orario": "da definire",
       "data": "10/05",
-      "avv": "PUETZ"
+      "avv": "PUETZ",
+      "ranking_avv": null
     },
     "storico": [
       {
         "data": "07/05",
         "esito": "L",
         "avv": "BUSE",
-        "score": "3-6 3-6"
+        "score": "3-6 3-6",
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 100,
+          "punti": "627",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -261,7 +419,8 @@
       "punti": "1240",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "ATP"
   },
   {
     "nome": "PAOLINI",
@@ -273,13 +432,27 @@
         "data": "09/05",
         "esito": "L",
         "avv": "MERTENS",
-        "score": "6-4 6-7 3-6"
+        "score": "6-4 6-7 3-6",
+        "ranking_avv": {
+          "tour": "WTA",
+          "pos": 19,
+          "punti": "1969",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       },
       {
         "data": "07/05",
         "esito": "W",
         "avv": "JEANJEAN",
-        "score": "6-7 6-2 6-4"
+        "score": "6-7 6-2 6-4",
+        "ranking_avv": {
+          "tour": "WTA",
+          "pos": 102,
+          "punti": "760",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -288,7 +461,8 @@
       "punti": "4236",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "WTA"
   },
   {
     "nome": "GRANT",
@@ -300,7 +474,14 @@
         "data": "08/05",
         "esito": "L",
         "avv": "BARTUNKOVA",
-        "score": "6-4 3-6 4-6"
+        "score": "6-4 3-6 4-6",
+        "ranking_avv": {
+          "tour": "WTA",
+          "pos": 126,
+          "punti": "582",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -309,7 +490,8 @@
       "punti": "309",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "WTA"
   },
   {
     "nome": "BASILETTI",
@@ -321,7 +503,14 @@
         "data": "08/05",
         "esito": "L",
         "avv": "SVITOLINA",
-        "score": "1-6 3-6"
+        "score": "1-6 3-6",
+        "ranking_avv": {
+          "tour": "WTA",
+          "pos": 13,
+          "punti": "2606",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        }
       }
     ],
     "ranking": {
@@ -330,6 +519,7 @@
       "punti": "106",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    }
+    },
+    "tour": "WTA"
   }
 ]

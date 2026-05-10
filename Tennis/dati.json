@@ -41,19 +41,8 @@
   },
   {
     "nome": "MUSETTI",
-    "stato": "live",
-    "live": {
-      "avv": "CERUNDOLO",
-      "score": "2-1",
-      "data": "10/05",
-      "ranking_avv": {
-        "tour": "ATP",
-        "pos": 21,
-        "punti": "2035",
-        "aggiornato": "08:45:57 del 10/05/2026",
-        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-      }
-    },
+    "stato": "ok",
+    "live": null,
     "prossimo": {
       "orario": "15:00",
       "data": "10/05",
@@ -88,7 +77,8 @@
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "correzione manuale"
     },
-    "tour": "ATP"
+    "tour": "ATP",
+    "ultimo_motivo_live_spento": "non confermato dalla fonte live"
   },
   {
     "nome": "COBOLLI",

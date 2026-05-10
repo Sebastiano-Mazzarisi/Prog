@@ -2,45 +2,39 @@
 Internazionali d'Italia - Roma
 Italiani
 Finale: 17/05/2026
-Dati aggiornati: 23:35:10 del 10/05/2026
-Fonte dati: ESPN scoreboard automatico + integrazione prossimi
+Aggiornato: 23:35:34 del 10/05/2026
+Versione: 2026-05-10-auto-fonti-v48
+Fonte automatica: ESPN scoreboard
 --------------------------------------------------
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
-DARDERI - PAUL
-16:00 - oggi
-  08/05  V  HANFMANN  6-4 6-4
---------------------------------------------------
-COCCIARETTO - SWIATEK
-19:00 - oggi
-  08/05  V  NAVARRO  6-3 6-3
---------------------------------------------------
-ARNALDI - JODAR
-20:30 - oggi
+ARNALDI - prossimo incontro da definire
   08/05  V  DE MINAUR  4-6 7-6 6-4
 --------------------------------------------------
-SINNER - POPYRIN
-da definire - domani
-  09/05  V  OFNER  6-3 6-4
---------------------------------------------------
-BELLUCCI - LANDALUCE
-da definire - da definire
+BELLUCCI - prossimo incontro da definire
   09/05  V  TOMAS MARTIN ETCHEVERRY  5-7 6-2 6-3
   07/05  V  BURRUCHAGA  6-4 6-4
 --------------------------------------------------
-COBOLLI - TIRANTE
-da definire - da definire
+COBOLLI - prossimo incontro da definire
   09/05  V  TERENCE ATMANE  7-6 6-3
 --------------------------------------------------
-MUSETTI - ancora in gara, prossimo incontro da definire
+COCCIARETTO - prossimo incontro da definire
+  08/05  V  NAVARRO  6-3 6-3
+--------------------------------------------------
+DARDERI - prossimo incontro da definire
+  08/05  V  HANFMANN  6-4 6-4
+--------------------------------------------------
+MUSETTI - prossimo incontro da definire
   oggi  V  CERUNDOLO  7-6(7) 6-4
   08/05  V  MPETSHI PERRICARD  6-4 6-4
 --------------------------------------------------
-PELLEGRINO - TIAFOE
-da definire - da definire
+PELLEGRINO - prossimo incontro da definire
   09/05  V  ARTHUR FILS  4-0 rit.
   07/05  V  NARDI  4-6 6-3 6-3
+--------------------------------------------------
+SINNER - prossimo incontro da definire
+  09/05  V  OFNER  6-3 6-4
 --------------------------------------------------
 
 ITALIANI FUORI DAI GIOCHI

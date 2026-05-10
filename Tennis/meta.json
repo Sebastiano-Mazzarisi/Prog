@@ -9,12 +9,12 @@
   "italiani_integrati": [
     "MUSETTI"
   ],
-  "html_version": "2026-05-10-live-fix-v43",
+  "html_version": "2026-05-10-risultati-layout-v45",
   "storico_non_giocato_rimosso": [
     "ARNALDI - JODAR",
     "COCCIARETTO - SWIATEK"
   ],
-  "pubblicato": "22:27:12 del 10/05/2026",
+  "pubblicato": "22:27:36 del 10/05/2026",
   "live_aggiornato": "20:50:10 del 10/05/2026",
   "live_controllato": "22:27:12 del 10/05/2026",
   "live_diagnostica": {
@@ -28,43 +28,5 @@
   "classifiche_atp_wta": "disabilitate",
   "risultati_finali_integrati": [
     "MUSETTI - prossimo rimosso"
-  ],
-  "ranking_aggiornato": "08:45:57 del 10/05/2026",
-  "ranking_fonte": "Jeff Sackmann tennis_atp/tennis_wta",
-  "ranking_giocatori_aggiornati": [
-    "SINNER",
-    "avversario di SINNER",
-    "avversario storico di SINNER",
-    "MUSETTI",
-    "avversario di MUSETTI",
-    "avversario storico di MUSETTI",
-    "COBOLLI",
-    "avversario di COBOLLI",
-    "avversario storico di COBOLLI",
-    "ARNALDI",
-    "avversario di ARNALDI",
-    "avversario storico di ARNALDI",
-    "DARDERI",
-    "avversario di DARDERI",
-    "avversario storico di DARDERI",
-    "BELLUCCI",
-    "avversario di BELLUCCI",
-    "avversario storico di BELLUCCI",
-    "PELLEGRINO",
-    "avversario di PELLEGRINO",
-    "avversario storico di PELLEGRINO",
-    "COCCIARETTO",
-    "avversario di COCCIARETTO",
-    "avversario storico di COCCIARETTO",
-    "BERRETTINI",
-    "avversario storico di BERRETTINI",
-    "SONEGO",
-    "avversario storico di SONEGO",
-    "PAOLINI",
-    "avversario storico di PAOLINI",
-    "GRANT",
-    "avversario storico di GRANT",
-    "BASILETTI",
-    "avversario storico di BASILETTI"
   ]
 }

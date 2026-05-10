@@ -61,15 +61,21 @@
         "esito": "W",
         "avv": "MPETSHI PERRICARD",
         "score": "6-4 6-4",
-        "ranking_avv": null
+        "ranking_avv": {
+          "tour": "ATP",
+          "pos": 62,
+          "punti": "",
+          "aggiornato": "08:45:57 del 10/05/2026",
+          "fonte": "ranking noti"
+        }
       }
     ],
     "ranking": {
       "tour": "ATP",
-      "pos": 15,
+      "pos": 10,
       "punti": "",
       "aggiornato": "08:45:57 del 10/05/2026",
-      "fonte": "ranking noti"
+      "fonte": "correzione manuale"
     },
     "tour": "ATP"
   },
@@ -106,10 +112,10 @@
     ],
     "ranking": {
       "tour": "ATP",
-      "pos": 22,
-      "punti": "1955",
+      "pos": 12,
+      "punti": "",
       "aggiornato": "08:45:57 del 10/05/2026",
-      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      "fonte": "correzione manuale"
     },
     "tour": "ATP"
   },
@@ -186,10 +192,10 @@
     ],
     "ranking": {
       "tour": "ATP",
-      "pos": 24,
-      "punti": "1579",
+      "pos": 20,
+      "punti": "",
       "aggiornato": "08:45:57 del 10/05/2026",
-      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      "fonte": "correzione manuale"
     },
     "tour": "ATP"
   },
@@ -309,10 +315,10 @@
       "avv": "SWIATEK",
       "ranking_avv": {
         "tour": "WTA",
-        "pos": 2,
-        "punti": "8178",
+        "pos": 4,
+        "punti": "",
         "aggiornato": "08:45:57 del 10/05/2026",
-        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+        "fonte": "correzione manuale"
       }
     },
     "storico": [

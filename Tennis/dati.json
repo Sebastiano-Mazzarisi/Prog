@@ -61,7 +61,11 @@
     "nome": "ARNALDI",
     "stato": "ok",
     "live": null,
-    "prossimo": null,
+    "prossimo": {
+      "orario": "20:30",
+      "data": "10/05",
+      "avv": "JODAR"
+    },
     "storico": [
       {
         "data": "08/05",
@@ -81,7 +85,11 @@
     "nome": "DARDERI",
     "stato": "ok",
     "live": null,
-    "prossimo": null,
+    "prossimo": {
+      "orario": "16:00",
+      "data": "10/05",
+      "avv": "PAUL"
+    },
     "storico": [
       {
         "data": "08/05",
@@ -149,7 +157,11 @@
     "nome": "COCCIARETTO",
     "stato": "ok",
     "live": null,
-    "prossimo": null,
+    "prossimo": {
+      "orario": "19:00",
+      "data": "10/05",
+      "avv": "SWIATEK"
+    },
     "storico": [
       {
         "data": "08/05",

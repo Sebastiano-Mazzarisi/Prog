@@ -9,19 +9,18 @@
   "ranking_aggiornato": "08:45:57 del 10/05/2026",
   "ranking_fonte": "Jeff Sackmann tennis_atp/tennis_wta",
   "ranking_giocatori_aggiornati": [
-    "avversario live di MUSETTI",
-    "avversario live di DARDERI"
+    "avversario live di MUSETTI"
   ],
   "ranking_scaricata_oggi": true,
   "italiani_integrati": [
     "DARDERI",
     "MUSETTI"
   ],
-  "html_version": "2026-05-10-live-fix-v41",
+  "html_version": "2026-05-10-live-fix-v42",
   "storico_non_giocato_rimosso": [
     "ARNALDI - JODAR",
     "COCCIARETTO - SWIATEK"
   ],
-  "pubblicato": "16:48:39 del 10/05/2026",
-  "live_aggiornato": "16:48:39 del 10/05/2026"
+  "pubblicato": "16:53:52 del 10/05/2026",
+  "live_aggiornato": "16:53:52 del 10/05/2026"
 }

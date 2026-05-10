@@ -8,15 +8,15 @@ Fonte dati: ESPN + integrazione prossimi + integrazione prossimi
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
-MUSETTI (ATP n.15) - CERUNDOLO (ATP n.21)
+MUSETTI (ATP n.10) - CERUNDOLO (ATP n.21)
 15:00 - oggi
-  08/05  V  MPETSHI PERRICARD  6-4 6-4
+  08/05  V  MPETSHI PERRICARD (ATP n.62)  6-4 6-4
 --------------------------------------------------
-DARDERI (ATP n.24) - PAUL (ATP n.20)
+DARDERI (ATP n.20) - PAUL (ATP n.20)
 16:00 - oggi
   08/05  V  HANFMANN (ATP n.102)  6-4 6-4
 --------------------------------------------------
-COCCIARETTO (WTA n.81) - SWIATEK (WTA n.2)
+COCCIARETTO (WTA n.81) - SWIATEK (WTA n.4)
 19:00 - oggi
   08/05  V  NAVARRO (WTA n.15)  6-3 6-3
 --------------------------------------------------
@@ -33,7 +33,7 @@ da definire - da definire
   09/05  V  TOMAS MARTIN ETCHEVERRY (ATP n.57)  5-7 6-2 6-3
   07/05  V  BURRUCHAGA (ATP n.104)  6-4 6-4
 --------------------------------------------------
-COBOLLI (ATP n.22) - TIRANTE (ATP n.103)
+COBOLLI (ATP n.12) - TIRANTE (ATP n.103)
 da definire - da definire
   09/05  V  TERENCE ATMANE (ATP n.62)  7-6 6-3
 --------------------------------------------------

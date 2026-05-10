@@ -9,21 +9,30 @@
   "ranking_aggiornato": "08:45:57 del 10/05/2026",
   "ranking_fonte": "Jeff Sackmann tennis_atp/tennis_wta",
   "ranking_giocatori_aggiornati": [
-    "SINNER",
-    "COBOLLI",
-    "ARNALDI",
-    "DARDERI",
-    "BELLUCCI",
-    "PELLEGRINO",
-    "COCCIARETTO",
-    "BERRETTINI",
-    "SONEGO",
-    "PAOLINI",
-    "GRANT",
-    "BASILETTI"
+    "avversario di SINNER",
+    "avversario storico di SINNER",
+    "avversario di MUSETTI",
+    "avversario di COBOLLI",
+    "avversario storico di COBOLLI",
+    "avversario di ARNALDI",
+    "avversario storico di ARNALDI",
+    "avversario di DARDERI",
+    "avversario storico di DARDERI",
+    "avversario di BELLUCCI",
+    "avversario storico di BELLUCCI",
+    "avversario di PELLEGRINO",
+    "avversario storico di PELLEGRINO",
+    "avversario di COCCIARETTO",
+    "avversario storico di COCCIARETTO",
+    "avversario storico di BERRETTINI",
+    "avversario storico di SONEGO",
+    "avversario storico di PAOLINI",
+    "avversario storico di GRANT",
+    "avversario storico di BASILETTI"
   ],
   "ranking_scaricata_oggi": true,
   "italiani_integrati": [
     "SONEGO"
-  ]
+  ],
+  "html_version": "2026-05-10-rank-avversari-v6"
 }

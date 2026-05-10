@@ -4,9 +4,10 @@
     "stato": "ok",
     "live": null,
     "prossimo": {
-      "orario": "da definire",
       "data": "11/05",
-      "avv": "POPYRIN"
+      "orario": "15:00",
+      "avv": "POPYRIN",
+      "fonte": "Programma.txt"
     },
     "storico": [
       {
@@ -60,11 +61,7 @@
     "nome": "ARNALDI",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "20:30",
-      "data": "10/05",
-      "avv": "JODAR"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "08/05",
@@ -72,17 +69,19 @@
         "avv": "DE MINAUR",
         "score": "4-6 7-6 6-4"
       }
-    ]
+    ],
+    "verifica": {
+      "data": "10/05",
+      "orario": "20:30",
+      "avv": "JODAR",
+      "motivo": "partita programmata ormai passata, risultato da verificare"
+    }
   },
   {
     "nome": "DARDERI",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "16:00",
-      "data": "10/05",
-      "avv": "PAUL"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "08/05",
@@ -90,7 +89,13 @@
         "avv": "HANFMANN",
         "score": "6-4 6-4"
       }
-    ]
+    ],
+    "verifica": {
+      "data": "10/05",
+      "orario": "16:00",
+      "avv": "PAUL",
+      "motivo": "partita programmata ormai passata, risultato da verificare"
+    }
   },
   {
     "nome": "BELLUCCI",
@@ -144,11 +149,7 @@
     "nome": "COCCIARETTO",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "19:00",
-      "data": "10/05",
-      "avv": "SWIATEK"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "08/05",
@@ -156,7 +157,13 @@
         "avv": "NAVARRO",
         "score": "6-3 6-3"
       }
-    ]
+    ],
+    "verifica": {
+      "data": "10/05",
+      "orario": "19:00",
+      "avv": "SWIATEK",
+      "motivo": "partita programmata ormai passata, risultato da verificare"
+    }
   },
   {
     "nome": "BERRETTINI",

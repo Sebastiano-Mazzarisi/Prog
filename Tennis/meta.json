@@ -1,20 +1,23 @@
 {
   "aggiornato": "23:14:55 del 10/05/2026",
-  "fonte": "dati.json + Programma.txt + Live.txt manuale",
+  "fonte": "dati.json + Programma.txt + Live.txt manuale + integrazione prossimi",
   "italiani_aggiornati": [
     "BELLUCCI",
     "COBOLLI",
     "PELLEGRINO"
   ],
   "italiani_integrati": [
+    "ARNALDI",
+    "COCCIARETTO",
+    "DARDERI",
     "MUSETTI"
   ],
-  "html_version": "2026-05-10-programma-v46",
+  "html_version": "2026-05-10-risultati-layout-v45",
   "storico_non_giocato_rimosso": [
     "ARNALDI - JODAR",
     "COCCIARETTO - SWIATEK"
   ],
-  "pubblicato": "23:14:55 del 10/05/2026",
+  "pubblicato": "23:16:40 del 10/05/2026",
   "live_aggiornato": "20:50:10 del 10/05/2026",
   "live_controllato": "23:14:55 del 10/05/2026",
   "live_diagnostica": {

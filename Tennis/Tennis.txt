@@ -8,13 +8,13 @@ Fonte dati: ESPN + integrazione prossimi + integrazione prossimi
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
-DARDERI (ATP n.20) - PAUL (ATP n.20)
->>> LIVE  LIVE
-  08/05  V  HANFMANN (ATP n.102)  6-4 6-4
---------------------------------------------------
 MUSETTI (ATP n.10) - CERUNDOLO (ATP n.21)
->>> LIVE  LIVE
+>>> LIVE  1-1
   08/05  V  MPETSHI PERRICARD (ATP n.62)  6-4 6-4
+--------------------------------------------------
+DARDERI (ATP n.20) - PAUL (ATP n.20)
+16:00 - oggi
+  08/05  V  HANFMANN (ATP n.102)  6-4 6-4
 --------------------------------------------------
 COCCIARETTO (WTA n.81) - SWIATEK (WTA n.4)
 19:00 - oggi

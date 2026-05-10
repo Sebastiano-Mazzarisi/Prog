@@ -242,7 +242,11 @@
     "nome": "SONEGO",
     "stato": "elim",
     "live": null,
-    "prossimo": null,
+    "prossimo": {
+      "orario": "da definire",
+      "data": "10/05",
+      "avv": "PUETZ"
+    },
     "storico": [
       {
         "data": "07/05",

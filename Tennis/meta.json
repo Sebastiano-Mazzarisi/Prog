@@ -1,6 +1,6 @@
 {
   "aggiornato": "23:36:07 del 09/05/2026",
-  "fonte": "ESPN + integrazione prossimi",
+  "fonte": "ESPN + integrazione prossimi + integrazione prossimi",
   "italiani_aggiornati": [
     "BELLUCCI",
     "COBOLLI",
@@ -13,9 +13,10 @@
   ],
   "ranking_scaricata_oggi": true,
   "italiani_integrati": [
-    "SONEGO"
+    "DARDERI",
+    "MUSETTI"
   ],
-  "html_version": "2026-05-10-rank-avversari-v14",
+  "html_version": "2026-05-10-rank-avversari-v15",
   "storico_non_giocato_rimosso": [
     "ARNALDI - JODAR",
     "COCCIARETTO - SWIATEK"

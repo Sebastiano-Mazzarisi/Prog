@@ -8,17 +8,17 @@ Fonte dati: ESPN
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
-COCCIARETTO - SWIATEK
+COCCIARETTO (WTA n.81) - SWIATEK
 19:00 - 10/05
   09/05  X  SWIATEK  da verificare
   08/05  V  NAVARRO  6-3 6-3
 --------------------------------------------------
-ARNALDI - JODAR
+ARNALDI (ATP n.61) - JODAR
 20:30 - 10/05
   09/05  V  JODAR  da verificare
   08/05  V  DE MINAUR  4-6 7-6 6-4
 --------------------------------------------------
-DARDERI - PAUL
+DARDERI (ATP n.24) - PAUL
 da definire - 10/05
   08/05  V  HANFMANN  6-4 6-4
 --------------------------------------------------
@@ -26,20 +26,20 @@ MUSETTI - CERUNDOLO
 da definire - 10/05
   08/05  V  MPETSHI PERRICARD  6-4 6-4
 --------------------------------------------------
-SINNER - POPYRIN
+SINNER (ATP n.2) - POPYRIN
 da definire - 11/05
   09/05  V  OFNER  6-3 6-4
 --------------------------------------------------
-BELLUCCI - LANDALUCE
+BELLUCCI (ATP n.73) - LANDALUCE
 da definire - da definire
   09/05  V  TOMAS MARTIN ETCHEVERRY  5-7 6-2 6-3
   07/05  V  BURRUCHAGA  6-4 6-4
 --------------------------------------------------
-COBOLLI - TIRANTE
+COBOLLI (ATP n.22) - TIRANTE
 da definire - da definire
   09/05  V  TERENCE ATMANE  7-6 6-3
 --------------------------------------------------
-PELLEGRINO - TIAFOE
+PELLEGRINO (ATP n.139) - TIAFOE
 da definire - da definire
   09/05  V  ARTHUR FILS  4-0 rit.
   07/05  V  NARDI  4-6 6-3 6-3
@@ -47,19 +47,19 @@ da definire - da definire
 
 ITALIANI FUORI DAI GIOCHI
 --------------------------------------------------
-BASILETTI
+BASILETTI (WTA n.496)
   08/05  X  SVITOLINA  1-6 3-6
 --------------------------------------------------
-BERRETTINI
+BERRETTINI (ATP n.55)
   07/05  X  POPYRIN  2-6 3-6
 --------------------------------------------------
-GRANT
+GRANT (WTA n.234)
   08/05  X  BARTUNKOVA  6-4 3-6 4-6
 --------------------------------------------------
-PAOLINI
+PAOLINI (WTA n.8)
   09/05  X  MERTENS  6-4 6-7 3-6
   07/05  V  JEANJEAN  6-7 6-2 6-4
 --------------------------------------------------
-SONEGO
+SONEGO (ATP n.39)
   07/05  X  BUSE  3-6 3-6
 --------------------------------------------------

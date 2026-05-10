@@ -3,61 +3,62 @@ Internazionali d'Italia - Roma
 Italiani
 Finale: 17/05/2026
 Dati aggiornati: 23:36:07 del 09/05/2026
-Fonte dati: ESPN + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi
+Fonte dati: ESPN + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi + integrazione prossimi
 --------------------------------------------------
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
-DARDERI - PAUL
+MUSETTI (ATP n.10) - CERUNDOLO (ATP n.21)
+15:00 - oggi
+  oggi  V  CERUNDOLO (ATP n.21)  7-6(7) 6-4
+  08/05  V  MPETSHI PERRICARD (ATP n.62)  6-4 6-4
+--------------------------------------------------
+DARDERI (ATP n.20) - PAUL (ATP n.20)
 16:00 - oggi
-  08/05  V  HANFMANN  6-4 6-4
+  08/05  V  HANFMANN (ATP n.102)  6-4 6-4
 --------------------------------------------------
-COCCIARETTO - SWIATEK
+COCCIARETTO (WTA n.81) - SWIATEK (WTA n.4)
 19:00 - oggi
-  08/05  V  NAVARRO  6-3 6-3
+  08/05  V  NAVARRO (WTA n.15)  6-3 6-3
 --------------------------------------------------
-ARNALDI - JODAR
+ARNALDI (ATP n.61) - JODAR (ATP n.165)
 20:30 - oggi
-  08/05  V  DE MINAUR  4-6 7-6 6-4
+  08/05  V  DE MINAUR (ATP n.6)  4-6 7-6 6-4
 --------------------------------------------------
-SINNER - POPYRIN
+SINNER (ATP n.1) - POPYRIN (ATP n.50)
 da definire - domani
-  09/05  V  OFNER  6-3 6-4
+  09/05  V  OFNER (ATP n.131)  6-3 6-4
 --------------------------------------------------
-BELLUCCI - LANDALUCE
+BELLUCCI (ATP n.73) - LANDALUCE (ATP n.146)
 da definire - da definire
-  09/05  V  TOMAS MARTIN ETCHEVERRY  5-7 6-2 6-3
-  07/05  V  BURRUCHAGA  6-4 6-4
+  09/05  V  TOMAS MARTIN ETCHEVERRY (ATP n.57)  5-7 6-2 6-3
+  07/05  V  BURRUCHAGA (ATP n.104)  6-4 6-4
 --------------------------------------------------
-COBOLLI - TIRANTE
+COBOLLI (ATP n.12) - TIRANTE (ATP n.103)
 da definire - da definire
-  09/05  V  TERENCE ATMANE  7-6 6-3
+  09/05  V  TERENCE ATMANE (ATP n.62)  7-6 6-3
 --------------------------------------------------
-MUSETTI - ancora in gara, prossimo incontro da definire
-  oggi  V  CERUNDOLO  7-6(7) 6-4
-  08/05  V  MPETSHI PERRICARD  6-4 6-4
---------------------------------------------------
-PELLEGRINO - TIAFOE
+PELLEGRINO (ATP n.139) - TIAFOE (ATP n.30)
 da definire - da definire
-  09/05  V  ARTHUR FILS  4-0 rit.
-  07/05  V  NARDI  4-6 6-3 6-3
+  09/05  V  ARTHUR FILS (ATP n.41)  4-0 rit.
+  07/05  V  NARDI (ATP n.105)  4-6 6-3 6-3
 --------------------------------------------------
 
 ITALIANI FUORI DAI GIOCHI
 --------------------------------------------------
-BASILETTI
-  08/05  X  SVITOLINA  1-6 3-6
+BASILETTI (WTA n.496)
+  08/05  X  SVITOLINA (WTA n.13)  1-6 3-6
 --------------------------------------------------
-BERRETTINI
-  07/05  X  POPYRIN  2-6 3-6
+BERRETTINI (ATP n.55)
+  07/05  X  POPYRIN (ATP n.50)  2-6 3-6
 --------------------------------------------------
-GRANT
-  08/05  X  BARTUNKOVA  6-4 3-6 4-6
+GRANT (WTA n.234)
+  08/05  X  BARTUNKOVA (WTA n.126)  6-4 3-6 4-6
 --------------------------------------------------
-PAOLINI
-  09/05  X  MERTENS  6-4 6-7 3-6
-  07/05  V  JEANJEAN  6-7 6-2 6-4
+PAOLINI (WTA n.8)
+  09/05  X  MERTENS (WTA n.19)  6-4 6-7 3-6
+  07/05  V  JEANJEAN (WTA n.102)  6-7 6-2 6-4
 --------------------------------------------------
-SONEGO
-  07/05  X  BUSE  3-6 3-6
+SONEGO (ATP n.39)
+  07/05  X  BUSE (ATP n.100)  3-6 3-6
 --------------------------------------------------

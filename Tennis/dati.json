@@ -41,19 +41,8 @@
   },
   {
     "nome": "MUSETTI",
-    "stato": "live",
-    "live": {
-      "avv": "CERUNDOLO",
-      "score": "12-10",
-      "data": "10/05",
-      "ranking_avv": {
-        "tour": "ATP",
-        "pos": 21,
-        "punti": "2035",
-        "aggiornato": "08:45:57 del 10/05/2026",
-        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-      }
-    },
+    "stato": "ok",
+    "live": null,
     "prossimo": {
       "orario": "15:00",
       "data": "10/05",
@@ -132,19 +121,8 @@
   },
   {
     "nome": "ARNALDI",
-    "stato": "live",
-    "live": {
-      "avv": "JODAR",
-      "score": "12-35",
-      "data": "10/05",
-      "ranking_avv": {
-        "tour": "ATP",
-        "pos": 165,
-        "punti": "349",
-        "aggiornato": "08:45:57 del 10/05/2026",
-        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-      }
-    },
+    "stato": "ok",
+    "live": null,
     "prossimo": {
       "orario": "20:30",
       "data": "10/05",
@@ -183,19 +161,8 @@
   },
   {
     "nome": "DARDERI",
-    "stato": "live",
-    "live": {
-      "avv": "PAUL",
-      "score": "12-35",
-      "data": "10/05",
-      "ranking_avv": {
-        "tour": "ATP",
-        "pos": 20,
-        "punti": "2050",
-        "aggiornato": "08:45:57 del 10/05/2026",
-        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-      }
-    },
+    "stato": "ok",
+    "live": null,
     "prossimo": {
       "orario": "16:00",
       "data": "10/05",
@@ -340,19 +307,8 @@
   },
   {
     "nome": "COCCIARETTO",
-    "stato": "live",
-    "live": {
-      "avv": "SWIATEK",
-      "score": "13-00",
-      "data": "10/05",
-      "ranking_avv": {
-        "tour": "WTA",
-        "pos": 4,
-        "punti": "",
-        "aggiornato": "08:45:57 del 10/05/2026",
-        "fonte": "correzione manuale"
-      }
-    },
+    "stato": "ok",
+    "live": null,
     "prossimo": {
       "orario": "19:00",
       "data": "10/05",

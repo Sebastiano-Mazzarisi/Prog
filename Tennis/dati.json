@@ -44,7 +44,7 @@
     "stato": "live",
     "live": {
       "avv": "CERUNDOLO",
-      "score": "LIVE",
+      "score": "1-1",
       "data": "10/05",
       "ranking_avv": {
         "tour": "ATP",
@@ -172,19 +172,8 @@
   },
   {
     "nome": "DARDERI",
-    "stato": "live",
-    "live": {
-      "avv": "PAUL",
-      "score": "LIVE",
-      "data": "10/05",
-      "ranking_avv": {
-        "tour": "ATP",
-        "pos": 20,
-        "punti": "2050",
-        "aggiornato": "08:45:57 del 10/05/2026",
-        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-      }
-    },
+    "stato": "ok",
+    "live": null,
     "prossimo": {
       "orario": "16:00",
       "data": "10/05",

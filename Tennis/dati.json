@@ -30,14 +30,14 @@
         }
       }
     ],
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 1,
       "punti": "",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "correzione manuale"
-    },
-    "tour": "ATP"
+    }
   },
   {
     "nome": "MUSETTI",
@@ -70,15 +70,15 @@
         }
       }
     ],
+    "ultimo_motivo_live_spento": "non confermato dalla fonte live",
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 10,
       "punti": "",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "correzione manuale"
-    },
-    "tour": "ATP",
-    "ultimo_motivo_live_spento": "non confermato dalla fonte live"
+    }
   },
   {
     "nome": "COBOLLI",
@@ -111,14 +111,14 @@
         }
       }
     ],
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 12,
       "punti": "",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "correzione manuale"
-    },
-    "tour": "ATP"
+    }
   },
   {
     "nome": "ARNALDI",
@@ -151,14 +151,14 @@
         }
       }
     ],
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 61,
       "punti": "858",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "ATP"
+    }
   },
   {
     "nome": "DARDERI",
@@ -191,14 +191,14 @@
         }
       }
     ],
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 20,
       "punti": "",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "correzione manuale"
-    },
-    "tour": "ATP"
+    }
   },
   {
     "nome": "BELLUCCI",
@@ -244,14 +244,14 @@
         }
       }
     ],
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 73,
       "punti": "758",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "ATP"
+    }
   },
   {
     "nome": "PELLEGRINO",
@@ -297,14 +297,14 @@
         }
       }
     ],
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 139,
       "punti": "438",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "ATP"
+    }
   },
   {
     "nome": "COCCIARETTO",
@@ -337,14 +337,14 @@
         }
       }
     ],
+    "tour": "WTA",
     "ranking": {
       "tour": "WTA",
       "pos": 81,
       "punti": "837",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "WTA"
+    }
   },
   {
     "nome": "BERRETTINI",
@@ -366,14 +366,14 @@
         }
       }
     ],
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 55,
       "punti": "945",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "ATP"
+    }
   },
   {
     "nome": "SONEGO",
@@ -400,14 +400,14 @@
         }
       }
     ],
+    "tour": "ATP",
     "ranking": {
       "tour": "ATP",
       "pos": 39,
       "punti": "1240",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "ATP"
+    }
   },
   {
     "nome": "PAOLINI",
@@ -442,14 +442,14 @@
         }
       }
     ],
+    "tour": "WTA",
     "ranking": {
       "tour": "WTA",
       "pos": 8,
       "punti": "4236",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "WTA"
+    }
   },
   {
     "nome": "GRANT",
@@ -471,14 +471,14 @@
         }
       }
     ],
+    "tour": "WTA",
     "ranking": {
       "tour": "WTA",
       "pos": 234,
       "punti": "309",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "WTA"
+    }
   },
   {
     "nome": "BASILETTI",
@@ -500,13 +500,13 @@
         }
       }
     ],
+    "tour": "WTA",
     "ranking": {
       "tour": "WTA",
       "pos": 496,
       "punti": "106",
       "aggiornato": "08:45:57 del 10/05/2026",
       "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
-    },
-    "tour": "WTA"
+    }
   }
 ]

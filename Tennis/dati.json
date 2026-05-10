@@ -15,7 +15,14 @@
         "avv": "OFNER",
         "score": "6-3 6-4"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "ATP",
+      "pos": 2,
+      "punti": "11500",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "MUSETTI",
@@ -33,7 +40,8 @@
         "avv": "MPETSHI PERRICARD",
         "score": "6-4 6-4"
       }
-    ]
+    ],
+    "ranking": null
   },
   {
     "nome": "COBOLLI",
@@ -51,7 +59,14 @@
         "avv": "TERENCE ATMANE",
         "score": "7-6 6-3"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "ATP",
+      "pos": 22,
+      "punti": "1955",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "ARNALDI",
@@ -75,7 +90,14 @@
         "avv": "DE MINAUR",
         "score": "4-6 7-6 6-4"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "ATP",
+      "pos": 61,
+      "punti": "858",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "DARDERI",
@@ -93,7 +115,14 @@
         "avv": "HANFMANN",
         "score": "6-4 6-4"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "ATP",
+      "pos": 24,
+      "punti": "1579",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "BELLUCCI",
@@ -117,7 +146,14 @@
         "avv": "BURRUCHAGA",
         "score": "6-4 6-4"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "ATP",
+      "pos": 73,
+      "punti": "758",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "PELLEGRINO",
@@ -141,7 +177,14 @@
         "avv": "NARDI",
         "score": "4-6 6-3 6-3"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "ATP",
+      "pos": 139,
+      "punti": "438",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "COCCIARETTO",
@@ -165,7 +208,14 @@
         "avv": "NAVARRO",
         "score": "6-3 6-3"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "WTA",
+      "pos": 81,
+      "punti": "837",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "BERRETTINI",
@@ -179,7 +229,14 @@
         "avv": "POPYRIN",
         "score": "2-6 3-6"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "ATP",
+      "pos": 55,
+      "punti": "945",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "SONEGO",
@@ -193,7 +250,14 @@
         "avv": "BUSE",
         "score": "3-6 3-6"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "ATP",
+      "pos": 39,
+      "punti": "1240",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "PAOLINI",
@@ -213,7 +277,14 @@
         "avv": "JEANJEAN",
         "score": "6-7 6-2 6-4"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "WTA",
+      "pos": 8,
+      "punti": "4236",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "GRANT",
@@ -227,7 +298,14 @@
         "avv": "BARTUNKOVA",
         "score": "6-4 3-6 4-6"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "WTA",
+      "pos": 234,
+      "punti": "309",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   },
   {
     "nome": "BASILETTI",
@@ -241,6 +319,13 @@
         "avv": "SVITOLINA",
         "score": "1-6 3-6"
       }
-    ]
+    ],
+    "ranking": {
+      "tour": "WTA",
+      "pos": 496,
+      "punti": "106",
+      "aggiornato": "08:45:57 del 10/05/2026",
+      "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+    }
   }
 ]

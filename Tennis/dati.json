@@ -1,8 +1,19 @@
 [
   {
     "nome": "SINNER",
-    "stato": "ok",
-    "live": null,
+    "stato": "live",
+    "live": {
+      "avv": "POPYRIN",
+      "score": "2026",
+      "data": "11/05",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 50,
+        "punti": "1000",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
+    },
     "prossimo": {
       "orario": "da definire",
       "data": "11/05",
@@ -41,8 +52,19 @@
   },
   {
     "nome": "MUSETTI",
-    "stato": "ok",
-    "live": null,
+    "stato": "live",
+    "live": {
+      "avv": "CERUNDOLO",
+      "score": "2026",
+      "data": "10/05",
+      "ranking_avv": {
+        "tour": "ATP",
+        "pos": 21,
+        "punti": "2035",
+        "aggiornato": "08:45:57 del 10/05/2026",
+        "fonte": "Jeff Sackmann tennis_atp/tennis_wta"
+      }
+    },
     "prossimo": {
       "orario": "15:00",
       "data": "10/05",

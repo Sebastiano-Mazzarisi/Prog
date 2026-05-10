@@ -1,22 +1,97 @@
 [
   {
-    "nome": "SINNER",
+    "nome": "ARNALDI",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "data": "11/05",
-      "orario": "15:00",
-      "avv": "POPYRIN",
-      "fonte": "Programma.txt"
-    },
+    "prossimo": null,
+    "storico": [
+      {
+        "data": "08/05",
+        "esito": "W",
+        "avv": "DE MINAUR",
+        "score": "4-6 7-6 6-4"
+      }
+    ],
+    "verifica": {
+      "data": "10/05",
+      "orario": "20:30",
+      "avv": "JODAR",
+      "motivo": "partita programmata ormai passata, risultato da verificare"
+    }
+  },
+  {
+    "nome": "BELLUCCI",
+    "stato": "ok",
+    "live": null,
+    "prossimo": null,
     "storico": [
       {
         "data": "09/05",
         "esito": "W",
-        "avv": "OFNER",
-        "score": "6-3 6-4"
+        "avv": "TOMAS MARTIN ETCHEVERRY",
+        "score": "5-7 6-2 6-3"
+      },
+      {
+        "data": "07/05",
+        "esito": "W",
+        "avv": "BURRUCHAGA",
+        "score": "6-4 6-4"
       }
     ]
+  },
+  {
+    "nome": "COBOLLI",
+    "stato": "ok",
+    "live": null,
+    "prossimo": null,
+    "storico": [
+      {
+        "data": "09/05",
+        "esito": "W",
+        "avv": "TERENCE ATMANE",
+        "score": "7-6 6-3"
+      }
+    ]
+  },
+  {
+    "nome": "COCCIARETTO",
+    "stato": "ok",
+    "live": null,
+    "prossimo": null,
+    "storico": [
+      {
+        "data": "08/05",
+        "esito": "W",
+        "avv": "NAVARRO",
+        "score": "6-3 6-3"
+      }
+    ],
+    "verifica": {
+      "data": "10/05",
+      "orario": "19:00",
+      "avv": "SWIATEK",
+      "motivo": "partita programmata ormai passata, risultato da verificare"
+    }
+  },
+  {
+    "nome": "DARDERI",
+    "stato": "ok",
+    "live": null,
+    "prossimo": null,
+    "storico": [
+      {
+        "data": "08/05",
+        "esito": "W",
+        "avv": "HANFMANN",
+        "score": "6-4 6-4"
+      }
+    ],
+    "verifica": {
+      "data": "10/05",
+      "orario": "16:00",
+      "avv": "PAUL",
+      "motivo": "partita programmata ormai passata, risultato da verificare"
+    }
   },
   {
     "nome": "MUSETTI",
@@ -40,104 +115,10 @@
     "ultimo_motivo_live_spento": "non confermato dalla fonte live"
   },
   {
-    "nome": "COBOLLI",
-    "stato": "ok",
-    "live": null,
-    "prossimo": {
-      "orario": "da definire",
-      "data": "da definire",
-      "avv": "TIRANTE"
-    },
-    "storico": [
-      {
-        "data": "09/05",
-        "esito": "W",
-        "avv": "TERENCE ATMANE",
-        "score": "7-6 6-3"
-      }
-    ]
-  },
-  {
-    "nome": "ARNALDI",
-    "stato": "ok",
-    "live": null,
-    "prossimo": {
-      "orario": "20:30",
-      "data": "10/05",
-      "avv": "JODAR"
-    },
-    "storico": [
-      {
-        "data": "08/05",
-        "esito": "W",
-        "avv": "DE MINAUR",
-        "score": "4-6 7-6 6-4"
-      }
-    ],
-    "verifica": {
-      "data": "10/05",
-      "orario": "20:30",
-      "avv": "JODAR",
-      "motivo": "partita programmata ormai passata, risultato da verificare"
-    }
-  },
-  {
-    "nome": "DARDERI",
-    "stato": "ok",
-    "live": null,
-    "prossimo": {
-      "orario": "16:00",
-      "data": "10/05",
-      "avv": "PAUL"
-    },
-    "storico": [
-      {
-        "data": "08/05",
-        "esito": "W",
-        "avv": "HANFMANN",
-        "score": "6-4 6-4"
-      }
-    ],
-    "verifica": {
-      "data": "10/05",
-      "orario": "16:00",
-      "avv": "PAUL",
-      "motivo": "partita programmata ormai passata, risultato da verificare"
-    }
-  },
-  {
-    "nome": "BELLUCCI",
-    "stato": "ok",
-    "live": null,
-    "prossimo": {
-      "orario": "da definire",
-      "data": "da definire",
-      "avv": "LANDALUCE"
-    },
-    "storico": [
-      {
-        "data": "09/05",
-        "esito": "W",
-        "avv": "TOMAS MARTIN ETCHEVERRY",
-        "score": "5-7 6-2 6-3"
-      },
-      {
-        "data": "07/05",
-        "esito": "W",
-        "avv": "BURRUCHAGA",
-        "score": "6-4 6-4"
-      }
-    ]
-  },
-  {
     "nome": "PELLEGRINO",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "da definire",
-      "data": "da definire",
-      "avv": "TIAFOE"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "09/05",
@@ -154,28 +135,32 @@
     ]
   },
   {
-    "nome": "COCCIARETTO",
+    "nome": "SINNER",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "19:00",
-      "data": "10/05",
-      "avv": "SWIATEK"
-    },
+    "prossimo": null,
+    "storico": [
+      {
+        "data": "09/05",
+        "esito": "W",
+        "avv": "OFNER",
+        "score": "6-3 6-4"
+      }
+    ]
+  },
+  {
+    "nome": "BASILETTI",
+    "stato": "elim",
+    "live": null,
+    "prossimo": null,
     "storico": [
       {
         "data": "08/05",
-        "esito": "W",
-        "avv": "NAVARRO",
-        "score": "6-3 6-3"
+        "esito": "L",
+        "avv": "SVITOLINA",
+        "score": "1-6 3-6"
       }
-    ],
-    "verifica": {
-      "data": "10/05",
-      "orario": "19:00",
-      "avv": "SWIATEK",
-      "motivo": "partita programmata ormai passata, risultato da verificare"
-    }
+    ]
   },
   {
     "nome": "BERRETTINI",
@@ -192,20 +177,16 @@
     ]
   },
   {
-    "nome": "SONEGO",
+    "nome": "GRANT",
     "stato": "elim",
     "live": null,
-    "prossimo": {
-      "orario": "da definire",
-      "data": "10/05",
-      "avv": "PUETZ"
-    },
+    "prossimo": null,
     "storico": [
       {
-        "data": "07/05",
+        "data": "08/05",
         "esito": "L",
-        "avv": "BUSE",
-        "score": "3-6 3-6"
+        "avv": "BARTUNKOVA",
+        "score": "6-4 3-6 4-6"
       }
     ]
   },
@@ -230,30 +211,16 @@
     ]
   },
   {
-    "nome": "GRANT",
+    "nome": "SONEGO",
     "stato": "elim",
     "live": null,
     "prossimo": null,
     "storico": [
       {
-        "data": "08/05",
+        "data": "07/05",
         "esito": "L",
-        "avv": "BARTUNKOVA",
-        "score": "6-4 3-6 4-6"
-      }
-    ]
-  },
-  {
-    "nome": "BASILETTI",
-    "stato": "elim",
-    "live": null,
-    "prossimo": null,
-    "storico": [
-      {
-        "data": "08/05",
-        "esito": "L",
-        "avv": "SVITOLINA",
-        "score": "1-6 3-6"
+        "avv": "BUSE",
+        "score": "3-6 3-6"
       }
     ]
   }

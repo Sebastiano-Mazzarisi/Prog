@@ -5,8 +5,8 @@
     "live": null,
     "prossimo": {
       "orario": "da definire",
-      "data": "10/05",
-      "avv": "da definire"
+      "data": "11/05",
+      "avv": "POPYRIN"
     },
     "storico": [
       {
@@ -39,7 +39,11 @@
     "nome": "COBOLLI",
     "stato": "ok",
     "live": null,
-    "prossimo": null,
+    "prossimo": {
+      "orario": "da definire",
+      "data": "da definire",
+      "avv": "TIRANTE"
+    },
     "storico": [
       {
         "data": "09/05",
@@ -54,9 +58,9 @@
     "stato": "ok",
     "live": null,
     "prossimo": {
-      "orario": "da definire",
+      "orario": "20:30",
       "data": "10/05",
-      "avv": "da definire"
+      "avv": "JODAR"
     },
     "storico": [
       {
@@ -95,7 +99,11 @@
     "nome": "BELLUCCI",
     "stato": "ok",
     "live": null,
-    "prossimo": null,
+    "prossimo": {
+      "orario": "da definire",
+      "data": "da definire",
+      "avv": "LANDALUCE"
+    },
     "storico": [
       {
         "data": "09/05",
@@ -115,7 +123,11 @@
     "nome": "PELLEGRINO",
     "stato": "ok",
     "live": null,
-    "prossimo": null,
+    "prossimo": {
+      "orario": "da definire",
+      "data": "da definire",
+      "avv": "TIAFOE"
+    },
     "storico": [
       {
         "data": "09/05",
@@ -136,9 +148,9 @@
     "stato": "ok",
     "live": null,
     "prossimo": {
-      "orario": "da definire",
+      "orario": "19:00",
       "data": "10/05",
-      "avv": "da definire"
+      "avv": "SWIATEK"
     },
     "storico": [
       {

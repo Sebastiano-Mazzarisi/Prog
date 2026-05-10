@@ -1,0 +1,776 @@
+<!-- Tennis.html generato da Tennis.py - VERSIONE: 2026-05-10-live-fix-v43 - generato: 18:59:59 del 10/05/2026 -->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tennis Roma">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" href="data:image/png;base64,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">
+<title>🎾 Tennis Roma</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;600;700;800&display=swap');
+
+  :root {
+    --clay:#C1440E;
+    --clay2:#E8622A;
+    --bg:#F5F0EB;
+    --card:#FFFFFF;
+    --line:#E0D8D0;
+    --text:#1A1410;
+    --muted:#8A7F74;
+    --win:#1A7A40;
+    --lose:#C0392B;
+    --next:#B8860B;
+    --live:#D60000;
+  }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+
+  body {
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Barlow Condensed',sans-serif;
+    min-height:100vh;
+    padding-bottom:50px;
+    font-size:18px;
+  }
+
+  .header {
+    background:linear-gradient(135deg,var(--clay) 0%,var(--clay2) 60%,#F07840 100%);
+    padding:24px 18px 18px;
+    position:relative;
+    overflow:hidden;
+    color:#fff;
+  }
+
+  .header::after {
+    content:'🎾';
+    position:absolute;
+    font-size:90px;
+    right:8px;
+    top:-10px;
+    opacity:0.75;
+    transform:rotate(20deg);
+    z-index:0;
+    pointer-events:none;
+  }
+
+  @media (max-width: 600px) {
+    .header::after {
+      top:10px;
+    }
+  }
+
+  .header h1 {
+    font-size:34px;
+    font-weight:800;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    line-height:1;
+    text-shadow:0 2px 8px rgba(0,0,0,.25);
+    position:relative;
+    z-index:1;
+  }
+
+  .header .subtitle {
+    font-size:16px;
+    opacity:.9;
+    margin-top:5px;
+    font-family:'DM Mono',monospace;
+    position:relative;
+    z-index:1;
+  }
+
+  .header .finale {
+    display:inline-block;
+    margin-top:10px;
+    background:rgba(0,0,0,.25);
+    border-radius:4px;
+    padding:4px 12px;
+    font-size:14px;
+    font-family:'DM Mono',monospace;
+  }
+
+  .agg {
+    background:#FFF8F3;
+    border-bottom:1px solid var(--line);
+    padding:10px 18px;
+    font-size:13px;
+    font-family:'DM Mono',monospace;
+    color:var(--muted);
+    line-height:1.45;
+  }
+
+  .agg-top {
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .dot {
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--win);
+    flex-shrink:0;
+  }
+
+  .dot.live-dot {
+    background:var(--live);
+    animation:blinkLive .8s infinite;
+  }
+
+  @keyframes blinkLive {
+    0%, 100% { opacity:1; transform:scale(1); }
+    50% { opacity:.20; transform:scale(.75); }
+  }
+
+  .section-label {
+    padding:16px 16px 7px;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--clay);
+    font-family:'DM Mono',monospace;
+  }
+
+  .card {
+    margin:0 10px 10px;
+    background:var(--card);
+    border-radius:12px;
+    border:1px solid var(--line);
+    overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.07);
+  }
+
+  .card.live {
+    border-color:var(--live);
+    box-shadow:0 0 0 2px var(--live),0 4px 20px rgba(214,0,0,.22);
+  }
+
+  .card.eliminato { opacity:.55; }
+
+  .card-head {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:14px 16px 13px;
+    border-bottom:1px solid var(--line);
+    gap:6px;
+    background:#BFE3FF;
+  }
+
+  .card-head-row {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    gap:8px;
+  }
+
+  .tennista-foto {
+    width:300px;
+    height:300px;
+    object-fit:cover;
+    border-radius:8px;
+    display:block;
+  }
+
+  .tennista-foto-wrap {
+    display:flex;
+    justify-content:center;
+    width:100%;
+  }
+
+  .nome-wrap {
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+    min-width:0;
+    flex:1;
+  }
+
+  .nome-primo {
+    font-size:18px;
+    font-weight:400;
+    letter-spacing:.01em;
+    color:#1A1410;
+    line-height:1;
+    white-space:nowrap;
+  }
+
+  .nome {
+    font-size:28px;
+    font-weight:800;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    line-height:1;
+    color:#1A1410;
+  }
+
+  .ranking {
+    font-family:'DM Mono',monospace;
+    font-size:13px;
+    font-weight:600;
+    color:#4F6475;
+    background:rgba(255,255,255,.55);
+    border:1px solid rgba(79,100,117,.18);
+    border-radius:999px;
+    padding:2px 7px;
+    white-space:nowrap;
+  }
+
+  .orario-ovale {
+    font-family:'DM Mono',monospace;
+    font-size:13px;
+    font-weight:700;
+    color:#8B6914;
+    background:#FFF8DC;
+    border:1px solid #D4A800;
+    border-radius:999px;
+    padding:2px 7px;
+    white-space:nowrap;
+  }
+
+  .badge {
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.05em;
+    padding:5px 10px;
+    border-radius:20px;
+    text-transform:uppercase;
+    font-family:'DM Mono',monospace;
+    white-space:nowrap;
+  }
+
+  .badge.live {
+    background:var(--live);
+    color:#fff;
+    animation:blinkBadge .75s infinite;
+    box-shadow:0 0 12px rgba(214,0,0,.45);
+  }
+
+  @keyframes blinkBadge {
+    0%, 100% { opacity:1; }
+    50% { opacity:.25; }
+  }
+
+  .badge.next { background:#FFF8DC; color:#8B6914; border:1px solid #D4A800; }
+  .badge.elim { background:#FDECEA; color:#C0392B; border:1px solid #E57373; }
+  .badge.ok { background:#EBF7F0; color:#1A7A40; border:1px solid #4CAF78; }
+
+  .card-body { padding:14px 16px 16px; background:#FFFFFF; }
+
+  .live-score {
+    margin-bottom:10px;
+    background:#FFF0F0;
+    border-radius:8px;
+    padding:14px 16px;
+    border-left:5px solid var(--live);
+  }
+
+  .live-score .vs { font-size:26px; font-weight:800; color:#1A1410; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .live-score .score { font-family:'DM Mono',monospace; font-size:30px; font-weight:500; color:var(--live); margin-top:5px; }
+
+  .prossimo {
+    margin-bottom:10px;
+    background:#FFF0B0;
+    border-radius:8px;
+    padding:14px 16px;
+    border-left:4px solid var(--next);
+  }
+
+  .prossimo .vs { font-size:26px; font-weight:800; letter-spacing:.02em; color:#1A1410; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .prossimo .orario { font-family:'DM Mono',monospace; font-size:17px; color:#996600; margin-top:5px; font-weight:500; }
+
+  .avv-ranking {
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    font-weight:600;
+    color:#806000;
+    background:rgba(255,255,255,.70);
+    border:1px solid rgba(128,96,0,.18);
+    border-radius:999px;
+    padding:2px 7px;
+    white-space:nowrap;
+  }
+
+  .match-row {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+
+  .match-row:last-child { border-bottom:none; }
+  .match-date { color:var(--muted); font-family:'DM Mono',monospace; font-size:15px; min-width:46px; }
+  .match-esito { font-size:18px; min-width:22px; }
+  .match-avv { flex:1; font-weight:700; font-size:20px; letter-spacing:.02em; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .match-score { color:var(--muted); font-family:'DM Mono',monospace; font-size:17px; font-weight:500; text-align:right; }
+</style>
+</head>
+
+<body>
+<div class="header">
+  <h1>Internazionali d'Italia</h1>
+  <div class="subtitle">Roma 2026 — Italiani</div>
+  <div class="finale">Finale: 17/05/2026</div>
+</div>
+
+<div class="agg" id="barra-aggiornamento">
+  <span id="dati-refresh">Aggiornamento: avvio...</span>
+</div>
+
+<div id="container"></div>
+
+<script>
+const DATA_EMBEDDED = [{"nome": "MUSETTI", "stato": "live", "live": {"avv": "CERUNDOLO", "score": "2-1", "data": "10/05", "ranking_avv": {"tour": "ATP", "pos": 21, "punti": "2035", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "prossimo": {"orario": "15:00", "data": "10/05", "avv": "CERUNDOLO", "ranking_avv": {"tour": "ATP", "pos": 21, "punti": "2035", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "08/05", "esito": "W", "avv": "MPETSHI PERRICARD", "score": "6-4 6-4", "ranking_avv": {"tour": "ATP", "pos": 62, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "ranking noti"}}], "ranking": {"tour": "ATP", "pos": 10, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "tour": "ATP"}, {"nome": "DARDERI", "stato": "ok", "live": null, "prossimo": {"orario": "16:00", "data": "10/05", "avv": "PAUL", "ranking_avv": {"tour": "ATP", "pos": 20, "punti": "2050", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "08/05", "esito": "W", "avv": "HANFMANN", "score": "6-4 6-4", "ranking_avv": {"tour": "ATP", "pos": 102, "punti": "618", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "ATP", "pos": 20, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "tour": "ATP"}, {"nome": "COCCIARETTO", "stato": "ok", "live": null, "prossimo": {"orario": "19:00", "data": "10/05", "avv": "SWIATEK", "ranking_avv": {"tour": "WTA", "pos": 4, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}}, "storico": [{"data": "08/05", "esito": "W", "avv": "NAVARRO", "score": "6-3 6-3", "ranking_avv": {"tour": "WTA", "pos": 15, "punti": "2515", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "WTA", "pos": 81, "punti": "837", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "WTA"}, {"nome": "ARNALDI", "stato": "ok", "live": null, "prossimo": {"orario": "20:30", "data": "10/05", "avv": "JODAR", "ranking_avv": {"tour": "ATP", "pos": 165, "punti": "349", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "08/05", "esito": "W", "avv": "DE MINAUR", "score": "4-6 7-6 6-4", "ranking_avv": {"tour": "ATP", "pos": 6, "punti": "4080", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "ATP", "pos": 61, "punti": "858", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "ATP"}, {"nome": "SINNER", "stato": "ok", "live": null, "prossimo": {"orario": "da definire", "data": "11/05", "avv": "POPYRIN", "ranking_avv": {"tour": "ATP", "pos": 50, "punti": "1000", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "W", "avv": "OFNER", "score": "6-3 6-4", "ranking_avv": {"tour": "ATP", "pos": 131, "punti": "463", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "ATP", "pos": 1, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "tour": "ATP"}, {"nome": "BELLUCCI", "stato": "ok", "live": null, "prossimo": {"orario": "da definire", "data": "da definire", "avv": "LANDALUCE", "ranking_avv": {"tour": "ATP", "pos": 146, "punti": "420", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "W", "avv": "TOMAS MARTIN ETCHEVERRY", "score": "5-7 6-2 6-3", "ranking_avv": {"tour": "ATP", "pos": 57, "punti": "895", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"data": "07/05", "esito": "W", "avv": "BURRUCHAGA", "score": "6-4 6-4", "ranking_avv": {"tour": "ATP", "pos": 104, "punti": "604", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "ATP", "pos": 73, "punti": "758", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "ATP"}, {"nome": "COBOLLI", "stato": "ok", "live": null, "prossimo": {"orario": "da definire", "data": "da definire", "avv": "TIRANTE", "ranking_avv": {"tour": "ATP", "pos": 103, "punti": "605", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "W", "avv": "TERENCE ATMANE", "score": "7-6 6-3", "ranking_avv": {"tour": "ATP", "pos": 62, "punti": "855", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "ATP", "pos": 12, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "tour": "ATP"}, {"nome": "PELLEGRINO", "stato": "ok", "live": null, "prossimo": {"orario": "da definire", "data": "da definire", "avv": "TIAFOE", "ranking_avv": {"tour": "ATP", "pos": 30, "punti": "1485", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, "storico": [{"data": "09/05", "esito": "W", "avv": "ARTHUR FILS", "score": "4-0 rit.", "ranking_avv": {"tour": "ATP", "pos": 41, "punti": "1210", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"data": "07/05", "esito": "W", "avv": "NARDI", "score": "4-6 6-3 6-3", "ranking_avv": {"tour": "ATP", "pos": 105, "punti": "599", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "ATP", "pos": 139, "punti": "438", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "ATP"}, {"nome": "BASILETTI", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "08/05", "esito": "L", "avv": "SVITOLINA", "score": "1-6 3-6", "ranking_avv": {"tour": "WTA", "pos": 13, "punti": "2606", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "WTA", "pos": 496, "punti": "106", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "WTA"}, {"nome": "BERRETTINI", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "07/05", "esito": "L", "avv": "POPYRIN", "score": "2-6 3-6", "ranking_avv": {"tour": "ATP", "pos": 50, "punti": "1000", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "ATP", "pos": 55, "punti": "945", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "ATP"}, {"nome": "GRANT", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "08/05", "esito": "L", "avv": "BARTUNKOVA", "score": "6-4 3-6 4-6", "ranking_avv": {"tour": "WTA", "pos": 126, "punti": "582", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "WTA", "pos": 234, "punti": "309", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "WTA"}, {"nome": "PAOLINI", "stato": "elim", "live": null, "prossimo": null, "storico": [{"data": "09/05", "esito": "L", "avv": "MERTENS", "score": "6-4 6-7 3-6", "ranking_avv": {"tour": "WTA", "pos": 19, "punti": "1969", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}, {"data": "07/05", "esito": "W", "avv": "JEANJEAN", "score": "6-7 6-2 6-4", "ranking_avv": {"tour": "WTA", "pos": 102, "punti": "760", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "WTA", "pos": 8, "punti": "4236", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "WTA"}, {"nome": "SONEGO", "stato": "elim", "live": null, "prossimo": {"orario": "da definire", "data": "10/05", "avv": "PUETZ", "ranking_avv": null}, "storico": [{"data": "07/05", "esito": "L", "avv": "BUSE", "score": "3-6 3-6", "ranking_avv": {"tour": "ATP", "pos": 100, "punti": "627", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}}], "ranking": {"tour": "ATP", "pos": 39, "punti": "1240", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "tour": "ATP"}];
+const HTML_VERSION = "2026-05-10-live-fix-v43";
+const RANKING_EMBEDDED = {"ATP|SINNER": {"tour": "ATP", "pos": 1, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "ATP|POPYRIN": {"tour": "ATP", "pos": 50, "punti": "1000", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|OFNER": {"tour": "ATP", "pos": 131, "punti": "463", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|MUSETTI": {"tour": "ATP", "pos": 10, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "ATP|CERUNDOLO": {"tour": "ATP", "pos": 21, "punti": "2035", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|COBOLLI": {"tour": "ATP", "pos": 12, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "ATP|TIRANTE": {"tour": "ATP", "pos": 103, "punti": "605", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|TERENCE ATMANE": {"tour": "ATP", "pos": 62, "punti": "855", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|ARNALDI": {"tour": "ATP", "pos": 61, "punti": "858", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|JODAR": {"tour": "ATP", "pos": 165, "punti": "349", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|DE MINAUR": {"tour": "ATP", "pos": 6, "punti": "4080", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|DARDERI": {"tour": "ATP", "pos": 20, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "ATP|PAUL": {"tour": "ATP", "pos": 20, "punti": "2050", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|HANFMANN": {"tour": "ATP", "pos": 102, "punti": "618", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|BELLUCCI": {"tour": "ATP", "pos": 73, "punti": "758", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|LANDALUCE": {"tour": "ATP", "pos": 146, "punti": "420", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|TOMAS MARTIN ETCHEVERRY": {"tour": "ATP", "pos": 57, "punti": "895", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|BURRUCHAGA": {"tour": "ATP", "pos": 104, "punti": "604", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|PELLEGRINO": {"tour": "ATP", "pos": 139, "punti": "438", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|TIAFOE": {"tour": "ATP", "pos": 30, "punti": "1485", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|ARTHUR FILS": {"tour": "ATP", "pos": 41, "punti": "1210", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|NARDI": {"tour": "ATP", "pos": 105, "punti": "599", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|COCCIARETTO": {"tour": "WTA", "pos": 81, "punti": "837", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|SWIATEK": {"tour": "WTA", "pos": 4, "punti": "", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "correzione manuale"}, "WTA|NAVARRO": {"tour": "WTA", "pos": 15, "punti": "2515", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|BERRETTINI": {"tour": "ATP", "pos": 55, "punti": "945", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|SONEGO": {"tour": "ATP", "pos": 39, "punti": "1240", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "ATP|BUSE": {"tour": "ATP", "pos": 100, "punti": "627", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|PAOLINI": {"tour": "WTA", "pos": 8, "punti": "4236", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|MERTENS": {"tour": "WTA", "pos": 19, "punti": "1969", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|JEANJEAN": {"tour": "WTA", "pos": 102, "punti": "760", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|GRANT": {"tour": "WTA", "pos": 234, "punti": "309", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|BARTUNKOVA": {"tour": "WTA", "pos": 126, "punti": "582", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|BASILETTI": {"tour": "WTA", "pos": 496, "punti": "106", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}, "WTA|SVITOLINA": {"tour": "WTA", "pos": 13, "punti": "2606", "aggiornato": "08:45:57 del 10/05/2026", "fonte": "Jeff Sackmann tennis_atp/tennis_wta"}};
+const NOMI_PROPRI = {"SINNER": "Jannik", "MUSETTI": "Lorenzo", "COBOLLI": "Flavio", "ARNALDI": "Matteo", "DARDERI": "Luciano", "BELLUCCI": "Mattia", "PELLEGRINO": "Andrea", "BERRETTINI": "Matteo", "SONEGO": "Lorenzo", "PAOLINI": "Jasmine", "COCCIARETTO": "Elisabetta", "GRANT": "Lucrezia", "BASILETTI": "Lisa"};
+let RANKING_MAP = Object.assign({}, RANKING_EMBEDDED);
+let timerRefresh = null;
+let ultimaFirmaDati = "";
+let primoCaricamento = true;
+
+function firmaDati(DATA) {
+  try { return JSON.stringify(DATA); }
+  catch(e) { return String(Date.now()); }
+}
+
+function pad(n) { return String(n).padStart(2, "0"); }
+
+function oraLocale() {
+  const d = new Date();
+  return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) +
+         " del " + pad(d.getDate()) + "/" + pad(d.getMonth()+1) + "/" + d.getFullYear();
+}
+
+function sistemaBarraAggiornamento() {
+  // Difesa contro vecchie versioni/cache: deve esistere UNA SOLA barra.
+  const barre = document.querySelectorAll(".agg");
+  barre.forEach((b, i) => { if(i > 0) b.remove(); });
+  // Non riscrivere innerHTML: causerebbe sfarfallio del layout ad ogni refresh.
+}
+
+function dataKey(data) {
+  if(!data) return 99999999;
+  const p = String(data).split("/");
+  if(p.length === 2) {
+    const g = parseInt(p[0],10);
+    const m = parseInt(p[1],10);
+    const a = new Date().getFullYear();
+    if(!isNaN(g) && !isNaN(m)) return a*10000 + m*100 + g;
+  }
+  return 99999999;
+}
+
+function orarioKey(orario) {
+  if(!orario) return 9999;
+  const testo = String(orario).toLowerCase().replace(".", ":");
+  const m = testo.match(/(\\d{1,2}):(\\d{2})/);
+  if(m) return parseInt(m[1],10) * 60 + parseInt(m[2],10);
+  return 9999;
+}
+
+function dataLabel(data) {
+  if(!data) return "";
+  const testo = String(data).trim();
+  const m = testo.match(/^(\d{1,2})\/(\d{1,2})$/);
+  if(!m) return testo;
+
+  const oggi = new Date();
+  const anno = oggi.getFullYear();
+  const d = new Date(anno, parseInt(m[2],10) - 1, parseInt(m[1],10));
+  const o = new Date(anno, oggi.getMonth(), oggi.getDate());
+  const diff = Math.round((d - o) / 86400000);
+
+  if(diff === 0) return "oggi";
+  if(diff === 1) return "domani";
+  return testo;
+}
+
+function scoreLabel(score) {
+  const testo = String(score ?? "").trim();
+  if(!testo) return "";
+  if(testo.toLowerCase() === "da verificare") return "";
+  return testo;
+}
+
+function ordineGiocatore(g) {
+  const stato = g.stato || "";
+  const p = g.prossimo || {};
+  if(stato === "live") return [0, dataKey(p.data), -1, g.nome || ""];
+  if(stato === "next" || stato === "ok") return [1, dataKey(p.data), orarioKey(p.orario), g.nome || ""];
+  if(stato === "elim") return [9, 99999999, 9999, g.nome || ""];
+  return [5, 99999999, 9999, g.nome || ""];
+}
+
+function confronta(a,b) {
+  const ka = ordineGiocatore(a);
+  const kb = ordineGiocatore(b);
+  for(let i=0;i<ka.length;i++) {
+    if(ka[i] < kb[i]) return -1;
+    if(ka[i] > kb[i]) return 1;
+  }
+  return 0;
+}
+
+function esc(s) {
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;");
+}
+
+function rankingHtml(g) {
+  const r = g.ranking || null;
+  const tour = (g.tour || (r && r.tour) || "").trim();
+  if(r && r.pos) return '<span class="ranking">' + esc(r.tour || tour) + ' n.' + esc(r.pos) + '</span>';
+  if(tour) return '<span class="ranking">' + esc(tour) + ' n.d.</span>';
+  return "";
+}
+
+function normalizzaNome(s) {
+  return String(s ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9 ]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function aggiornaRankingMap(cache) {
+  if(!cache || !cache.players) return;
+  Object.entries(cache.players).forEach(([nome, item]) => {
+    if(!item || !item.pos) return;
+    const t = item.tour || "";
+    const n = normalizzaNome(nome);
+    if(t && n) RANKING_MAP[t + "|" + n] = item;
+  });
+}
+
+function rankingDaMappa(nome, tour) {
+  const key = String(tour || "") + "|" + normalizzaNome(nome);
+  return RANKING_MAP[key] || null;
+}
+
+function rankingAvvHtml(m, tour) {
+  let r = (m && m.ranking_avv) ? m.ranking_avv : null;
+  if((!r || !r.pos) && m && m.avv) r = rankingDaMappa(m.avv, tour);
+  if(r && r.pos) return '<span class="avv-ranking">' + esc(r.tour || tour || "") + ' n.' + esc(r.pos) + '</span>';
+  if(m && m.avv && tour) return '<span class="avv-ranking">' + esc(tour) + ' n.d.</span>';
+  return "";
+}
+
+function applicaCorrezioniClient(DATA) {
+  // Ultima rete di sicurezza: anche se dati.json contiene una cache vecchia,
+  // il browser corregge i valori noti prima di disegnare la pagina.
+  (DATA || []).forEach(g => {
+    const nome = normalizzaNome(g.nome);
+    if(nome === "SINNER") {
+      g.tour = "ATP";
+      g.ranking = { tour: "ATP", pos: 1, punti: "", fonte: "correzione client" };
+    }
+  });
+  return DATA;
+}
+
+function renderCard(g) {
+  const stato = g.stato || "";
+  const tour = g.tour || ((g.ranking && g.ranking.tour) ? g.ranking.tour : "");
+  const isLive = stato === "live";
+  const isElim = stato === "elim";
+
+  let badge = "";
+  if(isLive) {
+    badge = '<span class="badge live">LIVE</span>';
+  } else if(isElim) {
+    badge = '<span class="badge elim">ELIMINATO</span>';
+  } else if(g.prossimo) {
+    badge = '<span class="badge next">' + esc(dataLabel(g.prossimo.data)) + '</span>';
+  } else {
+    badge = '<span class="badge ok">IN GARA</span>';
+  }
+
+  let body = "";
+
+  if(isLive && g.live) {
+    body += '<div class="live-score">' +
+            '<div class="vs">vs ' + esc(g.live.avv) + rankingAvvHtml(g.live, tour) + '</div>' +
+            '<div class="score">' + esc(scoreLabel(g.live.score)) + '</div>' +
+            '</div>';
+  }
+
+  if(g.prossimo && !isElim && !isLive) {
+    body += '<div class="prossimo">' +
+            '<div class="vs">vs ' + esc(g.prossimo.avv) + rankingAvvHtml(g.prossimo, tour) + '</div>' +
+            '</div>';
+  }
+
+  (g.storico || []).forEach(m => {
+    const sym = m.esito === "W" ? "✓" : "✗";
+    const col = m.esito === "W" ? "var(--win)" : "var(--lose)";
+    body += '<div class="match-row">' +
+            '<span class="match-date">' + esc(dataLabel(m.data)) + '</span>' +
+            '<span class="match-esito" style="color:' + col + '">' + sym + '</span>' +
+            '<span class="match-avv">' + esc(m.avv) + rankingAvvHtml(m, tour) + '</span>' +
+            '<span class="match-score">' + esc(scoreLabel(m.score)) + '</span>' +
+            '</div>';
+  });
+
+  if(!body) {
+    body = '<div style="font-size:14px;color:var(--muted);font-family:DM Mono,monospace;padding:4px 0">Nessun dettaglio disponibile</div>';
+  }
+
+  // Foto: "MUSETTI" → "Musetti.jpg"
+  const nomeFile = g.nome.charAt(0).toUpperCase() + g.nome.slice(1).toLowerCase().replace(/ /g, "_");
+  const fotoUrl = "Tennisti/" + nomeFile + ".jpg";
+  const fotoHtml =
+    '<div class="tennista-foto-wrap">' +
+    '<img class="tennista-foto" src="' + fotoUrl + '"' +
+    ' onerror="this.parentNode.style.display=\'none\'"' +
+    ' alt="' + esc(g.nome) + '">' +
+    '</div>';
+
+  // Nome: "MUSETTI" → primo nome da mappa, cognome in maiuscolo
+  const nomeCompleto = NOMI_PROPRI[g.nome] || "";
+  const nomeHtml = nomeCompleto
+    ? '<span class="nome-primo">' + esc(nomeCompleto) + '</span><span class="nome">' + esc(g.nome) + '</span>'
+    : '<span class="nome">' + esc(g.nome) + '</span>';
+
+  // Riga 1: nome + cognome a sinistra, badge data a destra
+  const riga1 =
+    '<div class="card-head-row">' +
+    '<div class="nome-wrap">' + nomeHtml + '</div>' +
+    badge +
+    '</div>';
+
+  // Riga 2: ranking a sinistra, orario a destra
+  const orarioTesto = (g.prossimo && g.prossimo.orario && g.prossimo.orario !== "da definire")
+    ? g.prossimo.orario : "";
+  const orarioHtml = orarioTesto
+    ? '<span class="orario-ovale">' + esc(orarioTesto) + '</span>'
+    : "";
+  const riga2 =
+    '<div class="card-head-row">' +
+    rankingHtml(g) +
+    orarioHtml +
+    '</div>';
+
+  return '<div class="card' + (isLive ? ' live' : '') + (isElim ? ' eliminato' : '') + '">' +
+         '<div class="card-head">' +
+         fotoHtml +
+         riga1 +
+         riga2 +
+         '</div>' +
+         '<div class="card-body">' + body + '</div>' +
+         '</div>';
+}
+
+function render(DATA) {
+  const inGara = DATA.filter(g => g.stato !== "elim");
+  const eliminati = DATA.filter(g => g.stato === "elim");
+  const isLive = DATA.some(g => g.stato === "live");
+
+  let html = "";
+
+  if(inGara.length) {
+    html += '<div class="section-label">Italiani ancora in gara</div>';
+    inGara.forEach(g => html += renderCard(g));
+  }
+
+  if(eliminati.length) {
+    html += '<div class="section-label">Italiani fuori dai giochi</div>';
+    eliminati.forEach(g => html += renderCard(g));
+  }
+
+  if(!html) {
+    html = '<div style="margin:20px 14px;padding:18px;border-radius:12px;background:#fff;border:1px solid var(--line);font-family:DM Mono,monospace;font-size:14px;color:var(--muted)">Nessun dato disponibile.</div>';
+  }
+
+  document.getElementById("container").innerHTML = html;
+}
+
+async function verificaVersioneHtmlAggiornata() {
+  // Rete anti-cache: se il browser sta usando una vecchia pagina HTML,
+  // controlla direttamente Tennis.html e ricarica quando trova una versione diversa.
+  try {
+    const rr = await fetch("Tennis.html?htmlcheck=" + Date.now(), {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache" }
+    });
+    if(!rr.ok) return;
+    const testo = await rr.text();
+    const m = testo.match(/VERSIONE:\s*([^\s]+)/);
+    const versioneRemota = m && m[1] ? m[1].trim() : "";
+    if(versioneRemota && versioneRemota !== HTML_VERSION) {
+      const ora = Date.now();
+      const ultimoReload = parseInt(sessionStorage.getItem("lastHtmlReload") || "0");
+      if(ora - ultimoReload > 8000) {
+        sessionStorage.setItem("lastHtmlReload", String(ora));
+        const base = window.location.href.split("?")[0];
+        window.location.replace(base + "?v=" + ora);
+      }
+    }
+  } catch(e) {}
+}
+
+async function carica() {
+  if(timerRefresh) clearTimeout(timerRefresh);
+
+  try {
+    await verificaVersioneHtmlAggiornata();
+    const r = await fetch("dati.json?t=" + Date.now(), {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache" }
+    });
+    const DATA_RAW = applicaCorrezioniClient(await r.json());
+
+    // Ordina: live prima, poi per data crescente, poi per orario crescente, poi alfabetico.
+    // "da definire" vale come infinito (9999).
+    function sortKey(g) {
+      const p = g.prossimo || {};
+      const stato = g.stato || "";
+      if (stato === "live") return [0, 0, 0, g.nome || ""];
+      if (stato === "elim") return [9, 9999, 9999, g.nome || ""];
+      // data: converte "GG/MM" in numero MMGG, "da definire" → 9999
+      let dk = 9999;
+      if (p.data && p.data !== "da definire") {
+        const pp = p.data.split("/");
+        if (pp.length === 2) dk = parseInt(pp[1],10)*100 + parseInt(pp[0],10);
+      }
+      // orario: converte "HH:MM" in minuti, "da definire" → 9999
+      let ok = 9999;
+      if (p.orario && p.orario !== "da definire") {
+        const mm = p.orario.match(/(\d{1,2}):(\d{2})/);
+        if (mm) ok = parseInt(mm[1],10)*60 + parseInt(mm[2],10);
+      }
+      return [1, dk, ok, g.nome || ""];
+    }
+    const DATA = DATA_RAW.slice().sort((a,b) => {
+      const ka = sortKey(a), kb = sortKey(b);
+      for (let i=0; i<ka.length; i++) {
+        if (ka[i] < kb[i]) return -1;
+        if (ka[i] > kb[i]) return 1;
+      }
+      return 0;
+    });
+
+    try {
+      const rr = await fetch("ranking_cache.json?t=" + Date.now(), { cache: "no-store" });
+      if(rr.ok) aggiornaRankingMap(await rr.json());
+    } catch(e) {}
+
+    sistemaBarraAggiornamento();
+    render(DATA);
+
+    // Forza il ridisegno della videata anche quando resta aperta ferma su monitor/tablet.
+    // Non aggiorno soltanto l'orario: rileggo dati.json, ricostruisco le card e marco il DOM come aggiornato.
+    const firma = firmaDati(DATA);
+    if(!primoCaricamento && firma !== ultimaFirmaDati) {
+      window.scrollBy(0, 0);
+    }
+    ultimaFirmaDati = firma;
+    primoCaricamento = false;
+    document.documentElement.setAttribute("data-refresh", String(Date.now()));
+
+    const isLive = DATA.some(g => g.stato === "live");
+    const intervallo = isLive ? 6000 : 60000;
+
+    try {
+      const rm = await fetch("meta.json?t=" + Date.now(), { cache: "no-store" });
+      if(rm.ok) {
+        const meta = await rm.json();
+        const orario = (meta.pubblicato || meta.ranking_aggiornato || meta.aggiornato || "");
+        const orarioBreve = orario.replace(/^(\d{2}:\d{2}):\d{2}/, "$1");
+        document.getElementById("dati-refresh").textContent =
+          "Aggiornamento: " + (orarioBreve || "non disponibile") + " (v." + HTML_VERSION.split("-v").pop() + ")";
+        if(meta.html_version && meta.html_version !== HTML_VERSION) {
+          const ora = Date.now();
+          const ultimoReload = parseInt(sessionStorage.getItem("lastReload") || "0");
+          if(ora - ultimoReload > 15000) {
+            sessionStorage.setItem("lastReload", String(ora));
+            const base = window.location.href.split("?")[0];
+            window.location.replace(base + "?v=" + ora);
+            return;
+          }
+        }
+      }
+    } catch(e) {}
+
+    timerRefresh = setTimeout(carica, intervallo);
+
+  } catch(e) {
+    document.getElementById("dati-refresh").textContent =
+      "Aggiornamento: errore · ritento tra 10 sec";
+    timerRefresh = setTimeout(carica, 10000);
+  }
+}
+
+// Mantieni lo schermo acceso su mobile (WakeLock API)
+(async function() {
+  if (!('wakeLock' in navigator)) return;
+  let lock = null;
+  async function acquisisci() {
+    try { lock = await navigator.wakeLock.request('screen'); } catch(e) {}
+  }
+  await acquisisci();
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible') await acquisisci();
+  });
+})();
+
+sistemaBarraAggiornamento();
+carica();
+
+(function() {
+  let startY = 0;
+  let pulling = false;
+
+  const ind = document.createElement("div");
+  ind.style.cssText =
+    "position:fixed;top:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:center;" +
+    "font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#C1440E;background:#FFF8F3;" +
+    "border-bottom:1px solid #E0D8D0;transform:translateY(-100%);transition:transform .2s ease;z-index:9999";
+
+  document.body.prepend(ind);
+
+  document.addEventListener("touchstart", e => {
+    if(window.scrollY === 0) {
+      startY = e.touches[0].clientY;
+      pulling = true;
+    }
+  }, { passive:true });
+
+  document.addEventListener("touchmove", e => {
+    if(!pulling) return;
+    const dy = e.touches[0].clientY - startY;
+    if(dy > 10) {
+      ind.style.transform = "translateY(" + Math.min(dy - 10, 60) + "px)";
+      ind.innerHTML = dy > 70 ? "↑ Rilascia per aggiornare" : "↓ Trascina per aggiornare";
+    }
+  }, { passive:true });
+
+  document.addEventListener("touchend", e => {
+    if(!pulling) return;
+    pulling = false;
+
+    const dy = e.changedTouches[0].clientY - startY;
+    ind.style.transform = "translateY(-100%)";
+
+    if(dy > 70) carica();
+  }, { passive:true });
+})();
+</script>
+</body>
+</html>

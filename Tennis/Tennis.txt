@@ -8,15 +8,15 @@ Fonte dati: ESPN
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
-ARNALDI - da definire
-da definire - 10/05
-  09/05  V  JODAR  da verificare
-  08/05  V  DE MINAUR  4-6 7-6 6-4
---------------------------------------------------
-COCCIARETTO - da definire
-da definire - 10/05
+COCCIARETTO - SWIATEK
+19:00 - 10/05
   09/05  X  SWIATEK  da verificare
   08/05  V  NAVARRO  6-3 6-3
+--------------------------------------------------
+ARNALDI - JODAR
+20:30 - 10/05
+  09/05  V  JODAR  da verificare
+  08/05  V  DE MINAUR  4-6 7-6 6-4
 --------------------------------------------------
 DARDERI - PAUL
 da definire - 10/05
@@ -26,18 +26,21 @@ MUSETTI - CERUNDOLO
 da definire - 10/05
   08/05  V  MPETSHI PERRICARD  6-4 6-4
 --------------------------------------------------
-SINNER - da definire
-da definire - 10/05
+SINNER - POPYRIN
+da definire - 11/05
   09/05  V  OFNER  6-3 6-4
 --------------------------------------------------
-BELLUCCI - ancora in gara, prossimo incontro da definire
+BELLUCCI - LANDALUCE
+da definire - da definire
   09/05  V  TOMAS MARTIN ETCHEVERRY  5-7 6-2 6-3
   07/05  V  BURRUCHAGA  6-4 6-4
 --------------------------------------------------
-COBOLLI - ancora in gara, prossimo incontro da definire
+COBOLLI - TIRANTE
+da definire - da definire
   09/05  V  TERENCE ATMANE  7-6 6-3
 --------------------------------------------------
-PELLEGRINO - ancora in gara, prossimo incontro da definire
+PELLEGRINO - TIAFOE
+da definire - da definire
   09/05  V  ARTHUR FILS  4-0 rit.
   07/05  V  NARDI  4-6 6-3 6-3
 --------------------------------------------------

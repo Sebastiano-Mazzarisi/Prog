@@ -9,12 +9,8 @@ Fonte dati: ESPN + integrazione prossimi + integrazione prossimi
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
 MUSETTI (ATP n.10) - CERUNDOLO (ATP n.21)
->>> LIVE  2026
+15:00 - oggi
   08/05  V  MPETSHI PERRICARD (ATP n.62)  6-4 6-4
---------------------------------------------------
-SINNER (ATP n.1) - POPYRIN (ATP n.50)
->>> LIVE  2026
-  09/05  V  OFNER (ATP n.131)  6-3 6-4
 --------------------------------------------------
 DARDERI (ATP n.20) - PAUL (ATP n.20)
 16:00 - oggi
@@ -27,6 +23,10 @@ COCCIARETTO (WTA n.81) - SWIATEK (WTA n.4)
 ARNALDI (ATP n.61) - JODAR (ATP n.165)
 20:30 - oggi
   08/05  V  DE MINAUR (ATP n.6)  4-6 7-6 6-4
+--------------------------------------------------
+SINNER (ATP n.1) - POPYRIN (ATP n.50)
+da definire - domani
+  09/05  V  OFNER (ATP n.131)  6-3 6-4
 --------------------------------------------------
 BELLUCCI (ATP n.73) - LANDALUCE (ATP n.146)
 da definire - da definire

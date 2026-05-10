@@ -1,5 +1,5 @@
 {
-  "aggiornato": "23:14:33 del 10/05/2026",
+  "aggiornato": "23:14:55 del 10/05/2026",
   "fonte": "dati.json + Programma.txt + Live.txt manuale",
   "italiani_aggiornati": [
     "BELLUCCI",
@@ -14,9 +14,9 @@
     "ARNALDI - JODAR",
     "COCCIARETTO - SWIATEK"
   ],
-  "pubblicato": "23:14:33 del 10/05/2026",
+  "pubblicato": "23:14:55 del 10/05/2026",
   "live_aggiornato": "20:50:10 del 10/05/2026",
-  "live_controllato": "23:14:33 del 10/05/2026",
+  "live_controllato": "23:14:55 del 10/05/2026",
   "live_diagnostica": {
     "controllato": "22:29:48 del 10/05/2026",
     "esito": "ok_nessun_live_riconosciuto",
@@ -29,18 +29,14 @@
   "risultati_finali_integrati": [
     "MUSETTI - prossimo rimosso"
   ],
-  "programma_aggiornato": "23:14:33 del 10/05/2026",
+  "programma_aggiornato": "23:14:55 del 10/05/2026",
   "programma_applicati": [
     "MUSETTI risultato CERUNDOLO",
     "SINNER prossimo POPYRIN"
   ],
   "programma_scaduti": [],
   "programma_non_trovati": [],
-  "prossimi_scaduti": [
-    "ARNALDI vs JODAR",
-    "DARDERI vs PAUL",
-    "COCCIARETTO vs SWIATEK"
-  ],
+  "prossimi_scaduti": [],
   "live_fonte": "Live.txt manuale",
   "live_applicati": []
 }

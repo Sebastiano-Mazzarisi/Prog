@@ -8,21 +8,21 @@ Fonte dati: ESPN + integrazione prossimi + integrazione prossimi
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
-ARNALDI (ATP n.61) - JODAR (ATP n.165)
->>> LIVE  12-35
-  08/05  V  DE MINAUR (ATP n.6)  4-6 7-6 6-4
---------------------------------------------------
-COCCIARETTO (WTA n.81) - SWIATEK (WTA n.4)
->>> LIVE  13-00
-  08/05  V  NAVARRO (WTA n.15)  6-3 6-3
+MUSETTI (ATP n.10) - CERUNDOLO (ATP n.21)
+15:00 - oggi
+  08/05  V  MPETSHI PERRICARD (ATP n.62)  6-4 6-4
 --------------------------------------------------
 DARDERI (ATP n.20) - PAUL (ATP n.20)
->>> LIVE  12-35
+16:00 - oggi
   08/05  V  HANFMANN (ATP n.102)  6-4 6-4
 --------------------------------------------------
-MUSETTI (ATP n.10) - CERUNDOLO (ATP n.21)
->>> LIVE  12-10
-  08/05  V  MPETSHI PERRICARD (ATP n.62)  6-4 6-4
+COCCIARETTO (WTA n.81) - SWIATEK (WTA n.4)
+19:00 - oggi
+  08/05  V  NAVARRO (WTA n.15)  6-3 6-3
+--------------------------------------------------
+ARNALDI (ATP n.61) - JODAR (ATP n.165)
+20:30 - oggi
+  08/05  V  DE MINAUR (ATP n.6)  4-6 7-6 6-4
 --------------------------------------------------
 SINNER (ATP n.1) - POPYRIN (ATP n.50)
 da definire - domani

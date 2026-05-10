@@ -9,17 +9,21 @@
   "ranking_aggiornato": "08:45:57 del 10/05/2026",
   "ranking_fonte": "Jeff Sackmann tennis_atp/tennis_wta",
   "ranking_giocatori_aggiornati": [
-    "MUSETTI"
+    "MUSETTI",
+    "avversario storico di MUSETTI",
+    "COBOLLI",
+    "DARDERI",
+    "avversario di COCCIARETTO"
   ],
   "ranking_scaricata_oggi": true,
   "italiani_integrati": [
     "DARDERI",
     "MUSETTI"
   ],
-  "html_version": "2026-05-10-rank-avversari-v28",
+  "html_version": "2026-05-10-rank-avversari-v29",
   "storico_non_giocato_rimosso": [
     "ARNALDI - JODAR",
     "COCCIARETTO - SWIATEK"
   ],
-  "pubblicato": "14:59:29 del 10/05/2026"
+  "pubblicato": "15:00:48 del 10/05/2026"
 }

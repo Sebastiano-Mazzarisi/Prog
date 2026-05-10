@@ -2,14 +2,26 @@
 Internazionali d'Italia - Roma
 Italiani
 Finale: 17/05/2026
-Aggiornamento: 23:14:55 del 10/05/2026
-Versione: 2026-05-10-programma-v46
+Dati aggiornati: 23:14:55 del 10/05/2026
+Fonte dati: dati.json + Programma.txt + Live.txt manuale + integrazione prossimi
 --------------------------------------------------
 
 ITALIANI ANCORA IN GARA
 --------------------------------------------------
+DARDERI - PAUL
+16:00 - oggi
+  08/05  V  HANFMANN  6-4 6-4
+--------------------------------------------------
+COCCIARETTO - SWIATEK
+19:00 - oggi
+  08/05  V  NAVARRO  6-3 6-3
+--------------------------------------------------
+ARNALDI - JODAR
+20:30 - oggi
+  08/05  V  DE MINAUR  4-6 7-6 6-4
+--------------------------------------------------
 SINNER - POPYRIN
-domani - 15:00
+15:00 - domani
   09/05  V  OFNER  6-3 6-4
 --------------------------------------------------
 BELLUCCI - LANDALUCE
@@ -21,32 +33,17 @@ COBOLLI - TIRANTE
 da definire - da definire
   09/05  V  TERENCE ATMANE  7-6 6-3
 --------------------------------------------------
+MUSETTI - ancora in gara, prossimo incontro da definire
+  oggi  V  CERUNDOLO  7-6(7) 6-4
+  08/05  V  MPETSHI PERRICARD  6-4 6-4
+--------------------------------------------------
 PELLEGRINO - TIAFOE
 da definire - da definire
   09/05  V  ARTHUR FILS  4-0 rit.
   07/05  V  NARDI  4-6 6-3 6-3
 --------------------------------------------------
-DARDERI - PAUL
-oggi - risultato da verificare
-  08/05  V  HANFMANN  6-4 6-4
---------------------------------------------------
-COCCIARETTO - SWIATEK
-oggi - risultato da verificare
-  08/05  V  NAVARRO  6-3 6-3
---------------------------------------------------
-ARNALDI - JODAR
-oggi - risultato da verificare
-  08/05  V  DE MINAUR  4-6 7-6 6-4
---------------------------------------------------
-MUSETTI - prossimo incontro da definire
-  oggi  V  CERUNDOLO  7-6(7) 6-4
-  08/05  V  MPETSHI PERRICARD  6-4 6-4
---------------------------------------------------
 
 ITALIANI FUORI DAI GIOCHI
---------------------------------------------------
-SONEGO
-  07/05  X  BUSE  3-6 3-6
 --------------------------------------------------
 BASILETTI
   08/05  X  SVITOLINA  1-6 3-6
@@ -60,4 +57,7 @@ GRANT
 PAOLINI
   09/05  X  MERTENS  6-4 6-7 3-6
   07/05  V  JEANJEAN  6-7 6-2 6-4
+--------------------------------------------------
+SONEGO
+  07/05  X  BUSE  3-6 3-6
 --------------------------------------------------

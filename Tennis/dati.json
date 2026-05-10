@@ -3,11 +3,7 @@
     "nome": "ARNALDI",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "20:30",
-      "data": "10/05",
-      "avv": "JODAR"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "08/05",
@@ -27,11 +23,7 @@
     "nome": "BELLUCCI",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "da definire",
-      "data": "da definire",
-      "avv": "LANDALUCE"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "09/05",
@@ -51,11 +43,7 @@
     "nome": "COBOLLI",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "da definire",
-      "data": "da definire",
-      "avv": "TIRANTE"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "09/05",
@@ -69,11 +57,7 @@
     "nome": "COCCIARETTO",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "19:00",
-      "data": "10/05",
-      "avv": "SWIATEK"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "08/05",
@@ -93,11 +77,7 @@
     "nome": "DARDERI",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "16:00",
-      "data": "10/05",
-      "avv": "PAUL"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "08/05",
@@ -138,11 +118,7 @@
     "nome": "PELLEGRINO",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "da definire",
-      "data": "da definire",
-      "avv": "TIAFOE"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "09/05",
@@ -162,11 +138,7 @@
     "nome": "SINNER",
     "stato": "ok",
     "live": null,
-    "prossimo": {
-      "orario": "da definire",
-      "data": "11/05",
-      "avv": "POPYRIN"
-    },
+    "prossimo": null,
     "storico": [
       {
         "data": "09/05",

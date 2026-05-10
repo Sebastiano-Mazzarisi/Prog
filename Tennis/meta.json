@@ -1,6 +1,6 @@
 {
   "aggiornato": "23:36:07 del 09/05/2026",
-  "fonte": "ESPN",
+  "fonte": "ESPN + integrazione prossimi",
   "italiani_aggiornati": [
     "BELLUCCI",
     "COBOLLI",
@@ -22,5 +22,8 @@
     "GRANT",
     "BASILETTI"
   ],
-  "ranking_scaricata_oggi": true
+  "ranking_scaricata_oggi": true,
+  "italiani_integrati": [
+    "SONEGO"
+  ]
 }

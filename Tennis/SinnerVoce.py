@@ -205,7 +205,8 @@ def to_datetime(data, ora):
     if not data or not ora:
         return None
     try:
-        return datetime.strptime(data + " " + ora, "%d/%m/%Y %H:%M:%S")
+        dt = datetime.strptime(data + " " + ora, "%d/%m/%Y %H:%M:%S")
+        return dt.replace(tzinfo=TZ_ROMA)
     except Exception:
         return None
 

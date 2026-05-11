@@ -25,6 +25,8 @@ F_CSV = os.path.join(DIR, "Sinner-dati.csv")
 COGNOME = "SINNER"
 NOME = "Jannik"
 TZ_ROMA = ZoneInfo("Europe/Rome")
+TORNEO_DESCRIZIONE = "Tennis, Roma, Internazionali d\'Italia 2026"
+TURNO_DESCRIZIONE = "ottavi di finale"
 
 URLS = [
     ("fixtures", "https://www.flashscore.com/tennis/atp-singles/rome/fixtures/"),
@@ -182,6 +184,98 @@ def avversario_valido(s):
         return False
 
     return True
+
+
+def nome_prima_del_cognome(nome):
+    """
+    Converte 'Pellegrino Andrea' in 'Andrea Pellegrino'.
+    """
+    nome = pulisci(nome)
+    if not nome:
+        return ""
+
+    parti = nome.split()
+    if len(parti) == 2:
+        return parti[1] + " " + parti[0]
+
+    return nome
+
+
+def data_estesa_italiana(data):
+    """
+    Converte 12/05/2026 in 'martedì 12 maggio 2026'.
+    """
+    if not data:
+        return ""
+
+    giorni = [
+        "lunedì",
+        "martedì",
+        "mercoledì",
+        "giovedì",
+        "venerdì",
+        "sabato",
+        "domenica",
+    ]
+
+    mesi = [
+        "",
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre",
+    ]
+
+    try:
+        dt = datetime.strptime(data, "%d/%m/%Y")
+        return f"{giorni[dt.weekday()]} {dt.day} {mesi[dt.month]} {dt.year}"
+    except Exception:
+        return data
+
+
+def ora_parlata(ora):
+    """
+    Converte 11:00:00 in '11', 15:30:00 in '15 e 30'.
+    """
+    if not ora:
+        return ""
+
+    try:
+        hh, mm = ora.split(":")[:2]
+        h = int(hh)
+        m = int(mm)
+        if m == 0:
+            return str(h)
+        return f"{h} e {m:02d}"
+    except Exception:
+        return ora[:5]
+
+
+
+def aggiornamento_parlato():
+    """
+    Restituisce una frase tipo:
+    Dati aggiornati alle 19 e 30 di oggi.
+    """
+    adesso_locale = adesso()
+    h = adesso_locale.hour
+    m = adesso_locale.minute
+
+    if m == 0:
+        ora = str(h)
+    else:
+        ora = f"{h} e {m:02d}"
+
+    return f"Dati aggiornati alle {ora} di oggi."
+
 
 
 def parse_data_ora(line):
@@ -505,42 +599,64 @@ def scegli_migliore(matches):
 
 
 def frase_siri(m):
-    aggiornato = adesso().strftime("%H:%M")
+    aggiornamento = aggiornamento_parlato()
 
     if not m.avversario:
-        return f"Non ho trovato la partita di Sinner. Ultimo controllo alle {aggiornato}."
+        return f"{TORNEO_DESCRIZIONE}. Non ho trovato la partita di Sinner. {aggiornamento}"
+
+    avversario = nome_prima_del_cognome(m.avversario)
 
     if m.stato == "X":
         if m.punteggio:
             return (
-                f"Sinner contro {m.avversario}. "
-                f"Partita in corso. "
+                f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
+                f"Sinner sta giocando contro {avversario}. "
                 f"Punteggio: {m.punteggio.replace('-', ' a ')}. "
-                f"Aggiornato alle {aggiornato}."
+                f"{aggiornamento}"
             )
+
         return (
-            f"Sinner contro {m.avversario}. "
-            f"Partita in corso, ma il punteggio non è ancora disponibile. "
-            f"Aggiornato alle {aggiornato}."
+            f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
+            f"Sinner sta giocando contro {avversario}, "
+            f"ma il punteggio non è ancora disponibile. "
+            f"{aggiornamento}"
         )
 
     if m.stato == "F":
-        quando = ""
-        if m.data and m.ora:
-            ora_breve = m.ora[:5]
-            oggi = adesso().strftime("%d/%m/%Y")
-            if m.data == oggi:
-                quando = f"oggi alle {ora_breve}"
-            else:
-                quando = f"il {m.data} alle {ora_breve}"
-        return f"Sinner giocherà contro {m.avversario}" + (f" {quando}" if quando else "") + f". Ultimo controllo alle {aggiornato}."
+        data_lunga = data_estesa_italiana(m.data)
+        ora_testo = ora_parlata(m.ora)
+
+        if data_lunga and ora_testo:
+            return (
+                f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
+                f"Sinner giocherà contro {avversario} "
+                f"{data_lunga}, alle ore {ora_testo}. "
+                f"{aggiornamento}"
+            )
+
+        return (
+            f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
+            f"Sinner giocherà contro {avversario}. "
+            f"{aggiornamento}"
+        )
 
     if m.stato == "P":
         if m.punteggio:
-            return f"Sinner ha giocato contro {m.avversario}. Risultato: {m.punteggio.replace('-', ' a ')}. Aggiornato alle {aggiornato}."
-        return f"Sinner ha giocato contro {m.avversario}. Risultato non disponibile. Aggiornato alle {aggiornato}."
+            return (
+                f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
+                f"Sinner ha giocato contro {avversario}. "
+                f"Risultato: {m.punteggio.replace('-', ' a ')}. "
+                f"{aggiornamento}"
+            )
 
-    return f"Situazione Sinner non disponibile. Ultimo controllo alle {aggiornato}."
+        return (
+            f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
+            f"Sinner ha giocato contro {avversario}. "
+            f"Risultato non disponibile. "
+            f"{aggiornamento}"
+        )
+
+    return f"{TORNEO_DESCRIZIONE}. Situazione Sinner non disponibile. {aggiornamento}"
 
 
 def scrivi_file(m, total_time):

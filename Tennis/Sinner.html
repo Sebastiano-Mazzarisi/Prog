@@ -52,6 +52,17 @@
       font-size:clamp(34px,4.5vw,54px);
       letter-spacing:-.045em;
       line-height:.95;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .tennis-logo{
+      width:46px;
+      height:46px;
+      flex:0 0 auto;
+      display:inline-block;
+      filter:drop-shadow(0 5px 10px rgba(20,32,51,.18));
     }
 
     .subtitle{
@@ -405,6 +416,12 @@
       h1{
         font-size:34px;
         line-height:1;
+        gap:9px;
+      }
+
+      .tennis-logo{
+        width:34px;
+        height:34px;
       }
 
       .subtitle{
@@ -588,6 +605,7 @@
 
     @media (max-width:390px){
       h1{font-size:30px}
+      .tennis-logo{width:30px;height:30px}
       .photo{height:165px}
       .versus{font-size:30px}
       #opponentName{font-size:24px}
@@ -608,7 +626,11 @@
   <main class="page">
     <section class="topbar">
       <div>
-        <h1>Jannik Sinner</h1>
+        <h1><svg class="tennis-logo" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="45" fill="#d7ff42" stroke="#8bb300" stroke-width="4"/>
+            <path d="M22 16 C47 32 53 68 78 84" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+            <path d="M78 16 C53 32 47 68 22 84" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+          </svg><span>Jannik Sinner</span></h1>
         <div class="subtitle">Internazionali di Roma 2026 · Monitor partita</div>
       </div>
       <div class="update" id="lastUpdate">Aggiornamento: —</div>
@@ -617,10 +639,10 @@
     <section class="hero">
       <div class="photo">
         <div class="status-pill future" id="statusPill" style="display:none"></div>
-        <img id="sinnerPhoto" src="Tennisti/JJSinner.jpg" alt="Jannik Sinner" onerror="showFallbackPhoto()">
+        <img id="sinnerPhoto" src="Tennisti/JSinner.jpg" alt="Jannik Sinner" onerror="showFallbackPhoto()">
         <div class="fallback" id="fallbackPhoto" style="display:none">
           <div class="initials">JS</div>
-          <div class="hint">Metti nella stessa cartella una foto chiamata:<br><b>Tennisti/JJSinner.jpg</b></div>
+          <div class="hint">Metti nella stessa cartella una foto chiamata:<br><b>Tennisti/JSinner.jpg</b></div>
         </div>
       </div>
 

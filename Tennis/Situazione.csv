@@ -1,14 +1,14 @@
 ﻿Cognome;Nome;Stato;Data;Ora;Avversario;Punteggio
-ARNALDI;Matteo;F;;;;
-BASILETTI;Lisa;F;;;;
-BELLUCCI;Mattia;F;;;Landaluce Martin;
-BERRETTINI;Matteo;F;;;;
-COBOLLI;Flavio;F;;;Tirante Thiago;
-COCCIARETTO;Elisabetta;F;;;;
-DARDERI;Luciano;F;;;Zverev Alexander;
-GRANT;Lucrezia;F;;;;
-MUSETTI;Lorenzo;F;;;Ruud Casper;
-PAOLINI;Jasmine;F;;;;
-PELLEGRINO;Andrea;F;;;Tiafoe Frances;
-SINNER;Jannik;F;;;Popyrin Alexei;
-SONEGO;Lorenzo;F;;;;
+BERRETTINI;Matteo;P;11/05/2026;11:15:00;Popyrin A;2-6 3-6
+PAOLINI;Jasmine;P;11/05/2026;13:10:00;Mertens E;6-4 3-6
+BELLUCCI;Mattia;P;11/05/2026;14:35:00;Etcheverry T M;5-7 6-2 6-3
+MUSETTI;Lorenzo;P;11/05/2026;15:15:00;Cerundolo F;6-4
+COBOLLI;Flavio;P;11/05/2026;16:55:00;Atmane T;6-3
+DARDERI;Luciano;P;11/05/2026;18:05:00;Paul T;3-6 6-3 6-2
+GRANT;Lucrezia;P;11/05/2026;18:25:00;Bartunkova N;6-4 3-6 4-6
+BASILETTI;Lisa;P;11/05/2026;19:10:00;Svitolina E;1-6 3-6
+COCCIARETTO;Elisabetta;P;11/05/2026;19:10:00;Swiatek I;1-6 0-6
+SINNER;Jannik;P;11/05/2026;19:10:00;Ofner S;6-3 6-4
+SONEGO;Lorenzo;P;11/05/2026;19:10:00;Buse I;3-6 3-6
+ARNALDI;Matteo;P;11/05/2026;21:00:00;Jodar R;1-6 6-4 3-6
+PELLEGRINO;Andrea;P;11/05/2026;21:30:00;Fils A;0-0 4-0

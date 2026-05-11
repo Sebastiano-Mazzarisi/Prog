@@ -659,6 +659,27 @@ def frase_siri(m):
     return f"{TORNEO_DESCRIZIONE}. Situazione Sinner non disponibile. {aggiornamento}"
 
 
+
+def applica_correzioni_manualI(m):
+    """
+    Correzioni manuali per casi in cui Flashscore associa un orario sbagliato
+    o ambiguo alla partita trovata.
+
+    Caso attuale:
+    Sinner - Andrea Pellegrino, ottavi di finale Roma 2026:
+    martedì 12 maggio 2026 alle 15:00.
+    """
+    if (
+        m.stato == "F"
+        and m.data == "12/05/2026"
+        and m.avversario == "Pellegrino Andrea"
+    ):
+        m.ora = "15:00:00"
+        m.fonte = (m.fonte or "") + " + correzione manuale orario Sinner-Pellegrino"
+
+    return m
+
+
 def scrivi_file(m, total_time):
     frase = frase_siri(m)
 
@@ -709,6 +730,7 @@ def esegui():
 
     total = time.perf_counter() - t0
     match = scegli_migliore(tutti)
+    match = applica_correzioni_manualI(match)
     scrivi_file(match, total)
 
     print("\nFRASE PER SIRI:")

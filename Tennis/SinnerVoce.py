@@ -14,6 +14,7 @@ import csv
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -23,6 +24,7 @@ F_CSV = os.path.join(DIR, "Sinner-dati.csv")
 
 COGNOME = "SINNER"
 NOME = "Jannik"
+TZ_ROMA = ZoneInfo("Europe/Rome")
 
 URLS = [
     ("fixtures", "https://www.flashscore.com/tennis/atp-singles/rome/fixtures/"),
@@ -51,12 +53,16 @@ class Match:
     recupero_sec: float = 0.0
 
 
+def adesso():
+    return datetime.now(TZ_ROMA)
+
+
 def pulisci(s):
     return re.sub(r"\s+", " ", (s or "").strip())
 
 
 def log(msg):
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}", flush=True)
+    print(f"[{adesso().strftime('%H:%M:%S')}] {msg}", flush=True)
 
 
 def title_name(s):
@@ -88,6 +94,8 @@ NOMI_NOTI = {
     "DIMITROV G": "Dimitrov Grigor",
     "PAUL T": "Paul Tommy",
     "TIAFOE F": "Tiafoe Frances",
+    "PELLEGRINO A": "Pellegrino Andrea",
+    "PELLEGRINO ANDREA": "Pellegrino Andrea",
     "LANDALUCE M": "Landaluce Martin",
     "TIRANTE T A": "Tirante Thiago Agustin",
 }
@@ -190,7 +198,7 @@ def parse_data_ora(line):
     if not (1 <= g <= 31 and 1 <= mese <= 12 and 0 <= hh <= 23 and 0 <= mm <= 59):
         return "", ""
 
-    return f"{g:02d}/{mese:02d}/{datetime.now().year}", f"{hh:02d}:{mm:02d}:00"
+    return f"{g:02d}/{mese:02d}/{adesso().year}", f"{hh:02d}:{mm:02d}:00"
 
 
 def to_datetime(data, ora):
@@ -413,7 +421,7 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
         punteggio = completa_con_game(punteggio, estrai_game_da_testo(tail_text))
 
         dt = to_datetime(data, ora)
-        now = datetime.now()
+        now = adesso()
 
         if forced_state == "fixtures":
             stato = "F"
@@ -470,7 +478,7 @@ def scegli_migliore(matches):
     if not matches:
         return Match("F", "", "", "", "", "fallback", 0.0)
 
-    now = datetime.now()
+    now = adesso()
 
     live = [m for m in matches if m.stato == "X"]
     if live:
@@ -496,7 +504,7 @@ def scegli_migliore(matches):
 
 
 def frase_siri(m):
-    aggiornato = datetime.now().strftime("%H:%M")
+    aggiornato = adesso().strftime("%H:%M")
 
     if not m.avversario:
         return f"Non ho trovato la partita di Sinner. Ultimo controllo alle {aggiornato}."
@@ -519,7 +527,7 @@ def frase_siri(m):
         quando = ""
         if m.data and m.ora:
             ora_breve = m.ora[:5]
-            oggi = datetime.now().strftime("%d/%m/%Y")
+            oggi = adesso().strftime("%d/%m/%Y")
             if m.data == oggi:
                 quando = f"oggi alle {ora_breve}"
             else:
@@ -561,7 +569,7 @@ def scrivi_file(m, total_time):
 
 def esegui():
     print("=" * 70)
-    print(f"SinnerVoce.py - {datetime.now().strftime('%H:%M:%S del %d/%m/%Y')}")
+    print(f"SinnerVoce.py - {adesso().strftime('%H:%M:%S del %d/%m/%Y')}")
     print("=" * 70)
 
     t0 = time.perf_counter()

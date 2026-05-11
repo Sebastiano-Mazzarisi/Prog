@@ -395,6 +395,12 @@
 
     .tools input{display:none}
 
+    #refreshInfo{
+      width:100%;
+      text-align:center;
+      color:var(--muted);
+    }
+
     /* SMARTPHONE */
     @media (max-width:700px){
       body{
@@ -708,16 +714,7 @@
       <div id="historyBox"></div>
 
       <div class="tools">
-        <button onclick="loadAll()">Aggiorna ora</button>
-        <label>
-          Carica Situazione.csv
-          <input type="file" accept=".csv,.txt" onchange="loadLocalCurrent(event)">
-        </label>
-        <label>
-          Carica Sinner-storico.csv
-          <input type="file" accept=".csv,.txt" onchange="loadLocalHistory(event)">
-        </label>
-        <span>La pagina aggiorna automaticamente ogni 30 secondi.</span>
+        <span id="refreshInfo">Aggiornamento automatico ogni 60 secondi.</span>
       </div>
     </section>
   </main>
@@ -725,7 +722,9 @@
 <script>
 const CURRENT_CSV = "Situazione.csv";
 const HISTORY_CSV = "Sinner-storico.csv";
-const REFRESH_MS = 30000;
+const REFRESH_IDLE_MS = 60000;
+const REFRESH_LIVE_MS = 10000;
+let refreshTimer = null;
 
 // Se la pagina è pubblicata su GitHub Pages o aperta da un percorso diverso,
 // questi fallback provano a leggere i CSV dal repository GitHub.
@@ -801,6 +800,37 @@ function stateClass(stato){
   if(stato === "X") return "live";
   if(stato === "P") return "played";
   return "future";
+}
+
+function wantedRefreshMs(){
+  const stato = currentMatch && currentMatch.Stato ? currentMatch.Stato : "F";
+
+  const matchTime = currentMatch ? parseItalianDateTime(currentMatch.Data, currentMatch.Ora) : null;
+  if(matchTime && stato !== "P"){
+    const alertTime = new Date(matchTime.getTime() - 5 * 60 * 1000);
+    if(new Date() >= alertTime) return REFRESH_LIVE_MS;
+  }
+
+  return stato === "X" ? REFRESH_LIVE_MS : REFRESH_IDLE_MS;
+}
+
+function scheduleNextRefresh(){
+  const ms = wantedRefreshMs();
+
+  if(refreshTimer){
+    clearTimeout(refreshTimer);
+    refreshTimer = null;
+  }
+
+  const info = document.getElementById("refreshInfo");
+  if(info){
+    info.textContent = "Aggiornamento automatico ogni " + Math.round(ms / 1000) + " secondi.";
+  }
+
+  refreshTimer = setTimeout(async () => {
+    await loadAll();
+    scheduleNextRefresh();
+  }, ms);
 }
 
 function splitScore(score){
@@ -933,6 +963,12 @@ function renderCurrent(row){
     "Aggiornamento: " + new Date().toLocaleTimeString("it-IT");
 
   updateCountdown();
+
+  const info = document.getElementById("refreshInfo");
+  if(info){
+    const ms = wantedRefreshMs();
+    info.textContent = "Aggiornamento automatico ogni " + Math.round(ms / 1000) + " secondi.";
+  }
 }
 
 function normalizeRow(row){
@@ -1067,31 +1103,8 @@ async function loadAll(){
   await loadHistory();
 }
 
-function loadLocalCurrent(ev){
-  const file = ev.target.files[0];
-  if(!file) return;
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    const rows = parseCSV(reader.result);
-    const sinner = rows.find(r => (r.Cognome || "").toUpperCase() === "SINNER") || rows[0];
-    renderCurrent(normalizeRow(sinner));
-    renderHistory(historyRows);
-  };
-  reader.readAsText(file);
-}
-
-function loadLocalHistory(ev){
-  const file = ev.target.files[0];
-  if(!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => renderHistory(parseCSV(reader.result));
-  reader.readAsText(file);
-}
-
-loadAll();
-setInterval(loadAll, REFRESH_MS);
+loadAll().then(scheduleNextRefresh);
 setInterval(updateCountdown, 1000);
 </script>
 </body>

@@ -2,16 +2,10 @@
 SinnerVoce.py
 Aggiorna Tennis/Sinner.txt con una frase leggibile da Siri.
 
-Questa versione è pensata per stare nella cartella:
-    Tennis/SinnerVoce.py
-
-GitHub Actions la esegue con:
-    cd Tennis
-    python SinnerVoce.py
-
-Output:
-    Tennis/Sinner.txt
-    Tennis/Sinner-dati.csv
+Versione corretta:
+- evita falsi avversari tipo "The Latest News";
+- non considera LIVE una riga senza punteggio solo perché l'orario è passato;
+- preferisce dati chiari da fixtures/results/main.
 """
 
 import os
@@ -31,8 +25,8 @@ COGNOME = "SINNER"
 NOME = "Jannik"
 
 URLS = [
-    ("main", "https://www.flashscore.com/tennis/atp-singles/rome/"),
     ("fixtures", "https://www.flashscore.com/tennis/atp-singles/rome/fixtures/"),
+    ("main", "https://www.flashscore.com/tennis/atp-singles/rome/"),
     ("results", "https://www.flashscore.com/tennis/atp-singles/rome/results/"),
 ]
 
@@ -66,12 +60,20 @@ def log(msg):
 
 
 def title_name(s):
-    return " ".join(p[:1].upper() + p[1:].lower() for p in pulisci(s).split())
+    out = []
+    for p in pulisci(s).split():
+        if len(p) <= 2 and p.isupper():
+            out.append(p)
+        else:
+            out.append(p[:1].upper() + p[1:].lower())
+    return " ".join(out)
 
 
 NOMI_NOTI = {
     "POPYRIN A": "Popyrin Alexei",
+    "POPYRIN ALEXEI": "Popyrin Alexei",
     "OFNER S": "Ofner Sebastian",
+    "OFNER SEBASTIAN": "Ofner Sebastian",
     "ALCARAZ C": "Alcaraz Carlos",
     "DJOKOVIC N": "Djokovic Novak",
     "ZVEREV A": "Zverev Alexander",
@@ -91,15 +93,41 @@ NOMI_NOTI = {
 }
 
 
+BLACKLIST_AVVERSARI = {
+    "THE LATEST NEWS",
+    "LATEST NEWS",
+    "NEWS",
+    "DRAW",
+    "RESULTS",
+    "FIXTURES",
+    "STANDINGS",
+    "SUMMARY",
+    "ODDS",
+    "ATP",
+    "WTA",
+    "TENNIS",
+    "ROME",
+    "SINGLES",
+    "DOUBLES",
+    "PREVIEW",
+    "HIGHLIGHTS",
+    "ADVERTISEMENT",
+    "SHOW MORE MATCHES",
+}
+
+
 def normalizza_giocatore(s):
     s = pulisci(s).replace(".", "")
     s = re.sub(r"\([^)]+\)", "", s)
     s = pulisci(s)
+
     if not s:
         return ""
+
     up = s.upper()
     if up in NOMI_NOTI:
         return NOMI_NOTI[up]
+
     return title_name(up)
 
 
@@ -110,6 +138,42 @@ def cognome_flashscore(s):
     if not s:
         return ""
     return s.upper().split()[0]
+
+
+def giocatore_plausibile(s):
+    s = pulisci(s)
+    if not s:
+        return False
+
+    up = s.upper().replace(".", "")
+    if up in BLACKLIST_AVVERSARI:
+        return False
+
+    if any(x in up for x in ["LATEST NEWS", "ADVERTISEMENT", "SHOW MORE", "FLASH SCORE"]):
+        return False
+
+    if re.fullmatch(r"[\d\s:.\-]+", s):
+        return False
+
+    if not re.search(r"[A-Za-zÀ-ÿ]", s):
+        return False
+
+    # Evita titoli o sezioni troppo lunghe.
+    if len(s) > 40:
+        return False
+
+    return True
+
+
+def avversario_valido(s):
+    if not giocatore_plausibile(s):
+        return False
+
+    up = s.upper()
+    if "SINNER" in up:
+        return False
+
+    return True
 
 
 def parse_data_ora(line):
@@ -181,6 +245,7 @@ def ricostruisci_set(resto, set_p1, set_p2):
         a, b = nums[i], nums[i + 1]
         if not set_plausibile(a, b):
             break
+
         pairs.append((a, b))
         i += 2
 
@@ -314,6 +379,9 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
         p1_raw = lines[i + 1]
         p2_raw = lines[i + 2]
 
+        if not giocatore_plausibile(p1_raw) or not giocatore_plausibile(p2_raw):
+            continue
+
         c1 = cognome_flashscore(p1_raw)
         c2 = cognome_flashscore(p2_raw)
 
@@ -321,7 +389,12 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
             continue
 
         sinner_primo = c1 == COGNOME
-        avversario = normalizza_giocatore(p2_raw if sinner_primo else p1_raw)
+        avv_raw = p2_raw if sinner_primo else p1_raw
+
+        if not avversario_valido(avv_raw):
+            continue
+
+        avversario = normalizza_giocatore(avv_raw)
 
         tail = []
         j = i + 3
@@ -355,8 +428,6 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
                 stato = "X"
             elif punteggio:
                 stato = "P"
-            elif dt and dt <= now <= dt + timedelta(hours=4):
-                stato = "X"
             elif dt and dt > now:
                 stato = "F"
             else:
@@ -440,8 +511,7 @@ def frase_siri(m):
             )
         return (
             f"Sinner contro {m.avversario}. "
-            f"Partita probabilmente in corso. "
-            f"Non ho ancora letto il punteggio. "
+            f"Partita in corso, ma il punteggio non è ancora disponibile. "
             f"Aggiornato alle {aggiornato}."
         )
 

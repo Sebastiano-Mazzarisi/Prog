@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sinner - Internazionali Roma 2026</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --ink:#142033;
+      --muted:#687386;
+      --line:#dbe3ef;
+      --blue:#0d6efd;
+      --blue-dark:#084298;
+      --blue2:#e7f0ff;
+      --green:#0f8a4b;
+      --orange:#c96a00;
+      --red:#b42318;
+      --shadow:0 16px 40px rgba(20,32,51,.11);
+      --radius:26px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left,#e7f0ff 0,transparent 34%),
+        linear-gradient(135deg,#f8fbff 0%,var(--bg) 100%);
+      min-height:100vh;
+    }
+
+    .page{
+      max-width:1180px;
+      margin:0 auto;
+      padding:26px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:22px;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(34px,4.5vw,54px);
+      letter-spacing:-.045em;
+      line-height:.95;
+    }
+
+    .subtitle{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:17px;
+    }
+
+    .update{
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px 16px;
+      color:var(--muted);
+      font-weight:750;
+      white-space:nowrap;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:310px 1fr;
+      gap:24px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px;
+      overflow:hidden;
+    }
+
+    .photo{
+      position:relative;
+      min-height:360px;
+      border-radius:24px;
+      background:linear-gradient(160deg,#dce9ff,#fff);
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+    }
+
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      background:#eef5ff;
+    }
+
+    .fallback{
+      text-align:center;
+      padding:26px;
+    }
+
+    .initials{
+      width:132px;
+      height:132px;
+      border-radius:50%;
+      margin:0 auto 18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--blue);
+      color:white;
+      font-size:54px;
+      font-weight:900;
+    }
+
+    .hint{
+      color:var(--muted);
+      line-height:1.35;
+      font-size:15px;
+    }
+
+    .status-pill{
+      position:absolute;
+      top:16px;
+      left:16px;
+      padding:9px 13px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:14px;
+      background:#fff7e6;
+      color:var(--orange);
+      border:1px solid #ffe0a3;
+      z-index:2;
+    }
+
+    .status-pill.live{background:#fff1f0;color:var(--red);border-color:#ffd0cc}
+    .status-pill.played{background:#edfdf4;color:var(--green);border-color:#c7f0d8}
+    .status-pill.future{background:#fff7e6;color:var(--orange);border-color:#ffe0a3}
+
+    .maininfo{
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+
+    .when{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .smallcard{
+      background:#f8fbff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      min-width:0;
+    }
+
+    .label{
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:12px;
+      font-weight:900;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .value{
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.03em;
+      white-space:nowrap;
+    }
+
+    .matchline{
+      margin:8px 0 22px;
+      padding:22px;
+      background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+      color:white;
+      border-radius:24px;
+      text-align:center;
+    }
+
+    .versus{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      font-size:clamp(30px,5vw,56px);
+      font-weight:950;
+      letter-spacing:-.045em;
+      line-height:1;
+    }
+
+    .dash{opacity:.55}
+
+    .round{
+      margin-top:8px;
+      opacity:.85;
+      font-weight:750;
+    }
+
+    .scoregrid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .scorebox{
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px 10px;
+      text-align:center;
+      min-height:94px;
+    }
+
+    .scoretitle{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      margin-bottom:10px;
+    }
+
+    .scorevalue{
+      font-size:32px;
+      font-weight:950;
+      letter-spacing:-.04em;
+    }
+
+    .history{
+      margin-top:24px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+
+    .history h2{
+      margin:0 0 14px;
+      font-size:28px;
+      letter-spacing:-.035em;
+    }
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:white;
+    }
+
+    th,td{
+      padding:13px 14px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      font-size:15px;
+    }
+
+    th{
+      background:#f4f7fb;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    tr:last-child td{border-bottom:none}
+
+    .history-cards{display:none}
+
+    .history-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      padding:14px;
+      margin-bottom:10px;
+    }
+
+    .history-date{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:6px;
+    }
+
+    .history-match{
+      font-size:17px;
+      font-weight:850;
+      margin-bottom:6px;
+    }
+
+    .history-score{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--blue2);
+      color:var(--blue-dark);
+      font-weight:900;
+    }
+
+    .empty{
+      color:var(--muted);
+      padding:18px;
+      background:#f8fbff;
+      border:1px dashed var(--line);
+      border-radius:18px;
+    }
+
+    .countdown{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+
+    .countbox{
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:9px 8px;
+      text-align:center;
+      backdrop-filter:blur(5px);
+    }
+
+    .countbox .num{
+      font-size:26px;
+      font-weight:950;
+      line-height:1;
+    }
+
+    .countbox .txt{
+      margin-top:4px;
+      font-size:10px;
+      font-weight:850;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      opacity:.8;
+    }
+
+    .timer-note{
+      margin-top:8px;
+      font-size:12px;
+      opacity:.82;
+      font-weight:700;
+    }
+
+    .tools{
+      margin-top:16px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .tools button,.tools label{
+      border:1px solid var(--line);
+      background:white;
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:800;
+      color:var(--ink);
+    }
+
+    .tools input{display:none}
+
+    /* SMARTPHONE */
+    @media (max-width:700px){
+      body{
+        background:#f5f8fc;
+      }
+
+      .page{
+        width:100%;
+        padding:12px;
+      }
+
+      .topbar{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+        margin-bottom:12px;
+      }
+
+      h1{
+        font-size:34px;
+        line-height:1;
+      }
+
+      .subtitle{
+        font-size:14px;
+        margin-top:5px;
+      }
+
+      .update{
+        width:100%;
+        text-align:center;
+        padding:10px 12px;
+        font-size:13px;
+        border-radius:14px;
+      }
+
+      .hero{
+        display:block;
+        padding:12px;
+        border-radius:22px;
+      }
+
+      .photo{
+        min-height:0;
+        height:190px;
+        border-radius:18px;
+        margin-bottom:12px;
+      }
+
+      .photo img{
+        object-fit:contain;
+        object-position:center center;
+      }
+
+      .fallback{
+        padding:12px;
+      }
+
+      .initials{
+        width:82px;
+        height:82px;
+        font-size:34px;
+        margin-bottom:8px;
+      }
+
+      .hint{
+        font-size:12px;
+      }
+
+      .status-pill{
+        top:10px;
+        left:10px;
+        padding:7px 10px;
+        font-size:12px;
+      }
+
+      .when{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+        margin-bottom:10px;
+      }
+
+      .smallcard{
+        border-radius:16px;
+        padding:11px 12px;
+      }
+
+      .label{
+        font-size:10px;
+        margin-bottom:4px;
+      }
+
+      .value{
+        font-size:21px;
+      }
+
+      .matchline{
+        margin:0 0 12px;
+        padding:16px 12px;
+        border-radius:18px;
+      }
+
+      .versus{
+        flex-direction:column;
+        gap:3px;
+        font-size:34px;
+        line-height:.95;
+      }
+
+      .dash{
+        display:none;
+      }
+
+      #opponentName{
+        font-size:28px;
+      }
+
+      .round{
+        margin-top:8px;
+        font-size:13px;
+      }
+
+      .countdown{
+        margin-top:10px;
+        gap:6px;
+      }
+
+      .countbox{
+        border-radius:12px;
+        padding:8px 4px;
+      }
+
+      .countbox .num{
+        font-size:21px;
+      }
+
+      .countbox .txt{
+        font-size:8px;
+      }
+
+      .timer-note{
+        font-size:11px;
+      }
+
+      .scoregrid{
+        grid-template-columns:repeat(4,1fr);
+        gap:7px;
+      }
+
+      .scorebox{
+        min-height:66px;
+        border-radius:14px;
+        padding:9px 3px;
+      }
+
+      .scoretitle{
+        font-size:9px;
+        letter-spacing:.04em;
+        margin-bottom:6px;
+      }
+
+      .scorevalue{
+        font-size:20px;
+      }
+
+      .history{
+        margin-top:12px;
+        padding:14px;
+        border-radius:22px;
+      }
+
+      .history h2{
+        font-size:22px;
+        line-height:1.05;
+        margin-bottom:12px;
+      }
+
+      .history-table{
+        display:none;
+      }
+
+      .history-cards{
+        display:block;
+      }
+
+      .tools{
+        gap:8px;
+        font-size:12px;
+      }
+
+      .tools button,.tools label{
+        width:100%;
+        text-align:center;
+        padding:11px;
+      }
+
+      .tools span{
+        width:100%;
+        text-align:center;
+      }
+    }
+
+    @media (max-width:390px){
+      h1{font-size:30px}
+      .photo{height:165px}
+      .versus{font-size:30px}
+      #opponentName{font-size:24px}
+      .value{font-size:18px}
+      .scorevalue{font-size:18px}
+      .scoretitle{font-size:8px}
+    }
+
+    @media print{
+      body{background:white}
+      .page{max-width:none;padding:12mm}
+      .hero,.history{box-shadow:none}
+      .tools{display:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="topbar">
+      <div>
+        <h1>Jannik Sinner</h1>
+        <div class="subtitle">Internazionali di Roma 2026 · Monitor partita</div>
+      </div>
+      <div class="update" id="lastUpdate">Aggiornamento: —</div>
+    </section>
+
+    <section class="hero">
+      <div class="photo">
+        <div class="status-pill future" id="statusPill" style="display:none"></div>
+        <img id="sinnerPhoto" src="Tennisti/Sinner.jpg" alt="Jannik Sinner" onerror="showFallbackPhoto()">
+        <div class="fallback" id="fallbackPhoto" style="display:none">
+          <div class="initials">JS</div>
+          <div class="hint">Metti nella stessa cartella una foto chiamata:<br><b>Tennisti/Sinner.jpg</b></div>
+        </div>
+      </div>
+
+      <div class="maininfo">
+        <div class="when">
+          <div class="smallcard">
+            <div class="label">Data</div>
+            <div class="value" id="matchDate">—</div>
+          </div>
+          <div class="smallcard">
+            <div class="label">Ora</div>
+            <div class="value" id="matchTime">—</div>
+          </div>
+        </div>
+
+        <div class="matchline">
+          <div class="versus">
+            <span>SINNER</span>
+            <span class="dash">-</span>
+            <span id="opponentName">AVVERSARIO</span>
+          </div>
+          <div class="round" id="stateText">Situazione non ancora caricata</div>
+          <div class="countdown" id="countdownBox">
+            <div class="countbox">
+              <div class="num" id="cdHours">—</div>
+              <div class="txt">Ore</div>
+            </div>
+            <div class="countbox">
+              <div class="num" id="cdMinutes">—</div>
+              <div class="txt">Min</div>
+            </div>
+            <div class="countbox">
+              <div class="num" id="cdSeconds">—</div>
+              <div class="txt">Sec</div>
+            </div>
+          </div>
+          <div class="timer-note" id="timerNote">Timer impostato 5 minuti prima dell'orario previsto</div>
+        </div>
+
+        <div class="scoregrid">
+          <div class="scorebox">
+            <div class="scoretitle">Set 1</div>
+            <div class="scorevalue" id="set1">—</div>
+          </div>
+          <div class="scorebox">
+            <div class="scoretitle">Set 2</div>
+            <div class="scorevalue" id="set2">—</div>
+          </div>
+          <div class="scorebox">
+            <div class="scoretitle">Set 3</div>
+            <div class="scorevalue" id="set3">—</div>
+          </div>
+          <div class="scorebox">
+            <div class="scoretitle">Game</div>
+            <div class="scorevalue" id="game">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="history">
+      <h2>Tutte le partite passate in questo torneo</h2>
+      <div id="historyBox"></div>
+
+      <div class="tools">
+        <button onclick="loadAll()">Aggiorna ora</button>
+        <label>
+          Carica Situazione.csv
+          <input type="file" accept=".csv,.txt" onchange="loadLocalCurrent(event)">
+        </label>
+        <label>
+          Carica Sinner-storico.csv
+          <input type="file" accept=".csv,.txt" onchange="loadLocalHistory(event)">
+        </label>
+        <span>La pagina aggiorna automaticamente ogni 30 secondi.</span>
+      </div>
+    </section>
+  </main>
+
+<script>
+const CURRENT_CSV = "Situazione.csv";
+const HISTORY_CSV = "Sinner-storico.csv";
+const REFRESH_MS = 30000;
+
+// Se la pagina è pubblicata su GitHub Pages o aperta da un percorso diverso,
+// questi fallback provano a leggere i CSV dal repository GitHub.
+// Se preferisci usare GitHub Pages, puoi sostituire questi URL con quelli pages.
+const RAW_BASE = "https://raw.githubusercontent.com/Sebastiano-Mazzarisi/Prog/main/Tennis/";
+const CURRENT_CSV_FALLBACK = RAW_BASE + "Situazione.csv";
+const HISTORY_CSV_FALLBACK = RAW_BASE + "Sinner-storico.csv";
+
+let currentMatch = null;
+let historyRows = [];
+
+const DEFAULT_HISTORY = [
+  {
+    Cognome:"SINNER",
+    Nome:"Jannik",
+    Stato:"P",
+    Data:"09/05/2026",
+    Ora:"19:10:00",
+    Avversario:"Ofner Sebastian",
+    Punteggio:"6-3 6-4"
+  }
+];
+
+function showFallbackPhoto(){
+  document.getElementById("sinnerPhoto").style.display = "none";
+  document.getElementById("fallbackPhoto").style.display = "block";
+}
+
+function parseCSV(text){
+  const lines = text.replace(/\r/g,"").split("\n").filter(x => x.trim());
+  if(!lines.length) return [];
+
+  const headers = lines[0].split(";").map(h => h.trim());
+  const rows = [];
+
+  for(let i=1; i<lines.length; i++){
+    const cols = lines[i].split(";");
+    const obj = {};
+    headers.forEach((h, idx) => obj[h] = (cols[idx] || "").trim());
+    rows.push(obj);
+  }
+
+  return rows;
+}
+
+async function fetchText(url, fallbackUrl=""){
+  const bust = (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+
+  try{
+    const res = await fetch(url + bust, {cache:"no-store"});
+    if(res.ok) return await res.text();
+  }catch(e){
+    // Su file:// alcuni browser bloccano fetch locale: prova il fallback GitHub.
+  }
+
+  if(fallbackUrl){
+    const fbBust = (fallbackUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
+    const res2 = await fetch(fallbackUrl + fbBust, {cache:"no-store"});
+    if(res2.ok) return await res2.text();
+  }
+
+  throw new Error(url + " non trovato");
+}
+
+function stateLabel(stato){
+  if(stato === "X") return "LIVE";
+  if(stato === "P") return "PARTITA GIOCATA";
+  if(stato === "F") return "";
+  return "";
+}
+
+function stateClass(stato){
+  if(stato === "X") return "live";
+  if(stato === "P") return "played";
+  return "future";
+}
+
+function splitScore(score){
+  const parts = (score || "").trim().split(/\s+/).filter(Boolean);
+  return {
+    set1: parts[0] || "—",
+    set2: parts[1] || "—",
+    set3: parts[2] || "—",
+    game: parts[3] || "—"
+  };
+}
+
+function parseItalianDateTime(data, ora){
+  if(!data || !ora) return null;
+
+  const d = data.split("/");
+  if(d.length !== 3) return null;
+
+  const t = ora.split(":");
+  if(t.length < 2) return null;
+
+  const day = parseInt(d[0], 10);
+  const month = parseInt(d[1], 10) - 1;
+  const year = parseInt(d[2], 10);
+  const hh = parseInt(t[0], 10);
+  const mm = parseInt(t[1], 10);
+  const ss = parseInt(t[2] || "0", 10);
+
+  const out = new Date(year, month, day, hh, mm, ss);
+  if(isNaN(out.getTime())) return null;
+  return out;
+}
+
+function updateCountdown(){
+  if(!currentMatch){
+    setCountdownBlank("Timer non ancora disponibile");
+    return;
+  }
+
+  const stato = currentMatch.Stato || "F";
+  const matchTime = parseItalianDateTime(currentMatch.Data, currentMatch.Ora);
+
+  if(!matchTime){
+    setCountdownBlank("Timer non disponibile: data/ora mancanti");
+    return;
+  }
+
+  // Timer 5 minuti prima della partita.
+  // Se Flashscore cambia l'orario e Sinner.py aggiorna Situazione.csv,
+  // il prossimo refresh aggiorna automaticamente anche questo timer.
+  const alertTime = new Date(matchTime.getTime() - 5 * 60 * 1000);
+  const now = new Date();
+  const diff = alertTime.getTime() - now.getTime();
+
+  if(stato === "P"){
+    setCountdownBlank("Partita conclusa");
+    return;
+  }
+
+  if(diff <= 0){
+    document.getElementById("cdHours").textContent = "0";
+    document.getElementById("cdMinutes").textContent = "0";
+    document.getElementById("cdSeconds").textContent = "0";
+
+    const pill = document.getElementById("statusPill");
+    pill.textContent = "LIVE";
+    pill.className = "status-pill live";
+    pill.style.display = "inline-block";
+
+    document.getElementById("stateText").textContent = "LIVE";
+    document.getElementById("timerNote").textContent = "Partita probabilmente in corso";
+    return;
+  }
+
+  const total = Math.floor(diff / 1000);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+
+  document.getElementById("cdHours").textContent = String(h);
+  document.getElementById("cdMinutes").textContent = String(m).padStart(2, "0");
+  document.getElementById("cdSeconds").textContent = String(s).padStart(2, "0");
+
+  if(stato !== "X"){
+    const pill = document.getElementById("statusPill");
+    pill.textContent = "";
+    pill.style.display = "none";
+    document.getElementById("stateText").textContent = "";
+  }
+
+  document.getElementById("timerNote").textContent =
+    "Timer alle " + alertTime.toLocaleTimeString("it-IT", {hour:"2-digit", minute:"2-digit"}) +
+    " · 5 minuti prima della partita";
+}
+
+function setCountdownBlank(note){
+  document.getElementById("cdHours").textContent = "—";
+  document.getElementById("cdMinutes").textContent = "—";
+  document.getElementById("cdSeconds").textContent = "—";
+  document.getElementById("timerNote").textContent = note || "";
+}
+
+function renderCurrent(row){
+  currentMatch = row || {};
+
+  const stato = currentMatch.Stato || "F";
+  const pill = document.getElementById("statusPill");
+
+  if(stato === "X"){
+    pill.textContent = "LIVE";
+    pill.className = "status-pill live";
+    pill.style.display = "inline-block";
+  }else{
+    pill.textContent = "";
+    pill.style.display = "none";
+  }
+
+  document.getElementById("matchDate").textContent = currentMatch.Data || "—";
+  document.getElementById("matchTime").textContent = (currentMatch.Ora || "—").replace(":00", "");
+  document.getElementById("opponentName").textContent = (currentMatch.Avversario || "AVVERSARIO").toUpperCase();
+  document.getElementById("stateText").textContent = stateLabel(stato);
+
+  const s = splitScore(currentMatch.Punteggio || "");
+  document.getElementById("set1").textContent = s.set1;
+  document.getElementById("set2").textContent = s.set2;
+  document.getElementById("set3").textContent = s.set3;
+  document.getElementById("game").textContent = s.game;
+
+  document.getElementById("lastUpdate").textContent =
+    "Aggiornamento: " + new Date().toLocaleTimeString("it-IT");
+
+  updateCountdown();
+}
+
+function normalizeRow(row){
+  return {
+    Cognome: row.Cognome || "SINNER",
+    Nome: row.Nome || "Jannik",
+    Stato: row.Stato || "",
+    Data: row.Data || "",
+    Ora: row.Ora || "",
+    Avversario: row.Avversario || "",
+    Punteggio: row.Punteggio || ""
+  };
+}
+
+function mergeHistory(rows){
+  const all = [...DEFAULT_HISTORY, ...rows.map(normalizeRow)];
+
+  if(currentMatch && currentMatch.Stato === "P"){
+    all.push(normalizeRow(currentMatch));
+  }
+
+  const seen = new Set();
+  const clean = [];
+
+  for(const r of all){
+    if((r.Cognome || "").toUpperCase() !== "SINNER") continue;
+    if(r.Stato !== "P") continue;
+    const key = [r.Data, r.Ora, r.Avversario, r.Punteggio].join("|");
+    if(seen.has(key)) continue;
+    seen.add(key);
+    clean.push(r);
+  }
+
+  clean.sort((a,b) => {
+    const ka = (a.Data || "").split("/").reverse().join("") + (a.Ora || "");
+    const kb = (b.Data || "").split("/").reverse().join("") + (b.Ora || "");
+    return kb.localeCompare(ka);
+  });
+
+  return clean;
+}
+
+function renderHistory(rows){
+  historyRows = mergeHistory(rows || []);
+  const box = document.getElementById("historyBox");
+
+  if(!historyRows.length){
+    box.innerHTML = `<div class="empty">Nessuna partita passata trovata.</div>`;
+    return;
+  }
+
+  let table = `
+    <div class="history-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Ora</th>
+            <th>Partita</th>
+            <th>Risultato</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  let cards = `<div class="history-cards">`;
+
+  for(const r of historyRows){
+    const data = escapeHtml(r.Data || "");
+    const ora = escapeHtml((r.Ora || "").replace(":00",""));
+    const avv = escapeHtml(r.Avversario || "");
+    const score = escapeHtml(r.Punteggio || "-");
+
+    table += `
+      <tr>
+        <td>${data}</td>
+        <td>${ora}</td>
+        <td><b>Sinner</b> - ${avv}</td>
+        <td><b>${score}</b></td>
+      </tr>
+    `;
+
+    cards += `
+      <div class="history-card">
+        <div class="history-date">${data} · ${ora}</div>
+        <div class="history-match">Sinner - ${avv}</div>
+        <div class="history-score">${score}</div>
+      </div>
+    `;
+  }
+
+  table += `</tbody></table></div>`;
+  cards += `</div>`;
+
+  box.innerHTML = table + cards;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[ch]));
+}
+
+async function loadCurrent(){
+  const text = await fetchText(CURRENT_CSV, CURRENT_CSV_FALLBACK);
+  const rows = parseCSV(text);
+  const sinner = rows.find(r => (r.Cognome || "").toUpperCase() === "SINNER") || rows[0];
+  renderCurrent(normalizeRow(sinner));
+}
+
+async function loadHistory(){
+  try{
+    const text = await fetchText(HISTORY_CSV, HISTORY_CSV_FALLBACK);
+    renderHistory(parseCSV(text));
+  }catch(e){
+    renderHistory([]);
+  }
+}
+
+async function loadAll(){
+  try{
+    await loadCurrent();
+  }catch(e){
+    console.warn(e);
+    document.getElementById("lastUpdate").textContent = "Situazione.csv non trovato";
+  }
+
+  await loadHistory();
+}
+
+function loadLocalCurrent(ev){
+  const file = ev.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const rows = parseCSV(reader.result);
+    const sinner = rows.find(r => (r.Cognome || "").toUpperCase() === "SINNER") || rows[0];
+    renderCurrent(normalizeRow(sinner));
+    renderHistory(historyRows);
+  };
+  reader.readAsText(file);
+}
+
+function loadLocalHistory(ev){
+  const file = ev.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => renderHistory(parseCSV(reader.result));
+  reader.readAsText(file);
+}
+
+loadAll();
+setInterval(loadAll, REFRESH_MS);
+setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>

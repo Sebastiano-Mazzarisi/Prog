@@ -6,34 +6,41 @@ Scopo:
 - Cerca la situazione di Sinner nelle pagine Flashscore ATP Roma.
 - Scrive Tennis/Sinner.txt con una frase leggibile da Siri.
 - Scrive Tennis/Sinner-dati.csv con i dati strutturati minimi.
+- Durante una partita live può restare attivo e aggiornare il file più volte.
+- Permette anche una simulazione usando una partita live qualsiasi, senza aspettare Sinner.
 
 Uso locale:
     python SinnerVoce.py
+
+Uso locale simulazione live:
+    python SinnerVoce.py --test-live
+
+Uso locale simulando un altro giocatore:
+    python SinnerVoce.py --giocatore RUUD --nome Casper
 
 Su GitHub Actions:
     viene eseguito automaticamente dal workflow .github/workflows/sinner.yml
 
 Nota:
-GitHub Actions non è adatto al refresh ogni 10 secondi.
-Con il workflow programmato l'aggiornamento realistico è circa ogni 5 minuti.
+GitHub Actions non è adatto a un refresh ogni 10 secondi tramite cron.
+Per aggiornare durante il match, questo script può restare in esecuzione
+e ripetere il controllo ogni LIVE_INTERVAL_SEC secondi.
 """
 
 import os
 import re
 import csv
+import sys
 import time
+import argparse
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 
-VERSIONE = "2026-05-13-path-fix-no-turno"
-
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
-# IMPORTANTE:
-# Se questo script si trova nella cartella Tennis/, deve scrivere direttamente
-# in quella cartella. La vecchia versione faceva ROOT/Tennis e quindi,
-# quando lo script era già dentro Tennis/, scriveva per errore in Tennis/Tennis/.
+# Se lo script è già nella cartella Tennis, scrive lì.
+# Se invece è nella root del progetto, scrive nella sottocartella Tennis.
 if os.path.basename(ROOT).lower() == "tennis":
     TENNIS_DIR = ROOT
 else:
@@ -44,8 +51,18 @@ os.makedirs(TENNIS_DIR, exist_ok=True)
 F_TXT = os.path.join(TENNIS_DIR, "Sinner.txt")
 F_CSV = os.path.join(TENNIS_DIR, "Sinner-dati.csv")
 
-COGNOME = "SINNER"
-NOME = "Jannik"
+NOME_TORNEO = "Tennis, Roma, Internazionali d'Italia 2026"
+
+DEFAULT_COGNOME = "SINNER"
+DEFAULT_NOME = "Jannik"
+
+COGNOME = os.environ.get("SINNER_COGNOME", DEFAULT_COGNOME).strip().upper()
+NOME = os.environ.get("SINNER_NOME", DEFAULT_NOME).strip()
+
+# Se LIVE_LOOP=1, quando trova una partita live resta acceso e aggiorna il file.
+LIVE_LOOP = os.environ.get("LIVE_LOOP", "1").strip().lower() not in ("0", "no", "false")
+LIVE_INTERVAL_SEC = int(os.environ.get("LIVE_INTERVAL_SEC", "60"))
+LIVE_MAX_MINUTES = int(os.environ.get("LIVE_MAX_MINUTES", "180"))
 
 URLS = [
     ("main", "https://www.flashscore.com/tennis/atp-singles/rome/"),
@@ -65,13 +82,15 @@ HEADERS = {
 
 @dataclass
 class Match:
-    stato: str
+    stato: str          # F=futuro, X=live, P=passato
     data: str
     ora: str
     avversario: str
     punteggio: str
     fonte: str
     recupero_sec: float = 0.0
+    giocatore: str = ""
+    raw: str = ""
 
 
 def pulisci(s):
@@ -109,7 +128,7 @@ NOMI_NOTI = {
     "LANDALUCE M": "Landaluce Martin",
     "TIRANTE T A": "Tirante Thiago Agustin",
     "RUBLEV A": "Rublev Andrey",
-    "A RUBLEV": "Rublev Andrey",
+    "KHACHANOV K": "Khachanov Karen",
 }
 
 
@@ -125,6 +144,17 @@ def normalizza_giocatore(s):
         return NOMI_NOTI[up]
 
     return title_name(up)
+
+
+def solo_cognome(s):
+    """
+    Flashscore spesso scrive "Rublev A" oppure la normalizzazione produce
+    "Rublev Andrey". Per la frase Siri usiamo solo il cognome.
+    """
+    s = normalizza_giocatore(s)
+    if not s:
+        return ""
+    return s.split()[0]
 
 
 def cognome_flashscore(s):
@@ -333,7 +363,14 @@ def scarica_con_playwright(url):
     return text, blocchi, elapsed
 
 
-def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
+def parse_lines(lines, fonte, forced_state="", elapsed=0.0, target_cognome=None):
+    """
+    Vecchio parser: funziona quando il blocco contiene una riga data/ora.
+    Lo manteniamo per fixtures e risultati.
+    """
+    if target_cognome is None:
+        target_cognome = COGNOME
+
     found = []
 
     for i, line in enumerate(lines):
@@ -347,11 +384,12 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
         c1 = cognome_flashscore(p1_raw)
         c2 = cognome_flashscore(p2_raw)
 
-        if COGNOME not in (c1, c2):
+        if target_cognome not in (c1, c2):
             continue
 
-        sinner_primo = c1 == COGNOME
-        avversario = normalizza_giocatore(p2_raw if sinner_primo else p1_raw)
+        target_primo = c1 == target_cognome
+        avversario = solo_cognome(p2_raw if target_primo else p1_raw)
+        giocatore = solo_cognome(p1_raw if target_primo else p2_raw)
 
         tail = []
         j = i + 3
@@ -366,7 +404,7 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
         tail_up = tail_text.upper()
 
         numeri = [t for t in tail if re.fullmatch(r"\d{1,2}", t)]
-        punteggio = estrai_punteggio_da_numeri(numeri, sinner_primo=sinner_primo)
+        punteggio = estrai_punteggio_da_numeri(numeri, sinner_primo=target_primo)
         punteggio = completa_con_game(punteggio, estrai_game_da_testo(tail_text))
 
         dt = to_datetime(data, ora)
@@ -400,17 +438,107 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
             punteggio=punteggio,
             fonte=fonte,
             recupero_sec=elapsed,
+            giocatore=giocatore,
+            raw="\n".join(lines[i:j]),
         ))
 
     return found
 
 
-def parse_text(text, fonte, forced_state="", elapsed=0.0):
+def sembra_giocatore(line):
+    line = pulisci(line)
+    if not line:
+        return False
+    up = line.upper()
+    if parse_data_ora(line)[0]:
+        return False
+    if up in {"ATP", "WTA", "SINGLES", "DOUBLES", "STANDINGS", "DRAW", "LIVE", "FINISHED", "SCHEDULE"}:
+        return False
+    if re.fullmatch(r"\d{1,2}", line):
+        return False
+    if re.fullmatch(r"(0|15|30|40|A|AD)\s*[-:]\s*(0|15|30|40|A|AD)", up):
+        return False
+    # Nomi tipo "Sinner J", "Rublev A", "Carlos Alcaraz".
+    return bool(re.search(r"[A-Za-zÀ-ÿ]", line)) and len(line) <= 40
+
+
+def parse_live_block(lines, fonte, elapsed=0.0, target_cognome=None, accetta_primo_live=False):
+    """
+    Nuovo parser: serve per i live.
+    Su Flashscore un match live può non avere più la riga "13.05. 15:00".
+    Il vecchio parser lo saltava perché pretendeva sempre la data/ora.
+    Qui cerchiamo invece due righe consecutive che sembrano giocatori
+    e vicino a loro parole/punteggi da live.
+    """
+    if target_cognome is None:
+        target_cognome = COGNOME
+
+    found = []
+    joined = "\n".join(lines)
+    up_joined = joined.upper()
+
+    live_words = ["LIVE", "SET", "GAME", "BREAK", "1ST", "2ND", "3RD", "4TH", "5TH"]
+    has_live_hint = any(w in up_joined for w in live_words)
+    has_point_score = bool(re.search(r"\b(0|15|30|40|A|AD)\s*[-:]\s*(0|15|30|40|A|AD)\b", up_joined))
+    has_many_numbers = len(re.findall(r"\b\d{1,2}\b", joined)) >= 2
+
+    if not (has_live_hint or has_point_score or has_many_numbers):
+        return found
+
+    for i in range(len(lines) - 1):
+        p1_raw = lines[i]
+        p2_raw = lines[i + 1]
+
+        if not (sembra_giocatore(p1_raw) and sembra_giocatore(p2_raw)):
+            continue
+
+        c1 = cognome_flashscore(p1_raw)
+        c2 = cognome_flashscore(p2_raw)
+
+        if c1 == c2:
+            continue
+
+        if accetta_primo_live:
+            target_here = c1
+        else:
+            if target_cognome not in (c1, c2):
+                continue
+            target_here = target_cognome
+
+        target_primo = c1 == target_here
+        avversario = solo_cognome(p2_raw if target_primo else p1_raw)
+        giocatore = solo_cognome(p1_raw if target_primo else p2_raw)
+
+        tail = lines[i + 2:i + 18]
+        tail_text = "\n".join(tail)
+        numeri = [t for t in tail if re.fullmatch(r"\d{1,2}", t)]
+        punteggio = estrai_punteggio_da_numeri(numeri, sinner_primo=target_primo)
+        punteggio = completa_con_game(punteggio, estrai_game_da_testo(tail_text + "\n" + joined))
+
+        found.append(Match(
+            stato="X",
+            data=datetime.now().strftime("%d/%m/%Y"),
+            ora=datetime.now().strftime("%H:%M:%S"),
+            avversario=avversario,
+            punteggio=punteggio,
+            fonte=fonte + "#live",
+            recupero_sec=elapsed,
+            giocatore=giocatore,
+            raw=joined,
+        ))
+
+        if accetta_primo_live:
+            return found
+
+    return found
+
+
+def parse_text(text, fonte, forced_state="", elapsed=0.0, target_cognome=None):
     lines = [pulisci(x) for x in text.splitlines() if pulisci(x)]
-    return parse_lines(lines, fonte, forced_state, elapsed)
+    return parse_lines(lines, fonte, forced_state, elapsed, target_cognome=target_cognome)
 
 
-def parse_dom_blocks(blocks, fonte, forced_state="", elapsed=0.0):
+def parse_dom_blocks(blocks, fonte, forced_state="", elapsed=0.0, target_cognome=None, test_live=False):
     found = []
     for block in blocks:
         lines = [pulisci(x) for x in block.splitlines() if pulisci(x)]
@@ -418,7 +546,19 @@ def parse_dom_blocks(blocks, fonte, forced_state="", elapsed=0.0):
             one = lines[0]
             one = re.sub(r"(\d{1,2}\.\d{1,2}\.\s+\d{1,2}:\d{2})", r"\n\1\n", one)
             lines = [pulisci(x) for x in one.splitlines() if pulisci(x)]
-        found.extend(parse_lines(lines, fonte + "#dom", forced_state, elapsed))
+
+        # Prima provo il parser nuovo per i live senza data/ora.
+        found.extend(parse_live_block(
+            lines,
+            fonte,
+            elapsed=elapsed,
+            target_cognome=target_cognome,
+            accetta_primo_live=test_live,
+        ))
+
+        # Poi mantengo il parser classico.
+        found.extend(parse_lines(lines, fonte + "#dom", forced_state, elapsed, target_cognome=target_cognome))
+
     return found
 
 
@@ -428,7 +568,7 @@ def match_datetime(m):
 
 def scegli_migliore(matches):
     if not matches:
-        return Match("F", "", "", "", "", "fallback", 0.0)
+        return Match("F", "", "", "", "", "fallback", 0.0, giocatore=solo_cognome(COGNOME))
 
     now = datetime.now()
 
@@ -455,107 +595,95 @@ def scegli_migliore(matches):
     return matches[0]
 
 
-GIORNI_IT = {
-    0: "lunedì",
-    1: "martedì",
-    2: "mercoledì",
-    3: "giovedì",
-    4: "venerdì",
-    5: "sabato",
-    6: "domenica",
-}
-
-MESI_IT = {
-    1: "gennaio",
-    2: "febbraio",
-    3: "marzo",
-    4: "aprile",
-    5: "maggio",
-    6: "giugno",
-    7: "luglio",
-    8: "agosto",
-    9: "settembre",
-    10: "ottobre",
-    11: "novembre",
-    12: "dicembre",
-}
-
-
-def data_lunga_it(data):
-    if not data:
-        return ""
+def ora_in_parole(hhmm):
     try:
-        d = datetime.strptime(data, "%d/%m/%Y")
-        return f"{GIORNI_IT[d.weekday()]} {d.day} {MESI_IT[d.month]} {d.year}"
-    except Exception:
-        return data
-
-
-def ora_parlata(ora):
-    if not ora:
-        return ""
-    try:
-        hh, mm = ora[:5].split(":")
+        hh, mm = hhmm.split(":")[:2]
         hh = int(hh)
         mm = int(mm)
         if mm == 0:
-            return str(hh)
+            return f"{hh}"
         return f"{hh} e {mm:02d}"
     except Exception:
-        return ora[:5]
+        return hhmm
 
 
-def aggiornato_parlato():
-    adesso = datetime.now()
-    return f"{adesso.hour} e {adesso.minute:02d}"
+def data_in_parole(data):
+    try:
+        d = datetime.strptime(data, "%d/%m/%Y")
+    except Exception:
+        return data
+
+    giorni = [
+        "lunedì", "martedì", "mercoledì", "giovedì",
+        "venerdì", "sabato", "domenica"
+    ]
+    mesi = [
+        "", "gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
+        "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"
+    ]
+    return f"{giorni[d.weekday()]} {d.day} {mesi[d.month]} {d.year}"
+
+
+def nome_voce_giocatore(m):
+    # In modalità normale vogliamo dire sempre Sinner, non Jannik.
+    if COGNOME == "SINNER":
+        return "Sinner"
+    if m.giocatore:
+        return m.giocatore
+    return solo_cognome(COGNOME)
 
 
 def frase_siri(m):
-    aggiornato = aggiornato_parlato()
-    prefisso = "Tennis, Roma, Internazionali d'Italia 2026"
+    aggiornato = datetime.now().strftime("%H:%M")
+    aggiornato_parole = ora_in_parole(aggiornato)
+    giocatore = nome_voce_giocatore(m)
 
     if not m.avversario:
-        return f"{prefisso}. Non ho trovato la partita di Sinner. Dati aggiornati alle {aggiornato} di oggi."
+        return f"{NOME_TORNEO}, non ho trovato la partita di {giocatore}. Ultimo controllo alle {aggiornato_parole}."
 
     if m.stato == "X":
         if m.punteggio:
             return (
-                f"{prefisso}, Sinner sta giocando contro {m.avversario}. "
+                f"{NOME_TORNEO}, {giocatore} sta giocando contro {m.avversario}. "
                 f"Punteggio: {m.punteggio.replace('-', ' a ')}. "
-                f"Dati aggiornati alle {aggiornato} di oggi."
+                f"Dati aggiornati alle {aggiornato_parole} di oggi."
             )
         return (
-            f"{prefisso}, Sinner sta probabilmente giocando contro {m.avversario}. "
+            f"{NOME_TORNEO}, {giocatore} sta probabilmente giocando contro {m.avversario}. "
             f"Non ho ancora letto il punteggio. "
-            f"Dati aggiornati alle {aggiornato} di oggi."
+            f"Dati aggiornati alle {aggiornato_parole} di oggi."
         )
 
     if m.stato == "F":
         quando = ""
         if m.data and m.ora:
-            quando = f" {data_lunga_it(m.data)}, alle ore {ora_parlata(m.ora)}"
-
-        # Il turno NON viene scritto qui: niente "ottavi di finale" fisso.
+            ora_breve = m.ora[:5]
+            oggi = datetime.now().strftime("%d/%m/%Y")
+            if m.data == oggi:
+                quando = f"oggi alle ore {ora_in_parole(ora_breve)}"
+            else:
+                quando = f"{data_in_parole(m.data)}, alle ore {ora_in_parole(ora_breve)}"
         return (
-            f"{prefisso}, Sinner giocherà contro {m.avversario}"
-            + quando
-            + f". Dati aggiornati alle {aggiornato} di oggi."
+            f"{NOME_TORNEO}, {giocatore} giocherà contro {m.avversario}"
+            + (f" {quando}" if quando else "")
+            + f". Dati aggiornati alle {aggiornato_parole} di oggi."
         )
 
     if m.stato == "P":
         if m.punteggio:
             return (
-                f"{prefisso}, Sinner ha giocato contro {m.avversario}. "
+                f"{NOME_TORNEO}, {giocatore} ha giocato contro {m.avversario}. "
                 f"Risultato: {m.punteggio.replace('-', ' a ')}. "
-                f"Dati aggiornati alle {aggiornato} di oggi."
+                f"Dati aggiornati alle {aggiornato_parole} di oggi."
             )
         return (
-            f"{prefisso}, Sinner ha giocato contro {m.avversario}. "
+            f"{NOME_TORNEO}, {giocatore} ha giocato contro {m.avversario}. "
             f"Risultato non disponibile. "
-            f"Dati aggiornati alle {aggiornato} di oggi."
+            f"Dati aggiornati alle {aggiornato_parole} di oggi."
         )
 
-    return f"{prefisso}. Situazione Sinner non disponibile. Dati aggiornati alle {aggiornato} di oggi."
+    return f"{NOME_TORNEO}, situazione {giocatore} non disponibile. Ultimo controllo alle {aggiornato_parole}."
+
 
 def scrivi_file(m, total_time):
     frase = frase_siri(m)
@@ -565,7 +693,19 @@ def scrivi_file(m, total_time):
 
     with open(F_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter=";")
-        w.writerow(["Cognome", "Nome", "Stato", "Data", "Ora", "Avversario", "Punteggio", "Fonte", "TempoRecupero"])
+        w.writerow([
+            "Cognome",
+            "Nome",
+            "Stato",
+            "Data",
+            "Ora",
+            "Avversario",
+            "Punteggio",
+            "Fonte",
+            "TempoRecupero",
+            "Giocatore",
+            "Raw",
+        ])
         w.writerow([
             COGNOME,
             NOME,
@@ -576,6 +716,8 @@ def scrivi_file(m, total_time):
             m.punteggio,
             m.fonte,
             f"{total_time:.2f}",
+            m.giocatore,
+            m.raw[:1000].replace("\n", " | "),
         ])
 
     log("File aggiornati:")
@@ -583,9 +725,18 @@ def scrivi_file(m, total_time):
     log(f"  {F_CSV}")
 
 
-def esegui():
+def esegui(test_live=False, target_cognome=None):
+    global COGNOME, NOME
+
+    if target_cognome:
+        COGNOME = target_cognome.strip().upper()
+
     print("=" * 70)
-    print(f"SinnerVoce.py {VERSIONE} - {datetime.now().strftime('%H:%M:%S del %d/%m/%Y')}")
+    print(f"SinnerVoce.py - {datetime.now().strftime('%H:%M:%S del %d/%m/%Y')}")
+    if test_live:
+        print("MODALITÀ TEST: userò la prima partita live trovata.")
+    else:
+        print(f"Giocatore seguito: {COGNOME}")
     print("=" * 70)
 
     t0 = time.perf_counter()
@@ -599,12 +750,27 @@ def esegui():
             text, blocks, elapsed = scarica_con_playwright(url)
             log(f"  recupero pagina: {elapsed:.2f}s, blocchi: {len(blocks)}")
 
-            rec_text = parse_text(text, url, forced, elapsed)
-            rec_dom = parse_dom_blocks(blocks, url, forced, elapsed)
+            if not test_live:
+                rec_text = parse_text(text, url, forced, elapsed, target_cognome=COGNOME)
+            else:
+                rec_text = []
 
-            log(f"  record Sinner: {len(rec_text) + len(rec_dom)}")
+            rec_dom = parse_dom_blocks(
+                blocks,
+                url,
+                forced,
+                elapsed,
+                target_cognome=COGNOME,
+                test_live=test_live,
+            )
+
+            log(f"  record trovati: {len(rec_text) + len(rec_dom)}")
             tutti.extend(rec_text)
             tutti.extend(rec_dom)
+
+            # In test live basta trovare una partita live, non serve scaricare tutto.
+            if test_live and any(m.stato == "X" for m in tutti):
+                break
 
         except Exception as e:
             log(f"  errore: {e}")
@@ -618,11 +784,48 @@ def esegui():
     print(frase)
     print(f"\nTempo recupero dati: {total:.2f}s")
 
-    return match.stato == "X"
+    return match.stato == "X", match
 
 
 def main():
-    esegui()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--giocatore", default="", help="Cognome del giocatore da seguire, es. RUUD")
+    parser.add_argument("--nome", default="", help="Nome del giocatore, es. Casper")
+    parser.add_argument("--test-live", action="store_true", help="Usa la prima partita live trovata, per provare senza aspettare Sinner")
+    parser.add_argument("--once", action="store_true", help="Esegue un solo controllo e poi termina")
+    args = parser.parse_args()
+
+    global COGNOME, NOME
+
+    if args.giocatore:
+        COGNOME = args.giocatore.strip().upper()
+    if args.nome:
+        NOME = args.nome.strip()
+
+    live, match = esegui(test_live=args.test_live, target_cognome=COGNOME)
+
+    if args.once or not LIVE_LOOP:
+        return
+
+    if not live:
+        return
+
+    start = time.time()
+    max_seconds = LIVE_MAX_MINUTES * 60
+
+    log(f"Partita live trovata. Aggiornamento automatico ogni {LIVE_INTERVAL_SEC} secondi.")
+    while True:
+        elapsed = time.time() - start
+        if elapsed >= max_seconds:
+            log("Raggiunto tempo massimo live. Termino.")
+            break
+
+        time.sleep(LIVE_INTERVAL_SEC)
+
+        live, match = esegui(test_live=args.test_live, target_cognome=COGNOME)
+        if not live:
+            log("La partita non risulta più live. Termino il ciclo.")
+            break
 
 
 if __name__ == "__main__":

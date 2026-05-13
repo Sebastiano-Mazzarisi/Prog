@@ -480,9 +480,11 @@ def parse_live_block(lines, fonte, elapsed=0.0, target_cognome=None, accetta_pri
     live_words = ["LIVE", "SET", "GAME", "BREAK", "1ST", "2ND", "3RD", "4TH", "5TH"]
     has_live_hint = any(w in up_joined for w in live_words)
     has_point_score = bool(re.search(r"\b(0|15|30|40|A|AD)\s*[-:]\s*(0|15|30|40|A|AD)\b", up_joined))
-    has_many_numbers = len(re.findall(r"\b\d{1,2}\b", joined)) >= 2
-
-    if not (has_live_hint or has_point_score or has_many_numbers):
+    # Attenzione: NON basta trovare molti numeri per dire che una partita è live.
+    # Un risultato finale tipo 6-2 6-3 contiene numeri, ma non è live.
+    # Quindi qui accettiamo il blocco live solo se troviamo parole da live
+    # oppure un punteggio di game tipo 15-30, 40-A, ecc.
+    if not (has_live_hint or has_point_score):
         return found
 
     for i in range(len(lines) - 1):
@@ -625,11 +627,17 @@ def data_in_parole(data):
 
 
 def nome_voce_giocatore(m):
-    # In modalità normale vogliamo dire sempre Sinner, non Jannik.
+    # In modalità normale vogliamo dire sempre Sinner.
+    # Però in modalità test-live, se il parser ha trovato una partita live
+    # di un altro giocatore, usiamo il cognome reale trovato nel blocco.
+    if m.giocatore:
+        if m.giocatore.upper() != "SINNER":
+            return m.giocatore
+        return "Sinner"
+
     if COGNOME == "SINNER":
         return "Sinner"
-    if m.giocatore:
-        return m.giocatore
+
     return solo_cognome(COGNOME)
 
 

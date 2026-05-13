@@ -1,11 +1,27 @@
 """
 SinnerVoce.py
-Aggiorna Tennis/Sinner.txt con una frase leggibile da Siri.
+Versione per GitHub Actions.
 
-Versione corretta:
-- evita falsi avversari tipo "The Latest News";
-- non considera LIVE una riga senza punteggio solo perché l'orario è passato;
-- preferisce dati chiari da fixtures/results/main.
+Scopo:
+- Cerca la situazione di Sinner nelle pagine Flashscore ATP Roma.
+- Scrive Tennis/Sinner.txt con una frase leggibile da Siri.
+- Scrive Tennis/Sinner-dati.csv con i dati strutturati minimi.
+
+Correzione importante:
+- Il turno NON è fisso.
+- "ottavi di finale", "quarti di finale", "semifinale", "finale", ecc. vengono usati
+  solo se il programma riesce a ricavarli dalla pagina.
+- Se il turno non viene trovato con certezza, viene omesso dalla frase invece di inventarlo.
+
+Uso locale:
+    python SinnerVoce.py
+
+Su GitHub Actions:
+    viene eseguito automaticamente dal workflow .github/workflows/sinner.yml
+
+Nota:
+GitHub Actions non è adatto al refresh ogni 10 secondi.
+Con il workflow programmato l'aggiornamento realistico è circa ogni 5 minuti.
 """
 
 import os
@@ -14,23 +30,23 @@ import csv
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
 
 
-DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.abspath(__file__))
+TENNIS_DIR = os.path.join(ROOT, "Tennis")
+os.makedirs(TENNIS_DIR, exist_ok=True)
 
-F_TXT = os.path.join(DIR, "Sinner.txt")
-F_CSV = os.path.join(DIR, "Sinner-dati.csv")
+F_TXT = os.path.join(TENNIS_DIR, "Sinner.txt")
+F_CSV = os.path.join(TENNIS_DIR, "Sinner-dati.csv")
 
 COGNOME = "SINNER"
 NOME = "Jannik"
-TZ_ROMA = ZoneInfo("Europe/Rome")
-TORNEO_DESCRIZIONE = "Tennis, Roma, Internazionali d\'Italia 2026"
-TURNO_DESCRIZIONE = "ottavi di finale"
+
+TORNEO = "Tennis, Roma, Internazionali d'Italia 2026"
 
 URLS = [
-    ("fixtures", "https://www.flashscore.com/tennis/atp-singles/rome/fixtures/"),
     ("main", "https://www.flashscore.com/tennis/atp-singles/rome/"),
+    ("fixtures", "https://www.flashscore.com/tennis/atp-singles/rome/fixtures/"),
     ("results", "https://www.flashscore.com/tennis/atp-singles/rome/results/"),
 ]
 
@@ -52,11 +68,8 @@ class Match:
     avversario: str
     punteggio: str
     fonte: str
+    turno: str = ""
     recupero_sec: float = 0.0
-
-
-def adesso():
-    return datetime.now(TZ_ROMA)
 
 
 def pulisci(s):
@@ -64,24 +77,19 @@ def pulisci(s):
 
 
 def log(msg):
-    print(f"[{adesso().strftime('%H:%M:%S')}] {msg}", flush=True)
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}", flush=True)
 
 
 def title_name(s):
-    out = []
-    for p in pulisci(s).split():
-        if len(p) <= 2 and p.isupper():
-            out.append(p)
-        else:
-            out.append(p[:1].upper() + p[1:].lower())
-    return " ".join(out)
+    return " ".join(
+        p[:1].upper() + p[1:].lower()
+        for p in pulisci(s).split()
+    )
 
 
 NOMI_NOTI = {
     "POPYRIN A": "Popyrin Alexei",
-    "POPYRIN ALEXEI": "Popyrin Alexei",
     "OFNER S": "Ofner Sebastian",
-    "OFNER SEBASTIAN": "Ofner Sebastian",
     "ALCARAZ C": "Alcaraz Carlos",
     "DJOKOVIC N": "Djokovic Novak",
     "ZVEREV A": "Zverev Alexander",
@@ -96,41 +104,61 @@ NOMI_NOTI = {
     "DIMITROV G": "Dimitrov Grigor",
     "PAUL T": "Paul Tommy",
     "TIAFOE F": "Tiafoe Frances",
-    "PELLEGRINO A": "Pellegrino Andrea",
-    "PELLEGRINO ANDREA": "Pellegrino Andrea",
     "LANDALUCE M": "Landaluce Martin",
     "TIRANTE T A": "Tirante Thiago Agustin",
+    "RUBLEV A": "Rublev Andrey",
 }
 
 
-BLACKLIST_AVVERSARI = {
-    "THE LATEST NEWS",
-    "LATEST NEWS",
-    "NEWS",
-    "DRAW",
-    "RESULTS",
-    "FIXTURES",
-    "STANDINGS",
-    "SUMMARY",
-    "ODDS",
-    "ATP",
-    "WTA",
-    "TENNIS",
-    "ROME",
-    "SINGLES",
-    "DOUBLES",
-    "PREVIEW",
-    "HIGHLIGHTS",
-    "ADVERTISEMENT",
-    "SHOW MORE MATCHES",
-}
+ROUND_PATTERNS = [
+    # prima i casi più specifici
+    (r"\bFINAL(E)?\b|\bFINALE\b", "finale"),
+    (r"\bSEMI[- ]?FINAL(S)?\b|\bSEMIFINAL(E|I)\b", "semifinale"),
+    (r"\bQUARTER[- ]?FINAL(S)?\b|\bQUARTI\b|\b1/4[- ]?FINAL(S)?\b", "quarti di finale"),
+    (r"\b1/8[- ]?FINAL(S)?\b|\bEIGHTH[- ]?FINAL(S)?\b|\bROUND OF 16\b|\bOTTAVI\b", "ottavi di finale"),
+    (r"\bROUND OF 32\b|\b1/16[- ]?FINAL(S)?\b|\bSEDICESIMI\b", "sedicesimi di finale"),
+    (r"\bROUND OF 64\b|\b1/32[- ]?FINAL(S)?\b|\bTRENTADUESIMI\b", "trentaduesimi di finale"),
+    (r"\bROUND OF 128\b|\b1/64[- ]?FINAL(S)?\b", "sessantaquattresimi di finale"),
+    (r"\bQUALIFICATION\b|\bQUALIFICAZIONI\b|\bQUALIFYING\b", "qualificazioni"),
+]
+
+
+def normalizza_turno(line):
+    """
+    Prova a capire se una riga della pagina Flashscore indica il turno.
+
+    Flashscore può usare intestazioni diverse a seconda della lingua:
+    - Quarter-finals
+    - Semi-finals
+    - Final
+    - 1/8-finals
+    - Round of 16
+    - Ottavi di finale
+    ecc.
+
+    Restituisce una stringa italiana pronta per Siri, oppure "".
+    """
+    s = pulisci(line)
+    if not s:
+        return ""
+
+    up = s.upper()
+
+    # Evita falsi positivi su righe troppo lunghe, pubblicità o descrizioni generiche.
+    if len(up) > 70:
+        return ""
+
+    for pattern, turno in ROUND_PATTERNS:
+        if re.search(pattern, up):
+            return turno
+
+    return ""
 
 
 def normalizza_giocatore(s):
     s = pulisci(s).replace(".", "")
     s = re.sub(r"\([^)]+\)", "", s)
     s = pulisci(s)
-
     if not s:
         return ""
 
@@ -150,134 +178,6 @@ def cognome_flashscore(s):
     return s.upper().split()[0]
 
 
-def giocatore_plausibile(s):
-    s = pulisci(s)
-    if not s:
-        return False
-
-    up = s.upper().replace(".", "")
-    if up in BLACKLIST_AVVERSARI:
-        return False
-
-    if any(x in up for x in ["LATEST NEWS", "ADVERTISEMENT", "SHOW MORE", "FLASH SCORE"]):
-        return False
-
-    if re.fullmatch(r"[\d\s:.\-]+", s):
-        return False
-
-    if not re.search(r"[A-Za-zÀ-ÿ]", s):
-        return False
-
-    # Evita titoli o sezioni troppo lunghe.
-    if len(s) > 40:
-        return False
-
-    return True
-
-
-def avversario_valido(s):
-    if not giocatore_plausibile(s):
-        return False
-
-    up = s.upper()
-    if "SINNER" in up:
-        return False
-
-    return True
-
-
-def nome_prima_del_cognome(nome):
-    """
-    Converte 'Pellegrino Andrea' in 'Andrea Pellegrino'.
-    """
-    nome = pulisci(nome)
-    if not nome:
-        return ""
-
-    parti = nome.split()
-    if len(parti) == 2:
-        return parti[1] + " " + parti[0]
-
-    return nome
-
-
-def data_estesa_italiana(data):
-    """
-    Converte 12/05/2026 in 'martedì 12 maggio 2026'.
-    """
-    if not data:
-        return ""
-
-    giorni = [
-        "lunedì",
-        "martedì",
-        "mercoledì",
-        "giovedì",
-        "venerdì",
-        "sabato",
-        "domenica",
-    ]
-
-    mesi = [
-        "",
-        "gennaio",
-        "febbraio",
-        "marzo",
-        "aprile",
-        "maggio",
-        "giugno",
-        "luglio",
-        "agosto",
-        "settembre",
-        "ottobre",
-        "novembre",
-        "dicembre",
-    ]
-
-    try:
-        dt = datetime.strptime(data, "%d/%m/%Y")
-        return f"{giorni[dt.weekday()]} {dt.day} {mesi[dt.month]} {dt.year}"
-    except Exception:
-        return data
-
-
-def ora_parlata(ora):
-    """
-    Converte 11:00:00 in '11', 15:30:00 in '15 e 30'.
-    """
-    if not ora:
-        return ""
-
-    try:
-        hh, mm = ora.split(":")[:2]
-        h = int(hh)
-        m = int(mm)
-        if m == 0:
-            return str(h)
-        return f"{h} e {m:02d}"
-    except Exception:
-        return ora[:5]
-
-
-
-def aggiornamento_parlato():
-    """
-    Restituisce una frase tipo:
-    Dati aggiornati alle 19 e 30 di oggi.
-    """
-    adesso_locale = adesso()
-    h = adesso_locale.hour
-    m = adesso_locale.minute
-
-    if m == 0:
-        ora = str(h)
-    else:
-        ora = f"{h} e {m:02d}"
-
-    return f"Dati aggiornati alle {ora} di oggi."
-
-
-
 def parse_data_ora(line):
     line = pulisci(line)
     m = re.match(r"^(\d{1,2})\.(\d{1,2})\.\s*(\d{1,2}):(\d{2})", line)
@@ -292,15 +192,16 @@ def parse_data_ora(line):
     if not (1 <= g <= 31 and 1 <= mese <= 12 and 0 <= hh <= 23 and 0 <= mm <= 59):
         return "", ""
 
-    return f"{g:02d}/{mese:02d}/{adesso().year}", f"{hh:02d}:{mm:02d}:00"
+    data = f"{g:02d}/{mese:02d}/{datetime.now().year}"
+    ora = f"{hh:02d}:{mm:02d}:00"
+    return data, ora
 
 
 def to_datetime(data, ora):
     if not data or not ora:
         return None
     try:
-        dt = datetime.strptime(data + " " + ora, "%d/%m/%Y %H:%M:%S")
-        return dt.replace(tzinfo=TZ_ROMA)
+        return datetime.strptime(data + " " + ora, "%d/%m/%Y %H:%M:%S")
     except Exception:
         return None
 
@@ -320,7 +221,8 @@ def set_plausibile(a, b):
 
 
 def conta_set(pairs):
-    v1, v2 = 0, 0
+    v1 = 0
+    v2 = 0
     for a, b in pairs:
         if a > b:
             v1 += 1
@@ -345,7 +247,8 @@ def ricostruisci_set(resto, set_p1, set_p2):
     i = 0
 
     while i + 1 < len(nums) and len(pairs) < n_set:
-        a, b = nums[i], nums[i + 1]
+        a = nums[i]
+        b = nums[i + 1]
         if not set_plausibile(a, b):
             break
 
@@ -468,22 +371,26 @@ def scarica_con_playwright(url):
 
         browser.close()
 
-    return text, blocchi, time.perf_counter() - t0
+    elapsed = time.perf_counter() - t0
+    return text, blocchi, elapsed
 
 
-def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
+def parse_lines(lines, fonte, forced_state="", elapsed=0.0, turno_default=""):
     found = []
+    turno_corrente = turno_default
 
     for i, line in enumerate(lines):
+        turno_trovato = normalizza_turno(line)
+        if turno_trovato:
+            turno_corrente = turno_trovato
+            continue
+
         data, ora = parse_data_ora(line)
         if not data or i + 2 >= len(lines):
             continue
 
         p1_raw = lines[i + 1]
         p2_raw = lines[i + 2]
-
-        if not giocatore_plausibile(p1_raw) or not giocatore_plausibile(p2_raw):
-            continue
 
         c1 = cognome_flashscore(p1_raw)
         c2 = cognome_flashscore(p2_raw)
@@ -492,12 +399,7 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
             continue
 
         sinner_primo = c1 == COGNOME
-        avv_raw = p2_raw if sinner_primo else p1_raw
-
-        if not avversario_valido(avv_raw):
-            continue
-
-        avversario = normalizza_giocatore(avv_raw)
+        avversario = normalizza_giocatore(p2_raw if sinner_primo else p1_raw)
 
         tail = []
         j = i + 3
@@ -505,6 +407,11 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
             d2, _ = parse_data_ora(lines[j])
             if d2:
                 break
+
+            turno_tail = normalizza_turno(lines[j])
+            if turno_tail:
+                break
+
             tail.append(lines[j])
             j += 1
 
@@ -516,7 +423,7 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
         punteggio = completa_con_game(punteggio, estrai_game_da_testo(tail_text))
 
         dt = to_datetime(data, ora)
-        now = adesso()
+        now = datetime.now()
 
         if forced_state == "fixtures":
             stato = "F"
@@ -531,6 +438,8 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
                 stato = "X"
             elif punteggio:
                 stato = "P"
+            elif dt and dt <= now <= dt + timedelta(hours=4):
+                stato = "X"
             elif dt and dt > now:
                 stato = "F"
             else:
@@ -543,6 +452,7 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
             avversario=avversario,
             punteggio=punteggio,
             fonte=fonte,
+            turno=turno_corrente,
             recupero_sec=elapsed,
         ))
 
@@ -555,11 +465,17 @@ def parse_text(text, fonte, forced_state="", elapsed=0.0):
 
 
 def parse_dom_blocks(blocks, fonte, forced_state="", elapsed=0.0):
+    """
+    I blocchi DOM spesso contengono solo la singola partita, senza l'intestazione del turno.
+    Per questo motivo il turno viene preso soprattutto da parse_text().
+    Se dentro il blocco compare una riga di turno, viene comunque usata.
+    """
     found = []
     for block in blocks:
         lines = [pulisci(x) for x in block.splitlines() if pulisci(x)]
         if len(lines) == 1:
-            one = re.sub(r"(\d{1,2}\.\d{1,2}\.\s+\d{1,2}:\d{2})", r"\n\1\n", lines[0])
+            one = lines[0]
+            one = re.sub(r"(\d{1,2}\.\d{1,2}\.\s+\d{1,2}:\d{2})", r"\n\1\n", one)
             lines = [pulisci(x) for x in one.splitlines() if pulisci(x)]
         found.extend(parse_lines(lines, fonte + "#dom", forced_state, elapsed))
     return found
@@ -569,15 +485,79 @@ def match_datetime(m):
     return to_datetime(m.data, m.ora)
 
 
+def punteggio_match(m):
+    """
+    Serve solo per scegliere il record migliore quando la stessa partita viene letta
+    sia dal testo pagina sia dal DOM.
+    """
+    score = 0
+    if m.avversario:
+        score += 10
+    if m.data and m.ora:
+        score += 10
+    if m.turno:
+        score += 8
+    if m.punteggio:
+        score += 6
+    if "#dom" in m.fonte:
+        score += 2
+    return score
+
+
+def unisci_record_stessa_partita(matches):
+    """
+    Quando Flashscore viene letto da più pagine, la stessa partita può apparire più volte.
+    Unisco i duplicati conservando le informazioni più complete, soprattutto il turno.
+    """
+    per_chiave = {}
+
+    for m in matches:
+        chiave = (
+            m.stato,
+            m.data,
+            m.ora,
+            m.avversario.upper(),
+        )
+
+        if chiave not in per_chiave:
+            per_chiave[chiave] = m
+            continue
+
+        old = per_chiave[chiave]
+
+        migliore = old
+        if punteggio_match(m) > punteggio_match(old):
+            migliore = m
+
+        # Conserva il turno se uno dei due record lo ha.
+        turno = old.turno or m.turno
+        punteggio = old.punteggio or m.punteggio
+        fonte = migliore.fonte
+
+        per_chiave[chiave] = Match(
+            stato=migliore.stato,
+            data=migliore.data,
+            ora=migliore.ora,
+            avversario=migliore.avversario,
+            punteggio=punteggio,
+            fonte=fonte,
+            turno=turno,
+            recupero_sec=migliore.recupero_sec,
+        )
+
+    return list(per_chiave.values())
+
+
 def scegli_migliore(matches):
     if not matches:
-        return Match("F", "", "", "", "", "fallback", 0.0)
+        return Match("F", "", "", "", "", "fallback", "", 0.0)
 
-    now = adesso()
+    matches = unisci_record_stessa_partita(matches)
+    now = datetime.now()
 
     live = [m for m in matches if m.stato == "X"]
     if live:
-        live.sort(key=lambda m: match_datetime(m) or now, reverse=True)
+        live.sort(key=lambda m: (punteggio_match(m), match_datetime(m) or now), reverse=True)
         return live[0]
 
     future = []
@@ -587,97 +567,131 @@ def scegli_migliore(matches):
             future.append(m)
 
     if future:
-        future.sort(key=lambda m: match_datetime(m))
+        future.sort(key=lambda m: (match_datetime(m), -punteggio_match(m)))
         return future[0]
 
     played = [m for m in matches if m.stato == "P"]
     if played:
-        played.sort(key=lambda m: match_datetime(m) or datetime.min, reverse=True)
+        played.sort(key=lambda m: (match_datetime(m) or datetime.min, punteggio_match(m)), reverse=True)
         return played[0]
 
+    matches.sort(key=punteggio_match, reverse=True)
     return matches[0]
 
 
+MESI = {
+    1: "gennaio",
+    2: "febbraio",
+    3: "marzo",
+    4: "aprile",
+    5: "maggio",
+    6: "giugno",
+    7: "luglio",
+    8: "agosto",
+    9: "settembre",
+    10: "ottobre",
+    11: "novembre",
+    12: "dicembre",
+}
+
+GIORNI = {
+    0: "lunedì",
+    1: "martedì",
+    2: "mercoledì",
+    3: "giovedì",
+    4: "venerdì",
+    5: "sabato",
+    6: "domenica",
+}
+
+
+def format_data_parlata(data):
+    try:
+        d = datetime.strptime(data, "%d/%m/%Y")
+        return f"{GIORNI[d.weekday()]} {d.day} {MESI[d.month]} {d.year}"
+    except Exception:
+        return data
+
+
+def format_ora_parlata(ora):
+    if not ora:
+        return ""
+
+    try:
+        hh, mm, _ = ora.split(":")
+        hh = int(hh)
+        mm = int(mm)
+        if mm == 0:
+            return str(hh)
+        return f"{hh} e {mm:02d}"
+    except Exception:
+        return ora[:5]
+
+
+def format_aggiornato():
+    adesso = datetime.now()
+    h = adesso.hour
+    m = adesso.minute
+    if m == 0:
+        return f"{h}"
+    return f"{h} e {m:02d}"
+
+
+def frase_turno(m):
+    """
+    Restituisce ', quarti di finale' oppure stringa vuota.
+    Il turno viene scritto solo se è stato letto davvero.
+    """
+    if not m.turno:
+        return ""
+    return f", {m.turno}"
+
+
 def frase_siri(m):
-    aggiornamento = aggiornamento_parlato()
+    aggiornato = format_aggiornato()
+    prefisso = TORNEO + frase_turno(m)
 
     if not m.avversario:
-        return f"{TORNEO_DESCRIZIONE}. Non ho trovato la partita di Sinner. {aggiornamento}"
-
-    avversario = nome_prima_del_cognome(m.avversario)
+        return f"{TORNEO}. Non ho trovato la partita di Sinner. Ultimo controllo alle {aggiornato} di oggi."
 
     if m.stato == "X":
         if m.punteggio:
             return (
-                f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
-                f"Sinner sta giocando contro {avversario}. "
+                f"{prefisso}, Sinner sta giocando contro {m.avversario}. "
                 f"Punteggio: {m.punteggio.replace('-', ' a ')}. "
-                f"{aggiornamento}"
+                f"Dati aggiornati alle {aggiornato} di oggi."
             )
-
         return (
-            f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
-            f"Sinner sta giocando contro {avversario}, "
-            f"ma il punteggio non è ancora disponibile. "
-            f"{aggiornamento}"
+            f"{prefisso}, Sinner sta probabilmente giocando contro {m.avversario}. "
+            f"Non ho ancora letto il punteggio. "
+            f"Dati aggiornati alle {aggiornato} di oggi."
         )
 
     if m.stato == "F":
-        data_lunga = data_estesa_italiana(m.data)
-        ora_testo = ora_parlata(m.ora)
-
-        if data_lunga and ora_testo:
-            return (
-                f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
-                f"Sinner giocherà contro {avversario} "
-                f"{data_lunga}, alle ore {ora_testo}. "
-                f"{aggiornamento}"
-            )
+        quando = ""
+        if m.data and m.ora:
+            quando = f" {format_data_parlata(m.data)}, alle ore {format_ora_parlata(m.ora)}"
 
         return (
-            f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
-            f"Sinner giocherà contro {avversario}. "
-            f"{aggiornamento}"
+            f"{prefisso}, Sinner giocherà contro {m.avversario}"
+            + quando
+            + f". Dati aggiornati alle {aggiornato} di oggi."
         )
 
     if m.stato == "P":
         if m.punteggio:
             return (
-                f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
-                f"Sinner ha giocato contro {avversario}. "
+                f"{prefisso}, Sinner ha giocato contro {m.avversario}. "
                 f"Risultato: {m.punteggio.replace('-', ' a ')}. "
-                f"{aggiornamento}"
+                f"Dati aggiornati alle {aggiornato} di oggi."
             )
-
         return (
-            f"{TORNEO_DESCRIZIONE}, {TURNO_DESCRIZIONE}, "
-            f"Sinner ha giocato contro {avversario}. "
+            f"{prefisso}, Sinner ha giocato contro {m.avversario}. "
             f"Risultato non disponibile. "
-            f"{aggiornamento}"
+            f"Dati aggiornati alle {aggiornato} di oggi."
         )
 
-    return f"{TORNEO_DESCRIZIONE}. Situazione Sinner non disponibile. {aggiornamento}"
-
-
-
-def applica_correzioni_manualI(m):
-    """
-    Correzioni manuali per casi in cui Flashscore associa un orario sbagliato
-    o ambiguo alla partita trovata.
-
-    Caso attuale:
-    Sinner - Andrea Pellegrino, ottavi di finale Roma 2026:
-    martedì 12 maggio 2026 alle 15:00.
-    """
-    if (
-        m.stato == "F"
-        and m.data == "12/05/2026"
-        and m.avversario == "Pellegrino Andrea"
-    ):
-        m.ora = "15:00:00"
-        m.fonte = (m.fonte or "") + " + correzione manuale orario Sinner-Pellegrino"
-
-    return m
+    return f"{TORNEO}. Situazione Sinner non disponibile. Ultimo controllo alle {aggiornato} di oggi."
 
 
 def scrivi_file(m, total_time):
@@ -688,26 +702,39 @@ def scrivi_file(m, total_time):
 
     with open(F_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter=";")
-        w.writerow(["Cognome", "Nome", "Stato", "Data", "Ora", "Avversario", "Punteggio", "Fonte", "TempoRecupero"])
+        w.writerow([
+            "Cognome",
+            "Nome",
+            "Stato",
+            "Data",
+            "Ora",
+            "Turno",
+            "Avversario",
+            "Punteggio",
+            "Fonte",
+            "TempoRecupero",
+        ])
         w.writerow([
             COGNOME,
             NOME,
             m.stato,
             m.data,
             m.ora,
+            m.turno,
             m.avversario,
             m.punteggio,
             m.fonte,
             f"{total_time:.2f}",
         ])
 
-    log(f"Aggiornato {F_TXT}")
-    log(f"Aggiornato {F_CSV}")
+    log("File aggiornati:")
+    log(f"  {F_TXT}")
+    log(f"  {F_CSV}")
 
 
 def esegui():
     print("=" * 70)
-    print(f"SinnerVoce.py - {adesso().strftime('%H:%M:%S del %d/%m/%Y')}")
+    print(f"SinnerVoce.py - {datetime.now().strftime('%H:%M:%S del %d/%m/%Y')}")
     print("=" * 70)
 
     t0 = time.perf_counter()
@@ -720,23 +747,32 @@ def esegui():
         try:
             text, blocks, elapsed = scarica_con_playwright(url)
             log(f"  recupero pagina: {elapsed:.2f}s, blocchi: {len(blocks)}")
+
             rec_text = parse_text(text, url, forced, elapsed)
             rec_dom = parse_dom_blocks(blocks, url, forced, elapsed)
+
             log(f"  record Sinner: {len(rec_text) + len(rec_dom)}")
             tutti.extend(rec_text)
             tutti.extend(rec_dom)
+
         except Exception as e:
             log(f"  errore: {e}")
 
     total = time.perf_counter() - t0
     match = scegli_migliore(tutti)
-    match = applica_correzioni_manualI(match)
     scrivi_file(match, total)
 
+    frase = frase_siri(match)
     print("\nFRASE PER SIRI:")
-    print(frase_siri(match))
+    print(frase)
     print(f"\nTempo recupero dati: {total:.2f}s")
+
+    return match.stato == "X"
+
+
+def main():
+    esegui()
 
 
 if __name__ == "__main__":
-    esegui()
+    main()

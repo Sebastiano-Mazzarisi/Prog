@@ -7,12 +7,6 @@ Scopo:
 - Scrive Tennis/Sinner.txt con una frase leggibile da Siri.
 - Scrive Tennis/Sinner-dati.csv con i dati strutturati minimi.
 
-Correzione importante:
-- Il turno NON è fisso.
-- "ottavi di finale", "quarti di finale", "semifinale", "finale", ecc. vengono usati
-  solo se il programma riesce a ricavarli dalla pagina.
-- Se il turno non viene trovato con certezza, viene omesso dalla frase invece di inventarlo.
-
 Uso locale:
     python SinnerVoce.py
 
@@ -32,8 +26,19 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 
+VERSIONE = "2026-05-13-path-fix-no-turno"
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
-TENNIS_DIR = os.path.join(ROOT, "Tennis")
+
+# IMPORTANTE:
+# Se questo script si trova nella cartella Tennis/, deve scrivere direttamente
+# in quella cartella. La vecchia versione faceva ROOT/Tennis e quindi,
+# quando lo script era già dentro Tennis/, scriveva per errore in Tennis/Tennis/.
+if os.path.basename(ROOT).lower() == "tennis":
+    TENNIS_DIR = ROOT
+else:
+    TENNIS_DIR = os.path.join(ROOT, "Tennis")
+
 os.makedirs(TENNIS_DIR, exist_ok=True)
 
 F_TXT = os.path.join(TENNIS_DIR, "Sinner.txt")
@@ -41,8 +46,6 @@ F_CSV = os.path.join(TENNIS_DIR, "Sinner-dati.csv")
 
 COGNOME = "SINNER"
 NOME = "Jannik"
-
-TORNEO = "Tennis, Roma, Internazionali d'Italia 2026"
 
 URLS = [
     ("main", "https://www.flashscore.com/tennis/atp-singles/rome/"),
@@ -68,7 +71,6 @@ class Match:
     avversario: str
     punteggio: str
     fonte: str
-    turno: str = ""
     recupero_sec: float = 0.0
 
 
@@ -107,52 +109,8 @@ NOMI_NOTI = {
     "LANDALUCE M": "Landaluce Martin",
     "TIRANTE T A": "Tirante Thiago Agustin",
     "RUBLEV A": "Rublev Andrey",
+    "A RUBLEV": "Rublev Andrey",
 }
-
-
-ROUND_PATTERNS = [
-    # prima i casi più specifici
-    (r"\bFINAL(E)?\b|\bFINALE\b", "finale"),
-    (r"\bSEMI[- ]?FINAL(S)?\b|\bSEMIFINAL(E|I)\b", "semifinale"),
-    (r"\bQUARTER[- ]?FINAL(S)?\b|\bQUARTI\b|\b1/4[- ]?FINAL(S)?\b", "quarti di finale"),
-    (r"\b1/8[- ]?FINAL(S)?\b|\bEIGHTH[- ]?FINAL(S)?\b|\bROUND OF 16\b|\bOTTAVI\b", "ottavi di finale"),
-    (r"\bROUND OF 32\b|\b1/16[- ]?FINAL(S)?\b|\bSEDICESIMI\b", "sedicesimi di finale"),
-    (r"\bROUND OF 64\b|\b1/32[- ]?FINAL(S)?\b|\bTRENTADUESIMI\b", "trentaduesimi di finale"),
-    (r"\bROUND OF 128\b|\b1/64[- ]?FINAL(S)?\b", "sessantaquattresimi di finale"),
-    (r"\bQUALIFICATION\b|\bQUALIFICAZIONI\b|\bQUALIFYING\b", "qualificazioni"),
-]
-
-
-def normalizza_turno(line):
-    """
-    Prova a capire se una riga della pagina Flashscore indica il turno.
-
-    Flashscore può usare intestazioni diverse a seconda della lingua:
-    - Quarter-finals
-    - Semi-finals
-    - Final
-    - 1/8-finals
-    - Round of 16
-    - Ottavi di finale
-    ecc.
-
-    Restituisce una stringa italiana pronta per Siri, oppure "".
-    """
-    s = pulisci(line)
-    if not s:
-        return ""
-
-    up = s.upper()
-
-    # Evita falsi positivi su righe troppo lunghe, pubblicità o descrizioni generiche.
-    if len(up) > 70:
-        return ""
-
-    for pattern, turno in ROUND_PATTERNS:
-        if re.search(pattern, up):
-            return turno
-
-    return ""
 
 
 def normalizza_giocatore(s):
@@ -375,16 +333,10 @@ def scarica_con_playwright(url):
     return text, blocchi, elapsed
 
 
-def parse_lines(lines, fonte, forced_state="", elapsed=0.0, turno_default=""):
+def parse_lines(lines, fonte, forced_state="", elapsed=0.0):
     found = []
-    turno_corrente = turno_default
 
     for i, line in enumerate(lines):
-        turno_trovato = normalizza_turno(line)
-        if turno_trovato:
-            turno_corrente = turno_trovato
-            continue
-
         data, ora = parse_data_ora(line)
         if not data or i + 2 >= len(lines):
             continue
@@ -407,11 +359,6 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0, turno_default=""):
             d2, _ = parse_data_ora(lines[j])
             if d2:
                 break
-
-            turno_tail = normalizza_turno(lines[j])
-            if turno_tail:
-                break
-
             tail.append(lines[j])
             j += 1
 
@@ -452,7 +399,6 @@ def parse_lines(lines, fonte, forced_state="", elapsed=0.0, turno_default=""):
             avversario=avversario,
             punteggio=punteggio,
             fonte=fonte,
-            turno=turno_corrente,
             recupero_sec=elapsed,
         ))
 
@@ -465,11 +411,6 @@ def parse_text(text, fonte, forced_state="", elapsed=0.0):
 
 
 def parse_dom_blocks(blocks, fonte, forced_state="", elapsed=0.0):
-    """
-    I blocchi DOM spesso contengono solo la singola partita, senza l'intestazione del turno.
-    Per questo motivo il turno viene preso soprattutto da parse_text().
-    Se dentro il blocco compare una riga di turno, viene comunque usata.
-    """
     found = []
     for block in blocks:
         lines = [pulisci(x) for x in block.splitlines() if pulisci(x)]
@@ -485,79 +426,15 @@ def match_datetime(m):
     return to_datetime(m.data, m.ora)
 
 
-def punteggio_match(m):
-    """
-    Serve solo per scegliere il record migliore quando la stessa partita viene letta
-    sia dal testo pagina sia dal DOM.
-    """
-    score = 0
-    if m.avversario:
-        score += 10
-    if m.data and m.ora:
-        score += 10
-    if m.turno:
-        score += 8
-    if m.punteggio:
-        score += 6
-    if "#dom" in m.fonte:
-        score += 2
-    return score
-
-
-def unisci_record_stessa_partita(matches):
-    """
-    Quando Flashscore viene letto da più pagine, la stessa partita può apparire più volte.
-    Unisco i duplicati conservando le informazioni più complete, soprattutto il turno.
-    """
-    per_chiave = {}
-
-    for m in matches:
-        chiave = (
-            m.stato,
-            m.data,
-            m.ora,
-            m.avversario.upper(),
-        )
-
-        if chiave not in per_chiave:
-            per_chiave[chiave] = m
-            continue
-
-        old = per_chiave[chiave]
-
-        migliore = old
-        if punteggio_match(m) > punteggio_match(old):
-            migliore = m
-
-        # Conserva il turno se uno dei due record lo ha.
-        turno = old.turno or m.turno
-        punteggio = old.punteggio or m.punteggio
-        fonte = migliore.fonte
-
-        per_chiave[chiave] = Match(
-            stato=migliore.stato,
-            data=migliore.data,
-            ora=migliore.ora,
-            avversario=migliore.avversario,
-            punteggio=punteggio,
-            fonte=fonte,
-            turno=turno,
-            recupero_sec=migliore.recupero_sec,
-        )
-
-    return list(per_chiave.values())
-
-
 def scegli_migliore(matches):
     if not matches:
-        return Match("F", "", "", "", "", "fallback", "", 0.0)
+        return Match("F", "", "", "", "", "fallback", 0.0)
 
-    matches = unisci_record_stessa_partita(matches)
     now = datetime.now()
 
     live = [m for m in matches if m.stato == "X"]
     if live:
-        live.sort(key=lambda m: (punteggio_match(m), match_datetime(m) or now), reverse=True)
+        live.sort(key=lambda m: match_datetime(m) or now, reverse=True)
         return live[0]
 
     future = []
@@ -567,19 +444,28 @@ def scegli_migliore(matches):
             future.append(m)
 
     if future:
-        future.sort(key=lambda m: (match_datetime(m), -punteggio_match(m)))
+        future.sort(key=lambda m: match_datetime(m))
         return future[0]
 
     played = [m for m in matches if m.stato == "P"]
     if played:
-        played.sort(key=lambda m: (match_datetime(m) or datetime.min, punteggio_match(m)), reverse=True)
+        played.sort(key=lambda m: match_datetime(m) or datetime.min, reverse=True)
         return played[0]
 
-    matches.sort(key=punteggio_match, reverse=True)
     return matches[0]
 
 
-MESI = {
+GIORNI_IT = {
+    0: "lunedì",
+    1: "martedì",
+    2: "mercoledì",
+    3: "giovedì",
+    4: "venerdì",
+    5: "sabato",
+    6: "domenica",
+}
+
+MESI_IT = {
     1: "gennaio",
     2: "febbraio",
     3: "marzo",
@@ -594,31 +480,22 @@ MESI = {
     12: "dicembre",
 }
 
-GIORNI = {
-    0: "lunedì",
-    1: "martedì",
-    2: "mercoledì",
-    3: "giovedì",
-    4: "venerdì",
-    5: "sabato",
-    6: "domenica",
-}
 
-
-def format_data_parlata(data):
+def data_lunga_it(data):
+    if not data:
+        return ""
     try:
         d = datetime.strptime(data, "%d/%m/%Y")
-        return f"{GIORNI[d.weekday()]} {d.day} {MESI[d.month]} {d.year}"
+        return f"{GIORNI_IT[d.weekday()]} {d.day} {MESI_IT[d.month]} {d.year}"
     except Exception:
         return data
 
 
-def format_ora_parlata(ora):
+def ora_parlata(ora):
     if not ora:
         return ""
-
     try:
-        hh, mm, _ = ora.split(":")
+        hh, mm = ora[:5].split(":")
         hh = int(hh)
         mm = int(mm)
         if mm == 0:
@@ -628,31 +505,17 @@ def format_ora_parlata(ora):
         return ora[:5]
 
 
-def format_aggiornato():
+def aggiornato_parlato():
     adesso = datetime.now()
-    h = adesso.hour
-    m = adesso.minute
-    if m == 0:
-        return f"{h}"
-    return f"{h} e {m:02d}"
+    return f"{adesso.hour} e {adesso.minute:02d}"
 
-
-def frase_turno(m):
-    """
-    VERSIONE SICURA: il turno viene omesso sempre.
-
-    Motivo: finché la fonte non consente di ricavare il turno con certezza,
-    è meglio non scrivere "ottavi di finale", "quarti di finale", ecc.
-    piuttosto che rischiare una frase sbagliata in Sinner.txt.
-    """
-    return ""
 
 def frase_siri(m):
-    aggiornato = format_aggiornato()
-    prefisso = TORNEO + frase_turno(m)
+    aggiornato = aggiornato_parlato()
+    prefisso = "Tennis, Roma, Internazionali d'Italia 2026"
 
     if not m.avversario:
-        return f"{TORNEO}. Non ho trovato la partita di Sinner. Ultimo controllo alle {aggiornato} di oggi."
+        return f"{prefisso}. Non ho trovato la partita di Sinner. Dati aggiornati alle {aggiornato} di oggi."
 
     if m.stato == "X":
         if m.punteggio:
@@ -670,8 +533,9 @@ def frase_siri(m):
     if m.stato == "F":
         quando = ""
         if m.data and m.ora:
-            quando = f" {format_data_parlata(m.data)}, alle ore {format_ora_parlata(m.ora)}"
+            quando = f" {data_lunga_it(m.data)}, alle ore {ora_parlata(m.ora)}"
 
+        # Il turno NON viene scritto qui: niente "ottavi di finale" fisso.
         return (
             f"{prefisso}, Sinner giocherà contro {m.avversario}"
             + quando
@@ -691,8 +555,7 @@ def frase_siri(m):
             f"Dati aggiornati alle {aggiornato} di oggi."
         )
 
-    return f"{TORNEO}. Situazione Sinner non disponibile. Ultimo controllo alle {aggiornato} di oggi."
-
+    return f"{prefisso}. Situazione Sinner non disponibile. Dati aggiornati alle {aggiornato} di oggi."
 
 def scrivi_file(m, total_time):
     frase = frase_siri(m)
@@ -702,25 +565,13 @@ def scrivi_file(m, total_time):
 
     with open(F_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter=";")
-        w.writerow([
-            "Cognome",
-            "Nome",
-            "Stato",
-            "Data",
-            "Ora",
-            "Turno",
-            "Avversario",
-            "Punteggio",
-            "Fonte",
-            "TempoRecupero",
-        ])
+        w.writerow(["Cognome", "Nome", "Stato", "Data", "Ora", "Avversario", "Punteggio", "Fonte", "TempoRecupero"])
         w.writerow([
             COGNOME,
             NOME,
             m.stato,
             m.data,
             m.ora,
-            m.turno,
             m.avversario,
             m.punteggio,
             m.fonte,
@@ -734,7 +585,7 @@ def scrivi_file(m, total_time):
 
 def esegui():
     print("=" * 70)
-    print(f"SinnerVoce.py - {datetime.now().strftime('%H:%M:%S del %d/%m/%Y')}")
+    print(f"SinnerVoce.py {VERSIONE} - {datetime.now().strftime('%H:%M:%S del %d/%m/%Y')}")
     print("=" * 70)
 
     t0 = time.perf_counter()

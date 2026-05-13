@@ -639,13 +639,13 @@ def format_aggiornato():
 
 def frase_turno(m):
     """
-    Restituisce ', quarti di finale' oppure stringa vuota.
-    Il turno viene scritto solo se è stato letto davvero.
-    """
-    if not m.turno:
-        return ""
-    return f", {m.turno}"
+    VERSIONE SICURA: il turno viene omesso sempre.
 
+    Motivo: finché la fonte non consente di ricavare il turno con certezza,
+    è meglio non scrivere "ottavi di finale", "quarti di finale", ecc.
+    piuttosto che rischiare una frase sbagliata in Sinner.txt.
+    """
+    return ""
 
 def frase_siri(m):
     aggiornato = format_aggiornato()

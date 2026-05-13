@@ -34,7 +34,7 @@ jobs:
       - name: Aggiorna Sinner.txt
         run: |
           cd Tennis
-          python SinnerVoce.py
+          python SinnerVoce.py --once
 
       - name: Pubblica file aggiornati
         run: |

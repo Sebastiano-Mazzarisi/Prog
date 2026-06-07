@@ -261,7 +261,7 @@
   }
 
   .iban-full-display {
-    background: var(--cream);
+    background: #ffffff;
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 16px;
@@ -282,7 +282,12 @@
     padding-bottom: 0;
   }
 
-  /* LINEA DIVISORIA DELICATA */
+  /* MODIFICATO: Le scritte guida (tag strong) ereditano lo stesso colore del titolo */
+  .iban-full-display strong {
+    color: var(--gold-dark);
+    font-weight: 600;
+  }
+
   .iban-full-display hr {
     border: none;
     height: 1px;
@@ -295,9 +300,7 @@
     font-family: 'Jost', sans-serif;
     font-weight: 500;
     color: #000000;
-    background: rgba(255,255,255,0.4);
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 2px 0px;
     display: inline-block;
     word-break: break-all;
     margin-top: 2px;

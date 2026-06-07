@@ -242,4 +242,274 @@
     position: absolute;
     top: 12px;
     right: 14px;
-    background: none
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--gold-dark);
+    line-height: 1;
+    padding: 4px;
+  }
+
+  .popup-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gold-dark);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .iban-full-display {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #000;
+    margin-bottom: 12px;
+  }
+
+  .iban-full-display p {
+    margin-bottom: 8px;
+  }
+  .iban-full-display p:last-child {
+    margin-bottom: 0;
+  }
+
+  .iban-row-value {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    color: #000000;
+    background: rgba(255,255,255,0.4);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    word-break: break-all;
+  }
+
+  .btn-copy-iban {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    text-align: center;
+    margin-top: 14px;
+    box-shadow: 0 2px 8px rgba(160,124,69,0.2);
+  }
+  .btn-copy-iban:hover { opacity: 0.92; }
+  .btn-copy-iban:active { transform: translateY(1px); }
+
+  .copy-status {
+    font-size: 14px;
+    color: var(--green);
+    font-weight: 600;
+    min-height: 20px;
+    margin-top: 8px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <div class="header">
+    <div class="lang-switcher">
+      <button class="lang-btn active-lang" id="lang-it" onclick="setLanguage('it')">Italiano</button>
+      <div class="header-ornament">✦ ✦ ✦</div>
+      <button class="lang-btn" id="lang-es" onclick="setLanguage('es')">Español</button>
+    </div>
+    <h1 id="main-title">Promemoria</h1>
+    <div class="subtitle">Giulia &amp; Onofrio</div>
+    <p class="description" id="main-desc"></p>
+  </div>
+
+  <div class="hero-container">
+    <img src="Foto2.jpg" alt="Giulia e Onofrio">
+  </div>
+
+  <div class="card-memo">
+    <div class="card-memo-title" id="title-cerimonia">Cerimonia</div>
+    <div class="card-memo-text" id="text-cerimonia">Domenica 21 giugno 2026<br>Ore 16:00 presso il Comune di Putignano</div>
+  </div>
+
+  <div class="card-memo">
+    <div class="card-memo-title" id="title-cena">Cena in Masseria</div>
+    <div class="card-memo-text" id="text-cena">Ore 18:00 presso Barsentum</div>
+  </div>
+
+  <div class="card-memo">
+    <div class="card-memo-title" id="gift-title">Pensiero per gli Sposi</div>
+    <div class="card-memo-text" id="gift-text">Se desiderate dedicarci un pensiero speciale,<br>potete cliccare qui sotto:</div>
+    
+    <div class="iban-clickable-box" onclick="apriIbanPopup()">
+      <div class="iban-holder">Onofrio Mazzarisi & Giulia Perez</div>
+      <div class="iban-preview">IT80 I036 6901 6005 3305 8528 402</div>
+      <div class="click-hint" id="click-hint">Clicca qui per visualizzare e copiare i dati completi</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="iban-overlay" class="custom-overlay" onclick="chiudiIbanPopup(event)">
+  <div class="custom-box">
+    <button class="close-btn" onclick="chiudiIbanPopupFuga()">✕</button>
+    <div class="popup-title" id="iban-popup-title">Dettagli per il Versamento</div>
+    
+    <div class="iban-full-display" id="iban-display-box">
+      </div>
+    
+    <button class="btn-copy-iban" id="btn-copy-action" onclick="copiaIbanSolo()">Copia solo IBAN</button>
+    <div class="copy-status" id="copy-status"></div>
+  </div>
+</div>
+
+<script>
+  let currentLanguage = 'it';
+  const IBAN_PULITO = 'IT80I0366901600533058528402';
+
+  const dataEvento = new Date('2026-06-21T00:00:00');
+  const dataOggi = new Date();
+  dataOggi.setHours(0, 0, 0, 0); 
+  const diffTime = dataEvento - dataOggi;
+  const giorniMancanti = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  function strGiorniLang(lang) {
+    if (giorniMancanti > 0) {
+      return lang === 'es' ? ` (en ${giorniMancanti} días)` : ` (tra ${giorniMancanti} giorni)`;
+    }
+    if (giorniMancanti === 0) return lang === 'es' ? ' (hoy)' : ' (oggi)';
+    if (giorniMancanti === -1) return lang === 'es' ? ' (mañana)' : ' (domani)';
+    if (giorniMancanti === -2) return lang === 'es' ? ' (pasado mañana)' : ' (dopodomani)';
+    return ''; 
+  }
+
+  const translations = {
+    it: {
+      docTitle: 'Promemoria Matrimonio – Giulia & Onofrio',
+      ogTitle: 'Matrimonio Giulia & Onofrio – Promemoria',
+      ogDesc: 'Tutte le informazioni utili e i dettagli per il matrimonio di Giulia & Onofrio.',
+      mainTitle: 'Promemoria',
+      mainDesc: 'DOMENICA 21 GIUGNO 2026' + strGiorniLang('it'),
+      titleCerimonia: 'Cerimonia',
+      textCerimonia: 'Domenica 21 giugno 2026<br>Ore 16:00 presso il Comune di Putignano',
+      titleCena: 'Cena in Masseria',
+      textCena: 'Ore 18:00 presso Barsentum',
+      giftTitle: 'Pensiero per gli Sposi',
+      giftText: 'Se desiderate dedicarci un pensiero speciale,<br>potete cliccare qui sotto:',
+      clickHint: 'Clicca qui per visualizzare e copiare i dati completi',
+      ibanPopupTitle: 'Dettagli per il Versamento',
+      btnCopyAction: 'Copia solo IBAN',
+      copiedMsg: 'IBAN copiato negli appunti!',
+      labelsBanca: {
+        beneficiario: 'Beneficiario',
+        iban: 'IBAN',
+        bic: 'Codice BIC/SWIFT',
+        banca: 'Nome e sede della banca',
+        corrispondente: 'BIC banca corrispondente'
+      }
+    },
+    es: {
+      docTitle: 'Recordatorio Boda – Giulia & Onofrio',
+      ogTitle: 'Boda de Giulia & Onofrio – Recordatorio',
+      ogDesc: 'Toda la información útil y los detalles para la boda di Giulia & Onofrio.',
+      mainTitle: 'Recordatorio',
+      mainDesc: 'DOMINGO 21 JUNIO 2026' + strGiorniLang('es'),
+      titleCerimonia: 'Ceremonia',
+      textCerimonia: 'Domingo 21 de junio de 2026<br>A las 16:00 en el Ayuntamiento de Putignano',
+      titleCena: 'Cena in Masseria',
+      textCena: 'A las 18:00 en Barsentum',
+      giftTitle: 'Regalo para los Novios',
+      giftText: 'Si deseáis tener un detalle especial con nosotros,<br>podéis hacer clic abajo:',
+      clickHint: 'Haz clic aquí para ver y copiar los datos completos',
+      ibanPopupTitle: 'Detalles para la Transferencia',
+      btnCopyAction: 'Copiar solo IBAN',
+      copiedMsg: '¡IBAN copiado al portapapeles!',
+      labelsBanca: {
+        beneficiario: 'Beneficiario',
+        iban: 'IBAN',
+        bic: 'Código BIC/SWIFT',
+        banca: 'Nombre y sede del banco',
+        corrispondente: 'BIC banco correspondiente'
+      }
+    }
+  };
+
+  window.addEventListener('DOMContentLoaded', () => {
+    setLanguage('it');
+  });
+
+  function setLanguage(lang) {
+    currentLanguage = lang;
+    
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active-lang'));
+    document.getElementById('lang-' + lang).classList.add('active-lang');
+    
+    const t = translations[lang];
+    document.getElementById('doc-title').textContent = t.docTitle;
+    document.getElementById('og-title').content = t.ogTitle;
+    document.getElementById('og-desc').content = t.ogDesc;
+    
+    document.getElementById('main-title').textContent = t.mainTitle;
+    document.getElementById('main-desc').textContent = t.mainDesc;
+    
+    document.getElementById('title-cerimonia').textContent = t.titleCerimonia;
+    document.getElementById('text-cerimonia').innerHTML = t.textCerimonia;
+    document.getElementById('title-cena').textContent = t.titleCena;
+    document.getElementById('text-cena').innerHTML = t.textCena;
+    
+    document.getElementById('gift-title').textContent = t.giftTitle;
+    document.getElementById('gift-text').innerHTML = t.giftText;
+    document.getElementById('click-hint').textContent = t.clickHint;
+    
+    document.getElementById('iban-popup-title').textContent = t.ibanPopupTitle;
+    document.getElementById('btn-copy-action').textContent = t.btnCopyAction;
+
+    const lb = t.labelsBanca;
+    document.getElementById('iban-display-box').innerHTML = `
+      <p><strong>${lb.beneficiario}:</strong><br><span class="iban-row-value">Onofrio Mazzarisi & Giulia Perez</span></p>
+      <p><strong>${lb.iban}:</strong><br><span class="iban-row-value" style="letter-spacing:0.5px;">IT80 I036 6901 6005 3305 8528 402</span></p>
+      <p><strong>${lb.bic}:</strong><br><span class="iban-row-value">REVOITM2</span></p>
+      <p><strong>${lb.banca}:</strong><br><span class="iban-row-value">Revolut Bank UAB<br>Via Dante 7, 20123, Milano (MI), Italy</span></p>
+      <p><strong>${lb.corrispondente}:</strong><br><span class="iban-row-value">CHASDEFX</span></p>
+    `;
+  }
+
+  function apriIbanPopup() {
+    document.getElementById('copy-status').textContent = '';
+    document.getElementById('iban-overlay').classList.add('visible');
+  }
+
+  function chiudiIbanPopupFuga() {
+    document.getElementById('iban-overlay').classList.remove('visible');
+  }
+
+  function chiudiIbanPopup(e) {
+    if (e.target === document.getElementById('iban-overlay')) {
+      chiudiIbanPopupFuga();
+    }
+  }
+
+  function copiaIbanSolo() {
+    navigator.clipboard.writeText(IBAN_PULITO).then(() => {
+      const status = document.getElementById('copy-status');
+      status.textContent = translations[currentLanguage].copiedMsg;
+      setTimeout(() => { status.textContent = ''; }, 2500);
+    }).catch(() => {
+      alert(IBAN_PULITO);
+    });
+  }
+</script>
+</body>
+</html>

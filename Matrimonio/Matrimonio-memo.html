@@ -324,6 +324,7 @@
 <body>
 <div class="page-wrapper">
 
+  <!-- HEADER -->
   <div class="header">
     <div class="lang-switcher">
       <button class="lang-btn active-lang" id="lang-it" onclick="setLanguage('it')">Italiano</button>
@@ -335,20 +336,24 @@
     <p class="description" id="main-desc"></p>
   </div>
 
+  <!-- FOTO PANORAMICA STRETTA -->
   <div class="hero-container">
-    <img src="Foto.jpeg" alt="Giulia e Onofrio">
+    <img src="Foto2.jpg" alt="Giulia e Onofrio">
   </div>
 
+  <!-- RIQUADRO 1: CERIMONIA -->
   <div class="card-memo">
     <div class="card-memo-title" id="title-cerimonia">Cerimonia</div>
     <div class="card-memo-text" id="text-cerimonia">Domenica 21 giugno 2026<br>Ore 16:00 presso il Comune di Putignano</div>
   </div>
 
+  <!-- RIQUADRO 2: CENA IN MASSERIA -->
   <div class="card-memo">
     <div class="card-memo-title" id="title-cena">Cena in Masseria</div>
     <div class="card-memo-text" id="text-cena">Ore 18:00 presso Barsentum</div>
   </div>
 
+  <!-- RIQUADRO 3: PENSIERO PER GLI SPOSI -->
   <div class="card-memo">
     <div class="card-memo-title" id="gift-title">Pensiero per gli Sposi</div>
     <div class="card-memo-text" id="gift-text">Se desiderate dedicarci un pensiero speciale,<br>potete cliccare qui sotto:</div>
@@ -362,13 +367,15 @@
 
 </div>
 
+<!-- POP-UP MODALE COMPLETO INFORMAZIONI VERSAMENTO -->
 <div id="iban-overlay" class="custom-overlay" onclick="chiudiIbanPopup(event)">
   <div class="custom-box">
     <button class="close-btn" onclick="chiudiIbanPopupFuga()">✕</button>
     <div class="popup-title" id="iban-popup-title">Dettagli per il Versamento</div>
     
     <div class="iban-full-display" id="iban-display-box">
-      </div>
+      <!-- Rigenerato dinamicamente -->
+    </div>
     
     <button class="btn-copy-iban" id="btn-copy-action" onclick="copiaIbanSolo()">Copia solo IBAN</button>
     <div class="copy-status" id="copy-status"></div>

@@ -272,10 +272,23 @@
   }
 
   .iban-full-display p {
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    padding: 8px 0;
+  }
+  .iban-full-display p:first-child {
+    padding-top: 0;
   }
   .iban-full-display p:last-child {
-    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* LINEA DIVISORIA DELICATA */
+  .iban-full-display hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    opacity: 0.4;
+    margin: 2px 0;
   }
 
   .iban-row-value {
@@ -287,6 +300,7 @@
     border-radius: 4px;
     display: inline-block;
     word-break: break-all;
+    margin-top: 2px;
   }
 
   .btn-copy-iban {
@@ -423,12 +437,12 @@
     es: {
       docTitle: 'Recordatorio Boda – Giulia & Onofrio',
       ogTitle: 'Boda de Giulia & Onofrio – Recordatorio',
-      ogDesc: 'Toda la información útil y los detalles para la boda di Giulia & Onofrio.',
+      ogDesc: 'Toda la información útil y los detalles para la boda de Giulia & Onofrio.',
       mainTitle: 'Recordatorio',
       mainDesc: 'DOMINGO 21 JUNIO 2026' + strGiorniLang('es'),
       titleCerimonia: 'Ceremonia',
       textCerimonia: 'Domingo 21 de junio de 2026<br>A las 16:00 en el Ayuntamiento de Putignano',
-      titleCena: 'Cena in Masseria',
+      titleCena: 'Cena en la Finca',
       textCena: 'A las 18:00 en Barsentum',
       giftTitle: 'Regalo para los Novios',
       giftText: 'Si deseáis tener un detalle especial con nosotros,<br>podéis hacer clic abajo:',
@@ -479,9 +493,13 @@
     const lb = t.labelsBanca;
     document.getElementById('iban-display-box').innerHTML = `
       <p><strong>${lb.beneficiario}:</strong><br><span class="iban-row-value">Onofrio Mazzarisi & Giulia Perez</span></p>
+      <hr>
       <p><strong>${lb.iban}:</strong><br><span class="iban-row-value" style="letter-spacing:0.5px;">IT80 I036 6901 6005 3305 8528 402</span></p>
+      <hr>
       <p><strong>${lb.bic}:</strong><br><span class="iban-row-value">REVOITM2</span></p>
+      <hr>
       <p><strong>${lb.banca}:</strong><br><span class="iban-row-value">Revolut Bank UAB<br>Via Dante 7, 20123, Milano (MI), Italy</span></p>
+      <hr>
       <p><strong>${lb.corrispondente}:</strong><br><span class="iban-row-value">CHASDEFX</span></p>
     `;
   }

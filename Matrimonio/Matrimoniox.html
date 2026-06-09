@@ -225,17 +225,32 @@
     border-radius: 12px;
     padding: 16px;
     margin-top: 12px;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    cursor: default;
     user-select: none;
   }
 
   .iban-clickable-box:hover {
-    background: rgba(184, 137, 58, 0.12);
-    border-color: var(--gold);
-    transform: translateY(-1px);
+    background: var(--cream);
+    border-color: var(--border);
+    transform: none;
   }
-  .iban-clickable-box:active { transform: translateY(0); }
+  .iban-clickable-box:active { transform: none; }
+
+  .btn-copia {
+    background: #dee5cd;
+    border: 1.5px solid #b0c49a;
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 0.9em;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4a5e35;
+    width: 220px;
+    transition: transform 0.1s;
+  }
+  .btn-copia:hover { transform: translateY(-2px); }
+  .btn-copia:active { transform: translateY(0); }
 
   .iban-holder {
     font-weight: 600;
@@ -407,12 +422,16 @@
   <div class="card-memo info-card" id="card-cena"></div>
 
   <div class="card-memo">
-    <div class="card-memo-title" id="gift-title">Pensiero per gli Sposi</div>
-    <div class="card-memo-text" id="gift-text">Se desiderate dedicarci un pensiero speciale,<br>potete cliccare qui sotto:</div>
+    <div class="card-memo-text" id="gift-text">Se desiderate dedicarci un pensiero,<br>potete cliccare qui sotto:</div>
 
-    <div class="iban-clickable-box" id="iban-box" onclick="copiaIbanDiretto()">
+    <div class="iban-clickable-box" id="iban-box" style="cursor:default;">
       <div class="iban-holder">Onofrio Mazzarisi &amp; Giulia Perez</div>
       <div class="iban-preview">IT80 I036 6901 6005 3305 8528 402</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;align-items:center;">
+      <button id="btn-intestatari" class="btn-copia" onclick="copiaIntestatari(this)">Copia INTESTATARI</button>
+      <button id="btn-iban" class="btn-copia" onclick="copiaIban(this)">Copia IBAN</button>
     </div>
   </div>
 
@@ -445,42 +464,36 @@
   const INFO_IT = `*Sposi:*
 Giulia Pérez: +39 328 0622 347
 Onofrio Mazzarisi: +39 333 5443 537
-Domenica 21 giugno 2026
 
-_Cerimonia civile ore 16:00 presso:_
+Cerimonia civile **ore 16:00** presso:
 *Palazzo Romanazzi-Carducci*
 Piazza Plebiscito, 16
-Putignano (Bari)
-Puglia - Italia
+Putignano (Bari) - Italia
 Telefono: +39 080 236 7269
 https://www.museoromanazzicarducci.it
 
-_Cena di matrimonio ore 18:00 presso:_
+Cena di matrimonio **ore 18:00** presso:
 *Masseria Barsentum*
 S.P. Noci-Barsento Km 4.500
-Putignano (Bari)
-Puglia - Italia
+Putignano (Bari) - Italia
 Telefono: +39 080 411 7533
 http://barsentum.it`;
 
   const INFO_ES = `*Los novios:*
 Giulia Pérez: +39 328 0622 347
 Onofrio Mazzarisi: +39 333 5443 537
-domingo, 21 de junio de 2026
 
-_Ceremonia Civil a las 16:00 horas en:_
+Ceremonia Civil a las **16:00** horas en:
 *Palacio Romanazzi-Carducci*
 Plaza Plebiscito, 16
-Putignano (Bari)
-Apulia - Italia
+Putignano (Bari) - Italia
 Teléfono: +39 080 236 7269
 https://www.museoromanazzicarducci.it
 
-_Cena de Boda a las 6:00 PM en:_
+Cena de Boda a las **6:00 PM** en:
 *Masseria Barsentum*
 SP Noci-Barsento, 4.500 km
-Putignano (Bari)
-Apulia - Italia
+Putignano (Bari) - Italia
 Teléfono: +39 080 411 7533
 http://barsentum.it`;
 
@@ -494,11 +507,15 @@ http://barsentum.it`;
       infoTitle: 'Informazioni',
       infoTesto: INFO_IT,
       giftTitle: 'Pensiero per gli Sposi',
-      giftText: 'Se desiderate dedicarci un pensiero speciale,<br>potete cliccare qui sotto:',
+      giftText: 'Se desiderate dedicarci un pensiero,<br>potete cliccare qui sotto:',
       clickHint: 'Clicca qui per visualizzare e copiare i dati completi',
       ibanPopupTitle: 'Dettagli per il Versamento',
       btnCopyAction: 'Copia solo IBAN',
       copiedMsg: 'IBAN copiato negli appunti!',
+      btnIntestatari: 'Copia INTESTATARI',
+      btnIban: 'Copia IBAN',
+      copiato: 'Copiato!',
+      ibanCopiato: 'IBAN COPIATO IN MEMORIA!',
       labelsBanca: {
         beneficiario: 'Beneficiario',
         iban: 'IBAN',
@@ -516,11 +533,15 @@ http://barsentum.it`;
       infoTitle: 'Información',
       infoTesto: INFO_ES,
       giftTitle: 'Regalo para los Novios',
-      giftText: 'Si deseáis tener un detalle especial con nosotros,<br>podéis hacer clic abajo:',
+      giftText: 'Si deseáis tener un detalle con nosotros,<br>podéis hacer clic abajo:',
       clickHint: 'Haz clic aquí para ver y copiar los datos completos',
       ibanPopupTitle: 'Detalles para la Transferencia',
       btnCopyAction: 'Copiar solo IBAN',
       copiedMsg: '¡IBAN copiado al portapapeles!',
+      btnIntestatari: 'Copiar TITULARES',
+      btnIban: 'Copiar IBAN',
+      copiato: '¡Copiado!',
+      ibanCopiato: '¡IBAN COPIADO AL PORTAPAPELES!',
       labelsBanca: {
         beneficiario: 'Beneficiario',
         iban: 'IBAN',
@@ -548,11 +569,11 @@ http://barsentum.it`;
     document.getElementById('main-title').textContent = t.mainTitle;
     document.getElementById('main-desc').textContent = t.mainDesc;
     renderInfoCards(t.infoTesto, t.lang);
-    document.getElementById('gift-title').textContent = t.giftTitle;
     document.getElementById('gift-text').innerHTML = t.giftText;
-    document.getElementById('click-hint').textContent = t.clickHint;
     document.getElementById('iban-popup-title').textContent = t.ibanPopupTitle;
     document.getElementById('btn-copy-action').textContent = t.btnCopyAction;
+    document.getElementById('btn-intestatari').textContent = t.btnIntestatari;
+    document.getElementById('btn-iban').textContent = t.btnIban;
 
     const lb = t.labelsBanca;
     document.getElementById('iban-display-box').innerHTML = `
@@ -594,6 +615,7 @@ http://barsentum.it`;
 
   function formattaInfo(testo) {
     function applyInline(s) {
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
       s = s.replace(/\*([^*]+)\*/g, '<span class="info-label">$1</span>');
       s = s.replace(/_([^_]+)_/g, '<em>$1</em>');
       return s;
@@ -609,11 +631,27 @@ http://barsentum.it`;
     }).join('');
   }
 
+  function copiaIntestatari(btn) {
+    navigator.clipboard.writeText('Onofrio Mazzarisi & Giulia Perez').then(() => {
+      const orig = btn.textContent;
+      btn.textContent = translations[currentLanguage].copiato;
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    }).catch(() => { alert('Onofrio Mazzarisi & Giulia Perez'); });
+  }
+
+  function copiaIban(btn) {
+    navigator.clipboard.writeText(IBAN_PULITO).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = translations[currentLanguage].copiato;
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    }).catch(() => { alert(IBAN_PULITO); });
+  }
+
   function copiaIbanDiretto() {
     const box = document.getElementById('iban-box');
     const originalHTML = box.innerHTML;
     navigator.clipboard.writeText(IBAN_PULITO).then(() => {
-      box.innerHTML = '<div style="font-weight:700;font-size:1.1em;letter-spacing:0.05em;padding:6px 0;">IBAN COPIATO IN MEMORIA!</div>';
+      box.innerHTML = '<div style="font-weight:700;font-size:1.1em;letter-spacing:0.05em;padding:6px 0;">' + translations[currentLanguage].ibanCopiato + '</div>';
       setTimeout(() => { box.innerHTML = originalHTML; }, 3000);
     }).catch(() => {
       alert(IBAN_PULITO);

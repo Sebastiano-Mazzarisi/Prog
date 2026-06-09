@@ -9,8 +9,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Matrimonio G&amp;O">
 <meta name="mobile-web-app-capable" content="yes">
-<meta id="og-title" property="og:title" content="Matrimonio Giulia &amp; Onofrio">
-<meta id="og-desc" property="og:description" content="Dettagli e informazioni per il matrimonio di Giulia &amp; Onofrio.">
+<meta id="og-title" property="og:title" content="Matrimonio Giulia &amp; Onofrio – Info e Promemoria">
+<meta id="og-desc" property="og:description" content="Informazioni utili, promemoria e dettagli per il matrimonio di Giulia &amp; Onofrio.">
 <meta property="og:image" content="https://sebastiano-mazzarisi.github.io/Prog/Matrimonio/Matrimonio.png">
 <meta property="og:image:width" content="180">
 <meta property="og:image:height" content="180">
@@ -94,6 +94,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 38px;
     font-weight: 600;
+    
     color: #000000;
     line-height: 1.1;
     margin-bottom: 4px;
@@ -129,18 +130,258 @@
 
   .hero-container img {
     width: 100%;
-    height: 250px; /* Altezza regolata per una foto */
+    height: 140px;
     display: block;
     object-fit: cover;
-    object-position: center;
+    object-position: center 30%;
   }
 
-  /* ... resto dello stile invariato ... */
-  .card-memo { background: var(--warm-white); border: 1.5px solid var(--border); border-radius: 16px; box-shadow: 0 4px 20px rgba(44,36,24,0.06); padding: 22px 20px; margin-bottom: 16px; margin-left: auto; margin-right: auto; max-width: 460px; text-align: center; }
-  .card-memo-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--gold-dark); margin-bottom: 8px; }
-  .info-card { text-align: center; font-size: 16px; font-weight: 400; color: #000000; line-height: 1.5; }
-  .btn-info { display: block; width: 100%; margin: 14px auto 0; padding: 12px 0; background: var(--cream); border: 1.5px solid var(--border); border-radius: 12px; font-family: 'Jost', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-dark); cursor: pointer; transition: background 0.15s; }
-  .iban-clickable-box { background: var(--cream); border: 1.5px dashed var(--border); border-radius: 12px; padding: 16px; margin-top: 12px; cursor: pointer; }
+  .card-memo {
+    background: var(--warm-white);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(44,36,24,0.06);
+    padding: 22px 20px;
+    margin-bottom: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 460px;
+    text-align: center;
+  }
+
+  .card-memo-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    
+    color: var(--gold-dark);
+    margin-bottom: 8px;
+  }
+
+  .card-memo-text {
+    font-size: 16px;
+    color: #000000;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .info-card {
+    text-align: left;
+  }
+
+  .info-card {
+    font-size: 16px;
+    font-weight: 400;
+    color: #000000;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .info-card p { margin: 0 0 3px; }
+
+  .info-card a {
+    color: var(--gold-dark);
+    word-break: break-all;
+  }
+
+  .info-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    
+    color: var(--gold-dark);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .info-card .card-memo-title {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .btn-info {
+    display: block;
+    width: 100%;
+    margin: 14px auto 0;
+    padding: 12px 0;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+  }
+  .btn-info:hover { background: rgba(184,137,58,0.10); color: var(--gold); }
+  .btn-info:active { transform: translateY(1px); }
+
+  .iban-clickable-box {
+    background: var(--cream);
+    border: 1.5px dashed var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    user-select: none;
+  }
+
+  .iban-clickable-box:hover {
+    background: rgba(184, 137, 58, 0.12);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
+  .iban-clickable-box:active { transform: translateY(0); }
+
+  .iban-holder {
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+  }
+
+  .iban-preview {
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    color: var(--gold-dark);
+  }
+
+  .click-hint {
+    font-size: 12px;
+    margin-top: 8px;
+    opacity: 0.6;
+    
+    letter-spacing: 0.5px;
+  }
+
+  .custom-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+  }
+  .custom-overlay.visible { display: flex; }
+
+  .custom-box {
+    background: var(--warm-white);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 32px 24px 24px;
+    box-shadow: 0 8px 40px rgba(44,36,24,0.25);
+    max-width: 480px;
+    width: 92%;
+    max-height: 84vh;
+    overflow-y: auto;
+    animation: popupIn 0.2s ease;
+    position: relative;
+    text-align: left;
+  }
+
+  @keyframes popupIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--gold-dark);
+    line-height: 1;
+    padding: 4px;
+  }
+
+  .popup-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gold-dark);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .iban-full-display {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #000;
+    margin-bottom: 12px;
+  }
+  .iban-full-display p { margin-bottom: 0; padding: 8px 0; }
+  .iban-full-display p:first-child { padding-top: 0; }
+  .iban-full-display p:last-child { padding-bottom: 0; }
+  .iban-full-display strong { color: var(--gold-dark); font-weight: 600; }
+  .iban-full-display hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    opacity: 0.4;
+    margin: 2px 0;
+  }
+
+  .iban-row-value {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    color: #000000;
+    padding: 2px 0px;
+    display: inline-block;
+    word-break: break-all;
+    margin-top: 2px;
+  }
+
+  .btn-copy-iban {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    text-align: center;
+    margin-top: 14px;
+    box-shadow: 0 2px 8px rgba(160,124,69,0.2);
+  }
+  .btn-copy-iban:hover { opacity: 0.92; }
+  .btn-copy-iban:active { transform: translateY(1px); }
+
+  .copy-status {
+    font-size: 14px;
+    color: var(--green);
+    font-weight: 600;
+    min-height: 20px;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .fallback-note {
+    font-size: 13px;
+    opacity: 0.75;
+    margin-top: 10px;
+    text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -152,15 +393,257 @@
       <div class="header-ornament">✦ ✦ ✦</div>
       <button class="lang-btn" id="lang-es" onclick="setLanguage('es')">Español</button>
     </div>
-    <h1 id="main-title">Matrimonio</h1>
+    <h1 id="main-title" style="display:none"></h1>
     <div class="subtitle">Giulia &amp; Onofrio</div>
     <p class="description" id="main-desc"></p>
   </div>
 
   <div class="hero-container">
-    <img src="https://raw.githubusercontent.com/Sebastiano-Mazzarisi/Prog/main/Matrimonio/Foto2.jpeg" alt="Foto Matrimonio">
+    <img src="Foto2.jpg" alt="Giulia e Onofrio">
   </div>
 
+  <div class="card-memo info-card" id="card-sposi"></div>
+  <div class="card-memo info-card" id="card-cerimonia"></div>
+  <div class="card-memo info-card" id="card-cena"></div>
+
+  <div class="card-memo">
+    <div class="card-memo-title" id="gift-title">Pensiero per gli Sposi</div>
+    <div class="card-memo-text" id="gift-text">Se desiderate dedicarci un pensiero speciale,<br>potete cliccare qui sotto:</div>
+
+    <div class="iban-clickable-box" id="iban-box" onclick="copiaIbanDiretto()">
+      <div class="iban-holder">Onofrio Mazzarisi &amp; Giulia Perez</div>
+      <div class="iban-preview">IT80 I036 6901 6005 3305 8528 402</div>
+    </div>
   </div>
+
+</div>
+
+<div id="iban-overlay" class="custom-overlay" onclick="chiudiIbanPopup(event)">
+  <div class="custom-box">
+    <button class="close-btn" onclick="chiudiIbanPopupFuga()">✕</button>
+    <div class="popup-title" id="iban-popup-title">Dettagli per il Versamento</div>
+    <div class="iban-full-display" id="iban-display-box"></div>
+    <button class="btn-copy-iban" id="btn-copy-action" onclick="copiaIbanSolo()">Copia solo IBAN</button>
+    <div class="copy-status" id="copy-status"></div>
+  </div>
+</div>
+
+<script>
+  let currentLanguage = 'it';
+  const IBAN_PULITO = 'IT80I0366901600533058528402';
+
+  const dataEvento = new Date('2026-06-21T00:00:00');
+  const dataOggi = new Date();
+  dataOggi.setHours(0, 0, 0, 0);
+  const diffTime = dataEvento - dataOggi;
+  const giorniMancanti = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  function strGiorniLang(lang) {
+    return '';
+  }
+
+  const INFO_IT = `*Sposi:*
+Giulia Pérez: +39 328 0622 347
+Onofrio Mazzarisi: +39 333 5443 537
+Domenica 21 giugno 2026
+
+_Cerimonia civile ore 16:00 presso:_
+*Palazzo Romanazzi-Carducci*
+Piazza Plebiscito, 16
+Putignano (Bari)
+Puglia - Italia
+Telefono: +39 080 236 7269
+https://www.museoromanazzicarducci.it
+
+_Cena di matrimonio ore 18:00 presso:_
+*Masseria Barsentum*
+S.P. Noci-Barsento Km 4.500
+Putignano (Bari)
+Puglia - Italia
+Telefono: +39 080 411 7533
+http://barsentum.it`;
+
+  const INFO_ES = `*Los novios:*
+Giulia Pérez: +39 328 0622 347
+Onofrio Mazzarisi: +39 333 5443 537
+domingo, 21 de junio de 2026
+
+_Ceremonia Civil a las 16:00 horas en:_
+*Palacio Romanazzi-Carducci*
+Plaza Plebiscito, 16
+Putignano (Bari)
+Apulia - Italia
+Teléfono: +39 080 236 7269
+https://www.museoromanazzicarducci.it
+
+_Cena de Boda a las 6:00 PM en:_
+*Masseria Barsentum*
+SP Noci-Barsento, 4.500 km
+Putignano (Bari)
+Apulia - Italia
+Teléfono: +39 080 411 7533
+http://barsentum.it`;
+
+  const translations = {
+    it: {
+      docTitle: 'Matrimonio – Giulia & Onofrio',
+      ogTitle: 'Matrimonio Giulia & Onofrio – Info e Promemoria',
+      ogDesc: 'Informazioni utili, promemoria e dettagli per il matrimonio di Giulia & Onofrio.',
+      mainTitle: 'Matrimonio',
+      mainDesc: 'DOMENICA 21 GIUGNO 2026' + strGiorniLang('it'),
+      infoTitle: 'Informazioni',
+      infoTesto: INFO_IT,
+      giftTitle: 'Pensiero per gli Sposi',
+      giftText: 'Se desiderate dedicarci un pensiero speciale,<br>potete cliccare qui sotto:',
+      clickHint: 'Clicca qui per visualizzare e copiare i dati completi',
+      ibanPopupTitle: 'Dettagli per il Versamento',
+      btnCopyAction: 'Copia solo IBAN',
+      copiedMsg: 'IBAN copiato negli appunti!',
+      labelsBanca: {
+        beneficiario: 'Beneficiario',
+        iban: 'IBAN',
+        bic: 'Codice BIC/SWIFT',
+        banca: 'Nome e sede della banca',
+        corrispondente: 'BIC banca corrispondente'
+      }
+    },
+    es: {
+      docTitle: 'Boda – Giulia & Onofrio',
+      ogTitle: 'Boda de Giulia & Onofrio – Info y Recordatorio',
+      ogDesc: 'Información útil, recordatorio y detalles para la boda de Giulia & Onofrio.',
+      mainTitle: 'Boda',
+      mainDesc: 'DOMINGO 21 JUNIO 2026' + strGiorniLang('es'),
+      infoTitle: 'Información',
+      infoTesto: INFO_ES,
+      giftTitle: 'Regalo para los Novios',
+      giftText: 'Si deseáis tener un detalle especial con nosotros,<br>podéis hacer clic abajo:',
+      clickHint: 'Haz clic aquí para ver y copiar los datos completos',
+      ibanPopupTitle: 'Detalles para la Transferencia',
+      btnCopyAction: 'Copiar solo IBAN',
+      copiedMsg: '¡IBAN copiado al portapapeles!',
+      labelsBanca: {
+        beneficiario: 'Beneficiario',
+        iban: 'IBAN',
+        bic: 'Código BIC/SWIFT',
+        banca: 'Nombre y sede del banco',
+        corrispondente: 'BIC banco correspondiente'
+      }
+    }
+  };
+
+  window.addEventListener('DOMContentLoaded', () => {
+    setLanguage('it');
+  });
+
+  function setLanguage(lang) {
+    currentLanguage = lang;
+
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active-lang'));
+    document.getElementById('lang-' + lang).classList.add('active-lang');
+
+    const t = translations[lang];
+    document.getElementById('doc-title').textContent = t.docTitle;
+    document.getElementById('og-title').content = t.ogTitle;
+    document.getElementById('og-desc').content = t.ogDesc;
+    document.getElementById('main-title').textContent = t.mainTitle;
+    document.getElementById('main-desc').textContent = t.mainDesc;
+    renderInfoCards(t.infoTesto, t.lang);
+    document.getElementById('gift-title').textContent = t.giftTitle;
+    document.getElementById('gift-text').innerHTML = t.giftText;
+    document.getElementById('click-hint').textContent = t.clickHint;
+    document.getElementById('iban-popup-title').textContent = t.ibanPopupTitle;
+    document.getElementById('btn-copy-action').textContent = t.btnCopyAction;
+
+    const lb = t.labelsBanca;
+    document.getElementById('iban-display-box').innerHTML = `
+      <p><strong>${lb.beneficiario}:</strong><br><span class="iban-row-value">Onofrio Mazzarisi &amp; Giulia Perez</span></p>
+      <hr>
+      <p><strong>${lb.iban}:</strong><br><span class="iban-row-value" style="letter-spacing:0.5px;">IT80 I036 6901 6005 3305 8528 402</span></p>
+      <hr>
+      <p><strong>${lb.bic}:</strong><br><span class="iban-row-value">REVOITM2</span></p>
+      <hr>
+      <p><strong>${lb.banca}:</strong><br><span class="iban-row-value">Revolut Bank UAB<br>Via Dante 7, 20123, Milano (MI), Italy</span></p>
+      <hr>
+      <p><strong>${lb.corrispondente}:</strong><br><span class="iban-row-value">CHASDEFX</span></p>
+    `;
+
+  }
+
+  function renderInfoCards(testo, lang) {
+    const righe = testo.split('\n');
+    const sezioni = [];
+    let corrente = [];
+    for (const riga of righe) {
+      if (riga.trim() === '' && corrente.length > 0) {
+        sezioni.push(corrente.join('\n'));
+        corrente = [];
+      } else {
+        corrente.push(riga);
+      }
+    }
+    if (corrente.length > 0) sezioni.push(corrente.join('\n'));
+
+    const ids = ['card-sposi', 'card-cerimonia', 'card-cena'];
+    ids.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const testo = sezioni[i] || '';
+      el.innerHTML = formattaInfo(testo);
+    });
+  }
+
+  function formattaInfo(testo) {
+    function applyInline(s) {
+      s = s.replace(/\*([^*]+)\*/g, '<span class="info-label">$1</span>');
+      s = s.replace(/_([^_]+)_/g, '<em>$1</em>');
+      return s;
+    }
+    return testo.split('\n').map(riga => {
+      const r = riga.trimEnd();
+      if (!r) return '';
+      if (/^https?:\/\//i.test(r.trim())) {
+        const safeUrl = r.trim().replace(/"/g, '&quot;');
+        return '<p><a href="' + safeUrl + '" target="_blank" rel="noopener">' + safeUrl + '</a></p>';
+      }
+      return '<p>' + applyInline(r) + '</p>';
+    }).join('');
+  }
+
+  function copiaIbanDiretto() {
+    const box = document.getElementById('iban-box');
+    const originalHTML = box.innerHTML;
+    navigator.clipboard.writeText(IBAN_PULITO).then(() => {
+      box.innerHTML = '<div style="font-weight:700;font-size:1.1em;letter-spacing:0.05em;padding:6px 0;">IBAN COPIATO IN MEMORIA!</div>';
+      setTimeout(() => { box.innerHTML = originalHTML; }, 3000);
+    }).catch(() => {
+      alert(IBAN_PULITO);
+    });
+  }
+
+  function apriIbanPopup() {
+    document.getElementById('copy-status').textContent = '';
+    document.getElementById('iban-overlay').classList.add('visible');
+  }
+
+  function chiudiIbanPopupFuga() {
+    document.getElementById('iban-overlay').classList.remove('visible');
+  }
+
+  function chiudiIbanPopup(e) {
+    if (e.target === document.getElementById('iban-overlay')) {
+      chiudiIbanPopupFuga();
+    }
+  }
+
+  function copiaIbanSolo() {
+    navigator.clipboard.writeText(IBAN_PULITO).then(() => {
+      const status = document.getElementById('copy-status');
+      status.textContent = translations[currentLanguage].copiedMsg;
+      setTimeout(() => { status.textContent = ''; }, 2500);
+    }).catch(() => {
+      alert(IBAN_PULITO);
+    });
+  }
+</script>
 </body>
 </html>

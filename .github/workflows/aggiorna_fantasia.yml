@@ -1,6 +1,12 @@
 name: Aggiorna Rosticceria Fantasia
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "fetch_fantasia_latest.py"
+      - ".github/workflows/aggiorna_fantasia.yml"
   schedule:
     # GitHub usa UTC. Lo script filtra la vera finestra 10:00-12:00 Europe/Rome.
     - cron: "*/15 8-11 * * *"

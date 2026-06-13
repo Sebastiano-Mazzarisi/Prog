@@ -8,6 +8,7 @@ import os
 import re
 import sys
 import time
+import urllib.parse
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -18,10 +19,6 @@ from playwright.sync_api import sync_playwright
 
 
 SEARCH_URL = "https://www.facebook.com/search/top?q=rosticceria%20fantasia"
-SEARCH_URLS = [
-    SEARCH_URL,
-    "https://www.facebook.com/search/posts?q=rosticceria%20fantasia",
-]
 PAGE_NAME = "Rosticceria Fantasia"
 OUTPUT_DIR = Path("Fantasia")
 ARCHIVE_DIR = OUTPUT_DIR / "archive"
@@ -166,6 +163,30 @@ def today_patterns(moment: Optional[dt.datetime] = None) -> List[str]:
     ]
 
 
+def facebook_search_urls() -> List[str]:
+    today = today_patterns()[0]
+    precise_queries = [
+        f"Rosticceria Fantasia MENU DEL GIORNO {today}",
+        f"Rosticceria Fantasia MEN\u00d9 DEL GIORNO {today}",
+        f"Rosticceria Fantasia {today}",
+    ]
+    urls = []
+    for query in precise_queries:
+        encoded = urllib.parse.quote(query)
+        urls.append(f"https://www.facebook.com/search/posts?q={encoded}")
+
+    urls.extend(
+        [
+            "https://www.facebook.com/RosticceriaFantasia",
+            "https://m.facebook.com/RosticceriaFantasia",
+            "https://mbasic.facebook.com/RosticceriaFantasia",
+            SEARCH_URL,
+            "https://www.facebook.com/search/posts?q=rosticceria%20fantasia",
+        ]
+    )
+    return urls
+
+
 def menu_candidate_score(text: str, image_url: str) -> int:
     lowered = text.lower()
     score = 0
@@ -235,7 +256,7 @@ def find_menu_post(cookies: List[Dict]) -> Optional[Dict]:
                 context.add_cookies(cookies)
 
             page = context.new_page()
-            for search_url in SEARCH_URLS:
+            for search_url in facebook_search_urls():
                 logging.info("Opening Facebook search page: %s", search_url)
                 page.goto(search_url, wait_until="domcontentloaded", timeout=60_000)
                 time.sleep(6)

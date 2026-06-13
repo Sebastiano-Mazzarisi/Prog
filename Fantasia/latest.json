@@ -1,8 +1,9 @@
 {
   "page": "Rosticceria Fantasia",
   "source_url": "https://www.facebook.com/search/top?q=rosticceria%20fantasia",
-  "status": "not_found",
-  "checked_at": "2026-06-13T14:58:38.954712+02:00",
-  "message": "Nessun menu nuovo trovato oggi.",
-  "detail": "Il controllo automatico ha cercato sulla pagina Facebook, ma non ha trovato una foto del menu con testo riconoscibile. La vecchia immagine non viene mostrata per evitare confusione."
+  "status": "existing_image",
+  "text": "Ultima foto del menu disponibile.\nIl controllo automatico non ha trovato una foto nuova, quindi viene mantenuta questa.",
+  "found_at": "2026-06-13T15:08:47.874011+02:00",
+  "checked_at": "2026-06-13T15:09:47.338270+02:00",
+  "hash": "1781356127"
 }

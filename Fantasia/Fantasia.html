@@ -30,47 +30,87 @@
       line-height: 1.45;
     }
     main {
-      max-width: 760px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 18px 14px 28px;
     }
+    header {
+      padding: 8px 2px 16px;
+    }
     h1 {
-      margin: 0 0 6px;
+      margin: 0;
       font-size: clamp(1.55rem, 5vw, 2.25rem);
+      letter-spacing: 0;
       color: var(--accent-dark);
     }
     .meta {
+      margin-top: 6px;
       color: var(--muted);
       font-size: 0.95rem;
-      margin-bottom: 16px;
+    }
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
     }
     .panel {
       background: var(--paper);
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 18px;
+      overflow: hidden;
     }
-    .message {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .detail {
-      color: var(--muted);
+    .menu-text {
+      padding: 14px;
       white-space: pre-wrap;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+    }
+    footer {
+      padding: 12px 2px 0;
+      color: var(--muted);
+      font-size: 0.9rem;
     }
     a { color: var(--accent); }
   </style>
 </head>
 <body>
   <main>
-    <h1>Rosticceria Fantasia</h1>
-    <div class="meta">Ultimo controllo: 13/06/2026 14:58</div>
-    <section class="panel" aria-label="Stato menu del giorno">
-      <div class="message">Nessun menu nuovo trovato oggi.</div>
-      <div class="detail">Il controllo automatico ha cercato sulla pagina Facebook, ma non ha trovato una foto del menu con testo riconoscibile. La vecchia immagine non viene mostrata per evitare confusione.</div>
+    <header>
+      <h1>Rosticceria Fantasia</h1>
+      <div class="meta">Menu trovato: 2026-06-13T15:08:47.874011+02:00<br>Aggiornato: 13/06/2026 15:09</div>
+      <div class="actions">
+        <a href="Fantasia.jpg">Apri foto</a>
+        <a href="latest.json">Dati JSON</a>
+      </div>
+    </header>
+    <section class="panel" aria-label="Menu del giorno">
+      <div class="menu-text">Ultima foto del menu disponibile.
+Il controllo automatico non ha trovato una foto nuova, quindi viene mantenuta questa.</div>
+      <img src="Fantasia.jpg?v=1781356127" alt="Foto del menu del giorno">
     </section>
-    <p class="meta">Fonte: <a href="https://www.facebook.com/search/top?q=rosticceria%20fantasia">ricerca Facebook</a>. Questa pagina si aggiorna automaticamente ogni 5 minuti.</p>
+    <footer>
+      Fonte: <a href="https://www.facebook.com/search/top?q=rosticceria%20fantasia">ricerca Facebook</a>. Questa pagina si aggiorna automaticamente ogni 5 minuti.
+    </footer>
   </main>
 </body>
 </html>

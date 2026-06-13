@@ -18,6 +18,10 @@ from playwright.sync_api import sync_playwright
 
 
 SEARCH_URL = "https://www.facebook.com/search/top?q=rosticceria%20fantasia"
+SEARCH_URLS = [
+    SEARCH_URL,
+    "https://www.facebook.com/search/posts?q=rosticceria%20fantasia",
+]
 PAGE_NAME = "Rosticceria Fantasia"
 OUTPUT_DIR = Path("Fantasia")
 ARCHIVE_DIR = OUTPUT_DIR / "archive"
@@ -142,6 +146,40 @@ def text_looks_like_menu(text: str) -> bool:
     return any(keyword in lowered for keyword in MENU_KEYWORDS)
 
 
+def today_patterns(moment: Optional[dt.datetime] = None) -> List[str]:
+    moment = moment or now_rome()
+    day = moment.day
+    month = moment.month
+    year = moment.year
+    short_year = year % 100
+    return [
+        f"{day:02d}/{month:02d}/{short_year:02d}",
+        f"{day}/{month:02d}/{short_year:02d}",
+        f"{day:02d}/{month}/{short_year:02d}",
+        f"{day}/{month}/{short_year:02d}",
+        f"{day:02d}/{month:02d}/{year}",
+        f"{day}/{month:02d}/{year}",
+        f"{day:02d}/{month}/{year}",
+        f"{day}/{month}/{year}",
+        f"{day:02d}-{month:02d}-{short_year:02d}",
+        f"{day:02d}-{month:02d}-{year}",
+    ]
+
+
+def menu_candidate_score(text: str, image_url: str) -> int:
+    lowered = text.lower()
+    score = 0
+    if "rosticceria fantasia" in lowered:
+        score += 50
+    if "menu del giorno" in lowered or "men\u00f9 del giorno" in lowered:
+        score += 100
+    if any(pattern in text for pattern in today_patterns()):
+        score += 1000
+    if image_url:
+        score += 10
+    return score
+
+
 def post_hash(text: str, image_url: str) -> str:
     seed = f"{normalize_text(text)}\n{image_url}".encode("utf-8", errors="ignore")
     return hashlib.sha256(seed).hexdigest()[:16]
@@ -174,7 +212,9 @@ def extract_best_image_from_article(article) -> Optional[str]:
 
 
 def find_menu_post(cookies: List[Dict]) -> Optional[Dict]:
-    logging.info("Opening Facebook search page: %s", SEARCH_URL)
+    best_candidate: Optional[Dict] = None
+    best_score = -1
+
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(
             headless=True,
@@ -195,51 +235,62 @@ def find_menu_post(cookies: List[Dict]) -> Optional[Dict]:
                 context.add_cookies(cookies)
 
             page = context.new_page()
-            page.goto(SEARCH_URL, wait_until="domcontentloaded", timeout=60_000)
-            time.sleep(6)
+            for search_url in SEARCH_URLS:
+                logging.info("Opening Facebook search page: %s", search_url)
+                page.goto(search_url, wait_until="domcontentloaded", timeout=60_000)
+                time.sleep(6)
 
-            for _ in range(4):
-                page.mouse.wheel(0, 1200)
-                time.sleep(2)
+                for _ in range(4):
+                    page.mouse.wheel(0, 1200)
+                    time.sleep(2)
 
-            selectors = ["div[role='article']", "div[aria-posinset]"]
-            articles = []
-            for selector in selectors:
-                try:
-                    found = page.locator(selector).all()
-                    if found:
-                        articles = found
-                        logging.info("Found %s candidate posts with selector %s.", len(found), selector)
-                        break
-                except PlaywrightTimeoutError:
-                    continue
+                selectors = ["div[role='article']", "div[aria-posinset]"]
+                articles = []
+                for selector in selectors:
+                    try:
+                        found = page.locator(selector).all()
+                        if found:
+                            articles = found
+                            logging.info("Found %s candidate posts with selector %s.", len(found), selector)
+                            break
+                    except PlaywrightTimeoutError:
+                        continue
 
-            for index, article in enumerate(articles[:25], 1):
-                try:
-                    text = normalize_text(article.inner_text(timeout=5_000))
-                except Exception:
-                    continue
+                for index, article in enumerate(articles[:30], 1):
+                    try:
+                        text = normalize_text(article.inner_text(timeout=5_000))
+                    except Exception:
+                        continue
 
-                if not text_looks_like_menu(text):
-                    continue
+                    if not text_looks_like_menu(text):
+                        continue
 
-                image_url = extract_best_image_from_article(article)
-                if not image_url:
-                    logging.info("Candidate post %s has menu text but no usable image.", index)
-                    continue
+                    image_url = extract_best_image_from_article(article)
+                    if not image_url:
+                        logging.info("Candidate post %s has menu text but no usable image.", index)
+                        continue
 
-                logging.info("Menu candidate found in post %s.", index)
-                return {
-                    "page": PAGE_NAME,
-                    "source_url": SEARCH_URL,
-                    "text": text,
-                    "image_url": image_url,
-                    "found_at": now_rome().isoformat(),
-                    "hash": post_hash(text, image_url),
-                }
+                    score = menu_candidate_score(text, image_url)
+                    logging.info("Menu candidate in post %s scored %s.", index, score)
+                    candidate = {
+                        "page": PAGE_NAME,
+                        "source_url": search_url,
+                        "text": text,
+                        "image_url": image_url,
+                        "found_at": now_rome().isoformat(),
+                        "hash": post_hash(text, image_url),
+                        "score": score,
+                    }
+                    if score > best_score:
+                        best_candidate = candidate
+                        best_score = score
+
+                if best_candidate and best_score >= 1000:
+                    logging.info("Today's menu candidate found with score %s.", best_score)
+                    return best_candidate
 
             logging.info("No menu post found in the visible Facebook results.")
-            return None
+            return best_candidate
         finally:
             browser.close()
 

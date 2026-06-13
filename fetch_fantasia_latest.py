@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import pytz
+import requests
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
@@ -22,6 +23,7 @@ PAGE_NAME = "Rosticceria Fantasia"
 OUTPUT_DIR = Path("Fantasia")
 ARCHIVE_DIR = OUTPUT_DIR / "archive"
 LATEST_JSON = OUTPUT_DIR / "latest.json"
+LATEST_IMAGE = OUTPUT_DIR / "Fantasia.jpg"
 LATEST_TXT = OUTPUT_DIR / "Fantasia.txt"
 INDEX_HTML = OUTPUT_DIR / "Fantasia.html"
 COOKIE_FILE = Path("cookies.txt")
@@ -327,6 +329,20 @@ def load_previous() -> Optional[Dict]:
         return None
 
 
+def download_image(image_url: str, destination: Path) -> None:
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/124.0.0.0 Safari/537.36"
+        )
+    }
+    response = requests.get(image_url, headers=headers, timeout=45)
+    response.raise_for_status()
+    destination.write_bytes(response.content)
+    logging.info("Saved image %s (%s bytes).", destination, len(response.content))
+
+
 def write_json(data: Dict) -> None:
     LATEST_JSON.write_text(
         json.dumps(data, ensure_ascii=False, indent=2) + "\n",
@@ -339,6 +355,10 @@ def html_page(data: Dict) -> str:
     found_at = data.get("found_at", "")
     generated_at = now_rome().strftime("%d/%m/%Y %H:%M")
     source_url = html.escape(data.get("source_url", SEARCH_URL), quote=True)
+    image_block = ""
+    if (OUTPUT_DIR / "Fantasia.jpg").exists():
+        image_block = f"""
+      <img src="Fantasia.jpg?v={html.escape(data.get("hash", generated_at), quote=True)}" alt="Foto del menu del giorno">"""
 
     return f"""<!doctype html>
 <html lang="it">
@@ -403,6 +423,13 @@ def html_page(data: Dict) -> str:
       color: var(--accent-dark);
       text-align: center;
     }}
+    img {{
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }}
     footer {{
       padding: 12px 2px 0;
       color: var(--muted);
@@ -419,6 +446,7 @@ def html_page(data: Dict) -> str:
     </header>
     <section class="panel" aria-label="Menu del giorno">
       <div class="menu-text">{escaped_text}</div>
+{image_block}
     </section>
     <footer>
       Fonte: <a href="{source_url}">ricerca Facebook</a>. Questa pagina si aggiorna automaticamente ogni 5 minuti.
@@ -569,6 +597,13 @@ def save_menu(post: Dict) -> bool:
     if previous and previous.get("hash") == post.get("hash"):
         logging.info("Menu already saved; nothing to update.")
         return False
+
+    if post.get("image_url"):
+        today = now_rome().strftime("%Y-%m-%d")
+        archive_image = ARCHIVE_DIR / f"{today}-{post['hash']}.jpg"
+        download_image(post["image_url"], archive_image)
+        LATEST_IMAGE.write_bytes(archive_image.read_bytes())
+        post["archive_image"] = archive_image.as_posix().replace("Fantasia/", "")
 
     post["title"] = menu_title(post.get("text", ""))
     write_json(post)

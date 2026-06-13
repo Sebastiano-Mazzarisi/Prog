@@ -13,7 +13,6 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import pytz
-import requests
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
@@ -23,7 +22,6 @@ PAGE_NAME = "Rosticceria Fantasia"
 OUTPUT_DIR = Path("Fantasia")
 ARCHIVE_DIR = OUTPUT_DIR / "archive"
 LATEST_JSON = OUTPUT_DIR / "latest.json"
-LATEST_IMAGE = OUTPUT_DIR / "Fantasia.jpg"
 LATEST_TXT = OUTPUT_DIR / "Fantasia.txt"
 INDEX_HTML = OUTPUT_DIR / "Fantasia.html"
 COOKIE_FILE = Path("cookies.txt")
@@ -201,7 +199,14 @@ def menu_candidate_score(text: str, image_url: str) -> int:
     return score
 
 
-def post_hash(text: str, image_url: str) -> str:
+def menu_title(text: str) -> str:
+    for line in normalize_text(text).splitlines():
+        if re.search(r"\bmen[u\u00f9]\b", line, flags=re.IGNORECASE):
+            return line.strip()
+    return normalize_text(text).splitlines()[0].strip()
+
+
+def post_hash(text: str, image_url: str = "") -> str:
     seed = f"{normalize_text(text)}\n{image_url}".encode("utf-8", errors="ignore")
     return hashlib.sha256(seed).hexdigest()[:16]
 
@@ -286,10 +291,7 @@ def find_menu_post(cookies: List[Dict]) -> Optional[Dict]:
                     if not text_looks_like_menu(text):
                         continue
 
-                    image_url = extract_best_image_from_article(article)
-                    if not image_url:
-                        logging.info("Candidate post %s has menu text but no usable image.", index)
-                        continue
+                    image_url = extract_best_image_from_article(article) or ""
 
                     score = menu_candidate_score(text, image_url)
                     logging.info("Menu candidate in post %s scored %s.", index, score)
@@ -316,20 +318,6 @@ def find_menu_post(cookies: List[Dict]) -> Optional[Dict]:
             browser.close()
 
 
-def download_image(image_url: str, destination: Path) -> None:
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/124.0.0.0 Safari/537.36"
-        )
-    }
-    response = requests.get(image_url, headers=headers, timeout=45)
-    response.raise_for_status()
-    destination.write_bytes(response.content)
-    logging.info("Saved image %s (%s bytes).", destination, len(response.content))
-
-
 def load_previous() -> Optional[Dict]:
     if not LATEST_JSON.exists():
         return None
@@ -347,7 +335,7 @@ def write_json(data: Dict) -> None:
 
 
 def html_page(data: Dict) -> str:
-    escaped_text = html.escape(data.get("text", ""))
+    escaped_text = html.escape(data.get("title") or menu_title(data.get("text", "")))
     found_at = data.get("found_at", "")
     generated_at = now_rome().strftime("%d/%m/%Y %H:%M")
     source_url = html.escape(data.get("source_url", SEARCH_URL), quote=True)
@@ -402,25 +390,6 @@ def html_page(data: Dict) -> str:
       color: var(--muted);
       font-size: 0.95rem;
     }}
-    .actions {{
-      margin-top: 12px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }}
-    .actions a {{
-      display: inline-flex;
-      align-items: center;
-      min-height: 38px;
-      padding: 8px 11px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      color: var(--accent-dark);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.92rem;
-    }}
     .panel {{
       background: var(--paper);
       border: 1px solid var(--line);
@@ -428,16 +397,11 @@ def html_page(data: Dict) -> str:
       overflow: hidden;
     }}
     .menu-text {{
-      padding: 14px;
-      white-space: pre-wrap;
-      font-size: 1rem;
-      border-bottom: 1px solid var(--line);
-    }}
-    img {{
-      display: block;
-      width: 100%;
-      height: auto;
-      background: #fff;
+      padding: 20px;
+      font-size: clamp(1.35rem, 5vw, 2.25rem);
+      font-weight: 800;
+      color: var(--accent-dark);
+      text-align: center;
     }}
     footer {{
       padding: 12px 2px 0;
@@ -452,14 +416,9 @@ def html_page(data: Dict) -> str:
     <header>
       <h1>Rosticceria Fantasia</h1>
       <div class="meta">Menu trovato: {html.escape(found_at)}<br>Aggiornato: {html.escape(generated_at)}</div>
-      <div class="actions">
-        <a href="Fantasia.jpg">Apri foto</a>
-        <a href="latest.json">Dati JSON</a>
-      </div>
     </header>
     <section class="panel" aria-label="Menu del giorno">
       <div class="menu-text">{escaped_text}</div>
-      <img src="Fantasia.jpg?v={html.escape(data.get("hash", generated_at), quote=True)}" alt="Foto del menu del giorno">
     </section>
     <footer>
       Fonte: <a href="{source_url}">ricerca Facebook</a>. Questa pagina si aggiorna automaticamente ogni 5 minuti.
@@ -587,19 +546,15 @@ def save_no_menu_found() -> None:
 
 def save_existing_image_page() -> None:
     checked_at = now_rome()
-    image_mtime = dt.datetime.fromtimestamp(LATEST_IMAGE.stat().st_mtime, ROME)
     data = {
         "page": PAGE_NAME,
         "source_url": SEARCH_URL,
-        "status": "existing_image",
-        "text": (
-            "Ultima foto del menu disponibile.\n"
-            "Il controllo automatico non ha trovato una foto nuova, "
-            "quindi viene mantenuta questa."
-        ),
-        "found_at": image_mtime.isoformat(),
+        "status": "existing_text",
+        "title": "Menu non aggiornato",
+        "text": "Il controllo automatico non ha trovato un nuovo testo del menu.",
+        "found_at": checked_at.isoformat(),
         "checked_at": checked_at.isoformat(),
-        "hash": str(int(image_mtime.timestamp())),
+        "hash": str(int(checked_at.timestamp())),
     }
     write_json(data)
     LATEST_TXT.write_text(
@@ -615,12 +570,7 @@ def save_menu(post: Dict) -> bool:
         logging.info("Menu already saved; nothing to update.")
         return False
 
-    today = now_rome().strftime("%Y-%m-%d")
-    archive_image = ARCHIVE_DIR / f"{today}-{post['hash']}.jpg"
-    download_image(post["image_url"], archive_image)
-    LATEST_IMAGE.write_bytes(archive_image.read_bytes())
-
-    post["archive_image"] = archive_image.as_posix().replace("Fantasia/", "")
+    post["title"] = menu_title(post.get("text", ""))
     write_json(post)
     LATEST_TXT.write_text(
         now_rome().strftime("%Y-%m-%d\n%H-%M"),
@@ -646,9 +596,6 @@ def main() -> int:
         previous = load_previous()
         if previous and previous.get("status") != "not_found":
             logging.info("No new menu found; keeping the last saved menu.")
-        elif LATEST_IMAGE.exists():
-            logging.info("No new menu found; restoring the existing image page.")
-            save_existing_image_page()
         else:
             save_no_menu_found()
         return 0

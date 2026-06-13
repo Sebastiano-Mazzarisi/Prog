@@ -64,7 +64,7 @@ def inside_time_window(moment: Optional[dt.datetime] = None) -> bool:
 def should_skip_for_time_window() -> bool:
     if os.getenv("FANTASIA_IGNORE_TIME_WINDOW") == "1":
         return False
-    if os.getenv("GITHUB_EVENT_NAME") == "workflow_dispatch":
+    if os.getenv("GITHUB_EVENT_NAME") in {"workflow_dispatch", "push"}:
         return False
     return not inside_time_window()
 

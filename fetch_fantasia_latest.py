@@ -398,8 +398,119 @@ def html_page(data: Dict) -> str:
 """
 
 
+def status_html_page(status: Dict) -> str:
+    generated_at = now_rome().strftime("%d/%m/%Y %H:%M")
+    message = html.escape(status.get("message", "Menu non trovato."))
+    detail = html.escape(status.get("detail", ""))
+    source_url = html.escape(status.get("source_url", SEARCH_URL), quote=True)
+
+    return f"""<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="300">
+  <title>Rosticceria Fantasia - Menu del giorno</title>
+  <link rel="manifest" href="Fantasia-manifest.json">
+  <meta name="theme-color" content="#E8521A">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Fantasia">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <style>
+    :root {{
+      color-scheme: light;
+      --ink: #251b14;
+      --muted: #6f6259;
+      --line: #e7ded6;
+      --paper: #fffaf4;
+      --accent: #b84f17;
+      --accent-dark: #7c2f0d;
+    }}
+    * {{ box-sizing: border-box; }}
+    body {{
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f4ede5;
+      color: var(--ink);
+      line-height: 1.45;
+    }}
+    main {{
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 18px 14px 28px;
+    }}
+    h1 {{
+      margin: 0 0 6px;
+      font-size: clamp(1.55rem, 5vw, 2.25rem);
+      color: var(--accent-dark);
+    }}
+    .meta {{
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }}
+    .panel {{
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }}
+    .message {{
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }}
+    .detail {{
+      color: var(--muted);
+      white-space: pre-wrap;
+    }}
+    a {{ color: var(--accent); }}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Rosticceria Fantasia</h1>
+    <div class="meta">Ultimo controllo: {html.escape(generated_at)}</div>
+    <section class="panel" aria-label="Stato menu del giorno">
+      <div class="message">{message}</div>
+      <div class="detail">{detail}</div>
+    </section>
+    <p class="meta">Fonte: <a href="{source_url}">ricerca Facebook</a>. Questa pagina si aggiorna automaticamente ogni 5 minuti.</p>
+  </main>
+</body>
+</html>
+"""
+
+
 def write_html(data: Dict) -> None:
     INDEX_HTML.write_text(html_page(data), encoding="utf-8")
+
+
+def write_status_html(status: Dict) -> None:
+    INDEX_HTML.write_text(status_html_page(status), encoding="utf-8")
+
+
+def save_no_menu_found() -> None:
+    checked_at = now_rome()
+    status = {
+        "page": PAGE_NAME,
+        "source_url": SEARCH_URL,
+        "status": "not_found",
+        "checked_at": checked_at.isoformat(),
+        "message": "Nessun menu nuovo trovato oggi.",
+        "detail": (
+            "Il controllo automatico ha cercato sulla pagina Facebook, "
+            "ma non ha trovato una foto del menu con testo riconoscibile. "
+            "La vecchia immagine non viene mostrata per evitare confusione."
+        ),
+    }
+    write_json(status)
+    LATEST_TXT.write_text(
+        checked_at.strftime("%Y-%m-%d\n%H-%M\nNO_MENU"),
+        encoding="utf-8",
+    )
+    write_status_html(status)
 
 
 def save_menu(post: Dict) -> bool:
@@ -413,7 +524,7 @@ def save_menu(post: Dict) -> bool:
     download_image(post["image_url"], archive_image)
     LATEST_IMAGE.write_bytes(archive_image.read_bytes())
 
-    post["archive_image"] = archive_image.as_posix().replace("fantasia/", "")
+    post["archive_image"] = archive_image.as_posix().replace("Fantasia/", "")
     write_json(post)
     LATEST_TXT.write_text(
         now_rome().strftime("%Y-%m-%d\n%H-%M"),
@@ -436,6 +547,7 @@ def main() -> int:
     cookies = load_netscape_cookies(cookie_path)
     post = find_menu_post(cookies)
     if not post:
+        save_no_menu_found()
         return 0
 
     save_menu(post)

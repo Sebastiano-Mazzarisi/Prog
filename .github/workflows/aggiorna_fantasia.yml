@@ -38,6 +38,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fetch_fantasia_latest.py Fantasia/Fantasia.html Fantasia/Fantasia.jpg Fantasia/Fantasia.txt Fantasia/latest.json Fantasia/archive
+          git add -A Fantasia fetch_fantasia_latest.py
           git diff --cached --quiet || git commit -m "Aggiorna menu Rosticceria Fantasia"
           git push

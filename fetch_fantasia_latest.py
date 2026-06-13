@@ -513,6 +513,30 @@ def save_no_menu_found() -> None:
     write_status_html(status)
 
 
+def save_existing_image_page() -> None:
+    checked_at = now_rome()
+    image_mtime = dt.datetime.fromtimestamp(LATEST_IMAGE.stat().st_mtime, ROME)
+    data = {
+        "page": PAGE_NAME,
+        "source_url": SEARCH_URL,
+        "status": "existing_image",
+        "text": (
+            "Ultima foto del menu disponibile.\n"
+            "Il controllo automatico non ha trovato una foto nuova, "
+            "quindi viene mantenuta questa."
+        ),
+        "found_at": image_mtime.isoformat(),
+        "checked_at": checked_at.isoformat(),
+        "hash": str(int(image_mtime.timestamp())),
+    }
+    write_json(data)
+    LATEST_TXT.write_text(
+        checked_at.strftime("%Y-%m-%d\n%H-%M\nOLD_IMAGE"),
+        encoding="utf-8",
+    )
+    write_html(data)
+
+
 def save_menu(post: Dict) -> bool:
     previous = load_previous()
     if previous and previous.get("hash") == post.get("hash"):
@@ -547,7 +571,14 @@ def main() -> int:
     cookies = load_netscape_cookies(cookie_path)
     post = find_menu_post(cookies)
     if not post:
-        save_no_menu_found()
+        previous = load_previous()
+        if previous and previous.get("status") != "not_found":
+            logging.info("No new menu found; keeping the last saved menu.")
+        elif LATEST_IMAGE.exists():
+            logging.info("No new menu found; restoring the existing image page.")
+            save_existing_image_page()
+        else:
+            save_no_menu_found()
         return 0
 
     save_menu(post)

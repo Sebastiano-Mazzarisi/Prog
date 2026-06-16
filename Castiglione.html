@@ -36,7 +36,6 @@
 
     html {
       scroll-behavior: smooth;
-      overscroll-behavior-y: none;
     }
 
     body {
@@ -45,7 +44,6 @@
       color: var(--ink);
       background: #eef2f6;
       line-height: 1.45;
-      overscroll-behavior-y: none;
     }
 
     a {
@@ -277,15 +275,14 @@
     }
 
 
-
+    /* Visualizzatore PDF semplice a pieno schermo */
     .pdf-viewer {
       position: fixed;
       inset: 0;
       z-index: 9999;
       display: none;
       background: #ffffff;
-      overflow: hidden;
-      overscroll-behavior: none;
+      overscroll-behavior: contain;
     }
 
     .pdf-viewer.open {
@@ -294,11 +291,11 @@
 
     .pdf-frame {
       width: 100%;
+      height: 100vh;
       height: 100dvh;
       border: 0;
       display: block;
       background: #ffffff;
-      overscroll-behavior: none;
     }
 
     .pdf-close {
@@ -306,13 +303,13 @@
       top: max(10px, env(safe-area-inset-top));
       right: max(10px, env(safe-area-inset-right));
       z-index: 10000;
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border: 2px solid rgba(255, 255, 255, 0.96);
       border-radius: 999px;
-      background: rgba(19, 32, 51, 0.86);
+      background: rgba(19, 32, 51, 0.88);
       color: #ffffff;
-      font-size: 1.55rem;
+      font-size: 1.6rem;
       font-weight: 900;
       line-height: 1;
       display: none;
@@ -328,15 +325,7 @@
 
     html.pdf-open,
     body.pdf-open {
-      overflow: hidden;
-      overscroll-behavior: none;
-    }
-
-    body.pdf-open {
-      position: fixed;
-      left: 0;
-      right: 0;
-      width: 100%;
+      overscroll-behavior-y: contain;
     }
 
     @media (max-width: 760px) {
@@ -617,23 +606,21 @@
 
     function openPdf(href) {
       savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
-      document.documentElement.classList.add("pdf-open");
-      document.body.classList.add("pdf-open");
-      document.body.style.top = `-${savedScrollY}px`;
       pdfFrame.src = href;
       pdfViewer.classList.add("open");
       pdfViewer.setAttribute("aria-hidden", "false");
       pdfClose.classList.add("open");
+      document.documentElement.classList.add("pdf-open");
+      document.body.classList.add("pdf-open");
     }
 
     function closePdf() {
       pdfViewer.classList.remove("open");
       pdfViewer.setAttribute("aria-hidden", "true");
       pdfClose.classList.remove("open");
+      pdfFrame.src = "about:blank";
       document.documentElement.classList.remove("pdf-open");
       document.body.classList.remove("pdf-open");
-      document.body.style.top = "";
-      pdfFrame.src = "about:blank";
       requestAnimationFrame(() => window.scrollTo(0, savedScrollY));
     }
 
@@ -714,12 +701,6 @@
 
     pdfClose.addEventListener("click", closePdf);
 
-    pdfViewer.addEventListener("touchmove", (event) => {
-      if (event.target === pdfViewer) {
-        event.preventDefault();
-      }
-    }, { passive: false });
-
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && pdfViewer.classList.contains("open")) {
         closePdf();
@@ -728,6 +709,5 @@
 
     render();
   </script>
-
 </body>
 </html>

@@ -399,6 +399,11 @@
 
   <footer></footer>
 
+  <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
+    <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>
+  </div>
+  <button class="pdf-close" id="pdfClose" type="button" aria-label="Chiudi PDF">×</button>
+
   <script>
     const documents = [
       {
@@ -723,11 +728,6 @@
 
     render();
   </script>
-
-  <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
-    <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>
-  </div>
-  <button class="pdf-close" id="pdfClose" type="button" aria-label="Chiudi PDF">×</button>
 
 </body>
 </html>

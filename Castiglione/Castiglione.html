@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Castiglione - indice documenti</title>
+  <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #132033;
+      --muted: #637083;
+      --line: #d8e0eb;
+      --soft: #f3f6fa;
+      --paper: #ffffff;
+      --blue: #174a7c;
+      --blue-2: #2e74b5;
+      --gold: #8a6500;
+      --green: #216e4e;
+      --shadow: 0 16px 38px rgba(19, 32, 51, 0.13);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: #eef2f6;
+      line-height: 1.45;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .hero {
+      min-height: 54vh;
+      display: grid;
+      align-items: end;
+      background:
+        linear-gradient(180deg, rgba(8, 26, 46, 0.18), rgba(8, 26, 46, 0.78)),
+        url("05 - Foto e video selezionati/04 - Esterno torrino.png") center / cover;
+      color: white;
+    }
+
+    .hero-inner,
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero-inner {
+      padding: 56px 0 34px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #f4d887;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 8vw, 5.8rem);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 680px;
+      margin: 18px 0 0;
+      font-size: clamp(1rem, 2.6vw, 1.25rem);
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    main {
+      padding: 22px 0 52px;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin: 0 0 18px;
+      padding: 12px;
+      background: rgba(238, 242, 246, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(216, 224, 235, 0.7);
+    }
+
+    .search {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      background: var(--paper);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--blue-2);
+      box-shadow: 0 0 0 3px rgba(46, 116, 181, 0.16);
+    }
+
+    .summary {
+      white-space: nowrap;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .top-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .main-doc {
+      display: grid;
+      gap: 12px;
+      min-height: 118px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .main-doc h2 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 1.18rem;
+      letter-spacing: 0;
+    }
+
+    .main-doc p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 38px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--blue);
+      font-size: 0.94rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .btn.primary {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+    }
+
+    .btn:hover {
+      border-color: var(--blue-2);
+      box-shadow: 0 4px 14px rgba(19, 32, 51, 0.12);
+    }
+
+    .sections {
+      display: grid;
+      gap: 18px;
+    }
+
+    section {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    section h2 {
+      margin: 0 0 12px;
+      color: var(--blue);
+      font-size: 1.25rem;
+      letter-spacing: 0;
+    }
+
+    .doc-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .doc {
+      display: grid;
+      grid-template-columns: 68px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #e3e9f1;
+      border-radius: 7px;
+      background: #fbfcfe;
+    }
+
+    .code {
+      display: inline-flex;
+      min-width: 52px;
+      min-height: 34px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      background: #e8eef5;
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .title {
+      margin: 0 0 4px;
+      font-weight: 800;
+    }
+
+    .meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border: 1px solid #eadcae;
+      border-radius: 7px;
+      background: #fff8e6;
+      color: #4f3a00;
+      font-size: 0.94rem;
+    }
+
+    .empty {
+      display: none;
+      padding: 22px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    footer {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 0 0 42px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        min-height: 46vh;
+      }
+
+      .toolbar,
+      .top-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        white-space: normal;
+      }
+
+      section {
+        padding: 14px;
+      }
+
+      .doc {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .button-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Indice documentale</p>
+      <h1>Castiglione</h1>
+      <p class="subtitle">Apri o scarica il dossier completo e i singoli PDF della raccolta per interessati.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="Cerca per codice, titolo o argomento" autocomplete="off">
+      <div class="summary" id="summary"></div>
+    </div>
+
+    <div class="top-actions" id="featured"></div>
+    <div class="sections" id="sections"></div>
+    <div class="empty" id="empty">Nessun documento corrisponde alla ricerca.</div>
+
+    <div class="note">
+      I pulsanti Apri visualizzano il PDF nel browser. I pulsanti Scarica salvano il file sul dispositivo quando il browser lo consente.
+    </div>
+  </main>
+
+  <footer>
+    Pagina statica pronta per GitHub Pages. Per mantenere i collegamenti attivi, conserva questo file HTML nella stessa cartella dei PDF.
+  </footer>
+
+  <script>
+    const documents = [
+      {
+        code: "PDF",
+        title: "Dossier unico per interessati",
+        file: "Castiglione - Dossier unico per interessati.pdf",
+        group: "Dossier completo",
+        note: "PDF complessivo con indice, guide e allegati principali.",
+        pages: 119,
+        size: "52,8 MB",
+        featured: true
+      },
+      {
+        code: "A01",
+        title: "Castiglione - Dossier informativo per interessati",
+        file: "A01 - Castiglione - Dossier informativo per interessati.pdf",
+        group: "Dossier completo",
+        note: "Sintesi iniziale, indice degli allegati e percorso di lettura.",
+        pages: 5,
+        size: "540 KB",
+        featured: true
+      },
+      {
+        code: "B01",
+        title: "Guida alla lettura degli atti ante 1967",
+        file: "B01 - Guida alla lettura degli atti ante 1967.pdf",
+        group: "Provenienza e atti ante 1967",
+        note: "Guida introduttiva agli atti storici.",
+        pages: 3,
+        size: "707 KB"
+      },
+      {
+        code: "B02",
+        title: "Atto di vendita del 23-04-1951",
+        file: "B02 - Atto di vendita del 23-04-1951.pdf",
+        group: "Provenienza e atti ante 1967",
+        note: "Atto notarile principale sulla provenienza.",
+        pages: 6,
+        size: "9 KB"
+      },
+      {
+        code: "B03",
+        title: "Nota di trascrizione del 11-05-1951",
+        file: "B03 - Nota di trascrizione del 11-05-1951.pdf",
+        group: "Provenienza e atti ante 1967",
+        note: "Nota collegata all'atto del 1951.",
+        pages: 2,
+        size: "1,9 MB"
+      },
+      {
+        code: "B04",
+        title: "Nota di trascrizione e divisione del 1954",
+        file: "B04 - Nota di trascrizione e divisione del 1954.pdf",
+        group: "Provenienza e atti ante 1967",
+        note: "Documento storico sulla divisione del 1954.",
+        pages: 2,
+        size: "8,6 MB"
+      },
+      {
+        code: "B05",
+        title: "Fascicolo completo atti ante 1967",
+        file: "B05 - Fascicolo completo atti ante 1967.pdf",
+        group: "Provenienza e atti ante 1967",
+        note: "Raccolta completa degli atti disponibili.",
+        pages: 12,
+        size: "13,7 MB"
+      },
+      {
+        code: "B06",
+        title: "Fascicolo completo atti ante 1967 leggibile",
+        file: "B06 - Fascicolo completo atti ante 1967 (leggibile).pdf",
+        group: "Provenienza e atti ante 1967",
+        note: "Copia di consultazione piu leggera; non sostituisce B05.",
+        pages: 9,
+        size: "116 KB"
+      },
+      {
+        code: "C01",
+        title: "Guida alla lettura della successione",
+        file: "C01 - Guida alla lettura della successione.pdf",
+        group: "Successione e titolarita",
+        note: "Guida introduttiva al titolo di successione.",
+        pages: 2,
+        size: "345 KB"
+      },
+      {
+        code: "C02",
+        title: "Titolo di successione",
+        file: "C02 - Titolo di successione.pdf",
+        group: "Successione e titolarita",
+        note: "Documento principale su titolarita e quote.",
+        pages: 20,
+        size: "2,3 MB"
+      },
+      {
+        code: "D01",
+        title: "Guida alla lettura dei documenti catastali",
+        file: "D01 - Guida alla lettura dei documenti catastali.pdf",
+        group: "Catasto",
+        note: "Guida a DOCFA, planimetria, accertamento e accesso agli atti.",
+        pages: 2,
+        size: "274 KB"
+      },
+      {
+        code: "D02",
+        title: "DOCFA e planimetria catastale del 22-10-2012",
+        file: "D02 - DOCFA e planimetria catastale del 22-10-2012.pdf",
+        group: "Catasto",
+        note: "Pratica catastale e planimetria.",
+        pages: 2,
+        size: "1,0 MB"
+      },
+      {
+        code: "D03",
+        title: "Accertamento catastale Agenzia Entrate e Territorio",
+        file: "D03 - Accertamento catastale Agenzia Entrate e Territorio.pdf",
+        group: "Catasto",
+        note: "Accertamento e dati catastali.",
+        pages: 3,
+        size: "2,5 MB"
+      },
+      {
+        code: "D04",
+        title: "Accesso agli atti Geom. Gianvito Patroni (19-05-2014)",
+        file: "D04 - Accesso agli atti Geom. Gianvito Patroni (19-05-2014).pdf",
+        group: "Catasto",
+        note: "Accesso agli atti comunale da far verificare al tecnico.",
+        pages: 40,
+        size: "12,5 MB"
+      },
+      {
+        code: "E01",
+        title: "Guida alle verifiche tecniche",
+        file: "E01 - Guida alle verifiche tecniche.pdf",
+        group: "Verifiche tecniche",
+        note: "Elenco dei controlli prima di proposta o rogito.",
+        pages: 2,
+        size: "311 KB"
+      },
+      {
+        code: "E02",
+        title: "Estratto atto 1951 con riferimento al fabbricato rurale",
+        file: "E02 - Estratto atto 1951 con riferimento al fabbricato rurale.pdf",
+        group: "Verifiche tecniche",
+        note: "Estratto mirato sul passaggio storico rilevante.",
+        pages: 1,
+        size: "386 KB"
+      },
+      {
+        code: "E03",
+        title: "Infografica tecnica Castiglione",
+        file: "E03 - Infografica tecnica Castiglione.pdf",
+        group: "Verifiche tecniche",
+        note: "Schema visivo delle principali criticita tecniche.",
+        pages: 1,
+        size: "393 KB"
+      },
+      {
+        code: "F01",
+        title: "Guida fotografica della proprieta",
+        file: "F01 - Guida fotografica della proprieta.pdf",
+        group: "Foto e presentazione",
+        note: "Prima lettura visiva di terreno e fabbricati.",
+        pages: 3,
+        size: "1,3 MB"
+      },
+      {
+        code: "G01",
+        title: "Scheda Vendesi",
+        file: "G01 - Scheda Vendesi.pdf",
+        group: "Materiale commerciale",
+        note: "Scheda sintetica per presentazione commerciale.",
+        pages: 1,
+        size: "280 KB"
+      },
+      {
+        code: "G02",
+        title: "Volantino A4 Castiglione",
+        file: "G02 - Volantino A4 Castiglione.pdf",
+        group: "Materiale commerciale",
+        note: "Volantino pronto per stampa o invio.",
+        pages: 1,
+        size: "896 KB"
+      }
+    ];
+
+    const featured = document.getElementById("featured");
+    const sections = document.getElementById("sections");
+    const search = document.getElementById("search");
+    const summary = document.getElementById("summary");
+    const empty = document.getElementById("empty");
+
+    function pdfUrl(file) {
+      return encodeURI(file);
+    }
+
+    function actions(doc) {
+      const href = pdfUrl(doc.file);
+      return `
+        <div class="button-row">
+          <a class="btn primary" href="${href}" target="_blank" rel="noopener">Apri PDF</a>
+          <a class="btn" href="${href}" download>Scarica</a>
+        </div>
+      `;
+    }
+
+    function documentCard(doc) {
+      return `
+        <article class="doc" data-search="${(doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase()}">
+          <div class="code">${doc.code}</div>
+          <div>
+            <p class="title">${doc.title}</p>
+            <p class="meta">${doc.note} ${doc.pages} pagine - ${doc.size}</p>
+          </div>
+          ${actions(doc)}
+        </article>
+      `;
+    }
+
+    function featuredCard(doc) {
+      return `
+        <article class="main-doc" data-search="${(doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase()}">
+          <h2>${doc.title}</h2>
+          <p>${doc.note} ${doc.pages} pagine - ${doc.size}</p>
+          ${actions(doc)}
+        </article>
+      `;
+    }
+
+    function render() {
+      const query = search.value.trim().toLowerCase();
+      const filtered = documents.filter((doc) => {
+        const haystack = (doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase();
+        return !query || haystack.includes(query);
+      });
+
+      const featuredDocs = filtered.filter((doc) => doc.featured);
+      const normalDocs = filtered.filter((doc) => !doc.featured);
+      const groups = [...new Set(normalDocs.map((doc) => doc.group))];
+
+      featured.innerHTML = featuredDocs.map(featuredCard).join("");
+      sections.innerHTML = groups.map((group) => {
+        const docs = normalDocs.filter((doc) => doc.group === group);
+        return `
+          <section>
+            <h2>${group}</h2>
+            <div class="doc-list">
+              ${docs.map(documentCard).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      summary.textContent = `${filtered.length} PDF indicizzati`;
+      empty.style.display = filtered.length ? "none" : "block";
+    }
+
+    search.addEventListener("input", render);
+    render();
+  </script>
+</body>
+</html>

@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
+  <!-- Versione: visualizzatore PDF interno a pieno schermo con X cerchiata -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -266,66 +267,67 @@
       text-align: center;
     }
 
+    body.viewer-open {
+      position: fixed;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .pdf-viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      background: #dfe5ec;
+    }
+
+    .pdf-viewer.is-open {
+      display: block;
+    }
+
+    .pdf-frame {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #dfe5ec;
+    }
+
+    .viewer-close-x {
+      position: fixed;
+      top: calc(10px + env(safe-area-inset-top));
+      right: calc(10px + env(safe-area-inset-right));
+      z-index: 60;
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+      border-radius: 50%;
+      background: rgba(19, 32, 51, 0.82);
+      color: white;
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+    }
+
+    .viewer-close-x:hover,
+    .viewer-close-x:focus {
+      background: rgba(23, 74, 124, 0.95);
+      outline: none;
+    }
+
+
     footer {
       width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
       padding: 0 0 42px;
       color: var(--muted);
       font-size: 0.9rem;
-    }
-
-
-    /* Visualizzatore PDF semplice a pieno schermo */
-    .pdf-viewer {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: none;
-      background: #ffffff;
-      overscroll-behavior: contain;
-    }
-
-    .pdf-viewer.open {
-      display: block;
-    }
-
-    .pdf-frame {
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      border: 0;
-      display: block;
-      background: #ffffff;
-    }
-
-    .pdf-close {
-      position: fixed;
-      top: max(10px, env(safe-area-inset-top));
-      right: max(10px, env(safe-area-inset-right));
-      z-index: 10000;
-      width: 46px;
-      height: 46px;
-      border: 2px solid rgba(255, 255, 255, 0.96);
-      border-radius: 999px;
-      background: rgba(19, 32, 51, 0.88);
-      color: #ffffff;
-      font-size: 1.6rem;
-      font-weight: 900;
-      line-height: 1;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-      cursor: pointer;
-    }
-
-    .pdf-close.open {
-      display: flex;
-    }
-
-    html.pdf-open,
-    body.pdf-open {
-      overscroll-behavior-y: contain;
     }
 
     @media (max-width: 760px) {
@@ -359,6 +361,12 @@
       .btn {
         width: 100%;
       }
+
+      .viewer-close-x {
+        width: 42px;
+        height: 42px;
+        font-size: 26px;
+      }
     }
   </style>
 </head>
@@ -386,19 +394,16 @@
     </div>
   </main>
 
-  <footer></footer>
 
-  <!-- Visualizzatore PDF: creato anche via JavaScript per evitare blocchi su GitHub/cache -->
+
   <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
     <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>
+    <button class="viewer-close-x" id="pdfViewerClose" type="button" aria-label="Chiudi PDF e torna all'elenco">×</button>
   </div>
-  <button class="pdf-close" id="pdfClose" type="button" aria-label="Chiudi PDF">×</button>
+
+  <footer></footer>
 
   <script>
-    "use strict";
-    const APP_VERSION = "Castiglione GitHub-safe 2026-06-17 00:10";
-    console.log(APP_VERSION);
-
     const documents = [
       {
         code: "VIDEO",
@@ -595,172 +600,135 @@
       }
     ];
 
+    const featured = document.getElementById("featured");
+    const sections = document.getElementById("sections");
+    const search = document.getElementById("search");
+    const summary = document.getElementById("summary");
+    const empty = document.getElementById("empty");
 
+    const pdfViewer = document.getElementById("pdfViewer");
+    const pdfFrame = document.getElementById("pdfFrame");
+    const pdfViewerClose = document.getElementById("pdfViewerClose");
+    let savedScrollY = 0;
 
-    function onReady(fn) {
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", fn, { once: true });
-      } else {
-        fn();
-      }
+    function pdfUrl(file) {
+      return encodeURI(file);
     }
 
-    onReady(function initCastiglione() {
-      const featured = document.getElementById("featured");
-      const sections = document.getElementById("sections");
-      const search = document.getElementById("search");
-      const summary = document.getElementById("summary");
-      const empty = document.getElementById("empty");
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
-      if (!featured || !sections || !search || !summary || !empty) {
-        console.error("Elementi principali mancanti", { featured, sections, search, summary, empty });
-        return;
-      }
-
-      let pdfViewer = document.getElementById("pdfViewer");
-      let pdfFrame = document.getElementById("pdfFrame");
-      let pdfClose = document.getElementById("pdfClose");
-
-      // Protezione: se GitHub/browser sta servendo una versione incoerente del DOM,
-      // il visualizzatore viene ricreato e lo script non si blocca.
-      if (!pdfViewer) {
-        pdfViewer = document.createElement("div");
-        pdfViewer.id = "pdfViewer";
-        pdfViewer.className = "pdf-viewer";
-        pdfViewer.setAttribute("aria-hidden", "true");
-        document.body.appendChild(pdfViewer);
-      }
-
-      if (!pdfFrame) {
-        pdfFrame = document.createElement("iframe");
-        pdfFrame.id = "pdfFrame";
-        pdfFrame.className = "pdf-frame";
-        pdfFrame.title = "Visualizzatore PDF";
-        pdfViewer.appendChild(pdfFrame);
-      }
-
-      if (!pdfClose) {
-        pdfClose = document.createElement("button");
-        pdfClose.id = "pdfClose";
-        pdfClose.className = "pdf-close";
-        pdfClose.type = "button";
-        pdfClose.setAttribute("aria-label", "Chiudi PDF");
-        pdfClose.textContent = "×";
-        document.body.appendChild(pdfClose);
-      }
-
-      let savedScrollY = 0;
-
-      function pdfUrl(file) {
-        return encodeURI(file);
-      }
-
-      function openPdf(href) {
-        savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
-        pdfFrame.src = href;
-        pdfViewer.classList.add("open");
-        pdfViewer.setAttribute("aria-hidden", "false");
-        pdfClose.classList.add("open");
-        document.documentElement.classList.add("pdf-open");
-        document.body.classList.add("pdf-open");
-      }
-
-      function closePdf() {
-        pdfViewer.classList.remove("open");
-        pdfViewer.setAttribute("aria-hidden", "true");
-        pdfClose.classList.remove("open");
-        pdfFrame.src = "about:blank";
-        document.documentElement.classList.remove("pdf-open");
-        document.body.classList.remove("pdf-open");
-        requestAnimationFrame(() => window.scrollTo(0, savedScrollY));
-      }
-
-      function actions(doc) {
-        const href = pdfUrl(doc.file);
-        if (doc.external) {
-          return `
-            <div class="button-row">
-              <a class="btn primary" href="${href}" target="_blank" rel="noopener">Apri video</a>
-            </div>
-          `;
-        }
+    function actions(doc) {
+      const href = pdfUrl(doc.file);
+      if (doc.external) {
         return `
           <div class="button-row">
-            <button class="btn primary" type="button" data-pdf="${href}">Apri PDF</button>
-            <a class="btn" href="${href}" download>Scarica</a>
+            <a class="btn primary" href="${href}" target="_blank" rel="noopener">Apri video</a>
           </div>
         `;
       }
+      return `
+        <div class="button-row">
+          <button class="btn primary" type="button" data-open-pdf="${href}" data-title="${escapeHtml(doc.title)}">Apri PDF</button>
+          <a class="btn" href="${href}" download>Scarica</a>
+        </div>
+      `;
+    }
 
-      function documentCard(doc) {
+    function documentCard(doc) {
+      return `
+        <article class="doc" data-search="${(doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase()}">
+          <div>
+            <p class="title">${doc.title}</p>
+            <p class="meta">${doc.note} ${doc.pages} pagine - ${doc.size}</p>
+          </div>
+          ${actions(doc)}
+        </article>
+      `;
+    }
+
+    function featuredCard(doc) {
+      return `
+        <article class="main-doc" data-search="${(doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase()}">
+          <h2>${doc.title}</h2>
+          <p>${doc.note}${doc.pages ? ` ${doc.pages} pagine - ${doc.size}` : ""}</p>
+          ${actions(doc)}
+        </article>
+      `;
+    }
+
+    function render() {
+      const query = search.value.trim().toLowerCase();
+      const filtered = documents.filter((doc) => {
+        const haystack = (doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase();
+        return !query || haystack.includes(query);
+      });
+
+      const featuredDocs = filtered.filter((doc) => doc.featured);
+      const normalDocs = filtered.filter((doc) => !doc.featured);
+      const groups = [...new Set(normalDocs.map((doc) => doc.group))];
+
+      featured.innerHTML = featuredDocs.map(featuredCard).join("");
+      sections.innerHTML = groups.map((group) => {
+        const docs = normalDocs.filter((doc) => doc.group === group);
         return `
-          <article class="doc" data-search="${(doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase()}">
-            <div>
-              <p class="title">${doc.title}</p>
-              <p class="meta">${doc.note} ${doc.pages ? doc.pages + " pagine - " + doc.size : ""}</p>
+          <section>
+            <h2>${group}</h2>
+            <div class="doc-list">
+              ${docs.map(documentCard).join("")}
             </div>
-            ${actions(doc)}
-          </article>
+          </section>
         `;
+      }).join("");
+
+      summary.textContent = `${filtered.length} documenti indicizzati`;
+      empty.style.display = filtered.length ? "none" : "block";
+    }
+
+
+
+    function openPdfViewer(url, title) {
+      savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      document.body.style.top = `-${savedScrollY}px`;
+      document.body.classList.add("viewer-open");
+      pdfFrame.src = url;
+      pdfViewer.classList.add("is-open");
+      pdfViewer.setAttribute("aria-hidden", "false");
+      pdfViewerClose.focus();
+    }
+
+    function closePdfViewer() {
+      pdfViewer.classList.remove("is-open");
+      pdfViewer.setAttribute("aria-hidden", "true");
+      pdfFrame.src = "about:blank";
+      document.body.classList.remove("viewer-open");
+      document.body.style.top = "";
+      window.scrollTo(0, savedScrollY);
+    }
+
+    document.addEventListener("click", (event) => {
+      const openButton = event.target.closest("[data-open-pdf]");
+      if (openButton) {
+        openPdfViewer(openButton.dataset.openPdf, openButton.dataset.title);
       }
-
-      function featuredCard(doc) {
-        return `
-          <article class="main-doc" data-search="${(doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase()}">
-            <h2>${doc.title}</h2>
-            <p>${doc.note}${doc.pages ? ` ${doc.pages} pagine - ${doc.size}` : ""}</p>
-            ${actions(doc)}
-          </article>
-        `;
-      }
-
-      function render() {
-        const query = search.value.trim().toLowerCase();
-        const filtered = documents.filter((doc) => {
-          const haystack = (doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase();
-          return !query || haystack.includes(query);
-        });
-
-        const featuredDocs = filtered.filter((doc) => doc.featured);
-        const normalDocs = filtered.filter((doc) => !doc.featured);
-        const groups = [...new Set(normalDocs.map((doc) => doc.group))];
-
-        featured.innerHTML = featuredDocs.map(featuredCard).join("");
-        sections.innerHTML = groups.map((group) => {
-          const docs = normalDocs.filter((doc) => doc.group === group);
-          return `
-            <section>
-              <h2>${group}</h2>
-              <div class="doc-list">
-                ${docs.map(documentCard).join("")}
-              </div>
-            </section>
-          `;
-        }).join("");
-
-        summary.textContent = `${filtered.length} documenti indicizzati`;
-        empty.style.display = filtered.length ? "none" : "block";
-      }
-
-      search.addEventListener("input", render);
-
-      document.addEventListener("click", (event) => {
-        const button = event.target.closest("[data-pdf]");
-        if (!button) return;
-        event.preventDefault();
-        openPdf(button.dataset.pdf);
-      });
-
-      pdfClose.addEventListener("click", closePdf);
-
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && pdfViewer.classList.contains("open")) {
-          closePdf();
-        }
-      });
-
-      render();
     });
+
+    pdfViewerClose.addEventListener("click", closePdfViewer);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && pdfViewer.classList.contains("is-open")) {
+        closePdfViewer();
+      }
+    });
+
+    search.addEventListener("input", render);
+    render();
   </script>
 </body>
 </html>

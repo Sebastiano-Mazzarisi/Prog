@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: visualizzatore PDF interno con pulsanti compatti su smartphone -->
+  <!-- Versione: visualizzatore PDF interno con zoom regolabile e pulsanti compatti su smartphone -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -288,13 +288,51 @@
 
     .pdf-viewer-bar {
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: 1fr auto auto auto;
       gap: 8px;
       align-items: center;
-      padding: 10px;
+      padding: 8px;
       border-bottom: 1px solid var(--line);
       background: #f8fafc;
       box-shadow: 0 4px 14px rgba(19, 32, 51, 0.10);
+    }
+
+    .pdf-zoom-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+    }
+
+    .zoom-btn,
+    .zoom-value {
+      min-height: 32px;
+      padding: 5px 9px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--blue);
+      font-size: 0.9rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .zoom-btn {
+      cursor: pointer;
+    }
+
+    .zoom-btn:hover {
+      border-color: var(--line);
+      background: #eef4fb;
+    }
+
+    .zoom-value {
+      min-width: 50px;
+      color: var(--ink);
+      text-align: center;
     }
 
     .pdf-viewer-title {
@@ -360,20 +398,42 @@
       }
 
       .pdf-viewer-bar {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 6px;
-        padding: 6px;
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 5px;
+        padding: 5px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
 
       .pdf-viewer-title {
         display: none;
       }
 
+      .pdf-zoom-controls {
+        flex: 0 0 auto;
+        gap: 2px;
+        padding: 2px;
+      }
+
+      .zoom-btn,
+      .zoom-value {
+        min-height: 32px;
+        padding: 5px 7px;
+        font-size: 0.84rem;
+      }
+
+      .zoom-value {
+        min-width: 44px;
+      }
+
       .pdf-viewer-bar .btn {
-        width: 100%;
+        flex: 0 0 auto;
+        width: auto;
         min-height: 36px;
-        padding: 7px 8px;
-        font-size: 0.9rem;
+        padding: 7px 9px;
+        font-size: 0.86rem;
+        white-space: nowrap;
       }
     }
   </style>
@@ -407,6 +467,12 @@
   <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
     <div class="pdf-viewer-bar">
       <div class="pdf-viewer-title" id="pdfViewerTitle">PDF</div>
+      <div class="pdf-zoom-controls" aria-label="Controlli zoom PDF">
+        <button class="zoom-btn" id="pdfZoomOut" type="button" title="Riduci">−</button>
+        <span class="zoom-value" id="pdfZoomValue">100%</span>
+        <button class="zoom-btn" id="pdfZoomIn" type="button" title="Ingrandisci">+</button>
+        <button class="zoom-btn" id="pdfZoomFit" type="button" title="Adatta alla pagina">Adatta</button>
+      </div>
       <a class="btn" id="pdfViewerExternal" href="#" target="_blank" rel="noopener">Schermo intero</a>
       <button class="btn viewer-close" id="pdfViewerClose" type="button">Chiudi PDF</button>
     </div>
@@ -623,7 +689,14 @@
     const pdfViewerTitle = document.getElementById("pdfViewerTitle");
     const pdfViewerExternal = document.getElementById("pdfViewerExternal");
     const pdfViewerClose = document.getElementById("pdfViewerClose");
+    const pdfZoomOut = document.getElementById("pdfZoomOut");
+    const pdfZoomIn = document.getElementById("pdfZoomIn");
+    const pdfZoomFit = document.getElementById("pdfZoomFit");
+    const pdfZoomValue = document.getElementById("pdfZoomValue");
     let savedScrollY = 0;
+    let currentPdfUrl = "";
+    let currentPdfZoom = 100;
+    let currentPdfFitMode = true;
 
     function pdfUrl(file) {
       return encodeURI(file);
@@ -707,13 +780,36 @@
 
 
 
+    function pdfViewerUrlWithZoom() {
+      if (!currentPdfUrl) return "about:blank";
+      const separator = currentPdfUrl.includes("#") ? "&" : "#";
+      if (currentPdfFitMode) {
+        return `${currentPdfUrl}${separator}zoom=page-fit&view=Fit`;
+      }
+      return `${currentPdfUrl}${separator}zoom=${currentPdfZoom}`;
+    }
+
+    function refreshPdfZoom() {
+      pdfZoomValue.textContent = currentPdfFitMode ? "Adatta" : `${currentPdfZoom}%`;
+      pdfFrame.src = pdfViewerUrlWithZoom();
+    }
+
+    function setPdfZoom(value) {
+      currentPdfFitMode = false;
+      currentPdfZoom = Math.max(50, Math.min(200, value));
+      refreshPdfZoom();
+    }
+
     function openPdfViewer(url, title) {
       savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
       document.body.style.top = `-${savedScrollY}px`;
       document.body.classList.add("viewer-open");
       pdfViewerTitle.textContent = title || "PDF";
       pdfViewerExternal.href = url;
-      pdfFrame.src = url;
+      currentPdfUrl = url;
+      currentPdfZoom = 100;
+      currentPdfFitMode = true;
+      refreshPdfZoom();
       pdfViewer.classList.add("is-open");
       pdfViewer.setAttribute("aria-hidden", "false");
       pdfViewerClose.focus();
@@ -723,6 +819,7 @@
       pdfViewer.classList.remove("is-open");
       pdfViewer.setAttribute("aria-hidden", "true");
       pdfFrame.src = "about:blank";
+      currentPdfUrl = "";
       document.body.classList.remove("viewer-open");
       document.body.style.top = "";
       window.scrollTo(0, savedScrollY);
@@ -736,6 +833,13 @@
     });
 
     pdfViewerClose.addEventListener("click", closePdfViewer);
+    pdfZoomOut.addEventListener("click", () => setPdfZoom(currentPdfFitMode ? 90 : currentPdfZoom - 10));
+    pdfZoomIn.addEventListener("click", () => setPdfZoom(currentPdfFitMode ? 110 : currentPdfZoom + 10));
+    pdfZoomFit.addEventListener("click", () => {
+      currentPdfFitMode = true;
+      currentPdfZoom = 100;
+      refreshPdfZoom();
+    });
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && pdfViewer.classList.contains("is-open")) {

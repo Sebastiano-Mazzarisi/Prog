@@ -266,6 +266,58 @@
       text-align: center;
     }
 
+    body.viewer-open {
+      position: fixed;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .pdf-viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      grid-template-rows: auto 1fr;
+      background: var(--paper);
+    }
+
+    .pdf-viewer.is-open {
+      display: grid;
+    }
+
+    .pdf-viewer-bar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+      box-shadow: 0 4px 14px rgba(19, 32, 51, 0.10);
+    }
+
+    .pdf-viewer-title {
+      overflow: hidden;
+      color: var(--ink);
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #dfe5ec;
+    }
+
+    .btn.viewer-close {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+    }
+
+
     footer {
       width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
@@ -305,6 +357,14 @@
       .btn {
         width: 100%;
       }
+
+      .pdf-viewer-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .pdf-viewer-title {
+        white-space: normal;
+      }
     }
   </style>
 </head>
@@ -331,6 +391,17 @@
       I pulsanti Apri visualizzano il PDF nel browser. I pulsanti Scarica salvano il file sul dispositivo quando il browser lo consente.
     </div>
   </main>
+
+
+
+  <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
+    <div class="pdf-viewer-bar">
+      <div class="pdf-viewer-title" id="pdfViewerTitle">PDF</div>
+      <a class="btn" id="pdfViewerExternal" href="#" target="_blank" rel="noopener">Apri esterno</a>
+      <button class="btn viewer-close" id="pdfViewerClose" type="button">Chiudi PDF</button>
+    </div>
+    <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>
+  </div>
 
   <footer></footer>
 
@@ -537,8 +608,24 @@
     const summary = document.getElementById("summary");
     const empty = document.getElementById("empty");
 
+    const pdfViewer = document.getElementById("pdfViewer");
+    const pdfFrame = document.getElementById("pdfFrame");
+    const pdfViewerTitle = document.getElementById("pdfViewerTitle");
+    const pdfViewerExternal = document.getElementById("pdfViewerExternal");
+    const pdfViewerClose = document.getElementById("pdfViewerClose");
+    let savedScrollY = 0;
+
     function pdfUrl(file) {
       return encodeURI(file);
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
     function actions(doc) {
@@ -552,7 +639,7 @@
       }
       return `
         <div class="button-row">
-          <a class="btn primary" href="${href}" target="_blank" rel="noopener">Apri PDF</a>
+          <button class="btn primary" type="button" data-open-pdf="${href}" data-title="${escapeHtml(doc.title)}">Apri PDF</button>
           <a class="btn" href="${href}" download>Scarica</a>
         </div>
       `;
@@ -607,6 +694,44 @@
       summary.textContent = `${filtered.length} documenti indicizzati`;
       empty.style.display = filtered.length ? "none" : "block";
     }
+
+
+
+    function openPdfViewer(url, title) {
+      savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      document.body.style.top = `-${savedScrollY}px`;
+      document.body.classList.add("viewer-open");
+      pdfViewerTitle.textContent = title || "PDF";
+      pdfViewerExternal.href = url;
+      pdfFrame.src = url;
+      pdfViewer.classList.add("is-open");
+      pdfViewer.setAttribute("aria-hidden", "false");
+      pdfViewerClose.focus();
+    }
+
+    function closePdfViewer() {
+      pdfViewer.classList.remove("is-open");
+      pdfViewer.setAttribute("aria-hidden", "true");
+      pdfFrame.src = "about:blank";
+      document.body.classList.remove("viewer-open");
+      document.body.style.top = "";
+      window.scrollTo(0, savedScrollY);
+    }
+
+    document.addEventListener("click", (event) => {
+      const openButton = event.target.closest("[data-open-pdf]");
+      if (openButton) {
+        openPdfViewer(openButton.dataset.openPdf, openButton.dataset.title);
+      }
+    });
+
+    pdfViewerClose.addEventListener("click", closePdfViewer);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && pdfViewer.classList.contains("is-open")) {
+        closePdfViewer();
+      }
+    });
 
     search.addEventListener("input", render);
     render();

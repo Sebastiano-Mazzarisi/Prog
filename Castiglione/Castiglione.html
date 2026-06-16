@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
+  <!-- Versione: visualizzatore PDF interno con pulsanti compatti su smartphone -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -359,11 +360,20 @@
       }
 
       .pdf-viewer-bar {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        padding: 6px;
       }
 
       .pdf-viewer-title {
-        white-space: normal;
+        display: none;
+      }
+
+      .pdf-viewer-bar .btn {
+        width: 100%;
+        min-height: 36px;
+        padding: 7px 8px;
+        font-size: 0.9rem;
       }
     }
   </style>
@@ -397,7 +407,7 @@
   <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
     <div class="pdf-viewer-bar">
       <div class="pdf-viewer-title" id="pdfViewerTitle">PDF</div>
-      <a class="btn" id="pdfViewerExternal" href="#" target="_blank" rel="noopener">Apri esterno</a>
+      <a class="btn" id="pdfViewerExternal" href="#" target="_blank" rel="noopener">Schermo intero</a>
       <button class="btn viewer-close" id="pdfViewerClose" type="button">Chiudi PDF</button>
     </div>
     <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>

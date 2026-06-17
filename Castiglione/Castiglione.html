@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: 17-06-2026 - 13:36:05 -->
+  <!-- Versione: 17-06-2026 - 14:31:00 -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -372,6 +372,13 @@
       white-space: nowrap;
     }
 
+    .counter-chip.is-positive {
+      border-color: rgba(150, 0, 0, 0.75);
+      background: #e11d48;
+      color: white;
+      box-shadow: 0 3px 12px rgba(150, 0, 0, 0.28);
+    }
+
     .counter-chip[hidden] {
       display: none !important;
     }
@@ -401,11 +408,73 @@
       opacity: 0.8;
     }
 
+    .work-progress {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(19, 32, 51, 0.36);
+      backdrop-filter: blur(3px);
+    }
+
+    .work-progress.is-visible {
+      display: flex;
+    }
+
+    .work-progress-box {
+      width: min(340px, calc(100vw - 42px));
+      padding: 18px;
+      border-radius: 14px;
+      background: white;
+      color: var(--ink);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+      text-align: center;
+    }
+
+    .work-progress-title {
+      margin: 0 0 10px;
+      color: var(--blue);
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .work-progress-percent {
+      margin: 0 0 12px;
+      font-size: 1.8rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-progress-bar {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e7edf5;
+      border: 1px solid #d2dbe8;
+    }
+
+    .work-progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--blue);
+      transition: width 0.08s linear;
+    }
+
+    .work-progress-note {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
     .refresh-indicator {
       position: fixed;
       top: calc(12px + env(safe-area-inset-top));
       left: 50%;
-      z-index: 80;
+      z-index: 100;
       min-width: 190px;
       transform: translate(-50%, -120%);
       padding: 9px 14px;
@@ -490,7 +559,7 @@
 <body>
   <header class="hero">
     <div class="version-area">
-      <div class="version-badge">Versione: 17-06-2026 - 13:36:05</div>
+      <div class="version-badge">Versione: 17-06-2026 - 14:31:00</div>
       <button class="counter-chip counter-chip-main" id="pageCounterChip" type="button" title="Visite pagina - clicca per azzerare tutti i contatori" hidden>0</button>
     </div>
     <div class="hero-inner">
@@ -516,6 +585,19 @@
   </main>
 
 
+
+  <div class="refresh-indicator" id="refreshIndicator" aria-live="polite"></div>
+
+  <div class="work-progress" id="workProgress" aria-hidden="true">
+    <div class="work-progress-box" role="status" aria-live="polite">
+      <p class="work-progress-title" id="workProgressTitle">Preparazione in corso</p>
+      <p class="work-progress-percent"><span id="workProgressPercent">0</span>%</p>
+      <div class="work-progress-bar" aria-hidden="true">
+        <div class="work-progress-fill" id="workProgressFill"></div>
+      </div>
+      <p class="work-progress-note">Attendi qualche istante...</p>
+    </div>
+  </div>
 
   <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
     <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>
@@ -728,13 +810,16 @@
     const empty = document.getElementById("empty");
     const refreshIndicator = document.getElementById("refreshIndicator");
     const pageCounterChip = document.getElementById("pageCounterChip");
+    const workProgress = document.getElementById("workProgress");
+    const workProgressTitle = document.getElementById("workProgressTitle");
+    const workProgressPercent = document.getElementById("workProgressPercent");
+    const workProgressFill = document.getElementById("workProgressFill");
+    let workProgressTimer = null;
 
     const queryParams = new URLSearchParams(window.location.search);
     const adminCounters = queryParams.get("v") === "77";
     const skipCounterIncrement = adminCounters;
 
-    // Contatori nello stesso stile dei file Contatori.html / Vendesi.html.
-    // ?v=77: legge e mostra i valori, ma NON incrementa.
     const counterNamespace = "socim";
     const counterPrefix = "castiglione-";
     const counterValues = {};
@@ -780,8 +865,9 @@
       const safeKey = escapeHtml(key);
       const safeLabel = escapeHtml(label);
       const value = Number.isFinite(counterValues[key]) ? counterValues[key] : 0;
+      const positiveClass = value > 0 ? "is-positive" : "";
       const prefix = label ? `<span class="counter-letter">${safeLabel}</span>` : "";
-      return `<span class="counter-chip counter-chip-mini ${extraClass}" data-counter-chip="${safeKey}" title="${safeLabel ? `${safeLabel}: ` : ""}${safeKey}">${prefix}${value}</span>`;
+      return `<span class="counter-chip counter-chip-mini ${positiveClass} ${extraClass}" data-counter-chip="${safeKey}" title="${safeLabel ? `${safeLabel}: ` : ""}${safeKey}">${prefix}${value}</span>`;
     }
 
     function actions(doc) {
@@ -856,7 +942,6 @@
       empty.style.display = filtered.length ? "none" : "block";
     }
 
-
     function counterStorageKey(name) {
       return `${counterPrefix}${name}`.replace(/[^a-zA-Z0-9_-]/g, "-");
     }
@@ -907,10 +992,8 @@
     }
 
     async function incrementCounter(name) {
-      if (skipCounterIncrement) {
-        return getCounter(name);
-      }
-
+      if (!name) return 0;
+      if (skipCounterIncrement) return getCounter(name);
       try {
         const value = await counterCascade(name, "hit");
         counterValues[name] = value;
@@ -926,7 +1009,6 @@
       const key = counterStorageKey(name);
       let done = false;
       let lastValue = 0;
-
       for (const backend of counterBackends) {
         if (typeof backend.set !== "function") continue;
         try {
@@ -938,11 +1020,15 @@
           console.warn(`Azzeramento ${backend.name} non riuscito per ${name}:`, error.message);
         }
       }
-
       if (!done) throw new Error(`Azzeramento non riuscito per ${name}`);
       counterValues[name] = lastValue;
       updateCounterChip(name, lastValue);
       return lastValue;
+    }
+
+    function applyCounterChipColor(chip, number) {
+      if (!chip) return;
+      chip.classList.toggle("is-positive", number > 0);
     }
 
     function updateCounterChip(name, value) {
@@ -950,21 +1036,26 @@
       if (name === "page" && pageCounterChip) {
         pageCounterChip.textContent = number;
         pageCounterChip.hidden = !adminCounters;
+        applyCounterChipColor(pageCounterChip, number);
       }
       document.querySelectorAll(`[data-counter-chip="${name}"]`).forEach((chip) => {
-        const letter = chip.querySelector(".counter-letter");
+        const letterText = chip.querySelector(".counter-letter")?.textContent || "";
         chip.textContent = "";
-        if (letter) chip.appendChild(letter);
+        if (letterText) {
+          const letter = document.createElement("span");
+          letter.className = "counter-letter";
+          letter.textContent = letterText;
+          chip.appendChild(letter);
+        }
         chip.appendChild(document.createTextNode(number));
+        applyCounterChipColor(chip, number);
       });
     }
 
     function refreshVisibleCounters() {
       if (!adminCounters) return;
       counterKeys.forEach((key) => {
-        if (Object.prototype.hasOwnProperty.call(counterValues, key)) {
-          updateCounterChip(key, counterValues[key]);
-        }
+        if (Object.prototype.hasOwnProperty.call(counterValues, key)) updateCounterChip(key, counterValues[key]);
       });
     }
 
@@ -979,12 +1070,9 @@
       if (!adminCounters) return;
       const confirmed = window.confirm("Vuoi azzerare tutti i contatori di Castiglione?");
       if (!confirmed) return;
-
       if (pageCounterChip) pageCounterChip.textContent = "...";
       try {
-        for (const key of counterKeys) {
-          await resetCounter(key);
-        }
+        for (const key of counterKeys) await resetCounter(key);
         refreshVisibleCounters();
         window.alert("Contatori azzerati.");
       } catch (error) {
@@ -992,7 +1080,6 @@
         window.alert("Non sono riuscito ad azzerare tutti i contatori. Riprova tra qualche secondo.");
       }
     }
-
 
     let pullStartY = 0;
     let pullDistance = 0;
@@ -1018,13 +1105,9 @@
       if (refreshStarted) return;
       refreshStarted = true;
       showRefreshIndicator("Aggiorno la pagina...");
-
       const refreshedUrl = new URL(window.location.href);
       refreshedUrl.searchParams.set("refresh", Date.now().toString());
-
-      window.setTimeout(() => {
-        window.location.replace(refreshedUrl.toString());
-      }, 350);
+      window.setTimeout(() => window.location.replace(refreshedUrl.toString()), 350);
     }
 
     document.addEventListener("touchstart", (event) => {
@@ -1037,7 +1120,6 @@
     document.addEventListener("touchmove", (event) => {
       if (!pullActive || refreshStarted) return;
       pullDistance = event.touches[0].clientY - pullStartY;
-
       if (pullDistance > 25 && isAtTop()) {
         event.preventDefault();
         showRefreshIndicator(pullDistance > 90 ? "Rilascia per aggiornare" : "Trascina per aggiornare");
@@ -1046,14 +1128,66 @@
 
     document.addEventListener("touchend", () => {
       if (!pullActive || refreshStarted) return;
-      if (pullDistance > 90 && isAtTop()) {
-        refreshHtmlFile();
-      } else {
-        hideRefreshIndicator();
-      }
+      if (pullDistance > 90 && isAtTop()) refreshHtmlFile();
+      else hideRefreshIndicator();
       pullActive = false;
       pullDistance = 0;
     });
+
+    function setWorkProgress(percent, title) {
+      const value = Math.max(0, Math.min(100, Math.round(percent)));
+      if (title && workProgressTitle) workProgressTitle.textContent = title;
+      if (workProgressPercent) workProgressPercent.textContent = String(value);
+      if (workProgressFill) workProgressFill.style.width = `${value}%`;
+    }
+
+    function showWorkProgress(title = "Preparazione in corso") {
+      if (!workProgress) return;
+      if (workProgressTimer) window.clearInterval(workProgressTimer);
+      setWorkProgress(0, title);
+      workProgress.classList.add("is-visible");
+      workProgress.setAttribute("aria-hidden", "false");
+      let percent = 0;
+      workProgressTimer = window.setInterval(() => {
+        const step = percent < 55 ? 8 : percent < 82 ? 5 : 2;
+        percent = Math.min(96, percent + step);
+        setWorkProgress(percent);
+        if (percent >= 96) {
+          window.clearInterval(workProgressTimer);
+          workProgressTimer = null;
+        }
+      }, 75);
+    }
+
+    function hideWorkProgress() {
+      if (workProgressTimer) {
+        window.clearInterval(workProgressTimer);
+        workProgressTimer = null;
+      }
+      if (!workProgress) return;
+      workProgress.classList.remove("is-visible");
+      workProgress.setAttribute("aria-hidden", "true");
+      setWorkProgress(0);
+    }
+
+    function completeWorkProgress(callback) {
+      window.setTimeout(() => {
+        if (workProgressTimer) {
+          window.clearInterval(workProgressTimer);
+          workProgressTimer = null;
+        }
+        setWorkProgress(100, "Apertura in corso");
+        window.setTimeout(() => {
+          if (typeof callback === "function") callback();
+        }, 180);
+      }, 850);
+    }
+
+    function progressTitleForElement(element) {
+      if (element?.dataset?.openPdf) return "Apertura PDF";
+      if (element?.hasAttribute("download")) return "Preparazione scaricamento";
+      return "Apertura collegamento";
+    }
 
     function shouldOpenPdfDirectly() {
       const smallScreen = window.matchMedia("(max-width: 760px)").matches;
@@ -1066,7 +1200,6 @@
         window.location.href = url;
         return;
       }
-
       savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
       document.body.style.top = `-${savedScrollY}px`;
       document.body.classList.add("viewer-open");
@@ -1074,6 +1207,7 @@
       pdfViewer.classList.add("is-open");
       pdfViewer.setAttribute("aria-hidden", "false");
       pdfViewerClose.focus();
+      window.setTimeout(hideWorkProgress, 350);
     }
 
     function closePdfViewer() {
@@ -1085,61 +1219,55 @@
       window.scrollTo(0, savedScrollY);
     }
 
-    async function handleCounterLink(event, target) {
-      const action = target.dataset.counterAction;
-      const href = target.getAttribute("href");
-      const isLink = target.tagName.toLowerCase() === "a" && href;
-
-      if (isLink) {
-        event.preventDefault();
-      }
-
-      await incrementCounter(action);
-
-      if (!isLink) return;
-
-      if (target.hasAttribute("download")) {
-        const a = document.createElement("a");
-        a.href = href;
-        a.download = target.getAttribute("download") || "";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        return;
-      }
-
-      if (target.target === "_blank") {
-        window.open(href, "_blank", "noopener");
-      } else {
-        window.location.href = href;
-      }
+    function triggerDownload(link) {
+      const temporaryLink = document.createElement("a");
+      temporaryLink.href = link.href;
+      temporaryLink.download = link.getAttribute("download") || "";
+      temporaryLink.rel = "noopener";
+      document.body.appendChild(temporaryLink);
+      temporaryLink.click();
+      temporaryLink.remove();
     }
 
-    document.addEventListener("click", async (event) => {
+    document.addEventListener("click", (event) => {
       const openButton = event.target.closest("[data-open-pdf]");
       if (openButton) {
         event.preventDefault();
-        await incrementCounter(openButton.dataset.counterAction);
-        openPdfViewer(openButton.dataset.openPdf, openButton.dataset.title);
+        if (openButton.dataset.counterAction) incrementCounter(openButton.dataset.counterAction);
+        showWorkProgress(progressTitleForElement(openButton));
+        completeWorkProgress(() => openPdfViewer(openButton.dataset.openPdf, openButton.dataset.title));
         return;
       }
 
       const counterTarget = event.target.closest("[data-counter-action]");
-      if (counterTarget) {
-        await handleCounterLink(event, counterTarget);
+      if (!counterTarget) return;
+
+      if (counterTarget.matches("a")) {
+        event.preventDefault();
+        incrementCounter(counterTarget.dataset.counterAction);
+        showWorkProgress(progressTitleForElement(counterTarget));
+        completeWorkProgress(() => {
+          if (counterTarget.hasAttribute("download")) {
+            triggerDownload(counterTarget);
+            window.setTimeout(hideWorkProgress, 700);
+          } else if (counterTarget.target === "_blank") {
+            window.open(counterTarget.href, "_blank", "noopener");
+            window.setTimeout(hideWorkProgress, 350);
+          } else {
+            window.location.href = counterTarget.href;
+          }
+        });
+        return;
       }
+
+      incrementCounter(counterTarget.dataset.counterAction);
     });
 
-    if (pageCounterChip) {
-      pageCounterChip.addEventListener("click", resetAllCounters);
-    }
-
+    if (pageCounterChip) pageCounterChip.addEventListener("click", resetAllCounters);
     pdfViewerClose.addEventListener("click", closePdfViewer);
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && pdfViewer.classList.contains("is-open")) {
-        closePdfViewer();
-      }
+      if (event.key === "Escape" && pdfViewer.classList.contains("is-open")) closePdfViewer();
     });
 
     search.addEventListener("input", () => {
@@ -1148,11 +1276,8 @@
     });
 
     render();
-    if (!skipCounterIncrement) {
-      incrementCounter("page");
-    }
+    if (!skipCounterIncrement) incrementCounter("page");
     loadVisibleCounters();
   </script>
-  <div class="refresh-indicator" id="refreshIndicator" aria-live="polite"></div>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: 17-06-2026 - 12:06:25 -->
+  <!-- Versione: 17-06-2026 - 15:17:56 -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -61,47 +61,6 @@
         linear-gradient(180deg, rgba(8, 26, 46, 0.18), rgba(8, 26, 46, 0.78)),
         url("05 - Foto e video selezionati/04 - Esterno torrino.png") center / cover;
       color: white;
-    }
-
-    .version-badge {
-      position: absolute;
-      top: calc(10px + env(safe-area-inset-top));
-      right: calc(12px + env(safe-area-inset-right));
-      z-index: 2;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(8, 26, 46, 0.48);
-      color: rgba(255, 255, 255, 0.88);
-      font-size: 0.72rem;
-      font-weight: 700;
-      line-height: 1.2;
-      white-space: nowrap;
-      backdrop-filter: blur(5px);
-    }
-
-    .refresh-indicator {
-      position: fixed;
-      top: calc(10px + env(safe-area-inset-top));
-      left: 50%;
-      z-index: 100;
-      transform: translate(-50%, -120%);
-      min-width: 170px;
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: rgba(19, 32, 51, 0.92);
-      color: white;
-      font-size: 0.88rem;
-      font-weight: 800;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
-      opacity: 0;
-      transition: transform 0.16s ease, opacity 0.16s ease;
-      pointer-events: none;
-    }
-
-    .refresh-indicator.is-visible {
-      transform: translate(-50%, 0);
-      opacity: 1;
     }
 
     .hero-inner,
@@ -371,6 +330,103 @@
     }
 
 
+    .version-area {
+      position: absolute;
+      top: calc(10px + env(safe-area-inset-top));
+      right: calc(12px + env(safe-area-inset-right));
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .version-badge {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(8, 26, 46, 0.48);
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: nowrap;
+      backdrop-filter: blur(5px);
+    }
+
+    .counter-chip {
+      display: inline-flex;
+      min-width: 30px;
+      min-height: 30px;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border: 1px solid rgba(138, 101, 0, 0.55);
+      border-radius: 999px;
+      background: #ffe066;
+      color: #4f3a00;
+      font-size: 0.83rem;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: 0 3px 10px rgba(19, 32, 51, 0.16);
+      white-space: nowrap;
+    }
+
+    .counter-chip[hidden] {
+      display: none !important;
+    }
+
+    .counter-chip-main {
+      border-color: rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+    }
+
+    .counter-chip-mini {
+      min-width: 28px;
+      min-height: 28px;
+      padding: 4px 7px;
+      font-size: 0.78rem;
+    }
+
+    .counter-pair {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .counter-letter {
+      margin-right: 3px;
+      font-size: 0.68rem;
+      font-weight: 900;
+      opacity: 0.8;
+    }
+
+    .refresh-indicator {
+      position: fixed;
+      top: calc(12px + env(safe-area-inset-top));
+      left: 50%;
+      z-index: 80;
+      min-width: 190px;
+      transform: translate(-50%, -120%);
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(19, 32, 51, 0.9);
+      color: white;
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-align: center;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+      opacity: 0;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+      pointer-events: none;
+    }
+
+    .refresh-indicator.is-visible {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+
     footer {
       width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
@@ -382,6 +438,18 @@
     @media (max-width: 760px) {
       .hero {
         min-height: 46vh;
+      }
+
+      .version-area {
+        left: 12px;
+        right: 12px;
+        justify-content: flex-end;
+      }
+
+      .version-badge {
+        max-width: calc(100% - 24px);
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .toolbar,
@@ -416,20 +484,15 @@
         height: 42px;
         font-size: 26px;
       }
-
-      .version-badge {
-        top: calc(8px + env(safe-area-inset-top));
-        right: calc(8px + env(safe-area-inset-right));
-        font-size: 0.64rem;
-        padding: 3px 7px;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="refresh-indicator" id="refreshIndicator">Trascina per aggiornare</div>
   <header class="hero">
-    <div class="version-badge">Versione: 17-06-2026 - 12:06:25</div>
+    <div class="version-area">
+      <div class="version-badge">Versione: 17-06-2026 - 15:17:56</div>
+      <button class="counter-chip counter-chip-main" id="pageCounterChip" type="button" title="Visite pagina - clicca per azzerare tutti i contatori" hidden>0</button>
+    </div>
     <div class="hero-inner">
       <p class="eyebrow">Indice documentale</p>
       <h1>Castiglione</h1>
@@ -453,6 +516,8 @@
   </main>
 
 
+
+  <div class="refresh-indicator" id="refreshIndicator" aria-live="polite"></div>
 
   <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
     <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>
@@ -664,6 +729,15 @@
     const summary = document.getElementById("summary");
     const empty = document.getElementById("empty");
     const refreshIndicator = document.getElementById("refreshIndicator");
+    const pageCounterChip = document.getElementById("pageCounterChip");
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const adminCounters = queryParams.get("v") === "77";
+    const skipCounterIncrement = adminCounters;
+    const counterNamespace = "castiglione-documenti-mazzarisi";
+    const counterApiBase = "https://api.counterapi.dev/v1";
+    const counterValues = {};
+    const counterKeys = ["page", "video-open", ...documents.flatMap((doc) => doc.external ? [] : [`open-${doc.code}`, `download-${doc.code}`])];
 
     const pdfViewer = document.getElementById("pdfViewer");
     const pdfFrame = document.getElementById("pdfFrame");
@@ -683,19 +757,33 @@
         .replace(/'/g, "&#039;");
     }
 
+    function counterChipHtml(key, label, extraClass = "") {
+      if (!adminCounters) return "";
+      const safeKey = escapeHtml(key);
+      const safeLabel = escapeHtml(label);
+      const value = Number.isFinite(counterValues[key]) ? counterValues[key] : 0;
+      const prefix = label ? `<span class="counter-letter">${safeLabel}</span>` : "";
+      return `<span class="counter-chip counter-chip-mini ${extraClass}" data-counter-chip="${safeKey}" title="${safeLabel ? `${safeLabel}: ` : ""}${safeKey}">${prefix}${value}</span>`;
+    }
+
     function actions(doc) {
       const href = pdfUrl(doc.file);
       if (doc.external) {
         return `
           <div class="button-row">
-            <a class="btn primary" href="${href}" target="_blank" rel="noopener">Apri video</a>
+            <a class="btn primary" href="${href}" target="_blank" rel="noopener" data-counter-action="video-open">Apri video</a>
+            ${counterChipHtml("video-open", "")}
           </div>
         `;
       }
       return `
         <div class="button-row">
-          <button class="btn primary" type="button" data-open-pdf="${href}" data-title="${escapeHtml(doc.title)}">Apri PDF</button>
-          <a class="btn" href="${href}" download>Scarica</a>
+          <button class="btn primary" type="button" data-open-pdf="${href}" data-title="${escapeHtml(doc.title)}" data-counter-action="open-${escapeHtml(doc.code)}">Apri PDF</button>
+          <a class="btn" href="${href}" download data-counter-action="download-${escapeHtml(doc.code)}">Scarica</a>
+          <span class="counter-pair">
+            ${counterChipHtml(`open-${doc.code}`, "A")}
+            ${counterChipHtml(`download-${doc.code}`, "S")}
+          </span>
         </div>
       `;
     }
@@ -748,6 +836,127 @@
 
       summary.textContent = `${filtered.length} documenti indicizzati`;
       empty.style.display = filtered.length ? "none" : "block";
+    }
+
+
+    function counterUrl(name, action = "") {
+      const namespace = encodeURIComponent(counterNamespace);
+      const key = encodeURIComponent(name);
+      return `${counterApiBase}/${namespace}/${key}${action ? `/${action}` : ""}`;
+    }
+
+    function extractCounterValue(data) {
+      if (!data || typeof data !== "object") return 0;
+      const candidates = [data.count, data.value, data.data, data.result];
+      for (const item of candidates) {
+        const number = Number(item);
+        if (Number.isFinite(number)) return number;
+      }
+      return 0;
+    }
+
+    async function counterRequest(name, action = "") {
+      const response = await fetch(counterUrl(name, action), { cache: "no-store", keepalive: true });
+      if (!response.ok) throw new Error(`Errore contatore ${name}: ${response.status}`);
+      const data = await response.json();
+      return extractCounterValue(data);
+    }
+
+    async function getCounter(name) {
+      try {
+        const value = await counterRequest(name);
+        counterValues[name] = value;
+        updateCounterChip(name, value);
+        return value;
+      } catch (error) {
+        console.warn(error.message);
+        return counterValues[name] || 0;
+      }
+    }
+
+    async function incrementCounter(name) {
+      if (skipCounterIncrement) {
+        return getCounter(name);
+      }
+      try {
+        const value = await counterRequest(name, "up");
+        counterValues[name] = value;
+        updateCounterChip(name, value);
+        return value;
+      } catch (error) {
+        console.warn(error.message);
+        return counterValues[name] || 0;
+      }
+    }
+
+    async function resetCounter(name) {
+      try {
+        const response = await fetch(`${counterUrl(name, "set")}?count=0`, { cache: "no-store", keepalive: true });
+        if (!response.ok) throw new Error(`Set non riuscito: ${response.status}`);
+        const data = await response.json();
+        const value = extractCounterValue(data);
+        counterValues[name] = value;
+        updateCounterChip(name, value);
+        return value;
+      } catch (firstError) {
+        try {
+          const response = await fetch(`${counterUrl(name)}?count=0`, { cache: "no-store", keepalive: true });
+          if (!response.ok) throw new Error(`Set alternativo non riuscito: ${response.status}`);
+          const data = await response.json();
+          const value = extractCounterValue(data);
+          counterValues[name] = value;
+          updateCounterChip(name, value);
+          return value;
+        } catch (secondError) {
+          console.warn(firstError.message, secondError.message);
+          throw secondError;
+        }
+      }
+    }
+
+    function updateCounterChip(name, value) {
+      const number = Number.isFinite(value) ? value : 0;
+      if (name === "page" && pageCounterChip) {
+        pageCounterChip.textContent = number;
+        pageCounterChip.hidden = !adminCounters;
+      }
+      document.querySelectorAll(`[data-counter-chip="${name}"]`).forEach((chip) => {
+        const letter = chip.querySelector(".counter-letter");
+        chip.textContent = "";
+        if (letter) chip.appendChild(letter);
+        chip.appendChild(document.createTextNode(number));
+      });
+    }
+
+    function refreshVisibleCounters() {
+      if (!adminCounters) return;
+      counterKeys.forEach((key) => {
+        if (Object.prototype.hasOwnProperty.call(counterValues, key)) {
+          updateCounterChip(key, counterValues[key]);
+        }
+      });
+    }
+
+    async function loadVisibleCounters() {
+      if (!adminCounters) return;
+      if (pageCounterChip) pageCounterChip.hidden = false;
+      await Promise.all(counterKeys.map((key) => getCounter(key)));
+      refreshVisibleCounters();
+    }
+
+    async function resetAllCounters() {
+      if (!adminCounters) return;
+      const confirmed = window.confirm("Vuoi azzerare tutti i contatori di Castiglione?");
+      if (!confirmed) return;
+
+      if (pageCounterChip) pageCounterChip.textContent = "...";
+      try {
+        await Promise.all(counterKeys.map((key) => resetCounter(key)));
+        refreshVisibleCounters();
+        window.alert("Contatori azzerati.");
+      } catch (error) {
+        window.alert("Non sono riuscito ad azzerare tutti i contatori. Riprova tra qualche secondo.");
+      }
     }
 
 
@@ -813,7 +1022,6 @@
       pullDistance = 0;
     });
 
-
     function shouldOpenPdfDirectly() {
       const smallScreen = window.matchMedia("(max-width: 760px)").matches;
       const mobileUserAgent = /Android.*Mobile|iPhone|iPod|Windows Phone/i.test(navigator.userAgent);
@@ -844,12 +1052,50 @@
       window.scrollTo(0, savedScrollY);
     }
 
-    document.addEventListener("click", (event) => {
+    function triggerDownload(link) {
+      const temporaryLink = document.createElement("a");
+      temporaryLink.href = link.href;
+      temporaryLink.download = link.getAttribute("download") || "";
+      temporaryLink.rel = "noopener";
+      document.body.appendChild(temporaryLink);
+      temporaryLink.click();
+      temporaryLink.remove();
+    }
+
+    document.addEventListener("click", async (event) => {
       const openButton = event.target.closest("[data-open-pdf]");
       if (openButton) {
+        event.preventDefault();
+        if (openButton.dataset.counterAction) {
+          await incrementCounter(openButton.dataset.counterAction);
+        }
         openPdfViewer(openButton.dataset.openPdf, openButton.dataset.title);
+        return;
       }
+
+      const counterTarget = event.target.closest("[data-counter-action]");
+      if (!counterTarget) return;
+
+      if (counterTarget.matches("a")) {
+        event.preventDefault();
+        await incrementCounter(counterTarget.dataset.counterAction);
+
+        if (counterTarget.hasAttribute("download")) {
+          triggerDownload(counterTarget);
+        } else if (counterTarget.target === "_blank") {
+          window.open(counterTarget.href, "_blank", "noopener");
+        } else {
+          window.location.href = counterTarget.href;
+        }
+        return;
+      }
+
+      incrementCounter(counterTarget.dataset.counterAction);
     });
+
+    if (pageCounterChip) {
+      pageCounterChip.addEventListener("click", resetAllCounters);
+    }
 
     pdfViewerClose.addEventListener("click", closePdfViewer);
 
@@ -859,8 +1105,16 @@
       }
     });
 
-    search.addEventListener("input", render);
+    search.addEventListener("input", () => {
+      render();
+      refreshVisibleCounters();
+    });
+
     render();
+    if (!skipCounterIncrement) {
+      incrementCounter("page");
+    }
+    loadVisibleCounters();
   </script>
 </body>
 </html>

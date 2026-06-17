@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: apertura PDF diretta su smartphone; visualizzatore interno a pieno schermo con X su schermi grandi -->
+  <!-- Versione: 17-06-2026 - 12:06:25 -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -45,6 +45,7 @@
       color: var(--ink);
       background: #eef2f6;
       line-height: 1.45;
+      overscroll-behavior-y: contain;
     }
 
     a {
@@ -52,6 +53,7 @@
     }
 
     .hero {
+      position: relative;
       min-height: 54vh;
       display: grid;
       align-items: end;
@@ -59,6 +61,47 @@
         linear-gradient(180deg, rgba(8, 26, 46, 0.18), rgba(8, 26, 46, 0.78)),
         url("05 - Foto e video selezionati/04 - Esterno torrino.png") center / cover;
       color: white;
+    }
+
+    .version-badge {
+      position: absolute;
+      top: calc(10px + env(safe-area-inset-top));
+      right: calc(12px + env(safe-area-inset-right));
+      z-index: 2;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(8, 26, 46, 0.48);
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: nowrap;
+      backdrop-filter: blur(5px);
+    }
+
+    .refresh-indicator {
+      position: fixed;
+      top: calc(10px + env(safe-area-inset-top));
+      left: 50%;
+      z-index: 100;
+      transform: translate(-50%, -120%);
+      min-width: 170px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(19, 32, 51, 0.92);
+      color: white;
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
+      opacity: 0;
+      transition: transform 0.16s ease, opacity 0.16s ease;
+      pointer-events: none;
+    }
+
+    .refresh-indicator.is-visible {
+      transform: translate(-50%, 0);
+      opacity: 1;
     }
 
     .hero-inner,
@@ -373,11 +416,20 @@
         height: 42px;
         font-size: 26px;
       }
+
+      .version-badge {
+        top: calc(8px + env(safe-area-inset-top));
+        right: calc(8px + env(safe-area-inset-right));
+        font-size: 0.64rem;
+        padding: 3px 7px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="refresh-indicator" id="refreshIndicator">Trascina per aggiornare</div>
   <header class="hero">
+    <div class="version-badge">Versione: 17-06-2026 - 12:06:25</div>
     <div class="hero-inner">
       <p class="eyebrow">Indice documentale</p>
       <h1>Castiglione</h1>
@@ -611,6 +663,7 @@
     const search = document.getElementById("search");
     const summary = document.getElementById("summary");
     const empty = document.getElementById("empty");
+    const refreshIndicator = document.getElementById("refreshIndicator");
 
     const pdfViewer = document.getElementById("pdfViewer");
     const pdfFrame = document.getElementById("pdfFrame");
@@ -697,6 +750,68 @@
       empty.style.display = filtered.length ? "none" : "block";
     }
 
+
+
+    let pullStartY = 0;
+    let pullDistance = 0;
+    let pullActive = false;
+    let refreshStarted = false;
+
+    function isAtTop() {
+      return (window.scrollY || document.documentElement.scrollTop || 0) <= 0;
+    }
+
+    function showRefreshIndicator(text) {
+      if (!refreshIndicator) return;
+      refreshIndicator.textContent = text;
+      refreshIndicator.classList.add("is-visible");
+    }
+
+    function hideRefreshIndicator() {
+      if (!refreshIndicator || refreshStarted) return;
+      refreshIndicator.classList.remove("is-visible");
+    }
+
+    function refreshHtmlFile() {
+      if (refreshStarted) return;
+      refreshStarted = true;
+      showRefreshIndicator("Aggiorno la pagina...");
+
+      const refreshedUrl = new URL(window.location.href);
+      refreshedUrl.searchParams.set("refresh", Date.now().toString());
+
+      window.setTimeout(() => {
+        window.location.replace(refreshedUrl.toString());
+      }, 350);
+    }
+
+    document.addEventListener("touchstart", (event) => {
+      if (!isAtTop() || pdfViewer.classList.contains("is-open")) return;
+      pullStartY = event.touches[0].clientY;
+      pullDistance = 0;
+      pullActive = true;
+    }, { passive: true });
+
+    document.addEventListener("touchmove", (event) => {
+      if (!pullActive || refreshStarted) return;
+      pullDistance = event.touches[0].clientY - pullStartY;
+
+      if (pullDistance > 25 && isAtTop()) {
+        event.preventDefault();
+        showRefreshIndicator(pullDistance > 90 ? "Rilascia per aggiornare" : "Trascina per aggiornare");
+      }
+    }, { passive: false });
+
+    document.addEventListener("touchend", () => {
+      if (!pullActive || refreshStarted) return;
+      if (pullDistance > 90 && isAtTop()) {
+        refreshHtmlFile();
+      } else {
+        hideRefreshIndicator();
+      }
+      pullActive = false;
+      pullDistance = 0;
+    });
 
 
     function shouldOpenPdfDirectly() {

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: 17-06-2026 - 14:31:00 -->
+  <!-- Versione: 17-06-2026 - 17:16:00 -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -31,26 +31,16 @@
       --shadow: 0 16px 38px rgba(19, 32, 51, 0.13);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       color: var(--ink);
       background: #eef2f6;
       line-height: 1.45;
-      overscroll-behavior-y: contain;
     }
-
-    a {
-      color: inherit;
-    }
+    a { color: inherit; }
 
     .hero {
       position: relative;
@@ -63,43 +53,61 @@
       color: white;
     }
 
-    .hero-inner,
-    main {
+    .version-area {
+      position: absolute;
+      top: calc(10px + env(safe-area-inset-top));
+      right: calc(12px + env(safe-area-inset-right));
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 9px;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 999px;
+      background: rgba(19, 32, 51, .58);
+      color: rgba(255,255,255,.92);
+      font-size: .72rem;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: nowrap;
+      backdrop-filter: blur(5px);
+    }
+
+    .hero-inner, main {
       width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
     }
-
-    .hero-inner {
-      padding: 56px 0 34px;
-    }
-
+    .hero-inner { padding: 56px 0 34px; }
     .eyebrow {
       margin: 0 0 8px;
       color: #f4d887;
-      font-size: 0.8rem;
+      font-size: .8rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0;
     }
-
     h1 {
       margin: 0;
       font-size: clamp(2.4rem, 8vw, 5.8rem);
-      line-height: 0.96;
+      line-height: .96;
       letter-spacing: 0;
     }
-
     .subtitle {
       max-width: 680px;
       margin: 18px 0 0;
       font-size: clamp(1rem, 2.6vw, 1.25rem);
-      color: rgba(255, 255, 255, 0.92);
+      color: rgba(255,255,255,.92);
     }
 
-    main {
-      padding: 22px 0 52px;
-    }
-
+    main { padding: 22px 0 52px; }
     .toolbar {
       position: sticky;
       top: 0;
@@ -110,11 +118,10 @@
       align-items: center;
       margin: 0 0 18px;
       padding: 12px;
-      background: rgba(238, 242, 246, 0.94);
+      background: rgba(238,242,246,.94);
       backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(216, 224, 235, 0.7);
+      border-bottom: 1px solid rgba(216,224,235,.7);
     }
-
     .search {
       width: 100%;
       min-height: 44px;
@@ -126,25 +133,17 @@
       font-size: 1rem;
       outline: none;
     }
-
     .search:focus {
       border-color: var(--blue-2);
-      box-shadow: 0 0 0 3px rgba(46, 116, 181, 0.16);
+      box-shadow: 0 0 0 3px rgba(46,116,181,.16);
     }
-
-    .summary {
-      white-space: nowrap;
-      color: var(--muted);
-      font-size: 0.93rem;
-    }
-
+    .summary { white-space: nowrap; color: var(--muted); font-size: .93rem; }
     .top-actions {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
       margin-bottom: 18px;
     }
-
     .main-doc {
       display: grid;
       gap: 12px;
@@ -155,27 +154,9 @@
       background: var(--paper);
       box-shadow: var(--shadow);
     }
-
-    .main-doc h2 {
-      margin: 0;
-      color: var(--blue);
-      font-size: 1.18rem;
-      letter-spacing: 0;
-    }
-
-    .main-doc p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.96rem;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
+    .main-doc h2 { margin: 0; color: var(--blue); font-size: 1.18rem; letter-spacing: 0; }
+    .main-doc p { margin: 0; color: var(--muted); font-size: .96rem; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .btn {
       display: inline-flex;
       min-height: 38px;
@@ -187,46 +168,18 @@
       border-radius: 6px;
       background: var(--paper);
       color: var(--blue);
-      font-size: 0.94rem;
+      font-size: .94rem;
       font-weight: 700;
       text-decoration: none;
+      cursor: pointer;
     }
+    .btn.primary { border-color: var(--blue); background: var(--blue); color: white; }
+    .btn:hover { border-color: var(--blue-2); box-shadow: 0 4px 14px rgba(19,32,51,.12); }
 
-    .btn.primary {
-      border-color: var(--blue);
-      background: var(--blue);
-      color: white;
-    }
-
-    .btn:hover {
-      border-color: var(--blue-2);
-      box-shadow: 0 4px 14px rgba(19, 32, 51, 0.12);
-    }
-
-    .sections {
-      display: grid;
-      gap: 18px;
-    }
-
-    section {
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--paper);
-    }
-
-    section h2 {
-      margin: 0 0 12px;
-      color: var(--blue);
-      font-size: 1.25rem;
-      letter-spacing: 0;
-    }
-
-    .doc-list {
-      display: grid;
-      gap: 10px;
-    }
-
+    .sections { display: grid; gap: 18px; }
+    section { padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+    section h2 { margin: 0 0 12px; color: var(--blue); font-size: 1.25rem; letter-spacing: 0; }
+    .doc-list { display: grid; gap: 10px; }
     .doc {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -237,18 +190,8 @@
       border-radius: 7px;
       background: #fbfcfe;
     }
-
-    .title {
-      margin: 0 0 4px;
-      font-weight: 800;
-    }
-
-    .meta {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
+    .title { margin: 0 0 4px; font-weight: 800; }
+    .meta { margin: 0; color: var(--muted); font-size: .9rem; }
     .note {
       margin-top: 18px;
       padding: 12px 14px;
@@ -256,9 +199,8 @@
       border-radius: 7px;
       background: #fff8e6;
       color: #4f3a00;
-      font-size: 0.94rem;
+      font-size: .94rem;
     }
-
     .empty {
       display: none;
       padding: 22px;
@@ -269,30 +211,43 @@
       text-align: center;
     }
 
-    body.viewer-open {
-      position: fixed;
-      width: 100%;
-      overflow: hidden;
+    .counter-chip {
+      display: inline-flex;
+      min-width: 30px;
+      min-height: 30px;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border: 1px solid rgba(138,101,0,.55);
+      border-radius: 999px;
+      background: #ffe066;
+      color: #4f3a00;
+      font-size: .83rem;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: 0 3px 10px rgba(19,32,51,.16);
+      white-space: nowrap;
     }
-
-    .pdf-viewer {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: none;
-      background: #dfe5ec;
+    .counter-chip.is-positive {
+      border-color: rgba(150,20,20,.72);
+      background: #d93025;
+      color: #fff;
+      box-shadow: 0 3px 12px rgba(150,20,20,.26);
     }
+    .counter-chip[hidden] { display: none !important; }
+    .counter-chip-main { cursor: pointer; }
+    .counter-chip-mini { min-width: 28px; min-height: 28px; padding: 4px 7px; font-size: .78rem; }
+    .counter-pair { display: inline-flex; align-items: center; gap: 5px; }
+    .counter-letter { margin-right: 3px; font-size: .68rem; font-weight: 900; opacity: .8; }
 
-    .pdf-viewer.is-open {
-      display: block;
-    }
-
+    body.viewer-open { position: fixed; width: 100%; overflow: hidden; }
+    .pdf-viewer { position: fixed; inset: 0; z-index: 50; display: none; background: #dfe5ec; }
+    .pdf-viewer.is-open { display: block; }
     .pdf-frame {
       position: absolute;
       left: 0;
       top: 0;
       width: 100vw;
-      height: 100vh;
       height: 100dvh;
       max-width: none;
       max-height: none;
@@ -301,7 +256,6 @@
       background: #dfe5ec;
       box-shadow: none;
     }
-
     .viewer-close-x {
       position: fixed;
       top: calc(10px + env(safe-area-inset-top));
@@ -314,99 +268,15 @@
       justify-content: center;
       border: 2px solid white;
       border-radius: 50%;
-      background: rgba(19, 32, 51, 0.82);
+      background: rgba(19,32,51,.82);
       color: white;
       font-size: 28px;
       font-weight: 800;
       line-height: 1;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 16px rgba(0,0,0,.35);
       cursor: pointer;
     }
-
-    .viewer-close-x:hover,
-    .viewer-close-x:focus {
-      background: rgba(23, 74, 124, 0.95);
-      outline: none;
-    }
-
-
-    .version-area {
-      position: absolute;
-      top: calc(10px + env(safe-area-inset-top));
-      right: calc(12px + env(safe-area-inset-right));
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .version-badge {
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(8, 26, 46, 0.48);
-      color: rgba(255, 255, 255, 0.88);
-      font-size: 0.72rem;
-      font-weight: 700;
-      line-height: 1.2;
-      white-space: nowrap;
-      backdrop-filter: blur(5px);
-    }
-
-    .counter-chip {
-      display: inline-flex;
-      min-width: 30px;
-      min-height: 30px;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 8px;
-      border: 1px solid rgba(138, 101, 0, 0.55);
-      border-radius: 999px;
-      background: #ffe066;
-      color: #4f3a00;
-      font-size: 0.83rem;
-      font-weight: 900;
-      line-height: 1;
-      box-shadow: 0 3px 10px rgba(19, 32, 51, 0.16);
-      white-space: nowrap;
-    }
-
-    .counter-chip.is-positive {
-      border-color: rgba(150, 0, 0, 0.75);
-      background: #e11d48;
-      color: white;
-      box-shadow: 0 3px 12px rgba(150, 0, 0, 0.28);
-    }
-
-    .counter-chip[hidden] {
-      display: none !important;
-    }
-
-    .counter-chip-main {
-      border-color: rgba(255, 255, 255, 0.55);
-      cursor: pointer;
-    }
-
-    .counter-chip-mini {
-      min-width: 28px;
-      min-height: 28px;
-      padding: 4px 7px;
-      font-size: 0.78rem;
-    }
-
-    .counter-pair {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .counter-letter {
-      margin-right: 3px;
-      font-size: 0.68rem;
-      font-weight: 900;
-      opacity: 0.8;
-    }
+    .viewer-close-x:hover, .viewer-close-x:focus { background: rgba(23,74,124,.95); outline: none; }
 
     .work-progress {
       position: fixed;
@@ -416,59 +286,24 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: rgba(19, 32, 51, 0.36);
+      background: rgba(19,32,51,.36);
       backdrop-filter: blur(3px);
     }
-
-    .work-progress.is-visible {
-      display: flex;
-    }
-
+    .work-progress.is-visible { display: flex; }
     .work-progress-box {
-      width: min(340px, calc(100vw - 42px));
+      width: min(360px, calc(100vw - 42px));
       padding: 18px;
       border-radius: 14px;
       background: white;
       color: var(--ink);
-      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 18px 46px rgba(0,0,0,.28);
       text-align: center;
     }
-
-    .work-progress-title {
-      margin: 0 0 10px;
-      color: var(--blue);
-      font-size: 1rem;
-      font-weight: 900;
-    }
-
-    .work-progress-percent {
-      margin: 0 0 12px;
-      font-size: 1.8rem;
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .work-progress-bar {
-      height: 12px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #e7edf5;
-      border: 1px solid #d2dbe8;
-    }
-
-    .work-progress-fill {
-      width: 0%;
-      height: 100%;
-      border-radius: 999px;
-      background: var(--blue);
-      transition: width 0.08s linear;
-    }
-
-    .work-progress-note {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 0.86rem;
-    }
+    .work-progress-title { margin: 0 0 10px; color: var(--blue); font-size: 1rem; font-weight: 900; }
+    .work-progress-percent { margin: 0 0 12px; font-size: 1.8rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .work-progress-bar { height: 12px; overflow: hidden; border-radius: 999px; background: #e7edf5; border: 1px solid #d2dbe8; }
+    .work-progress-fill { width: 0%; height: 100%; border-radius: 999px; background: var(--blue); transition: width .10s linear; }
+    .work-progress-note { margin: 10px 0 0; color: var(--muted); font-size: .86rem; }
 
     .refresh-indicator {
       position: fixed;
@@ -479,87 +314,37 @@
       transform: translate(-50%, -120%);
       padding: 9px 14px;
       border-radius: 999px;
-      background: rgba(19, 32, 51, 0.9);
+      background: rgba(19,32,51,.9);
       color: white;
-      font-size: 0.88rem;
+      font-size: .88rem;
       font-weight: 800;
       text-align: center;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 8px 22px rgba(0,0,0,.28);
       opacity: 0;
-      transition: transform 0.18s ease, opacity 0.18s ease;
+      transition: transform .18s ease, opacity .18s ease;
       pointer-events: none;
     }
-
-    .refresh-indicator.is-visible {
-      transform: translate(-50%, 0);
-      opacity: 1;
-    }
-
-
-    footer {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 0 0 42px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
+    .refresh-indicator.is-visible { transform: translate(-50%, 0); opacity: 1; }
+    footer { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 0 0 42px; color: var(--muted); font-size: .9rem; }
 
     @media (max-width: 760px) {
-      .hero {
-        min-height: 46vh;
-      }
-
-      .version-area {
-        left: 12px;
-        right: 12px;
-        justify-content: flex-end;
-      }
-
-      .version-badge {
-        max-width: calc(100% - 24px);
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .toolbar,
-      .top-actions {
-        grid-template-columns: 1fr;
-      }
-
-      .summary {
-        white-space: normal;
-      }
-
-      section {
-        padding: 14px;
-      }
-
-      .doc {
-        grid-template-columns: 1fr;
-        align-items: start;
-      }
-
-      .button-row {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .viewer-close-x {
-        width: 42px;
-        height: 42px;
-        font-size: 26px;
-      }
+      .hero { min-height: 46vh; }
+      .version-area { left: 12px; right: 12px; justify-content: flex-end; }
+      .version-badge { max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis; }
+      .toolbar, .top-actions { grid-template-columns: 1fr; }
+      .summary { white-space: normal; }
+      section { padding: 14px; }
+      .doc { grid-template-columns: 1fr; align-items: start; }
+      .button-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .btn { width: 100%; }
+      .viewer-close-x { width: 42px; height: 42px; font-size: 26px; }
     }
   </style>
 </head>
 <body>
   <header class="hero">
     <div class="version-area">
-      <div class="version-badge">Versione: 17-06-2026 - 14:31:00</div>
+      <div class="version-badge">Versione: 17-06-2026 - 17:16:00</div>
       <button class="counter-chip counter-chip-main" id="pageCounterChip" type="button" title="Visite pagina - clicca per azzerare tutti i contatori" hidden>0</button>
     </div>
     <div class="hero-inner">
@@ -574,40 +359,32 @@
       <input class="search" id="search" type="search" placeholder="Cerca per codice, titolo o argomento" autocomplete="off">
       <div class="summary" id="summary"></div>
     </div>
-
     <div class="top-actions" id="featured"></div>
     <div class="sections" id="sections"></div>
     <div class="empty" id="empty">Nessun documento corrisponde alla ricerca.</div>
-
-    <div class="note">
-      Su smartphone i pulsanti Apri aprono il PDF direttamente nel browser del telefono, per consentire zoom e pieno schermo. Su computer e tablet grandi il PDF si apre nella pagina con la X di chiusura. I pulsanti Scarica salvano il file sul dispositivo quando il browser lo consente.
-    </div>
+    <div class="note">Su smartphone i pulsanti Apri aprono il PDF direttamente nel browser del telefono, per consentire zoom e pieno schermo. Su computer e tablet grandi il PDF si apre nella pagina con la X di chiusura. I pulsanti Scarica salvano il file sul dispositivo quando il browser lo consente.</div>
   </main>
 
-
-
   <div class="refresh-indicator" id="refreshIndicator" aria-live="polite"></div>
-
-  <div class="work-progress" id="workProgress" aria-hidden="true">
-    <div class="work-progress-box" role="status" aria-live="polite">
-      <p class="work-progress-title" id="workProgressTitle">Preparazione in corso</p>
-      <p class="work-progress-percent"><span id="workProgressPercent">0</span>%</p>
-      <div class="work-progress-bar" aria-hidden="true">
-        <div class="work-progress-fill" id="workProgressFill"></div>
-      </div>
-      <p class="work-progress-note">Attendi qualche istante...</p>
-    </div>
-  </div>
 
   <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
     <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>
     <button class="viewer-close-x" id="pdfViewerClose" type="button" aria-label="Chiudi PDF e torna all'elenco">×</button>
   </div>
 
+  <div class="work-progress" id="workProgress" aria-hidden="true">
+    <div class="work-progress-box" role="status" aria-live="polite">
+      <p class="work-progress-title" id="workProgressTitle">Preparazione in corso</p>
+      <p class="work-progress-percent"><span id="workProgressPercent">0</span>%</p>
+      <div class="work-progress-bar" aria-hidden="true"><div class="work-progress-fill" id="workProgressFill"></div></div>
+      <p class="work-progress-note" id="workProgressNote">Preparazione collegamento...</p>
+    </div>
+  </div>
+
   <footer></footer>
 
   <script>
-    const documents = [
+const documents = [
       {
         code: "VIDEO",
         title: "Video Castiglione su YouTube",
@@ -814,60 +591,34 @@
     const workProgressTitle = document.getElementById("workProgressTitle");
     const workProgressPercent = document.getElementById("workProgressPercent");
     const workProgressFill = document.getElementById("workProgressFill");
+    const workProgressNote = document.getElementById("workProgressNote");
     let workProgressTimer = null;
 
     const queryParams = new URLSearchParams(window.location.search);
     const adminCounters = queryParams.get("v") === "77";
     const skipCounterIncrement = adminCounters;
-
-    const counterNamespace = "socim";
-    const counterPrefix = "castiglione-";
+    const counterNamespace = "castiglione-documenti-mazzarisi";
     const counterValues = {};
     const counterKeys = ["page", "video-open", ...documents.flatMap((doc) => doc.external ? [] : [`open-${doc.code}`, `download-${doc.code}`])];
-
-    const counterBackends = [
-      {
-        name: "mileshilliard",
-        hit: (ns, key) => `https://countapi.mileshilliard.com/api/v1/hit/${ns}_${key}`,
-        get: (ns, key) => `https://countapi.mileshilliard.com/api/v1/get/${ns}_${key}`,
-        set: (ns, key, value) => `https://countapi.mileshilliard.com/api/v1/set/${ns}_${key}?value=${value}`,
-        map: (json) => Number(json.value ?? json.count)
-      },
-      {
-        name: "countapi.xyz",
-        hit: (ns, key) => `https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`,
-        get: (ns, key) => `https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`,
-        set: (ns, key, value) => `https://api.countapi.xyz/set/${encodeURIComponent(ns)}/${encodeURIComponent(key)}?value=${value}`,
-        map: (json) => Number(json.value)
-      }
-    ];
 
     const pdfViewer = document.getElementById("pdfViewer");
     const pdfFrame = document.getElementById("pdfFrame");
     const pdfViewerClose = document.getElementById("pdfViewerClose");
     let savedScrollY = 0;
 
-    function pdfUrl(file) {
-      return encodeURI(file);
-    }
-
+    function pdfUrl(file) { return encodeURI(file); }
     function escapeHtml(text) {
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
-    function counterChipHtml(key, label, extraClass = "") {
+    function counterChipHtml(key, label = "") {
       if (!adminCounters) return "";
       const safeKey = escapeHtml(key);
       const safeLabel = escapeHtml(label);
       const value = Number.isFinite(counterValues[key]) ? counterValues[key] : 0;
-      const positiveClass = value > 0 ? "is-positive" : "";
       const prefix = label ? `<span class="counter-letter">${safeLabel}</span>` : "";
-      return `<span class="counter-chip counter-chip-mini ${positiveClass} ${extraClass}" data-counter-chip="${safeKey}" title="${safeLabel ? `${safeLabel}: ` : ""}${safeKey}">${prefix}${value}</span>`;
+      const positiveClass = value > 0 ? "is-positive" : "";
+      return `<span class="counter-chip counter-chip-mini ${positiveClass}" data-counter-chip="${safeKey}" title="${safeLabel ? `${safeLabel}: ` : ""}${safeKey}">${prefix}${value}</span>`;
     }
 
     function actions(doc) {
@@ -876,7 +627,7 @@
         return `
           <div class="button-row">
             <a class="btn primary" href="${href}" target="_blank" rel="noopener" data-counter-action="video-open">Apri video</a>
-            ${counterChipHtml("video-open", "")}
+            ${counterChipHtml("video-open")}
           </div>
         `;
       }
@@ -895,10 +646,7 @@
     function documentCard(doc) {
       return `
         <article class="doc" data-search="${(doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase()}">
-          <div>
-            <p class="title">${doc.title}</p>
-            <p class="meta">${doc.note} ${doc.pages} pagine - ${doc.size}</p>
-          </div>
+          <div><p class="title">${doc.title}</p><p class="meta">${doc.note} ${doc.pages} pagine - ${doc.size}</p></div>
           ${actions(doc)}
         </article>
       `;
@@ -920,187 +668,131 @@
         const haystack = (doc.code + " " + doc.title + " " + doc.group + " " + doc.note).toLowerCase();
         return !query || haystack.includes(query);
       });
-
       const featuredDocs = filtered.filter((doc) => doc.featured);
       const normalDocs = filtered.filter((doc) => !doc.featured);
       const groups = [...new Set(normalDocs.map((doc) => doc.group))];
-
       featured.innerHTML = featuredDocs.map(featuredCard).join("");
       sections.innerHTML = groups.map((group) => {
         const docs = normalDocs.filter((doc) => doc.group === group);
-        return `
-          <section>
-            <h2>${group}</h2>
-            <div class="doc-list">
-              ${docs.map(documentCard).join("")}
-            </div>
-          </section>
-        `;
+        return `<section><h2>${group}</h2><div class="doc-list">${docs.map(documentCard).join("")}</div></section>`;
       }).join("");
-
       summary.textContent = `${filtered.length} documenti indicizzati`;
       empty.style.display = filtered.length ? "none" : "block";
     }
 
-    function counterStorageKey(name) {
-      return `${counterPrefix}${name}`.replace(/[^a-zA-Z0-9_-]/g, "-");
+    function counterUrls(name, action = "get") {
+      const ns = counterNamespace;
+      const key = name;
+      const joined = `${ns}_${key}`;
+      if (action === "hit") return [
+        `https://countapi.mileshilliard.com/api/v1/hit/${joined}`,
+        `https://countapi.store/hit/${encodeURIComponent(key)}/visite`,
+        `https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`
+      ];
+      if (action === "set") return [
+        `https://countapi.mileshilliard.com/api/v1/set/${joined}?value=0`,
+        `https://api.countapi.xyz/set/${encodeURIComponent(ns)}/${encodeURIComponent(key)}?value=0`
+      ];
+      return [
+        `https://countapi.mileshilliard.com/api/v1/get/${joined}`,
+        `https://countapi.store/get/${encodeURIComponent(key)}/visite`,
+        `https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`
+      ];
     }
 
-    async function fetchCounterJson(url, timeoutMs = 3500) {
-      const controller = new AbortController();
-      const timer = window.setTimeout(() => controller.abort(), timeoutMs);
-      try {
-        const response = await fetch(url, {
-          signal: controller.signal,
-          cache: "no-store",
-          headers: { "Accept": "application/json" }
-        });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
-      } finally {
-        window.clearTimeout(timer);
+    function extractCounterValue(data) {
+      for (const item of [data?.value, data?.count]) {
+        const number = Number(item);
+        if (Number.isFinite(number)) return number;
       }
+      return 0;
     }
 
-    async function counterCascade(name, mode, value = 0) {
-      const key = counterStorageKey(name);
-      for (const backend of counterBackends) {
+    async function firstCounterValue(name, action = "get") {
+      let lastError = null;
+      for (const rawUrl of counterUrls(name, action)) {
+        const url = rawUrl + (rawUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
         try {
-          const url = backend[mode](counterNamespace, key, value);
-          const data = await fetchCounterJson(url);
-          const number = backend.map(data);
-          if (Number.isFinite(number)) return number;
-        } catch (error) {
-          console.warn(`Contatore ${backend.name} non disponibile per ${mode} ${name}:`, error.message);
-        }
+          const response = await fetch(url, { cache: "no-store" });
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          const value = extractCounterValue(await response.json());
+          if (Number.isFinite(value)) return value;
+        } catch (error) { lastError = error; }
       }
-      throw new Error(`Nessun backend contatore disponibile per ${name}`);
-    }
-
-    async function getCounter(name) {
-      try {
-        const value = await counterCascade(name, "get");
-        counterValues[name] = value;
-        updateCounterChip(name, value);
-        return value;
-      } catch (error) {
-        console.warn(error.message);
-        const value = counterValues[name] || 0;
-        updateCounterChip(name, value);
-        return value;
-      }
-    }
-
-    async function incrementCounter(name) {
-      if (!name) return 0;
-      if (skipCounterIncrement) return getCounter(name);
-      try {
-        const value = await counterCascade(name, "hit");
-        counterValues[name] = value;
-        updateCounterChip(name, value);
-        return value;
-      } catch (error) {
-        console.warn(error.message);
-        return counterValues[name] || 0;
-      }
-    }
-
-    async function resetCounter(name) {
-      const key = counterStorageKey(name);
-      let done = false;
-      let lastValue = 0;
-      for (const backend of counterBackends) {
-        if (typeof backend.set !== "function") continue;
-        try {
-          const data = await fetchCounterJson(backend.set(counterNamespace, key, 0));
-          const value = backend.map(data);
-          if (Number.isFinite(value)) lastValue = value;
-          done = true;
-        } catch (error) {
-          console.warn(`Azzeramento ${backend.name} non riuscito per ${name}:`, error.message);
-        }
-      }
-      if (!done) throw new Error(`Azzeramento non riuscito per ${name}`);
-      counterValues[name] = lastValue;
-      updateCounterChip(name, lastValue);
-      return lastValue;
-    }
-
-    function applyCounterChipColor(chip, number) {
-      if (!chip) return;
-      chip.classList.toggle("is-positive", number > 0);
+      if (lastError) throw lastError;
+      return 0;
     }
 
     function updateCounterChip(name, value) {
       const number = Number.isFinite(value) ? value : 0;
+      const isPositive = number > 0;
       if (name === "page" && pageCounterChip) {
         pageCounterChip.textContent = number;
         pageCounterChip.hidden = !adminCounters;
-        applyCounterChipColor(pageCounterChip, number);
+        pageCounterChip.classList.toggle("is-positive", isPositive);
       }
       document.querySelectorAll(`[data-counter-chip="${name}"]`).forEach((chip) => {
-        const letterText = chip.querySelector(".counter-letter")?.textContent || "";
+        const letter = chip.querySelector(".counter-letter");
         chip.textContent = "";
-        if (letterText) {
-          const letter = document.createElement("span");
-          letter.className = "counter-letter";
-          letter.textContent = letterText;
-          chip.appendChild(letter);
-        }
+        if (letter) chip.appendChild(letter);
         chip.appendChild(document.createTextNode(number));
-        applyCounterChipColor(chip, number);
+        chip.classList.toggle("is-positive", isPositive);
       });
+    }
+
+    async function getCounter(name) {
+      try {
+        const value = await firstCounterValue(name, "get");
+        counterValues[name] = value;
+        updateCounterChip(name, value);
+        return value;
+      } catch (error) { console.warn(error); return counterValues[name] || 0; }
+    }
+
+    async function incrementCounter(name) {
+      if (skipCounterIncrement) return getCounter(name);
+      try {
+        const value = await firstCounterValue(name, "hit");
+        counterValues[name] = value;
+        updateCounterChip(name, value);
+        return value;
+      } catch (error) { console.warn(error); return counterValues[name] || 0; }
+    }
+
+    async function resetCounter(name) {
+      const value = await firstCounterValue(name, "set");
+      counterValues[name] = value;
+      updateCounterChip(name, value);
+      return value;
     }
 
     function refreshVisibleCounters() {
       if (!adminCounters) return;
-      counterKeys.forEach((key) => {
-        if (Object.prototype.hasOwnProperty.call(counterValues, key)) updateCounterChip(key, counterValues[key]);
-      });
+      counterKeys.forEach((key) => { if (Object.prototype.hasOwnProperty.call(counterValues, key)) updateCounterChip(key, counterValues[key]); });
     }
 
     async function loadVisibleCounters() {
       if (!adminCounters) return;
-      if (pageCounterChip) pageCounterChip.hidden = false;
       await Promise.all(counterKeys.map((key) => getCounter(key)));
+      render();
       refreshVisibleCounters();
     }
 
     async function resetAllCounters() {
       if (!adminCounters) return;
-      const confirmed = window.confirm("Vuoi azzerare tutti i contatori di Castiglione?");
-      if (!confirmed) return;
-      if (pageCounterChip) pageCounterChip.textContent = "...";
+      if (!window.confirm("Vuoi davvero azzerare tutti i contatori?")) return;
       try {
-        for (const key of counterKeys) await resetCounter(key);
+        await Promise.all(counterKeys.map((key) => resetCounter(key)));
+        render();
         refreshVisibleCounters();
         window.alert("Contatori azzerati.");
-      } catch (error) {
-        console.warn(error.message);
-        window.alert("Non sono riuscito ad azzerare tutti i contatori. Riprova tra qualche secondo.");
-      }
+      } catch (error) { window.alert("Non sono riuscito ad azzerare tutti i contatori. Riprova tra qualche secondo."); }
     }
 
-    let pullStartY = 0;
-    let pullDistance = 0;
-    let pullActive = false;
-    let refreshStarted = false;
-
-    function isAtTop() {
-      return (window.scrollY || document.documentElement.scrollTop || 0) <= 0;
-    }
-
-    function showRefreshIndicator(text) {
-      if (!refreshIndicator) return;
-      refreshIndicator.textContent = text;
-      refreshIndicator.classList.add("is-visible");
-    }
-
-    function hideRefreshIndicator() {
-      if (!refreshIndicator || refreshStarted) return;
-      refreshIndicator.classList.remove("is-visible");
-    }
-
+    let pullStartY = 0, pullDistance = 0, pullActive = false, refreshStarted = false;
+    function isAtTop() { return (window.scrollY || document.documentElement.scrollTop || 0) <= 0; }
+    function showRefreshIndicator(text) { if (!refreshIndicator) return; refreshIndicator.textContent = text; refreshIndicator.classList.add("is-visible"); }
+    function hideRefreshIndicator() { if (!refreshIndicator || refreshStarted) return; refreshIndicator.classList.remove("is-visible"); }
     function refreshHtmlFile() {
       if (refreshStarted) return;
       refreshStarted = true;
@@ -1109,14 +801,10 @@
       refreshedUrl.searchParams.set("refresh", Date.now().toString());
       window.setTimeout(() => window.location.replace(refreshedUrl.toString()), 350);
     }
-
     document.addEventListener("touchstart", (event) => {
       if (!isAtTop() || pdfViewer.classList.contains("is-open")) return;
-      pullStartY = event.touches[0].clientY;
-      pullDistance = 0;
-      pullActive = true;
+      pullStartY = event.touches[0].clientY; pullDistance = 0; pullActive = true;
     }, { passive: true });
-
     document.addEventListener("touchmove", (event) => {
       if (!pullActive || refreshStarted) return;
       pullDistance = event.touches[0].clientY - pullStartY;
@@ -1125,18 +813,16 @@
         showRefreshIndicator(pullDistance > 90 ? "Rilascia per aggiornare" : "Trascina per aggiornare");
       }
     }, { passive: false });
-
     document.addEventListener("touchend", () => {
       if (!pullActive || refreshStarted) return;
-      if (pullDistance > 90 && isAtTop()) refreshHtmlFile();
-      else hideRefreshIndicator();
-      pullActive = false;
-      pullDistance = 0;
+      if (pullDistance > 90 && isAtTop()) refreshHtmlFile(); else hideRefreshIndicator();
+      pullActive = false; pullDistance = 0;
     });
 
-    function setWorkProgress(percent, title) {
+    function setWorkProgress(percent, title, note) {
       const value = Math.max(0, Math.min(100, Math.round(percent)));
       if (title && workProgressTitle) workProgressTitle.textContent = title;
+      if (note && workProgressNote) workProgressNote.textContent = note;
       if (workProgressPercent) workProgressPercent.textContent = String(value);
       if (workProgressFill) workProgressFill.style.width = `${value}%`;
     }
@@ -1144,43 +830,30 @@
     function showWorkProgress(title = "Preparazione in corso") {
       if (!workProgress) return;
       if (workProgressTimer) window.clearInterval(workProgressTimer);
-      setWorkProgress(0, title);
+      setWorkProgress(0, title, "Sto preparando l'apertura...");
       workProgress.classList.add("is-visible");
       workProgress.setAttribute("aria-hidden", "false");
       let percent = 0;
       workProgressTimer = window.setInterval(() => {
-        const step = percent < 55 ? 8 : percent < 82 ? 5 : 2;
-        percent = Math.min(96, percent + step);
-        setWorkProgress(percent);
-        if (percent >= 96) {
-          window.clearInterval(workProgressTimer);
-          workProgressTimer = null;
-        }
-      }, 75);
+        const step = percent < 40 ? 5 : percent < 70 ? 3 : 1;
+        percent = Math.min(88, percent + step);
+        setWorkProgress(percent, null, percent >= 80 ? "Richiesta inviata, il file può richiedere ancora tempo..." : "Lo smartphone sta lavorando...");
+        if (percent >= 88) { window.clearInterval(workProgressTimer); workProgressTimer = null; }
+      }, 120);
     }
 
     function hideWorkProgress() {
-      if (workProgressTimer) {
-        window.clearInterval(workProgressTimer);
-        workProgressTimer = null;
-      }
+      if (workProgressTimer) { window.clearInterval(workProgressTimer); workProgressTimer = null; }
       if (!workProgress) return;
       workProgress.classList.remove("is-visible");
       workProgress.setAttribute("aria-hidden", "true");
-      setWorkProgress(0);
+      setWorkProgress(0, null, "Preparazione collegamento...");
     }
 
     function completeWorkProgress(callback) {
-      window.setTimeout(() => {
-        if (workProgressTimer) {
-          window.clearInterval(workProgressTimer);
-          workProgressTimer = null;
-        }
-        setWorkProgress(100, "Apertura in corso");
-        window.setTimeout(() => {
-          if (typeof callback === "function") callback();
-        }, 180);
-      }, 850);
+      if (workProgressTimer) { window.clearInterval(workProgressTimer); workProgressTimer = null; }
+      setWorkProgress(88, "Apertura in corso", "Richiesta inviata: il caricamento vero continuerà nel browser.");
+      window.setTimeout(() => { if (typeof callback === "function") callback(); }, 450);
     }
 
     function progressTitleForElement(element) {
@@ -1196,10 +869,7 @@
     }
 
     function openPdfViewer(url, title) {
-      if (shouldOpenPdfDirectly()) {
-        window.location.href = url;
-        return;
-      }
+      if (shouldOpenPdfDirectly()) { window.location.href = url; return; }
       savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
       document.body.style.top = `-${savedScrollY}px`;
       document.body.classList.add("viewer-open");
@@ -1207,7 +877,7 @@
       pdfViewer.classList.add("is-open");
       pdfViewer.setAttribute("aria-hidden", "false");
       pdfViewerClose.focus();
-      window.setTimeout(hideWorkProgress, 350);
+      window.setTimeout(hideWorkProgress, 900);
     }
 
     function closePdfViewer() {
@@ -1229,6 +899,12 @@
       temporaryLink.remove();
     }
 
+    function continueLinkAction(link) {
+      if (link.hasAttribute("download")) { triggerDownload(link); window.setTimeout(hideWorkProgress, 1200); }
+      else if (link.target === "_blank") { window.open(link.href, "_blank", "noopener"); window.setTimeout(hideWorkProgress, 700); }
+      else window.location.href = link.href;
+    }
+
     document.addEventListener("click", (event) => {
       const openButton = event.target.closest("[data-open-pdf]");
       if (openButton) {
@@ -1238,43 +914,22 @@
         completeWorkProgress(() => openPdfViewer(openButton.dataset.openPdf, openButton.dataset.title));
         return;
       }
-
       const counterTarget = event.target.closest("[data-counter-action]");
       if (!counterTarget) return;
-
       if (counterTarget.matches("a")) {
         event.preventDefault();
         incrementCounter(counterTarget.dataset.counterAction);
         showWorkProgress(progressTitleForElement(counterTarget));
-        completeWorkProgress(() => {
-          if (counterTarget.hasAttribute("download")) {
-            triggerDownload(counterTarget);
-            window.setTimeout(hideWorkProgress, 700);
-          } else if (counterTarget.target === "_blank") {
-            window.open(counterTarget.href, "_blank", "noopener");
-            window.setTimeout(hideWorkProgress, 350);
-          } else {
-            window.location.href = counterTarget.href;
-          }
-        });
+        completeWorkProgress(() => continueLinkAction(counterTarget));
         return;
       }
-
       incrementCounter(counterTarget.dataset.counterAction);
     });
 
     if (pageCounterChip) pageCounterChip.addEventListener("click", resetAllCounters);
     pdfViewerClose.addEventListener("click", closePdfViewer);
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && pdfViewer.classList.contains("is-open")) closePdfViewer();
-    });
-
-    search.addEventListener("input", () => {
-      render();
-      refreshVisibleCounters();
-    });
-
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape" && pdfViewer.classList.contains("is-open")) closePdfViewer(); });
+    search.addEventListener("input", () => { render(); refreshVisibleCounters(); });
     render();
     if (!skipCounterIncrement) incrementCounter("page");
     loadVisibleCounters();

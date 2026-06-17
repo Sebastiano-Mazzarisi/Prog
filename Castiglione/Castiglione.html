@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: 17-06-2026 - 13:35:00 -->
+  <!-- Versione: 17-06-2026 - 13:36:05 -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -490,7 +490,7 @@
 <body>
   <header class="hero">
     <div class="version-area">
-      <div class="version-badge">Versione: 17-06-2026 - 13:35:00</div>
+      <div class="version-badge">Versione: 17-06-2026 - 13:36:05</div>
       <button class="counter-chip counter-chip-main" id="pageCounterChip" type="button" title="Visite pagina - clicca per azzerare tutti i contatori" hidden>0</button>
     </div>
     <div class="hero-inner">
@@ -516,8 +516,6 @@
   </main>
 
 
-
-  <div class="refresh-indicator" id="refreshIndicator" aria-live="polite"></div>
 
   <div class="pdf-viewer" id="pdfViewer" aria-hidden="true">
     <iframe class="pdf-frame" id="pdfFrame" title="Visualizzatore PDF"></iframe>
@@ -734,10 +732,30 @@
     const queryParams = new URLSearchParams(window.location.search);
     const adminCounters = queryParams.get("v") === "77";
     const skipCounterIncrement = adminCounters;
-    const counterNamespace = "castiglione-documenti-mazzarisi";
-    const counterApiBase = "https://api.counterapi.dev/v1";
+
+    // Contatori nello stesso stile dei file Contatori.html / Vendesi.html.
+    // ?v=77: legge e mostra i valori, ma NON incrementa.
+    const counterNamespace = "socim";
+    const counterPrefix = "castiglione-";
     const counterValues = {};
     const counterKeys = ["page", "video-open", ...documents.flatMap((doc) => doc.external ? [] : [`open-${doc.code}`, `download-${doc.code}`])];
+
+    const counterBackends = [
+      {
+        name: "mileshilliard",
+        hit: (ns, key) => `https://countapi.mileshilliard.com/api/v1/hit/${ns}_${key}`,
+        get: (ns, key) => `https://countapi.mileshilliard.com/api/v1/get/${ns}_${key}`,
+        set: (ns, key, value) => `https://countapi.mileshilliard.com/api/v1/set/${ns}_${key}?value=${value}`,
+        map: (json) => Number(json.value ?? json.count)
+      },
+      {
+        name: "countapi.xyz",
+        hit: (ns, key) => `https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`,
+        get: (ns, key) => `https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`,
+        set: (ns, key, value) => `https://api.countapi.xyz/set/${encodeURIComponent(ns)}/${encodeURIComponent(key)}?value=${value}`,
+        map: (json) => Number(json.value)
+      }
+    ];
 
     const pdfViewer = document.getElementById("pdfViewer");
     const pdfFrame = document.getElementById("pdfFrame");
@@ -839,77 +857,62 @@
     }
 
 
-    function counterUrl(name, action = "") {
-      const namespace = encodeURIComponent(counterNamespace);
-      const key = encodeURIComponent(name);
-      return `${counterApiBase}/${namespace}/${key}${action ? `/${action}` : ""}`;
+    function counterStorageKey(name) {
+      return `${counterPrefix}${name}`.replace(/[^a-zA-Z0-9_-]/g, "-");
     }
 
-    function extractCounterValue(data) {
-      function scan(value, depth = 0) {
-        if (depth > 4 || value === null || value === undefined) return null;
-
-        if (typeof value === "number" && Number.isFinite(value)) return value;
-
-        if (typeof value === "string" && value.trim() !== "") {
-          const number = Number(value);
-          if (Number.isFinite(number)) return number;
-        }
-
-        if (typeof value === "object") {
-          const preferred = ["value", "count", "total", "up_count", "result", "data"];
-          for (const key of preferred) {
-            if (Object.prototype.hasOwnProperty.call(value, key)) {
-              const found = scan(value[key], depth + 1);
-              if (found !== null) return found;
-            }
-          }
-
-          for (const item of Object.values(value)) {
-            const found = scan(item, depth + 1);
-            if (found !== null) return found;
-          }
-        }
-
-        return null;
-      }
-
-      const value = scan(data);
-      return value === null ? 0 : value;
-    }
-
-    async function counterRequest(name, action = "") {
-      const response = await fetch(counterUrl(name, action), {
-        cache: "no-store",
-        headers: { "Accept": "application/json" }
-      });
-      if (!response.ok) throw new Error(`Errore contatore ${name}: ${response.status}`);
-      const data = await response.json();
-      return extractCounterValue(data);
-    }
-
-    function counterPing(name) {
-      const url = `${counterUrl(name, "up")}?t=${Date.now()}`;
-
-      if (window.fetch) {
-        fetch(url, {
-          method: "GET",
+    async function fetchCounterJson(url, timeoutMs = 3500) {
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal,
           cache: "no-store",
-          keepalive: true,
-          mode: "no-cors"
-        }).catch(() => {
-          const img = new Image();
-          img.src = url;
+          headers: { "Accept": "application/json" }
         });
-      } else {
-        const img = new Image();
-        img.src = url;
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+      } finally {
+        window.clearTimeout(timer);
       }
+    }
+
+    async function counterCascade(name, mode, value = 0) {
+      const key = counterStorageKey(name);
+      for (const backend of counterBackends) {
+        try {
+          const url = backend[mode](counterNamespace, key, value);
+          const data = await fetchCounterJson(url);
+          const number = backend.map(data);
+          if (Number.isFinite(number)) return number;
+        } catch (error) {
+          console.warn(`Contatore ${backend.name} non disponibile per ${mode} ${name}:`, error.message);
+        }
+      }
+      throw new Error(`Nessun backend contatore disponibile per ${name}`);
     }
 
     async function getCounter(name) {
       try {
-        const value = await counterRequest(name);
+        const value = await counterCascade(name, "get");
+        counterValues[name] = value;
+        updateCounterChip(name, value);
+        return value;
+      } catch (error) {
+        console.warn(error.message);
+        const value = counterValues[name] || 0;
+        updateCounterChip(name, value);
+        return value;
+      }
+    }
+
+    async function incrementCounter(name) {
+      if (skipCounterIncrement) {
+        return getCounter(name);
+      }
+
+      try {
+        const value = await counterCascade(name, "hit");
         counterValues[name] = value;
         updateCounterChip(name, value);
         return value;
@@ -919,38 +922,27 @@
       }
     }
 
-    async function incrementCounter(name) {
-      if (skipCounterIncrement) {
-        return getCounter(name);
-      }
-
-      counterPing(name);
-      return counterValues[name] || 0;
-    }
-
     async function resetCounter(name) {
-      try {
-        const response = await fetch(`${counterUrl(name, "set")}?count=0&t=${Date.now()}`, { cache: "no-store" });
-        if (!response.ok) throw new Error(`Set non riuscito: ${response.status}`);
-        const data = await response.json();
-        const value = extractCounterValue(data);
-        counterValues[name] = value;
-        updateCounterChip(name, value);
-        return value;
-      } catch (firstError) {
+      const key = counterStorageKey(name);
+      let done = false;
+      let lastValue = 0;
+
+      for (const backend of counterBackends) {
+        if (typeof backend.set !== "function") continue;
         try {
-          const response = await fetch(`${counterUrl(name)}?count=0&t=${Date.now()}`, { cache: "no-store" });
-          if (!response.ok) throw new Error(`Set alternativo non riuscito: ${response.status}`);
-          const data = await response.json();
-          const value = extractCounterValue(data);
-          counterValues[name] = value;
-          updateCounterChip(name, value);
-          return value;
-        } catch (secondError) {
-          console.warn(firstError.message, secondError.message);
-          throw secondError;
+          const data = await fetchCounterJson(backend.set(counterNamespace, key, 0));
+          const value = backend.map(data);
+          if (Number.isFinite(value)) lastValue = value;
+          done = true;
+        } catch (error) {
+          console.warn(`Azzeramento ${backend.name} non riuscito per ${name}:`, error.message);
         }
       }
+
+      if (!done) throw new Error(`Azzeramento non riuscito per ${name}`);
+      counterValues[name] = lastValue;
+      updateCounterChip(name, lastValue);
+      return lastValue;
     }
 
     function updateCounterChip(name, value) {
@@ -990,14 +982,16 @@
 
       if (pageCounterChip) pageCounterChip.textContent = "...";
       try {
-        await Promise.all(counterKeys.map((key) => resetCounter(key)));
+        for (const key of counterKeys) {
+          await resetCounter(key);
+        }
         refreshVisibleCounters();
         window.alert("Contatori azzerati.");
       } catch (error) {
+        console.warn(error.message);
         window.alert("Non sono riuscito ad azzerare tutti i contatori. Riprova tra qualche secondo.");
       }
     }
-
 
 
     let pullStartY = 0;
@@ -1061,7 +1055,6 @@
       pullDistance = 0;
     });
 
-
     function shouldOpenPdfDirectly() {
       const smallScreen = window.matchMedia("(max-width: 760px)").matches;
       const mobileUserAgent = /Android.*Mobile|iPhone|iPod|Windows Phone/i.test(navigator.userAgent);
@@ -1092,15 +1085,48 @@
       window.scrollTo(0, savedScrollY);
     }
 
-    document.addEventListener("click", (event) => {
-      const counterTarget = event.target.closest("[data-counter-action]");
-      if (counterTarget) {
-        incrementCounter(counterTarget.dataset.counterAction);
+    async function handleCounterLink(event, target) {
+      const action = target.dataset.counterAction;
+      const href = target.getAttribute("href");
+      const isLink = target.tagName.toLowerCase() === "a" && href;
+
+      if (isLink) {
+        event.preventDefault();
       }
 
+      await incrementCounter(action);
+
+      if (!isLink) return;
+
+      if (target.hasAttribute("download")) {
+        const a = document.createElement("a");
+        a.href = href;
+        a.download = target.getAttribute("download") || "";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        return;
+      }
+
+      if (target.target === "_blank") {
+        window.open(href, "_blank", "noopener");
+      } else {
+        window.location.href = href;
+      }
+    }
+
+    document.addEventListener("click", async (event) => {
       const openButton = event.target.closest("[data-open-pdf]");
       if (openButton) {
+        event.preventDefault();
+        await incrementCounter(openButton.dataset.counterAction);
         openPdfViewer(openButton.dataset.openPdf, openButton.dataset.title);
+        return;
+      }
+
+      const counterTarget = event.target.closest("[data-counter-action]");
+      if (counterTarget) {
+        await handleCounterLink(event, counterTarget);
       }
     });
 
@@ -1127,5 +1153,6 @@
     }
     loadVisibleCounters();
   </script>
+  <div class="refresh-indicator" id="refreshIndicator" aria-live="polite"></div>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: 17-06-2026 - 15:17:56 -->
+  <!-- Versione: 17-06-2026 - 13:35:00 -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -490,7 +490,7 @@
 <body>
   <header class="hero">
     <div class="version-area">
-      <div class="version-badge">Versione: 17-06-2026 - 15:17:56</div>
+      <div class="version-badge">Versione: 17-06-2026 - 13:35:00</div>
       <button class="counter-chip counter-chip-main" id="pageCounterChip" type="button" title="Visite pagina - clicca per azzerare tutti i contatori" hidden>0</button>
     </div>
     <div class="hero-inner">
@@ -846,20 +846,65 @@
     }
 
     function extractCounterValue(data) {
-      if (!data || typeof data !== "object") return 0;
-      const candidates = [data.count, data.value, data.data, data.result];
-      for (const item of candidates) {
-        const number = Number(item);
-        if (Number.isFinite(number)) return number;
+      function scan(value, depth = 0) {
+        if (depth > 4 || value === null || value === undefined) return null;
+
+        if (typeof value === "number" && Number.isFinite(value)) return value;
+
+        if (typeof value === "string" && value.trim() !== "") {
+          const number = Number(value);
+          if (Number.isFinite(number)) return number;
+        }
+
+        if (typeof value === "object") {
+          const preferred = ["value", "count", "total", "up_count", "result", "data"];
+          for (const key of preferred) {
+            if (Object.prototype.hasOwnProperty.call(value, key)) {
+              const found = scan(value[key], depth + 1);
+              if (found !== null) return found;
+            }
+          }
+
+          for (const item of Object.values(value)) {
+            const found = scan(item, depth + 1);
+            if (found !== null) return found;
+          }
+        }
+
+        return null;
       }
-      return 0;
+
+      const value = scan(data);
+      return value === null ? 0 : value;
     }
 
     async function counterRequest(name, action = "") {
-      const response = await fetch(counterUrl(name, action), { cache: "no-store", keepalive: true });
+      const response = await fetch(counterUrl(name, action), {
+        cache: "no-store",
+        headers: { "Accept": "application/json" }
+      });
       if (!response.ok) throw new Error(`Errore contatore ${name}: ${response.status}`);
       const data = await response.json();
       return extractCounterValue(data);
+    }
+
+    function counterPing(name) {
+      const url = `${counterUrl(name, "up")}?t=${Date.now()}`;
+
+      if (window.fetch) {
+        fetch(url, {
+          method: "GET",
+          cache: "no-store",
+          keepalive: true,
+          mode: "no-cors"
+        }).catch(() => {
+          const img = new Image();
+          img.src = url;
+        });
+      } else {
+        const img = new Image();
+        img.src = url;
+      }
     }
 
     async function getCounter(name) {
@@ -878,20 +923,14 @@
       if (skipCounterIncrement) {
         return getCounter(name);
       }
-      try {
-        const value = await counterRequest(name, "up");
-        counterValues[name] = value;
-        updateCounterChip(name, value);
-        return value;
-      } catch (error) {
-        console.warn(error.message);
-        return counterValues[name] || 0;
-      }
+
+      counterPing(name);
+      return counterValues[name] || 0;
     }
 
     async function resetCounter(name) {
       try {
-        const response = await fetch(`${counterUrl(name, "set")}?count=0`, { cache: "no-store", keepalive: true });
+        const response = await fetch(`${counterUrl(name, "set")}?count=0&t=${Date.now()}`, { cache: "no-store" });
         if (!response.ok) throw new Error(`Set non riuscito: ${response.status}`);
         const data = await response.json();
         const value = extractCounterValue(data);
@@ -900,7 +939,7 @@
         return value;
       } catch (firstError) {
         try {
-          const response = await fetch(`${counterUrl(name)}?count=0`, { cache: "no-store", keepalive: true });
+          const response = await fetch(`${counterUrl(name)}?count=0&t=${Date.now()}`, { cache: "no-store" });
           if (!response.ok) throw new Error(`Set alternativo non riuscito: ${response.status}`);
           const data = await response.json();
           const value = extractCounterValue(data);
@@ -1022,6 +1061,7 @@
       pullDistance = 0;
     });
 
+
     function shouldOpenPdfDirectly() {
       const smallScreen = window.matchMedia("(max-width: 760px)").matches;
       const mobileUserAgent = /Android.*Mobile|iPhone|iPod|Windows Phone/i.test(navigator.userAgent);
@@ -1052,45 +1092,16 @@
       window.scrollTo(0, savedScrollY);
     }
 
-    function triggerDownload(link) {
-      const temporaryLink = document.createElement("a");
-      temporaryLink.href = link.href;
-      temporaryLink.download = link.getAttribute("download") || "";
-      temporaryLink.rel = "noopener";
-      document.body.appendChild(temporaryLink);
-      temporaryLink.click();
-      temporaryLink.remove();
-    }
+    document.addEventListener("click", (event) => {
+      const counterTarget = event.target.closest("[data-counter-action]");
+      if (counterTarget) {
+        incrementCounter(counterTarget.dataset.counterAction);
+      }
 
-    document.addEventListener("click", async (event) => {
       const openButton = event.target.closest("[data-open-pdf]");
       if (openButton) {
-        event.preventDefault();
-        if (openButton.dataset.counterAction) {
-          await incrementCounter(openButton.dataset.counterAction);
-        }
         openPdfViewer(openButton.dataset.openPdf, openButton.dataset.title);
-        return;
       }
-
-      const counterTarget = event.target.closest("[data-counter-action]");
-      if (!counterTarget) return;
-
-      if (counterTarget.matches("a")) {
-        event.preventDefault();
-        await incrementCounter(counterTarget.dataset.counterAction);
-
-        if (counterTarget.hasAttribute("download")) {
-          triggerDownload(counterTarget);
-        } else if (counterTarget.target === "_blank") {
-          window.open(counterTarget.href, "_blank", "noopener");
-        } else {
-          window.location.href = counterTarget.href;
-        }
-        return;
-      }
-
-      incrementCounter(counterTarget.dataset.counterAction);
     });
 
     if (pageCounterChip) {

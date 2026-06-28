@@ -1,0 +1,25 @@
+{
+  "name": "Don Pietro Giannuzzi - Archivio storico",
+  "short_name": "Don Pietro",
+  "description": "Materiali storici, divulgativi e didattici sulla vita di don Pietro Giannuzzi, primo cappellano militare caduto sul Carso.",
+  "id": "./Index.html",
+  "start_url": "./Index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f3ea",
+  "theme_color": "#20354f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

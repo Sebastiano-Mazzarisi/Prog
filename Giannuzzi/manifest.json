@@ -1,9 +1,9 @@
 {
   "name": "Don Pietro Giannuzzi",
-  "short_name": "Don Pietro",
+  "short_name": "Don Pietro Giannuzzi",
   "description": "Archivio di Michele Micca Longo",
-  "id": "./Index.html",
-  "start_url": "./Index.html",
+  "id": "./Index.html?v=4",
+  "start_url": "./Index.html?v=4",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f7f3ea",

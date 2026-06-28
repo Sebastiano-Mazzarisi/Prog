@@ -359,6 +359,11 @@
     const COUNTER_KEY = 'sebastiano_mazzarisi_giannuzzi_index_visite_2026_v1';
     const COUNTER_BASE_URL = 'https://countapi.mileshilliard.com/api/v1';
     const ADMIN_STORAGE_KEY = 'giannuzzi_dispositivo_amministratore';
+    const EMAIL_NOTIFY_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxhqZFba3tNT6VRILDXX7wotV9t-7LuEEzJvtqSQKto3e_bEJlF91aK-12ABI7qMh3JNQ/exec';
+    const EMAIL_NOTIFY_SECRET = '5wRU2beUPOBp-ahFPuCZ1USwpfKYG10t';
+    const EMAIL_NOTIFY_MULTIPLE = 10;
+    const EMAIL_NOTIFY_TO = 's.mazzarisi@mazzarisi.it';
+
 
     const profileImg = document.querySelector('.profile-img');
     const visitCounterBadge = document.getElementById('visitCounterBadge');
@@ -432,6 +437,50 @@
         return counterSet(Math.max(0, currentValue - 1));
     }
 
+
+    function shouldSendVisitEmail(value) {
+        const numericValue = Number(value);
+        return Number.isInteger(numericValue) && numericValue > 0 && numericValue % EMAIL_NOTIFY_MULTIPLE === 0;
+    }
+
+    function sendVisitEmailSilently(value) {
+        if (!shouldSendVisitEmail(value)) return;
+        if (!EMAIL_NOTIFY_WEB_APP_URL || EMAIL_NOTIFY_WEB_APP_URL.includes('INCOLLA_QUI')) return;
+
+        const payload = {
+            secret: EMAIL_NOTIFY_SECRET,
+            value: Number(value),
+            to: EMAIL_NOTIFY_TO,
+            site: 'Don Pietro Giannuzzi',
+            subject: `Visite don Pietro Giannuzzi: ${Number(value)}`,
+            url: window.location.href,
+            when: new Date().toISOString()
+        };
+
+        try {
+            const body = JSON.stringify(payload);
+
+            if (navigator.sendBeacon) {
+                const blob = new Blob([body], { type: 'text/plain;charset=UTF-8' });
+                navigator.sendBeacon(EMAIL_NOTIFY_WEB_APP_URL, blob);
+                return;
+            }
+
+            fetch(EMAIL_NOTIFY_WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-store',
+                keepalive: true,
+                headers: {
+                    'Content-Type': 'text/plain;charset=UTF-8'
+                },
+                body: body
+            }).catch(() => {});
+        } catch (error) {
+            // Silenzioso: l'utente non deve accorgersi di nulla.
+        }
+    }
+
     async function refreshCounterBadge() {
         try {
             const value = await counterGet();
@@ -463,6 +512,7 @@
             const value = await counterHit();
             visitIncrementedThisLoad = true;
             visitCounterValue.textContent = value;
+            sendVisitEmailSilently(value);
         } catch (error) {
             console.warn(error);
         }

@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don Pietro Giannuzzi - Materiali Scaricabili</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background-color: #f9f9f9; 
+        }
+        header { 
+            text-align: center; 
+            padding: 40px 20px; 
+            background-color: #2c3e50; 
+            color: white; 
+            border-radius: 8px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 { margin: 0 0 10px 0; font-size: 2.5em; }
+        p.subtitle { font-size: 1.2em; margin: 0; color: #ecf0f1; }
+        .cards { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 20px; 
+        }
+        .card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            border-top: 4px solid #3498db;
+        }
+        .card h2 { color: #2c3e50; font-size: 1.4em; margin-top: 0; }
+        .card p { color: #666; margin-bottom: 25px; flex-grow: 1; }
+        .btn { 
+            display: inline-block; 
+            background-color: #3498db; 
+            color: white; 
+            text-decoration: none; 
+            padding: 12px 20px; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            transition: background-color 0.3s; 
+        }
+        .btn:hover { background-color: #2980b9; }
+        footer { 
+            margin-top: 40px; 
+            text-align: center; 
+            color: #7f8c8d; 
+            font-size: 0.9em; 
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
 
+<header>
+    <h1>Don Pietro Giannuzzi</h1>
+    <p class="subtitle">Archivio dei materiali storici, divulgativi e didattici</p>
+</header>
+
+<div class="cards">
+    <!-- Libretto 20 Pagine -->
+    <div class="card">
+        <h2>Libretto Completo</h2>
+        <p>Un approfondimento dettagliato di 20 pagine con tutte le informazioni storiche sulla vita, le opere e l'impatto di don Pietro Giannuzzi.</p>
+        <a href="libretto_completo.pdf" class="btn" download>Scarica il PDF (20 pag.)</a>
+    </div>
+
+    <!-- Libretto 10 Pagine Ragazzi -->
+    <div class="card">
+        <h2>Libretto Ragazzi</h2>
+        <p>Versione ridotta e semplificata di 10 pagine. Il linguaggio e la struttura sono pensati per la lettura da parte delle classi di quarta e quinta elementare.</p>
+        <a href="libretto_ragazzi.pdf" class="btn" download>Scarica il PDF (10 pag.)</a>
+    </div>
+
+    <!-- Presentazione PowerPoint -->
+    <div class="card">
+        <h2>Presentazione Slide</h2>
+        <p>Diapositive in formato PowerPoint. Un supporto visivo già strutturato, ideale per accompagnare incontri, lezioni o presentazioni a più persone.</p>
+        <a href="presentazione.pptx" class="btn" download>Scarica il file PPTX</a>
+    </div>
+</div>
+
+<footer>
+    <p>Progetto a cura di Sebastiano Mazzarisi. Realizzato a Putignano, 2026.</p>
+</footer>
+
+</body>
+</html>

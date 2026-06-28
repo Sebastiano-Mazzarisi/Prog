@@ -350,12 +350,14 @@
         - Il contatore viene incrementato solo per i dispositivi non amministratore.
         - L'amministratore si attiva cliccando 5 volte sull'immagine iniziale entro 5 secondi.
         - Se l'attivazione avviene dopo che questa apertura ha già incrementato il contatore,
-          il programma decrementa subito di 1.
+          il programma legge il valore corrente e lo riporta indietro di 1.
         - Da quel momento il dispositivo resta amministratore tramite localStorage.
+
+        Servizio usato: CountAPI alternativo su countapi.mileshilliard.com
+        Endpoint disponibili: get, set, hit.
     */
-    const COUNTER_NAMESPACE = 'sebastiano-mazzarisi-giannuzzi';
-    const COUNTER_NAME = 'visite-index';
-    const COUNTER_BASE_URL = `https://api.counterapi.dev/v1/${COUNTER_NAMESPACE}/${COUNTER_NAME}`;
+    const COUNTER_KEY = 'sebastiano_mazzarisi_giannuzzi_index_visite_2026_v1';
+    const COUNTER_BASE_URL = 'https://countapi.mileshilliard.com/api/v1';
     const ADMIN_STORAGE_KEY = 'giannuzzi_dispositivo_amministratore';
 
     const profileImg = document.querySelector('.profile-img');
@@ -384,7 +386,8 @@
     function extractCounterValue(data) {
         if (typeof data === 'number') return data;
         if (!data || typeof data !== 'object') return 0;
-        const possibleKeys = ['count', 'value', 'data', 'counter'];
+
+        const possibleKeys = ['value', 'count', 'data', 'counter'];
         for (const key of possibleKeys) {
             if (typeof data[key] === 'number') return data[key];
             if (typeof data[key] === 'string' && data[key].trim() !== '' && !Number.isNaN(Number(data[key]))) {
@@ -394,23 +397,44 @@
         return 0;
     }
 
-    async function counterRequest(action, options = {}) {
-        let url = COUNTER_BASE_URL;
-        if (action === 'up') url += '/up';
-        if (action === 'down') url += '/down';
-        if (action === 'set') url += `/set?count=${encodeURIComponent(options.count ?? 0)}`;
-
+    async function fetchJson(url) {
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) {
             throw new Error(`Errore contatore: ${response.status}`);
         }
-        const data = await response.json();
+        return response.json();
+    }
+
+    async function counterGet() {
+        try {
+            const data = await fetchJson(`${COUNTER_BASE_URL}/get/${encodeURIComponent(COUNTER_KEY)}`);
+            return extractCounterValue(data);
+        } catch (error) {
+            // Se il contatore non esiste ancora, lo crea a 0.
+            const data = await fetchJson(`${COUNTER_BASE_URL}/set/${encodeURIComponent(COUNTER_KEY)}?value=0`);
+            return extractCounterValue(data);
+        }
+    }
+
+    async function counterHit() {
+        const data = await fetchJson(`${COUNTER_BASE_URL}/hit/${encodeURIComponent(COUNTER_KEY)}`);
         return extractCounterValue(data);
+    }
+
+    async function counterSet(value) {
+        const safeValue = Math.max(0, Number(value) || 0);
+        const data = await fetchJson(`${COUNTER_BASE_URL}/set/${encodeURIComponent(COUNTER_KEY)}?value=${encodeURIComponent(safeValue)}`);
+        return extractCounterValue(data);
+    }
+
+    async function counterRemoveOne() {
+        const currentValue = await counterGet();
+        return counterSet(Math.max(0, currentValue - 1));
     }
 
     async function refreshCounterBadge() {
         try {
-            const value = await counterRequest('get');
+            const value = await counterGet();
             visitCounterValue.textContent = value;
             return value;
         } catch (error) {
@@ -436,7 +460,7 @@
         }
 
         try {
-            const value = await counterRequest('up');
+            const value = await counterHit();
             visitIncrementedThisLoad = true;
             visitCounterValue.textContent = value;
         } catch (error) {
@@ -454,7 +478,7 @@
 
         if (visitIncrementedThisLoad) {
             try {
-                const value = await counterRequest('down');
+                const value = await counterRemoveOne();
                 visitCounterValue.textContent = value;
                 visitIncrementedThisLoad = false;
             } catch (error) {
@@ -502,7 +526,7 @@
         if (!confirm('Confermi di voler azzerare il contatore delle visite?')) return;
 
         try {
-            const value = await counterRequest('set', { count: 0 });
+            const value = await counterSet(0);
             visitCounterValue.textContent = value;
             alert('Contatore azzerato.');
         } catch (error) {

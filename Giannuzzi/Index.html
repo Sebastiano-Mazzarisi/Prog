@@ -52,17 +52,38 @@
         }
         .card h2 { color: #2c3e50; font-size: 1.4em; margin-top: 0; }
         .card p { color: #666; margin-bottom: 25px; flex-grow: 1; }
+        
+        /* Contenitore per i due bottoni affiancati */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
         .btn { 
+            flex: 1;
             display: inline-block; 
-            background-color: #3498db; 
             color: white; 
             text-decoration: none; 
-            padding: 12px 20px; 
+            padding: 10px 5px; 
             border-radius: 5px; 
             font-weight: bold; 
+            font-size: 0.9em;
             transition: background-color 0.3s; 
+            text-align: center;
         }
-        .btn:hover { background-color: #2980b9; }
+        .btn-open {
+            background-color: #3498db; 
+        }
+        .btn-open:hover { 
+            background-color: #2980b9; 
+        }
+        .btn-save {
+            background-color: #2c3e50; 
+        }
+        .btn-save:hover { 
+            background-color: #1a252f; 
+        }
+        
         .audio-player {
             width: 100%;
             margin-bottom: 15px;
@@ -83,40 +104,46 @@
 <header>
     <h1>Don Pietro Giannuzzi</h1>
     <p class="subtitle">Archivio dei materiali storici, divulgativi e didattici</p>
-    <!-- Assicurati che il file Foto-60-C.jpg sia nella stessa cartella dell'index.html -->
-    <img src="Foto-60-C.jpg" alt="Ritratto di Don Pietro Giannuzzi" class="profile-img">
+    <img src="Foto-60-C.png" alt="Ritratto di Don Pietro Giannuzzi" class="profile-img">
 </header>
 
 <div class="cards">
-    <!-- Nel suo tempo -->
     <div class="card">
         <h2>Nel suo tempo</h2>
         <p>Un approfondimento dettagliato sulla vita, le opere e l'impatto storico di don Pietro Giannuzzi.</p>
-        <a href="Don Pietro Giannuzzi - Nel suo tempo.pdf" class="btn" download>Scarica il PDF</a>
+        <div class="btn-group">
+            <a href="Don Pietro Giannuzzi - Nel suo tempo.pdf" class="btn btn-open" target="_blank">Apri PDF</a>
+            <a href="Don Pietro Giannuzzi - Nel suo tempo.pdf" class="btn btn-save" download>Salva PDF</a>
+        </div>
     </div>
 
-    <!-- Libricino illustrato -->
     <div class="card">
         <h2>Libricino illustrato</h2>
         <p>Versione arricchita da immagini e illustrazioni per ripercorrere visivamente la sua storia.</p>
-        <a href="Don Pietro Giannuzzi - Libricino illustrato.pdf" class="btn" download>Scarica il PDF</a>
+        <div class="btn-group">
+            <a href="Don Pietro Giannuzzi - Libricino illustrato.pdf" class="btn btn-open" target="_blank">Apri PDF</a>
+            <a href="Don Pietro Giannuzzi - Libricino illustrato.pdf" class="btn btn-save" download>Salva PDF</a>
+        </div>
     </div>
 
-    <!-- Libricino per ragazzi -->
     <div class="card">
         <h2>Libricino per ragazzi</h2>
         <p>Versione con linguaggio e struttura pensati per la lettura da parte dei più giovani e delle scuole.</p>
-        <a href="Don Pietro Giannuzzi - Libricino per ragazzi.pdf" class="btn" download>Scarica il PDF</a>
+        <div class="btn-group">
+            <a href="Don Pietro Giannuzzi - Libricino per ragazzi.pdf" class="btn btn-open" target="_blank">Apri PDF</a>
+            <a href="Don Pietro Giannuzzi - Libricino per ragazzi.pdf" class="btn btn-save" download>Salva PDF</a>
+        </div>
     </div>
     
-    <!-- Infografica -->
     <div class="card">
         <h2>Infografica</h2>
         <p>Una sintesi visiva immediata con i momenti chiave, i luoghi e le date più importanti.</p>
-        <a href="Don Pietro Giannuzzi - Infografica.pdf" class="btn" download>Scarica l'Infografica</a>
+        <div class="btn-group">
+            <a href="Don Pietro Giannuzzi - Infografica.pdf" class="btn btn-open" target="_blank">Apri PDF</a>
+            <a href="Don Pietro Giannuzzi - Infografica.pdf" class="btn btn-save" download>Salva PDF</a>
+        </div>
     </div>
 
-    <!-- Podcast Audio -->
     <div class="card">
         <h2>Podcast Audio</h2>
         <p>Ascolta la storia di don Pietro Giannuzzi ovunque ti trovi.</p>
@@ -124,14 +151,15 @@
             <source src="Don Pietro Giannuzzi - Podcast.mp3" type="audio/mpeg">
             Il tuo browser non supporta la riproduzione audio.
         </audio>
-        <div>
-            <a href="Don Pietro Giannuzzi - Podcast.mp3" class="btn" download>Scarica il file MP3</a>
+        <div class="btn-group">
+            <a href="Don Pietro Giannuzzi - Podcast.mp3" class="btn btn-open" target="_blank">Apri Audio</a>
+            <a href="Don Pietro Giannuzzi - Podcast.mp3" class="btn btn-save" download>Salva Audio</a>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>Ricerca a cura di Michele Micca Longo. Realizzato a Putignano, 2026.</p>
+    <p>Ricerca a cura di Michele Micca Longo. Realizzato a Castellana Grotte, 2026.</p>
 </footer>
 
 </body>

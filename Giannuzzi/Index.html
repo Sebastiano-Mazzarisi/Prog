@@ -137,6 +137,90 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+
+        /* Contatore visite: nascosto fino all'attivazione amministratore */
+        #visitCounterBadge {
+            position: fixed;
+            top: 14px;
+            right: 14px;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            color: #0057b8;
+            border: 2px solid #0057b8;
+            border-radius: 999px;
+            padding: 9px 14px;
+            font-weight: 800;
+            font-size: 15px;
+            line-height: 1;
+            box-shadow: 0 5px 16px rgba(0,0,0,0.22);
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #visitCounterBadge.visible {
+            display: inline-flex;
+        }
+        #visitCounterBadge .counter-label {
+            letter-spacing: 0.2px;
+        }
+        #adminCounterModal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.45);
+            padding: 18px;
+        }
+        #adminCounterModal.visible {
+            display: flex;
+        }
+        .admin-modal-box {
+            width: min(420px, 100%);
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+            padding: 22px;
+            color: #233;
+            text-align: center;
+        }
+        .admin-modal-box h3 {
+            margin: 0 0 8px 0;
+            color: #20354f;
+            font-size: 1.25em;
+        }
+        .admin-modal-box p {
+            margin: 0 0 18px 0;
+            color: #555;
+        }
+        .admin-modal-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .admin-modal-actions button {
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 10px;
+            color: white;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        #resetCounterBtn {
+            background: #c62828;
+        }
+        #exitAdminBtn {
+            background: #0057b8;
+        }
+        #closeAdminModalBtn {
+            background: #607d8b;
+        }
     </style>
 </head>
 <body>
@@ -146,6 +230,24 @@
     <p class="subtitle">Archivio dei materiali storici, divulgativi e didattici</p>
     <img src="Foto-60-C.png" alt="Ritratto di Don Pietro Giannuzzi" class="profile-img">
 </header>
+
+
+<div id="visitCounterBadge" title="Contatore visite - amministratore">
+    <span class="counter-label">Visite</span>
+    <span id="visitCounterValue">--</span>
+</div>
+
+<div id="adminCounterModal" aria-hidden="true">
+    <div class="admin-modal-box" role="dialog" aria-modal="true" aria-labelledby="adminCounterTitle">
+        <h3 id="adminCounterTitle">Contatore visite</h3>
+        <p>Da questo dispositivo sei in modalità amministratore: le visite non vengono conteggiate.</p>
+        <div class="admin-modal-actions">
+            <button id="resetCounterBtn" type="button">Azzera contatore</button>
+            <button id="exitAdminBtn" type="button">Esci da modalità amministratore</button>
+            <button id="closeAdminModalBtn" type="button">Chiudi</button>
+        </div>
+    </div>
+</div>
 
 <div class="cards">
     
@@ -242,6 +344,184 @@
     audio.addEventListener('pause', function() {
         playPauseBtn.textContent = 'Play';
     });
+
+    /*
+        CONTATORE VISITE
+        - Il contatore viene incrementato solo per i dispositivi non amministratore.
+        - L'amministratore si attiva cliccando 5 volte sull'immagine iniziale entro 5 secondi.
+        - Se l'attivazione avviene dopo che questa apertura ha già incrementato il contatore,
+          il programma decrementa subito di 1.
+        - Da quel momento il dispositivo resta amministratore tramite localStorage.
+    */
+    const COUNTER_NAMESPACE = 'sebastiano-mazzarisi-giannuzzi';
+    const COUNTER_NAME = 'visite-index';
+    const COUNTER_BASE_URL = `https://api.counterapi.dev/v1/${COUNTER_NAMESPACE}/${COUNTER_NAME}`;
+    const ADMIN_STORAGE_KEY = 'giannuzzi_dispositivo_amministratore';
+
+    const profileImg = document.querySelector('.profile-img');
+    const visitCounterBadge = document.getElementById('visitCounterBadge');
+    const visitCounterValue = document.getElementById('visitCounterValue');
+    const adminCounterModal = document.getElementById('adminCounterModal');
+    const resetCounterBtn = document.getElementById('resetCounterBtn');
+    const exitAdminBtn = document.getElementById('exitAdminBtn');
+    const closeAdminModalBtn = document.getElementById('closeAdminModalBtn');
+
+    let visitIncrementedThisLoad = false;
+    let activationClicks = [];
+
+    function isAdminDevice() {
+        return localStorage.getItem(ADMIN_STORAGE_KEY) === 'si';
+    }
+
+    function setAdminDevice(value) {
+        if (value) {
+            localStorage.setItem(ADMIN_STORAGE_KEY, 'si');
+        } else {
+            localStorage.removeItem(ADMIN_STORAGE_KEY);
+        }
+    }
+
+    function extractCounterValue(data) {
+        if (typeof data === 'number') return data;
+        if (!data || typeof data !== 'object') return 0;
+        const possibleKeys = ['count', 'value', 'data', 'counter'];
+        for (const key of possibleKeys) {
+            if (typeof data[key] === 'number') return data[key];
+            if (typeof data[key] === 'string' && data[key].trim() !== '' && !Number.isNaN(Number(data[key]))) {
+                return Number(data[key]);
+            }
+        }
+        return 0;
+    }
+
+    async function counterRequest(action, options = {}) {
+        let url = COUNTER_BASE_URL;
+        if (action === 'up') url += '/up';
+        if (action === 'down') url += '/down';
+        if (action === 'set') url += `/set?count=${encodeURIComponent(options.count ?? 0)}`;
+
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) {
+            throw new Error(`Errore contatore: ${response.status}`);
+        }
+        const data = await response.json();
+        return extractCounterValue(data);
+    }
+
+    async function refreshCounterBadge() {
+        try {
+            const value = await counterRequest('get');
+            visitCounterValue.textContent = value;
+            return value;
+        } catch (error) {
+            console.warn(error);
+            visitCounterValue.textContent = 'errore';
+            return null;
+        }
+    }
+
+    function showCounterBadge() {
+        visitCounterBadge.classList.add('visible');
+        refreshCounterBadge();
+    }
+
+    function hideCounterBadge() {
+        visitCounterBadge.classList.remove('visible');
+    }
+
+    async function incrementVisitIfNeeded() {
+        if (isAdminDevice()) {
+            showCounterBadge();
+            return;
+        }
+
+        try {
+            const value = await counterRequest('up');
+            visitIncrementedThisLoad = true;
+            visitCounterValue.textContent = value;
+        } catch (error) {
+            console.warn(error);
+        }
+    }
+
+    async function activateAdminMode() {
+        if (isAdminDevice()) {
+            showCounterBadge();
+            return;
+        }
+
+        setAdminDevice(true);
+
+        if (visitIncrementedThisLoad) {
+            try {
+                const value = await counterRequest('down');
+                visitCounterValue.textContent = value;
+                visitIncrementedThisLoad = false;
+            } catch (error) {
+                console.warn(error);
+                await refreshCounterBadge();
+            }
+        } else {
+            await refreshCounterBadge();
+        }
+
+        showCounterBadge();
+    }
+
+    function registerHiddenAdminClick() {
+        const now = Date.now();
+        activationClicks = activationClicks.filter(time => now - time <= 5000);
+        activationClicks.push(now);
+
+        if (activationClicks.length >= 5) {
+            activationClicks = [];
+            activateAdminMode();
+        }
+    }
+
+    profileImg.addEventListener('click', registerHiddenAdminClick);
+
+    visitCounterBadge.addEventListener('click', function() {
+        adminCounterModal.classList.add('visible');
+        adminCounterModal.setAttribute('aria-hidden', 'false');
+    });
+
+    closeAdminModalBtn.addEventListener('click', function() {
+        adminCounterModal.classList.remove('visible');
+        adminCounterModal.setAttribute('aria-hidden', 'true');
+    });
+
+    adminCounterModal.addEventListener('click', function(e) {
+        if (e.target === adminCounterModal) {
+            adminCounterModal.classList.remove('visible');
+            adminCounterModal.setAttribute('aria-hidden', 'true');
+        }
+    });
+
+    resetCounterBtn.addEventListener('click', async function() {
+        if (!confirm('Confermi di voler azzerare il contatore delle visite?')) return;
+
+        try {
+            const value = await counterRequest('set', { count: 0 });
+            visitCounterValue.textContent = value;
+            alert('Contatore azzerato.');
+        } catch (error) {
+            console.warn(error);
+            alert('Non è stato possibile azzerare il contatore.');
+        }
+    });
+
+    exitAdminBtn.addEventListener('click', function() {
+        if (!confirm('Confermi di voler uscire dalla modalità amministratore su questo dispositivo?')) return;
+
+        setAdminDevice(false);
+        hideCounterBadge();
+        adminCounterModal.classList.remove('visible');
+        adminCounterModal.setAttribute('aria-hidden', 'true');
+        alert('Modalità amministratore disattivata. Alla prossima apertura, questo dispositivo verrà conteggiato.');
+    });
+
+    incrementVisitIfNeeded();
 </script>
 
 </body>

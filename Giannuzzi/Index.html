@@ -375,6 +375,8 @@
 
     let visitIncrementedThisLoad = false;
     let activationClicks = [];
+    let counterRefreshTimer = null;
+    let counterRefreshInProgress = false;
 
     function isAdminDevice() {
         return localStorage.getItem(ADMIN_STORAGE_KEY) === 'si';
@@ -472,6 +474,10 @@
     }
 
     async function refreshCounterBadge() {
+        if (counterRefreshInProgress) return null;
+
+        counterRefreshInProgress = true;
+
         try {
             const value = await counterGet();
             visitCounterValue.textContent = value;
@@ -480,16 +486,37 @@
             console.warn(error);
             visitCounterValue.textContent = 'errore';
             return null;
+        } finally {
+            counterRefreshInProgress = false;
         }
+    }
+
+    function startCounterBadgeAutoRefresh() {
+        if (counterRefreshTimer) return;
+
+        counterRefreshTimer = setInterval(function() {
+            if (isAdminDevice() && visitCounterBadge.classList.contains('visible')) {
+                refreshCounterBadge();
+            }
+        }, 10000);
+    }
+
+    function stopCounterBadgeAutoRefresh() {
+        if (!counterRefreshTimer) return;
+
+        clearInterval(counterRefreshTimer);
+        counterRefreshTimer = null;
     }
 
     function showCounterBadge() {
         visitCounterBadge.classList.add('visible');
         refreshCounterBadge();
+        startCounterBadgeAutoRefresh();
     }
 
     function hideCounterBadge() {
         visitCounterBadge.classList.remove('visible');
+        stopCounterBadgeAutoRefresh();
     }
 
     async function incrementVisitIfNeeded() {

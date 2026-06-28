@@ -97,6 +97,14 @@
             border-top: 1px solid #ddd;
             padding-top: 20px;
         }
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -147,19 +155,19 @@
     <div class="card">
         <h2>Podcast Audio</h2>
         <p>Ascolta la storia di don Pietro Giannuzzi ovunque ti trovi.</p>
-        <audio controls class="audio-player">
+        <audio id="podcastPlayer" controls class="audio-player">
             <source src="Don Pietro Giannuzzi - Podcast.mp3" type="audio/mpeg">
             Il tuo browser non supporta la riproduzione audio.
         </audio>
         <div class="btn-group">
-            <a href="Don Pietro Giannuzzi - Podcast.mp3" class="btn btn-open" target="_blank">Apri Audio</a>
+            <a href="#" onclick="document.getElementById('podcastPlayer').play(); return false;" class="btn btn-open">Apri Audio</a>
             <a href="Don Pietro Giannuzzi - Podcast.mp3" class="btn btn-save" download>Salva Audio</a>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>Ricerca a cura di Michele Micca Longo. Realizzato a Castellana Grotte, 2026.</p>
+    <p>Ricerca a cura di <a href="https://www.facebook.com/groups/154203238075366" target="_blank">Michele Micca Longo</a>. Realizzato a Castellana Grotte, 2026.</p>
 </footer>
 
 </body>

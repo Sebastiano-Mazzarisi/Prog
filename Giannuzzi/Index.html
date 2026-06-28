@@ -9,7 +9,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             line-height: 1.6; 
             color: #333; 
-            max-width: 900px; 
+            max-width: 1000px; 
             margin: 0 auto; 
             padding: 20px; 
             background-color: #f9f9f9; 
@@ -20,11 +20,20 @@
             background-color: #2c3e50; 
             color: white; 
             border-radius: 8px; 
-            margin-bottom: 30px; 
+            margin-bottom: 40px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         h1 { margin: 0 0 10px 0; font-size: 2.5em; }
         p.subtitle { font-size: 1.2em; margin: 0; color: #ecf0f1; }
+        .profile-img { 
+            max-width: 220px; 
+            height: auto; 
+            border-radius: 12px; 
+            border: 4px solid #ecf0f1; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+            margin: 25px auto 0 auto; 
+            display: block;
+        }
         .cards { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -54,6 +63,11 @@
             transition: background-color 0.3s; 
         }
         .btn:hover { background-color: #2980b9; }
+        .audio-player {
+            width: 100%;
+            margin-bottom: 15px;
+            outline: none;
+        }
         footer { 
             margin-top: 40px; 
             text-align: center; 
@@ -69,33 +83,55 @@
 <header>
     <h1>Don Pietro Giannuzzi</h1>
     <p class="subtitle">Archivio dei materiali storici, divulgativi e didattici</p>
+    <!-- Assicurati che il file Foto-60-C.jpg sia nella stessa cartella dell'index.html -->
+    <img src="Foto-60-C.jpg" alt="Ritratto di Don Pietro Giannuzzi" class="profile-img">
 </header>
 
 <div class="cards">
-    <!-- Libretto 20 Pagine -->
+    <!-- Nel suo tempo -->
     <div class="card">
-        <h2>Libretto Completo</h2>
-        <p>Un approfondimento dettagliato di 20 pagine con tutte le informazioni storiche sulla vita, le opere e l'impatto di don Pietro Giannuzzi.</p>
-        <a href="libretto_completo.pdf" class="btn" download>Scarica il PDF (20 pag.)</a>
+        <h2>Nel suo tempo</h2>
+        <p>Un approfondimento dettagliato sulla vita, le opere e l'impatto storico di don Pietro Giannuzzi.</p>
+        <a href="Don Pietro Giannuzzi - Nel suo tempo.pdf" class="btn" download>Scarica il PDF</a>
     </div>
 
-    <!-- Libretto 10 Pagine Ragazzi -->
+    <!-- Libricino illustrato -->
     <div class="card">
-        <h2>Libretto Ragazzi</h2>
-        <p>Versione ridotta e semplificata di 10 pagine. Il linguaggio e la struttura sono pensati per la lettura da parte delle classi di quarta e quinta elementare.</p>
-        <a href="libretto_ragazzi.pdf" class="btn" download>Scarica il PDF (10 pag.)</a>
+        <h2>Libricino illustrato</h2>
+        <p>Versione arricchita da immagini e illustrazioni per ripercorrere visivamente la sua storia.</p>
+        <a href="Don Pietro Giannuzzi - Libricino illustrato.pdf" class="btn" download>Scarica il PDF</a>
     </div>
 
-    <!-- Presentazione PowerPoint -->
+    <!-- Libricino per ragazzi -->
     <div class="card">
-        <h2>Presentazione Slide</h2>
-        <p>Diapositive in formato PowerPoint. Un supporto visivo già strutturato, ideale per accompagnare incontri, lezioni o presentazioni a più persone.</p>
-        <a href="presentazione.pptx" class="btn" download>Scarica il file PPTX</a>
+        <h2>Libricino per ragazzi</h2>
+        <p>Versione con linguaggio e struttura pensati per la lettura da parte dei più giovani e delle scuole.</p>
+        <a href="Don Pietro Giannuzzi - Libricino per ragazzi.pdf" class="btn" download>Scarica il PDF</a>
+    </div>
+    
+    <!-- Infografica -->
+    <div class="card">
+        <h2>Infografica</h2>
+        <p>Una sintesi visiva immediata con i momenti chiave, i luoghi e le date più importanti.</p>
+        <a href="Don Pietro Giannuzzi - Infografica.pdf" class="btn" download>Scarica l'Infografica</a>
+    </div>
+
+    <!-- Podcast Audio -->
+    <div class="card">
+        <h2>Podcast Audio</h2>
+        <p>Ascolta la storia di don Pietro Giannuzzi ovunque ti trovi.</p>
+        <audio controls class="audio-player">
+            <source src="Don Pietro Giannuzzi - Podcast.mp3" type="audio/mpeg">
+            Il tuo browser non supporta la riproduzione audio.
+        </audio>
+        <div>
+            <a href="Don Pietro Giannuzzi - Podcast.mp3" class="btn" download>Scarica il file MP3</a>
+        </div>
     </div>
 </div>
 
 <footer>
-    <p>Progetto a cura di Sebastiano Mazzarisi. Realizzato a Putignano, 2026.</p>
+    <p>Ricerca a cura di Michele Micca Longo. Realizzato a Putignano, 2026.</p>
 </footer>
 
 </body>

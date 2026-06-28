@@ -53,7 +53,6 @@
         .card h2 { color: #2c3e50; font-size: 1.4em; margin-top: 0; }
         .card p { color: #666; margin-bottom: 25px; flex-grow: 1; }
         
-        /* Contenitore per i due bottoni affiancati */
         .btn-group {
             display: flex;
             gap: 10px;
@@ -77,11 +76,12 @@
         .btn-open:hover { 
             background-color: #2980b9; 
         }
+        /* Colore verde scuro per i bottoni Salva */
         .btn-save {
-            background-color: #2c3e50; 
+            background-color: #2e7d32; 
         }
         .btn-save:hover { 
-            background-color: #1a252f; 
+            background-color: #1b5e20; 
         }
         
         .audio-player {
@@ -116,6 +116,7 @@
 </header>
 
 <div class="cards">
+    <!-- Nel suo tempo -->
     <div class="card">
         <h2>Nel suo tempo</h2>
         <p>Un approfondimento dettagliato sulla vita, le opere e l'impatto storico di don Pietro Giannuzzi.</p>
@@ -125,6 +126,7 @@
         </div>
     </div>
 
+    <!-- Libricino illustrato -->
     <div class="card">
         <h2>Libricino illustrato</h2>
         <p>Versione arricchita da immagini e illustrazioni per ripercorrere visivamente la sua storia.</p>
@@ -134,6 +136,7 @@
         </div>
     </div>
 
+    <!-- Libricino per ragazzi -->
     <div class="card">
         <h2>Libricino per ragazzi</h2>
         <p>Versione con linguaggio e struttura pensati per la lettura da parte dei più giovani e delle scuole.</p>
@@ -143,6 +146,7 @@
         </div>
     </div>
     
+    <!-- Infografica -->
     <div class="card">
         <h2>Infografica</h2>
         <p>Una sintesi visiva immediata con i momenti chiave, i luoghi e le date più importanti.</p>
@@ -152,6 +156,7 @@
         </div>
     </div>
 
+    <!-- Podcast Audio -->
     <div class="card">
         <h2>Podcast Audio</h2>
         <p>Ascolta la storia di don Pietro Giannuzzi ovunque ti trovi.</p>
@@ -160,15 +165,41 @@
             Il tuo browser non supporta la riproduzione audio.
         </audio>
         <div class="btn-group">
-            <a href="#" onclick="document.getElementById('podcastPlayer').play(); return false;" class="btn btn-open">Apri Audio</a>
+            <a href="#" id="playPauseBtn" class="btn btn-open">Play</a>
             <a href="Don Pietro Giannuzzi - Podcast.mp3" class="btn btn-save" download>Salva Audio</a>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>Ricerca a cura di <a href="https://www.facebook.com/groups/154203238075366" target="_blank">Michele Micca Longo</a>. Realizzato a Castellana Grotte, 2026.</p>
+    <p>Ricerca 2026 a cura di <a href="https://www.facebook.com/michele.miccalongo" target="_blank">Michele Micca Longo</a>, amministratore del gruppo <a href="https://www.facebook.com/groups/154203238075366" target="_blank">Castellana in Fotografia</a></p>
 </footer>
+
+<script>
+    const audio = document.getElementById('podcastPlayer');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+
+    // Funzione per il toggle Play/Pausa dal pulsante esterno
+    playPauseBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    });
+
+    // Aggiorna il testo del pulsante in "Pausa" quando l'audio viene riprodotto
+    // (sia premendo il nostro pulsante, sia usando i controlli nativi)
+    audio.addEventListener('play', function() {
+        playPauseBtn.textContent = 'Pausa';
+    });
+
+    // Aggiorna il testo del pulsante in "Play" quando l'audio viene messo in pausa
+    audio.addEventListener('pause', function() {
+        playPauseBtn.textContent = 'Play';
+    });
+</script>
 
 </body>
 </html>

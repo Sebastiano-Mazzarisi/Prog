@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Don Pietro Giannuzzi - Materiali Scaricabili</title>
+    
+    <!-- Meta Tag per l'anteprima su WhatsApp, Facebook, Telegram, ecc. -->
+    <meta property="og:title" content="Don Pietro Giannuzzi">
+    <meta property="og:description" content="Don Pietro Giannuzzi - Archivio dei materiali storici, divulgativi e didattici">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Sebastiano-Mazzarisi/Prog/main/Giannuzzi/Foto-70-C.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -190,7 +198,6 @@
     });
 
     // Aggiorna il testo del pulsante in "Pausa" quando l'audio viene riprodotto
-    // (sia premendo il nostro pulsante, sia usando i controlli nativi)
     audio.addEventListener('play', function() {
         playPauseBtn.textContent = 'Pausa';
     });

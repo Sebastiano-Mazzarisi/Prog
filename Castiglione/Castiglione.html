@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: 03-07-2026 - 13:46:09 -->
+  <!-- Versione: 03-07-2026 - 13:56:15 -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -348,7 +348,7 @@
 <body>
   <header class="hero">
     <div class="version-area">
-      <div class="version-badge">Versione: 03-07-2026 - 13:46:09</div>
+      <div class="version-badge">Versione: 03-07-2026 - 13:56:15</div>
       <button class="counter-chip counter-chip-main" id="pageCounterChip" type="button" title="Visite pagina - clicca per azzerare tutti i contatori" hidden>0</button>
     </div>
     <div class="hero-inner">
@@ -396,8 +396,9 @@ const documents = [
         group: "Dossier completo",
         note: "PDF complessivo con indice, guide e allegati principali.",
         pages: 119,
-        size: "52,8 MB",
-        featured: true
+        size: "14,7 MB",
+        featured: true,
+        direct: true
       },
       {
         code: "A01",
@@ -641,6 +642,14 @@ const documents = [
           <div class="button-row">
             <a class="btn primary" href="${href}" target="_blank" rel="noopener" data-counter-action="video-open">Apri video</a>
             ${counterChipHtml("video-open")}
+          </div>
+        `;
+      }
+      if (doc.direct) {
+        return `
+          <div class="button-row">
+            <a class="btn primary" href="${href}" target="_blank" rel="noopener">Apri PDF</a>
+            <a class="btn" href="${href}" download>Scarica</a>
           </div>
         `;
       }

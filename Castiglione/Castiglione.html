@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Castiglione - indice documenti</title>
-  <!-- Versione: 03-07-2026 - 18:33:13 -->
+  <!-- Versione: 03-07-2026 - 18:47:27 -->
   <meta name="description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
   <meta property="og:title" content="Castiglione - documenti per interessati">
   <meta property="og:description" content="Indice dei documenti Castiglione con apertura e download dei PDF.">
@@ -194,7 +194,16 @@
 
     .sections { display: grid; gap: 18px; }
     section { padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
-    section h2 { margin: 0 0 12px; color: var(--blue); font-size: 1.25rem; letter-spacing: 0; }
+    section h2 {
+      display: inline-block;
+      margin: 0 0 12px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #fff2a8;
+      color: var(--blue);
+      font-size: 1.25rem;
+      letter-spacing: 0;
+    }
     .doc-list { display: grid; gap: 10px; }
     .doc {
       display: grid;
@@ -360,7 +369,7 @@
 <body>
   <header class="hero">
     <div class="version-area">
-      <div class="version-badge">Versione: 03-07-2026 - 18:33:13</div>
+      <div class="version-badge">Versione: 03-07-2026 - 18:47:27</div>
       <button class="counter-chip counter-chip-main" id="pageCounterChip" type="button" title="Visite pagina - clicca per azzerare tutti i contatori" hidden>0</button>
     </div>
     <div class="hero-inner">
@@ -503,7 +512,7 @@ const documents = [
         code: "C01",
         title: "Guida alla lettura della successione",
         file: "C01 - Guida alla lettura della successione.pdf",
-        group: "Successione e titolarita",
+        group: "Successione e titolarità",
         note: "Guida introduttiva al titolo di successione.",
         pages: 2,
         size: "345 KB"
@@ -512,8 +521,8 @@ const documents = [
         code: "C02",
         title: "Titolo di successione",
         file: "C02 - Titolo di successione.pdf",
-        group: "Successione e titolarita",
-        note: "Documento principale su titolarita e quote.",
+        group: "Successione e titolarità",
+        note: "Documento principale su titolarità e quote.",
         pages: 20,
         size: "4,8 MB"
       },

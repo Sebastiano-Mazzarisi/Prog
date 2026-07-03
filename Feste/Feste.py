@@ -429,8 +429,8 @@ def genera_html(dati, fake_today=None):
         .modal-title {{ font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; color: var(--primary); text-align: center; text-transform: uppercase; }}
 
         .print-options {{ display: flex; flex-direction: column; gap: 12px; }}
-        .print-option-btn {{ background: white; border: 2px solid var(--primary); color: var(--primary); padding: 12px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: left; display: flex; align-items: center; gap: 10px; }}
-        .print-option-btn:hover {{ background: var(--primary-light); }}
+        .print-option-btn {{ background: #bfe3ff; border: 2px solid #65aee8; color: #111827; padding: 12px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: left; display: flex; align-items: center; gap: 10px; }}
+        .print-option-btn:hover {{ background: #a9d8ff; }}
         .print-option-btn span {{ font-size: 1.2rem; }}
 
         .stats-scroll-box {{ max-height: 50vh; overflow-y: auto; margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; }}

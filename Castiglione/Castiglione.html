@@ -675,7 +675,10 @@ const documentTextIndex = {"PDF":["Castiglione - dossier informativo","DOSSIER I
     const skipCounterIncrement = adminCounters;
     const counterNamespace = "castiglione-documenti-mazzarisi";
     const counterValues = {};
-    const counterKeys = ["page", "video-open", ...documents.flatMap((doc) => doc.external ? [] : [`open-${doc.code}`, `download-${doc.code}`])];
+    function externalCounterKey(doc) {
+      return doc.code === "VIDEO" ? "video-open" : `${doc.code.toLowerCase()}-open`;
+    }
+    const counterKeys = ["page", ...documents.flatMap((doc) => doc.external ? [externalCounterKey(doc)] : [`open-${doc.code}`, `download-${doc.code}`])];
 
     const pdfViewer = document.getElementById("pdfViewer");
     const pdfFrame = document.getElementById("pdfFrame");
@@ -748,18 +751,23 @@ const documentTextIndex = {"PDF":["Castiglione - dossier informativo","DOSSIER I
     function actions(doc) {
       const href = pdfUrl(doc.file);
       if (doc.external) {
+        const counterKey = externalCounterKey(doc);
         return `
           <div class="button-row">
-            <a class="btn primary" href="${href}" target="_blank" rel="noopener" data-counter-action="video-open">${doc.buttonLabel || "Apri video"}</a>
-            ${counterChipHtml("video-open")}
+            <a class="btn primary" href="${href}" target="_blank" rel="noopener" data-counter-action="${counterKey}">${doc.buttonLabel || "Apri video"}</a>
+            ${counterChipHtml(counterKey)}
           </div>
         `;
       }
       if (doc.direct) {
         return `
           <div class="button-row">
-            <a class="btn primary" href="${pdfSearchUrl(href)}" target="_blank" rel="noopener">Apri PDF</a>
-            <a class="btn" href="${href}" download>Scarica</a>
+            <a class="btn primary" href="${pdfSearchUrl(href)}" target="_blank" rel="noopener" data-counter-action="open-${escapeHtml(doc.code)}">Apri PDF</a>
+            <a class="btn" href="${href}" download data-counter-action="download-${escapeHtml(doc.code)}">Scarica</a>
+            <span class="counter-pair">
+              ${counterChipHtml(`open-${doc.code}`, "A")}
+              ${counterChipHtml(`download-${doc.code}`, "S")}
+            </span>
           </div>
         `;
       }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1783939961921,
+  "updatedAt": 1783939966294,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -46,11 +46,6 @@
     {
       "id": "1783934836166-970996a47f3a28",
       "text": "Pacello: Manutezione UP!",
-      "state": "low"
-    },
-    {
-      "id": "1783939747070-712c10cb332f38",
-      "text": "prova",
       "state": "low"
     },
     {

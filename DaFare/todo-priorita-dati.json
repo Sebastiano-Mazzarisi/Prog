@@ -1,11 +1,16 @@
 {
   "version": 1,
-  "updatedAt": 1783934023233,
+  "updatedAt": 1783934092138,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
       "id": "1783932847989-aaccb7217b2d98",
       "text": "Castiglione: Carlo Lafirenze - Risposta Franco",
+      "state": "urgent"
+    },
+    {
+      "id": "1783934092138-8b0674ad6c3fe",
+      "text": "Michele Bianco: Giuseppe Santoro, sottotetto",
       "state": "urgent"
     },
     {

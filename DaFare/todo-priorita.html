@@ -945,7 +945,7 @@
           if (editInput) {
             autoGrow(editInput);
             editInput.focus();
-            editInput.select();
+            editInput.setSelectionRange(editInput.value.length, editInput.value.length);
           }
         });
       }

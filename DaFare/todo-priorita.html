@@ -79,12 +79,6 @@
       font-weight: 650;
     }
 
-    .subtitle {
-      color: var(--muted);
-      margin: 0;
-      font-size: 15px;
-    }
-
     .priority-legend {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -357,7 +351,6 @@
   <div class="app">
     <header class="app-header">
       <h1>Cose da fare</h1>
-      <p class="subtitle" id="subtitle">Usa M per modificare e mostrare gli altri comandi.</p>
       <div class="priority-legend" aria-label="Priorita">
         <button class="priority-chip urgent is-selected" type="button" data-add-state="urgent">URGENTE</button>
         <button class="priority-chip normal" type="button" data-add-state="normal">NORMALE</button>
@@ -403,7 +396,6 @@
       const form = document.getElementById("todoForm");
       const input = document.getElementById("todoInput");
       const notesEl = document.getElementById("notes");
-      const subtitle = document.getElementById("subtitle");
       const addPriorityButtons = Array.from(document.querySelectorAll(".priority-legend [data-add-state]"));
       const syncForm = document.getElementById("syncForm");
       const syncNowButton = document.getElementById("syncNow");
@@ -851,7 +843,6 @@
         form.hidden = openNoteId !== null;
         form.classList.toggle("is-adding", addingNote);
         syncForm.hidden = true;
-        subtitle.hidden = openNoteId !== null || addingNote;
 
         if (addingNote) {
           return;
@@ -903,7 +894,7 @@
           edit.type = "button";
           edit.className = "note-action";
           edit.setAttribute("aria-label", "Modifica nota");
-          edit.textContent = "M";
+          edit.textContent = "\u270f\ufe0f";
 
           const priority = document.createElement("button");
           priority.type = "button";

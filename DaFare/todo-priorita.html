@@ -91,9 +91,9 @@
       min-height: 42px;
       display: grid;
       place-items: center;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid var(--line);
+      color: var(--button-ink);
+      background: var(--button);
+      border: 1px solid var(--button);
       font-size: 14px;
       font-weight: 800;
       line-height: 1;
@@ -569,16 +569,13 @@
           "<meta charset=\"utf-8\">",
           "<title>Cose da fare!</title>",
           "<style>",
-          "body{font-family:Arial,sans-serif;color:#1d1d1f;margin:28px;}",
-          "h1{font-size:24px;margin:0 0 18px;}",
-          ".note{break-inside:avoid;border:1px solid #bfc3ca;border-radius:8px;margin:0 0 10px;padding:10px 12px;}",
-          ".priority{font-size:11px;font-weight:700;margin-bottom:6px;}",
-          ".text{font-size:15px;line-height:1.35;white-space:normal;}",
-          ".urgent{background:#ffd6d6;}",
-          ".normal{background:#dff3ff;}",
-          ".low{background:#fff0a8;}",
-          ".done{background:#c9f7d2;}",
-          "@media print{body{margin:14mm;}button{display:none;}}",
+          "@page{size:A4 portrait;margin:10mm;}",
+          "body{font-family:Arial,sans-serif;color:#111;margin:0;font-size:11pt;}",
+          "h1{font-size:16pt;margin:0 0 8mm;border-bottom:1px solid #999;padding-bottom:3mm;}",
+          ".note{break-inside:avoid;border-bottom:1px solid #ccc;margin:0;padding:2.5mm 0;}",
+          ".priority{display:inline-block;width:26mm;font-size:8pt;font-weight:700;vertical-align:top;}",
+          ".text{display:inline-block;width:calc(100% - 28mm);font-size:10.5pt;line-height:1.2;white-space:normal;}",
+          "@media print{button{display:none;}}",
           "</style>",
           "</head>",
           "<body>",

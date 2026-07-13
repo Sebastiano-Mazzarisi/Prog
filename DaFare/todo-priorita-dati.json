@@ -1,13 +1,8 @@
 {
   "version": 1,
-  "updatedAt": 1783934838786,
+  "updatedAt": 1783935414348,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
-    {
-      "id": "1783932847989-aaccb7217b2d98",
-      "text": "Castiglione: Carlo Lafirenze - Risposta Franco",
-      "state": "urgent"
-    },
     {
       "id": "1783932865201-e7c7598acb8ef8",
       "text": "Vaporterma - Mara, Leo, Giannetto. Pompe serbatoio",
@@ -27,6 +22,11 @@
       "id": "1783934092138-8b0674ad6c3fe",
       "text": "Michele Bianco: Giuseppe Santoro, sottotetto",
       "state": "normal"
+    },
+    {
+      "id": "1783932847989-aaccb7217b2d98",
+      "text": "Castiglione: Carlo Lafirenze - Risposta Franco",
+      "state": "low"
     },
     {
       "id": "1783934836166-970996a47f3a28",

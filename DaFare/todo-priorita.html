@@ -581,7 +581,12 @@
           "<body>",
           "<h1>Cose da fare!</h1>",
           rows || "<p>Nessuna nota.</p>",
-          "<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},150);});<\/script>",
+          "<script>",
+          "function closePrintPage(){setTimeout(function(){window.close();},100);}",
+          "window.addEventListener('afterprint',closePrintPage);",
+          "window.addEventListener('focus',function(){setTimeout(closePrintPage,500);});",
+          "window.addEventListener('load',function(){setTimeout(function(){window.print();},150);});",
+          "<\/script>",
           "</body>",
           "</html>"
         ].join("");
@@ -1182,7 +1187,11 @@
 
       printNotesButton.addEventListener("click", function () {
         skipNextRefresh = true;
+        openNoteId = null;
+        addingNote = false;
+        saveUiState();
         preparePdf();
+        render();
       });
 
       syncForm.addEventListener("submit", function (event) {

@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Cose da fare">
+  <meta name="theme-color" content="#f6f7f9">
+  <title>Cose da fare</title>
+  <style>
+    :root {
+      --urgent: #ffd6d6;
+      --normal: #fff0a8;
+      --low: #ffffff;
+      --done: #c9f7d2;
+      --ink: #1d1d1f;
+      --muted: #62626a;
+      --line: #d8d8de;
+      --surface: #f6f7f9;
+      --button: #1f6feb;
+      --button-ink: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--surface);
+    }
+
+    body {
+      min-height: 100%;
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .app {
+      width: min(780px, 100%);
+      margin: 0 auto;
+      padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    }
+
+    .app-header {
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 26px;
+      line-height: 1.15;
+      margin: 0 0 6px;
+      font-weight: 650;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .priority-legend {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .priority-chip {
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .sync-panel {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 14px 0;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .sync-panel input {
+      min-height: 40px;
+      font-size: 15px;
+    }
+
+    .sync-panel .sync-wide {
+      grid-column: 1 / -1;
+    }
+
+    .sync-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .sync-button {
+      min-height: 38px;
+      padding: 0 12px;
+      color: var(--button-ink);
+      background: var(--button);
+      font-weight: 650;
+    }
+
+    .sync-status {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .composer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 17px;
+      font: inherit;
+      color: var(--ink);
+      background: #ffffff;
+      resize: vertical;
+      overflow: hidden;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      min-height: 44px;
+      font: inherit;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .add-button {
+      background: var(--button);
+      color: var(--button-ink);
+      padding: 0 16px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .notes {
+      display: grid;
+      gap: 10px;
+    }
+
+    .note-card {
+      position: relative;
+      color: var(--ink);
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+      transition: transform 120ms ease, border-color 120ms ease;
+    }
+
+    .note-content {
+      width: 100%;
+      display: block;
+      text-align: left;
+      color: inherit;
+      background: transparent;
+      padding: 16px 58px 16px 14px;
+      min-height: 58px;
+    }
+
+    .note-text {
+      display: block;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 17px;
+      line-height: 1.35;
+      padding-right: 4px;
+    }
+
+    .note-card.is-open .note-content {
+      padding-right: 14px;
+    }
+
+    .note-actions {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .note-action {
+      width: 34px;
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.64);
+      color: var(--ink);
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      font-size: 21px;
+      line-height: 1;
+      padding: 0;
+      font-weight: 650;
+    }
+
+    .edit-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .edit-action {
+      flex: 1 1 120px;
+      min-height: 40px;
+      padding: 0 12px;
+      background: rgba(255, 255, 255, 0.68);
+      color: var(--ink);
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    .note-edit-input {
+      min-height: 74px;
+      font-size: 17px;
+      line-height: 1.35;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .urgent {
+      background: var(--urgent);
+    }
+
+    .normal {
+      background: var(--normal);
+    }
+
+    .low {
+      background: var(--low);
+    }
+
+    .done {
+      background: var(--done);
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 22px 14px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 520px) {
+      .app {
+        padding: max(14px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      }
+
+      .composer {
+        grid-template-columns: 1fr;
+      }
+
+      .add-button {
+        width: 100%;
+      }
+
+      .priority-legend {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sync-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .sync-panel .sync-wide {
+        grid-column: auto;
+      }
+
+      .note-content {
+        padding-right: 58px;
+      }
+
+      .note-card.is-open .note-content {
+        padding-right: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1>Cose da fare</h1>
+      <p class="subtitle" id="subtitle">Usa M per modificare e mostrare gli altri comandi.</p>
+      <div class="priority-legend" aria-label="Priorita">
+        <div class="priority-chip urgent">URGENTE</div>
+        <div class="priority-chip normal">NORMALE</div>
+        <div class="priority-chip low">BASSA</div>
+        <div class="priority-chip done">COMPLETATA</div>
+      </div>
+    </header>
+
+    <form class="sync-panel" id="syncForm" autocomplete="off" hidden>
+      <label class="sr-only" for="githubOwner">Utente GitHub</label>
+      <input id="githubOwner" name="githubOwner" type="text" placeholder="Utente GitHub" aria-label="Utente GitHub">
+      <label class="sr-only" for="githubRepo">Repository</label>
+      <input id="githubRepo" name="githubRepo" type="text" placeholder="Repository" aria-label="Repository">
+      <label class="sr-only" for="githubBranch">Branch</label>
+      <input id="githubBranch" name="githubBranch" type="text" placeholder="Branch" aria-label="Branch">
+      <label class="sr-only" for="githubPath">File dati</label>
+      <input id="githubPath" name="githubPath" type="text" placeholder="todo-priorita-dati.json" aria-label="File dati">
+      <label class="sr-only" for="githubToken">Token GitHub</label>
+      <input class="sync-wide" id="githubToken" name="githubToken" type="password" placeholder="Token GitHub" aria-label="Token GitHub">
+      <div class="sync-actions sync-wide">
+        <button class="sync-button" type="submit">Salva GitHub</button>
+        <button class="sync-button" id="syncNow" type="button">Sincronizza</button>
+        <span class="sync-status" id="syncStatus">GitHub non configurato</span>
+      </div>
+    </form>
+
+    <form class="composer" id="todoForm" autocomplete="off">
+      <label class="sr-only" for="todoInput">Nuova nota</label>
+      <textarea id="todoInput" name="todoInput" rows="2" placeholder="Scrivi una cosa da fare..." aria-label="Nuova nota"></textarea>
+      <button class="add-button" type="submit">Aggiungi</button>
+    </form>
+
+    <main class="notes" id="notes" aria-live="polite"></main>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById("todoForm");
+      const input = document.getElementById("todoInput");
+      const notesEl = document.getElementById("notes");
+      const subtitle = document.getElementById("subtitle");
+      const syncForm = document.getElementById("syncForm");
+      const syncNowButton = document.getElementById("syncNow");
+      const syncStatus = document.getElementById("syncStatus");
+      const githubOwner = document.getElementById("githubOwner");
+      const githubRepo = document.getElementById("githubRepo");
+      const githubBranch = document.getElementById("githubBranch");
+      const githubPath = document.getElementById("githubPath");
+      const githubToken = document.getElementById("githubToken");
+      const storageKey = "todo-priorita-notes-v1";
+      const updatedKey = "todo-priorita-updated-v1";
+      const syncKey = "todo-priorita-github-v1";
+      const clientKey = "todo-priorita-client-v1";
+      const builtInSyncConfig = {
+        owner: "Sebastiano-Mazzarisi",
+        repo: "Prog",
+        branch: "main",
+        path: "DaFare/todo-priorita-dati.json",
+        token: "",
+        apiUrl: ""
+      };
+      const states = ["urgent", "normal", "low", "done"];
+
+      let notes = loadNotes();
+      let openNoteId = null;
+      let savedUpdatedAt = Number(localStorage.getItem(updatedKey));
+      let notesUpdatedAt = savedUpdatedAt || (notes.length ? Date.now() : 0);
+      let syncConfig = loadSyncConfig();
+      let remoteSha = null;
+      let syncTimer = null;
+      let pollTimer = null;
+      let syncing = false;
+      let applyingRemote = false;
+      let clientId = localStorage.getItem(clientKey);
+
+      if (!clientId) {
+        clientId = createId();
+        localStorage.setItem(clientKey, clientId);
+      }
+
+      function loadNotes() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+          if (Array.isArray(saved)) {
+            return saved
+              .filter((note) => note && typeof note.text === "string")
+              .map(normalizeNote);
+          }
+        } catch (error) {
+          return [];
+        }
+        return [];
+      }
+
+      function saveNotes(options) {
+        const settings = options || {};
+        if (!settings.keepTimestamp) {
+          notesUpdatedAt = Date.now();
+          localStorage.setItem(updatedKey, String(notesUpdatedAt));
+        }
+        localStorage.setItem(storageKey, JSON.stringify(notes));
+        if (!applyingRemote && !settings.skipSync) {
+          scheduleSync();
+        }
+      }
+
+      function createId() {
+        return String(Date.now()) + "-" + Math.random().toString(16).slice(2);
+      }
+
+      function normalizeNote(note) {
+        return {
+          id: note.id || createId(),
+          text: note.text,
+          state: states.includes(note.state) ? note.state : "urgent"
+        };
+      }
+
+      function sortNotes() {
+        notes.sort(function (first, second) {
+          const firstPriority = states.indexOf(first.state);
+          const secondPriority = states.indexOf(second.state);
+
+          if (firstPriority !== secondPriority) {
+            return firstPriority - secondPriority;
+          }
+
+          return first.text.localeCompare(second.text, "it", { sensitivity: "base" });
+        });
+      }
+
+      function nextState(current) {
+        const index = states.indexOf(current);
+        return states[(index + 1) % states.length];
+      }
+
+      function autoGrow(field) {
+        field.style.height = "auto";
+        field.style.height = field.scrollHeight + "px";
+      }
+
+      function loadSyncConfig() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(syncKey) || "{}");
+          return {
+            owner: String(saved.owner || builtInSyncConfig.owner),
+            repo: String(saved.repo || builtInSyncConfig.repo),
+            branch: String(saved.branch || builtInSyncConfig.branch || "main"),
+            path: String(saved.path || builtInSyncConfig.path || "todo-priorita-dati.json"),
+            token: String(saved.token || builtInSyncConfig.token),
+            apiUrl: String(saved.apiUrl || builtInSyncConfig.apiUrl)
+          };
+        } catch (error) {
+          return {
+            owner: builtInSyncConfig.owner,
+            repo: builtInSyncConfig.repo,
+            branch: builtInSyncConfig.branch || "main",
+            path: builtInSyncConfig.path || "todo-priorita-dati.json",
+            token: builtInSyncConfig.token,
+            apiUrl: builtInSyncConfig.apiUrl
+          };
+        }
+      }
+
+      function saveSyncConfig() {
+        syncConfig = {
+          owner: githubOwner.value.trim(),
+          repo: githubRepo.value.trim(),
+          branch: githubBranch.value.trim() || "main",
+          path: githubPath.value.trim() || "todo-priorita-dati.json",
+          token: githubToken.value.trim(),
+          apiUrl: builtInSyncConfig.apiUrl
+        };
+        localStorage.setItem(syncKey, JSON.stringify(syncConfig));
+        fillSyncForm();
+        updateSyncStatus(isSyncConfigured() ? "GitHub configurato" : "GitHub non configurato");
+        restartPolling();
+      }
+
+      function fillSyncForm() {
+        githubOwner.value = syncConfig.owner;
+        githubRepo.value = syncConfig.repo;
+        githubBranch.value = syncConfig.branch || "main";
+        githubPath.value = syncConfig.path || "todo-priorita-dati.json";
+        githubToken.value = syncConfig.token;
+      }
+
+      function isSyncConfigured() {
+        return Boolean(syncConfig.apiUrl || (syncConfig.owner && syncConfig.repo && syncConfig.branch && syncConfig.path && syncConfig.token));
+      }
+
+      function updateSyncStatus(message) {
+        syncStatus.textContent = message;
+      }
+
+      function githubApiUrl() {
+        const path = syncConfig.path.split("/").map(encodeURIComponent).join("/");
+        const params = new URLSearchParams({ ref: syncConfig.branch });
+        return "https://api.github.com/repos/" + encodeURIComponent(syncConfig.owner) + "/" + encodeURIComponent(syncConfig.repo) + "/contents/" + path + "?" + params.toString();
+      }
+
+      function githubWriteUrl() {
+        const path = syncConfig.path.split("/").map(encodeURIComponent).join("/");
+        return "https://api.github.com/repos/" + encodeURIComponent(syncConfig.owner) + "/" + encodeURIComponent(syncConfig.repo) + "/contents/" + path;
+      }
+
+      function encodeBase64(text) {
+        return btoa(unescape(encodeURIComponent(text)));
+      }
+
+      function decodeBase64(text) {
+        return decodeURIComponent(escape(atob(text.replace(/\s/g, ""))));
+      }
+
+      async function fetchRemoteData() {
+        if (syncConfig.apiUrl) {
+          const response = await fetch(syncConfig.apiUrl, {
+            headers: {
+              "Accept": "application/json"
+            }
+          });
+
+          if (response.status === 404) {
+            return { sha: null, data: null };
+          }
+
+          if (!response.ok) {
+            throw new Error("Sync: " + response.status);
+          }
+
+          return {
+            sha: null,
+            data: await response.json()
+          };
+        }
+
+        const response = await fetch(githubApiUrl(), {
+          headers: {
+            "Accept": "application/vnd.github+json",
+            "Authorization": "Bearer " + syncConfig.token,
+            "X-GitHub-Api-Version": "2022-11-28"
+          }
+        });
+
+        if (response.status === 404) {
+          return { sha: null, data: null };
+        }
+
+        if (!response.ok) {
+          throw new Error("GitHub: " + response.status);
+        }
+
+        const file = await response.json();
+        return {
+          sha: file.sha,
+          data: JSON.parse(decodeBase64(file.content || ""))
+        };
+      }
+
+      async function writeRemoteData(sha) {
+        const payload = {
+          version: 1,
+          updatedAt: notesUpdatedAt,
+          updatedBy: clientId,
+          notes: notes.map(normalizeNote)
+        };
+
+        if (syncConfig.apiUrl) {
+          const response = await fetch(syncConfig.apiUrl, {
+            method: "PUT",
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error("Sync: " + response.status);
+          }
+
+          remoteSha = null;
+          return;
+        }
+
+        const body = {
+          message: "Aggiorna cose da fare",
+          content: encodeBase64(JSON.stringify(payload, null, 2)),
+          branch: syncConfig.branch
+        };
+
+        if (sha) {
+          body.sha = sha;
+        }
+
+        const response = await fetch(githubWriteUrl(), {
+          method: "PUT",
+          headers: {
+            "Accept": "application/vnd.github+json",
+            "Authorization": "Bearer " + syncConfig.token,
+            "Content-Type": "application/json",
+            "X-GitHub-Api-Version": "2022-11-28"
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+          throw new Error("GitHub: " + response.status);
+        }
+
+        const result = await response.json();
+        remoteSha = result.content && result.content.sha ? result.content.sha : sha;
+      }
+
+      function applyRemoteData(data) {
+        if (!data || !Array.isArray(data.notes)) {
+          return false;
+        }
+
+        const remoteUpdatedAt = Number(data.updatedAt) || 0;
+        if (remoteUpdatedAt <= notesUpdatedAt) {
+          return false;
+        }
+
+        applyingRemote = true;
+        notes = data.notes
+          .filter((note) => note && typeof note.text === "string")
+          .map(normalizeNote);
+        notesUpdatedAt = remoteUpdatedAt;
+        localStorage.setItem(updatedKey, String(notesUpdatedAt));
+        saveNotes({ keepTimestamp: true, skipSync: true });
+        applyingRemote = false;
+
+        if (openNoteId && !notes.some((note) => note.id === openNoteId)) {
+          openNoteId = null;
+        }
+
+        render();
+        return true;
+      }
+
+      async function syncWithGitHub(options) {
+        const settings = options || {};
+        if (!isSyncConfigured() || syncing) {
+          return;
+        }
+
+        syncing = true;
+        updateSyncStatus("Sincronizzazione...");
+
+        try {
+          const remote = await fetchRemoteData();
+          remoteSha = remote.sha;
+
+          if (!remote.data) {
+            await writeRemoteData(remoteSha);
+            updateSyncStatus("Creato file dati GitHub");
+            return;
+          }
+
+          const remoteUpdatedAt = Number(remote.data.updatedAt) || 0;
+          if (remoteUpdatedAt > notesUpdatedAt) {
+            applyRemoteData(remote.data);
+            updateSyncStatus("Aggiornato da GitHub");
+            return;
+          }
+
+          if (settings.pushLocal || notesUpdatedAt > remoteUpdatedAt) {
+            await writeRemoteData(remoteSha);
+            updateSyncStatus("Salvato su GitHub");
+            return;
+          }
+
+          updateSyncStatus("Sincronizzato");
+        } catch (error) {
+          updateSyncStatus("Errore sync: " + error.message);
+        } finally {
+          syncing = false;
+        }
+      }
+
+      function scheduleSync() {
+        if (!isSyncConfigured()) {
+          return;
+        }
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(function () {
+          syncWithGitHub({ pushLocal: true });
+        }, 700);
+      }
+
+      function restartPolling() {
+        clearInterval(pollTimer);
+        if (!isSyncConfigured()) {
+          return;
+        }
+        syncWithGitHub();
+        pollTimer = setInterval(function () {
+          syncWithGitHub();
+        }, 3000);
+      }
+
+      function render() {
+        sortNotes();
+        notesEl.textContent = "";
+        form.hidden = openNoteId !== null;
+        syncForm.hidden = true;
+        subtitle.hidden = openNoteId !== null;
+
+        if (!notes.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = "Nessuna nota. Aggiungine una sopra.";
+          notesEl.appendChild(empty);
+          return;
+        }
+
+        const visibleNotes = openNoteId === null
+          ? notes
+          : notes.filter((note) => note.id === openNoteId);
+
+        visibleNotes.forEach((note) => {
+          const isOpen = openNoteId === note.id;
+          const card = document.createElement("article");
+          card.className = "note-card " + note.state + (isOpen ? " is-open" : "");
+
+          const content = document.createElement("div");
+          content.className = "note-content";
+
+          let editInput = null;
+
+          if (isOpen) {
+            editInput = document.createElement("textarea");
+            editInput.className = "note-edit-input";
+            editInput.rows = 2;
+            editInput.value = note.text;
+            editInput.setAttribute("aria-label", "Descrizione nota");
+            editInput.addEventListener("input", function () {
+              autoGrow(editInput);
+            });
+            content.appendChild(editInput);
+          } else {
+            const text = document.createElement("span");
+            text.className = "note-text";
+            text.textContent = note.text;
+            content.appendChild(text);
+          }
+
+          const actions = document.createElement("div");
+          actions.className = "note-actions";
+
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "note-action";
+          edit.setAttribute("aria-label", "Modifica nota");
+          edit.textContent = "M";
+
+          const priority = document.createElement("button");
+          priority.type = "button";
+          priority.className = isOpen ? "edit-action" : "note-action";
+          priority.setAttribute("aria-label", "Cambia priorita");
+          priority.textContent = isOpen ? "Priorità" : "P";
+
+          const save = document.createElement("button");
+          save.type = "button";
+          save.className = "edit-action";
+          save.setAttribute("aria-label", "Salva nota");
+          save.textContent = "Salva";
+
+          const exit = document.createElement("button");
+          exit.type = "button";
+          exit.className = "edit-action";
+          exit.setAttribute("aria-label", "Esci dalla modifica");
+          exit.textContent = "Esci";
+
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "edit-action";
+          remove.setAttribute("aria-label", "Cancella nota");
+          remove.textContent = "Cancella";
+
+          if (isOpen) {
+            const editActions = document.createElement("div");
+            editActions.className = "edit-actions";
+            editActions.appendChild(priority);
+            editActions.appendChild(save);
+            editActions.appendChild(remove);
+            editActions.appendChild(exit);
+            content.appendChild(editActions);
+          } else {
+            actions.appendChild(edit);
+          }
+
+          card.appendChild(content);
+          if (!isOpen) {
+            card.appendChild(actions);
+          }
+
+          edit.addEventListener("click", function () {
+            openNoteId = note.id;
+            render();
+          });
+
+          save.addEventListener("click", function () {
+            const cleanText = editInput.value.trim();
+            if (!cleanText) {
+              editInput.focus();
+              return;
+            }
+
+            note.text = cleanText;
+            openNoteId = null;
+            saveNotes();
+            render();
+          });
+
+          exit.addEventListener("click", function () {
+            if (editInput.value !== note.text && !window.confirm("Uscire senza salvare le modifiche?")) {
+              editInput.focus();
+              return;
+            }
+
+            openNoteId = null;
+            render();
+          });
+
+          priority.addEventListener("click", function () {
+            note.state = nextState(note.state);
+            saveNotes();
+            render();
+          });
+
+          remove.addEventListener("click", function () {
+            if (!window.confirm("Cancellare questa nota?")) {
+              if (editInput) {
+                editInput.focus();
+              }
+              return;
+            }
+
+            notes = notes.filter((item) => item.id !== note.id);
+            if (openNoteId === note.id) {
+              openNoteId = null;
+            }
+            saveNotes();
+            render();
+            notesEl.scrollIntoView({ block: "start" });
+          });
+
+          notesEl.appendChild(card);
+
+          if (editInput) {
+            autoGrow(editInput);
+            editInput.focus();
+            editInput.select();
+          }
+        });
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const text = input.value.trim();
+        if (!text) {
+          input.focus();
+          return;
+        }
+        const newNote = {
+          id: createId(),
+          text,
+          state: "urgent"
+        };
+        notes.unshift(newNote);
+        openNoteId = newNote.id;
+        input.value = "";
+        saveNotes();
+        render();
+      });
+
+      input.addEventListener("input", function () {
+        autoGrow(input);
+      });
+      autoGrow(input);
+
+      syncForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        saveSyncConfig();
+        syncWithGitHub({ pushLocal: notes.length > 0 });
+      });
+
+      syncNowButton.addEventListener("click", function () {
+        saveSyncConfig();
+        syncWithGitHub({ pushLocal: notes.length > 0 });
+      });
+
+      fillSyncForm();
+      updateSyncStatus(isSyncConfigured() ? "GitHub configurato" : "GitHub non configurato");
+      restartPolling();
+
+      render();
+    })();
+  </script>
+</body>
+</html>

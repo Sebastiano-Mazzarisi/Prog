@@ -30,8 +30,8 @@
   <style>
     :root {
       --urgent: #ffd6d6;
-      --normal: #fff0a8;
-      --low: #dff3ff;
+      --normal: #dff3ff;
+      --low: #fff0a8;
       --done: #c9f7d2;
       --ink: #1d1d1f;
       --muted: #62626a;
@@ -72,11 +72,31 @@
       margin-bottom: 18px;
     }
 
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
     h1 {
       font-size: 26px;
       line-height: 1.15;
-      margin: 0 0 6px;
+      margin: 0;
       font-weight: 650;
+    }
+
+    .print-button {
+      width: 42px;
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      font-size: 22px;
+      line-height: 1;
+      padding: 0;
     }
 
     .priority-legend {
@@ -350,7 +370,10 @@
 <body>
   <div class="app">
     <header class="app-header">
-      <h1>Cose da fare</h1>
+      <div class="title-row">
+        <h1>Cose da fare</h1>
+        <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">🖨️</button>
+      </div>
       <div class="priority-legend" aria-label="Priorita">
         <button class="priority-chip urgent is-selected" type="button" data-add-state="urgent">URGENTE</button>
         <button class="priority-chip normal" type="button" data-add-state="normal">NORMALE</button>
@@ -396,6 +419,7 @@
       const form = document.getElementById("todoForm");
       const input = document.getElementById("todoInput");
       const notesEl = document.getElementById("notes");
+      const printNotesButton = document.getElementById("printNotes");
       const addPriorityButtons = Array.from(document.querySelectorAll(".priority-legend [data-add-state]"));
       const syncForm = document.getElementById("syncForm");
       const syncNowButton = document.getElementById("syncNow");
@@ -501,6 +525,75 @@
       function autoGrow(field) {
         field.style.height = "auto";
         field.style.height = field.scrollHeight + "px";
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function priorityLabel(state) {
+        const labels = {
+          urgent: "URGENTE",
+          normal: "NORMALE",
+          low: "BASSA",
+          done: "COMPLETATA"
+        };
+        return labels[state] || "URGENTE";
+      }
+
+      function preparePdf() {
+        sortNotes();
+
+        const rows = notes.map(function (note) {
+          return [
+            "<article class=\"note " + note.state + "\">",
+            "<div class=\"priority\">" + priorityLabel(note.state) + "</div>",
+            "<div class=\"text\">" + escapeHtml(note.text).replace(/\n/g, "<br>") + "</div>",
+            "</article>"
+          ].join("");
+        }).join("");
+
+        const html = [
+          "<!doctype html>",
+          "<html lang=\"it\">",
+          "<head>",
+          "<meta charset=\"utf-8\">",
+          "<title>Cose da fare!</title>",
+          "<style>",
+          "body{font-family:Arial,sans-serif;color:#1d1d1f;margin:28px;}",
+          "h1{font-size:24px;margin:0 0 18px;}",
+          ".note{break-inside:avoid;border:1px solid #bfc3ca;border-radius:8px;margin:0 0 10px;padding:10px 12px;}",
+          ".priority{font-size:11px;font-weight:700;margin-bottom:6px;}",
+          ".text{font-size:15px;line-height:1.35;white-space:normal;}",
+          ".urgent{background:#ffd6d6;}",
+          ".normal{background:#dff3ff;}",
+          ".low{background:#fff0a8;}",
+          ".done{background:#c9f7d2;}",
+          "@media print{body{margin:14mm;}button{display:none;}}",
+          "</style>",
+          "</head>",
+          "<body>",
+          "<h1>Cose da fare!</h1>",
+          rows || "<p>Nessuna nota.</p>",
+          "<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},150);});<\/script>",
+          "</body>",
+          "</html>"
+        ].join("");
+
+        const printWindow = window.open("", "_blank");
+        if (!printWindow) {
+          window.alert("Consenti le finestre popup per preparare il PDF.");
+          return;
+        }
+
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
       }
 
       function clearAppCache() {
@@ -1072,6 +1165,11 @@
         autoGrow(input);
       });
       autoGrow(input);
+
+      printNotesButton.addEventListener("click", function () {
+        skipNextRefresh = true;
+        preparePdf();
+      });
 
       document.addEventListener("click", function (event) {
         if (event.target.closest("button")) {

@@ -1,12 +1,17 @@
 {
   "version": 1,
-  "updatedAt": 1783932847990,
+  "updatedAt": 1783932867481,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
       "id": "1783932847989-aaccb7217b2d98",
       "text": "Nota urgente",
       "state": "urgent"
+    },
+    {
+      "id": "1783932865201-e7c7598acb8ef8",
+      "text": "Nota normale",
+      "state": "normal"
     }
   ]
 }

@@ -1,11 +1,16 @@
 {
   "version": 1,
-  "updatedAt": 1783934211312,
+  "updatedAt": 1783934639052,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
       "id": "1783932847989-aaccb7217b2d98",
       "text": "Castiglione: Carlo Lafirenze - Risposta Franco",
+      "state": "urgent"
+    },
+    {
+      "id": "1783934639051-0a4a71df4df0f",
+      "text": "Cesare Laterza: pagare infilaggio",
       "state": "urgent"
     },
     {

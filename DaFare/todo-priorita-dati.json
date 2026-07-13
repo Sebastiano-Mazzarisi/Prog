@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1783934651423,
+  "updatedAt": 1783934836167,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -27,6 +27,11 @@
       "id": "1783934092138-8b0674ad6c3fe",
       "text": "Michele Bianco: Giuseppe Santoro, sottotetto",
       "state": "normal"
+    },
+    {
+      "id": "1783934836166-970996a47f3a28",
+      "text": "Pacello: Manutezione UP!",
+      "state": "low"
     }
   ]
 }

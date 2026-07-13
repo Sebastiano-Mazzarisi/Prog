@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1783938566830,
+  "updatedAt": 1783938681446,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -31,6 +31,11 @@
     {
       "id": "1783932847989-aaccb7217b2d98",
       "text": "Castiglione: Carlo Lafirenze - Risposta Franco",
+      "state": "low"
+    },
+    {
+      "id": "1783938681446-f4e9f3edcce998",
+      "text": "Crediti Coop: Elenco bonifici non utilizzati nell'atto.",
       "state": "low"
     },
     {

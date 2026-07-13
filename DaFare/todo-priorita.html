@@ -104,6 +104,12 @@
       text-align: center;
     }
 
+    button.priority-chip {
+      width: 100%;
+      cursor: pointer;
+      color: var(--ink);
+    }
+
     .sync-panel {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -146,9 +152,15 @@
 
     .composer {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: 1fr;
       gap: 10px;
       margin-bottom: 14px;
+    }
+
+    .add-priority-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
     }
 
     input,
@@ -174,14 +186,6 @@
       cursor: pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-    }
-
-    .add-button {
-      background: var(--button);
-      color: var(--button-ink);
-      padding: 0 16px;
-      font-weight: 650;
-      white-space: nowrap;
     }
 
     .notes {
@@ -312,15 +316,8 @@
         padding: max(14px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
       }
 
-      .composer {
-        grid-template-columns: 1fr;
-      }
-
-      .add-button {
-        width: 100%;
-      }
-
-      .priority-legend {
+      .priority-legend,
+      .add-priority-buttons {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -376,7 +373,12 @@
     <form class="composer" id="todoForm" autocomplete="off">
       <label class="sr-only" for="todoInput">Nuova nota</label>
       <textarea id="todoInput" name="todoInput" rows="2" placeholder="Scrivi una cosa da fare..." aria-label="Nuova nota"></textarea>
-      <button class="add-button" type="submit">Aggiungi</button>
+      <div class="add-priority-buttons" aria-label="Aggiungi con priorita">
+        <button class="priority-chip urgent" type="submit" data-add-state="urgent">URGENTE</button>
+        <button class="priority-chip normal" type="submit" data-add-state="normal">NORMALE</button>
+        <button class="priority-chip low" type="submit" data-add-state="low">BASSA</button>
+        <button class="priority-chip done" type="submit" data-add-state="done">COMPLETATA</button>
+      </div>
     </form>
 
     <main class="notes" id="notes" aria-live="polite"></main>
@@ -420,6 +422,7 @@
       let pollTimer = null;
       let syncing = false;
       let applyingRemote = false;
+      let pendingAddState = "urgent";
       let clientId = localStorage.getItem(clientKey);
 
       if (!clientId) {
@@ -908,6 +911,10 @@
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
+        const submitter = event.submitter;
+        const selectedState = submitter && states.includes(submitter.dataset.addState)
+          ? submitter.dataset.addState
+          : pendingAddState;
         const text = input.value.trim();
         if (!text) {
           input.focus();
@@ -916,13 +923,20 @@
         const newNote = {
           id: createId(),
           text,
-          state: "urgent"
+          state: selectedState
         };
         notes.unshift(newNote);
         openNoteId = newNote.id;
         input.value = "";
         saveNotes();
         render();
+      });
+
+      form.addEventListener("click", function (event) {
+        const addButton = event.target.closest("[data-add-state]");
+        if (addButton && states.includes(addButton.dataset.addState)) {
+          pendingAddState = addButton.dataset.addState;
+        }
       });
 
       input.addEventListener("input", function () {

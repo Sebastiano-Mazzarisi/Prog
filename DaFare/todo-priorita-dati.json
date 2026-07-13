@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1783935949913,
+  "updatedAt": 1783935979799,
   "updatedBy": "1783933890562-f53fd5264d5818",
   "notes": [
     {
@@ -26,6 +26,11 @@
     {
       "id": "1783934092138-8b0674ad6c3fe",
       "text": "Michele Bianco: Giuseppe Santoro, sottotetto",
+      "state": "normal"
+    },
+    {
+      "id": "1783935979799-eaefa4934f4808",
+      "text": "Rrr",
       "state": "normal"
     },
     {

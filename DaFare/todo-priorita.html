@@ -69,7 +69,7 @@
     }
 
     .app-header {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .title-row {
@@ -220,6 +220,10 @@
       border-radius: 8px;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
       transition: transform 120ms ease, border-color 120ms ease;
+    }
+
+    .note-card.priority-break {
+      margin-top: 10px;
     }
 
     .note-content {
@@ -957,10 +961,14 @@
           ? notes
           : notes.filter((note) => note.id === openNoteId);
 
-        visibleNotes.forEach((note) => {
+        visibleNotes.forEach((note, index) => {
           const isOpen = openNoteId === note.id;
+          const previousNote = visibleNotes[index - 1];
           const card = document.createElement("article");
           card.className = "note-card " + note.state + (isOpen ? " is-open" : "");
+          if (previousNote && previousNote.state !== note.state) {
+            card.classList.add("priority-break");
+          }
 
           const content = document.createElement("div");
           content.className = "note-content";

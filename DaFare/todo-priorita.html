@@ -111,7 +111,7 @@
       min-height: 34px;
       display: flex;
       flex-direction: row;
-      gap: 4px;
+      gap: 0;
       align-items: center;
       justify-content: center;
       border: 1px solid rgba(0, 0, 0, 0.16);
@@ -596,6 +596,14 @@
       }
 
       function updatePriorityCounts() {
+        const counts = countByState();
+
+        priorityCountEls.forEach(function (element) {
+          element.textContent = ": " + String(counts[element.dataset.countState] || 0);
+        });
+      }
+
+      function countByState() {
         const counts = {
           urgent: 0,
           normal: 0,
@@ -609,9 +617,7 @@
           }
         });
 
-        priorityCountEls.forEach(function (element) {
-          element.textContent = ": " + String(counts[element.dataset.countState] || 0);
-        });
+        return counts;
       }
 
       function preparePdf() {
@@ -1079,7 +1085,7 @@
           priority.type = "button";
           priority.className = isOpen ? "edit-action" : "note-action";
           priority.setAttribute("aria-label", "Cambia priorita");
-          priority.textContent = isOpen ? "PrioritÃ " : "P";
+          priority.textContent = isOpen ? "Priorità" : "P";
 
           const save = document.createElement("button");
           save.type = "button";

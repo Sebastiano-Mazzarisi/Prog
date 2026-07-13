@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1783940109169,
+  "updatedAt": 1783942182610,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -26,6 +26,11 @@
     {
       "id": "1783938562683-88ebf8b5f0c598",
       "text": "Mussella: Pagare condominio Torre dei Normanni",
+      "state": "normal"
+    },
+    {
+      "id": "1783942182610-49e0db67c95de8",
+      "text": "prova",
       "state": "normal"
     },
     {

@@ -87,16 +87,17 @@
     }
 
     .print-button {
-      width: 42px;
+      min-width: 46px;
       min-height: 42px;
       display: grid;
       place-items: center;
       color: var(--ink);
       background: rgba(255, 255, 255, 0.72);
       border: 1px solid var(--line);
-      font-size: 22px;
+      font-size: 14px;
+      font-weight: 800;
       line-height: 1;
-      padding: 0;
+      padding: 0 10px;
     }
 
     .priority-legend {
@@ -372,7 +373,7 @@
     <header class="app-header">
       <div class="title-row">
         <h1>Cose da fare</h1>
-        <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">🖨️</button>
+        <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">PDF</button>
       </div>
       <div class="priority-legend" aria-label="Priorita">
         <button class="priority-chip urgent is-selected" type="button" data-add-state="urgent">URGENTE</button>
@@ -404,7 +405,6 @@
       <label class="sr-only" for="todoInput">Nuova nota</label>
       <textarea id="todoInput" name="todoInput" rows="2" placeholder="Scrivi una cosa da fare..." aria-label="Nuova nota"></textarea>
       <div class="new-note-actions">
-        <button class="edit-action" id="newPriority" type="button">Priorità</button>
         <button class="edit-action" type="submit">Salva</button>
         <button class="edit-action" id="clearNewNote" type="button">Cancella</button>
         <button class="edit-action" id="cancelNewNote" type="button">Esci</button>
@@ -636,6 +636,11 @@
         }, 250);
       }
 
+      function refreshAfterDataChange() {
+        clearAppCache();
+        refreshApp();
+      }
+
       function selectAddState(state) {
         pendingAddState = states.includes(state) ? state : "urgent";
         addPriorityButtons.forEach(function (button) {
@@ -651,7 +656,6 @@
         openNoteId = null;
         addingNote = true;
         selectAddState(state);
-        input.value = "";
         render();
         autoGrow(input);
         input.focus();
@@ -933,7 +937,7 @@
       function render() {
         sortNotes();
         notesEl.textContent = "";
-        form.hidden = openNoteId !== null;
+        form.hidden = openNoteId !== null || !addingNote;
         form.classList.toggle("is-adding", addingNote);
         syncForm.hidden = true;
 
@@ -1049,6 +1053,7 @@
             addingNote = false;
             saveNotes();
             render();
+            refreshAfterDataChange();
           });
 
           exit.addEventListener("click", function () {
@@ -1067,6 +1072,7 @@
             note.state = nextState(note.state);
             saveNotes();
             render();
+            refreshAfterDataChange();
           });
 
           remove.addEventListener("click", function () {
@@ -1086,6 +1092,7 @@
             saveNotes();
             render();
             notesEl.scrollIntoView({ block: "start" });
+            refreshAfterDataChange();
           });
 
           notesEl.appendChild(card);
@@ -1118,10 +1125,17 @@
         input.value = "";
         saveNotes();
         render();
+        refreshAfterDataChange();
       });
 
       addPriorityButtons.forEach(function (button) {
         button.addEventListener("click", function () {
+          if (addingNote) {
+            selectAddState(button.dataset.addState);
+            input.focus();
+            return;
+          }
+
           startAddingNote(button.dataset.addState);
         });
       });
@@ -1139,11 +1153,6 @@
       document.getElementById("clearNewNote").addEventListener("click", function () {
         input.value = "";
         autoGrow(input);
-        input.focus();
-      });
-
-      document.getElementById("newPriority").addEventListener("click", function () {
-        selectAddState(nextState(pendingAddState));
         input.focus();
       });
 
@@ -1169,20 +1178,6 @@
       printNotesButton.addEventListener("click", function () {
         skipNextRefresh = true;
         preparePdf();
-      });
-
-      document.addEventListener("click", function (event) {
-        if (event.target.closest("button")) {
-          setTimeout(function () {
-            if (skipNextRefresh) {
-              skipNextRefresh = false;
-              return;
-            }
-
-            clearAppCache();
-            refreshApp();
-          }, 100);
-        }
       });
 
       syncForm.addEventListener("submit", function (event) {

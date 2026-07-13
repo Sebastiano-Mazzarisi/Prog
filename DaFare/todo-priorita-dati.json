@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1783938417714,
+  "updatedAt": 1783938457923,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -36,6 +36,11 @@
     {
       "id": "1783934836166-970996a47f3a28",
       "text": "Pacello: Manutezione UP!",
+      "state": "low"
+    },
+    {
+      "id": "1783938457923-3b0461dffee5c",
+      "text": "Socim: Trovare agente per vendita box",
       "state": "low"
     }
   ]

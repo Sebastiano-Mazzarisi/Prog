@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1783942728608,
+  "updatedAt": 1783942750244,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -11,7 +11,7 @@
     {
       "id": "1783934205768-586532fcba4228",
       "text": "Villapiana: Rino Petrara, sottoscala. Fabbro: porta ingresso. Idraulico: water e lavandino",
-      "state": "urgent"
+      "state": "low"
     },
     {
       "id": "1783934639051-0a4a71df4df0f",

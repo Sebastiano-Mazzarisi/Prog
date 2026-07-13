@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1783934092138,
+  "updatedAt": 1783934095489,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -9,14 +9,14 @@
       "state": "urgent"
     },
     {
-      "id": "1783934092138-8b0674ad6c3fe",
-      "text": "Michele Bianco: Giuseppe Santoro, sottotetto",
-      "state": "urgent"
-    },
-    {
       "id": "1783932865201-e7c7598acb8ef8",
       "text": "Vaporterma - Mara, Leo, Giannetto. Pompe serbatoio",
       "state": "urgent"
+    },
+    {
+      "id": "1783934092138-8b0674ad6c3fe",
+      "text": "Michele Bianco: Giuseppe Santoro, sottotetto",
+      "state": "normal"
     }
   ]
 }

@@ -506,6 +506,7 @@
       let pendingAddState = "urgent";
       let addingNote = false;
       let skipNextRefresh = false;
+      let activeEditInput = null;
       let clientId = localStorage.getItem(clientKey);
 
       if (!clientId) {
@@ -615,11 +616,22 @@
 
       function preparePdf() {
         sortNotes();
+        const printCounts = {
+          urgent: 0,
+          normal: 0,
+          low: 0,
+          done: 0
+        };
 
         const rows = notes.map(function (note) {
+          if (Object.prototype.hasOwnProperty.call(printCounts, note.state)) {
+            printCounts[note.state] += 1;
+          }
+          const progressive = printCounts[note.state] || 1;
+
           return [
             "<article class=\"note " + note.state + "\">",
-            "<div class=\"priority\">" + priorityLabel(note.state) + "</div>",
+            "<div class=\"priority\">" + priorityLabel(note.state) + " " + progressive + "</div>",
             "<div class=\"text\">" + escapeHtml(note.text).replace(/\n/g, "<br>") + "</div>",
             "</article>"
           ].join("");
@@ -691,6 +703,30 @@
         if (addingNote) {
           form.classList.add(pendingAddState);
         }
+      }
+
+      function setOpenNoteState(state) {
+        const note = notes.find(function (item) {
+          return item.id === openNoteId;
+        });
+
+        if (!note || !states.includes(state)) {
+          return;
+        }
+
+        if (activeEditInput) {
+          note.text = activeEditInput.value;
+        }
+        note.state = state;
+        selectAddState(state);
+        const card = activeEditInput ? activeEditInput.closest(".note-card") : null;
+        if (card) {
+          card.classList.remove("urgent", "normal", "low", "done");
+          card.classList.add(state);
+        }
+        updatePriorityCounts();
+        saveNotes();
+        refreshAfterDataChange();
       }
 
       function startAddingNote(state) {
@@ -979,6 +1015,7 @@
         sortNotes();
         updatePriorityCounts();
         notesEl.textContent = "";
+        activeEditInput = null;
         if (openNoteId && !notes.some(function (note) { return note.id === openNoteId; })) {
           openNoteId = null;
         }
@@ -1069,7 +1106,6 @@
           if (isOpen) {
             const editActions = document.createElement("div");
             editActions.className = "edit-actions";
-            editActions.appendChild(priority);
             editActions.appendChild(save);
             editActions.appendChild(remove);
             editActions.appendChild(exit);
@@ -1147,6 +1183,7 @@
           notesEl.appendChild(card);
 
           if (editInput) {
+            activeEditInput = editInput;
             autoGrow(editInput);
             editInput.focus();
             editInput.setSelectionRange(editInput.value.length, editInput.value.length);
@@ -1179,6 +1216,11 @@
 
       addPriorityButtons.forEach(function (button) {
         button.addEventListener("click", function () {
+          if (openNoteId) {
+            setOpenNoteState(button.dataset.addState);
+            return;
+          }
+
           if (addingNote) {
             selectAddState(button.dataset.addState);
             input.focus();

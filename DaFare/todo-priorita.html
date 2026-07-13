@@ -635,16 +635,9 @@
         }
       }
 
-      function refreshApp() {
-        saveUiState();
-        setTimeout(function () {
-          window.location.reload();
-        }, 250);
-      }
-
       function refreshAfterDataChange() {
         clearAppCache();
-        refreshApp();
+        syncWithGitHub({ pushLocal: true });
       }
 
       function selectAddState(state) {

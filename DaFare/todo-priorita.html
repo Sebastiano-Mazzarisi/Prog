@@ -255,6 +255,16 @@
       margin-top: 10px;
     }
 
+    .new-note-actions {
+      display: none;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .composer.is-adding .new-note-actions {
+      display: flex;
+    }
+
     .edit-action {
       flex: 1 1 120px;
       min-height: 40px;
@@ -371,7 +381,10 @@
     <form class="composer" id="todoForm" autocomplete="off">
       <label class="sr-only" for="todoInput">Nuova nota</label>
       <textarea id="todoInput" name="todoInput" rows="2" placeholder="Scrivi una cosa da fare..." aria-label="Nuova nota"></textarea>
-      <button class="sr-only" type="submit">Salva nuova nota</button>
+      <div class="new-note-actions">
+        <button class="edit-action" type="submit">Salva</button>
+        <button class="edit-action" id="cancelNewNote" type="button">Esci</button>
+      </div>
     </form>
 
     <main class="notes" id="notes" aria-live="polite"></main>
@@ -417,6 +430,7 @@
       let syncing = false;
       let applyingRemote = false;
       let pendingAddState = "urgent";
+      let addingNote = false;
       let clientId = localStorage.getItem(clientKey);
 
       if (!clientId) {
@@ -490,6 +504,23 @@
         addPriorityButtons.forEach(function (button) {
           button.classList.toggle("is-selected", button.dataset.addState === pendingAddState);
         });
+      }
+
+      function startAddingNote(state) {
+        openNoteId = null;
+        addingNote = true;
+        selectAddState(state);
+        input.value = "";
+        render();
+        autoGrow(input);
+        input.focus();
+      }
+
+      function stopAddingNote() {
+        addingNote = false;
+        input.value = "";
+        autoGrow(input);
+        render();
       }
 
       function loadSyncConfig() {
@@ -757,8 +788,13 @@
         sortNotes();
         notesEl.textContent = "";
         form.hidden = openNoteId !== null;
+        form.classList.toggle("is-adding", addingNote);
         syncForm.hidden = true;
-        subtitle.hidden = openNoteId !== null;
+        subtitle.hidden = openNoteId !== null || addingNote;
+
+        if (addingNote) {
+          return;
+        }
 
         if (!notes.length) {
           const empty = document.createElement("div");
@@ -850,6 +886,7 @@
           }
 
           edit.addEventListener("click", function () {
+            addingNote = false;
             openNoteId = note.id;
             render();
           });
@@ -863,6 +900,7 @@
 
             note.text = cleanText;
             openNoteId = null;
+            addingNote = false;
             saveNotes();
             render();
           });
@@ -874,6 +912,7 @@
             }
 
             openNoteId = null;
+            addingNote = false;
             render();
           });
 
@@ -895,6 +934,7 @@
             if (openNoteId === note.id) {
               openNoteId = null;
             }
+            addingNote = false;
             saveNotes();
             render();
             notesEl.scrollIntoView({ block: "start" });
@@ -924,6 +964,7 @@
         };
         notes.unshift(newNote);
         openNoteId = newNote.id;
+        addingNote = false;
         input.value = "";
         saveNotes();
         render();
@@ -931,9 +972,17 @@
 
       addPriorityButtons.forEach(function (button) {
         button.addEventListener("click", function () {
-          selectAddState(button.dataset.addState);
-          input.focus();
+          startAddingNote(button.dataset.addState);
         });
+      });
+
+      document.getElementById("cancelNewNote").addEventListener("click", function () {
+        if (input.value.trim() && !window.confirm("Uscire senza salvare la nuova nota?")) {
+          input.focus();
+          return;
+        }
+
+        stopAddingNote();
       });
 
       form.addEventListener("keydown", function (event) {

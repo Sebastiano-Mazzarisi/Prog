@@ -162,6 +162,12 @@
       margin-bottom: 14px;
     }
 
+    .composer.is-adding {
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
     input,
     textarea {
       width: 100%;
@@ -382,7 +388,9 @@
       <label class="sr-only" for="todoInput">Nuova nota</label>
       <textarea id="todoInput" name="todoInput" rows="2" placeholder="Scrivi una cosa da fare..." aria-label="Nuova nota"></textarea>
       <div class="new-note-actions">
-        <button class="edit-action" type="submit">Aggiungi</button>
+        <button class="edit-action" id="newPriority" type="button">Priorità</button>
+        <button class="edit-action" type="submit">Salva</button>
+        <button class="edit-action" id="clearNewNote" type="button">Cancella</button>
         <button class="edit-action" id="cancelNewNote" type="button">Esci</button>
       </div>
     </form>
@@ -504,6 +512,10 @@
         addPriorityButtons.forEach(function (button) {
           button.classList.toggle("is-selected", button.dataset.addState === pendingAddState);
         });
+        form.classList.remove("urgent", "normal", "low", "done");
+        if (addingNote) {
+          form.classList.add(pendingAddState);
+        }
       }
 
       function startAddingNote(state) {
@@ -519,6 +531,7 @@
       function stopAddingNote() {
         addingNote = false;
         input.value = "";
+        form.classList.remove("urgent", "normal", "low", "done");
         autoGrow(input);
         render();
       }
@@ -965,6 +978,7 @@
         notes.unshift(newNote);
         openNoteId = newNote.id;
         addingNote = false;
+        form.classList.remove("urgent", "normal", "low", "done");
         input.value = "";
         saveNotes();
         render();
@@ -983,6 +997,17 @@
         }
 
         stopAddingNote();
+      });
+
+      document.getElementById("clearNewNote").addEventListener("click", function () {
+        input.value = "";
+        autoGrow(input);
+        input.focus();
+      });
+
+      document.getElementById("newPriority").addEventListener("click", function () {
+        selectAddState(nextState(pendingAddState));
+        input.focus();
       });
 
       form.addEventListener("keydown", function (event) {

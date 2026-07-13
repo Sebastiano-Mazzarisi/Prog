@@ -417,6 +417,7 @@
       const updatedKey = "todo-priorita-updated-v1";
       const syncKey = "todo-priorita-github-v1";
       const clientKey = "todo-priorita-client-v1";
+      const uiStateKey = "todo-priorita-ui-v1";
       const builtInSyncConfig = {
         owner: "Sebastiano-Mazzarisi",
         repo: "Prog",
@@ -439,12 +440,15 @@
       let applyingRemote = false;
       let pendingAddState = "urgent";
       let addingNote = false;
+      let skipNextRefresh = false;
       let clientId = localStorage.getItem(clientKey);
 
       if (!clientId) {
         clientId = createId();
         localStorage.setItem(clientKey, clientId);
       }
+
+      restoreUiState();
 
       function loadNotes() {
         try {
@@ -505,6 +509,46 @@
       function autoGrow(field) {
         field.style.height = "auto";
         field.style.height = field.scrollHeight + "px";
+      }
+
+      function clearAppCache() {
+        if (window.caches) {
+          caches.keys()
+            .then(function (keys) {
+              return Promise.all(keys.map(function (key) {
+                return caches.delete(key);
+              }));
+            })
+            .catch(function () {});
+        }
+      }
+
+      function saveUiState() {
+        sessionStorage.setItem(uiStateKey, JSON.stringify({
+          openNoteId,
+          addingNote,
+          pendingAddState
+        }));
+      }
+
+      function restoreUiState() {
+        try {
+          const saved = JSON.parse(sessionStorage.getItem(uiStateKey) || "{}");
+          openNoteId = typeof saved.openNoteId === "string" ? saved.openNoteId : null;
+          addingNote = Boolean(saved.addingNote);
+          pendingAddState = states.includes(saved.pendingAddState) ? saved.pendingAddState : "urgent";
+        } catch (error) {
+          openNoteId = null;
+          addingNote = false;
+          pendingAddState = "urgent";
+        }
+      }
+
+      function refreshApp() {
+        saveUiState();
+        setTimeout(function () {
+          window.location.reload();
+        }, 250);
       }
 
       function selectAddState(state) {
@@ -612,6 +656,7 @@
       async function fetchRemoteData() {
         if (syncConfig.apiUrl) {
           const response = await fetch(syncConfig.apiUrl, {
+            cache: "no-store",
             headers: {
               "Accept": "application/json"
             }
@@ -632,6 +677,7 @@
         }
 
         const response = await fetch(githubApiUrl(), {
+          cache: "no-store",
           headers: {
             "Accept": "application/vnd.github+json",
             "Authorization": "Bearer " + syncConfig.token,
@@ -665,6 +711,7 @@
         if (syncConfig.apiUrl) {
           const response = await fetch(syncConfig.apiUrl, {
             method: "PUT",
+            cache: "no-store",
             headers: {
               "Accept": "application/json",
               "Content-Type": "application/json"
@@ -692,6 +739,7 @@
 
         const response = await fetch(githubWriteUrl(), {
           method: "PUT",
+          cache: "no-store",
           headers: {
             "Accept": "application/vnd.github+json",
             "Authorization": "Bearer " + syncConfig.token,
@@ -907,6 +955,7 @@
           save.addEventListener("click", function () {
             const cleanText = editInput.value.trim();
             if (!cleanText) {
+              skipNextRefresh = true;
               editInput.focus();
               return;
             }
@@ -920,6 +969,7 @@
 
           exit.addEventListener("click", function () {
             if (editInput.value !== note.text && !window.confirm("Uscire senza salvare le modifiche?")) {
+              skipNextRefresh = true;
               editInput.focus();
               return;
             }
@@ -937,6 +987,7 @@
 
           remove.addEventListener("click", function () {
             if (!window.confirm("Cancellare questa nota?")) {
+              skipNextRefresh = true;
               if (editInput) {
                 editInput.focus();
               }
@@ -967,6 +1018,7 @@
         event.preventDefault();
         const text = input.value.trim();
         if (!text) {
+          skipNextRefresh = true;
           input.focus();
           return;
         }
@@ -992,6 +1044,7 @@
 
       document.getElementById("cancelNewNote").addEventListener("click", function () {
         if (input.value.trim() && !window.confirm("Uscire senza salvare la nuova nota?")) {
+          skipNextRefresh = true;
           input.focus();
           return;
         }
@@ -1028,6 +1081,20 @@
         autoGrow(input);
       });
       autoGrow(input);
+
+      document.addEventListener("click", function (event) {
+        if (event.target.closest("button")) {
+          setTimeout(function () {
+            if (skipNextRefresh) {
+              skipNextRefresh = false;
+              return;
+            }
+
+            clearAppCache();
+            refreshApp();
+          }, 100);
+        }
+      });
 
       syncForm.addEventListener("submit", function (event) {
         event.preventDefault();

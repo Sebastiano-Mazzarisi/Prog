@@ -31,7 +31,7 @@
     :root {
       --urgent: #ffd6d6;
       --normal: #fff0a8;
-      --low: #ffffff;
+      --low: #dff3ff;
       --done: #c9f7d2;
       --ink: #1d1d1f;
       --muted: #62626a;
@@ -110,6 +110,11 @@
       color: var(--ink);
     }
 
+    .priority-chip.is-selected {
+      border-color: var(--button);
+      box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.22);
+    }
+
     .sync-panel {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -155,12 +160,6 @@
       grid-template-columns: 1fr;
       gap: 10px;
       margin-bottom: 14px;
-    }
-
-    .add-priority-buttons {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
     }
 
     input,
@@ -316,8 +315,7 @@
         padding: max(14px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
       }
 
-      .priority-legend,
-      .add-priority-buttons {
+      .priority-legend {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -345,10 +343,10 @@
       <h1>Cose da fare</h1>
       <p class="subtitle" id="subtitle">Usa M per modificare e mostrare gli altri comandi.</p>
       <div class="priority-legend" aria-label="Priorita">
-        <div class="priority-chip urgent">URGENTE</div>
-        <div class="priority-chip normal">NORMALE</div>
-        <div class="priority-chip low">BASSA</div>
-        <div class="priority-chip done">COMPLETATA</div>
+        <button class="priority-chip urgent is-selected" type="button" data-add-state="urgent">URGENTE</button>
+        <button class="priority-chip normal" type="button" data-add-state="normal">NORMALE</button>
+        <button class="priority-chip low" type="button" data-add-state="low">BASSA</button>
+        <button class="priority-chip done" type="button" data-add-state="done">COMPLETATA</button>
       </div>
     </header>
 
@@ -373,12 +371,7 @@
     <form class="composer" id="todoForm" autocomplete="off">
       <label class="sr-only" for="todoInput">Nuova nota</label>
       <textarea id="todoInput" name="todoInput" rows="2" placeholder="Scrivi una cosa da fare..." aria-label="Nuova nota"></textarea>
-      <div class="add-priority-buttons" aria-label="Aggiungi con priorita">
-        <button class="priority-chip urgent" type="submit" data-add-state="urgent">URGENTE</button>
-        <button class="priority-chip normal" type="submit" data-add-state="normal">NORMALE</button>
-        <button class="priority-chip low" type="submit" data-add-state="low">BASSA</button>
-        <button class="priority-chip done" type="submit" data-add-state="done">COMPLETATA</button>
-      </div>
+      <button class="sr-only" type="submit">Salva nuova nota</button>
     </form>
 
     <main class="notes" id="notes" aria-live="polite"></main>
@@ -390,6 +383,7 @@
       const input = document.getElementById("todoInput");
       const notesEl = document.getElementById("notes");
       const subtitle = document.getElementById("subtitle");
+      const addPriorityButtons = Array.from(document.querySelectorAll(".priority-legend [data-add-state]"));
       const syncForm = document.getElementById("syncForm");
       const syncNowButton = document.getElementById("syncNow");
       const syncStatus = document.getElementById("syncStatus");
@@ -489,6 +483,13 @@
       function autoGrow(field) {
         field.style.height = "auto";
         field.style.height = field.scrollHeight + "px";
+      }
+
+      function selectAddState(state) {
+        pendingAddState = states.includes(state) ? state : "urgent";
+        addPriorityButtons.forEach(function (button) {
+          button.classList.toggle("is-selected", button.dataset.addState === pendingAddState);
+        });
       }
 
       function loadSyncConfig() {
@@ -911,10 +912,6 @@
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
-        const submitter = event.submitter;
-        const selectedState = submitter && states.includes(submitter.dataset.addState)
-          ? submitter.dataset.addState
-          : pendingAddState;
         const text = input.value.trim();
         if (!text) {
           input.focus();
@@ -923,13 +920,27 @@
         const newNote = {
           id: createId(),
           text,
-          state: selectedState
+          state: pendingAddState
         };
         notes.unshift(newNote);
         openNoteId = newNote.id;
         input.value = "";
         saveNotes();
         render();
+      });
+
+      addPriorityButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          selectAddState(button.dataset.addState);
+          input.focus();
+        });
+      });
+
+      form.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+          event.preventDefault();
+          form.requestSubmit();
+        }
       });
 
       form.addEventListener("click", function (event) {
@@ -958,6 +969,7 @@
       fillSyncForm();
       updateSyncStatus(isSyncConfigured() ? "GitHub configurato" : "GitHub non configurato");
       restartPolling();
+      selectAddState(pendingAddState);
 
       render();
     })();

@@ -437,7 +437,6 @@
       const updatedKey = "todo-priorita-updated-v1";
       const syncKey = "todo-priorita-github-v1";
       const clientKey = "todo-priorita-client-v1";
-      const uiStateKey = "todo-priorita-ui-v1";
       const builtInSyncConfig = {
         owner: "Sebastiano-Mazzarisi",
         repo: "Prog",
@@ -467,8 +466,7 @@
         clientId = createId();
         localStorage.setItem(clientKey, clientId);
       }
-
-      restoreUiState();
+      sessionStorage.removeItem("todo-priorita-ui-v1");
 
       function loadNotes() {
         try {
@@ -611,27 +609,6 @@
               }));
             })
             .catch(function () {});
-        }
-      }
-
-      function saveUiState() {
-        sessionStorage.setItem(uiStateKey, JSON.stringify({
-          openNoteId,
-          addingNote,
-          pendingAddState
-        }));
-      }
-
-      function restoreUiState() {
-        try {
-          const saved = JSON.parse(sessionStorage.getItem(uiStateKey) || "{}");
-          openNoteId = typeof saved.openNoteId === "string" ? saved.openNoteId : null;
-          addingNote = Boolean(saved.addingNote);
-          pendingAddState = states.includes(saved.pendingAddState) ? saved.pendingAddState : "urgent";
-        } catch (error) {
-          openNoteId = null;
-          addingNote = false;
-          pendingAddState = "urgent";
         }
       }
 
@@ -936,6 +913,9 @@
       function render() {
         sortNotes();
         notesEl.textContent = "";
+        if (openNoteId && !notes.some(function (note) { return note.id === openNoteId; })) {
+          openNoteId = null;
+        }
         form.hidden = openNoteId !== null || !addingNote;
         form.classList.toggle("is-adding", addingNote);
         syncForm.hidden = true;
@@ -1182,7 +1162,6 @@
         skipNextRefresh = true;
         openNoteId = null;
         addingNote = false;
-        saveUiState();
         preparePdf();
         render();
       });

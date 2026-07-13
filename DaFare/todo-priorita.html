@@ -1102,7 +1102,7 @@
           state: pendingAddState
         };
         notes.unshift(newNote);
-        openNoteId = newNote.id;
+        openNoteId = null;
         addingNote = false;
         form.classList.remove("urgent", "normal", "low", "done");
         input.value = "";

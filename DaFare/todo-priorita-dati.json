@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1784020585541,
+  "updatedAt": 1784020772325,
   "updatedBy": "1783943102989-e9a4518b7dd338",
   "notes": [
     {
@@ -10,7 +10,7 @@
     },
     {
       "id": "1784020585541-003911bddd7c18",
-      "text": "🟡 Programma: cliccando su nota copia il testo in memoria.",
+      "text": "🔶 Programma: cliccando su nota copia il testo in memoria.",
       "state": "urgent"
     },
     {

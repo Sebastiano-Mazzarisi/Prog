@@ -26,7 +26,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>Cose da fare!</title>
+  <title>Cose da fare! (v. 1.1)</title>
   <style>
     :root {
       --urgent: #ffd6d6;
@@ -122,7 +122,8 @@
       text-align: center;
     }
 
-    .priority-count {
+    .priority-count,
+    .title-version {
       font-size: 11px;
       line-height: 1;
       font-weight: 600;
@@ -273,13 +274,28 @@
       min-height: 34px;
       display: grid;
       place-items: center;
-      background: rgba(255, 255, 255, 0.64);
+      background: #ffffff;
       color: var(--ink);
       border: 1px solid rgba(0, 0, 0, 0.16);
       font-size: 21px;
       line-height: 1;
       padding: 0;
       font-weight: 650;
+    }
+
+    .copy-feedback {
+      position: absolute;
+      top: 8px;
+      right: 50px;
+      min-height: 34px;
+      padding: 0 10px;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      pointer-events: none;
     }
 
     .edit-actions {
@@ -368,7 +384,8 @@
         font-size: 16px;
       }
 
-      .priority-count {
+      .priority-count,
+      .title-version {
         font-size: 13px;
       }
 
@@ -421,7 +438,7 @@
   <div class="app">
     <header class="app-header">
       <div class="title-row">
-        <h1>Cose da fare</h1>
+        <h1>Cose da fare! <span class="title-version">(v. 1.1)</span></h1>
         <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">PDF</button>
       </div>
       <div class="priority-legend" aria-label="Priorita">
@@ -474,6 +491,7 @@
       const syncForm = document.getElementById("syncForm");
       const syncNowButton = document.getElementById("syncNow");
       const syncStatus = document.getElementById("syncStatus");
+      const cancelNewNoteButton = document.getElementById("cancelNewNote");
       const githubOwner = document.getElementById("githubOwner");
       const githubRepo = document.getElementById("githubRepo");
       const githubBranch = document.getElementById("githubBranch");
@@ -508,6 +526,7 @@
       let skipNextRefresh = false;
       let activeEditInput = null;
       let clientId = localStorage.getItem(clientKey);
+      let copyAudioContext = null;
 
       if (!clientId) {
         clientId = createId();
@@ -746,6 +765,89 @@
         form.classList.remove("urgent", "normal", "low", "done");
         autoGrow(input);
         render();
+      }
+
+      function exitAddingNote() {
+        if (input.value.trim() && !window.confirm("Uscire senza salvare la nuova nota?")) {
+          skipNextRefresh = true;
+          input.focus();
+          return false;
+        }
+
+        stopAddingNote();
+        return true;
+      }
+
+      function exitEditingNote(editInput, note) {
+        if (editInput.value !== note.text && !window.confirm("Uscire senza salvare le modifiche?")) {
+          skipNextRefresh = true;
+          editInput.focus();
+          return false;
+        }
+
+        openNoteId = null;
+        addingNote = false;
+        render();
+        return true;
+      }
+
+      function copyTextToClipboard(text) {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          return navigator.clipboard.writeText(text);
+        }
+
+        const helper = document.createElement("textarea");
+        helper.value = text;
+        helper.setAttribute("readonly", "");
+        helper.style.position = "fixed";
+        helper.style.left = "-9999px";
+        document.body.appendChild(helper);
+        helper.select();
+
+        try {
+          document.execCommand("copy");
+          return Promise.resolve();
+        } catch (error) {
+          return Promise.reject(error);
+        } finally {
+          document.body.removeChild(helper);
+        }
+      }
+
+      function showCopiedFeedback(button) {
+        if (!button) {
+          return;
+        }
+
+        button.hidden = false;
+        clearTimeout(button.hideTimer);
+        button.hideTimer = setTimeout(function () {
+          button.hidden = true;
+        }, 2000);
+      }
+
+      function playCopySound() {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) {
+          return;
+        }
+
+        try {
+          copyAudioContext = copyAudioContext || new AudioContext();
+          const now = copyAudioContext.currentTime;
+          const oscillator = copyAudioContext.createOscillator();
+          const gain = copyAudioContext.createGain();
+
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(160, now);
+          gain.gain.setValueAtTime(0.045, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+
+          oscillator.connect(gain);
+          gain.connect(copyAudioContext.destination);
+          oscillator.start(now);
+          oscillator.stop(now + 0.11);
+        } catch (error) {}
       }
 
       function loadSyncConfig() {
@@ -1054,6 +1156,7 @@
           content.className = "note-content";
 
           let editInput = null;
+          let copyFeedback = null;
 
           if (isOpen) {
             editInput = document.createElement("textarea");
@@ -1070,6 +1173,23 @@
             text.className = "note-text";
             text.textContent = note.text;
             content.appendChild(text);
+            copyFeedback = document.createElement("button");
+            copyFeedback.type = "button";
+            copyFeedback.className = "copy-feedback";
+            copyFeedback.textContent = "Copiato!";
+            copyFeedback.tabIndex = -1;
+            copyFeedback.hidden = true;
+            content.addEventListener("click", function () {
+              copyTextToClipboard(note.text)
+                .then(function () {
+                  showCopiedFeedback(copyFeedback);
+                  playCopySound();
+                  updateSyncStatus("Nota copiata negli appunti");
+                })
+                .catch(function () {
+                  updateSyncStatus("Impossibile copiare la nota");
+                });
+            });
           }
 
           const actions = document.createElement("div");
@@ -1118,6 +1238,7 @@
 
           card.appendChild(content);
           if (!isOpen) {
+            card.appendChild(copyFeedback);
             card.appendChild(actions);
           }
 
@@ -1144,15 +1265,7 @@
           });
 
           exit.addEventListener("click", function () {
-            if (editInput.value !== note.text && !window.confirm("Uscire senza salvare le modifiche?")) {
-              skipNextRefresh = true;
-              editInput.focus();
-              return;
-            }
-
-            openNoteId = null;
-            addingNote = false;
-            render();
+            exitEditingNote(editInput, note);
           });
 
           priority.addEventListener("click", function () {
@@ -1233,14 +1346,8 @@
         });
       });
 
-      document.getElementById("cancelNewNote").addEventListener("click", function () {
-        if (input.value.trim() && !window.confirm("Uscire senza salvare la nuova nota?")) {
-          skipNextRefresh = true;
-          input.focus();
-          return;
-        }
-
-        stopAddingNote();
+      cancelNewNoteButton.addEventListener("click", function () {
+        exitAddingNote();
       });
 
       document.getElementById("clearNewNote").addEventListener("click", function () {
@@ -1253,6 +1360,29 @@
         if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
           event.preventDefault();
           form.requestSubmit();
+        }
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key !== "Escape") {
+          return;
+        }
+
+        if (openNoteId && activeEditInput) {
+          const note = notes.find(function (item) {
+            return item.id === openNoteId;
+          });
+
+          if (note) {
+            event.preventDefault();
+            exitEditingNote(activeEditInput, note);
+          }
+          return;
+        }
+
+        if (addingNote) {
+          event.preventDefault();
+          exitAddingNote();
         }
       });
 

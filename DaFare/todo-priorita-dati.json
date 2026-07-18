@@ -1,8 +1,13 @@
 {
   "version": 1,
-  "updatedAt": 1784395794687,
+  "updatedAt": 1784395828907,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
+    {
+      "id": "1784395828907-cf867cc8184bc8",
+      "text": "Condizionatore Torre dei Normanni",
+      "state": "urgent"
+    },
     {
       "id": "1783932865201-e7c7598acb8ef8",
       "text": "Morea Gomme: decidere su gomme Panda",

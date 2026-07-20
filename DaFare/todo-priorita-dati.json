@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1784532776666,
+  "updatedAt": 1784532885274,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -36,6 +36,11 @@
     {
       "id": "1783932847989-aaccb7217b2d98",
       "text": "Castiglione: Carlo Lafirenze - Risposta Franco",
+      "state": "low"
+    },
+    {
+      "id": "1784532885273-cbf967e22c1d7",
+      "text": "Fideuram: Controllare estratti conto mensili",
       "state": "low"
     },
     {

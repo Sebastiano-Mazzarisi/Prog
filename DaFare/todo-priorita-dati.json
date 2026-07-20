@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1784532467993,
+  "updatedAt": 1784532772942,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -36,7 +36,7 @@
     {
       "id": "1783938681446-f4e9f3edcce998",
       "text": "Cooperativa: Elenco bonifici non utilizzati nell'atto.",
-      "state": "low"
+      "state": "normal"
     },
     {
       "id": "1783938414247-866156ade89a88",

@@ -26,7 +26,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>Cose da fare! (v. 1.2)</title>
+  <title>Cose da fare! (v. 1.3)</title>
   <style>
     :root {
       --urgent: #ffd6d6;
@@ -438,7 +438,7 @@
   <div class="app">
     <header class="app-header">
       <div class="title-row">
-        <h1>Cose da fare! <span class="title-version">(v. 1.2)</span></h1>
+        <h1>Cose da fare! <span class="title-version">(v. 1.3)</span></h1>
         <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">PDF</button>
       </div>
       <div class="priority-legend" aria-label="Priorita">
@@ -604,6 +604,40 @@
           .replace(/'/g, "&#039;");
       }
 
+      function appendFormattedNoteText(container, value) {
+        const pattern = /\*([^*\n]+?)\*/g;
+        const text = String(value);
+        let cursor = 0;
+        let match;
+
+        while ((match = pattern.exec(text)) !== null) {
+          if (match.index > cursor) {
+            container.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+          }
+
+          const strong = document.createElement("strong");
+          strong.textContent = match[1];
+          container.appendChild(strong);
+          cursor = pattern.lastIndex;
+        }
+
+        if (cursor < text.length) {
+          container.appendChild(document.createTextNode(text.slice(cursor)));
+        }
+      }
+
+      function formatNoteTextHtml(value) {
+        const pattern = /\*([^*\n]+?)\*/g;
+        return String(value)
+          .split("\n")
+          .map(function (line) {
+            return escapeHtml(line).replace(pattern, function (_match, boldText) {
+              return "<strong>" + boldText + "</strong>";
+            });
+          })
+          .join("<br>");
+      }
+
       function priorityLabel(state) {
         const labels = {
           urgent: "URGENTE",
@@ -650,7 +684,7 @@
           return [
             "<article class=\"note " + note.state + "\">",
             "<div class=\"priority\">" + priorityLabel(note.state) + "</div>",
-            "<div class=\"text\">" + escapeHtml(note.text).replace(/\n/g, "<br>") + "</div>",
+            "<div class=\"text\">" + formatNoteTextHtml(note.text) + "</div>",
             "</article>"
           ].join("");
         }).join("");
@@ -1171,7 +1205,7 @@
           } else {
             const text = document.createElement("span");
             text.className = "note-text";
-            text.textContent = note.text;
+            appendFormattedNoteText(text, note.text);
             content.appendChild(text);
             copyFeedback = document.createElement("button");
             copyFeedback.type = "button";

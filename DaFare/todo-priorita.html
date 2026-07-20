@@ -26,7 +26,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>Cose da fare! (v. 1.4)</title>
+  <title>Cose da fare! (v. 1.5)</title>
   <style>
     :root {
       --urgent: #ffd6d6;
@@ -438,7 +438,7 @@
   <div class="app">
     <header class="app-header">
       <div class="title-row">
-        <h1>Cose da fare! <span class="title-version">(v. 1.4)</span></h1>
+        <h1>Cose da fare! <span class="title-version">(v. 1.5)</span></h1>
         <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">PDF</button>
       </div>
       <div class="priority-legend" aria-label="Priorita">
@@ -648,6 +648,16 @@
         return labels[state] || "URGENTE";
       }
 
+      function printPriorityLabel(state) {
+        const labels = {
+          urgent: "Urgente",
+          normal: "Normale",
+          low: "Bassa",
+          done: "Completata"
+        };
+        return labels[state] || "Urgente";
+      }
+
       function updatePriorityCounts() {
         const counts = countByState();
 
@@ -696,7 +706,7 @@
 
           return [
             "<section class=\"priority-section " + state + "\">",
-            "<div class=\"priority-heading\"><span>" + priorityLabel(state) + "</span></div>",
+            "<div class=\"priority-heading\"><span>" + printPriorityLabel(state) + "</span></div>",
             "<ul class=\"priority-notes\">",
             items,
             "</ul>",
@@ -717,10 +727,10 @@
           ".summary{display:flex;gap:5mm;margin:0 0 4mm;padding-bottom:2mm;border-bottom:1px solid #999;font-size:9pt;font-weight:700;}",
           ".summary span{white-space:nowrap;}",
           ".priority-section{break-inside:avoid;margin:0 0 5mm;}",
-          ".priority-heading{display:flex;align-items:center;gap:3mm;margin:0 0 1.5mm;font-size:9pt;font-weight:700;text-transform:capitalize;}",
+          ".priority-heading{display:flex;align-items:center;gap:3mm;margin:0 0 1.5mm;font-size:9pt;font-weight:700;}",
           ".priority-heading::after{content:\"\";flex:1;border-top:1px solid #999;}",
-          ".priority-notes{margin:0 0 0 8mm;padding:0;font-size:10.5pt;line-height:1.25;}",
-          ".priority-notes li{break-inside:avoid;margin:0 0 1mm;padding-left:1mm;}",
+          ".priority-notes{list-style:none;margin:0 0 0 8mm;padding:0;font-size:10.5pt;line-height:1.25;}",
+          ".priority-notes li{break-inside:avoid;margin:0 0 1mm;padding:0;}",
           "@media print{button{display:none;}}",
           "</style>",
           "</head>",

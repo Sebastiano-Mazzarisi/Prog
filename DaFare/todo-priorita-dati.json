@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1784534260365,
+  "updatedAt": 1784534530132,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -56,6 +56,11 @@
     {
       "id": "1783938457923-3b0461dffee5c",
       "text": "*Socim*: Trovare agente immobiliare per vendita box senza esclusiva",
+      "state": "low"
+    },
+    {
+      "id": "1784534530132-6ee2e1c16fd6f8",
+      "text": "*Villapiana*: Problema sottoscala e frattura intonaco",
       "state": "low"
     }
   ]

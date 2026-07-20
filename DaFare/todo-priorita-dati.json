@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1784532772942,
+  "updatedAt": 1784532776666,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -19,6 +19,11 @@
       "state": "urgent"
     },
     {
+      "id": "1783938681446-f4e9f3edcce998",
+      "text": "Cooperativa: Elenco bonifici non utilizzati nell'atto.",
+      "state": "normal"
+    },
+    {
       "id": "1783934092138-8b0674ad6c3fe",
       "text": "Michele Bianco: Giuseppe Santoro, sottotetto",
       "state": "normal"
@@ -32,11 +37,6 @@
       "id": "1783932847989-aaccb7217b2d98",
       "text": "Castiglione: Carlo Lafirenze - Risposta Franco",
       "state": "low"
-    },
-    {
-      "id": "1783938681446-f4e9f3edcce998",
-      "text": "Cooperativa: Elenco bonifici non utilizzati nell'atto.",
-      "state": "normal"
     },
     {
       "id": "1783938414247-866156ade89a88",

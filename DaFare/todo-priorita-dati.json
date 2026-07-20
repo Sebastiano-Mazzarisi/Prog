@@ -1,11 +1,16 @@
 {
   "version": 1,
-  "updatedAt": 1784561034439,
+  "updatedAt": 1784561075058,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
       "id": "1783932865201-e7c7598acb8ef8",
       "text": "*Morea Gomme*: decidere su gomme Panda (estive o 4 stagioni)",
+      "state": "urgent"
+    },
+    {
+      "id": "1783934836166-970996a47f3a28",
+      "text": "*Pacello*: Manutezione UP! Prendere Mary da Pacello alle 08:45",
       "state": "urgent"
     },
     {
@@ -47,11 +52,6 @@
       "id": "1783938414247-866156ade89a88",
       "text": "*Leonardo Pedone*: Situazione garage Cooperativa",
       "state": "low"
-    },
-    {
-      "id": "1783934836166-970996a47f3a28",
-      "text": "*Pacello*: Manutezione UP!",
-      "state": "urgent"
     },
     {
       "id": "1783938457923-3b0461dffee5c",

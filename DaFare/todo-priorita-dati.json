@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1784534023963,
+  "updatedAt": 1784534036503,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -40,7 +40,7 @@
     },
     {
       "id": "1784532885273-cbf967e22c1d7",
-      "text": "Fideuram: Controllare estratti conto mensili",
+      "text": "*Fideuram*: Controllare estratti conto mensili",
       "state": "low"
     },
     {

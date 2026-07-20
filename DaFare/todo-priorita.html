@@ -26,7 +26,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>Cose da fare! (v. 1.5)</title>
+  <title>Cose da fare! (v. 1.6)</title>
   <style>
     :root {
       --urgent: #ffd6d6;
@@ -438,7 +438,7 @@
   <div class="app">
     <header class="app-header">
       <div class="title-row">
-        <h1>Cose da fare! <span class="title-version">(v. 1.5)</span></h1>
+        <h1>Cose da fare! <span class="title-version">(v. 1.6)</span></h1>
         <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">PDF</button>
       </div>
       <div class="priority-legend" aria-label="Priorita">
@@ -685,11 +685,7 @@
 
       function preparePdf() {
         sortNotes();
-        const printCounts = countByState();
         const printStates = ["urgent", "normal", "low", "done"];
-        const summaryRows = printStates.map(function (state) {
-          return "<span>" + priorityLabel(state) + ": " + (printCounts[state] || 0) + "</span>";
-        }).join("");
 
         const rows = printStates.map(function (state) {
           const groupNotes = notes.filter(function (note) {
@@ -706,7 +702,7 @@
 
           return [
             "<section class=\"priority-section " + state + "\">",
-            "<div class=\"priority-heading\"><span>" + printPriorityLabel(state) + "</span></div>",
+            "<div class=\"priority-heading\"><span>" + printPriorityLabel(state) + " (" + groupNotes.length + ")</span></div>",
             "<ul class=\"priority-notes\">",
             items,
             "</ul>",
@@ -723,9 +719,7 @@
           "<style>",
           "@page{size:A4 portrait;margin:10mm;}",
           "body{font-family:Arial,sans-serif;color:#111;margin:0;font-size:11pt;}",
-          "h1{font-size:16pt;margin:0 0 2mm;}",
-          ".summary{display:flex;gap:5mm;margin:0 0 4mm;padding-bottom:2mm;border-bottom:1px solid #999;font-size:9pt;font-weight:700;}",
-          ".summary span{white-space:nowrap;}",
+          "h1{font-size:16pt;margin:0 0 4mm;}",
           ".priority-section{break-inside:avoid;margin:0 0 5mm;}",
           ".priority-heading{display:flex;align-items:center;gap:3mm;margin:0 0 1.5mm;font-size:9pt;font-weight:700;}",
           ".priority-heading::after{content:\"\";flex:1;border-top:1px solid #999;}",
@@ -736,7 +730,6 @@
           "</head>",
           "<body>",
           "<h1>Cose da fare!</h1>",
-          "<div class=\"summary\">" + summaryRows + "</div>",
           rows || "<p>Nessuna nota.</p>",
           "<script>",
           "function closePrintPage(){setTimeout(function(){window.close();},100);}",

@@ -26,7 +26,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>Cose da fare! (v. 1.3)</title>
+  <title>Cose da fare! (v. 1.4)</title>
   <style>
     :root {
       --urgent: #ffd6d6;
@@ -438,7 +438,7 @@
   <div class="app">
     <header class="app-header">
       <div class="title-row">
-        <h1>Cose da fare! <span class="title-version">(v. 1.3)</span></h1>
+        <h1>Cose da fare! <span class="title-version">(v. 1.4)</span></h1>
         <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">PDF</button>
       </div>
       <div class="priority-legend" aria-label="Priorita">
@@ -676,16 +676,31 @@
       function preparePdf() {
         sortNotes();
         const printCounts = countByState();
-        const summaryRows = ["urgent", "normal", "low", "done"].map(function (state) {
+        const printStates = ["urgent", "normal", "low", "done"];
+        const summaryRows = printStates.map(function (state) {
           return "<span>" + priorityLabel(state) + ": " + (printCounts[state] || 0) + "</span>";
         }).join("");
 
-        const rows = notes.map(function (note) {
+        const rows = printStates.map(function (state) {
+          const groupNotes = notes.filter(function (note) {
+            return note.state === state;
+          });
+
+          if (!groupNotes.length) {
+            return "";
+          }
+
+          const items = groupNotes.map(function (note) {
+            return "<li>" + formatNoteTextHtml(note.text) + "</li>";
+          }).join("");
+
           return [
-            "<article class=\"note " + note.state + "\">",
-            "<div class=\"priority\">" + priorityLabel(note.state) + "</div>",
-            "<div class=\"text\">" + formatNoteTextHtml(note.text) + "</div>",
-            "</article>"
+            "<section class=\"priority-section " + state + "\">",
+            "<div class=\"priority-heading\"><span>" + priorityLabel(state) + "</span></div>",
+            "<ul class=\"priority-notes\">",
+            items,
+            "</ul>",
+            "</section>"
           ].join("");
         }).join("");
 
@@ -701,9 +716,11 @@
           "h1{font-size:16pt;margin:0 0 2mm;}",
           ".summary{display:flex;gap:5mm;margin:0 0 4mm;padding-bottom:2mm;border-bottom:1px solid #999;font-size:9pt;font-weight:700;}",
           ".summary span{white-space:nowrap;}",
-          ".note{break-inside:avoid;border-bottom:1px solid #ccc;margin:0;padding:2.5mm 0;}",
-          ".priority{display:inline-block;width:26mm;font-size:8pt;font-weight:700;vertical-align:top;}",
-          ".text{display:inline-block;width:calc(100% - 28mm);font-size:10.5pt;line-height:1.2;white-space:normal;}",
+          ".priority-section{break-inside:avoid;margin:0 0 5mm;}",
+          ".priority-heading{display:flex;align-items:center;gap:3mm;margin:0 0 1.5mm;font-size:9pt;font-weight:700;text-transform:capitalize;}",
+          ".priority-heading::after{content:\"\";flex:1;border-top:1px solid #999;}",
+          ".priority-notes{margin:0 0 0 8mm;padding:0;font-size:10.5pt;line-height:1.25;}",
+          ".priority-notes li{break-inside:avoid;margin:0 0 1mm;padding-left:1mm;}",
           "@media print{button{display:none;}}",
           "</style>",
           "</head>",

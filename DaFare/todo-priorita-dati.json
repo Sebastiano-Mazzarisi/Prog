@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1784621759236,
+  "updatedAt": 1784621766152,
   "updatedBy": "1783932825060-4c29d112ba5da",
   "notes": [
     {
@@ -19,11 +19,6 @@
       "state": "urgent"
     },
     {
-      "id": "1784395725355-344b698565fa18",
-      "text": "*Rino Lella*: Risposta per invito mercoledì 29 luglio",
-      "state": "normal"
-    },
-    {
       "id": "1783938681446-f4e9f3edcce998",
       "text": "*Cooperativa*: Elenco bonifici non utilizzati nell'atto.",
       "state": "normal"
@@ -31,6 +26,11 @@
     {
       "id": "1783934092138-8b0674ad6c3fe",
       "text": "*Michele Bianco*: Giuseppe Santoro, sottotetto.",
+      "state": "normal"
+    },
+    {
+      "id": "1784395725355-344b698565fa18",
+      "text": "*Rino Lella*: Risposta per invito mercoledì 29 luglio",
       "state": "normal"
     },
     {

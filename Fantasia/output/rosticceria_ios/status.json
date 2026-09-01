@@ -1,16 +1,20 @@
 {
-  "updated_at": "2026-09-01T21:47:27",
+  "updated_at": "2026-09-01T22:18:11",
   "pages": [
     {
       "name": "Fantasia",
       "image": "Fantasia.jpg",
       "text": "MENÙ DEL GIORNO 01/09/26",
+      "published_at": "01/09/2026 10:17 circa",
+      "published_at_raw": "12 h",
       "error": null
     },
     {
       "name": "Cibarìa",
       "image": "Cibaria.jpg",
       "text": "1 Settembre 2026\nMenù del giorno.",
+      "published_at": "01/09/2026 09:18 circa",
+      "published_at_raw": "13 h",
       "error": null
     }
   ]

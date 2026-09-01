@@ -1,12 +1,14 @@
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 import time
 import argparse
 import datetime
 import html
+from zoneinfo import ZoneInfo
 from typing import Dict, List, Optional
 
 import requests
@@ -152,6 +154,95 @@ def best_text_from_post(post) -> str:
         return ""
 
 
+def best_published_time_from_post(post) -> str:
+    selectors = [
+        "abbr",
+        'a[aria-label]',
+        'span[aria-label]',
+        'time',
+    ]
+
+    for selector in selectors:
+        try:
+            for element in post.locator(selector).all():
+                for attribute in ("title", "aria-label", "datetime"):
+                    value = element.get_attribute(attribute)
+                    if value and looks_like_facebook_time(value):
+                        return value.strip()
+
+                try:
+                    text = element.inner_text(timeout=1000).strip()
+                except Exception:
+                    text = ""
+                if text and looks_like_facebook_time(text):
+                    return text
+        except Exception:
+            pass
+
+    return ""
+
+
+def rome_now() -> datetime.datetime:
+    return datetime.datetime.now(ZoneInfo("Europe/Rome"))
+
+
+def normalize_facebook_time(value: str) -> str:
+    value = value.strip()
+    if not value:
+        return ""
+
+    lower_value = value.lower()
+    now = rome_now()
+
+    match = re.fullmatch(r"(\d+)\s*(min|m)", lower_value)
+    if match:
+        minutes = int(match.group(1))
+        return (now - datetime.timedelta(minutes=minutes)).strftime("%d/%m/%Y %H:%M circa")
+
+    match = re.fullmatch(r"(\d+)\s*(h|ore?|ora)", lower_value)
+    if match:
+        hours = int(match.group(1))
+        return (now - datetime.timedelta(hours=hours)).strftime("%d/%m/%Y %H:%M circa")
+
+    match = re.search(r"ieri.*?(\d{1,2})[:.](\d{2})", lower_value)
+    if match:
+        published = now - datetime.timedelta(days=1)
+        published = published.replace(hour=int(match.group(1)), minute=int(match.group(2)), second=0, microsecond=0)
+        return published.strftime("%d/%m/%Y %H:%M")
+
+    return value
+
+
+def looks_like_facebook_time(value: str) -> bool:
+    value = value.strip().lower()
+    if not value:
+        return False
+
+    month_words = [
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre",
+    ]
+    relative_words = ["min", "h", "ore", "ieri", "oggi"]
+    has_digit = any(char.isdigit() for char in value)
+
+    return has_digit and (
+        any(month in value for month in month_words)
+        or any(word in value for word in relative_words)
+        or "/" in value
+        or ":" in value
+    )
+
+
 def image_score(image) -> int:
     try:
         box = image.bounding_box(timeout=1000)
@@ -200,6 +291,7 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
             if best_image and best_score:
                 image_url = best_image.get_attribute("src")
                 if image_url:
+                    published_at_raw = best_published_time_from_post(post)
                     try:
                         photo_url = best_image.evaluate(
                             "image => { const link = image.closest('a[href]'); return link ? link.href : ''; }"
@@ -210,6 +302,8 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
                         "image_url": image_url,
                         "photo_url": photo_url,
                         "text": best_text_from_post(post),
+                        "published_at": normalize_facebook_time(published_at_raw),
+                        "published_at_raw": published_at_raw,
                     }
 
     return None
@@ -361,6 +455,8 @@ def write_publish_status(panels: List[Dict], output_dir: str) -> None:
                 "name": panel["name"],
                 "image": panel.get("publish_image"),
                 "text": panel.get("text", ""),
+                "published_at": panel.get("published_at", ""),
+                "published_at_raw": panel.get("published_at_raw", ""),
                 "error": panel.get("error"),
             }
             for panel in panels
@@ -382,8 +478,10 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
         else:
             image = html.escape(panel.get("publish_image", ""))
             text = html.escape(panel.get("text", ""))
+            published_at = html.escape(panel.get("published_at", ""))
             body = f"""
                 <img src="{image}?v={int(time.time())}" alt="{title}">
+                <p class="published">Facebook: {published_at or "orario non disponibile"}</p>
                 <pre>{text}</pre>
             """
         cards.append(f"<section><h2>{title}</h2>{body}</section>")
@@ -443,6 +541,11 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
       font-size: 16px;
       line-height: 1.35;
       margin: 12px 0 0;
+    }}
+    .published {{
+      color: #ccc;
+      font-size: 13px;
+      margin: 8px 0 0;
     }}
     .error {{
       color: #ffd0d0;
@@ -618,6 +721,8 @@ def extract_pages() -> List[Dict]:
                     "name": name,
                     "image_bytes": image_bytes,
                     "text": post.get("text", ""),
+                    "published_at": post.get("published_at", ""),
+                    "published_at_raw": post.get("published_at_raw", ""),
                 }
             )
         except Exception as exc:

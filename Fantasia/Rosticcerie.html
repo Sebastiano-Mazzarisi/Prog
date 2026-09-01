@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Rosticcerie">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Rosticcerie</title>
+  <link rel="apple-touch-icon" href="https://sebastiano-mazzarisi.github.io/Prog/icons/rosticcerie-180.png">
+  <link rel="manifest" href="https://sebastiano-mazzarisi.github.io/Prog/manifest.webmanifest">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      overflow: hidden;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .viewer {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: #050505;
+    }
+
+    .viewer img {
+      max-width: 100vw;
+      max-height: 100vh;
+      width: auto;
+      height: auto;
+      display: block;
+      background: #000;
+    }
+
+    .badge {
+      position: fixed;
+      top: calc(16px + env(safe-area-inset-top));
+      left: calc(16px + env(safe-area-inset-left));
+      max-width: min(520px, calc(100vw - 32px));
+      padding: 10px 13px;
+      background: rgba(0, 0, 0, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+    }
+
+    .title {
+      margin: 0;
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .published {
+      margin: 4px 0 0;
+      color: #d8d8d8;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .status {
+      position: fixed;
+      left: calc(16px + env(safe-area-inset-left));
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      max-width: min(520px, calc(100vw - 32px));
+      margin: 0;
+      padding: 8px 10px;
+      background: rgba(0, 0, 0, 0.68);
+      color: #d8d8d8;
+      font-size: 12px;
+    }
+
+    .controls {
+      position: fixed;
+      right: calc(16px + env(safe-area-inset-right));
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      min-width: 88px;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      padding: 12px 14px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button.active {
+      background: #fff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <main class="viewer">
+    <img id="photo" src="Rosticceria_Fantasia.jpg" alt="Fantasia">
+  </main>
+
+  <section class="badge" aria-live="polite">
+    <h1 id="title" class="title">Fantasia</h1>
+    <p id="published" class="published">Facebook: data non disponibile</p>
+  </section>
+
+  <p id="status" class="status">Carico le immagini aggiornate...</p>
+
+  <nav class="controls" aria-label="Scegli rosticceria">
+    <button id="fantasiaButton" class="active" type="button">Fantasia</button>
+    <button id="cibariaButton" type="button">Cibarìa</button>
+  </nav>
+
+  <script>
+    const remoteBase = "https://sebastiano-mazzarisi.github.io/Prog/";
+    const localPlaces = [
+      { name: "Fantasia", image: "Rosticceria_Fantasia.jpg", published_at: "" },
+      { name: "Cibarìa", image: "Rosticceria_Cibaria.jpg", published_at: "" }
+    ];
+
+    let base = "";
+    let places = localPlaces;
+    let currentIndex = 0;
+
+    const photo = document.getElementById("photo");
+    const title = document.getElementById("title");
+    const published = document.getElementById("published");
+    const status = document.getElementById("status");
+    const fantasiaButton = document.getElementById("fantasiaButton");
+    const cibariaButton = document.getElementById("cibariaButton");
+
+    function facebookDate(place) {
+      return place.published_at || "data non disponibile";
+    }
+
+    function showPlace(index) {
+      currentIndex = index;
+      const place = places[index];
+      const image = place.image || localPlaces[index].image;
+      photo.src = `${base}${image}?v=${Date.now()}`;
+      photo.alt = place.name;
+      title.textContent = place.name;
+      published.textContent = `Facebook: ${facebookDate(place)}`;
+      fantasiaButton.classList.toggle("active", index === 0);
+      cibariaButton.classList.toggle("active", index === 1);
+    }
+
+    async function loadLatest() {
+      try {
+        const response = await fetch(`${remoteBase}status.json?v=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("status non disponibile");
+        }
+
+        const statusData = await response.json();
+        places = statusData.pages;
+        base = remoteBase;
+
+        const updated = new Date(statusData.updated_at);
+        status.textContent = Number.isNaN(updated.getTime())
+          ? "Immagini aggiornate da GitHub"
+          : `Aggiornato: ${updated.toLocaleString("it-IT")}`;
+      } catch (error) {
+        places = localPlaces;
+        base = "";
+        status.textContent = "Uso le immagini locali incluse nella stessa cartella.";
+      }
+
+      showPlace(currentIndex);
+    }
+
+    fantasiaButton.addEventListener("click", () => showPlace(0));
+    cibariaButton.addEventListener("click", () => showPlace(1));
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === " ") {
+        showPlace((currentIndex + 1) % places.length);
+      }
+      if (event.key === "ArrowLeft") {
+        showPlace((currentIndex + places.length - 1) % places.length);
+      }
+    });
+
+    loadLatest();
+    setInterval(loadLatest, 5 * 60 * 1000);
+  </script>
+</body>
+</html>

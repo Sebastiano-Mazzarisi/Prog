@@ -1,3 +1,11 @@
+<!--
+Nome.py: Rosticcerie.html
+Data e ora ultima modifica: 2026-09-01 22:56:34
+Descrizione: Web app per la visualizzazione delle foto delle rosticcerie, modificata per adattare l'immagine allo schermo ed evitare la sovrapposizione dei pulsanti.
+File di input: Nessuno
+File di output: Nessuno
+Parametri: Nessuno
+-->
 <!doctype html>
 <html lang="it">
 <head>
@@ -30,6 +38,7 @@
       display: grid;
       grid-template-rows: auto 1fr auto;
       height: 100vh;
+      height: 100dvh; /* Risolve il problema dell'altezza della barra di navigazione su mobile */
     }
 
     .viewer {
@@ -43,8 +52,9 @@
     .viewer img {
       max-width: 100%;
       max-height: 100%;
-      width: auto;
-      height: auto;
+      width: 100%; /* Modificato per confinare l'immagine */
+      height: 100%; /* Modificato per confinare l'immagine */
+      object-fit: contain; /* Assicura che l'immagine sia visibile per intero senza sovrapporsi */
       display: block;
       background: #000;
     }

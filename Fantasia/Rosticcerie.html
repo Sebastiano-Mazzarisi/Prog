@@ -69,19 +69,11 @@
       line-height: 1.25;
     }
 
-    .status {
-      margin: 0;
-      padding: 4px 12px 8px;
-      background: #111;
-      color: #d8d8d8;
-      font-size: 12px;
-    }
-
     .controls {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      padding: 0 12px 12px;
+      padding: 12px;
       background: #111;
     }
 
@@ -109,7 +101,6 @@
       }
 
       .badge,
-      .status,
       .controls {
         max-width: 760px;
         width: 100%;
@@ -129,7 +120,6 @@
   </main>
 
   <footer>
-    <p id="status" class="status">Carico le immagini aggiornate...</p>
     <nav class="controls" aria-label="Scegli rosticceria">
       <button id="fantasiaButton" class="active" type="button">Fantasia</button>
       <button id="cibariaButton" type="button">Cibarìa</button>
@@ -150,7 +140,6 @@
     const photo = document.getElementById("photo");
     const title = document.getElementById("title");
     const published = document.getElementById("published");
-    const status = document.getElementById("status");
     const fantasiaButton = document.getElementById("fantasiaButton");
     const cibariaButton = document.getElementById("cibariaButton");
 
@@ -181,14 +170,9 @@
         places = statusData.pages;
         base = remoteBase;
 
-        const updated = new Date(statusData.updated_at);
-        status.textContent = Number.isNaN(updated.getTime())
-          ? "Immagini aggiornate da GitHub"
-          : `Aggiornato: ${updated.toLocaleString("it-IT")}`;
       } catch (error) {
         places = localPlaces;
         base = "";
-        status.textContent = "Uso le immagini locali incluse nella stessa cartella.";
       }
 
       showPlace(currentIndex);

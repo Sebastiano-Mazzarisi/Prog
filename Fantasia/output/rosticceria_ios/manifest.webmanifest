@@ -1,7 +1,7 @@
 {
   "name": "Rosticcerie",
   "short_name": "Rosticcerie",
-  "start_url": "Rosticcerie.html",
+  "start_url": "https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/Rosticcerie.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#111111",

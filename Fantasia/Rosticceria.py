@@ -41,9 +41,9 @@ PANECO_PAGE = {
 }
 COOKIE_FILE = "cookies.txt"
 PUBLISH_DIR = os.path.join("output", "rosticceria_ios")
-RUN_START = datetime.time(10, 0)
+RUN_START = datetime.time(9, 0)
 RUN_END = datetime.time(12, 0)
-RUN_INTERVAL_MINUTES = 30
+RUN_INTERVAL_MINUTES = 1
 
 
 def script_dir() -> str:
@@ -661,6 +661,67 @@ def safe_file_name(name: str) -> str:
     return "".join(char if char.isalnum() else "_" for char in name).strip("_")
 
 
+def parse_status_date(value: str) -> Optional[datetime.date]:
+    match = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})", value or "")
+    if not match:
+        return None
+
+    try:
+        return datetime.date(int(match.group(3)), int(match.group(2)), int(match.group(1)))
+    except ValueError:
+        return None
+
+
+def existing_publish_panel_if_today(name: str) -> Optional[Dict]:
+    output_dir = publish_dir()
+    status_path = os.path.join(output_dir, "status.json")
+    if not os.path.exists(status_path):
+        return None
+
+    try:
+        with open(status_path, "r", encoding="utf-8") as status_file:
+            status = json.load(status_file)
+    except Exception:
+        return None
+
+    for page_status in status.get("pages", []):
+        if page_status.get("name") != name:
+            continue
+        if parse_status_date(page_status.get("published_at", "")) != rome_now().date():
+            return None
+
+        image_name = page_status.get("image") or f"{safe_file_name(name)}.jpg"
+        image_path = os.path.join(output_dir, image_name)
+        if not os.path.exists(image_path):
+            return None
+
+        text_name = page_status.get("publish_text") or f"{safe_file_name(name)}.txt"
+        text_path = os.path.join(output_dir, text_name)
+        text = page_status.get("text", "")
+        if os.path.exists(text_path):
+            try:
+                with open(text_path, "r", encoding="utf-8") as text_file:
+                    text = text_file.read()
+            except Exception:
+                pass
+
+        with open(image_path, "rb") as image_file:
+            image_bytes = image_file.read()
+
+        return {
+            "name": name,
+            "image_bytes": image_bytes,
+            "text": text,
+            "published_at": page_status.get("published_at", ""),
+            "published_at_raw": page_status.get("published_at_raw", ""),
+            "publish_image": image_name,
+            "publish_text": text_name,
+            "reused": True,
+        }
+
+    return None
+
+
 def save_publish_files(panels: List[Dict]) -> str:
     output_dir = publish_dir()
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M")
@@ -672,6 +733,11 @@ def save_publish_files(panels: List[Dict]) -> str:
         base_name = safe_file_name(panel["name"])
         latest_name = f"{base_name}.jpg"
         archive_name = f"{base_name}_{timestamp}.jpg"
+        panel["publish_image"] = panel.get("publish_image") or latest_name
+        panel["publish_text"] = panel.get("publish_text") or f"{base_name}.txt"
+
+        if panel.get("reused"):
+            continue
 
         for filename in (latest_name, archive_name):
             path = os.path.join(output_dir, filename)
@@ -957,6 +1023,12 @@ def extract_pages() -> List[Dict]:
 
     for facebook_page in FACEBOOK_PAGES:
         name = facebook_page["name"]
+        existing_panel = existing_publish_panel_if_today(name)
+        if existing_panel:
+            print(f"{name}: foto di oggi già presente, salto la verifica.")
+            panels.append(existing_panel)
+            continue
+
         print(f"Cerco la prima immagine su Facebook: {name}...")
         try:
             post = extract_first_facebook_image(facebook_page["url"])
@@ -975,6 +1047,12 @@ def extract_pages() -> List[Dict]:
         except Exception as exc:
             panels.append({"name": name, "error": str(exc)})
 
+    existing_panel = existing_publish_panel_if_today(PANECO_PAGE["name"])
+    if existing_panel:
+        print("Pane&Co: menu di oggi già presente, salto la verifica.")
+        panels.append(existing_panel)
+        return panels
+
     print("Creo il menu Pane&Co con primi e secondi del giorno...")
     try:
         panel = extract_paneeco_menu()
@@ -989,6 +1067,13 @@ def extract_pages() -> List[Dict]:
 
 def run_once(show: bool = False, publish_to_git: bool = True) -> None:
     panels = extract_pages()
+    output_dir = publish_dir()
+    if panels and all(panel.get("reused") for panel in panels):
+        print("Tutte le rosticcerie hanno già il menu di oggi: nessuna verifica necessaria.")
+        if show:
+            show_fullscreen(panels)
+        return
+
     output_dir = save_publish_files(panels)
     print(f"File per iOS aggiornati in: {output_dir}")
 
@@ -1023,7 +1108,7 @@ def next_run_time(now: datetime.datetime) -> datetime.datetime:
 
 
 def monitor_loop(show: bool = False, publish_to_git: bool = True) -> None:
-    print("Monitor attivo: estrazione ogni 30 minuti tra le 10:00 e le 12:00.")
+    print("Monitor attivo: estrazione ogni minuto tra le 09:00 e le 12:00.")
 
     while True:
         now = datetime.datetime.now()

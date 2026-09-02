@@ -45,6 +45,7 @@ FACEBOOK_PAGES = [
 TEXT_FACEBOOK_PAGES = [
     {
         "name": "Bollenti",
+        "display_name": "Bollenti Piatti",
         "url": "https://www.facebook.com/BollentiPiatti",
     },
 ]
@@ -180,6 +181,95 @@ def clean_text_menu_post(text: str) -> str:
         cleaned_lines.append(line)
 
     return "\n".join(cleaned_lines).strip()
+
+
+def has_see_more_marker(text: str) -> bool:
+    return bool(re.search(r"(?:…|\.\.\.)\s*Altro|Mostra altro|See more", text or "", re.IGNORECASE))
+
+
+def expand_facebook_see_more(post, page) -> None:
+    selectors = [
+        'div[role="button"]:has-text("Altro")',
+        'div[role="button"]:has-text("Mostra altro")',
+        'div[role="button"]:has-text("See more")',
+        'span:has-text("Altro")',
+        'span:has-text("Mostra altro")',
+        'span:has-text("See more")',
+        'a:has-text("Altro")',
+        'a:has-text("Mostra altro")',
+        'a:has-text("See more")',
+    ]
+
+    for _ in range(3):
+        clicked = False
+        try:
+            before_text = post.inner_text(timeout=1000)
+        except Exception:
+            before_text = ""
+
+        for selector in selectors:
+            try:
+                for element in post.locator(selector).all():
+                    label = element.inner_text(timeout=700).strip()
+                    lower_label = label.lower()
+                    if "altro" not in lower_label and "see more" not in lower_label:
+                        continue
+                    if not element.is_visible(timeout=700):
+                        continue
+                    element.click(timeout=1500, force=True)
+                    page.wait_for_timeout(900)
+                    clicked = True
+                    break
+            except Exception:
+                pass
+            if clicked:
+                break
+
+        if not clicked:
+            try:
+                clicked = bool(
+                    post.evaluate(
+                        """post => {
+                            const candidates = Array.from(post.querySelectorAll('div[role="button"], a, span, div'));
+                            const matching = candidates
+                                .map((candidate) => ({
+                                    candidate,
+                                    label: (candidate.innerText || candidate.textContent || '').trim()
+                                }))
+                                .filter((item) => /altro|mostra altro|see more/i.test(item.label))
+                                .sort((a, b) => a.label.length - b.label.length);
+
+                            for (const { candidate, label } of matching) {
+                                if (!/altro|mostra altro|see more/i.test(label)) {
+                                    continue;
+                                }
+                                let clickable = candidate.closest('[role="button"], a') || candidate;
+                                for (let depth = 0; clickable && depth < 5; depth += 1) {
+                                    try {
+                                        clickable.click();
+                                        return true;
+                                    } catch (error) {
+                                        clickable = clickable.parentElement;
+                                    }
+                                }
+                            }
+                            return false;
+                        }"""
+                    )
+                )
+                if clicked:
+                    page.wait_for_timeout(900)
+            except Exception:
+                clicked = False
+
+        if not clicked:
+            return
+        try:
+            after_text = post.inner_text(timeout=1000)
+        except Exception:
+            after_text = ""
+        if after_text and after_text != before_text and "Altro" not in after_text:
+            return
 
 
 def menu_date_line_from_text(text: str) -> str:
@@ -510,22 +600,19 @@ def find_first_text_menu_post(page) -> Optional[Dict[str, str]]:
     for selector in post_selectors:
         posts = page.locator(selector).all()
         for post in posts[:20]:
-            try:
-                for see_more in post.get_by_text(re.compile(r"Altro", re.IGNORECASE)).all():
-                    if see_more.is_visible(timeout=500):
-                        see_more.click(timeout=1000)
-                        page.wait_for_timeout(500)
-            except Exception:
-                pass
+            expand_facebook_see_more(post, page)
 
             try:
                 raw_text = post.inner_text(timeout=3000)
+                truncated = has_see_more_marker(raw_text)
                 full_text = clean_text_menu_post(raw_text)
             except Exception:
                 continue
 
             post_text = full_text
             if not post_text:
+                continue
+            if truncated:
                 continue
 
             published_at = infer_date_from_text(post_text) or infer_date_from_text(raw_text)
@@ -670,7 +757,11 @@ def extract_first_facebook_text_menu(page_config: Dict[str, str]) -> Dict[str, s
                 post = find_first_text_menu_post(page)
                 if post:
                     text = post.get("text", "")
-                    image_bytes = render_text_menu_image(page_config["name"], text, post.get("published_at", ""))
+                    image_bytes = render_text_menu_image(
+                        page_config.get("display_name", page_config["name"]),
+                        text,
+                        post.get("published_at", ""),
+                    )
                     return {
                         "name": page_config["name"],
                         "image_bytes": image_bytes,

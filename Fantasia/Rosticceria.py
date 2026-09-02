@@ -1,6 +1,6 @@
 # Nome.py: Rosticceria.py
 # Data e ora ultima modifica: 02/09/2026 10:19
-# Descrizione: Estrae e pubblica i menu e le foto delle rosticcerie Fantasia, Cibarìa e Pane&Co da Facebook e web.
+# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti e Pane&Co da Facebook e web.
 # File di input: cookies.txt
 # File di output: status.json, index.html, immagini jpg
 # Parametri: --once, --show, --no-git
@@ -40,6 +40,12 @@ FACEBOOK_PAGES = [
         "name": "Cibarìa",
         "url": "https://www.facebook.com/cibaria.asporto",
         "output_image": "Rosticceria_Cibaria.jpg",
+    },
+]
+TEXT_FACEBOOK_PAGES = [
+    {
+        "name": "Bollenti",
+        "url": "https://www.facebook.com/BollentiPiatti",
     },
 ]
 PANECO_PAGE = {
@@ -146,11 +152,34 @@ def clean_post_text(text: str) -> str:
             line.startswith("Foto di ")
             or line.startswith("Rosticceria Fantasia")
             or line.startswith("Cibaria")
+            or line.startswith("Bollenti Piatti")
         ):
             continue
         lines.append(line)
 
     return "\n".join(lines).strip()
+
+
+def clean_text_menu_post(text: str) -> str:
+    cleaned_lines = []
+
+    for raw_line in clean_post_text(text).splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        if re.fullmatch(r"\d+\s*(?:h|min|m|g|d)", line, re.IGNORECASE):
+            continue
+        if re.fullmatch(r"[·.\-]+", line):
+            continue
+        if re.fullmatch(r"\d+", line):
+            continue
+
+        line = re.sub(r"\s*(?:…|\.\.\.)\s*Altro(?:\.\.\.)?\s*$", "", line, flags=re.IGNORECASE).strip()
+        if not line:
+            continue
+        cleaned_lines.append(line)
+
+    return "\n".join(cleaned_lines).strip()
 
 
 def menu_date_line_from_text(text: str) -> str:
@@ -336,6 +365,10 @@ def looks_like_facebook_time(value: str) -> bool:
     value = value.strip().lower()
     if not value:
         return False
+    if value.startswith(("http://", "https://")) and not re.search(
+        r"\b\d{1,2}/\d{1,2}/\d{2,4}\b|\b\d{4}-\d{2}-\d{2}\b", value
+    ):
+        return False
 
     month_words = list(ITALIAN_MONTHS.keys()) + [
         "january",
@@ -467,6 +500,56 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
     return None
 
 
+def find_first_text_menu_post(page) -> Optional[Dict[str, str]]:
+    post_selectors = [
+        'div[role="article"]',
+        "div[aria-posinset]",
+    ]
+
+    fallback_post = None
+    for selector in post_selectors:
+        posts = page.locator(selector).all()
+        for post in posts[:20]:
+            try:
+                for see_more in post.get_by_text(re.compile(r"Altro", re.IGNORECASE)).all():
+                    if see_more.is_visible(timeout=500):
+                        see_more.click(timeout=1000)
+                        page.wait_for_timeout(500)
+            except Exception:
+                pass
+
+            try:
+                raw_text = post.inner_text(timeout=3000)
+                full_text = clean_text_menu_post(raw_text)
+            except Exception:
+                continue
+
+            post_text = full_text
+            if not post_text:
+                continue
+
+            published_at = infer_date_from_text(post_text) or infer_date_from_text(raw_text)
+            published_at_raw = published_at or best_published_time_from_post(post) or raw_text
+            normalized_published_at = published_at or normalize_facebook_time(published_at_raw) or normalize_facebook_time(raw_text)
+            candidate = {
+                "text": post_text,
+                "published_at": normalized_published_at,
+                "published_at_raw": published_at_raw,
+            }
+
+            lower_text = post_text.lower()
+            if ("menu" in lower_text or "menù" in lower_text) and normalized_published_at:
+                return candidate
+
+            if fallback_post is None and len(post_text) > 20:
+                fallback_post = candidate
+
+        if fallback_post:
+            return fallback_post
+
+    return None
+
+
 def find_largest_visible_image_url(page) -> str:
     best_url = ""
     best_score = 0
@@ -544,6 +627,61 @@ def extract_first_facebook_image(facebook_url: str) -> Dict[str, str]:
                 page.wait_for_timeout(2000)
 
             raise RuntimeError(f"Non ho trovato nessuna immagine grande nella pagina Facebook: {facebook_url}")
+        finally:
+            browser.close()
+
+
+def extract_first_facebook_text_menu(page_config: Dict[str, str]) -> Dict[str, str]:
+    cookie_path = os.path.join(script_dir(), COOKIE_FILE)
+
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        try:
+            context = browser.new_context(
+                viewport={"width": 1366, "height": 2400},
+                user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/126.0.0.0 Safari/537.36"
+                ),
+            )
+
+            cookies = load_facebook_cookies(cookie_path)
+            if cookies:
+                context.add_cookies(cookies)
+            if not cookies_look_authenticated(cookies):
+                print(
+                    f"ATTENZIONE: {cookie_path} non contiene un login Facebook valido "
+                    "(mancano i cookie 'c_user'/'xs'). Verrà usata una sessione anonima."
+                )
+
+            page = context.new_page()
+            page.goto(page_config["url"], wait_until="domcontentloaded", timeout=60000)
+
+            try:
+                page.get_by_role("button", name="Consenti tutti i cookie").click(timeout=3000)
+            except PlaywrightTimeoutError:
+                pass
+            except Exception:
+                pass
+
+            page.wait_for_timeout(5000)
+            for _ in range(4):
+                post = find_first_text_menu_post(page)
+                if post:
+                    text = post.get("text", "")
+                    image_bytes = render_text_menu_image(page_config["name"], text, post.get("published_at", ""))
+                    return {
+                        "name": page_config["name"],
+                        "image_bytes": image_bytes,
+                        "text": text,
+                        "published_at": post.get("published_at", ""),
+                        "published_at_raw": post.get("published_at_raw", ""),
+                    }
+                page.mouse.wheel(0, 900)
+                page.wait_for_timeout(2000)
+
+            raise RuntimeError(f"Non ho trovato nessun post testuale del menu nella pagina Facebook: {page_config['url']}")
         finally:
             browser.close()
 
@@ -683,6 +821,69 @@ def wrap_text(draw: ImageDraw.ImageDraw, text: str, font, max_width: int) -> Lis
             current = word
     lines.append(current)
     return lines
+
+
+def render_text_menu_image(title: str, text: str, published_at: str = "") -> bytes:
+    width = 1080
+    margin = 58
+    header_bg = (176, 0, 32)
+    cream = (255, 252, 243)
+    paper = (255, 255, 255)
+    ink = (18, 18, 18)
+    muted = (90, 90, 90)
+    line_color = (226, 226, 226)
+
+    title_font = load_font(52, bold=True)
+    date_font = load_font(30)
+    body_font = load_font(31)
+
+    clean_text = clean_post_text(text)
+    body_lines = []
+    probe = Image.new("RGB", (width, 200), cream)
+    draw = ImageDraw.Draw(probe)
+    text_width = width - (margin * 2) - 48
+
+    for raw_line in clean_text.splitlines():
+        line = raw_line.strip()
+        if not line:
+            body_lines.append("")
+            continue
+        body_lines.extend(wrap_text(draw, line, body_font, text_width))
+
+    if not body_lines:
+        body_lines = ["Menu non disponibile"]
+
+    line_height = 43
+    content_height = sum(line_height if line else 24 for line in body_lines)
+    height = margin + 104 + 34 + content_height + margin
+    image = Image.new("RGB", (width, max(height, 900)), cream)
+    draw = ImageDraw.Draw(image)
+
+    y = margin
+    draw.rounded_rectangle((margin, y, width - margin, y + 104), radius=18, fill=header_bg)
+    draw.text((margin + 28, y + 23), title, fill=(255, 255, 255), font=title_font)
+    y += 124
+
+    display_date = published_at or infer_date_from_text(clean_text)
+    if display_date:
+        draw.text((margin + 10, y), f"Menu del giorno: {display_date}", fill=muted, font=date_font)
+        y += 52
+
+    card_top = y
+    card_bottom = y + content_height + 42
+    draw.rounded_rectangle((margin, card_top, width - margin, card_bottom), radius=14, fill=paper, outline=line_color, width=2)
+    y += 22
+
+    for line in body_lines:
+        if not line:
+            y += 24
+            continue
+        draw.text((margin + 24, y), line, fill=ink, font=body_font)
+        y += line_height
+
+    output = io.BytesIO()
+    image.save(output, format="JPEG", quality=92)
+    return output.getvalue()
 
 
 def render_paneeco_image(date_label: str, categories: List[Dict]) -> bytes:
@@ -1242,6 +1443,23 @@ def extract_pages() -> List[Dict]:
                     "published_at_raw": post.get("published_at_raw", ""),
                 }
             )
+        except Exception as exc:
+            panels.append({"name": name, "error": str(exc)})
+
+    for text_page in TEXT_FACEBOOK_PAGES:
+        name = text_page["name"]
+        existing_panel = existing_publish_panel_if_today(name)
+        if existing_panel:
+            print(f"{name}: menu di oggi già presente, salto la verifica.")
+            panels.append(existing_panel)
+            continue
+
+        print(f"Cerco il menu testuale su Facebook: {name}...")
+        try:
+            panel = extract_first_facebook_text_menu(text_page)
+            image_path = save_image(panel["image_bytes"], f"Rosticceria_{safe_file_name(name)}.jpg")
+            print(f"{name}: immagine generata in {image_path}")
+            panels.append(panel)
         except Exception as exc:
             panels.append({"name": name, "error": str(exc)})
 

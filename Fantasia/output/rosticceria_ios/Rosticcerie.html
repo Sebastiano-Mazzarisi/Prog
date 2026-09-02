@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Rosticcerie">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Rosticcerie</title>
-  <link rel="apple-touch-icon" href="https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/icons/rosticcerie-180.png">
+  <link rel="apple-touch-icon" href="https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/Rosticceria.jpg">
   <link rel="manifest" href="https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/manifest.webmanifest">
   <style>
     * {
@@ -41,8 +41,8 @@
 
     .controls {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
     }
 
     button {
@@ -61,7 +61,7 @@
     }
 
     .button-name {
-      font-size: 17px;
+      font-size: 15px;
       line-height: 1.05;
     }
 
@@ -271,7 +271,7 @@
   </header>
 
   <main id="viewer" class="viewer mobile-only">
-    <img id="photo" src="Rosticceria_Fantasia.jpg" alt="Fantasia">
+    <img id="photo" src="Fantasia.jpg" alt="Fantasia">
   </main>
 
   <main id="desktopGrid" class="desktop-grid" aria-label="Rosticcerie affiancate"></main>
@@ -291,9 +291,10 @@
   <script>
     const remoteBase = "https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/";
     const localPlaces = [
-      { name: "Fantasia", image: "Rosticceria_Fantasia.jpg", published_at: "" },
-      { name: "Cibarìa", image: "Rosticceria_Cibaria.jpg", published_at: "" },
-      { name: "Pane&Co", image: "Rosticceria_Pane_Co.jpg", published_at: "" }
+      { name: "Fantasia", image: "Fantasia.jpg", published_at: "" },
+      { name: "Cibarìa", image: "Cibaria.jpg", published_at: "" },
+      { name: "Bollenti", image: "Bollenti.jpg", published_at: "" },
+      { name: "Pane&Co", image: "Pane_Co.jpg", published_at: "" }
     ];
 
     let base = "";

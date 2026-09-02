@@ -54,7 +54,7 @@ jobs:
           from datetime import datetime
           from zoneinfo import ZoneInfo
 
-          expected = {"Fantasia", "Cibarìa", "Pane&Co"}
+          expected = {"Fantasia", "Cibarìa", "Bollenti", "Pane&Co"}
           today = datetime.now(ZoneInfo("Europe/Rome")).date()
           status_path = os.path.join("Fantasia", "output", "rosticceria_ios", "status.json")
           skip_all = False

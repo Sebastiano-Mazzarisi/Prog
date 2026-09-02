@@ -153,7 +153,28 @@ def clean_post_text(text: str) -> str:
     return "\n".join(lines).strip()
 
 
+def menu_date_line_from_text(text: str) -> str:
+    for raw_line in (text or "").splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        if not re.search(r"\bmenu\b|\bmenù\b", line, re.IGNORECASE):
+            continue
+        if infer_date_from_text(line):
+            return line
+
+    return ""
+
+
 def best_text_from_post(post) -> str:
+    try:
+        full_text = clean_post_text(post.inner_text(timeout=3000))
+        menu_date_line = menu_date_line_from_text(full_text)
+        if menu_date_line:
+            return menu_date_line
+    except Exception:
+        full_text = ""
+
     message_selectors = [
         'div[data-ad-preview="message"] span[dir="auto"]',
         'div[data-ad-preview="message"] div[dir="auto"]',
@@ -169,6 +190,9 @@ def best_text_from_post(post) -> str:
                     text_parts.append(element.inner_text(timeout=3000))
             text = clean_post_text("\n".join(text_parts))
             if text:
+                menu_date_line = menu_date_line_from_text(text)
+                if menu_date_line:
+                    return menu_date_line
                 return text
         except Exception:
             pass
@@ -185,14 +209,14 @@ def best_text_from_post(post) -> str:
                 text_parts.append(text)
         text = clean_post_text("\n".join(text_parts))
         if text:
+            menu_date_line = menu_date_line_from_text(text)
+            if menu_date_line:
+                return menu_date_line
             return text
     except Exception:
         pass
 
-    try:
-        return clean_post_text(post.inner_text(timeout=3000))
-    except Exception:
-        return ""
+    return full_text
 
 
 def best_published_time_from_post(post) -> str:
@@ -420,7 +444,11 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
                 image_url = best_image.get_attribute("src")
                 if image_url:
                     post_text = best_text_from_post(post)
-                    date_in_post_text = infer_date_from_text(post_text)
+                    try:
+                        full_post_text = clean_post_text(post.inner_text(timeout=3000))
+                    except Exception:
+                        full_post_text = post_text
+                    date_in_post_text = infer_date_from_text(post_text) or infer_date_from_text(full_post_text)
                     published_at_raw = date_in_post_text or best_published_time_from_post(post)
                     try:
                         photo_url = best_image.evaluate(
@@ -951,7 +979,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
         else:
             image = html.escape(panel.get("publish_image", ""))
             text = html.escape(panel.get("text", ""))
-            published_at = html.escape(panel.get("published_at", ""))
+            published_at = html.escape(panel_published_at(panel))
             body = f"""
                 <img src="{image}?v={int(time.time())}" alt="{title}">
                 <p class="published">Facebook: {published_at or "orario non disponibile"}</p>

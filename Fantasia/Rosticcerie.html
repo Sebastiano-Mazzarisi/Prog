@@ -102,6 +102,48 @@
       transform-origin: top left;
       user-select: none;
       -webkit-user-drag: none;
+      cursor: pointer;
+    }
+
+    .refresh-progress {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      z-index: 20;
+      width: min(340px, calc(100vw - 32px));
+      padding: 10px 12px 12px;
+      border: 1px solid rgba(255, 233, 77, 0.55);
+      background: rgba(8, 8, 8, 0.92);
+      color: #fff;
+      transform: translateX(-50%);
+      display: none;
+    }
+
+    .refresh-progress.visible {
+      display: block;
+    }
+
+    .refresh-progress__label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .refresh-progress__track {
+      height: 8px;
+      background: #2a2a2a;
+      overflow: hidden;
+    }
+
+    .refresh-progress__bar {
+      width: 0%;
+      height: 100%;
+      background: #ffe94d;
+      box-shadow: 0 0 10px rgba(255, 233, 77, 0.7);
+      transition: width 0.25s linear;
     }
 
     .desktop-grid {
@@ -166,6 +208,16 @@
 
   <main id="desktopGrid" class="desktop-grid" aria-label="Rosticcerie affiancate"></main>
 
+  <div id="refreshProgress" class="refresh-progress" role="status" aria-live="polite">
+    <div class="refresh-progress__label">
+      <span>Controllo aggiornamenti</span>
+      <span id="refreshPercent">0%</span>
+    </div>
+    <div class="refresh-progress__track">
+      <div id="refreshBar" class="refresh-progress__bar"></div>
+    </div>
+  </div>
+
   <script>
     const remoteBase = "https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/";
     const localPlaces = [
@@ -184,12 +236,20 @@
     let touchStartY = 0;
     let swipeReady = false;
     let wasPinching = false;
+    let suppressNextClick = false;
+    let isRefreshing = false;
+    let progressDelay = 0;
+    let progressTimer = 0;
+    let progressValue = 0;
 
     const viewer = document.getElementById("viewer");
     const photo = document.getElementById("photo");
     const published = document.getElementById("published");
     const controls = document.getElementById("controls");
     const desktopGrid = document.getElementById("desktopGrid");
+    const refreshProgress = document.getElementById("refreshProgress");
+    const refreshPercent = document.getElementById("refreshPercent");
+    const refreshBar = document.getElementById("refreshBar");
 
     function displayDate(place) {
       const value = place.published_at || "";
@@ -256,6 +316,42 @@
       viewer.scrollLeft = 0;
     }
 
+    function setProgress(value) {
+      progressValue = Math.max(0, Math.min(100, value));
+      refreshPercent.textContent = `${Math.round(progressValue)}%`;
+      refreshBar.style.width = `${progressValue}%`;
+    }
+
+    function startProgress() {
+      setProgress(8);
+      refreshProgress.classList.add("visible");
+      progressTimer = window.setInterval(() => {
+        const nextValue = progressValue < 70 ? progressValue + 7 : progressValue + 2;
+        setProgress(Math.min(95, nextValue));
+      }, 450);
+    }
+
+    function prepareProgress() {
+      window.clearTimeout(progressDelay);
+      window.clearInterval(progressTimer);
+      refreshProgress.classList.remove("visible");
+      setProgress(0);
+      progressDelay = window.setTimeout(startProgress, 5000);
+    }
+
+    function finishProgress() {
+      window.clearTimeout(progressDelay);
+      window.clearInterval(progressTimer);
+
+      if (refreshProgress.classList.contains("visible")) {
+        setProgress(100);
+        window.setTimeout(() => {
+          refreshProgress.classList.remove("visible");
+          setProgress(0);
+        }, 700);
+      }
+    }
+
     function showPlace(index) {
       currentIndex = (index + places.length) % places.length;
       const place = places[currentIndex];
@@ -303,6 +399,7 @@
         const image = document.createElement("img");
         image.src = imageUrl(place, index);
         image.alt = place.name;
+        image.addEventListener("click", checkForUpdates);
 
         header.append(title, date);
         imageWrap.append(image);
@@ -329,6 +426,18 @@
       renderControls();
       showPlace(currentIndex);
       renderDesktop();
+    }
+
+    async function checkForUpdates() {
+      if (isRefreshing) {
+        return;
+      }
+
+      isRefreshing = true;
+      prepareProgress();
+      await loadLatest();
+      finishProgress();
+      isRefreshing = false;
     }
 
     function touchDistance(touches) {
@@ -371,12 +480,22 @@
         const dy = event.changedTouches[0].clientY - touchStartY;
 
         if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          suppressNextClick = true;
           showPlace(currentIndex + (dx < 0 ? 1 : -1));
         }
       }
 
       pinchStartDistance = 0;
       swipeReady = false;
+    });
+
+    photo.addEventListener("click", () => {
+      if (suppressNextClick) {
+        suppressNextClick = false;
+        return;
+      }
+
+      checkForUpdates();
     });
 
     document.addEventListener("keydown", (event) => {

@@ -67,7 +67,8 @@
       text-align: center;
     }
 
-    .viewer {
+    .viewer,
+    .desktop-image {
       min-height: 0;
       overflow: auto;
       background: #050505;
@@ -76,7 +77,8 @@
       touch-action: pan-x pan-y pinch-zoom;
     }
 
-    .viewer img {
+    .viewer img,
+    .desktop-image img {
       width: 100%;
       max-width: none;
       height: auto;
@@ -87,25 +89,58 @@
       -webkit-user-drag: none;
     }
 
+    .desktop-grid {
+      display: none;
+      min-height: 0;
+      background: #333;
+      gap: 1px;
+    }
+
+    .desktop-panel {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: #111;
+    }
+
+    .desktop-panel-header {
+      padding: 10px 14px 8px;
+      border-bottom: 1px solid #333;
+      background: #111;
+    }
+
+    .desktop-panel-header h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .desktop-panel-header p {
+      margin: 4px 0 0;
+      color: #d8d8d8;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
     @media (min-width: 760px) {
-      .topbar {
-        width: 760px;
-        justify-self: center;
+      body {
+        grid-template-rows: 1fr;
       }
 
-      .viewer {
+      .mobile-only {
+        display: none;
+      }
+
+      .desktop-grid {
         display: grid;
-        justify-items: center;
-      }
-
-      .viewer img {
-        width: min(100%, 760px);
+        grid-template-columns: 1fr 1fr;
       }
     }
   </style>
 </head>
 <body>
-  <header class="topbar" aria-live="polite">
+  <header class="topbar mobile-only" aria-live="polite">
     <nav class="controls" aria-label="Scegli rosticceria">
       <button id="fantasiaButton" class="active" type="button">Fantasia</button>
       <button id="cibariaButton" type="button">Cibarìa</button>
@@ -113,9 +148,11 @@
     <p id="published" class="published">Pubblicata su Facebook: data non disponibile</p>
   </header>
 
-  <main id="viewer" class="viewer">
+  <main id="viewer" class="viewer mobile-only">
     <img id="photo" src="Rosticceria_Fantasia.jpg" alt="Fantasia">
   </main>
+
+  <main id="desktopGrid" class="desktop-grid" aria-label="Rosticcerie affiancate"></main>
 
   <script>
     const remoteBase = "https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/";
@@ -130,12 +167,17 @@
     let zoom = 1;
     let pinchStartDistance = 0;
     let pinchStartZoom = 1;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let swipeReady = false;
+    let wasPinching = false;
 
     const viewer = document.getElementById("viewer");
     const photo = document.getElementById("photo");
     const published = document.getElementById("published");
     const fantasiaButton = document.getElementById("fantasiaButton");
     const cibariaButton = document.getElementById("cibariaButton");
+    const desktopGrid = document.getElementById("desktopGrid");
 
     function facebookDate(place) {
       const value = place.published_at || "";
@@ -143,27 +185,60 @@
       return match ? match[0] : "data non disponibile";
     }
 
+    function imageUrl(place, fallbackIndex) {
+      const image = place.image || localPlaces[fallbackIndex].image;
+      return `${base}${image}?v=${Date.now()}`;
+    }
+
     function setZoom(value) {
       zoom = Math.min(3, Math.max(1, value));
       photo.style.width = `${zoom * 100}%`;
     }
 
-    function resetView() {
+    function resetMobileView() {
       setZoom(1);
       viewer.scrollTop = 0;
       viewer.scrollLeft = 0;
     }
 
     function showPlace(index) {
-      currentIndex = index;
-      const place = places[index];
-      const image = place.image || localPlaces[index].image;
-      photo.src = `${base}${image}?v=${Date.now()}`;
+      currentIndex = (index + places.length) % places.length;
+      const place = places[currentIndex];
+      photo.src = imageUrl(place, currentIndex);
       photo.alt = place.name;
       published.textContent = `Pubblicata su Facebook: ${facebookDate(place)}`;
-      fantasiaButton.classList.toggle("active", index === 0);
-      cibariaButton.classList.toggle("active", index === 1);
-      resetView();
+      fantasiaButton.classList.toggle("active", currentIndex === 0);
+      cibariaButton.classList.toggle("active", currentIndex === 1);
+      resetMobileView();
+    }
+
+    function renderDesktop() {
+      desktopGrid.innerHTML = "";
+      places.forEach((place, index) => {
+        const panel = document.createElement("section");
+        panel.className = "desktop-panel";
+
+        const header = document.createElement("header");
+        header.className = "desktop-panel-header";
+
+        const title = document.createElement("h2");
+        title.textContent = place.name;
+
+        const date = document.createElement("p");
+        date.textContent = `Pubblicata su Facebook: ${facebookDate(place)}`;
+
+        const imageWrap = document.createElement("div");
+        imageWrap.className = "desktop-image";
+
+        const image = document.createElement("img");
+        image.src = imageUrl(place, index);
+        image.alt = place.name;
+
+        header.append(title, date);
+        imageWrap.append(image);
+        panel.append(header, imageWrap);
+        desktopGrid.append(panel);
+      });
     }
 
     async function loadLatest() {
@@ -182,6 +257,7 @@
       }
 
       showPlace(currentIndex);
+      renderDesktop();
     }
 
     function touchDistance(touches) {
@@ -191,9 +267,18 @@
     }
 
     viewer.addEventListener("touchstart", (event) => {
+      if (event.touches.length === 1) {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+        swipeReady = true;
+        wasPinching = false;
+      }
+
       if (event.touches.length === 2) {
         pinchStartDistance = touchDistance(event.touches);
         pinchStartZoom = zoom;
+        swipeReady = false;
+        wasPinching = true;
       }
     }, { passive: true });
 
@@ -205,11 +290,22 @@
       }
     }, { passive: false });
 
-    viewer.addEventListener("touchend", () => {
+    viewer.addEventListener("touchend", (event) => {
       if (zoom < 1.05) {
         setZoom(1);
       }
+
+      if (swipeReady && !wasPinching && event.changedTouches.length > 0) {
+        const dx = event.changedTouches[0].clientX - touchStartX;
+        const dy = event.changedTouches[0].clientY - touchStartY;
+
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          showPlace(currentIndex + (dx < 0 ? 1 : -1));
+        }
+      }
+
       pinchStartDistance = 0;
+      swipeReady = false;
     });
 
     fantasiaButton.addEventListener("click", () => showPlace(0));
@@ -217,10 +313,10 @@
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowRight" || event.key === " ") {
-        showPlace((currentIndex + 1) % places.length);
+        showPlace(currentIndex + 1);
       }
       if (event.key === "ArrowLeft") {
-        showPlace((currentIndex + places.length - 1) % places.length);
+        showPlace(currentIndex - 1);
       }
     });
 

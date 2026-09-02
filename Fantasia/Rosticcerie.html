@@ -1,16 +1,8 @@
-<!--
-Nome.py: Rosticcerie.html
-Data e ora ultima modifica: 2026-09-01 22:56:34
-Descrizione: Web app per la visualizzazione delle foto delle rosticcerie, modificata per adattare l'immagine allo schermo ed evitare la sovrapposizione dei pulsanti.
-File di input: Nessuno
-File di output: Nessuno
-Parametri: Nessuno
--->
 <!doctype html>
 <html lang="it">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=yes">
   <meta name="theme-color" content="#111111">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Rosticcerie">
@@ -33,65 +25,31 @@ Parametri: Nessuno
     }
 
     body {
-      overflow: hidden;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-      display: grid;
-      grid-template-rows: auto 1fr auto;
       height: 100vh;
-      height: 100dvh; /* Risolve il problema dell'altezza della barra di navigazione su mobile */
-    }
-
-    .viewer {
+      height: 100dvh;
+      overflow: hidden;
       display: grid;
-      place-items: center;
-      background: #050505;
-      min-height: 0;
-      padding: 6px;
+      grid-template-rows: auto 1fr;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
-    .viewer img {
-      max-width: 100%;
-      max-height: 100%;
-      width: 100%; /* Modificato per confinare l'immagine */
-      height: 100%; /* Modificato per confinare l'immagine */
-      object-fit: contain; /* Assicura che l'immagine sia visibile per intero senza sovrapporsi */
-      display: block;
-      background: #000;
-    }
-
-    .badge {
-      padding: 9px 12px;
+    .topbar {
       background: #111;
       border-bottom: 1px solid #333;
-    }
-
-    .title {
-      margin: 0;
-      font-size: 21px;
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
-    .published {
-      margin: 4px 0 0;
-      color: #d8d8d8;
-      font-size: 13px;
-      line-height: 1.25;
+      padding: 9px 10px 7px;
     }
 
     .controls {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      padding: 12px;
-      background: #111;
     }
 
     button {
       border: 1px solid rgba(255, 255, 255, 0.65);
       background: rgba(0, 0, 0, 0.75);
       color: #fff;
-      padding: 12px 14px;
+      padding: 10px 12px;
       font-size: 16px;
       cursor: pointer;
     }
@@ -101,40 +59,63 @@ Parametri: Nessuno
       color: #000;
     }
 
+    .published {
+      margin: 6px 0 0;
+      color: #d8d8d8;
+      font-size: 12px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .viewer {
+      min-height: 0;
+      overflow: auto;
+      background: #050505;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+
+    .viewer img {
+      width: 100%;
+      max-width: none;
+      height: auto;
+      display: block;
+      background: #000;
+      transform-origin: top left;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
     @media (min-width: 760px) {
-      body {
-        grid-template-rows: auto 1fr auto;
+      .topbar {
+        width: 760px;
+        justify-self: center;
       }
 
       .viewer {
-        padding: 10px;
+        display: grid;
+        justify-items: center;
       }
 
-      .badge,
-      .controls {
-        max-width: 760px;
-        width: 100%;
-        justify-self: center;
+      .viewer img {
+        width: min(100%, 760px);
       }
     }
   </style>
 </head>
 <body>
-  <section class="badge" aria-live="polite">
-    <h1 id="title" class="title">Fantasia</h1>
-    <p id="published" class="published">Facebook: data non disponibile</p>
-  </section>
-
-  <main class="viewer">
-    <img id="photo" src="Rosticceria_Fantasia.jpg" alt="Fantasia">
-  </main>
-
-  <footer>
+  <header class="topbar" aria-live="polite">
     <nav class="controls" aria-label="Scegli rosticceria">
       <button id="fantasiaButton" class="active" type="button">Fantasia</button>
       <button id="cibariaButton" type="button">Cibarìa</button>
     </nav>
-  </footer>
+    <p id="published" class="published">Pubblicata su Facebook: data non disponibile</p>
+  </header>
+
+  <main id="viewer" class="viewer">
+    <img id="photo" src="Rosticceria_Fantasia.jpg" alt="Fantasia">
+  </main>
 
   <script>
     const remoteBase = "https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/";
@@ -146,15 +127,31 @@ Parametri: Nessuno
     let base = "";
     let places = localPlaces;
     let currentIndex = 0;
+    let zoom = 1;
+    let pinchStartDistance = 0;
+    let pinchStartZoom = 1;
 
+    const viewer = document.getElementById("viewer");
     const photo = document.getElementById("photo");
-    const title = document.getElementById("title");
     const published = document.getElementById("published");
     const fantasiaButton = document.getElementById("fantasiaButton");
     const cibariaButton = document.getElementById("cibariaButton");
 
     function facebookDate(place) {
-      return place.published_at || "data non disponibile";
+      const value = place.published_at || "";
+      const match = value.match(/\d{1,2}\/\d{1,2}\/\d{4}/);
+      return match ? match[0] : "data non disponibile";
+    }
+
+    function setZoom(value) {
+      zoom = Math.min(3, Math.max(1, value));
+      photo.style.width = `${zoom * 100}%`;
+    }
+
+    function resetView() {
+      setZoom(1);
+      viewer.scrollTop = 0;
+      viewer.scrollLeft = 0;
     }
 
     function showPlace(index) {
@@ -163,10 +160,10 @@ Parametri: Nessuno
       const image = place.image || localPlaces[index].image;
       photo.src = `${base}${image}?v=${Date.now()}`;
       photo.alt = place.name;
-      title.textContent = place.name;
-      published.textContent = `Facebook: ${facebookDate(place)}`;
+      published.textContent = `Pubblicata su Facebook: ${facebookDate(place)}`;
       fantasiaButton.classList.toggle("active", index === 0);
       cibariaButton.classList.toggle("active", index === 1);
+      resetView();
     }
 
     async function loadLatest() {
@@ -179,7 +176,6 @@ Parametri: Nessuno
         const statusData = await response.json();
         places = statusData.pages;
         base = remoteBase;
-
       } catch (error) {
         places = localPlaces;
         base = "";
@@ -187,6 +183,34 @@ Parametri: Nessuno
 
       showPlace(currentIndex);
     }
+
+    function touchDistance(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    }
+
+    viewer.addEventListener("touchstart", (event) => {
+      if (event.touches.length === 2) {
+        pinchStartDistance = touchDistance(event.touches);
+        pinchStartZoom = zoom;
+      }
+    }, { passive: true });
+
+    viewer.addEventListener("touchmove", (event) => {
+      if (event.touches.length === 2 && pinchStartDistance > 0) {
+        event.preventDefault();
+        const nextZoom = pinchStartZoom * (touchDistance(event.touches) / pinchStartDistance);
+        setZoom(nextZoom);
+      }
+    }, { passive: false });
+
+    viewer.addEventListener("touchend", () => {
+      if (zoom < 1.05) {
+        setZoom(1);
+      }
+      pinchStartDistance = 0;
+    });
 
     fantasiaButton.addEventListener("click", () => showPlace(0));
     cibariaButton.addEventListener("click", () => showPlace(1));

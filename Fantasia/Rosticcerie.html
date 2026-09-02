@@ -146,6 +146,27 @@
       transition: width 0.25s linear;
     }
 
+    .checking-button {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 30;
+      border: 1px solid rgba(255, 233, 77, 0.75);
+      background: rgba(12, 12, 12, 0.94);
+      color: #ffe94d;
+      padding: 14px 24px;
+      font-size: 18px;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(255, 233, 77, 0.65);
+      transform: translate(-50%, -50%);
+      display: none;
+      pointer-events: none;
+    }
+
+    .checking-button.visible {
+      display: block;
+    }
+
     .desktop-grid {
       display: none;
       min-height: 0;
@@ -218,6 +239,8 @@
     </div>
   </div>
 
+  <button id="checkingButton" class="checking-button" type="button" aria-live="polite">Controllo...</button>
+
   <script>
     const remoteBase = "https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/";
     const localPlaces = [
@@ -241,6 +264,7 @@
     let progressDelay = 0;
     let progressTimer = 0;
     let progressValue = 0;
+    let checkingStartedAt = 0;
 
     const viewer = document.getElementById("viewer");
     const photo = document.getElementById("photo");
@@ -250,6 +274,7 @@
     const refreshProgress = document.getElementById("refreshProgress");
     const refreshPercent = document.getElementById("refreshPercent");
     const refreshBar = document.getElementById("refreshBar");
+    const checkingButton = document.getElementById("checkingButton");
 
     function displayDate(place) {
       const value = place.published_at || "";
@@ -332,6 +357,8 @@
     }
 
     function prepareProgress() {
+      checkingStartedAt = Date.now();
+      checkingButton.classList.add("visible");
       window.clearTimeout(progressDelay);
       window.clearInterval(progressTimer);
       refreshProgress.classList.remove("visible");
@@ -339,7 +366,13 @@
       progressDelay = window.setTimeout(startProgress, 5000);
     }
 
-    function finishProgress() {
+    async function finishProgress() {
+      const elapsed = Date.now() - checkingStartedAt;
+      if (elapsed < 2000) {
+        await new Promise((resolve) => window.setTimeout(resolve, 2000 - elapsed));
+      }
+
+      checkingButton.classList.remove("visible");
       window.clearTimeout(progressDelay);
       window.clearInterval(progressTimer);
 
@@ -440,7 +473,7 @@
       try {
         await loadLatest();
       } finally {
-        finishProgress();
+        await finishProgress();
         isRefreshing = false;
       }
     }

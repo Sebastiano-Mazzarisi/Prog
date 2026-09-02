@@ -143,7 +143,7 @@
 <body>
   <header class="topbar mobile-only" aria-live="polite">
     <nav id="controls" class="controls" aria-label="Scegli rosticceria"></nav>
-    <p id="published" class="published">Pubblicata su Facebook: data non disponibile</p>
+    <p id="published" class="published">Data non disponibile</p>
   </header>
 
   <main id="viewer" class="viewer mobile-only">
@@ -177,10 +177,31 @@
     const controls = document.getElementById("controls");
     const desktopGrid = document.getElementById("desktopGrid");
 
-    function facebookDate(place) {
+    function displayDate(place) {
       const value = place.published_at || "";
-      const match = value.match(/\d{1,2}\/\d{1,2}\/\d{4}/);
-      return match ? match[0] : "data non disponibile";
+      const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if (!match) {
+        return "Data non disponibile";
+      }
+
+      const date = new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+      const weekdays = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+      const months = [
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre"
+      ];
+
+      return `${weekdays[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
     }
 
     function imageUrl(place, fallbackIndex) {
@@ -204,8 +225,7 @@
       const place = places[currentIndex];
       photo.src = imageUrl(place, currentIndex);
       photo.alt = place.name;
-      const sourceLabel = place.name === "Pane&Co" ? "Menu" : "Pubblicata su Facebook";
-      published.textContent = `${sourceLabel}: ${facebookDate(place)}`;
+      published.textContent = displayDate(place);
       controls.querySelectorAll("button").forEach((button, buttonIndex) => {
         button.classList.toggle("active", buttonIndex === currentIndex);
       });
@@ -237,7 +257,7 @@
         title.textContent = place.name;
 
         const date = document.createElement("p");
-        date.textContent = `${place.name === "Pane&Co" ? "Menu" : "Pubblicata su Facebook"}: ${facebookDate(place)}`;
+        date.textContent = displayDate(place);
 
         const imageWrap = document.createElement("div");
         imageWrap.className = "desktop-image";

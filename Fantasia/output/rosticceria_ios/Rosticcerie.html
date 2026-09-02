@@ -60,6 +60,20 @@
       color: #000;
     }
 
+    .today-name {
+      color: #ffe94d;
+      text-shadow: 0 0 10px rgba(255, 233, 77, 0.65);
+    }
+
+    button.today-name {
+      border-color: #ffe94d;
+    }
+
+    button.active.today-name {
+      background: #171717;
+      color: #ffe94d;
+    }
+
     .published {
       margin: 6px 0 0;
       color: #d8d8d8;
@@ -204,6 +218,28 @@
       return `${weekdays[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
     }
 
+    function placeDate(place) {
+      const value = place.published_at || "";
+      const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if (!match) {
+        return null;
+      }
+
+      return new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+    }
+
+    function isToday(place) {
+      const date = placeDate(place);
+      if (!date) {
+        return false;
+      }
+
+      const today = new Date();
+      return date.getFullYear() === today.getFullYear()
+        && date.getMonth() === today.getMonth()
+        && date.getDate() === today.getDate();
+    }
+
     function imageUrl(place, fallbackIndex) {
       const image = place.image || localPlaces[fallbackIndex].image;
       return `${base}${image}?v=${Date.now()}`;
@@ -238,7 +274,8 @@
         const button = document.createElement("button");
         button.type = "button";
         button.textContent = place.name;
-        button.className = index === currentIndex ? "active" : "";
+        button.classList.toggle("active", index === currentIndex);
+        button.classList.toggle("today-name", isToday(place));
         button.addEventListener("click", () => showPlace(index));
         controls.append(button);
       });
@@ -255,6 +292,7 @@
 
         const title = document.createElement("h2");
         title.textContent = place.name;
+        title.classList.toggle("today-name", isToday(place));
 
         const date = document.createElement("p");
         date.textContent = displayDate(place);

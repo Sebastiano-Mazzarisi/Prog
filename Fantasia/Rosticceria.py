@@ -53,17 +53,29 @@ RUN_END = datetime.time(12, 0)
 RUN_INTERVAL_MINUTES = 1
 ITALIAN_MONTHS = {
     "gennaio": 1,
+    "gen": 1,
     "febbraio": 2,
+    "feb": 2,
     "marzo": 3,
+    "mar": 3,
     "aprile": 4,
+    "apr": 4,
     "maggio": 5,
+    "mag": 5,
     "giugno": 6,
+    "giu": 6,
     "luglio": 7,
+    "lug": 7,
     "agosto": 8,
+    "ago": 8,
     "settembre": 9,
+    "set": 9,
     "ottobre": 10,
+    "ott": 10,
     "novembre": 11,
+    "nov": 11,
     "dicembre": 12,
+    "dic": 12,
 }
 # Cookie che compaiono solo dopo un login Facebook riuscito. Se mancano,
 # stiamo navigando come visitatori anonimi e Facebook mostra molte meno
@@ -185,30 +197,49 @@ def best_text_from_post(post) -> str:
 
 def best_published_time_from_post(post) -> str:
     selectors = [
+        "time",
         "abbr",
         'a[aria-label]',
         'span[aria-label]',
-        'time',
+        'a[href*="/posts/"]',
+        'a[href*="story_fbid"]',
+        'a[href*="/permalink/"]',
         'a[role="link"]',
         'span',
     ]
 
+    candidates = []
     for selector in selectors:
         try:
             for element in post.locator(selector).all():
-                for attribute in ("title", "aria-label", "datetime"):
+                for attribute in ("title", "aria-label", "datetime", "href"):
                     value = element.get_attribute(attribute)
-                    if value and looks_like_facebook_time(value):
-                        return value.strip()
+                    if value:
+                        candidates.append(value.strip())
 
                 try:
                     text = element.inner_text(timeout=1000).strip()
                 except Exception:
                     text = ""
-                if text and looks_like_facebook_time(text):
-                    return text
+                if text:
+                    candidates.append(text)
         except Exception:
             pass
+
+    try:
+        text = post.inner_text(timeout=3000)
+        candidates.extend(line.strip() for line in text.splitlines()[:10] if line.strip())
+    except Exception:
+        pass
+
+    seen = set()
+    for value in candidates:
+        compact = re.sub(r"\s+", " ", value).strip()
+        if not compact or compact in seen:
+            continue
+        seen.add(compact)
+        if looks_like_facebook_time(compact):
+            return compact
 
     return ""
 
@@ -225,32 +256,51 @@ def normalize_facebook_time(value: str) -> str:
     lower_value = value.lower()
     now = rome_now()
 
-    match = re.search(r"(\d+)\s*(min|m)", lower_value)
+    match = re.search(r"\d{4}-\d{2}-\d{2}(?:[t ][0-9:.+-]+)?", lower_value)
+    if match:
+        raw_iso = match.group(0)
+        try:
+            published = datetime.datetime.fromisoformat(raw_iso.replace("z", "+00:00"))
+            if published.tzinfo:
+                published = published.astimezone(ZoneInfo("Europe/Rome"))
+            return published.strftime("%d/%m/%Y %H:%M")
+        except ValueError:
+            pass
+
+    if lower_value.startswith(("oggi", "today")):
+        match = re.search(r"(\d{1,2})[:.](\d{2})", lower_value)
+        if match:
+            published = now.replace(hour=int(match.group(1)), minute=int(match.group(2)), second=0, microsecond=0)
+            return published.strftime("%d/%m/%Y %H:%M")
+        return now.strftime("%d/%m/%Y circa")
+
+    match = re.search(r"(\d+)\s*(min|m|minuti)", lower_value)
     if match:
         minutes = int(match.group(1))
         return (now - datetime.timedelta(minutes=minutes)).strftime("%d/%m/%Y %H:%M circa")
 
-    match = re.search(r"(\d+)\s*(h|ore?|ora)", lower_value)
+    match = re.search(r"(\d+)\s*(h|ore?|ora|hours?)", lower_value)
     if match:
         hours = int(match.group(1))
         return (now - datetime.timedelta(hours=hours)).strftime("%d/%m/%Y %H:%M circa")
 
-    match = re.search(r"(\d+)\s*(g|gg|giorno|giorni)", lower_value)
+    match = re.search(r"(\d+)\s*(g|gg|giorno|giorni|d|days?)", lower_value)
     if match:
         days = int(match.group(1))
         return (now - datetime.timedelta(days=days)).strftime("%d/%m/%Y circa")
 
-    match = re.search(r"(\d+)\s*(sett|settiman[ae]|settimane)", lower_value)
+    match = re.search(r"(\d+)\s*(sett|settiman[ae]|settimane|w|weeks?)", lower_value)
     if match:
         weeks = int(match.group(1))
         return (now - datetime.timedelta(weeks=weeks)).strftime("%d/%m/%Y circa")
 
-    match = re.search(r"ieri.*?(\d{1,2})[:.](\d{2})", lower_value)
-    if match:
+    if lower_value.startswith(("ieri", "yesterday")):
         published = now - datetime.timedelta(days=1)
-        published = published.replace(hour=int(match.group(1)), minute=int(match.group(2)), second=0, microsecond=0)
+        match = re.search(r"(\d{1,2})[:.](\d{2})", lower_value)
+        if match:
+            published = published.replace(hour=int(match.group(1)), minute=int(match.group(2)), second=0, microsecond=0)
         return published.strftime("%d/%m/%Y %H:%M")
-        
+
     inferred = infer_date_from_text(value)
     if inferred:
         return inferred
@@ -263,34 +313,49 @@ def looks_like_facebook_time(value: str) -> bool:
     if not value:
         return False
 
-    month_words = [
-        "gennaio",
-        "febbraio",
-        "marzo",
-        "aprile",
-        "maggio",
-        "giugno",
-        "luglio",
-        "agosto",
-        "settembre",
-        "ottobre",
-        "novembre",
-        "dicembre",
+    month_words = list(ITALIAN_MONTHS.keys()) + [
+        "january",
+        "jan",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "aug",
+        "september",
+        "sep",
+        "sept",
+        "october",
+        "oct",
+        "november",
+        "december",
+        "dec",
     ]
     relative_words = [
         "min",
+        "minuti",
         "h",
         "ore",
         "ora",
         "ieri",
         "oggi",
+        "yesterday",
+        "today",
         "g",
         "gg",
         "giorno",
         "giorni",
+        "d",
+        "day",
+        "days",
         "sett",
         "settimana",
         "settimane",
+        "w",
+        "week",
+        "weeks",
     ]
     has_digit = any(char.isdigit() for char in value)
     # Confronto a parole intere per evitare falsi positivi con abbreviazioni
@@ -300,7 +365,8 @@ def looks_like_facebook_time(value: str) -> bool:
     return has_digit and (
         any(month in value for month in month_words)
         or bool(words_in_value & set(relative_words))
-        or "/" in value
+        or bool(re.search(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b", value))
+        or bool(re.search(r"\b\d{4}-\d{2}-\d{2}\b", value))
         or ":" in value
     )
 
@@ -353,7 +419,9 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
             if best_image and best_score:
                 image_url = best_image.get_attribute("src")
                 if image_url:
-                    published_at_raw = best_published_time_from_post(post)
+                    post_text = best_text_from_post(post)
+                    date_in_post_text = infer_date_from_text(post_text)
+                    published_at_raw = date_in_post_text or best_published_time_from_post(post)
                     try:
                         photo_url = best_image.evaluate(
                             "image => { const link = image.closest('a[href]'); return link ? link.href : ''; }"
@@ -363,8 +431,8 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
                     return {
                         "image_url": image_url,
                         "photo_url": photo_url,
-                        "text": best_text_from_post(post),
-                        "published_at": normalize_facebook_time(published_at_raw),
+                        "text": post_text,
+                        "published_at": date_in_post_text or normalize_facebook_time(published_at_raw),
                         "published_at_raw": published_at_raw,
                     }
 

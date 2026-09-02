@@ -59,19 +59,30 @@ jobs:
           status_path = os.path.join("Fantasia", "output", "rosticceria_ios", "status.json")
           skip_all = False
 
+          def parse_date(value):
+              match = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})", value or "")
+              if not match:
+                  match = re.search(r"(\d{1,2})/(\d{1,2})/(\d{2})", value or "")
+              if not match:
+                  return None
+
+              year = int(match.group(3))
+              if year < 100:
+                  year += 2000
+              return datetime(year, int(match.group(2)), int(match.group(1))).date()
+
           try:
               with open(status_path, "r", encoding="utf-8") as status_file:
                   status = json.load(status_file)
 
               fresh = set()
               for page in status.get("pages", []):
-                  match = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})", page.get("published_at", ""))
                   image_name = page.get("image")
                   image_path = os.path.join("Fantasia", "output", "rosticceria_ios", image_name or "")
-                  if not match or not image_name or not os.path.exists(image_path):
+                  if not image_name or not os.path.exists(image_path):
                       continue
 
-                  page_date = datetime(int(match.group(3)), int(match.group(2)), int(match.group(1))).date()
+                  page_date = parse_date(page.get('published_at', ''))
                   if page_date == today:
                       fresh.add(page.get("name", ""))
 

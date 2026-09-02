@@ -44,6 +44,24 @@ PUBLISH_DIR = os.path.join("output", "rosticceria_ios")
 RUN_START = datetime.time(9, 0)
 RUN_END = datetime.time(12, 0)
 RUN_INTERVAL_MINUTES = 1
+ITALIAN_MONTHS = {
+    "gennaio": 1,
+    "febbraio": 2,
+    "marzo": 3,
+    "aprile": 4,
+    "maggio": 5,
+    "giugno": 6,
+    "luglio": 7,
+    "agosto": 8,
+    "settembre": 9,
+    "ottobre": 10,
+    "novembre": 11,
+    "dicembre": 12,
+}
+# Cookie che compaiono solo dopo un login Facebook riuscito. Se mancano,
+# stiamo navigando come visitatori anonimi e Facebook mostra molte meno
+# informazioni (spesso senza data/ora del post).
+FACEBOOK_LOGIN_COOKIE_NAMES = {"c_user", "xs"}
 
 
 def script_dir() -> str:
@@ -208,6 +226,16 @@ def normalize_facebook_time(value: str) -> str:
         hours = int(match.group(1))
         return (now - datetime.timedelta(hours=hours)).strftime("%d/%m/%Y %H:%M circa")
 
+    match = re.fullmatch(r"(\d+)\s*(g|gg|giorno|giorni)", lower_value)
+    if match:
+        days = int(match.group(1))
+        return (now - datetime.timedelta(days=days)).strftime("%d/%m/%Y circa")
+
+    match = re.fullmatch(r"(\d+)\s*(sett|settiman[ae]|settimane)", lower_value)
+    if match:
+        weeks = int(match.group(1))
+        return (now - datetime.timedelta(weeks=weeks)).strftime("%d/%m/%Y circa")
+
     match = re.search(r"ieri.*?(\d{1,2})[:.](\d{2})", lower_value)
     if match:
         published = now - datetime.timedelta(days=1)
@@ -236,12 +264,29 @@ def looks_like_facebook_time(value: str) -> bool:
         "novembre",
         "dicembre",
     ]
-    relative_words = ["min", "h", "ore", "ieri", "oggi"]
+    relative_words = [
+        "min",
+        "h",
+        "ore",
+        "ora",
+        "ieri",
+        "oggi",
+        "g",
+        "gg",
+        "giorno",
+        "giorni",
+        "sett",
+        "settimana",
+        "settimane",
+    ]
     has_digit = any(char.isdigit() for char in value)
+    # Confronto a parole intere per evitare falsi positivi con abbreviazioni
+    # corte come "g" o "h" (es. non deve scattare su testi generici).
+    words_in_value = set(re.findall(r"[a-zàèéìòù]+", value))
 
     return has_digit and (
         any(month in value for month in month_words)
-        or any(word in value for word in relative_words)
+        or bool(words_in_value & set(relative_words))
         or "/" in value
         or ":" in value
     )
@@ -328,6 +373,11 @@ def find_largest_visible_image_url(page) -> str:
     return best_url
 
 
+def cookies_look_authenticated(cookies: List[Dict]) -> bool:
+    names = {cookie.get("name", "") for cookie in cookies}
+    return bool(names & FACEBOOK_LOGIN_COOKIE_NAMES)
+
+
 def extract_first_facebook_image(facebook_url: str) -> Dict[str, str]:
     cookie_path = os.path.join(script_dir(), COOKIE_FILE)
 
@@ -346,6 +396,13 @@ def extract_first_facebook_image(facebook_url: str) -> Dict[str, str]:
             cookies = load_facebook_cookies(cookie_path)
             if cookies:
                 context.add_cookies(cookies)
+            if not cookies_look_authenticated(cookies):
+                print(
+                    f"ATTENZIONE: {cookie_path} non contiene un login Facebook valido "
+                    "(mancano i cookie 'c_user'/'xs'). Verrà usata una sessione anonima: "
+                    "Facebook mostra molte meno informazioni (spesso senza data/ora del post). "
+                    "Rigenera il file con extract_cookies.py facendo il login quando richiesto."
+                )
 
             page = context.new_page()
             page.goto(facebook_url, wait_until="domcontentloaded", timeout=60000)
@@ -448,25 +505,11 @@ def normalize_paneeco_date(value: str) -> str:
     if not value:
         return ""
 
-    months = {
-        "gennaio": 1,
-        "febbraio": 2,
-        "marzo": 3,
-        "aprile": 4,
-        "maggio": 5,
-        "giugno": 6,
-        "luglio": 7,
-        "agosto": 8,
-        "settembre": 9,
-        "ottobre": 10,
-        "novembre": 11,
-        "dicembre": 12,
-    }
     match = re.search(r"(\d{1,2})\s+([A-Za-zÀ-ÿ]+)", value, re.IGNORECASE)
     if not match:
         return value
 
-    month = months.get(match.group(2).lower())
+    month = ITALIAN_MONTHS.get(match.group(2).lower())
     if not month:
         return value
 
@@ -672,6 +715,45 @@ def parse_status_date(value: str) -> Optional[datetime.date]:
         return None
 
 
+def infer_date_from_text(text: str) -> str:
+    text = text or ""
+
+    match = re.search(r"(\d{1,2})/(\d{1,2})/(\d{2,4})", text)
+    if match:
+        year = int(match.group(3))
+        if year < 100:
+            year += 2000
+
+        try:
+            return datetime.date(year, int(match.group(2)), int(match.group(1))).strftime("%d/%m/%Y")
+        except ValueError:
+            pass
+
+    # Fallback: date scritte per esteso in italiano, es. "1 Settembre 2026"
+    # o "1 settembre" (anno sottinteso = anno corrente).
+    month_pattern = "|".join(ITALIAN_MONTHS.keys())
+    match = re.search(
+        rf"(\d{{1,2}})\s+({month_pattern})(?:\s+(\d{{4}}))?",
+        text,
+        re.IGNORECASE,
+    )
+    if match:
+        day = int(match.group(1))
+        month = ITALIAN_MONTHS.get(match.group(2).lower())
+        year = int(match.group(3)) if match.group(3) else rome_now().year
+        if month:
+            try:
+                return datetime.date(year, month, day).strftime("%d/%m/%Y")
+            except ValueError:
+                return ""
+
+    return ""
+
+
+def panel_published_at(panel: Dict) -> str:
+    return panel.get("published_at") or infer_date_from_text(panel.get("text", ""))
+
+
 def existing_publish_panel_if_today(name: str) -> Optional[Dict]:
     output_dir = publish_dir()
     status_path = os.path.join(output_dir, "status.json")
@@ -687,7 +769,8 @@ def existing_publish_panel_if_today(name: str) -> Optional[Dict]:
     for page_status in status.get("pages", []):
         if page_status.get("name") != name:
             continue
-        if parse_status_date(page_status.get("published_at", "")) != rome_now().date():
+        published_at = page_status.get("published_at", "") or infer_date_from_text(page_status.get("text", ""))
+        if parse_status_date(published_at) != rome_now().date():
             return None
 
         image_name = page_status.get("image") or f"{safe_file_name(name)}.jpg"
@@ -712,7 +795,7 @@ def existing_publish_panel_if_today(name: str) -> Optional[Dict]:
             "name": name,
             "image_bytes": image_bytes,
             "text": text,
-            "published_at": page_status.get("published_at", ""),
+            "published_at": published_at,
             "published_at_raw": page_status.get("published_at_raw", ""),
             "publish_image": image_name,
             "publish_text": text_name,
@@ -764,7 +847,7 @@ def write_publish_status(panels: List[Dict], output_dir: str) -> None:
                 "name": panel["name"],
                 "image": panel.get("publish_image"),
                 "text": panel.get("text", ""),
-                "published_at": panel.get("published_at", ""),
+                "published_at": panel_published_at(panel),
                 "published_at_raw": panel.get("published_at_raw", ""),
                 "error": panel.get("error"),
             }
@@ -1035,6 +1118,12 @@ def extract_pages() -> List[Dict]:
             image_bytes = download_image(post["image_url"])
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
+            if not post.get("published_at_raw"):
+                print(
+                    f"{name}: non ho trovato la data/ora del post su Facebook "
+                    "(published_at_raw vuoto). Uso come riserva la data eventualmente "
+                    "scritta nel testo del post."
+                )
             panels.append(
                 {
                     "name": name,

@@ -87,6 +87,15 @@
       border-color: #ffe94d;
     }
 
+    button.stale {
+      border-color: #ff4b4b;
+      box-shadow: 0 0 0 1px #ff4b4b inset;
+    }
+
+    button.stale .button-date {
+      color: #ff8a8a;
+    }
+
     button.active.today-name {
       background: #ffe94d;
       color: #000;
@@ -95,8 +104,20 @@
       box-shadow: 0 0 0 2px #fff inset, 0 0 16px rgba(255, 233, 77, 0.7);
     }
 
+    button.active.stale {
+      background: #b00020;
+      color: #fff;
+      border-color: #fff;
+      text-shadow: none;
+      box-shadow: 0 0 0 2px #fff inset, 0 0 16px rgba(255, 75, 75, 0.75);
+    }
+
     button.active .button-date {
       color: #000;
+    }
+
+    button.active.stale .button-date {
+      color: #fff;
     }
 
     .published {
@@ -363,6 +384,10 @@
         && date.getDate() === today.getDate();
     }
 
+    function isStale(place) {
+      return !isToday(place);
+    }
+
     function imageUrl(place, fallbackIndex) {
       const image = place.image || localPlaces[fallbackIndex].image;
       return `${base}${image}?v=${Date.now()}`;
@@ -451,6 +476,7 @@
         button.append(name, date);
         button.classList.toggle("active", index === currentIndex);
         button.classList.toggle("today-name", isToday(place));
+        button.classList.toggle("stale", isStale(place));
         button.addEventListener("click", () => showPlace(index));
         controls.append(button);
       });

@@ -58,6 +58,8 @@
     button.active {
       background: #fff;
       color: #000;
+      border-color: #fff;
+      box-shadow: 0 0 0 2px #fff inset;
     }
 
     .today-name {
@@ -70,8 +72,11 @@
     }
 
     button.active.today-name {
-      background: #171717;
-      color: #ffe94d;
+      background: #ffe94d;
+      color: #000;
+      border-color: #fff;
+      text-shadow: none;
+      box-shadow: 0 0 0 2px #fff inset, 0 0 16px rgba(255, 233, 77, 0.7);
     }
 
     .published {
@@ -277,13 +282,11 @@
     const checkingButton = document.getElementById("checkingButton");
 
     function displayDate(place) {
-      const value = place.published_at || "";
-      const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-      if (!match) {
+      const date = placeDate(place);
+      if (!date) {
         return "Data non disponibile";
       }
 
-      const date = new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
       const weekdays = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
       const months = [
         "gennaio",
@@ -304,13 +307,17 @@
     }
 
     function placeDate(place) {
-      const value = place.published_at || "";
+      const value = `${place.published_at || ""}\n${place.text || ""}`;
       const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-      if (!match) {
+      const shortMatch = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{2})/);
+      const dateMatch = match || shortMatch;
+      if (!dateMatch) {
         return null;
       }
 
-      return new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+      const rawYear = Number(dateMatch[3]);
+      const year = rawYear < 100 ? rawYear + 2000 : rawYear;
+      return new Date(year, Number(dateMatch[2]) - 1, Number(dateMatch[1]));
     }
 
     function isToday(place) {

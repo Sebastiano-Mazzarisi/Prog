@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T22:18:11",
+  "updated_at": "2026-09-02T07:44:23",
   "pages": [
     {
       "name": "Fantasia",
@@ -15,6 +15,14 @@
       "text": "1 Settembre 2026\nMenù del giorno.",
       "published_at": "01/09/2026 09:18 circa",
       "published_at_raw": "13 h",
+      "error": null
+    },
+    {
+      "name": "Pane&Co",
+      "image": "Pane_Co.jpg",
+      "text": "Menu 2 Settembre\n\nPRIMI PIATTI DEL GIORNO\n- Penne tricolore alla boscaiola - €6.50\n- Tagliolino con fagiolini e pesto di basilico - €8.50\n- Risotto con cozze e patate - €8.50\n- Minestrone di verdure - €6.00\n  Con o senza pasta\n- Foglie d’ulivo con speck, rucola e pomodorini - €7.50\n\nSECONDI PIATTI DEL GIORNO\n- Bombette di capocollo con patate - €7.50\n  5 pezzi\n- Trancio di pesce spada gratinato - €8.50",
+      "published_at": "02/09/2026",
+      "published_at_raw": "2 Settembre",
       "error": null
     }
   ]

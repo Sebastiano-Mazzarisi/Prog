@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 from typing import Dict, List, Optional
 
 import requests
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 try:
     from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
@@ -35,6 +35,10 @@ FACEBOOK_PAGES = [
         "output_image": "Rosticceria_Cibaria.jpg",
     },
 ]
+PANECO_PAGE = {
+    "name": "Pane&Co",
+    "url": "https://www.paneeco.it/menu",
+}
 COOKIE_FILE = "cookies.txt"
 PUBLISH_DIR = os.path.join("output", "rosticceria_ios")
 RUN_START = datetime.time(10, 0)
@@ -378,6 +382,245 @@ def extract_first_facebook_image(facebook_url: str) -> Dict[str, str]:
             browser.close()
 
 
+def extract_paneeco_menu() -> Dict:
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        try:
+            page = browser.new_page(
+                viewport={"width": 1366, "height": 2200},
+                user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/126.0.0.0 Safari/537.36"
+                ),
+            )
+            page.goto(PANECO_PAGE["url"], wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(2000)
+
+            data = page.evaluate(
+                """() => {
+                    const normalize = (value) => (value || '').replace(/\\s+/g, ' ').trim();
+                    const date = normalize(document.querySelector('.menu-header__title')?.textContent);
+                    const categories = Array.from(document.querySelectorAll('.menu-category')).map((section) => {
+                        const title = normalize(section.querySelector('.menu-category__title')?.textContent);
+                        const description = normalize(section.querySelector('.menu-category__description')?.textContent);
+                        const items = Array.from(section.querySelectorAll('.menu-item')).map((item) => ({
+                            name: normalize(item.querySelector('.menu-item__name')?.textContent),
+                            price: normalize(item.querySelector('.menu-item__price')?.textContent),
+                            description: normalize(item.querySelector('.menu-item__description')?.textContent)
+                        })).filter((item) => item.name);
+                        return { title, description, items };
+                    }).filter((category) => category.title);
+                    return { date, categories };
+                }"""
+            )
+        finally:
+            browser.close()
+
+    wanted_titles = {
+        "primi piatti del giorno",
+        "secondi piatti del giorno",
+    }
+    categories = [
+        category
+        for category in data.get("categories", [])
+        if category.get("title", "").strip().lower() in wanted_titles
+    ]
+
+    if not categories:
+        raise RuntimeError("Non ho trovato Primi del giorno e Secondi del giorno su Pane&Co.")
+
+    published_at = normalize_paneeco_date(data.get("date", ""))
+    menu_text = paneeco_text(data.get("date", ""), categories)
+    image_bytes = render_paneeco_image(data.get("date", ""), categories)
+
+    return {
+        "name": PANECO_PAGE["name"],
+        "image_bytes": image_bytes,
+        "text": menu_text,
+        "published_at": published_at,
+        "published_at_raw": data.get("date", ""),
+    }
+
+
+def normalize_paneeco_date(value: str) -> str:
+    value = value.strip()
+    if not value:
+        return ""
+
+    months = {
+        "gennaio": 1,
+        "febbraio": 2,
+        "marzo": 3,
+        "aprile": 4,
+        "maggio": 5,
+        "giugno": 6,
+        "luglio": 7,
+        "agosto": 8,
+        "settembre": 9,
+        "ottobre": 10,
+        "novembre": 11,
+        "dicembre": 12,
+    }
+    match = re.search(r"(\d{1,2})\s+([A-Za-zÀ-ÿ]+)", value, re.IGNORECASE)
+    if not match:
+        return value
+
+    month = months.get(match.group(2).lower())
+    if not month:
+        return value
+
+    year = rome_now().year
+    return f"{int(match.group(1)):02d}/{month:02d}/{year}"
+
+
+def paneeco_text(date_label: str, categories: List[Dict]) -> str:
+    lines = []
+    if date_label:
+        lines.append(f"Menu {date_label}")
+        lines.append("")
+
+    for category in categories:
+        lines.append(category["title"].upper())
+        for item in category.get("items", []):
+            price = f" - {item['price']}" if item.get("price") else ""
+            lines.append(f"- {item['name']}{price}")
+            if item.get("description"):
+                lines.append(f"  {item['description']}")
+        lines.append("")
+
+    return "\n".join(lines).strip()
+
+
+def load_font(size: int, bold: bool = False):
+    candidates = []
+    if os.name == "nt":
+        candidates.extend(
+            [
+                os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts", "arialbd.ttf" if bold else "arial.ttf"),
+                os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts", "segoeuib.ttf" if bold else "segoeui.ttf"),
+            ]
+        )
+    candidates.extend(
+        [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
+        ]
+    )
+
+    for path in candidates:
+        if os.path.exists(path):
+            return ImageFont.truetype(path, size=size)
+
+    return ImageFont.load_default()
+
+
+def wrap_text(draw: ImageDraw.ImageDraw, text: str, font, max_width: int) -> List[str]:
+    words = text.split()
+    if not words:
+        return []
+
+    lines = []
+    current = words[0]
+    for word in words[1:]:
+        candidate = f"{current} {word}"
+        if draw.textbbox((0, 0), candidate, font=font)[2] <= max_width:
+            current = candidate
+        else:
+            lines.append(current)
+            current = word
+    lines.append(current)
+    return lines
+
+
+def render_paneeco_image(date_label: str, categories: List[Dict]) -> bytes:
+    width = 1080
+    margin = 54
+    yellow = (255, 214, 65)
+    cream = (255, 252, 243)
+    ink = (16, 16, 16)
+    muted = (92, 92, 92)
+    border = (229, 229, 229)
+
+    title_font = load_font(48, bold=True)
+    date_font = load_font(30)
+    section_font = load_font(30, bold=True)
+    item_font = load_font(28, bold=True)
+    desc_font = load_font(23)
+    price_font = load_font(27, bold=True)
+
+    probe = Image.new("RGB", (width, 200), cream)
+    draw = ImageDraw.Draw(probe)
+
+    row_data = []
+    height = margin
+    height += 66
+    if date_label:
+        height += 45
+    height += 28
+
+    for category in categories:
+        section_height = 74
+        if category.get("description"):
+            section_height += 34
+        height += section_height
+        for item in category.get("items", []):
+            item_lines = wrap_text(draw, item["name"], item_font, width - (margin * 2) - 170)
+            desc_lines = wrap_text(draw, item.get("description", ""), desc_font, width - (margin * 2) - 30)
+            row_height = 38 * max(1, len(item_lines)) + 28 * len(desc_lines) + 30
+            row_data.append((item, item_lines, desc_lines, row_height))
+            height += row_height
+        height += 28
+
+    image = Image.new("RGB", (width, height + margin), cream)
+    draw = ImageDraw.Draw(image)
+
+    y = margin
+    draw.text((margin, y), "Pane&Co", fill=ink, font=title_font)
+    y += 64
+    if date_label:
+        draw.text((margin, y), f"Menu del giorno: {date_label}", fill=muted, font=date_font)
+        y += 48
+    y += 12
+
+    row_index = 0
+    for category in categories:
+        section_top = y
+        section_height = 74 + (34 if category.get("description") else 0)
+        draw.rounded_rectangle((margin, section_top, width - margin, section_top + section_height), radius=18, fill=yellow)
+        draw.text((margin + 28, section_top + 20), category["title"].upper(), fill=ink, font=section_font)
+        if category.get("description"):
+            draw.text((margin + 28, section_top + 57), category["description"], fill=ink, font=desc_font)
+        y += section_height
+
+        for item in category.get("items", []):
+            item, item_lines, desc_lines, row_height = row_data[row_index]
+            row_index += 1
+            draw.rectangle((margin, y, width - margin, y + row_height), fill=(255, 255, 255))
+            draw.line((margin, y, width - margin, y), fill=border, width=2)
+
+            text_y = y + 18
+            for line in item_lines:
+                draw.text((margin + 28, text_y), line, fill=ink, font=item_font)
+                text_y += 38
+
+            if item.get("price"):
+                price_bbox = draw.textbbox((0, 0), item["price"], font=price_font)
+                draw.text((width - margin - 28 - (price_bbox[2] - price_bbox[0]), y + 20), item["price"], fill=ink, font=price_font)
+
+            for line in desc_lines:
+                draw.text((margin + 28, text_y), line, fill=muted, font=desc_font)
+                text_y += 28
+
+            y += row_height
+
+        y += 28
+
+    output = io.BytesIO()
+    image.save(output, format="JPEG", quality=92)
+    return output.getvalue()
+
+
 def download_image(image_url: str) -> bytes:
     headers = {
         "User-Agent": (
@@ -688,11 +931,15 @@ def show_fullscreen(panels: List[Dict]) -> None:
     canvas = Canvas(root, width=screen_width, height=screen_height, bg="black", highlightthickness=0)
     canvas.pack(fill="both", expand=True)
 
-    half_width = screen_width // 2
+    panel_count = max(1, len(panels))
+    panel_width = screen_width // panel_count
     photos = []
-    photos.append(draw_panel(canvas, ImageTk, panels[0], 0, 0, half_width, screen_height))
-    photos.append(draw_panel(canvas, ImageTk, panels[1], half_width, 0, screen_width - half_width, screen_height))
-    canvas.create_line(half_width, 0, half_width, screen_height, fill="white", width=2)
+    for index, panel in enumerate(panels):
+        left = index * panel_width
+        width = screen_width - left if index == panel_count - 1 else panel_width
+        photos.append(draw_panel(canvas, ImageTk, panel, left, 0, width, screen_height))
+        if index:
+            canvas.create_line(left, 0, left, screen_height, fill="white", width=2)
     canvas.photos = photos
 
     def close(_event=None):
@@ -727,6 +974,15 @@ def extract_pages() -> List[Dict]:
             )
         except Exception as exc:
             panels.append({"name": name, "error": str(exc)})
+
+    print("Creo il menu Pane&Co con primi e secondi del giorno...")
+    try:
+        panel = extract_paneeco_menu()
+        image_path = save_image(panel["image_bytes"], "Rosticceria_Pane_Co.jpg")
+        print(f"Pane&Co: immagine salvata in {image_path}")
+        panels.append(panel)
+    except Exception as exc:
+        panels.append({"name": PANECO_PAGE["name"], "error": str(exc)})
 
     return panels
 
@@ -785,7 +1041,7 @@ def monitor_loop(show: bool = False, publish_to_git: bool = True) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Estrae e pubblica le foto di Fantasia e Cibarìa.")
+    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa e Pane&Co.")
     parser.add_argument("--once", action="store_true", help="Esegue una sola estrazione e poi termina.")
     parser.add_argument("--show", action="store_true", help="Mostra anche le due foto a pieno schermo.")
     parser.add_argument("--no-git", action="store_true", help="Non prova a pubblicare con GitHub/git.")

@@ -41,7 +41,7 @@
 
     .controls {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
     }
 
@@ -52,6 +52,7 @@
       padding: 10px 12px;
       font-size: 16px;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     button.active {
@@ -134,17 +135,14 @@
 
       .desktop-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
   </style>
 </head>
 <body>
   <header class="topbar mobile-only" aria-live="polite">
-    <nav class="controls" aria-label="Scegli rosticceria">
-      <button id="fantasiaButton" class="active" type="button">Fantasia</button>
-      <button id="cibariaButton" type="button">Cibarìa</button>
-    </nav>
+    <nav id="controls" class="controls" aria-label="Scegli rosticceria"></nav>
     <p id="published" class="published">Pubblicata su Facebook: data non disponibile</p>
   </header>
 
@@ -158,7 +156,8 @@
     const remoteBase = "https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/";
     const localPlaces = [
       { name: "Fantasia", image: "Rosticceria_Fantasia.jpg", published_at: "" },
-      { name: "Cibarìa", image: "Rosticceria_Cibaria.jpg", published_at: "" }
+      { name: "Cibarìa", image: "Rosticceria_Cibaria.jpg", published_at: "" },
+      { name: "Pane&Co", image: "Rosticceria_Pane_Co.jpg", published_at: "" }
     ];
 
     let base = "";
@@ -175,8 +174,7 @@
     const viewer = document.getElementById("viewer");
     const photo = document.getElementById("photo");
     const published = document.getElementById("published");
-    const fantasiaButton = document.getElementById("fantasiaButton");
-    const cibariaButton = document.getElementById("cibariaButton");
+    const controls = document.getElementById("controls");
     const desktopGrid = document.getElementById("desktopGrid");
 
     function facebookDate(place) {
@@ -206,10 +204,24 @@
       const place = places[currentIndex];
       photo.src = imageUrl(place, currentIndex);
       photo.alt = place.name;
-      published.textContent = `Pubblicata su Facebook: ${facebookDate(place)}`;
-      fantasiaButton.classList.toggle("active", currentIndex === 0);
-      cibariaButton.classList.toggle("active", currentIndex === 1);
+      const sourceLabel = place.name === "Pane&Co" ? "Menu" : "Pubblicata su Facebook";
+      published.textContent = `${sourceLabel}: ${facebookDate(place)}`;
+      controls.querySelectorAll("button").forEach((button, buttonIndex) => {
+        button.classList.toggle("active", buttonIndex === currentIndex);
+      });
       resetMobileView();
+    }
+
+    function renderControls() {
+      controls.innerHTML = "";
+      places.forEach((place, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = place.name;
+        button.className = index === currentIndex ? "active" : "";
+        button.addEventListener("click", () => showPlace(index));
+        controls.append(button);
+      });
     }
 
     function renderDesktop() {
@@ -225,7 +237,7 @@
         title.textContent = place.name;
 
         const date = document.createElement("p");
-        date.textContent = `Pubblicata su Facebook: ${facebookDate(place)}`;
+        date.textContent = `${place.name === "Pane&Co" ? "Menu" : "Pubblicata su Facebook"}: ${facebookDate(place)}`;
 
         const imageWrap = document.createElement("div");
         imageWrap.className = "desktop-image";
@@ -256,6 +268,7 @@
         base = "";
       }
 
+      renderControls();
       showPlace(currentIndex);
       renderDesktop();
     }
@@ -307,9 +320,6 @@
       pinchStartDistance = 0;
       swipeReady = false;
     });
-
-    fantasiaButton.addEventListener("click", () => showPlace(0));
-    cibariaButton.addEventListener("click", () => showPlace(1));
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowRight" || event.key === " ") {

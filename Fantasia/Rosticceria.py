@@ -1,3 +1,10 @@
+# Nome.py: Rosticceria.py
+# Data e ora ultima modifica: 02/09/2026 10:19
+# Descrizione: Estrae e pubblica i menu e le foto delle rosticcerie Fantasia, Cibarìa e Pane&Co da Facebook e web.
+# File di input: cookies.txt
+# File di output: status.json, index.html, immagini jpg
+# Parametri: --once, --show, --no-git
+
 import io
 import json
 import os
@@ -182,6 +189,8 @@ def best_published_time_from_post(post) -> str:
         'a[aria-label]',
         'span[aria-label]',
         'time',
+        'a[role="link"]',
+        'span',
     ]
 
     for selector in selectors:
@@ -216,22 +225,22 @@ def normalize_facebook_time(value: str) -> str:
     lower_value = value.lower()
     now = rome_now()
 
-    match = re.fullmatch(r"(\d+)\s*(min|m)", lower_value)
+    match = re.search(r"(\d+)\s*(min|m)", lower_value)
     if match:
         minutes = int(match.group(1))
         return (now - datetime.timedelta(minutes=minutes)).strftime("%d/%m/%Y %H:%M circa")
 
-    match = re.fullmatch(r"(\d+)\s*(h|ore?|ora)", lower_value)
+    match = re.search(r"(\d+)\s*(h|ore?|ora)", lower_value)
     if match:
         hours = int(match.group(1))
         return (now - datetime.timedelta(hours=hours)).strftime("%d/%m/%Y %H:%M circa")
 
-    match = re.fullmatch(r"(\d+)\s*(g|gg|giorno|giorni)", lower_value)
+    match = re.search(r"(\d+)\s*(g|gg|giorno|giorni)", lower_value)
     if match:
         days = int(match.group(1))
         return (now - datetime.timedelta(days=days)).strftime("%d/%m/%Y circa")
 
-    match = re.fullmatch(r"(\d+)\s*(sett|settiman[ae]|settimane)", lower_value)
+    match = re.search(r"(\d+)\s*(sett|settiman[ae]|settimane)", lower_value)
     if match:
         weeks = int(match.group(1))
         return (now - datetime.timedelta(weeks=weeks)).strftime("%d/%m/%Y circa")
@@ -241,6 +250,10 @@ def normalize_facebook_time(value: str) -> str:
         published = now - datetime.timedelta(days=1)
         published = published.replace(hour=int(match.group(1)), minute=int(match.group(2)), second=0, microsecond=0)
         return published.strftime("%d/%m/%Y %H:%M")
+        
+    inferred = infer_date_from_text(value)
+    if inferred:
+        return inferred
 
     return value
 

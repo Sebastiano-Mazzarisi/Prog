@@ -98,16 +98,16 @@ jobs:
           pip install -r Fantasia/requirements.txt
           playwright install --with-deps chromium
 
-      - name: Crea cookies.txt dal Secret
+      - name: Crea cookies.txt se presente
         if: steps.timecheck.outputs.run == 'true' && steps.cached.outputs.skip_all != 'true'
         env:
           FACEBOOK_COOKIES: ${{ secrets.FACEBOOK_COOKIES }}
         run: |
           if [ -z "$FACEBOOK_COOKIES" ]; then
-            echo "Manca il Secret FACEBOOK_COOKIES"
-            exit 1
+            echo "Secret FACEBOOK_COOKIES non presente: provo senza cookie."
+          else
+            printf '%s' "$FACEBOOK_COOKIES" > Fantasia/cookies.txt
           fi
-          printf '%s' "$FACEBOOK_COOKIES" > Fantasia/cookies.txt
 
       - name: Estrai foto
         if: steps.timecheck.outputs.run == 'true' && steps.cached.outputs.skip_all != 'true'

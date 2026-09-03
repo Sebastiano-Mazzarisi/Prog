@@ -1094,6 +1094,41 @@ def download_image(image_url: str) -> bytes:
     return response.content
 
 
+def crop_fantasia_chalkboard(image_bytes: bytes) -> bytes:
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    width, height = image.size
+    if width < 100 or height < 100:
+        return image_bytes
+
+    x_start = int(width * 0.08)
+    x_end = int(width * 0.92)
+    step = max(1, (x_end - x_start) // 180)
+    dark_rows = []
+
+    for y in range(height):
+        total = 0
+        dark = 0
+        for x in range(x_start, x_end, step):
+            r, g, b = image.getpixel((x, y))
+            if r < 105 and g < 105 and b < 105:
+                dark += 1
+            total += 1
+        if total and dark / total >= 0.55:
+            dark_rows.append(y)
+
+    if not dark_rows:
+        return image_bytes
+
+    top = max(0, min(dark_rows) - 45)
+    bottom = min(height, max(dark_rows) + 36)
+    if bottom - top < height * 0.45 or bottom - top > height * 0.95:
+        return image_bytes
+
+    output = io.BytesIO()
+    image.crop((0, top, width, bottom)).save(output, format="JPEG", quality=92)
+    return output.getvalue()
+
+
 def save_image(image_bytes: bytes, filename: str) -> str:
     image_path = os.path.join(script_dir(), filename)
     with open(image_path, "wb") as image_file:
@@ -1534,6 +1569,8 @@ def extract_pages() -> List[Dict]:
         try:
             post = extract_first_facebook_image(facebook_page["url"])
             image_bytes = download_image(post["image_url"])
+            if name == "Fantasia":
+                image_bytes = crop_fantasia_chalkboard(image_bytes)
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
             if not post.get("published_at_raw"):

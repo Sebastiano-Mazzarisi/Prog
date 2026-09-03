@@ -613,11 +613,11 @@
       const gutter = 10;
       const cellWidth = (pageWidth - margin * 2 - gutter) / 2;
       const cellHeight = (pageHeight - margin * 2 - gutter) / 2;
-      const positions = [
-        [margin, margin + cellHeight + gutter],
-        [margin + cellWidth + gutter, margin + cellHeight + gutter],
-        [margin, margin],
-        [margin + cellWidth + gutter, margin]
+      const cells = [
+        { x: margin, top: pageHeight - margin },
+        { x: margin + cellWidth + gutter, top: pageHeight - margin },
+        { x: margin, top: margin + cellHeight },
+        { x: margin + cellWidth + gutter, top: margin + cellHeight }
       ];
 
       const objects = [];
@@ -634,8 +634,8 @@
         const scale = Math.min(cellWidth / image.size.width, cellHeight / image.size.height);
         const width = image.size.width * scale;
         const height = image.size.height * scale;
-        const x = positions[index][0] + (cellWidth - width) / 2;
-        const y = positions[index][1] + (cellHeight - height) / 2;
+        const x = cells[index].x + (cellWidth - width) / 2;
+        const y = cells[index].top - height;
         content += `q\n${width.toFixed(2)} 0 0 ${height.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im${index + 1} Do\nQ\n`;
       });
 
@@ -664,13 +664,18 @@
       try {
         const images = await menuImagesForPdf();
         const blob = buildPdf(images);
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Rosticcerie.pdf";
-        document.body.append(link);
-        link.click();
-        link.remove();
-        window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        const url = URL.createObjectURL(blob);
+        const opened = window.open(url, "_blank", "noopener");
+        if (!opened) {
+          const link = document.createElement("a");
+          link.href = url;
+          link.target = "_blank";
+          link.rel = "noopener";
+          document.body.append(link);
+          link.click();
+          link.remove();
+        }
+        window.setTimeout(() => URL.revokeObjectURL(url), 60000);
       } catch (error) {
         alert("PDF non disponibile ora");
       }

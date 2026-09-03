@@ -1,6 +1,6 @@
 # Nome.py: Rosticceria.py
 # Data e ora ultima modifica: 03/09/2026 16:14
-# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Santoro (Castellana), Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela da Facebook e web.
+# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela da Facebook e web.
 # File di input: cookies.txt
 # File di output: status.json, index.html, immagini jpg
 # Parametri: --once, --show, --no-git
@@ -40,11 +40,6 @@ FACEBOOK_PAGES = [
         "name": "Cibarìa",
         "url": "https://www.facebook.com/cibaria.asporto",
         "output_image": "Rosticceria_Cibaria.jpg",
-    },
-    {
-        "name": "Santoro (Castellana)",
-        "url": "https://www.facebook.com/santorogastronomia",
-        "output_image": "Rosticceria_Santoro.jpg",
     },
     {
         "name": "Impastamò",
@@ -169,7 +164,6 @@ def clean_post_text(text: str) -> str:
             line.startswith("Foto di ")
             or line.startswith("Rosticceria Fantasia")
             or line.startswith("Cibaria")
-            or line.startswith("Santoro")
             or line.startswith("Bollenti Piatti")
             or line.startswith("Impastamò")
             or line.startswith("Impastamo")
@@ -652,7 +646,9 @@ def find_first_text_menu_post(page, required_terms: Optional[List[str]] = None) 
 
             lower_text = post_text.lower()
             has_required_terms = all(term.lower() in lower_text for term in (required_terms or []))
-            if has_required_terms and ("menu" in lower_text or "menù" in lower_text) and normalized_published_at:
+            if required_terms and not has_required_terms:
+                continue
+            if ("menu" in lower_text or "menù" in lower_text) and normalized_published_at:
                 return candidate
 
             if fallback_post is None and len(post_text) > 20:
@@ -1148,60 +1144,6 @@ def crop_fantasia_chalkboard(image_bytes: bytes) -> bytes:
     image.crop((0, top, width, bottom)).save(output, format="JPEG", quality=92)
     return output.getvalue()
 
-def crop_le_delizie_borders(image_bytes: bytes) -> bytes:
-    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    width, height = image.size
-    if width < 100 or height < 100:
-        return image_bytes
-
-    y_start = int(height * 0.08)
-    y_end = int(height * 0.92)
-    step = max(1, (y_end - y_start) // 180)
-    dark_cols = []
-
-    for x in range(width):
-        total = 0
-        dark = 0
-        for y in range(y_start, y_end, step):
-            r, g, b = image.getpixel((x, y))
-            if r < 105 and g < 105 and b < 105:
-                dark += 1
-            total += 1
-        if total and dark / total >= 0.55:
-            dark_cols.append(x)
-
-    if not dark_cols:
-        return image_bytes
-
-    runs = []
-    run_start = dark_cols[0]
-    prev = dark_cols[0]
-    for x in dark_cols[1:]:
-        if x - prev > 5:
-            runs.append((run_start, prev))
-            run_start = x
-        prev = x
-    runs.append((run_start, prev))
-    run_start, run_end = max(runs, key=lambda r: r[1] - r[0])
-
-    left = max(0, run_start - 20)
-    right = min(width, run_end + 20)
-    if right - left < width * 0.25 or right - left > width * 0.95:
-        return image_bytes
-
-    cropped = image.crop((left, 0, right, height))
-    cropped = enhance_chalk_contrast(cropped)
-
-    output = io.BytesIO()
-    cropped.save(output, format="JPEG", quality=92)
-    return output.getvalue()
-
-
-def enhance_chalk_contrast(image: Image.Image, black_point: int = 20, white_point: int = 150) -> Image.Image:
-    scale = 255.0 / max(1, (white_point - black_point))
-    lut = [min(255, max(0, round((value - black_point) * scale))) for value in range(256)]
-    return image.point(lut * len(image.getbands()))
-
 
 def save_image(image_bytes: bytes, filename: str) -> str:
     image_path = os.path.join(script_dir(), filename)
@@ -1645,8 +1587,6 @@ def extract_pages() -> List[Dict]:
             image_bytes = download_image(post["image_url"])
             if name == "Fantasia":
                 image_bytes = crop_fantasia_chalkboard(image_bytes)
-            elif name == "Le delizie di Michela":
-                image_bytes = crop_le_delizie_borders(image_bytes)
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
             if not post.get("published_at_raw"):
@@ -1768,7 +1708,7 @@ def monitor_loop(show: bool = False, publish_to_git: bool = True) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Santoro (Castellana), Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela.")
+    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela.")
     parser.add_argument("--once", action="store_true", help="Esegue una sola estrazione e poi termina.")
     parser.add_argument("--show", action="store_true", help="Mostra anche le due foto a pieno schermo.")
     parser.add_argument("--no-git", action="store_true", help="Non prova a pubblicare con GitHub/git.")

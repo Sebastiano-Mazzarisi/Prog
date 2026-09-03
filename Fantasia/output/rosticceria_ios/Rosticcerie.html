@@ -217,6 +217,8 @@
     .desktop-grid {
       display: none;
       min-height: 0;
+      height: 100vh;
+      height: 100dvh;
       background: #333;
       gap: 1px;
     }
@@ -235,10 +237,30 @@
       background: #111;
     }
 
+    .desktop-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
     .desktop-panel-header h2 {
       margin: 0;
       font-size: 22px;
       line-height: 1.1;
+    }
+
+    .pdf-button {
+      width: 36px;
+      min-height: 28px;
+      height: 28px;
+      padding: 0;
+      border: 1px solid #ffe94d;
+      background: #111;
+      color: #ffe94d;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
     }
 
     .desktop-panel-header p {
@@ -259,7 +281,7 @@
 
       .desktop-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
       }
     }
   </style>
@@ -293,8 +315,8 @@
     const localPlaces = [
       { name: "Fantasia", image: "Fantasia.jpg", published_at: "" },
       { name: "Cibarìa", image: "Cibaria.jpg", published_at: "" },
-      { name: "Bollenti", image: "Bollenti.jpg", published_at: "" },
-      { name: "Pane&Co", image: "Pane_Co.jpg", published_at: "" }
+      { name: "Pane&Co", image: "Pane_Co.jpg", published_at: "" },
+      { name: "Bollenti", image: "Bollenti.jpg", published_at: "" }
     ];
 
     let base = "";
@@ -492,9 +514,22 @@
         const header = document.createElement("header");
         header.className = "desktop-panel-header";
 
+        const titleRow = document.createElement("div");
+        titleRow.className = "desktop-title-row";
+
         const title = document.createElement("h2");
         title.textContent = place.name;
         title.classList.toggle("today-name", isToday(place));
+
+        const pdfButton = document.createElement("button");
+        pdfButton.type = "button";
+        pdfButton.className = "pdf-button";
+        pdfButton.textContent = "PDF";
+        pdfButton.title = "Crea PDF A4";
+        pdfButton.addEventListener("click", (event) => {
+          event.stopPropagation();
+          downloadMenusPdf();
+        });
 
         const date = document.createElement("p");
         date.textContent = displayDate(place);
@@ -507,11 +542,138 @@
         image.alt = place.name;
         image.addEventListener("click", checkForUpdates);
 
-        header.append(title, date);
+        titleRow.append(title, pdfButton);
+        header.append(titleRow, date);
         imageWrap.append(image);
         panel.append(header, imageWrap);
         desktopGrid.append(panel);
       });
+    }
+
+    function orderedPlaces(list) {
+      const order = ["Fantasia", "Cibarìa", "Pane&Co", "Bollenti"];
+      return [...list].sort((a, b) => {
+        const ai = order.indexOf(a.name);
+        const bi = order.indexOf(b.name);
+        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+      });
+    }
+
+    function textBytes(text) {
+      return new TextEncoder().encode(text);
+    }
+
+    function concatBytes(parts) {
+      const size = parts.reduce((total, part) => total + part.length, 0);
+      const output = new Uint8Array(size);
+      let offset = 0;
+      parts.forEach((part) => {
+        output.set(part, offset);
+        offset += part.length;
+      });
+      return output;
+    }
+
+    function jpegSize(bytes) {
+      let offset = 2;
+      while (offset + 9 < bytes.length) {
+        if (bytes[offset] !== 0xff) {
+          offset += 1;
+          continue;
+        }
+        const marker = bytes[offset + 1];
+        const length = (bytes[offset + 2] << 8) + bytes[offset + 3];
+        if (marker >= 0xc0 && marker <= 0xc3) {
+          return {
+            height: (bytes[offset + 5] << 8) + bytes[offset + 6],
+            width: (bytes[offset + 7] << 8) + bytes[offset + 8]
+          };
+        }
+        offset += 2 + length;
+      }
+      return { width: 1, height: 1 };
+    }
+
+    async function menuImagesForPdf() {
+      const selected = orderedPlaces(places).slice(0, 4);
+      return Promise.all(selected.map(async (place, index) => {
+        const response = await fetch(imageUrl(place, index), { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`Immagine non disponibile: ${place.name}`);
+        }
+        const bytes = new Uint8Array(await response.arrayBuffer());
+        return { name: place.name, bytes, size: jpegSize(bytes) };
+      }));
+    }
+
+    function buildPdf(images) {
+      const pageWidth = 595.28;
+      const pageHeight = 841.89;
+      const margin = 12;
+      const gutter = 10;
+      const cellWidth = (pageWidth - margin * 2 - gutter) / 2;
+      const cellHeight = (pageHeight - margin * 2 - gutter) / 2;
+      const positions = [
+        [margin, margin + cellHeight + gutter],
+        [margin + cellWidth + gutter, margin + cellHeight + gutter],
+        [margin, margin],
+        [margin + cellWidth + gutter, margin]
+      ];
+
+      const objects = [];
+      images.forEach((image, index) => {
+        objects.push(concatBytes([
+          textBytes(`<< /Type /XObject /Subtype /Image /Width ${image.size.width} /Height ${image.size.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${image.bytes.length} >>\nstream\n`),
+          image.bytes,
+          textBytes("\nendstream")
+        ]));
+      });
+
+      let content = "";
+      images.forEach((image, index) => {
+        const scale = Math.min(cellWidth / image.size.width, cellHeight / image.size.height);
+        const width = image.size.width * scale;
+        const height = image.size.height * scale;
+        const x = positions[index][0] + (cellWidth - width) / 2;
+        const y = positions[index][1] + (cellHeight - height) / 2;
+        content += `q\n${width.toFixed(2)} 0 0 ${height.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im${index + 1} Do\nQ\n`;
+      });
+
+      objects.push(textBytes(`<< /Length ${textBytes(content).length} >>\nstream\n${content}endstream`));
+      objects.push(textBytes("<< /Type /Page /Parent 7 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im1 1 0 R /Im2 2 0 R /Im3 3 0 R /Im4 4 0 R >> >> /Contents 5 0 R >>"));
+      objects.push(textBytes("<< /Type /Pages /Kids [6 0 R] /Count 1 >>"));
+      objects.push(textBytes("<< /Type /Catalog /Pages 7 0 R >>"));
+
+      const parts = [textBytes("%PDF-1.4\n")];
+      const offsets = [0];
+      objects.forEach((object, index) => {
+        offsets.push(parts.reduce((total, part) => total + part.length, 0));
+        parts.push(textBytes(`${index + 1} 0 obj\n`), object, textBytes("\nendobj\n"));
+      });
+      const xrefOffset = parts.reduce((total, part) => total + part.length, 0);
+      let xref = `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+      for (let index = 1; index <= objects.length; index += 1) {
+        xref += `${String(offsets[index]).padStart(10, "0")} 00000 n \n`;
+      }
+      xref += `trailer\n<< /Size ${objects.length + 1} /Root 8 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+      parts.push(textBytes(xref));
+      return new Blob([concatBytes(parts)], { type: "application/pdf" });
+    }
+
+    async function downloadMenusPdf() {
+      try {
+        const images = await menuImagesForPdf();
+        const blob = buildPdf(images);
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "Rosticcerie.pdf";
+        document.body.append(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      } catch (error) {
+        alert("PDF non disponibile ora");
+      }
     }
 
     async function loadLatest() {
@@ -523,10 +685,10 @@
         }
 
         statusData = await response.json();
-        places = statusData.pages;
+        places = orderedPlaces(statusData.pages);
         base = remoteBase;
       } catch (error) {
-        places = localPlaces;
+        places = orderedPlaces(localPlaces);
         base = "";
       }
 

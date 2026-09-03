@@ -932,6 +932,7 @@ def render_text_menu_image(title: str, text: str, published_at: str = "") -> byt
     title_font = load_font(52, bold=True)
     date_font = load_font(30)
     body_font = load_font(31)
+    section_font = load_font(31, bold=True)
 
     clean_text = clean_post_text(text)
     body_lines = []
@@ -942,15 +943,19 @@ def render_text_menu_image(title: str, text: str, published_at: str = "") -> byt
     for raw_line in clean_text.splitlines():
         line = raw_line.strip()
         if not line:
-            body_lines.append("")
+            body_lines.append({"text": "", "section": False})
             continue
-        body_lines.extend(wrap_text(draw, line, body_font, text_width))
+        is_section = line.upper() in {"PRIMI PIATTI", "SECONDI PIATTI"}
+        wrapped = wrap_text(draw, line, section_font if is_section else body_font, text_width)
+        for wrapped_line in wrapped:
+            body_lines.append({"text": wrapped_line, "section": is_section})
 
     if not body_lines:
-        body_lines = ["Menu non disponibile"]
+        body_lines = [{"text": "Menu non disponibile", "section": False}]
 
     line_height = 43
-    content_height = sum(line_height if line else 24 for line in body_lines)
+    section_height = 54
+    content_height = sum(section_height if line["section"] else line_height if line["text"] else 24 for line in body_lines)
     height = margin + 104 + 34 + content_height + margin + 70
     image = Image.new("RGB", (width, max(height, 900)), cream)
     draw = ImageDraw.Draw(image)
@@ -970,9 +975,16 @@ def render_text_menu_image(title: str, text: str, published_at: str = "") -> byt
     draw.rounded_rectangle((margin, card_top, width - margin, card_bottom), radius=14, fill=paper, outline=line_color, width=2)
     y += 22
 
-    for line in body_lines:
+    for line_data in body_lines:
+        line = line_data["text"]
         if not line:
             y += 24
+            continue
+        if line_data["section"]:
+            section_bottom = y + 45
+            draw.rounded_rectangle((margin + 18, y - 4, width - margin - 18, section_bottom), radius=12, fill=(255, 214, 65))
+            draw.text((margin + 36, y + 6), line, fill=ink, font=section_font)
+            y += section_height
             continue
         draw.text((margin + 24, y), line, fill=ink, font=body_font)
         y += line_height
@@ -1542,6 +1554,20 @@ def extract_pages() -> List[Dict]:
         except Exception as exc:
             panels.append({"name": name, "error": str(exc)})
 
+    existing_panel = existing_publish_panel_if_today(PANECO_PAGE["name"])
+    if existing_panel:
+        print("Pane&Co: menu di oggi già presente, salto la verifica.")
+        panels.append(existing_panel)
+    else:
+        print("Creo il menu Pane&Co con primi e secondi del giorno...")
+        try:
+            panel = extract_paneeco_menu()
+            image_path = save_image(panel["image_bytes"], "Rosticceria_Pane_Co.jpg")
+            print(f"Pane&Co: immagine salvata in {image_path}")
+            panels.append(panel)
+        except Exception as exc:
+            panels.append({"name": PANECO_PAGE["name"], "error": str(exc)})
+
     for text_page in TEXT_FACEBOOK_PAGES:
         name = text_page["name"]
         existing_panel = existing_publish_panel_if_today(name)
@@ -1563,21 +1589,6 @@ def extract_pages() -> List[Dict]:
                 panels.append(existing_panel)
             else:
                 panels.append({"name": name, "error": str(exc)})
-
-    existing_panel = existing_publish_panel_if_today(PANECO_PAGE["name"])
-    if existing_panel:
-        print("Pane&Co: menu di oggi già presente, salto la verifica.")
-        panels.append(existing_panel)
-        return panels
-
-    print("Creo il menu Pane&Co con primi e secondi del giorno...")
-    try:
-        panel = extract_paneeco_menu()
-        image_path = save_image(panel["image_bytes"], "Rosticceria_Pane_Co.jpg")
-        print(f"Pane&Co: immagine salvata in {image_path}")
-        panels.append(panel)
-    except Exception as exc:
-        panels.append({"name": PANECO_PAGE["name"], "error": str(exc)})
 
     return panels
 

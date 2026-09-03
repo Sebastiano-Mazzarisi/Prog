@@ -1,6 +1,6 @@
 # Nome.py: Rosticceria.py
 # Data e ora ultima modifica: 03/09/2026 16:14
-# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti, Pane&Co, Impastamò e Le delizie di Michela da Facebook e web.
+# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela da Facebook e web.
 # File di input: cookies.txt
 # File di output: status.json, index.html, immagini jpg
 # Parametri: --once, --show, --no-git
@@ -54,7 +54,7 @@ FACEBOOK_PAGES = [
 ]
 TEXT_FACEBOOK_PAGES = [
     {
-        "name": "Bollenti",
+        "name": "Bollenti piatti",
         "display_name": "Bollenti Piatti",
         "url": "https://www.facebook.com/BollentiPiatti",
         "required_terms": ["secondi piatti"],
@@ -1708,7 +1708,7 @@ def monitor_loop(show: bool = False, publish_to_git: bool = True) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Bollenti, Pane&Co, Impastamò e Le delizie di Michela.")
+    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela.")
     parser.add_argument("--once", action="store_true", help="Esegue una sola estrazione e poi termina.")
     parser.add_argument("--show", action="store_true", help="Mostra anche le due foto a pieno schermo.")
     parser.add_argument("--no-git", action="store_true", help="Non prova a pubblicare con GitHub/git.")

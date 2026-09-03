@@ -1145,47 +1145,6 @@ def crop_fantasia_chalkboard(image_bytes: bytes) -> bytes:
     return output.getvalue()
 
 
-def invert_fantasia_chalkboard(image_bytes: bytes) -> bytes:
-    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    width, height = image.size
-    if width < 100 or height < 100:
-        return image_bytes
-
-    x_start = int(width * 0.115)
-    x_end = int(width * 0.885)
-    y_start = int(height * 0.045)
-    y_end = int(height * 0.965)
-    pixels = image.load()
-    black_points = []
-
-    for y in range(y_start, y_end):
-        for x in range(x_start, x_end):
-            r, g, b = pixels[x, y]
-            average = (r + g + b) // 3
-            if average < 95:
-                pixels[x, y] = (248, 248, 248)
-            elif average > 130 and abs(r - g) < 55 and abs(g - b) < 55:
-                pixels[x, y] = (6, 6, 6)
-                black_points.append((x, y))
-            else:
-                if average > 118:
-                    pixels[x, y] = (6, 6, 6)
-                    black_points.append((x, y))
-                else:
-                    pixels[x, y] = (248, 248, 248)
-
-    for x, y in black_points:
-        for neighbor_y in range(max(y_start, y - 1), min(y_end, y + 2)):
-            for neighbor_x in range(max(x_start, x - 1), min(x_end, x + 2)):
-                r, g, b = pixels[neighbor_x, neighbor_y]
-                if (r + g + b) // 3 < 210:
-                    pixels[neighbor_x, neighbor_y] = (6, 6, 6)
-
-    output = io.BytesIO()
-    image.save(output, format="JPEG", quality=92)
-    return output.getvalue()
-
-
 def save_image(image_bytes: bytes, filename: str) -> str:
     image_path = os.path.join(script_dir(), filename)
     with open(image_path, "wb") as image_file:
@@ -1328,12 +1287,6 @@ def save_publish_files(panels: List[Dict]) -> str:
         archive_name = f"{base_name}_{timestamp}.jpg"
         panel["publish_image"] = panel.get("publish_image") or latest_name
         panel["publish_text"] = panel.get("publish_text") or f"{base_name}.txt"
-
-        if panel["name"] == "Fantasia" and panel.get("image_bytes"):
-            pdf_path = os.path.join(output_dir, "Fantasia_pdf.jpg")
-            pdf_image_bytes = panel.get("pdf_image_bytes") or invert_fantasia_chalkboard(panel["image_bytes"])
-            with open(pdf_path, "wb") as image_file:
-                image_file.write(pdf_image_bytes)
 
         if panel.get("reused"):
             continue
@@ -1632,10 +1585,8 @@ def extract_pages() -> List[Dict]:
         try:
             post = extract_first_facebook_image(facebook_page["url"])
             image_bytes = download_image(post["image_url"])
-            pdf_image_bytes = None
             if name == "Fantasia":
                 image_bytes = crop_fantasia_chalkboard(image_bytes)
-                pdf_image_bytes = invert_fantasia_chalkboard(image_bytes)
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
             if not post.get("published_at_raw"):
@@ -1648,7 +1599,6 @@ def extract_pages() -> List[Dict]:
                 {
                     "name": name,
                     "image_bytes": image_bytes,
-                    "pdf_image_bytes": pdf_image_bytes,
                     "text": post.get("text", ""),
                     "published_at": post.get("published_at", ""),
                     "published_at_raw": post.get("published_at_raw", ""),

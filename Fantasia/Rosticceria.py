@@ -40,12 +40,12 @@ FACEBOOK_PAGES = [
         "name": "Cibarìa",
         "url": "https://www.facebook.com/cibaria.asporto",
         "output_image": "Rosticceria_Cibaria.jpg",
-        },
-        {
-            "name": "Impastamò",
-            "url": "https://www.facebook.com/profile.php?id=61560452176728",
-            "output_image": "Rosticceria_Impastamo.jpg",
-        },
+    },
+    {
+        "name": "Impastamò",
+        "url": "https://www.facebook.com/profile.php?id=61560452176728",
+        "output_image": "Rosticceria_Impastamo.jpg",
+    },
 ]
 TEXT_FACEBOOK_PAGES = [
     {

@@ -1407,6 +1407,15 @@ def write_publish_status(panels: List[Dict], output_dir: str) -> None:
 
 def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     updated_at = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
+    phone_numbers = {
+        "Fantasia": "080-405.41.39",
+        "Cibarìa": "080-645.07.99",
+        "Impastamò": "392-536.15.36",
+        "Le delizie di Michela": "080-521.22.33",
+        "Santoro (Castellana)": "080-859.83.13",
+        "Pane&Co": "080-405.49.00",
+    }
+    phone_numbers_json = json.dumps(phone_numbers, ensure_ascii=False)
     cards = []
 
     for panel in panels:
@@ -1469,6 +1478,14 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
       margin: 4px 0 0;
       color: #ccc;
       font-size: 14px;
+    }}
+    .phone-link {{
+      display: none;
+      margin: 8px 0 0;
+      color: #00c853;
+      font-weight: bold;
+      font-size: 18px;
+      text-decoration: none;
     }}
     /* Ripristinato il layout a più colonne */
     main {{
@@ -1574,7 +1591,12 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get('v') === '57';
     // Uso un'API globale gratuita per il contatore
-    const counterUrl = 'https://api.counterapi.dev/v1/sebmazz_rosticcerie/clicks';
+    const ABACUS_BASE = 'https://abacus.jasoncameron.dev';
+    const COUNTER_NAMESPACE = 'rosticcerie-fantasia';
+    const COUNTER_KEY = 'menu-views';
+    const counterGetUrl = ABACUS_BASE + '/get/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
+    const counterHitUrl = ABACUS_BASE + '/hit/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
+    const PHONE_NUMBERS = {phone_numbers_json};
     
     let totalClicks = 0;
     let offsetClicks = 0;
@@ -1584,10 +1606,10 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
             // Recuperiamo l'offset dal dispositivo admin
             offsetClicks = parseInt(localStorage.getItem('rosti_clicks_offset') || '0', 10);
             
-            fetch(counterUrl)
+            fetch(counterGetUrl)
                 .then(r => r.json())
                 .then(data => {{
-                    totalClicks = data.count || 0;
+                    totalClicks = data.value || 0;
                     updateAdminTitle();
                 }}).catch(e => console.error(e));
         }}
@@ -1612,11 +1634,21 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
         mainTitle.innerText = title;
         document.getElementById('main-updated').innerText = date;
         
+        const phoneEl = document.getElementById('main-phone');
+        const phoneNumber = PHONE_NUMBERS[title];
+        if (phoneNumber) {{
+            phoneEl.textContent = phoneNumber;
+            phoneEl.href = 'tel:' + phoneNumber.replace(/[^0-9+]/g, '');
+            phoneEl.style.display = 'inline-block';
+        }} else {{
+            phoneEl.style.display = 'none';
+        }}
+        
         document.getElementById('main-footer').style.display = 'block';
         window.scrollTo(0, 0);
         
         if (!isAdmin) {{
-            fetch(counterUrl + '/up').catch(e => {{}});
+            fetch(counterHitUrl).catch(e => {{}});
         }}
     }}
 
@@ -1633,6 +1665,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
         }}
         
         document.getElementById('main-updated').innerText = 'Aggiornato: {html.escape(updated_at)}';
+        document.getElementById('main-phone').style.display = 'none';
         document.getElementById('main-footer').style.display = 'none';
         window.scrollTo(0, 0);
     }}
@@ -1654,6 +1687,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
   <header id="main-header">
     <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
     <p id="main-updated" class="updated">Aggiornato: {html.escape(updated_at)}</p>
+    <a id="main-phone" class="phone-link" href="tel:"></a>
   </header>
   
   <main id="grid-view">

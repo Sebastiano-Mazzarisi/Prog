@@ -628,7 +628,8 @@
     async function menuImagesForPdf() {
       const selected = orderedPlaces(places).slice(0, 4);
       return Promise.all(selected.map(async (place, index) => {
-        const response = await fetch(imageUrl(place, index), { cache: "no-store" });
+        const pdfImage = place.name === "Fantasia" ? "Fantasia_pdf.jpg" : (place.image || localPlaces[index].image);
+        const response = await fetch(`${base}${pdfImage}?v=${Date.now()}`, { cache: "no-store" });
         if (!response.ok) {
           throw new Error(`Immagine non disponibile: ${place.name}`);
         }

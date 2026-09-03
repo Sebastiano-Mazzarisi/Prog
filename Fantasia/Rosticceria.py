@@ -1612,7 +1612,7 @@ def extract_pages() -> List[Dict]:
             image_bytes = download_image(post["image_url"])
             if name == "Fantasia":
                 image_bytes = crop_fantasia_chalkboard(image_bytes)
-                image_bytes = invert_fantasia_chalkboard(image_bytes)
+                save_image(invert_fantasia_chalkboard(image_bytes), "Rosticceria_Fantasia_pdf.jpg")
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
             if not post.get("published_at_raw"):

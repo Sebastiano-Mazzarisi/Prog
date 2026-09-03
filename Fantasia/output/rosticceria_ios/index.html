@@ -12,13 +12,21 @@
       color: #fff;
       font-family: Arial, sans-serif;
     }
+    /* Fascia nera superiore */
     header {
-      padding: 14px 16px;
+      background: #000;
+      padding: 18px 16px;
       border-bottom: 1px solid #333;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      text-align: center;
     }
-    h1 {
+    h1#main-title {
       margin: 0;
-      font-size: 22px;
+      font-size: 32px;
+      color: #007bff; /* Blu */
+      cursor: pointer;
     }
     .updated {
       margin: 4px 0 0;
@@ -31,21 +39,26 @@
       gap: 1px;
       background: #333;
     }
-    section {
-      min-height: 100vh;
+    .card {
       background: #111;
       padding: 12px;
       box-sizing: border-box;
+      cursor: pointer;
     }
-    h2 {
+    .card h2 {
       margin: 0 0 10px;
       font-size: 20px;
+      pointer-events: none;
     }
-    img {
+    .card img {
       width: 100%;
       height: auto;
       display: block;
       background: #000;
+      pointer-events: none;
+    }
+    .card pre, .card p {
+      pointer-events: none;
     }
     pre {
       white-space: pre-wrap;
@@ -63,45 +76,187 @@
       color: #ffd0d0;
       font-size: 16px;
     }
+    
+    /* Dettaglio (nasconde il duplicato h2 del riquadro) */
+    #detail-view {
+      display: none;
+      padding: 12px;
+      padding-bottom: 85px; /* Spazio per la fascia Home */
+    }
+    #detail-view h2 {
+      display: none;
+    }
+    
+    /* Fascia nera inferiore */
+    footer {
+      display: none;
+      background: #000;
+      padding: 18px 16px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 100;
+      cursor: pointer;
+      border-top: 1px solid #333;
+      box-sizing: border-box;
+    }
+    footer h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #fff;
+    }
+    
     @media (max-width: 760px) {
       main {
         grid-template-columns: 1fr;
       }
-      section {
-        min-height: auto;
-      }
     }
   </style>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get('v') === '57';
+    // Uso un'API globale gratuita per il contatore
+    const counterUrl = 'https://api.counterapi.dev/v1/sebmazz_rosticcerie/clicks';
+    
+    let totalClicks = 0;
+    let offsetClicks = 0;
+    
+    function loadCounter() {
+        if (isAdmin) {
+            // Recuperiamo l'offset dal dispositivo admin
+            offsetClicks = parseInt(localStorage.getItem('rosti_clicks_offset') || '0', 10);
+            
+            fetch(counterUrl)
+                .then(r => r.json())
+                .then(data => {
+                    totalClicks = data.count || 0;
+                    updateAdminTitle();
+                }).catch(e => console.error(e));
+        }
+    }
+    
+    function updateAdminTitle() {
+        let val = Math.max(0, totalClicks - offsetClicks);
+        document.getElementById('main-title').innerText = `Rosticcerie (${val.toLocaleString('it-IT')})`;
+    }
+
+    function openDetail(element) {
+        document.getElementById('grid-view').style.display = 'none';
+        
+        const detailView = document.getElementById('detail-view');
+        detailView.innerHTML = element.innerHTML;
+        detailView.style.display = 'block';
+        
+        const title = element.getAttribute('data-title');
+        const date = element.getAttribute('data-date');
+        
+        const mainTitle = document.getElementById('main-title');
+        mainTitle.innerText = title;
+        document.getElementById('main-updated').innerText = date;
+        
+        document.getElementById('main-footer').style.display = 'block';
+        window.scrollTo(0, 0);
+        
+        if (!isAdmin) {
+            fetch(counterUrl + '/up').catch(e => {});
+        }
+    }
+
+    function closeDetail() {
+        document.getElementById('detail-view').style.display = 'none';
+        document.getElementById('detail-view').innerHTML = '';
+        document.getElementById('grid-view').style.display = 'grid';
+        
+        const mainTitle = document.getElementById('main-title');
+        if (isAdmin) {
+            updateAdminTitle();
+        } else {
+            mainTitle.innerText = 'Rosticcerie';
+        }
+        
+        document.getElementById('main-updated').innerText = 'Aggiornato: 03/09/2026 20:08';
+        document.getElementById('main-footer').style.display = 'none';
+        window.scrollTo(0, 0);
+    }
+    
+    function handleTitleClick() {
+        if (isAdmin && document.getElementById('grid-view').style.display !== 'none') {
+            if (confirm("Vuoi davvero azzerare il contatore?")) {
+                offsetClicks = totalClicks;
+                localStorage.setItem('rosti_clicks_offset', offsetClicks.toString());
+                updateAdminTitle();
+            }
+        }
+    }
+    
+    window.onload = loadCounter;
+  </script>
 </head>
 <body>
-  <header>
-    <h1>Rosticcerie</h1>
-    <p class="updated">Aggiornato: 03/09/2026 16:05</p>
+  <header id="main-header">
+    <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
+    <p id="main-updated" class="updated">Aggiornato: 03/09/2026 20:08</p>
   </header>
-  <main>
-    <section><h2>Fantasia</h2>
-                <img src="Fantasia.jpg?v=1788451509" alt="Fantasia">
+  
+  <main id="grid-view">
+    
+        <section class="card" data-title="Fantasia" data-date="03/09/2026" onclick="openDetail(this)">
+            <h2>Fantasia</h2>
+            
+                <img src="Fantasia.jpg?v=1788458929" alt="Fantasia">
                 <p class="published">Facebook: 03/09/2026</p>
-                <pre>MENÙ DEL GIORNO 03/09/26</pre>
-            </section><section><h2>Cibarìa</h2>
-                <img src="Cibaria.jpg?v=1788451509" alt="Cibarìa">
+                <pre>MENÙ DEL GIORNO 02/09/26</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Cibarìa" data-date="03/09/2026" onclick="openDetail(this)">
+            <h2>Cibarìa</h2>
+            
+                <img src="Cibaria.jpg?v=1788458929" alt="Cibarìa">
                 <p class="published">Facebook: 03/09/2026</p>
-                <pre>3 Settembre 2026.
-Menú del giorno.</pre>
-            </section><section><h2>Impastamò</h2>
-                <img src="Impastamo.jpg?v=1788451509" alt="Impastamò">
+                <pre>2 Settembre 2026
+Menù del giorno.</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Impastamò" data-date="29/08/2026 circa" onclick="openDetail(this)">
+            <h2>Impastamò</h2>
+            
+                <img src="Impastamo.jpg?v=1788458929" alt="Impastamò">
                 <p class="published">Facebook: 29/08/2026 circa</p>
                 <pre>Ricarichiamo un po’ le energie!
 Ci vediamo presto con le bontà della nuova stagione in arrivo</pre>
-            </section><section><h2>Le delizie di Michela</h2>
-                <img src="Le_delizie_di_Michela.jpg?v=1788451509" alt="Le delizie di Michela">
-                <p class="published">Facebook: 03/09/2026 09:40 circa</p>
-                <pre>Like
-Comment</pre>
-            </section><section><h2>Pane&amp;Co</h2>
-                <img src="Pane_Co.jpg?v=1788451509" alt="Pane&amp;Co">
+            
+        </section>
+        
+        <section class="card" data-title="Le delizie di Michela" data-date="03/09/2026 20:04 circa" onclick="openDetail(this)">
+            <h2>Le delizie di Michela</h2>
+            
+                <img src="Le_delizie_di_Michela.jpg?v=1788458929" alt="Le delizie di Michela">
+                <p class="published">Facebook: 03/09/2026 20:04 circa</p>
+                <pre>8 h
+·
+Tutte le reazioni:
+1</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Santoro (Castellana)" data-date="03/09/2026 09:08 circa" onclick="openDetail(this)">
+            <h2>Santoro (Castellana)</h2>
+            
+                <img src="Santoro__Castellana.jpg?v=1788458929" alt="Santoro (Castellana)">
+                <p class="published">Facebook: 03/09/2026 09:08 circa</p>
+                <pre>menù del giorno 3 Settembre</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Pane&amp;Co" data-date="03/09/2026" onclick="openDetail(this)">
+            <h2>Pane&amp;Co</h2>
+            
+                <img src="Pane_Co.jpg?v=1788458929" alt="Pane&amp;Co">
                 <p class="published">Facebook: 03/09/2026</p>
-                <pre>Menu 3 Settembre
+                <pre>Menu 2 Settembre
 
 PRIMI PIATTI DEL GIORNO
 - Penne tricolore all&#x27;arrabbiata - €6.50
@@ -114,7 +269,20 @@ PRIMI PIATTI DEL GIORNO
 SECONDI PIATTI DEL GIORNO
 - Bocconcini di pollo con verdure - €7.50
 - Trancio di pesce spada gratinato - €8.50</pre>
-            </section><section><h2>Bollenti piatti</h2><p class="error">Non ho trovato nessun post testuale del menu nella pagina Facebook: https://www.facebook.com/BollentiPiatti</p></section>
+            
+        </section>
+        
+        <section class="card" data-title="Bollenti piatti" data-date="Orario non disponibile" onclick="openDetail(this)">
+            <h2>Bollenti piatti</h2>
+            <p class="error">Non ho trovato nessun post testuale del menu nella pagina Facebook: https://www.facebook.com/BollentiPiatti</p>
+        </section>
+        
   </main>
+  
+  <div id="detail-view"></div>
+  
+  <footer id="main-footer" onclick="closeDetail()">
+    <h1>Home</h1>
+  </footer>
 </body>
 </html>

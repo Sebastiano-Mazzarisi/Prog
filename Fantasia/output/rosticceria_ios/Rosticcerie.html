@@ -595,6 +595,36 @@
       return { width: 1, height: 1 };
     }
 
+    function pdfLiteralText(text) {
+      return `(${String(text).replace(/[\\()]/g, "\\$&").replace(/[^\x20-\x7e]/g, (char) => {
+        const octal = char.charCodeAt(0).toString(8).padStart(3, "0");
+        return `\\${octal}`;
+      })})`;
+    }
+
+    function pdfCaptionDate(place) {
+      const date = placeDate(place);
+      if (!date) {
+        return "";
+      }
+      const weekdays = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+      const months = [
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre"
+      ];
+      return `${weekdays[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
+    }
+
     async function menuImagesForPdf() {
       const selected = orderedPlaces(places).slice(0, 4);
       return Promise.all(selected.map(async (place, index) => {
@@ -603,7 +633,12 @@
           throw new Error(`Immagine non disponibile: ${place.name}`);
         }
         const bytes = new Uint8Array(await response.arrayBuffer());
-        return { name: place.name, bytes, size: jpegSize(bytes) };
+        return {
+          name: place.name,
+          bytes,
+          size: jpegSize(bytes),
+          caption: place.name === "Fantasia" ? pdfCaptionDate(place) : ""
+        };
       }));
     }
 
@@ -638,10 +673,13 @@
         const x = cells[index].x + (cellWidth - width) / 2;
         const y = cells[index].top - height;
         content += `q\n${width.toFixed(2)} 0 0 ${height.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im${index + 1} Do\nQ\n`;
+        if (image.caption) {
+          content += `BT\n/F1 12 Tf\n0 g\n${x.toFixed(2)} ${(y - 15).toFixed(2)} Td\n${pdfLiteralText(image.caption)} Tj\nET\n`;
+        }
       });
 
       objects.push(textBytes(`<< /Length ${textBytes(content).length} >>\nstream\n${content}endstream`));
-      objects.push(textBytes("<< /Type /Page /Parent 7 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im1 1 0 R /Im2 2 0 R /Im3 3 0 R /Im4 4 0 R >> >> /Contents 5 0 R >>"));
+      objects.push(textBytes("<< /Type /Page /Parent 7 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> /XObject << /Im1 1 0 R /Im2 2 0 R /Im3 3 0 R /Im4 4 0 R >> >> /Contents 5 0 R >>"));
       objects.push(textBytes("<< /Type /Pages /Kids [6 0 R] /Count 1 >>"));
       objects.push(textBytes("<< /Type /Catalog /Pages 7 0 R >>"));
 

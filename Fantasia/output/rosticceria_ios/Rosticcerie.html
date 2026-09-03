@@ -25,60 +25,24 @@
     }
 
     body {
-      position: relative;
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
-    .screen {
-      position: absolute;
-      inset: 0;
-      display: none;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    .screen.active {
-      display: flex;
-    }
-
-    .app-title {
-      flex: 0 0 auto;
-      width: 70%;
-      margin: 14px auto 10px;
-      padding: 10px 0;
-      text-align: center;
-      background: #000;
-      color: #3d9dff;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(61, 157, 255, 0.6);
+    .topbar {
+      background: #111;
+      border-bottom: 1px solid #333;
+      padding: 9px 10px 7px;
     }
 
     .controls {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      padding: 0 10px 10px;
-      overflow-y: auto;
-      min-height: 0;
-      flex: 1;
-    }
-
-    .home-bar {
-      flex: 0 0 auto;
-      background: #000;
-      border-top: 1px solid #333;
-      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
-      display: flex;
-      justify-content: center;
-    }
-
-    .home-bar button {
-      min-width: 140px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
     }
 
     button {
@@ -175,10 +139,6 @@
       touch-action: pan-x pan-y pinch-zoom;
     }
 
-    .viewer {
-      flex: 1;
-    }
-
     .viewer img,
     .desktop-image img {
       width: 100%;
@@ -257,8 +217,6 @@
     .desktop-grid {
       display: none;
       min-height: 0;
-      height: 100vh;
-      height: 100dvh;
       background: #333;
       gap: 1px;
     }
@@ -277,19 +235,11 @@
       background: #111;
     }
 
-    .desktop-title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
     .desktop-panel-header h2 {
       margin: 0;
       font-size: 22px;
       line-height: 1.1;
     }
-
 
     .desktop-panel-header p {
       margin: 4px 0 0;
@@ -299,32 +249,30 @@
     }
 
     @media (min-width: 760px) {
+      body {
+        grid-template-rows: 1fr;
+      }
+
       .mobile-only {
-        display: none !important;
+        display: none;
       }
 
       .desktop-grid {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
   </style>
 </head>
 <body>
-  <section id="homeScreen" class="screen mobile-only active" aria-live="polite">
-    <h1 class="app-title">Rosticcerie</h1>
+  <header class="topbar mobile-only" aria-live="polite">
     <nav id="controls" class="controls" aria-label="Scegli rosticceria"></nav>
     <p id="published" class="published">Data non disponibile</p>
-  </section>
+  </header>
 
-  <section id="detailScreen" class="screen mobile-only">
-    <main id="viewer" class="viewer">
-      <img id="photo" src="Fantasia.jpg" alt="Fantasia">
-    </main>
-    <div class="home-bar">
-      <button id="homeButton" type="button">Home</button>
-    </div>
-  </section>
+  <main id="viewer" class="viewer mobile-only">
+    <img id="photo" src="Fantasia.jpg" alt="Fantasia">
+  </main>
 
   <main id="desktopGrid" class="desktop-grid" aria-label="Rosticcerie affiancate"></main>
 
@@ -345,8 +293,8 @@
     const localPlaces = [
       { name: "Fantasia", image: "Fantasia.jpg", published_at: "" },
       { name: "Cibarìa", image: "Cibaria.jpg", published_at: "" },
-      { name: "Pane&Co", image: "Pane_Co.jpg", published_at: "" },
-      { name: "Bollenti piatti", image: "Bollenti_piatti.jpg", published_at: "" }
+      { name: "Bollenti", image: "Bollenti.jpg", published_at: "" },
+      { name: "Pane&Co", image: "Pane_Co.jpg", published_at: "" }
     ];
 
     let base = "";
@@ -366,9 +314,6 @@
     let progressValue = 0;
     let checkingStartedAt = 0;
 
-    const homeScreen = document.getElementById("homeScreen");
-    const detailScreen = document.getElementById("detailScreen");
-    const homeButton = document.getElementById("homeButton");
     const viewer = document.getElementById("viewer");
     const photo = document.getElementById("photo");
     const published = document.getElementById("published");
@@ -378,16 +323,6 @@
     const refreshPercent = document.getElementById("refreshPercent");
     const refreshBar = document.getElementById("refreshBar");
     const checkingButton = document.getElementById("checkingButton");
-
-    function showHomeScreen() {
-      homeScreen.classList.add("active");
-      detailScreen.classList.remove("active");
-    }
-
-    function showDetailScreen() {
-      detailScreen.classList.add("active");
-      homeScreen.classList.remove("active");
-    }
 
     function displayDate(place) {
       const date = placeDate(place);
@@ -424,8 +359,7 @@
       return `${weekdays[date.getDay()]}-${String(date.getDate()).padStart(2, "0")}`;
     }
 
-
-function placeDate(place) {
+    function placeDate(place) {
       const value = `${place.published_at || ""}\n${place.text || ""}`;
       const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
       const shortMatch = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{2})/);
@@ -538,16 +472,13 @@ function placeDate(place) {
 
         const date = document.createElement("span");
         date.className = "button-date";
-      date.textContent = shortDisplayDate(place);
+        date.textContent = shortDisplayDate(place);
 
         button.append(name, date);
         button.classList.toggle("active", index === currentIndex);
         button.classList.toggle("today-name", isToday(place));
         button.classList.toggle("stale", isStale(place));
-        button.addEventListener("click", () => {
-          showPlace(index);
-          showDetailScreen();
-        });
+        button.addEventListener("click", () => showPlace(index));
         controls.append(button);
       });
     }
@@ -561,15 +492,12 @@ function placeDate(place) {
         const header = document.createElement("header");
         header.className = "desktop-panel-header";
 
-        const titleRow = document.createElement("div");
-        titleRow.className = "desktop-title-row";
-
         const title = document.createElement("h2");
         title.textContent = place.name;
         title.classList.toggle("today-name", isToday(place));
 
-          const date = document.createElement("p");
-          date.textContent = displayDate(place);
+        const date = document.createElement("p");
+        date.textContent = displayDate(place);
 
         const imageWrap = document.createElement("div");
         imageWrap.className = "desktop-image";
@@ -579,24 +507,14 @@ function placeDate(place) {
         image.alt = place.name;
         image.addEventListener("click", checkForUpdates);
 
-        titleRow.append(title);
-        header.append(titleRow, date);
+        header.append(title, date);
         imageWrap.append(image);
         panel.append(header, imageWrap);
         desktopGrid.append(panel);
       });
     }
 
-    function orderedPlaces(list) {
-      const order = ["Fantasia", "Pane&Co", "Cibarìa", "Bollenti piatti", "Le delizie di Michela", "Impastamò"];
-      return [...list].sort((a, b) => {
-        const ai = order.indexOf(a.name);
-        const bi = order.indexOf(b.name);
-        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
-      });
-    }
-
-   async function loadLatest() {
+    async function loadLatest() {
       let statusData = null;
       try {
         const response = await fetch(`${remoteBase}status.json?v=${Date.now()}`, { cache: "no-store" });
@@ -605,10 +523,10 @@ function placeDate(place) {
         }
 
         statusData = await response.json();
-        places = orderedPlaces(statusData.pages);
+        places = statusData.pages;
         base = remoteBase;
       } catch (error) {
-        places = orderedPlaces(localPlaces);
+        places = localPlaces;
         base = "";
       }
 
@@ -690,8 +608,6 @@ function placeDate(place) {
 
       checkForUpdates();
     });
-
-    homeButton.addEventListener("click", showHomeScreen);
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowRight" || event.key === " ") {

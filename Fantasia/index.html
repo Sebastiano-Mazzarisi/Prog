@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="300">
+  <title>Rosticcerie</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #333;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+    .updated {
+      margin: 4px 0 0;
+      color: #ccc;
+      font-size: 14px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: #333;
+    }
+    section {
+      min-height: 100vh;
+      background: #111;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #000;
+    }
+    pre {
+      white-space: pre-wrap;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.35;
+      margin: 12px 0 0;
+    }
+    .published {
+      color: #ccc;
+      font-size: 13px;
+      margin: 8px 0 0;
+    }
+    .error {
+      color: #ffd0d0;
+      font-size: 16px;
+    }
+    @media (max-width: 760px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      section {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rosticcerie</h1>
+    <p class="updated">Aggiornato: 03/09/2026 01:07</p>
+  </header>
+  <main>
+    <section><h2>Fantasia</h2>
+                <img src="Fantasia.jpg?v=1788390456" alt="Fantasia">
+                <p class="published">Facebook: 02/09/2026</p>
+                <pre>MENÙ DEL GIORNO 02/09/26</pre>
+            </section><section><h2>Cibarìa</h2>
+                <img src="Cibaria.jpg?v=1788390456" alt="Cibarìa">
+                <p class="published">Facebook: 02/09/2026</p>
+                <pre>2 Settembre 2026
+Menù del giorno.</pre>
+            </section><section><h2>Bollenti</h2><p class="error">Non ho trovato nessun post testuale del menu nella pagina Facebook: https://www.facebook.com/BollentiPiatti</p></section><section><h2>Pane&amp;Co</h2>
+                <img src="Pane_Co.jpg?v=1788390456" alt="Pane&amp;Co">
+                <p class="published">Facebook: 02/09/2026</p>
+                <pre>Menu 2 Settembre
+
+PRIMI PIATTI DEL GIORNO
+- Penne tricolore all&#x27;arrabbiata - €6.50
+- Risotto con speck e radicchio - €7.50
+- Spaghetti con fagiolini, pomodoro fresco e cacio - €8.50
+- Cavatelli al grano arso con gamberetti, datterino giallo e zucchine - €8.50
+- Minestra di piselli con orzo - €6.00
+  Con o senza pasta
+
+SECONDI PIATTI DEL GIORNO
+- Bocconcini di pollo con verdure - €7.50
+- Trancio di pesce spada gratinato - €8.50</pre>
+            </section>
+  </main>
+</body>
+</html>

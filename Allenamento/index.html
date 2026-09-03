@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Allenamento</title>
+  <meta name="description" content="App personale per seguire schede, esercizi, timer e progressi di allenamento.">
+  <link rel="icon" href="assets/allenamento-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/allenamento-icon.svg" alt="" aria-hidden="true">
+      <div>
+        <h1>Allenamento</h1>
+        <p id="todayLabel">Oggi</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="printBtn" title="Stampa scheda" aria-label="Stampa scheda">
+        <span aria-hidden="true">PDF</span>
+      </button>
+      <button class="primary" id="finishSessionBtn">Chiudi sessione</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="panel plan-panel" aria-labelledby="planTitle">
+      <div class="panel-head">
+        <div>
+          <h2 id="planTitle">Scheda</h2>
+          <p>Scegli il giorno e segna le serie completate.</p>
+        </div>
+        <button class="ghost" id="resetDayBtn">Reset</button>
+      </div>
+
+      <nav class="day-tabs" id="dayTabs" aria-label="Giorni di allenamento"></nav>
+
+      <div class="session-card">
+        <div>
+          <span class="eyebrow">Sessione</span>
+          <strong id="activeDayName">A</strong>
+        </div>
+        <div class="progress-ring" aria-label="Avanzamento allenamento">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="49"></circle>
+            <circle id="progressCircle" cx="60" cy="60" r="49"></circle>
+          </svg>
+          <span id="progressText">0%</span>
+        </div>
+      </div>
+
+      <div class="exercise-list" id="exerciseList"></div>
+    </section>
+
+    <aside class="side-stack">
+      <section class="panel timer-panel" aria-labelledby="timerTitle">
+        <div class="panel-head compact">
+          <div>
+            <h2 id="timerTitle">Recupero</h2>
+            <p>Timer rapido tra una serie e l'altra.</p>
+          </div>
+        </div>
+        <div class="timer-face" id="timerFace">01:30</div>
+        <div class="timer-controls">
+          <button class="ghost" data-timer="60">1:00</button>
+          <button class="ghost active" data-timer="90">1:30</button>
+          <button class="ghost" data-timer="120">2:00</button>
+        </div>
+        <div class="timer-actions">
+          <button class="primary" id="timerStartBtn">Avvia</button>
+          <button class="ghost" id="timerResetBtn">Azzera</button>
+        </div>
+      </section>
+
+      <section class="panel stats-panel" aria-labelledby="statsTitle">
+        <div class="panel-head compact">
+          <div>
+            <h2 id="statsTitle">Riepilogo</h2>
+            <p>Progressi salvati su questo dispositivo.</p>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <article><span id="weekSessions">0</span><p>sessioni</p></article>
+          <article><span id="weekSets">0</span><p>serie</p></article>
+          <article><span id="bestStreak">0</span><p>giorni fila</p></article>
+        </div>
+      </section>
+
+      <section class="panel editor-panel" aria-labelledby="editorTitle">
+        <div class="panel-head compact">
+          <div>
+            <h2 id="editorTitle">Aggiungi esercizio</h2>
+            <p>Modifica la scheda quando serve.</p>
+          </div>
+        </div>
+        <form id="exerciseForm" class="exercise-form">
+          <label>Nome esercizio<input id="exerciseName" required placeholder="Es. Leg press"></label>
+          <div class="form-row">
+            <label>Serie<input id="exerciseSets" type="number" min="1" max="10" value="3" required></label>
+            <label>Ripetizioni<input id="exerciseReps" placeholder="10" required></label>
+          </div>
+          <label>Note<input id="exerciseNotes" placeholder="Carico, postura, variante..."></label>
+          <button class="primary" type="submit">Aggiungi</button>
+        </form>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="history-strip">
+    <div>
+      <strong>Storico recente</strong>
+      <p id="historyText">Nessuna sessione salvata.</p>
+    </div>
+    <button class="ghost" id="clearHistoryBtn">Pulisci storico</button>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # Nome.py: Rosticceria.py
-# Data e ora ultima modifica: 03/09/2026 15:06
-# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti, Pane&Co e Impastamò da Facebook e web.
+# Data e ora ultima modifica: 03/09/2026 16:14
+# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti, Pane&Co, Impastamò e Le delizie di Michela da Facebook e web.
 # File di input: cookies.txt
 # File di output: status.json, index.html, immagini jpg
 # Parametri: --once, --show, --no-git
@@ -45,6 +45,11 @@ FACEBOOK_PAGES = [
         "name": "Impastamò",
         "url": "https://www.facebook.com/profile.php?id=61560452176728",
         "output_image": "Rosticceria_Impastamo.jpg",
+    },
+    {
+        "name": "Le delizie di Michela",
+        "url": "https://www.facebook.com/profile.php?id=100045208848338",
+        "output_image": "Rosticceria_LeDelizieDiMichela.jpg",
     },
 ]
 TEXT_FACEBOOK_PAGES = [
@@ -159,9 +164,10 @@ def clean_post_text(text: str) -> str:
             line.startswith("Foto di ")
             or line.startswith("Rosticceria Fantasia")
             or line.startswith("Cibaria")
-                or line.startswith("Bollenti Piatti")
-                or line.startswith("Impastamò")
-                or line.startswith("Impastamo")
+            or line.startswith("Bollenti Piatti")
+            or line.startswith("Impastamò")
+            or line.startswith("Impastamo")
+            or line.startswith("Le delizie di Michela")
         ):
             continue
         lines.append(line)
@@ -1752,7 +1758,7 @@ def monitor_loop(show: bool = False, publish_to_git: bool = True) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Bollenti, Pane&Co e Impastamò.")
+    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Bollenti, Pane&Co, Impastamò e Le delizie di Michela.")
     parser.add_argument("--once", action="store_true", help="Esegue una sola estrazione e poi termina.")
     parser.add_argument("--show", action="store_true", help="Mostra anche le due foto a pieno schermo.")
     parser.add_argument("--no-git", action="store_true", help="Non prova a pubblicare con GitHub/git.")

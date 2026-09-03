@@ -1589,7 +1589,12 @@ def extract_pages() -> List[Dict]:
                 }
             )
         except Exception as exc:
-            panels.append({"name": name, "error": str(exc)})
+            existing_panel = existing_publish_panel_if_today(name, require_today=False)
+            if existing_panel:
+                print(f"{name}: Facebook non leggibile ora, tengo l'ultima foto salvata.")
+                panels.append(existing_panel)
+            else:
+                panels.append({"name": name, "error": str(exc)})
 
     existing_panel = existing_publish_panel_if_today(PANECO_PAGE["name"])
     if existing_panel:

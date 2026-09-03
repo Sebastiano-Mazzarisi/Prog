@@ -1,21 +1,21 @@
 {
-  "updated_at": "2026-09-03T07:12:48",
+  "updated_at": "2026-09-03T09:25:00",
   "pages": [
     {
       "name": "Fantasia",
-      "image": null,
-      "text": "",
-      "published_at": "",
-      "published_at_raw": "",
-      "error": "Non ho trovato nessuna immagine grande nella pagina Facebook: https://www.facebook.com/RosticceriaFantasia"
+      "image": "Fantasia.jpg",
+      "text": "MENÙ DEL GIORNO 02/09/26",
+      "published_at": "02/09/2026",
+      "published_at_raw": "02/09/2026",
+      "error": null
     },
     {
       "name": "Cibarìa",
-      "image": null,
-      "text": "",
-      "published_at": "",
-      "published_at_raw": "",
-      "error": "Non ho trovato nessuna immagine grande nella pagina Facebook: https://www.facebook.com/cibaria.asporto"
+      "image": "Cibaria.jpg",
+      "text": "2 Settembre 2026\nMenù del giorno.",
+      "published_at": "02/09/2026",
+      "published_at_raw": "02/09/2026",
+      "error": null
     },
     {
       "name": "Pane&Co",
@@ -28,7 +28,7 @@
     {
       "name": "Bollenti",
       "image": "Bollenti.jpg",
-      "text": "PRIMI PIATTI\n●RISO A INSALATA\n●INSALATA DI FARRO CON SALMONE, ZUCCHINA E PESTO DI BASILICO\n●PIZZA DI PATATE 5,0\n●LASAGNA AL FORNO 5,0\n●TROFIE ALLA CRUDIAIOLA CON TONNO, DATTERINO GIALLO E ZUCCHINA 5,5\n●RIGATONI ALLA NORMA CON MELANZANA VIOLETTA DORATA, POMODORINI E CACIORICOTTA 5,5\nSECONDI PIATTI\n●POLLI AL GIRARROSTO\n●PETTO DI POLLO AL LIMONE\n●ALETTE DI POLLO AL FORNELLO\n●FAGOTTO DI CARNE MACINATA FARCITA CON PISELLI\n●SPIEDINO DI ARROSTINI IN SALSA BARBECUE\n●SPIEDINO DI BOMBETTE GRATINATE AL FORNO CON SPECK E GALBANINO\n●TRIANGOLO DI MERLUZZO IMPANATO CON PATATE AL FORNO\n●FILETTO DI CERNIA IN SALSA DI SENAPE IN CROSTA DI MANDORLE\n●INSALATA DI POLLO\n●INSALATA DI POLLO IN SALSA ROSA\n●INSALATA DI PATATE ALLO YOGURT E MAIONESE\n",
+      "text": "PRIMI PIATTI\n●RISO A INSALATA\n●INSALATA DI FARRO CON SALMONE, ZUCCHINA E PESTO DI BASILICO\n●PIZZA DI PATATE 5,0\n●LASAGNA AL FORNO 5,0\n●TROFIE ALLA CRUDIAIOLA CON TONNO, DATTERINO GIALLO E ZUCCHINA 5,5\n●RIGATONI ALLA NORMA CON MELANZANA VIOLETTA DORATA, POMODORINI E CACIORICOTTA 5,5\nSECONDI PIATTI\n●POLLI AL GIRARROSTO\n●PETTO DI POLLO AL LIMONE\n●ALETTE DI POLLO AL FORNELLO\n●FAGOTTO DI CARNE MACINATA FARCITA CON PISELLI\n●SPIEDINO DI ARROSTINI IN SALSA BARBECUE\n●SPIEDINO DI BOMBETTE GRATINATE AL FORNO CON SPECK E GALBANINO\n●TRIANGOLO DI MERLUZZO IMPANATO CON PATATE AL FORNO\n●FILETTO DI CERNIA IN SALSA DI SENAPE IN CROSTA DI MANDORLE\n●INSALATA DI POLLO\n●INSALATA DI POLLO IN SALSA ROSA\n●INSALATA DI PATATE ALLO YOGURT E MAIONESE",
       "published_at": "02/09/2026 11:24 circa",
       "published_at_raw": "14 h",
       "error": null

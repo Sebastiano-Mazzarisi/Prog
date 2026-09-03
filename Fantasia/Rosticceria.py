@@ -1185,9 +1185,18 @@ def crop_le_delizie_borders(image_bytes: bytes) -> bytes:
     if right - left < width * 0.25 or right - left > width * 0.95:
         return image_bytes
 
+    cropped = image.crop((left, 0, right, height))
+    cropped = enhance_chalk_contrast(cropped)
+
     output = io.BytesIO()
-    image.crop((left, 0, right, height)).save(output, format="JPEG", quality=92)
+    cropped.save(output, format="JPEG", quality=92)
     return output.getvalue()
+
+
+def enhance_chalk_contrast(image: Image.Image, black_point: int = 20, white_point: int = 150) -> Image.Image:
+    scale = 255.0 / max(1, (white_point - black_point))
+    lut = [min(255, max(0, round((value - black_point) * scale))) for value in range(256)]
+    return image.point(lut * len(image.getbands()))
 
 
 def save_image(image_bytes: bytes, filename: str) -> str:

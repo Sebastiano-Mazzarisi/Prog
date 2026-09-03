@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T15:03:16",
+  "updated_at": "2026-09-03T15:08:50",
   "pages": [
     {
       "name": "Fantasia",
@@ -42,12 +42,12 @@
       "error": null
     },
     {
-      "name": "Bollenti",
-      "image": "Bollenti.jpg",
-      "text": "PRIMI PIATTI\n●RISO A INSALATA\n●INSALATA DI FARRO AL SALMONE E ZUCCHINA\n●CICORIA ALL'OLIO 5,0\n●TORTELLINI ALLA CARNE AL SUGO DI POMODORO 5,0\n●SEDANINI ALLA CRUDIAIOLA CON VELLUTATA DI DATTERINO GIALLO E ROSSO MELANZANA E CACIORICOTTA 5,0\n●FUSILLI AL SALMONE E PISELLI 5,5\n●GNOCCHI CON PESTO DI BASILICO STRACCIATELLA E POMODORINO 5,0\nSECONDI PIATTI\n●POLLI AL GIRARROSTO\n●ALETTE DI POLLO AL FORNELLO\n●SCALOPPINE DI VITELLO AI FUNGHI\n●COTOLETTE DI POLLO\n●ZAMPINA ARROSTO\n●MILLEFOGLIE DI VERDURE VEGETARIANO\n●FILETTO DI CERNIA CON SENAPE, MANDORLE E ZUCCHINA\n●INSALATA DI MARE CON VERDURINE\n●INSALATA DI POLLO\n●INSALATA DI POLLO ALLO YOGURT E MAIONESE\n",
-      "published_at": "03/09/2026",
-      "published_at_raw": "1 h",
-      "error": null
+      "name": "Bollenti piatti",
+      "image": null,
+      "text": "",
+      "published_at": "",
+      "published_at_raw": "",
+      "error": "Non ho trovato nessun post testuale del menu nella pagina Facebook: https://www.facebook.com/BollentiPiatti"
     }
   ]
 }

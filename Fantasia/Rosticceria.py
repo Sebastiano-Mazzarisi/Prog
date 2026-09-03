@@ -1140,6 +1140,7 @@ def invert_fantasia_chalkboard(image_bytes: bytes) -> bytes:
     y_start = int(height * 0.045)
     y_end = int(height * 0.965)
     pixels = image.load()
+    black_points = []
 
     for y in range(y_start, y_end):
         for x in range(x_start, x_end):
@@ -1147,11 +1148,22 @@ def invert_fantasia_chalkboard(image_bytes: bytes) -> bytes:
             average = (r + g + b) // 3
             if average < 95:
                 pixels[x, y] = (248, 248, 248)
-            elif average > 145 and abs(r - g) < 45 and abs(g - b) < 45:
-                pixels[x, y] = (18, 18, 18)
+            elif average > 130 and abs(r - g) < 55 and abs(g - b) < 55:
+                pixels[x, y] = (6, 6, 6)
+                black_points.append((x, y))
             else:
-                inverted = max(18, min(248, 255 - average))
-                pixels[x, y] = (inverted, inverted, inverted)
+                if average > 118:
+                    pixels[x, y] = (6, 6, 6)
+                    black_points.append((x, y))
+                else:
+                    pixels[x, y] = (248, 248, 248)
+
+    for x, y in black_points:
+        for neighbor_y in range(max(y_start, y - 1), min(y_end, y + 2)):
+            for neighbor_x in range(max(x_start, x - 1), min(x_end, x + 2)):
+                r, g, b = pixels[neighbor_x, neighbor_y]
+                if (r + g + b) // 3 < 210:
+                    pixels[neighbor_x, neighbor_y] = (6, 6, 6)
 
     output = io.BytesIO()
     image.save(output, format="JPEG", quality=92)

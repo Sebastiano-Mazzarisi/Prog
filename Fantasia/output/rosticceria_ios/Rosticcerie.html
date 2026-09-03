@@ -40,10 +40,7 @@
     }
 
     .controls {
-      display: grid;
-      grid-auto-flow: column;
-      grid-template-rows: repeat(2, 1fr);
-      grid-auto-columns: minmax(46%, 1fr);
+      display: flex;
       gap: 6px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -52,6 +49,11 @@
 
     .controls::-webkit-scrollbar {
       display: none;
+    }
+
+    .controls button {
+      flex: 0 0 auto;
+      min-width: 30%;
     }
 
     button {
@@ -539,7 +541,7 @@ function placeDate(place) {
     }
 
     function orderedPlaces(list) {
-      const order = ["Fantasia", "Cibarìa", "Pane&Co", "Bollenti piatti"];
+      const order = ["Fantasia", "Pane&Co", "Cibarìa", "Bollenti piatti", "Le delizie di Michela", "Impastamò"];
       return [...list].sort((a, b) => {
         const ai = order.indexOf(a.name);
         const bi = order.indexOf(b.name);

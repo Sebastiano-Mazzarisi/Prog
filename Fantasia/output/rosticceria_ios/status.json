@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T09:05:42",
+  "updated_at": "2026-09-03T14:05:03",
   "pages": [
     {
       "name": "Fantasia",
@@ -15,6 +15,14 @@
       "text": "3 Settembre 2026.\nMenú del giorno.",
       "published_at": "03/09/2026",
       "published_at_raw": "03/09/2026",
+      "error": null
+    },
+    {
+      "name": "Impastamò",
+      "image": "Impastamo.jpg",
+      "text": "Ricarichiamo un po’ le energie!\nCi vediamo presto con le bontà della nuova stagione in arrivo",
+      "published_at": "29/08/2026 circa",
+      "published_at_raw": "5d",
       "error": null
     },
     {

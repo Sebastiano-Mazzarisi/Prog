@@ -1328,6 +1328,10 @@ def existing_publish_panel_if_today(name: str, require_today: bool = True) -> Op
             except Exception:
                 pass
 
+        if not text.strip():
+            # Voce salvata senza testo valido: non riproporla all'infinito.
+            return None
+
         with open(image_path, "rb") as image_file:
             image_bytes = image_file.read()
 

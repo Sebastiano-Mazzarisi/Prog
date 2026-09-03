@@ -1153,17 +1153,69 @@ def crop_michela_chalkboard(image_bytes: bytes) -> bytes:
     if width < 100 or height < 100:
         return image_bytes
 
-    # Toglie prima una cornice laterale fissa (5% da ogni lato)...
-    left = int(width * 0.05)
-    right = int(width * 0.95)
-    if right - left < width * 0.3:
+    y_start = int(height * 0.1)
+    y_end = int(height * 0.9)
+    step = max(1, (y_end - y_start) // 300)
+
+    is_dark_col = []
+    for x in range(width):
+        dark_pixels = 0
+        total_pixels = 0
+        for y in range(y_start, y_end, step):
+            r, g, b = image.getpixel((x, y))
+            if (r + g + b) / 3 < 130:
+                dark_pixels += 1
+            total_pixels += 1
+        is_dark_col.append(total_pixels > 0 and (dark_pixels / total_pixels) >= 0.45)
+
+    # Riempie piccoli buchi (rumore) tra colonne scure per unire un blocco continuo
+    max_gap = max(5, width // 100)
+    filled = list(is_dark_col)
+    x = 0
+    while x < width:
+        if not filled[x]:
+            gap_start = x
+            while x < width and not filled[x]:
+                x += 1
+            gap_len = x - gap_start
+            if gap_start > 0 and x < width and gap_len <= max_gap:
+                for gx in range(gap_start, x):
+                    filled[gx] = True
+        else:
+            x += 1
+
+    # Individua il blocco contiguo di colonne scure più lungo: è la lavagna.
+    # (Ignora così macchie scure isolate altrove nella foto, come finestre o ombre,
+    # che in precedenza allargavano il ritaglio ben oltre i bordi reali della lavagna.)
+    best_start = None
+    best_end = None
+    best_len = 0
+    run_start = None
+    for x in range(width):
+        if filled[x]:
+            if run_start is None:
+                run_start = x
+        else:
+            if run_start is not None and x - run_start > best_len:
+                best_len = x - run_start
+                best_start, best_end = run_start, x
+            run_start = None
+    if run_start is not None and width - run_start > best_len:
+        best_start, best_end = run_start, width
+        best_len = width - run_start
+
+    if best_start is None or best_len < width * 0.2:
         return image_bytes
+
+    margin = 15
+    left = max(0, best_start - margin)
+    right = min(width, best_end + margin)
 
     output = io.BytesIO()
     image.crop((left, 0, right, height)).save(output, format="JPEG", quality=92)
     trimmed_bytes = output.getvalue()
 
-    # ...poi applica lo stesso ritaglio verticale usato per Fantasia.
+    # Applica poi lo stesso ritaglio verticale usato per Fantasia.
     return crop_fantasia_chalkboard(trimmed_bytes)
 
 

@@ -250,18 +250,6 @@
       line-height: 1.1;
     }
 
-    .pdf-button {
-      width: 36px;
-      min-height: 28px;
-      height: 28px;
-      padding: 0;
-      border: 1px solid #ffe94d;
-      background: #111;
-      color: #ffe94d;
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1;
-    }
 
     .desktop-panel-header p {
       margin: 4px 0 0;
@@ -381,7 +369,11 @@
       return `${weekdays[date.getDay()]}-${String(date.getDate()).padStart(2, "0")}`;
     }
 
-    function placeDate(place) {
+    function showsDate(place) {
+        return place.name !== "Le delizie di Michela";
+}
+
+function placeDate(place) {
       const value = `${place.published_at || ""}\n${place.text || ""}`;
       const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
       const shortMatch = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{2})/);
@@ -476,7 +468,7 @@
       const place = places[currentIndex];
       photo.src = imageUrl(place, currentIndex);
       photo.alt = place.name;
-      published.textContent = displayDate(place);
+      published.textContent = showsDate(place) ? displayDate(place) : "";
       controls.querySelectorAll("button").forEach((button, buttonIndex) => {
         button.classList.toggle("active", buttonIndex === currentIndex);
       });
@@ -494,7 +486,7 @@
 
         const date = document.createElement("span");
         date.className = "button-date";
-        date.textContent = shortDisplayDate(place);
+      date.textContent = showsDate(place) ? shortDisplayDate(place) : "";
 
         button.append(name, date);
         button.classList.toggle("active", index === currentIndex);
@@ -521,19 +513,11 @@
         title.textContent = place.name;
         title.classList.toggle("today-name", isToday(place));
 
-        const pdfButton = document.createElement("button");
-        pdfButton.type = "button";
-        pdfButton.className = "pdf-button";
-        pdfButton.textContent = "PDF";
-        pdfButton.title = "Crea PDF A4";
-        pdfButton.addEventListener("click", (event) => {
-          event.stopPropagation();
-          const pdfWindow = window.open("", "_blank");
-          downloadMenusPdf(pdfWindow);
-        });
-
-        const date = document.createElement("p");
-        date.textContent = displayDate(place);
+          let date = null;
+          if (showsDate(place)) {
+            date = document.createElement("p");
+            date.textContent = displayDate(place);
+          }
 
         const imageWrap = document.createElement("div");
         imageWrap.className = "desktop-image";
@@ -543,8 +527,8 @@
         image.alt = place.name;
         image.addEventListener("click", checkForUpdates);
 
-        titleRow.append(title, pdfButton);
-        header.append(titleRow, date);
+        titleRow.append(title);
+        header.append(titleRow, ...(date ? [date] : []));
         imageWrap.append(image);
         panel.append(header, imageWrap);
         desktopGrid.append(panel);
@@ -560,179 +544,7 @@
       });
     }
 
-    function textBytes(text) {
-      return new TextEncoder().encode(text);
-    }
-
-    function concatBytes(parts) {
-      const size = parts.reduce((total, part) => total + part.length, 0);
-      const output = new Uint8Array(size);
-      let offset = 0;
-      parts.forEach((part) => {
-        output.set(part, offset);
-        offset += part.length;
-      });
-      return output;
-    }
-
-    function jpegSize(bytes) {
-      let offset = 2;
-      while (offset + 9 < bytes.length) {
-        if (bytes[offset] !== 0xff) {
-          offset += 1;
-          continue;
-        }
-        const marker = bytes[offset + 1];
-        const length = (bytes[offset + 2] << 8) + bytes[offset + 3];
-        if (marker >= 0xc0 && marker <= 0xc3) {
-          return {
-            height: (bytes[offset + 5] << 8) + bytes[offset + 6],
-            width: (bytes[offset + 7] << 8) + bytes[offset + 8]
-          };
-        }
-        offset += 2 + length;
-      }
-      return { width: 1, height: 1 };
-    }
-
-    function pdfLiteralText(text) {
-      return `(${String(text).replace(/[\\()]/g, "\\$&").replace(/[^\x20-\x7e]/g, (char) => {
-        const octal = char.charCodeAt(0).toString(8).padStart(3, "0");
-        return `\\${octal}`;
-      })})`;
-    }
-
-    function pdfCaptionDate(place) {
-      const date = placeDate(place);
-      if (!date) {
-        return "";
-      }
-      const weekdays = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
-      const months = [
-        "gennaio",
-        "febbraio",
-        "marzo",
-        "aprile",
-        "maggio",
-        "giugno",
-        "luglio",
-        "agosto",
-        "settembre",
-        "ottobre",
-        "novembre",
-        "dicembre"
-      ];
-      return `${weekdays[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
-    }
-
-    async function menuImagesForPdf() {
-      const selected = orderedPlaces(places).slice(0, 4);
-      return Promise.all(selected.map(async (place, index) => {
-        const pdfImage = place.name === "Fantasia" ? "Fantasia_pdf.jpg" : (place.image || localPlaces[index].image);
-        const response = await fetch(`${base}${pdfImage}?v=${Date.now()}`, { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error(`Immagine non disponibile: ${place.name}`);
-        }
-        const bytes = new Uint8Array(await response.arrayBuffer());
-        return {
-          name: place.name,
-          bytes,
-          size: jpegSize(bytes),
-          caption: place.name === "Fantasia" ? pdfCaptionDate(place) : ""
-        };
-      }));
-    }
-
-    function buildPdf(images) {
-      const pageWidth = 595.28;
-      const pageHeight = 841.89;
-      const margin = 12;
-      const columnGap = 10;
-      const rowGap = 28.35;
-      const cellWidth = (pageWidth - margin * 2 - columnGap) / 2;
-      const cellHeight = (pageHeight - margin * 2 - rowGap) / 2;
-      const cells = [
-        { x: margin, top: pageHeight - margin },
-        { x: margin + cellWidth + columnGap, top: pageHeight - margin },
-        { x: margin, top: margin + cellHeight },
-        { x: margin + cellWidth + columnGap, top: margin + cellHeight }
-      ];
-
-      const objects = [];
-      images.forEach((image, index) => {
-        objects.push(concatBytes([
-          textBytes(`<< /Type /XObject /Subtype /Image /Width ${image.size.width} /Height ${image.size.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${image.bytes.length} >>\nstream\n`),
-          image.bytes,
-          textBytes("\nendstream")
-        ]));
-      });
-
-      let content = "";
-      images.forEach((image, index) => {
-        const captionHeight = image.caption ? 22 : 0;
-        const scale = Math.min(cellWidth / image.size.width, (cellHeight - captionHeight) / image.size.height);
-        const width = image.size.width * scale;
-        const height = image.size.height * scale;
-        const x = cells[index].x + (cellWidth - width) / 2;
-        const imageY = cells[index].top - height;
-        const frameY = imageY - captionHeight;
-        const frameHeight = height + captionHeight;
-        content += `q\n0.82 g\n${(x + 4).toFixed(2)} ${(frameY - 4).toFixed(2)} ${width.toFixed(2)} ${frameHeight.toFixed(2)} re\nf\nQ\n`;
-        content += `q\n1 g\n${x.toFixed(2)} ${frameY.toFixed(2)} ${width.toFixed(2)} ${frameHeight.toFixed(2)} re\nf\nQ\n`;
-        content += `q\n${width.toFixed(2)} 0 0 ${height.toFixed(2)} ${x.toFixed(2)} ${imageY.toFixed(2)} cm\n/Im${index + 1} Do\nQ\n`;
-        if (image.caption) {
-          content += `BT\n/F1 12 Tf\n0 g\n${(x + 4).toFixed(2)} ${(frameY + 6).toFixed(2)} Td\n${pdfLiteralText(image.caption)} Tj\nET\n`;
-        }
-        content += `q\n0.70 G\n0.7 w\n${x.toFixed(2)} ${frameY.toFixed(2)} ${width.toFixed(2)} ${frameHeight.toFixed(2)} re\nS\nQ\n`;
-      });
-
-      objects.push(textBytes(`<< /Length ${textBytes(content).length} >>\nstream\n${content}endstream`));
-      objects.push(textBytes("<< /Type /Page /Parent 7 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> /XObject << /Im1 1 0 R /Im2 2 0 R /Im3 3 0 R /Im4 4 0 R >> >> /Contents 5 0 R >>"));
-      objects.push(textBytes("<< /Type /Pages /Kids [6 0 R] /Count 1 >>"));
-      objects.push(textBytes("<< /Type /Catalog /Pages 7 0 R >>"));
-
-      const parts = [textBytes("%PDF-1.4\n")];
-      const offsets = [0];
-      objects.forEach((object, index) => {
-        offsets.push(parts.reduce((total, part) => total + part.length, 0));
-        parts.push(textBytes(`${index + 1} 0 obj\n`), object, textBytes("\nendobj\n"));
-      });
-      const xrefOffset = parts.reduce((total, part) => total + part.length, 0);
-      let xref = `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
-      for (let index = 1; index <= objects.length; index += 1) {
-        xref += `${String(offsets[index]).padStart(10, "0")} 00000 n \n`;
-      }
-      xref += `trailer\n<< /Size ${objects.length + 1} /Root 8 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
-      parts.push(textBytes(xref));
-      return new Blob([concatBytes(parts)], { type: "application/pdf" });
-    }
-
-    async function downloadMenusPdf(pdfWindow) {
-      try {
-        if (pdfWindow) {
-          pdfWindow.document.write("<!doctype html><title>Rosticcerie.pdf</title><body style=\"margin:0;background:#222;color:white;font:16px Arial;display:grid;place-items:center;height:100vh\">Creo il PDF...</body>");
-        }
-        const images = await menuImagesForPdf();
-        const blob = buildPdf(images);
-        const url = URL.createObjectURL(blob);
-        if (pdfWindow) {
-          pdfWindow.location.href = url;
-        } else {
-          const link = document.createElement("a");
-          link.href = url;
-          link.target = "_blank";
-          link.rel = "noopener";
-          document.body.append(link);
-          link.click();
-          link.remove();
-        }
-        window.setTimeout(() => URL.revokeObjectURL(url), 60000);
-      } catch (error) {
-        alert("PDF non disponibile ora");
-      }
-    }
-
-    async function loadLatest() {
+   async function loadLatest() {
       let statusData = null;
       try {
         const response = await fetch(`${remoteBase}status.json?v=${Date.now()}`, { cache: "no-store" });

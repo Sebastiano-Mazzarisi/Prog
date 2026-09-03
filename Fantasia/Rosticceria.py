@@ -1,8 +1,8 @@
 # Nome.py: Rosticceria.py
-# Data e ora ultima modifica: 03/09/2026 16:14
-# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela da Facebook e web.
+# Data e ora ultima modifica: 03/09/2026 20:58
+# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò, Le delizie di Michela e Santoro da Facebook e web.
 # File di input: cookies.txt
-# File di output: status.json, index.html, immagini jpg
+# File di output: status.json, Rosticcerie.html, immagini jpg
 # Parametri: --once, --show, --no-git
 
 import io
@@ -50,6 +50,11 @@ FACEBOOK_PAGES = [
         "name": "Le delizie di Michela",
         "url": "https://www.facebook.com/profile.php?id=100045208848338",
         "output_image": "Rosticceria_LeDelizieDiMichela.jpg",
+    },
+    {
+        "name": "Santoro (Castellana)",
+        "url": "https://www.facebook.com/santorogastronomia",
+        "output_image": "Rosticceria_Santoro.jpg",
     },
 ]
 TEXT_FACEBOOK_PAGES = [
@@ -160,14 +165,18 @@ def clean_post_text(text: str) -> str:
         line = raw_line.strip()
         if not line or line in blocked:
             continue
+        
+        lower_line = line.lower()
         if (
-            line.startswith("Foto di ")
-            or line.startswith("Rosticceria Fantasia")
-            or line.startswith("Cibaria")
-            or line.startswith("Bollenti Piatti")
-            or line.startswith("Impastamò")
-            or line.startswith("Impastamo")
-            or line.startswith("Le delizie di Michela")
+            lower_line.startswith("foto di ")
+            or lower_line.startswith("rosticceria fantasia")
+            or lower_line.startswith("cibaria")
+            or lower_line.startswith("cibarìa")
+            or lower_line.startswith("bollenti")
+            or lower_line.startswith("impastamo")
+            or lower_line.startswith("impastamò")
+            or lower_line.startswith("le delizie di michela")
+            or lower_line.startswith("santoro")
         ):
             continue
         lines.append(line)
@@ -363,7 +372,6 @@ def best_published_time_from_post(post) -> str:
         'span[aria-label]',
         'a[href*="/posts/"]',
         'a[href*="story_fbid"]',
-        'a[href*="/permalink/"]',
         'a[role="link"]',
         'span',
     ]
@@ -522,8 +530,7 @@ def looks_like_facebook_time(value: str) -> bool:
         "weeks",
     ]
     has_digit = any(char.isdigit() for char in value)
-    # Confronto a parole intere per evitare falsi positivi con abbreviazioni
-    # corte come "g" o "h" (es. non deve scattare su testi generici).
+    
     words_in_value = set(re.findall(r"[a-zàèéìòù]+", value))
 
     return has_digit and (
@@ -701,9 +708,7 @@ def extract_first_facebook_image(facebook_url: str) -> Dict[str, str]:
             if not cookies_look_authenticated(cookies):
                 print(
                     f"ATTENZIONE: {cookie_path} non contiene un login Facebook valido "
-                    "(mancano i cookie 'c_user'/'xs'). Verrà usata una sessione anonima: "
-                    "Facebook mostra molte meno informazioni (spesso senza data/ora del post). "
-                    "Rigenera il file con extract_cookies.py facendo il login quando richiesto."
+                    "(mancano i cookie 'c_user'/'xs'). Verrà usata una sessione anonima."
                 )
 
             page = context.new_page()
@@ -761,8 +766,7 @@ def extract_first_facebook_text_menu(page_config: Dict[str, str]) -> Dict[str, s
                 context.add_cookies(cookies)
             if not cookies_look_authenticated(cookies):
                 print(
-                    f"ATTENZIONE: {cookie_path} non contiene un login Facebook valido "
-                    "(mancano i cookie 'c_user'/'xs'). Verrà usata una sessione anonima."
+                    f"ATTENZIONE: {cookie_path} non contiene un login Facebook valido."
                 )
 
             page = context.new_page()
@@ -1145,6 +1149,60 @@ def crop_fantasia_chalkboard(image_bytes: bytes) -> bytes:
     return output.getvalue()
 
 
+def crop_michela_chalkboard(image_bytes: bytes) -> bytes:
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    width, height = image.size
+    if width < 100 or height < 100:
+        return image_bytes
+
+    x_start = int(width * 0.15)
+    x_end = int(width * 0.85)
+    step_x = max(1, (x_end - x_start) // 150)
+    dark_rows = []
+
+    for y in range(height):
+        total = 0
+        dark = 0
+        for x in range(x_start, x_end, step_x):
+            r, g, b = image.getpixel((x, y))
+            if r < 105 and g < 105 and b < 105:
+                dark += 1
+            total += 1
+        if total and dark / total >= 0.5:
+            dark_rows.append(y)
+
+    y_start = int(height * 0.15)
+    y_end = int(height * 0.85)
+    step_y = max(1, (y_end - y_start) // 150)
+    dark_cols = []
+
+    for x in range(width):
+        total = 0
+        dark = 0
+        for y in range(y_start, y_end, step_y):
+            r, g, b = image.getpixel((x, y))
+            if r < 105 and g < 105 and b < 105:
+                dark += 1
+            total += 1
+        if total and dark / total >= 0.5:
+            dark_cols.append(x)
+
+    if not dark_rows or not dark_cols:
+        return image_bytes
+
+    top = max(0, min(dark_rows) - 35)
+    bottom = min(height, max(dark_rows) + 35)
+    left = max(0, min(dark_cols) - 35)
+    right = min(width, max(dark_cols) + 35)
+
+    if bottom - top < height * 0.3 or right - left < width * 0.3:
+        return image_bytes
+
+    output = io.BytesIO()
+    image.crop((left, top, right, bottom)).save(output, format="JPEG", quality=92)
+    return output.getvalue()
+
+
 def save_image(image_bytes: bytes, filename: str) -> str:
     image_path = os.path.join(script_dir(), filename)
     with open(image_path, "wb") as image_file:
@@ -1198,8 +1256,7 @@ def infer_date_from_text(text: str) -> str:
         except ValueError:
             pass
 
-    # Fallback: date scritte per esteso in italiano, es. "1 Settembre 2026"
-    # o "1 settembre" (anno sottinteso = anno corrente).
+    # Fallback
     month_pattern = "|".join(ITALIAN_MONTHS.keys())
     match = re.search(
         rf"(\d{{1,2}})\s+({month_pattern})(?:\s+(\d{{4}}))?",
@@ -1336,16 +1393,27 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
         title = html.escape(panel["name"])
         if "error" in panel:
             body = f"<p class=\"error\">{html.escape(panel['error'])}</p>"
+            published_at = ""
         else:
             image = html.escape(panel.get("publish_image", ""))
             text = html.escape(panel.get("text", ""))
             published_at = html.escape(panel_published_at(panel))
             body = f"""
                 <img src="{image}?v={int(time.time())}" alt="{title}">
-                <p class="published">Facebook: {published_at or "orario non disponibile"}</p>
                 <pre>{text}</pre>
             """
-        cards.append(f"<section><h2>{title}</h2>{body}</section>")
+        
+        card_date = published_at if "error" not in panel and published_at else "Data non disponibile"
+        
+        cards.append(f"""
+        <section class="card" data-title="{title}" data-date="{card_date}" onclick="openDetail(this)">
+            <div class="card-header">
+                <h2>{title}</h2>
+                <p class="published">{card_date}</p>
+            </div>
+            {body}
+        </section>
+        """)
 
     index_html = f"""<!doctype html>
 <html lang="it">
@@ -1361,79 +1429,222 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
       color: #fff;
       font-family: Arial, sans-serif;
     }}
+    /* Fascia nera superiore */
     header {{
-      padding: 14px 16px;
+      background: #000;
+      padding: 18px 16px;
       border-bottom: 1px solid #333;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      text-align: center;
     }}
-    h1 {{
+    h1#main-title {{
       margin: 0;
-      font-size: 22px;
+      font-size: 32px;
+      color: #007bff; /* Blu */
+      cursor: pointer;
     }}
     .updated {{
       margin: 4px 0 0;
       color: #ccc;
       font-size: 14px;
     }}
+    /* Ripristinato il layout a più colonne */
     main {{
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 1px;
       background: #333;
     }}
-    section {{
-      min-height: 100vh;
+    .card {{
       background: #111;
-      padding: 12px;
+      padding: 8px; /* Padding ridotto come nell'originale */
       box-sizing: border-box;
+      cursor: pointer;
     }}
-    h2 {{
-      margin: 0 0 10px;
-      font-size: 20px;
+    .card-header {{
+      pointer-events: none;
+      margin-bottom: 8px;
     }}
-    img {{
+    .card h2 {{
+      margin: 0;
+      font-size: 18px;
+      color: #ffcc00; /* Colore giallo per i titoli come nell'originale */
+    }}
+    .published {{
+      color: #ccc;
+      font-size: 12px;
+      margin: 2px 0 0;
+    }}
+    .card img {{
       width: 100%;
       height: auto;
       display: block;
       background: #000;
+      pointer-events: none;
+    }}
+    .card pre, .card p.error {{
+      pointer-events: none;
     }}
     pre {{
+      display: none; /* Nascondiamo il testo lungo nella griglia compatta */
       white-space: pre-wrap;
       font-family: Arial, sans-serif;
       font-size: 16px;
       line-height: 1.35;
       margin: 12px 0 0;
     }}
-    .published {{
-      color: #ccc;
-      font-size: 13px;
-      margin: 8px 0 0;
-    }}
     .error {{
       color: #ffd0d0;
       font-size: 16px;
+    }}
+    
+    /* Layout per monitor normali/piccoli */
+    @media (max-width: 1200px) {{
+      main {{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }}
     }}
     @media (max-width: 760px) {{
       main {{
         grid-template-columns: 1fr;
       }}
-      section {{
-        min-height: auto;
-      }}
+    }}
+
+    /* Dettaglio a tutto schermo */
+    #detail-view {{
+      display: none;
+      padding: 12px;
+      padding-bottom: 85px; /* Spazio per la fascia Home */
+    }}
+    #detail-view .card-header {{
+      display: none; /* Titolo e data sono spostati nella fascia superiore */
+    }}
+    #detail-view pre {{
+      display: block; /* Mostra il testo nel dettaglio */
+    }}
+    
+    /* Fascia nera inferiore */
+    footer {{
+      display: none;
+      background: #000;
+      padding: 18px 16px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 100;
+      cursor: pointer;
+      border-top: 1px solid #333;
+      box-sizing: border-box;
+    }}
+    footer h1 {{
+      margin: 0;
+      font-size: 30px;
+      color: #fff;
     }}
   </style>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get('v') === '57';
+    // Uso un'API globale gratuita per il contatore
+    const counterUrl = 'https://api.counterapi.dev/v1/sebmazz_rosticcerie/clicks';
+    
+    let totalClicks = 0;
+    let offsetClicks = 0;
+    
+    function loadCounter() {{
+        if (isAdmin) {{
+            // Recuperiamo l'offset dal dispositivo admin
+            offsetClicks = parseInt(localStorage.getItem('rosti_clicks_offset') || '0', 10);
+            
+            fetch(counterUrl)
+                .then(r => r.json())
+                .then(data => {{
+                    totalClicks = data.count || 0;
+                    updateAdminTitle();
+                }}).catch(e => console.error(e));
+        }}
+    }}
+    
+    function updateAdminTitle() {{
+        let val = Math.max(0, totalClicks - offsetClicks);
+        document.getElementById('main-title').innerText = `Rosticcerie (${{val.toLocaleString('it-IT')}})`;
+    }}
+
+    function openDetail(element) {{
+        document.getElementById('grid-view').style.display = 'none';
+        
+        const detailView = document.getElementById('detail-view');
+        detailView.innerHTML = element.innerHTML;
+        detailView.style.display = 'block';
+        
+        const title = element.getAttribute('data-title');
+        const date = element.getAttribute('data-date');
+        
+        const mainTitle = document.getElementById('main-title');
+        mainTitle.innerText = title;
+        document.getElementById('main-updated').innerText = date;
+        
+        document.getElementById('main-footer').style.display = 'block';
+        window.scrollTo(0, 0);
+        
+        if (!isAdmin) {{
+            fetch(counterUrl + '/up').catch(e => {{}});
+        }}
+    }}
+
+    function closeDetail() {{
+        document.getElementById('detail-view').style.display = 'none';
+        document.getElementById('detail-view').innerHTML = '';
+        document.getElementById('grid-view').style.display = 'grid';
+        
+        const mainTitle = document.getElementById('main-title');
+        if (isAdmin) {{
+            updateAdminTitle();
+        }} else {{
+            mainTitle.innerText = 'Rosticcerie';
+        }}
+        
+        document.getElementById('main-updated').innerText = 'Aggiornato: {html.escape(updated_at)}';
+        document.getElementById('main-footer').style.display = 'none';
+        window.scrollTo(0, 0);
+    }}
+    
+    function handleTitleClick() {{
+        if (isAdmin && document.getElementById('grid-view').style.display !== 'none') {{
+            if (confirm("Vuoi davvero azzerare il contatore?")) {{
+                offsetClicks = totalClicks;
+                localStorage.setItem('rosti_clicks_offset', offsetClicks.toString());
+                updateAdminTitle();
+            }}
+        }}
+    }}
+    
+    window.onload = loadCounter;
+  </script>
 </head>
 <body>
-  <header>
-    <h1>Rosticcerie</h1>
-    <p class="updated">Aggiornato: {html.escape(updated_at)}</p>
+  <header id="main-header">
+    <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
+    <p id="main-updated" class="updated">Aggiornato: {html.escape(updated_at)}</p>
   </header>
-  <main>
+  
+  <main id="grid-view">
     {"".join(cards)}
   </main>
+  
+  <div id="detail-view"></div>
+  
+  <footer id="main-footer" onclick="closeDetail()">
+    <h1>Home</h1>
+  </footer>
 </body>
 </html>
 """
-    index_path = os.path.join(output_dir, "index.html")
+    # Ora genera in automatico il file con il nome giusto!
+    index_path = os.path.join(output_dir, "Rosticcerie.html")
     with open(index_path, "w", encoding="utf-8") as index_file:
         index_file.write(index_html)
 
@@ -1585,8 +1796,12 @@ def extract_pages() -> List[Dict]:
         try:
             post = extract_first_facebook_image(facebook_page["url"])
             image_bytes = download_image(post["image_url"])
+            
             if name == "Fantasia":
                 image_bytes = crop_fantasia_chalkboard(image_bytes)
+            elif name == "Le delizie di Michela":
+                image_bytes = crop_michela_chalkboard(image_bytes)
+                
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
             if not post.get("published_at_raw"):
@@ -1708,7 +1923,7 @@ def monitor_loop(show: bool = False, publish_to_git: bool = True) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela.")
+    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò, Le delizie di Michela e Santoro.")
     parser.add_argument("--once", action="store_true", help="Esegue una sola estrazione e poi termina.")
     parser.add_argument("--show", action="store_true", help="Mostra anche le due foto a pieno schermo.")
     parser.add_argument("--no-git", action="store_true", help="Non prova a pubblicare con GitHub/git.")

@@ -528,7 +528,8 @@
         pdfButton.title = "Crea PDF A4";
         pdfButton.addEventListener("click", (event) => {
           event.stopPropagation();
-          downloadMenusPdf();
+          const pdfWindow = window.open("", "_blank");
+          downloadMenusPdf(pdfWindow);
         });
 
         const date = document.createElement("p");
@@ -660,13 +661,17 @@
       return new Blob([concatBytes(parts)], { type: "application/pdf" });
     }
 
-    async function downloadMenusPdf() {
+    async function downloadMenusPdf(pdfWindow) {
       try {
+        if (pdfWindow) {
+          pdfWindow.document.write("<!doctype html><title>Rosticcerie.pdf</title><body style=\"margin:0;background:#222;color:white;font:16px Arial;display:grid;place-items:center;height:100vh\">Creo il PDF...</body>");
+        }
         const images = await menuImagesForPdf();
         const blob = buildPdf(images);
         const url = URL.createObjectURL(blob);
-        const opened = window.open(url, "_blank", "noopener");
-        if (!opened) {
+        if (pdfWindow) {
+          pdfWindow.location.href = url;
+        } else {
           const link = document.createElement("a");
           link.href = url;
           link.target = "_blank";

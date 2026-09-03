@@ -178,6 +178,8 @@ def clean_text_menu_post(text: str) -> str:
 
         line = re.sub(r"\s*Vedi meno\s*$", "", line, flags=re.IGNORECASE).strip()
         line = re.sub(r"\s*(?:…|\.\.\.)\s*Altro(?:\.\.\.)?\s*$", "", line, flags=re.IGNORECASE).strip()
+        if re.match(r"^men[uù]\s+di\b", line, re.IGNORECASE):
+            continue
         if not line:
             continue
         cleaned_lines.append(line)
@@ -922,7 +924,6 @@ def wrap_text(draw: ImageDraw.ImageDraw, text: str, font, max_width: int) -> Lis
 def render_text_menu_image(title: str, text: str, published_at: str = "") -> bytes:
     width = 1080
     margin = 58
-    header_bg = (176, 0, 32)
     cream = (255, 252, 243)
     paper = (255, 255, 255)
     ink = (18, 18, 18)
@@ -956,14 +957,13 @@ def render_text_menu_image(title: str, text: str, published_at: str = "") -> byt
     line_height = 43
     section_height = 54
     content_height = sum(section_height if line["section"] else line_height if line["text"] else 24 for line in body_lines)
-    height = margin + 104 + 34 + content_height + margin + 70
+    height = margin + 66 + 34 + content_height + margin + 70
     image = Image.new("RGB", (width, max(height, 900)), cream)
     draw = ImageDraw.Draw(image)
 
     y = margin
-    draw.rounded_rectangle((margin, y, width - margin, y + 104), radius=18, fill=header_bg)
-    draw.text((margin + 28, y + 23), title, fill=(255, 255, 255), font=title_font)
-    y += 124
+    draw.text((margin, y), title, fill=ink, font=title_font)
+    y += 64
 
     display_date = published_at or infer_date_from_text(clean_text)
     if display_date:

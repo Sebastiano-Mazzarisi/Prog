@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T20:08:49",
+  "updated_at": "2026-09-03T21:02:34",
   "pages": [
     {
       "name": "Fantasia",
@@ -51,11 +51,11 @@
     },
     {
       "name": "Bollenti piatti",
-      "image": null,
+      "image": "Bollenti_piatti.jpg",
       "text": "",
       "published_at": "",
       "published_at_raw": "",
-      "error": "Non ho trovato nessun post testuale del menu nella pagina Facebook: https://www.facebook.com/BollentiPiatti"
+      "error": null
     }
   ]
 }

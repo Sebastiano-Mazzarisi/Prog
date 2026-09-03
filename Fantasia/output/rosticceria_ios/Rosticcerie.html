@@ -25,35 +25,60 @@
     }
 
     body {
+      position: relative;
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
-      display: grid;
-      grid-template-rows: auto 1fr;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
-    .topbar {
-      background: #111;
-      border-bottom: 1px solid #333;
-      padding: 9px 10px 7px;
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .app-title {
+      flex: 0 0 auto;
+      width: 70%;
+      margin: 14px auto 10px;
+      padding: 10px 0;
+      text-align: center;
+      background: #000;
+      color: #3d9dff;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(61, 157, 255, 0.6);
     }
 
     .controls {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      padding: 0 10px 10px;
+      overflow-y: auto;
+      min-height: 0;
+      flex: 1;
     }
 
-    .controls::-webkit-scrollbar {
-      display: none;
-    }
-
-    .controls button {
+    .home-bar {
       flex: 0 0 auto;
-      min-width: 30%;
+      background: #000;
+      border-top: 1px solid #333;
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+      display: flex;
+      justify-content: center;
+    }
+
+    .home-bar button {
+      min-width: 140px;
     }
 
     button {
@@ -148,6 +173,10 @@
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
       touch-action: pan-x pan-y pinch-zoom;
+    }
+
+    .viewer {
+      flex: 1;
     }
 
     .viewer img,
@@ -270,12 +299,8 @@
     }
 
     @media (min-width: 760px) {
-      body {
-        grid-template-rows: 1fr;
-      }
-
       .mobile-only {
-        display: none;
+        display: none !important;
       }
 
       .desktop-grid {
@@ -286,14 +311,20 @@
   </style>
 </head>
 <body>
-  <header class="topbar mobile-only" aria-live="polite">
+  <section id="homeScreen" class="screen mobile-only active" aria-live="polite">
+    <h1 class="app-title">Rosticcerie</h1>
     <nav id="controls" class="controls" aria-label="Scegli rosticceria"></nav>
     <p id="published" class="published">Data non disponibile</p>
-  </header>
+  </section>
 
-  <main id="viewer" class="viewer mobile-only">
-    <img id="photo" src="Fantasia.jpg" alt="Fantasia">
-  </main>
+  <section id="detailScreen" class="screen mobile-only">
+    <main id="viewer" class="viewer">
+      <img id="photo" src="Fantasia.jpg" alt="Fantasia">
+    </main>
+    <div class="home-bar">
+      <button id="homeButton" type="button">Home</button>
+    </div>
+  </section>
 
   <main id="desktopGrid" class="desktop-grid" aria-label="Rosticcerie affiancate"></main>
 
@@ -335,6 +366,9 @@
     let progressValue = 0;
     let checkingStartedAt = 0;
 
+    const homeScreen = document.getElementById("homeScreen");
+    const detailScreen = document.getElementById("detailScreen");
+    const homeButton = document.getElementById("homeButton");
     const viewer = document.getElementById("viewer");
     const photo = document.getElementById("photo");
     const published = document.getElementById("published");
@@ -344,6 +378,16 @@
     const refreshPercent = document.getElementById("refreshPercent");
     const refreshBar = document.getElementById("refreshBar");
     const checkingButton = document.getElementById("checkingButton");
+
+    function showHomeScreen() {
+      homeScreen.classList.add("active");
+      detailScreen.classList.remove("active");
+    }
+
+    function showDetailScreen() {
+      detailScreen.classList.add("active");
+      homeScreen.classList.remove("active");
+    }
 
     function displayDate(place) {
       const date = placeDate(place);
@@ -500,7 +544,10 @@ function placeDate(place) {
         button.classList.toggle("active", index === currentIndex);
         button.classList.toggle("today-name", isToday(place));
         button.classList.toggle("stale", isStale(place));
-        button.addEventListener("click", () => showPlace(index));
+        button.addEventListener("click", () => {
+          showPlace(index);
+          showDetailScreen();
+        });
         controls.append(button);
       });
     }
@@ -643,6 +690,8 @@ function placeDate(place) {
 
       checkForUpdates();
     });
+
+    homeButton.addEventListener("click", showHomeScreen);
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowRight" || event.key === " ") {

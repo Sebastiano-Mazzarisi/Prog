@@ -1654,12 +1654,6 @@ def extract_pages() -> List[Dict]:
 
     for text_page in TEXT_FACEBOOK_PAGES:
         name = text_page["name"]
-        existing_panel = existing_publish_panel_if_today(name)
-        if existing_panel:
-            print(f"{name}: menu di oggi già presente, salto la verifica.")
-            panels.append(existing_panel)
-            continue
-
         print(f"Cerco il menu testuale su Facebook: {name}...")
         try:
             panel = extract_first_facebook_text_menu(text_page)

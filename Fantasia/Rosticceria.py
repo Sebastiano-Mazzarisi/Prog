@@ -1129,6 +1129,35 @@ def crop_fantasia_chalkboard(image_bytes: bytes) -> bytes:
     return output.getvalue()
 
 
+def invert_fantasia_chalkboard(image_bytes: bytes) -> bytes:
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    width, height = image.size
+    if width < 100 or height < 100:
+        return image_bytes
+
+    x_start = int(width * 0.115)
+    x_end = int(width * 0.885)
+    y_start = int(height * 0.045)
+    y_end = int(height * 0.965)
+    pixels = image.load()
+
+    for y in range(y_start, y_end):
+        for x in range(x_start, x_end):
+            r, g, b = pixels[x, y]
+            average = (r + g + b) // 3
+            if average < 95:
+                pixels[x, y] = (248, 248, 248)
+            elif average > 145 and abs(r - g) < 45 and abs(g - b) < 45:
+                pixels[x, y] = (18, 18, 18)
+            else:
+                inverted = max(18, min(248, 255 - average))
+                pixels[x, y] = (inverted, inverted, inverted)
+
+    output = io.BytesIO()
+    image.save(output, format="JPEG", quality=92)
+    return output.getvalue()
+
+
 def save_image(image_bytes: bytes, filename: str) -> str:
     image_path = os.path.join(script_dir(), filename)
     with open(image_path, "wb") as image_file:
@@ -1571,6 +1600,7 @@ def extract_pages() -> List[Dict]:
             image_bytes = download_image(post["image_url"])
             if name == "Fantasia":
                 image_bytes = crop_fantasia_chalkboard(image_bytes)
+                image_bytes = invert_fantasia_chalkboard(image_bytes)
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
             if not post.get("published_at_raw"):

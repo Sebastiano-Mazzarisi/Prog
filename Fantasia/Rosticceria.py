@@ -576,7 +576,10 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
                     except Exception:
                         full_post_text = post_text
                     date_in_post_text = infer_date_from_text(post_text) or infer_date_from_text(full_post_text)
-                    published_at_raw = date_in_post_text or best_published_time_from_post(post)
+                    facebook_time = best_published_time_from_post(post)
+                    normalized_facebook_time = normalize_facebook_time(facebook_time)
+                    published_at_raw = facebook_time or date_in_post_text
+                    published_at = normalized_facebook_time or date_in_post_text or rome_now().strftime("%d/%m/%Y")
                     try:
                         photo_url = best_image.evaluate(
                             "image => { const link = image.closest('a[href]'); return link ? link.href : ''; }"
@@ -587,7 +590,7 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
                         "image_url": image_url,
                         "photo_url": photo_url,
                         "text": post_text,
-                        "published_at": date_in_post_text or normalize_facebook_time(published_at_raw),
+                        "published_at": published_at,
                         "published_at_raw": published_at_raw,
                     }
 

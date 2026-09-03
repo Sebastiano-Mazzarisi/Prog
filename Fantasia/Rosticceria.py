@@ -47,6 +47,7 @@ TEXT_FACEBOOK_PAGES = [
         "name": "Bollenti",
         "display_name": "Bollenti Piatti",
         "url": "https://www.facebook.com/BollentiPiatti",
+        "required_terms": ["secondi piatti"],
     },
 ]
 PANECO_PAGE = {
@@ -175,6 +176,7 @@ def clean_text_menu_post(text: str) -> str:
         if re.fullmatch(r"\d+", line):
             continue
 
+        line = re.sub(r"\s*Vedi meno\s*$", "", line, flags=re.IGNORECASE).strip()
         line = re.sub(r"\s*(?:…|\.\.\.)\s*Altro(?:\.\.\.)?\s*$", "", line, flags=re.IGNORECASE).strip()
         if not line:
             continue
@@ -590,7 +592,7 @@ def find_first_post_image(page) -> Optional[Dict[str, str]]:
     return None
 
 
-def find_first_text_menu_post(page) -> Optional[Dict[str, str]]:
+def find_first_text_menu_post(page, required_terms: Optional[List[str]] = None) -> Optional[Dict[str, str]]:
     post_selectors = [
         'div[role="article"]',
         "div[aria-posinset]",
@@ -625,6 +627,9 @@ def find_first_text_menu_post(page) -> Optional[Dict[str, str]]:
             }
 
             lower_text = post_text.lower()
+            has_required_terms = all(term.lower() in lower_text for term in (required_terms or []))
+            if required_terms and not has_required_terms:
+                continue
             if ("menu" in lower_text or "menù" in lower_text) and normalized_published_at:
                 return candidate
 
@@ -754,7 +759,7 @@ def extract_first_facebook_text_menu(page_config: Dict[str, str]) -> Dict[str, s
 
             page.wait_for_timeout(5000)
             for _ in range(4):
-                post = find_first_text_menu_post(page)
+                post = find_first_text_menu_post(page, page_config.get("required_terms"))
                 if post:
                     text = post.get("text", "")
                     image_bytes = render_text_menu_image(
@@ -946,7 +951,7 @@ def render_text_menu_image(title: str, text: str, published_at: str = "") -> byt
 
     line_height = 43
     content_height = sum(line_height if line else 24 for line in body_lines)
-    height = margin + 104 + 34 + content_height + margin
+    height = margin + 104 + 34 + content_height + margin + 70
     image = Image.new("RGB", (width, max(height, 900)), cream)
     draw = ImageDraw.Draw(image)
 
@@ -961,7 +966,7 @@ def render_text_menu_image(title: str, text: str, published_at: str = "") -> byt
         y += 52
 
     card_top = y
-    card_bottom = y + content_height + 42
+    card_bottom = y + content_height + 76
     draw.rounded_rectangle((margin, card_top, width - margin, card_bottom), radius=14, fill=paper, outline=line_color, width=2)
     y += 22
 
@@ -1155,7 +1160,7 @@ def panel_published_at(panel: Dict) -> str:
     return panel.get("published_at") or infer_date_from_text(panel.get("text", ""))
 
 
-def existing_publish_panel_if_today(name: str) -> Optional[Dict]:
+def existing_publish_panel_if_today(name: str, require_today: bool = True) -> Optional[Dict]:
     output_dir = publish_dir()
     status_path = os.path.join(output_dir, "status.json")
     if not os.path.exists(status_path):
@@ -1171,7 +1176,7 @@ def existing_publish_panel_if_today(name: str) -> Optional[Dict]:
         if page_status.get("name") != name:
             continue
         published_at = page_status.get("published_at", "") or infer_date_from_text(page_status.get("text", ""))
-        if parse_status_date(published_at) != rome_now().date():
+        if require_today and parse_status_date(published_at) != rome_now().date():
             return None
 
         image_name = page_status.get("image") or f"{safe_file_name(name)}.jpg"
@@ -1552,7 +1557,12 @@ def extract_pages() -> List[Dict]:
             print(f"{name}: immagine generata in {image_path}")
             panels.append(panel)
         except Exception as exc:
-            panels.append({"name": name, "error": str(exc)})
+            existing_panel = existing_publish_panel_if_today(name, require_today=False)
+            if existing_panel:
+                print(f"{name}: menu completo non leggibile ora, tengo l'ultimo menu salvato.")
+                panels.append(existing_panel)
+            else:
+                panels.append({"name": name, "error": str(exc)})
 
     existing_panel = existing_publish_panel_if_today(PANECO_PAGE["name"])
     if existing_panel:

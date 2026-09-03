@@ -33,6 +33,14 @@
       color: #ccc;
       font-size: 14px;
     }
+    .phone-link {
+      display: none;
+      margin: 8px 0 0;
+      color: #00c853;
+      font-weight: bold;
+      font-size: 18px;
+      text-decoration: none;
+    }
     /* Ripristinato il layout a più colonne */
     main {
       display: grid;
@@ -137,7 +145,12 @@
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get('v') === '57';
     // Uso un'API globale gratuita per il contatore
-    const counterUrl = 'https://api.counterapi.dev/v1/sebmazz_rosticcerie/clicks';
+    const ABACUS_BASE = 'https://abacus.jasoncameron.dev';
+    const COUNTER_NAMESPACE = 'rosticcerie-fantasia';
+    const COUNTER_KEY = 'menu-views';
+    const counterGetUrl = ABACUS_BASE + '/get/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
+    const counterHitUrl = ABACUS_BASE + '/hit/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
+    const PHONE_NUMBERS = {"Fantasia": "080-405.41.39", "Cibarìa": "080-645.07.99", "Impastamò": "392-536.15.36", "Le delizie di Michela": "080-521.22.33", "Santoro (Castellana)": "080-859.83.13", "Pane&Co": "080-405.49.00"};
     
     let totalClicks = 0;
     let offsetClicks = 0;
@@ -147,10 +160,10 @@
             // Recuperiamo l'offset dal dispositivo admin
             offsetClicks = parseInt(localStorage.getItem('rosti_clicks_offset') || '0', 10);
             
-            fetch(counterUrl)
+            fetch(counterGetUrl)
                 .then(r => r.json())
                 .then(data => {
-                    totalClicks = data.count || 0;
+                    totalClicks = data.value || 0;
                     updateAdminTitle();
                 }).catch(e => console.error(e));
         }
@@ -175,11 +188,21 @@
         mainTitle.innerText = title;
         document.getElementById('main-updated').innerText = date;
         
+        const phoneEl = document.getElementById('main-phone');
+        const phoneNumber = PHONE_NUMBERS[title];
+        if (phoneNumber) {
+            phoneEl.textContent = phoneNumber;
+            phoneEl.href = 'tel:' + phoneNumber.replace(/[^0-9+]/g, '');
+            phoneEl.style.display = 'inline-block';
+        } else {
+            phoneEl.style.display = 'none';
+        }
+        
         document.getElementById('main-footer').style.display = 'block';
         window.scrollTo(0, 0);
         
         if (!isAdmin) {
-            fetch(counterUrl + '/up').catch(e => {});
+            fetch(counterHitUrl).catch(e => {});
         }
     }
 
@@ -195,7 +218,8 @@
             mainTitle.innerText = 'Rosticcerie';
         }
         
-        document.getElementById('main-updated').innerText = 'Aggiornato: 03/09/2026 22:04';
+        document.getElementById('main-updated').innerText = 'Aggiornato: 03/09/2026 22:39';
+        document.getElementById('main-phone').style.display = 'none';
         document.getElementById('main-footer').style.display = 'none';
         window.scrollTo(0, 0);
     }
@@ -216,29 +240,30 @@
 <body>
   <header id="main-header">
     <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
-    <p id="main-updated" class="updated">Aggiornato: 03/09/2026 22:04</p>
+    <p id="main-updated" class="updated">Aggiornato: 03/09/2026 22:39</p>
+    <a id="main-phone" class="phone-link" href="tel:"></a>
   </header>
   
   <main id="grid-view">
     
-        <section class="card" data-title="Fantasia" data-date="03/09/2026 11:02 circa" onclick="openDetail(this)">
+        <section class="card" data-title="Fantasia" data-date="03/09/2026 10:37 circa" onclick="openDetail(this)">
             <div class="card-header">
                 <h2>Fantasia</h2>
-                <p class="published">03/09/2026 11:02 circa</p>
+                <p class="published">03/09/2026 10:37 circa</p>
             </div>
             
-                <img src="Fantasia.jpg?v=1788473044" alt="Fantasia">
+                <img src="Fantasia.jpg?v=1788475146" alt="Fantasia">
                 <pre>MENÙ DEL GIORNO 03/09/26</pre>
             
         </section>
         
-        <section class="card" data-title="Cibarìa" data-date="02/09/2026 circa" onclick="openDetail(this)">
+        <section class="card" data-title="Cibarìa" data-date="03/09/2026 09:37 circa" onclick="openDetail(this)">
             <div class="card-header">
                 <h2>Cibarìa</h2>
-                <p class="published">02/09/2026 circa</p>
+                <p class="published">03/09/2026 09:37 circa</p>
             </div>
             
-                <img src="Cibaria.jpg?v=1788473044" alt="Cibarìa">
+                <img src="Cibaria.jpg?v=1788475146" alt="Cibarìa">
                 <pre>3 Settembre 2026.
 Menú del giorno.</pre>
             
@@ -250,31 +275,31 @@ Menú del giorno.</pre>
                 <p class="published">30/08/2026 circa</p>
             </div>
             
-                <img src="Impastamo.jpg?v=1788473044" alt="Impastamò">
+                <img src="Impastamo.jpg?v=1788475146" alt="Impastamò">
                 <pre>Ricarichiamo un po’ le energie!
 Ci vediamo presto con le bontà della nuova stagione in arrivo</pre>
             
         </section>
         
-        <section class="card" data-title="Le delizie di Michela" data-date="03/09/2026 12:03 circa" onclick="openDetail(this)">
+        <section class="card" data-title="Le delizie di Michela" data-date="04/09/2026 00:37 circa" onclick="openDetail(this)">
             <div class="card-header">
                 <h2>Le delizie di Michela</h2>
-                <p class="published">03/09/2026 12:03 circa</p>
+                <p class="published">04/09/2026 00:37 circa</p>
             </div>
             
-                <img src="Le_delizie_di_Michela.jpg?v=1788473044" alt="Le delizie di Michela">
+                <img src="Le_delizie_di_Michela.jpg?v=1788475146" alt="Le delizie di Michela">
                 <pre>Like
 Comment</pre>
             
         </section>
         
-        <section class="card" data-title="Santoro (Castellana)" data-date="03/09/2026 23:58 circa" onclick="openDetail(this)">
+        <section class="card" data-title="Santoro (Castellana)" data-date="03/09/2026 09:38 circa" onclick="openDetail(this)">
             <div class="card-header">
                 <h2>Santoro (Castellana)</h2>
-                <p class="published">03/09/2026 23:58 circa</p>
+                <p class="published">03/09/2026 09:38 circa</p>
             </div>
             
-                <img src="Santoro__Castellana.jpg?v=1788473044" alt="Santoro (Castellana)">
+                <img src="Santoro__Castellana.jpg?v=1788475146" alt="Santoro (Castellana)">
                 <pre>menù del giorno 3 Settembre</pre>
             
         </section>
@@ -285,7 +310,7 @@ Comment</pre>
                 <p class="published">03/09/2026</p>
             </div>
             
-                <img src="Pane_Co.jpg?v=1788473044" alt="Pane&amp;Co">
+                <img src="Pane_Co.jpg?v=1788475146" alt="Pane&amp;Co">
                 <pre>Menu 3 Settembre
 
 PRIMI PIATTI DEL GIORNO
@@ -310,7 +335,7 @@ SECONDI PIATTI DEL GIORNO
                 <p class="published">Data non disponibile</p>
             </div>
             
-                <img src="Bollenti_piatti.jpg?v=1788473044" alt="Bollenti piatti">
+                <img src="Bollenti_piatti.jpg?v=1788475146" alt="Bollenti piatti">
                 <pre>PRIMI PIATTI
 ●RISO A INSALATA
 ●INSALATA DI FARRO AL SALMONE E ZUCCHINA

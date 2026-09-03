@@ -1153,68 +1153,18 @@ def crop_michela_chalkboard(image_bytes: bytes) -> bytes:
     if width < 100 or height < 100:
         return image_bytes
 
-    step = max(1, height // 150)
-    dark_cols = []
-    
-    # Analizza la luminosità media delle colonne (ignora le variazioni minime)
-    for x in range(width):
-        dark_pixels = 0
-        total_pixels = 0
-        # Esamina solo la porzione centrale verticale per evitare di prendere pavimenti
-        for y in range(int(height * 0.2), int(height * 0.8), step):
-            r, g, b = image.getpixel((x, y))
-            # Una media RGB inferiore a 130 catturerà anche il grigio/nero illuminato dal sole
-            if (r + g + b) / 3 < 130: 
-                dark_pixels += 1
-            total_pixels += 1
-        
-        # Se quasi metà della colonna è scura, è parte della lavagna
-        if total_pixels and (dark_pixels / total_pixels) >= 0.45:
-            dark_cols.append(x)
-
-    if not dark_cols:
-        return image_bytes
-
-    left = min(dark_cols)
-    right = max(dark_cols)
-
-    # Trova le righe scure limitando la scansione alla larghezza della lavagna appena trovata
-    dark_rows = []
-    step_x = max(1, (right - left) // 100)
-
-    for y in range(height):
-        dark_pixels = 0
-        total_pixels = 0
-        for x in range(left + int((right-left)*0.2), right - int((right-left)*0.2), step_x):
-            r, g, b = image.getpixel((x, y))
-            if (r + g + b) / 3 < 130:
-                dark_pixels += 1
-            total_pixels += 1
-        
-        if total_pixels and (dark_pixels / total_pixels) >= 0.45:
-            dark_rows.append(y)
-
-    if not dark_rows:
-        return image_bytes
-
-    top = min(dark_rows)
-    bottom = max(dark_rows)
-
-    # Lascia un piccolo margine per sicurezza in modo da non tagliare le parole ai bordi
-    margin_x = 15
-    margin_y = 20
-    left = max(0, left - margin_x)
-    right = min(width, right + margin_x)
-    top = max(0, top - margin_y)
-    bottom = min(height, bottom + margin_y)
-
-    # Non applica il ritaglio se rileva un'area insensatamente piccola
-    if (right - left) < width * 0.3 or (bottom - top) < height * 0.3:
+    # Toglie prima una cornice laterale fissa (5% da ogni lato)...
+    left = int(width * 0.05)
+    right = int(width * 0.95)
+    if right - left < width * 0.3:
         return image_bytes
 
     output = io.BytesIO()
-    image.crop((left, top, right, bottom)).save(output, format="JPEG", quality=92)
-    return output.getvalue()
+    image.crop((left, 0, right, height)).save(output, format="JPEG", quality=92)
+    trimmed_bytes = output.getvalue()
+
+    # ...poi applica lo stesso ritaglio verticale usato per Fantasia.
+    return crop_fantasia_chalkboard(trimmed_bytes)
 
 
 def save_image(image_bytes: bytes, filename: str) -> str:

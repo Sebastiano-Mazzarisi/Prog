@@ -1316,6 +1316,12 @@ def save_publish_files(panels: List[Dict]) -> str:
         panel["publish_image"] = panel.get("publish_image") or latest_name
         panel["publish_text"] = panel.get("publish_text") or f"{base_name}.txt"
 
+        if panel["name"] == "Fantasia" and panel.get("image_bytes"):
+            pdf_path = os.path.join(output_dir, "Fantasia_pdf.jpg")
+            pdf_image_bytes = panel.get("pdf_image_bytes") or invert_fantasia_chalkboard(panel["image_bytes"])
+            with open(pdf_path, "wb") as image_file:
+                image_file.write(pdf_image_bytes)
+
         if panel.get("reused"):
             continue
 
@@ -1613,9 +1619,10 @@ def extract_pages() -> List[Dict]:
         try:
             post = extract_first_facebook_image(facebook_page["url"])
             image_bytes = download_image(post["image_url"])
+            pdf_image_bytes = None
             if name == "Fantasia":
                 image_bytes = crop_fantasia_chalkboard(image_bytes)
-                save_image(invert_fantasia_chalkboard(image_bytes), "Rosticceria_Fantasia_pdf.jpg")
+                pdf_image_bytes = invert_fantasia_chalkboard(image_bytes)
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
             if not post.get("published_at_raw"):
@@ -1628,6 +1635,7 @@ def extract_pages() -> List[Dict]:
                 {
                     "name": name,
                     "image_bytes": image_bytes,
+                    "pdf_image_bytes": pdf_image_bytes,
                     "text": post.get("text", ""),
                     "published_at": post.get("published_at", ""),
                     "published_at_raw": post.get("published_at_raw", ""),
@@ -1678,6 +1686,8 @@ def run_once(show: bool = False, publish_to_git: bool = True) -> None:
     panels = extract_pages()
     output_dir = publish_dir()
     if panels and all(panel.get("reused") for panel in panels):
+        output_dir = save_publish_files(panels)
+        print(f"File per iOS riallineati in: {output_dir}")
         print("Tutte le rosticcerie hanno già il menu di oggi: nessuna verifica necessaria.")
         if show:
             show_fullscreen(panels)

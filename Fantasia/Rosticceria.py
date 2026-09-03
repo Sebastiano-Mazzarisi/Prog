@@ -1,6 +1,6 @@
 # Nome.py: Rosticceria.py
 # Data e ora ultima modifica: 03/09/2026 16:14
-# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela da Facebook e web.
+# Descrizione: Estrae e pubblica i menu delle rosticcerie Fantasia, Cibarìa, Santoro (Castellana), Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela da Facebook e web.
 # File di input: cookies.txt
 # File di output: status.json, index.html, immagini jpg
 # Parametri: --once, --show, --no-git
@@ -40,6 +40,11 @@ FACEBOOK_PAGES = [
         "name": "Cibarìa",
         "url": "https://www.facebook.com/cibaria.asporto",
         "output_image": "Rosticceria_Cibaria.jpg",
+    },
+    {
+        "name": "Santoro (Castellana)",
+        "url": "https://www.facebook.com/santorogastronomia",
+        "output_image": "Rosticceria_Santoro.jpg",
     },
     {
         "name": "Impastamò",
@@ -164,6 +169,7 @@ def clean_post_text(text: str) -> str:
             line.startswith("Foto di ")
             or line.startswith("Rosticceria Fantasia")
             or line.startswith("Cibaria")
+            or line.startswith("Santoro")
             or line.startswith("Bollenti Piatti")
             or line.startswith("Impastamò")
             or line.startswith("Impastamo")
@@ -646,9 +652,7 @@ def find_first_text_menu_post(page, required_terms: Optional[List[str]] = None) 
 
             lower_text = post_text.lower()
             has_required_terms = all(term.lower() in lower_text for term in (required_terms or []))
-            if required_terms and not has_required_terms:
-                continue
-            if ("menu" in lower_text or "menù" in lower_text) and normalized_published_at:
+            if has_required_terms and ("menu" in lower_text or "menù" in lower_text) and normalized_published_at:
                 return candidate
 
             if fallback_post is None and len(post_text) > 20:
@@ -1764,7 +1768,7 @@ def monitor_loop(show: bool = False, publish_to_git: bool = True) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela.")
+    parser = argparse.ArgumentParser(description="Estrae e pubblica Fantasia, Cibarìa, Santoro (Castellana), Bollenti piatti, Pane&Co, Impastamò e Le delizie di Michela.")
     parser.add_argument("--once", action="store_true", help="Esegue una sola estrazione e poi termina.")
     parser.add_argument("--show", action="store_true", help="Mostra anche le due foto a pieno schermo.")
     parser.add_argument("--no-git", action="store_true", help="Non prova a pubblicare con GitHub/git.")

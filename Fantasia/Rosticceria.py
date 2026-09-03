@@ -1144,6 +1144,51 @@ def crop_fantasia_chalkboard(image_bytes: bytes) -> bytes:
     image.crop((0, top, width, bottom)).save(output, format="JPEG", quality=92)
     return output.getvalue()
 
+def crop_le_delizie_borders(image_bytes: bytes) -> bytes:
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    width, height = image.size
+    if width < 100 or height < 100:
+        return image_bytes
+
+    y_start = int(height * 0.08)
+    y_end = int(height * 0.92)
+    step = max(1, (y_end - y_start) // 180)
+    dark_cols = []
+
+    for x in range(width):
+        total = 0
+        dark = 0
+        for y in range(y_start, y_end, step):
+            r, g, b = image.getpixel((x, y))
+            if r < 105 and g < 105 and b < 105:
+                dark += 1
+            total += 1
+        if total and dark / total >= 0.55:
+            dark_cols.append(x)
+
+    if not dark_cols:
+        return image_bytes
+
+    runs = []
+    run_start = dark_cols[0]
+    prev = dark_cols[0]
+    for x in dark_cols[1:]:
+        if x - prev > 5:
+            runs.append((run_start, prev))
+            run_start = x
+        prev = x
+    runs.append((run_start, prev))
+    run_start, run_end = max(runs, key=lambda r: r[1] - r[0])
+
+    left = max(0, run_start - 20)
+    right = min(width, run_end + 20)
+    if right - left < width * 0.25 or right - left > width * 0.95:
+        return image_bytes
+
+    output = io.BytesIO()
+    image.crop((left, 0, right, height)).save(output, format="JPEG", quality=92)
+    return output.getvalue()
+
 
 def save_image(image_bytes: bytes, filename: str) -> str:
     image_path = os.path.join(script_dir(), filename)
@@ -1587,6 +1632,8 @@ def extract_pages() -> List[Dict]:
             image_bytes = download_image(post["image_url"])
             if name == "Fantasia":
                 image_bytes = crop_fantasia_chalkboard(image_bytes)
+            elif name == "Le delizie di Michela":
+                image_bytes = crop_le_delizie_borders(image_bytes)
             image_path = save_image(image_bytes, facebook_page["output_image"])
             print(f"{name}: immagine salvata in {image_path}")
             if not post.get("published_at_raw"):

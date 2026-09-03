@@ -653,9 +653,7 @@ def find_first_text_menu_post(page, required_terms: Optional[List[str]] = None) 
 
             lower_text = post_text.lower()
             has_required_terms = all(term.lower() in lower_text for term in (required_terms or []))
-            if required_terms and not has_required_terms:
-                continue
-            if ("menu" in lower_text or "menù" in lower_text) and normalized_published_at:
+            if has_required_terms and ("menu" in lower_text or "menù" in lower_text) and normalized_published_at:
                 return candidate
 
             if fallback_post is None and len(post_text) > 20:
@@ -1539,6 +1537,11 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     }}
     #detail-view pre {{
       display: block; /* Mostra il testo nel dettaglio */
+    }}
+    #detail-view img {{
+      max-width: 100%;
+      height: auto;
+      display: block;
     }}
     
     /* Fascia nera inferiore */

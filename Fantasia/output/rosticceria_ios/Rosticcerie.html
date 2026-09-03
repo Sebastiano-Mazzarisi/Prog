@@ -2,656 +2,320 @@
 <html lang="it">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=yes">
-  <meta name="theme-color" content="#111111">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Rosticcerie">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="300">
   <title>Rosticcerie</title>
-  <link rel="apple-touch-icon" href="https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/Rosticceria.jpg">
-  <link rel="manifest" href="https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/manifest.webmanifest">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
     body {
       margin: 0;
-      min-height: 100%;
       background: #111;
       color: #fff;
       font-family: Arial, sans-serif;
     }
-
-    body {
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    }
-
-    .topbar {
-      background: #111;
+    /* Fascia nera superiore */
+    header {
+      background: #000;
+      padding: 18px 16px;
       border-bottom: 1px solid #333;
-      padding: 9px 10px 7px;
-    }
-
-    .controls {
-      display: grid;
-      grid-auto-flow: column;
-      grid-template-rows: repeat(2, 1fr);
-      grid-auto-columns: minmax(46%, 1fr);
-      gap: 6px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-
-    .controls::-webkit-scrollbar {
-      display: none;
-    }
-
-    button {
-      border: 1px solid rgba(255, 255, 255, 0.65);
-      background: rgba(0, 0, 0, 0.75);
-      color: #fff;
-      min-height: 66px;
-      padding: 8px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .button-name {
-      font-size: 15px;
-      line-height: 1.05;
-    }
-
-    .button-date {
-      color: #d8d8d8;
-      font-size: 13px;
-      line-height: 1;
-    }
-
-    button.active {
-      background: #fff;
-      color: #000;
-      border-color: #fff;
-      box-shadow: 0 0 0 2px #fff inset;
-    }
-
-    .today-name {
-      color: #ffe94d;
-      text-shadow: 0 0 10px rgba(255, 233, 77, 0.65);
-    }
-
-    button.today-name {
-      border-color: #ffe94d;
-    }
-
-    button.stale {
-      border-color: #ff4b4b;
-      box-shadow: 0 0 0 1px #ff4b4b inset;
-    }
-
-    button.stale .button-date {
-      color: #ff8a8a;
-    }
-
-    button.active.today-name {
-      background: #ffe94d;
-      color: #000;
-      border-color: #fff;
-      text-shadow: none;
-      box-shadow: 0 0 0 2px #fff inset, 0 0 16px rgba(255, 233, 77, 0.7);
-    }
-
-    button.active.stale {
-      background: #b00020;
-      color: #fff;
-      border-color: #fff;
-      text-shadow: none;
-      box-shadow: 0 0 0 2px #fff inset, 0 0 16px rgba(255, 75, 75, 0.75);
-    }
-
-    button.active .button-date {
-      color: #000;
-    }
-
-    button.active.stale .button-date {
-      color: #fff;
-    }
-
-    .published {
-      display: none;
-      margin: 6px 0 0;
-      color: #d8d8d8;
-      font-size: 12px;
-      line-height: 1.2;
+      position: sticky;
+      top: 0;
+      z-index: 100;
       text-align: center;
     }
-
-    .viewer,
-    .desktop-image {
-      min-height: 0;
-      overflow: auto;
-      background: #050505;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
-      touch-action: pan-x pan-y pinch-zoom;
+    h1#main-title {
+      margin: 0;
+      font-size: 32px;
+      color: #007bff; /* Blu */
+      cursor: pointer;
     }
-
-    .viewer img,
-    .desktop-image img {
+    .updated {
+      margin: 4px 0 0;
+      color: #ccc;
+      font-size: 14px;
+    }
+    /* Ripristinato il layout a più colonne */
+    main {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: #333;
+    }
+    .card {
+      background: #111;
+      padding: 8px; /* Padding ridotto come nell'originale */
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+    .card-header {
+      pointer-events: none;
+      margin-bottom: 8px;
+    }
+    .card h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #ffcc00; /* Colore giallo per i titoli come nell'originale */
+    }
+    .published {
+      color: #ccc;
+      font-size: 12px;
+      margin: 2px 0 0;
+    }
+    .card img {
       width: 100%;
-      max-width: none;
       height: auto;
       display: block;
       background: #000;
-      transform-origin: top left;
-      user-select: none;
-      -webkit-user-drag: none;
-      cursor: pointer;
-    }
-
-    .refresh-progress {
-      position: fixed;
-      left: 50%;
-      bottom: calc(18px + env(safe-area-inset-bottom));
-      z-index: 20;
-      width: min(340px, calc(100vw - 32px));
-      padding: 10px 12px 12px;
-      border: 1px solid rgba(255, 233, 77, 0.55);
-      background: rgba(8, 8, 8, 0.92);
-      color: #fff;
-      transform: translateX(-50%);
-      display: none;
-    }
-
-    .refresh-progress.visible {
-      display: block;
-    }
-
-    .refresh-progress__label {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 12px;
-      line-height: 1.2;
-      margin-bottom: 8px;
-    }
-
-    .refresh-progress__track {
-      height: 8px;
-      background: #2a2a2a;
-      overflow: hidden;
-    }
-
-    .refresh-progress__bar {
-      width: 0%;
-      height: 100%;
-      background: #ffe94d;
-      box-shadow: 0 0 10px rgba(255, 233, 77, 0.7);
-      transition: width 0.25s linear;
-    }
-
-    .checking-button {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      z-index: 30;
-      border: 1px solid rgba(255, 233, 77, 0.75);
-      background: rgba(12, 12, 12, 0.94);
-      color: #ffe94d;
-      padding: 14px 24px;
-      font-size: 18px;
-      font-weight: 700;
-      text-shadow: 0 0 10px rgba(255, 233, 77, 0.65);
-      transform: translate(-50%, -50%);
-      display: none;
       pointer-events: none;
     }
-
-    .checking-button.visible {
-      display: block;
+    .card pre, .card p.error {
+      pointer-events: none;
+    }
+    pre {
+      display: none; /* Nascondiamo il testo lungo nella griglia compatta */
+      white-space: pre-wrap;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.35;
+      margin: 12px 0 0;
+    }
+    .error {
+      color: #ffd0d0;
+      font-size: 16px;
+    }
+    
+    /* Layout per monitor normali/piccoli */
+    @media (max-width: 1200px) {
+      main {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 760px) {
+      main {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .desktop-grid {
+    /* Dettaglio a tutto schermo */
+    #detail-view {
       display: none;
-      min-height: 0;
-      height: 100vh;
-      height: 100dvh;
-      background: #333;
-      gap: 1px;
+      padding: 12px;
+      padding-bottom: 85px; /* Spazio per la fascia Home */
     }
-
-    .desktop-panel {
-      min-width: 0;
-      min-height: 0;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      background: #111;
+    #detail-view .card-header {
+      display: none; /* Titolo e data sono spostati nella fascia superiore */
     }
-
-    .desktop-panel-header {
-      padding: 10px 14px 8px;
-      border-bottom: 1px solid #333;
-      background: #111;
+    #detail-view pre {
+      display: block; /* Mostra il testo nel dettaglio */
     }
-
-    .desktop-title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+    
+    /* Fascia nera inferiore */
+    footer {
+      display: none;
+      background: #000;
+      padding: 18px 16px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 100;
+      cursor: pointer;
+      border-top: 1px solid #333;
+      box-sizing: border-box;
     }
-
-    .desktop-panel-header h2 {
+    footer h1 {
       margin: 0;
-      font-size: 22px;
-      line-height: 1.1;
-    }
-
-
-    .desktop-panel-header p {
-      margin: 4px 0 0;
-      color: #d8d8d8;
-      font-size: 12px;
-      line-height: 1.2;
-    }
-
-    @media (min-width: 760px) {
-      body {
-        grid-template-rows: 1fr;
-      }
-
-      .mobile-only {
-        display: none;
-      }
-
-      .desktop-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
+      font-size: 30px;
+      color: #fff;
     }
   </style>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get('v') === '57';
+    // Uso un'API globale gratuita per il contatore
+    const counterUrl = 'https://api.counterapi.dev/v1/sebmazz_rosticcerie/clicks';
+    
+    let totalClicks = 0;
+    let offsetClicks = 0;
+    
+    function loadCounter() {
+        if (isAdmin) {
+            // Recuperiamo l'offset dal dispositivo admin
+            offsetClicks = parseInt(localStorage.getItem('rosti_clicks_offset') || '0', 10);
+            
+            fetch(counterUrl)
+                .then(r => r.json())
+                .then(data => {
+                    totalClicks = data.count || 0;
+                    updateAdminTitle();
+                }).catch(e => console.error(e));
+        }
+    }
+    
+    function updateAdminTitle() {
+        let val = Math.max(0, totalClicks - offsetClicks);
+        document.getElementById('main-title').innerText = `Rosticcerie (${val.toLocaleString('it-IT')})`;
+    }
+
+    function openDetail(element) {
+        document.getElementById('grid-view').style.display = 'none';
+        
+        const detailView = document.getElementById('detail-view');
+        detailView.innerHTML = element.innerHTML;
+        detailView.style.display = 'block';
+        
+        const title = element.getAttribute('data-title');
+        const date = element.getAttribute('data-date');
+        
+        const mainTitle = document.getElementById('main-title');
+        mainTitle.innerText = title;
+        document.getElementById('main-updated').innerText = date;
+        
+        document.getElementById('main-footer').style.display = 'block';
+        window.scrollTo(0, 0);
+        
+        if (!isAdmin) {
+            fetch(counterUrl + '/up').catch(e => {});
+        }
+    }
+
+    function closeDetail() {
+        document.getElementById('detail-view').style.display = 'none';
+        document.getElementById('detail-view').innerHTML = '';
+        document.getElementById('grid-view').style.display = 'grid';
+        
+        const mainTitle = document.getElementById('main-title');
+        if (isAdmin) {
+            updateAdminTitle();
+        } else {
+            mainTitle.innerText = 'Rosticcerie';
+        }
+        
+        document.getElementById('main-updated').innerText = 'Aggiornato: 03/09/2026 20:50';
+        document.getElementById('main-footer').style.display = 'none';
+        window.scrollTo(0, 0);
+    }
+    
+    function handleTitleClick() {
+        if (isAdmin && document.getElementById('grid-view').style.display !== 'none') {
+            if (confirm("Vuoi davvero azzerare il contatore?")) {
+                offsetClicks = totalClicks;
+                localStorage.setItem('rosti_clicks_offset', offsetClicks.toString());
+                updateAdminTitle();
+            }
+        }
+    }
+    
+    window.onload = loadCounter;
+  </script>
 </head>
 <body>
-  <header class="topbar mobile-only" aria-live="polite">
-    <nav id="controls" class="controls" aria-label="Scegli rosticceria"></nav>
-    <p id="published" class="published">Data non disponibile</p>
+  <header id="main-header">
+    <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
+    <p id="main-updated" class="updated">Aggiornato: 03/09/2026 20:50</p>
   </header>
+  
+  <main id="grid-view">
+    
+        <section class="card" data-title="Fantasia" data-date="03/09/2026" onclick="openDetail(this)">
+            <div class="card-header">
+                <h2>Fantasia</h2>
+                <p class="published">03/09/2026</p>
+            </div>
+            
+                <img src="Fantasia.jpg?v=1788461408" alt="Fantasia">
+                <pre>MENÙ DEL GIORNO 02/09/26</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Cibarìa" data-date="03/09/2026" onclick="openDetail(this)">
+            <div class="card-header">
+                <h2>Cibarìa</h2>
+                <p class="published">03/09/2026</p>
+            </div>
+            
+                <img src="Cibaria.jpg?v=1788461408" alt="Cibarìa">
+                <pre>2 Settembre 2026
+Menù del giorno.</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Impastamò" data-date="29/08/2026 circa" onclick="openDetail(this)">
+            <div class="card-header">
+                <h2>Impastamò</h2>
+                <p class="published">29/08/2026 circa</p>
+            </div>
+            
+                <img src="Impastamo.jpg?v=1788461408" alt="Impastamò">
+                <pre>Ricarichiamo un po’ le energie!
+Ci vediamo presto con le bontà della nuova stagione in arrivo</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Le delizie di Michela" data-date="03/09/2026 20:04 circa" onclick="openDetail(this)">
+            <div class="card-header">
+                <h2>Le delizie di Michela</h2>
+                <p class="published">03/09/2026 20:04 circa</p>
+            </div>
+            
+                <img src="Le_delizie_di_Michela.jpg?v=1788461408" alt="Le delizie di Michela">
+                <pre>8 h
+·
+Tutte le reazioni:
+1</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Santoro (Castellana)" data-date="03/09/2026 09:08 circa" onclick="openDetail(this)">
+            <div class="card-header">
+                <h2>Santoro (Castellana)</h2>
+                <p class="published">03/09/2026 09:08 circa</p>
+            </div>
+            
+                <img src="Santoro__Castellana.jpg?v=1788461408" alt="Santoro (Castellana)">
+                <pre>menù del giorno 3 Settembre</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Pane&amp;Co" data-date="03/09/2026" onclick="openDetail(this)">
+            <div class="card-header">
+                <h2>Pane&amp;Co</h2>
+                <p class="published">03/09/2026</p>
+            </div>
+            
+                <img src="Pane_Co.jpg?v=1788461408" alt="Pane&amp;Co">
+                <pre>Menu 2 Settembre
 
-  <main id="viewer" class="viewer mobile-only">
-    <img id="photo" src="Fantasia.jpg" alt="Fantasia">
+PRIMI PIATTI DEL GIORNO
+- Penne tricolore all&#x27;arrabbiata - €6.50
+- Risotto con speck e radicchio - €7.50
+- Spaghetti con fagiolini, pomodoro fresco e cacio - €8.50
+- Cavatelli al grano arso con gamberetti, datterino giallo e zucchine - €8.50
+- Minestra di piselli con orzo - €6.00
+  Con o senza pasta
+
+SECONDI PIATTI DEL GIORNO
+- Bocconcini di pollo con verdure - €7.50
+- Trancio di pesce spada gratinato - €8.50</pre>
+            
+        </section>
+        
+        <section class="card" data-title="Bollenti piatti" data-date="Data non disponibile" onclick="openDetail(this)">
+            <div class="card-header">
+                <h2>Bollenti piatti</h2>
+                <p class="published">Data non disponibile</p>
+            </div>
+            
+                <img src="Bollenti_piatti.jpg?v=1788461408" alt="Bollenti piatti">
+                <pre></pre>
+            
+        </section>
+        
   </main>
-
-  <main id="desktopGrid" class="desktop-grid" aria-label="Rosticcerie affiancate"></main>
-
-  <div id="refreshProgress" class="refresh-progress" role="status" aria-live="polite">
-    <div class="refresh-progress__label">
-      <span>Controllo aggiornamenti</span>
-      <span id="refreshPercent">0%</span>
-    </div>
-    <div class="refresh-progress__track">
-      <div id="refreshBar" class="refresh-progress__bar"></div>
-    </div>
-  </div>
-
-  <button id="checkingButton" class="checking-button" type="button" aria-live="polite">Controllo...</button>
-
-  <script>
-    const remoteBase = "https://sebastiano-mazzarisi.github.io/Prog/Fantasia/output/rosticceria_ios/";
-    const localPlaces = [
-      { name: "Fantasia", image: "Fantasia.jpg", published_at: "" },
-      { name: "Cibarìa", image: "Cibaria.jpg", published_at: "" },
-      { name: "Pane&Co", image: "Pane_Co.jpg", published_at: "" },
-      { name: "Bollenti piatti", image: "Bollenti_piatti.jpg", published_at: "" }
-    ];
-
-    let base = "";
-    let places = localPlaces;
-    let currentIndex = 0;
-    let zoom = 1;
-    let pinchStartDistance = 0;
-    let pinchStartZoom = 1;
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let swipeReady = false;
-    let wasPinching = false;
-    let suppressNextClick = false;
-    let isRefreshing = false;
-    let progressDelay = 0;
-    let progressTimer = 0;
-    let progressValue = 0;
-    let checkingStartedAt = 0;
-
-    const viewer = document.getElementById("viewer");
-    const photo = document.getElementById("photo");
-    const published = document.getElementById("published");
-    const controls = document.getElementById("controls");
-    const desktopGrid = document.getElementById("desktopGrid");
-    const refreshProgress = document.getElementById("refreshProgress");
-    const refreshPercent = document.getElementById("refreshPercent");
-    const refreshBar = document.getElementById("refreshBar");
-    const checkingButton = document.getElementById("checkingButton");
-
-    function displayDate(place) {
-      const date = placeDate(place);
-      if (!date) {
-        return "Data non disponibile";
-      }
-
-      const weekdays = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
-      const months = [
-        "gennaio",
-        "febbraio",
-        "marzo",
-        "aprile",
-        "maggio",
-        "giugno",
-        "luglio",
-        "agosto",
-        "settembre",
-        "ottobre",
-        "novembre",
-        "dicembre"
-      ];
-
-      return `${weekdays[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
-    }
-
-    function shortDisplayDate(place) {
-      const date = placeDate(place);
-      if (!date) {
-        return "--";
-      }
-
-      const weekdays = ["dom", "lun", "mar", "mer", "gio", "ven", "sab"];
-      return `${weekdays[date.getDay()]}-${String(date.getDate()).padStart(2, "0")}`;
-    }
-
-    function placeDate(place) {
-      const value = `${place.published_at || ""}\n${place.text || ""}`;
-      const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-      const shortMatch = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{2})/);
-      const dateMatch = match || shortMatch;
-      if (!dateMatch) {
-        return null;
-      }
-
-      const rawYear = Number(dateMatch[3]);
-      const year = rawYear < 100 ? rawYear + 2000 : rawYear;
-      return new Date(year, Number(dateMatch[2]) - 1, Number(dateMatch[1]));
-    }
-
-    function isToday(place) {
-      const date = placeDate(place);
-      if (!date) {
-        return false;
-      }
-
-      const today = new Date();
-      return date.getFullYear() === today.getFullYear()
-        && date.getMonth() === today.getMonth()
-        && date.getDate() === today.getDate();
-    }
-
-    function isStale(place) {
-      return !isToday(place);
-    }
-
-    function imageUrl(place, fallbackIndex) {
-      const image = place.image || localPlaces[fallbackIndex].image;
-      return `${base}${image}?v=${Date.now()}`;
-    }
-
-    function setZoom(value) {
-      zoom = Math.min(3, Math.max(1, value));
-      photo.style.width = `${zoom * 100}%`;
-    }
-
-    function resetMobileView() {
-      setZoom(1);
-      viewer.scrollTop = 0;
-      viewer.scrollLeft = 0;
-    }
-
-    function setProgress(value) {
-      progressValue = Math.max(0, Math.min(100, value));
-      refreshPercent.textContent = `${Math.round(progressValue)}%`;
-      refreshBar.style.width = `${progressValue}%`;
-    }
-
-    function startProgress() {
-      setProgress(8);
-      refreshProgress.classList.add("visible");
-      progressTimer = window.setInterval(() => {
-        const nextValue = progressValue < 70 ? progressValue + 7 : progressValue + 2;
-        setProgress(Math.min(95, nextValue));
-      }, 450);
-    }
-
-    function prepareProgress() {
-      checkingStartedAt = Date.now();
-      checkingButton.classList.add("visible");
-      window.clearTimeout(progressDelay);
-      window.clearInterval(progressTimer);
-      refreshProgress.classList.remove("visible");
-      setProgress(0);
-      progressDelay = window.setTimeout(startProgress, 5000);
-    }
-
-    async function finishProgress() {
-      const elapsed = Date.now() - checkingStartedAt;
-      if (elapsed < 2000) {
-        await new Promise((resolve) => window.setTimeout(resolve, 2000 - elapsed));
-      }
-
-      checkingButton.classList.remove("visible");
-      window.clearTimeout(progressDelay);
-      window.clearInterval(progressTimer);
-
-      if (refreshProgress.classList.contains("visible")) {
-        setProgress(100);
-        window.setTimeout(() => {
-          refreshProgress.classList.remove("visible");
-          setProgress(0);
-        }, 700);
-      }
-    }
-
-    function showPlace(index) {
-      currentIndex = (index + places.length) % places.length;
-      const place = places[currentIndex];
-      photo.src = imageUrl(place, currentIndex);
-      photo.alt = place.name;
-      published.textContent = displayDate(place);
-      controls.querySelectorAll("button").forEach((button, buttonIndex) => {
-        button.classList.toggle("active", buttonIndex === currentIndex);
-      });
-      resetMobileView();
-    }
-
-    function renderControls() {
-      controls.innerHTML = "";
-      places.forEach((place, index) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        const name = document.createElement("span");
-        name.className = "button-name";
-        name.textContent = place.name;
-
-        const date = document.createElement("span");
-        date.className = "button-date";
-      date.textContent = shortDisplayDate(place);
-
-        button.append(name, date);
-        button.classList.toggle("active", index === currentIndex);
-        button.classList.toggle("today-name", isToday(place));
-        button.classList.toggle("stale", isStale(place));
-        button.addEventListener("click", () => showPlace(index));
-        controls.append(button);
-      });
-    }
-
-    function renderDesktop() {
-      desktopGrid.innerHTML = "";
-      places.forEach((place, index) => {
-        const panel = document.createElement("section");
-        panel.className = "desktop-panel";
-
-        const header = document.createElement("header");
-        header.className = "desktop-panel-header";
-
-        const titleRow = document.createElement("div");
-        titleRow.className = "desktop-title-row";
-
-        const title = document.createElement("h2");
-        title.textContent = place.name;
-        title.classList.toggle("today-name", isToday(place));
-
-        const date = document.createElement("p");
-        date.textContent = displayDate(place);
-
-        const imageWrap = document.createElement("div");
-        imageWrap.className = "desktop-image";
-
-        const image = document.createElement("img");
-        image.src = imageUrl(place, index);
-        image.alt = place.name;
-        image.addEventListener("click", checkForUpdates);
-
-        titleRow.append(title);
-        header.append(titleRow, date);
-        imageWrap.append(image);
-        panel.append(header, imageWrap);
-        desktopGrid.append(panel);
-      });
-    }
-
-    function orderedPlaces(list) {
-      const order = ["Fantasia", "Cibarìa", "Pane&Co", "Bollenti piatti"];
-      return [...list].sort((a, b) => {
-        const ai = order.indexOf(a.name);
-        const bi = order.indexOf(b.name);
-        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
-      });
-    }
-
-   async function loadLatest() {
-      let statusData = null;
-      try {
-        const response = await fetch(`${remoteBase}status.json?v=${Date.now()}`, { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error("status non disponibile");
-        }
-
-        statusData = await response.json();
-        places = orderedPlaces(statusData.pages);
-        base = remoteBase;
-      } catch (error) {
-        places = orderedPlaces(localPlaces);
-        base = "";
-      }
-
-      renderControls();
-      showPlace(currentIndex);
-      renderDesktop();
-      return statusData;
-    }
-
-    async function checkForUpdates() {
-      if (isRefreshing) {
-        return;
-      }
-
-      isRefreshing = true;
-      prepareProgress();
-      try {
-        await loadLatest();
-      } finally {
-        await finishProgress();
-        isRefreshing = false;
-      }
-    }
-
-    function touchDistance(touches) {
-      const dx = touches[0].clientX - touches[1].clientX;
-      const dy = touches[0].clientY - touches[1].clientY;
-      return Math.hypot(dx, dy);
-    }
-
-    viewer.addEventListener("touchstart", (event) => {
-      if (event.touches.length === 1) {
-        touchStartX = event.touches[0].clientX;
-        touchStartY = event.touches[0].clientY;
-        swipeReady = true;
-        wasPinching = false;
-      }
-
-      if (event.touches.length === 2) {
-        pinchStartDistance = touchDistance(event.touches);
-        pinchStartZoom = zoom;
-        swipeReady = false;
-        wasPinching = true;
-      }
-    }, { passive: true });
-
-    viewer.addEventListener("touchmove", (event) => {
-      if (event.touches.length === 2 && pinchStartDistance > 0) {
-        event.preventDefault();
-        const nextZoom = pinchStartZoom * (touchDistance(event.touches) / pinchStartDistance);
-        setZoom(nextZoom);
-      }
-    }, { passive: false });
-
-    viewer.addEventListener("touchend", (event) => {
-      if (zoom < 1.05) {
-        setZoom(1);
-      }
-
-      if (swipeReady && !wasPinching && event.changedTouches.length > 0) {
-        const dx = event.changedTouches[0].clientX - touchStartX;
-        const dy = event.changedTouches[0].clientY - touchStartY;
-
-        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) {
-          suppressNextClick = true;
-          showPlace(currentIndex + (dx < 0 ? 1 : -1));
-        }
-      }
-
-      pinchStartDistance = 0;
-      swipeReady = false;
-    });
-
-    photo.addEventListener("click", () => {
-      if (suppressNextClick) {
-        suppressNextClick = false;
-        return;
-      }
-
-      checkForUpdates();
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowRight" || event.key === " ") {
-        showPlace(currentIndex + 1);
-      }
-      if (event.key === "ArrowLeft") {
-        showPlace(currentIndex - 1);
-      }
-    });
-
-    loadLatest();
-    setInterval(loadLatest, 5 * 60 * 1000);
-  </script>
+  
+  <div id="detail-view"></div>
+  
+  <footer id="main-footer" onclick="closeDetail()">
+    <h1>Home</h1>
+  </footer>
 </body>
 </html>

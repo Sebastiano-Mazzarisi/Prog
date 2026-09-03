@@ -646,14 +646,15 @@
       const pageWidth = 595.28;
       const pageHeight = 841.89;
       const margin = 12;
-      const gutter = 10;
-      const cellWidth = (pageWidth - margin * 2 - gutter) / 2;
-      const cellHeight = (pageHeight - margin * 2 - gutter) / 2;
+      const columnGap = 10;
+      const rowGap = 28.35;
+      const cellWidth = (pageWidth - margin * 2 - columnGap) / 2;
+      const cellHeight = (pageHeight - margin * 2 - rowGap) / 2;
       const cells = [
         { x: margin, top: pageHeight - margin },
-        { x: margin + cellWidth + gutter, top: pageHeight - margin },
+        { x: margin + cellWidth + columnGap, top: pageHeight - margin },
         { x: margin, top: margin + cellHeight },
-        { x: margin + cellWidth + gutter, top: margin + cellHeight }
+        { x: margin + cellWidth + columnGap, top: margin + cellHeight }
       ];
 
       const objects = [];
@@ -667,15 +668,21 @@
 
       let content = "";
       images.forEach((image, index) => {
-        const scale = Math.min(cellWidth / image.size.width, cellHeight / image.size.height);
+        const captionHeight = image.caption ? 22 : 0;
+        const scale = Math.min(cellWidth / image.size.width, (cellHeight - captionHeight) / image.size.height);
         const width = image.size.width * scale;
         const height = image.size.height * scale;
         const x = cells[index].x + (cellWidth - width) / 2;
-        const y = cells[index].top - height;
-        content += `q\n${width.toFixed(2)} 0 0 ${height.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im${index + 1} Do\nQ\n`;
+        const imageY = cells[index].top - height;
+        const frameY = imageY - captionHeight;
+        const frameHeight = height + captionHeight;
+        content += `q\n0.82 g\n${(x + 4).toFixed(2)} ${(frameY - 4).toFixed(2)} ${width.toFixed(2)} ${frameHeight.toFixed(2)} re\nf\nQ\n`;
+        content += `q\n1 g\n${x.toFixed(2)} ${frameY.toFixed(2)} ${width.toFixed(2)} ${frameHeight.toFixed(2)} re\nf\nQ\n`;
+        content += `q\n${width.toFixed(2)} 0 0 ${height.toFixed(2)} ${x.toFixed(2)} ${imageY.toFixed(2)} cm\n/Im${index + 1} Do\nQ\n`;
         if (image.caption) {
-          content += `BT\n/F1 12 Tf\n0 g\n${x.toFixed(2)} ${(y - 15).toFixed(2)} Td\n${pdfLiteralText(image.caption)} Tj\nET\n`;
+          content += `BT\n/F1 12 Tf\n0 g\n${(x + 4).toFixed(2)} ${(frameY + 6).toFixed(2)} Td\n${pdfLiteralText(image.caption)} Tj\nET\n`;
         }
+        content += `q\n0.70 G\n0.7 w\n${x.toFixed(2)} ${frameY.toFixed(2)} ${width.toFixed(2)} ${frameHeight.toFixed(2)} re\nS\nQ\n`;
       });
 
       objects.push(textBytes(`<< /Length ${textBytes(content).length} >>\nstream\n${content}endstream`));

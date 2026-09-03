@@ -41,8 +41,17 @@
 
     .controls {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-flow: column;
+      grid-template-rows: repeat(2, 1fr);
+      grid-auto-columns: minmax(46%, 1fr);
       gap: 6px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .controls::-webkit-scrollbar {
+      display: none;
     }
 
     button {
@@ -217,6 +226,8 @@
     .desktop-grid {
       display: none;
       min-height: 0;
+      height: 100vh;
+      height: 100dvh;
       background: #333;
       gap: 1px;
     }
@@ -235,11 +246,19 @@
       background: #111;
     }
 
+    .desktop-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
     .desktop-panel-header h2 {
       margin: 0;
       font-size: 22px;
       line-height: 1.1;
     }
+
 
     .desktop-panel-header p {
       margin: 4px 0 0;
@@ -259,7 +278,7 @@
 
       .desktop-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
       }
     }
   </style>
@@ -293,8 +312,8 @@
     const localPlaces = [
       { name: "Fantasia", image: "Fantasia.jpg", published_at: "" },
       { name: "Cibarìa", image: "Cibaria.jpg", published_at: "" },
-      { name: "Bollenti", image: "Bollenti.jpg", published_at: "" },
-      { name: "Pane&Co", image: "Pane_Co.jpg", published_at: "" }
+      { name: "Pane&Co", image: "Pane_Co.jpg", published_at: "" },
+      { name: "Bollenti piatti", image: "Bollenti_piatti.jpg", published_at: "" }
     ];
 
     let base = "";
@@ -472,7 +491,7 @@
 
         const date = document.createElement("span");
         date.className = "button-date";
-        date.textContent = shortDisplayDate(place);
+      date.textContent = shortDisplayDate(place);
 
         button.append(name, date);
         button.classList.toggle("active", index === currentIndex);
@@ -492,6 +511,9 @@
         const header = document.createElement("header");
         header.className = "desktop-panel-header";
 
+        const titleRow = document.createElement("div");
+        titleRow.className = "desktop-title-row";
+
         const title = document.createElement("h2");
         title.textContent = place.name;
         title.classList.toggle("today-name", isToday(place));
@@ -507,14 +529,24 @@
         image.alt = place.name;
         image.addEventListener("click", checkForUpdates);
 
-        header.append(title, date);
+        titleRow.append(title);
+        header.append(titleRow, date);
         imageWrap.append(image);
         panel.append(header, imageWrap);
         desktopGrid.append(panel);
       });
     }
 
-    async function loadLatest() {
+    function orderedPlaces(list) {
+      const order = ["Fantasia", "Cibarìa", "Pane&Co", "Bollenti piatti"];
+      return [...list].sort((a, b) => {
+        const ai = order.indexOf(a.name);
+        const bi = order.indexOf(b.name);
+        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+      });
+    }
+
+   async function loadLatest() {
       let statusData = null;
       try {
         const response = await fetch(`${remoteBase}status.json?v=${Date.now()}`, { cache: "no-store" });
@@ -523,10 +555,10 @@
         }
 
         statusData = await response.json();
-        places = statusData.pages;
+        places = orderedPlaces(statusData.pages);
         base = remoteBase;
       } catch (error) {
-        places = localPlaces;
+        places = orderedPlaces(localPlaces);
         base = "";
       }
 

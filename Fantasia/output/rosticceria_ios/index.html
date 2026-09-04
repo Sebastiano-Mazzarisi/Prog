@@ -37,14 +37,6 @@
       color: #ccc;
       font-size: 14px;
     }
-    .phone-link {
-      display: none;
-      margin: 8px 0 0;
-      color: #00c853;
-      font-weight: bold;
-      font-size: 18px;
-      text-decoration: none;
-    }
     /* Ripristinato il layout a più colonne */
     main {
       display: grid;
@@ -54,57 +46,22 @@
     }
     .card {
       background: #111;
-      padding: 8px; /* Padding ridotto come nell'originale */
       box-sizing: border-box;
       cursor: pointer;
-    }
-    .card-header {
-      pointer-events: none;
-      margin-bottom: 8px;
-    }
-    .card-title-row {
+      min-height: 110px;
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+    }
+    .card-detail-content {
+      display: none; /* Nella griglia si vede solo il nome */
     }
     .card h2 {
       margin: 0;
-      font-size: clamp(15px, 5vw, 26px);
+      font-size: clamp(16px, 5vw, 26px);
       color: #ffcc00; /* Colore giallo per i titoli come nell'originale */
-    }
-    .published {
-      color: #ccc;
-      font-size: 12px;
-      margin: 2px 0 0;
-    }
-    .card-phone {
-      pointer-events: auto;
-      color: #00c853;
-      font-weight: bold;
-      font-size: clamp(15px, 5vw, 26px);
-      text-decoration: none;
-      white-space: nowrap;
-      margin-left: auto;
-    }
-    .card img {
-      width: 100%;
-      height: auto;
-      display: block;
-      background: #000;
-      pointer-events: none;
-    }
-    .card pre, .card p.error {
-      pointer-events: none;
-    }
-    pre {
-      display: none; /* Nascondiamo il testo lungo nella griglia compatta */
-      white-space: pre-wrap;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.35;
-      margin: 12px 0 0;
     }
     .error {
       color: #ffd0d0;
@@ -124,15 +81,18 @@
       padding: 12px;
       padding-bottom: 85px; /* Spazio per la fascia Home */
     }
-    #detail-view .card-header {
-      display: none; /* Titolo e data sono spostati nella fascia superiore */
+    #detail-view h2 {
+      display: none; /* Il nome e' gia' mostrato nella fascia superiore */
     }
-    #detail-view pre {
-      display: block; /* Mostra il testo nel dettaglio */
+    #detail-view .card-detail-content {
+      display: block; /* Nel dettaglio si vede solo l'immagine (tutto e' dentro l'immagine) */
     }
     #detail-view img {
       max-width: 100%;
       height: auto;
+      display: block;
+    }
+    #detail-view a {
       display: block;
     }
     
@@ -228,21 +188,7 @@
         detailView.style.display = 'block';
         
         const title = element.getAttribute('data-title');
-        const date = element.getAttribute('data-date');
-        
-        const mainTitle = document.getElementById('main-title');
-        mainTitle.innerText = title;
-        document.getElementById('main-updated').innerText = date;
-        
-        const phoneEl = document.getElementById('main-phone');
-        const phoneNumber = PHONE_NUMBERS[title];
-        if (phoneNumber) {
-            phoneEl.textContent = phoneNumber;
-            phoneEl.href = 'tel:' + phoneNumber.replace(/[^0-9+]/g, '');
-            phoneEl.style.display = 'inline-block';
-        } else {
-            phoneEl.style.display = 'none';
-        }
+        document.getElementById('main-title').innerText = title;
         
         document.getElementById('main-footer').style.display = 'block';
         window.scrollTo(0, 0);
@@ -264,8 +210,6 @@
             mainTitle.innerText = 'Rosticcerie';
         }
         
-        document.getElementById('main-updated').innerText = 'Aggiornato: 04/09/2026 06:48';
-        document.getElementById('main-phone').style.display = 'none';
         document.getElementById('main-footer').style.display = 'none';
         window.scrollTo(0, 0);
     }
@@ -284,143 +228,71 @@
 <body>
   <header id="main-header">
     <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
-    <p id="main-updated" class="updated">Aggiornato: 04/09/2026 06:48</p>
-    <a id="main-phone" class="phone-link" href="tel:"></a>
+    <p id="main-updated" class="updated">Aggiornato: 04/09/2026 07:06</p>
   </header>
   
   <main id="grid-view">
     
-        <section class="card" data-title="Fantasia" data-date="03/09/2026 10:47 circa" onclick="openDetail(this)">
-            <div class="card-header">
-                <div class="card-title-row">
-                    <h2>Fantasia</h2>
-                    <a class="card-phone" href="tel:0804054139" onclick="event.stopPropagation()">080-405.41.39</a>
-                </div>
-                <p class="published">03/09/2026 10:47 circa</p>
-            </div>
+        <section class="card" data-title="Fantasia" onclick="openDetail(this)">
+            <h2>Fantasia</h2>
             
-                <img src="Fantasia.jpg?v=1788504526" alt="Fantasia">
-                <pre>MENÙ DEL GIORNO 03/09/26</pre>
+            <div class="card-detail-content">
+                <a href="tel:0804054139"><img src="Fantasia_call.jpg?v=1788505611" alt="Fantasia"></a>
+            </div>
             
         </section>
         
-        <section class="card" data-title="Cibarìa" data-date="04/09/2026 00:54 circa" onclick="openDetail(this)">
-            <div class="card-header">
-                <div class="card-title-row">
-                    <h2>Cibarìa</h2>
-                    <a class="card-phone" href="tel:0806450799" onclick="event.stopPropagation()">080-645.07.99</a>
-                </div>
-                <p class="published">04/09/2026 00:54 circa</p>
-            </div>
+        <section class="card" data-title="Cibarìa" onclick="openDetail(this)">
+            <h2>Cibarìa</h2>
             
-                <img src="Cibaria.jpg?v=1788504526" alt="Cibarìa">
-                <pre>3 Settembre 2026.
-Menú del giorno.</pre>
+            <div class="card-detail-content">
+                <a href="tel:0806450799"><img src="Cibaria_call.jpg?v=1788505611" alt="Cibarìa"></a>
+            </div>
             
         </section>
         
-        <section class="card" data-title="Impastamò" data-date="30/08/2026 circa" onclick="openDetail(this)">
-            <div class="card-header">
-                <div class="card-title-row">
-                    <h2>Impastamò</h2>
-                    <a class="card-phone" href="tel:3925361536" onclick="event.stopPropagation()">392-536.15.36</a>
-                </div>
-                <p class="published">30/08/2026 circa</p>
-            </div>
+        <section class="card" data-title="Impastamò" onclick="openDetail(this)">
+            <h2>Impastamò</h2>
             
-                <img src="Impastamo.jpg?v=1788504526" alt="Impastamò">
-                <pre>Ricarichiamo un po’ le energie!
-Ci vediamo presto con le bontà della nuova stagione in arrivo</pre>
+            <div class="card-detail-content">
+                <a href="tel:3925361536"><img src="Impastamo_call.jpg?v=1788505611" alt="Impastamò"></a>
+            </div>
             
         </section>
         
-        <section class="card" data-title="Le delizie di Michela" data-date="04/09/2026 00:37 circa" onclick="openDetail(this)">
-            <div class="card-header">
-                <div class="card-title-row">
-                    <h2>Le delizie di Michela</h2>
-                    <a class="card-phone" href="tel:0805212233" onclick="event.stopPropagation()">080-521.22.33</a>
-                </div>
-                <p class="published">04/09/2026 00:37 circa</p>
-            </div>
+        <section class="card" data-title="Le delizie di Michela" onclick="openDetail(this)">
+            <h2>Le delizie di Michela</h2>
             
-                <img src="Le_delizie_di_Michela.jpg?v=1788504526" alt="Le delizie di Michela">
-                <pre>Like
-Comment</pre>
+            <div class="card-detail-content">
+                <a href="tel:0805212233"><img src="Le_delizie_di_Michela_call.jpg?v=1788505611" alt="Le delizie di Michela"></a>
+            </div>
             
         </section>
         
-        <section class="card" data-title="Santoro (Castellana)" data-date="04/09/2026 00:51 circa" onclick="openDetail(this)">
-            <div class="card-header">
-                <div class="card-title-row">
-                    <h2>Santoro (Castellana)</h2>
-                    <a class="card-phone" href="tel:0808598313" onclick="event.stopPropagation()">080-859.83.13</a>
-                </div>
-                <p class="published">04/09/2026 00:51 circa</p>
-            </div>
+        <section class="card" data-title="Santoro (Castellana)" onclick="openDetail(this)">
+            <h2>Santoro (Castellana)</h2>
             
-                <img src="Santoro__Castellana.jpg?v=1788504526" alt="Santoro (Castellana)">
-                <pre>menù del giorno 3 Settembre</pre>
+            <div class="card-detail-content">
+                <a href="tel:0808598313"><img src="Santoro__Castellana_call.jpg?v=1788505611" alt="Santoro (Castellana)"></a>
+            </div>
             
         </section>
         
-        <section class="card" data-title="Pane&amp;Co" data-date="04/09/2026" onclick="openDetail(this)">
-            <div class="card-header">
-                <div class="card-title-row">
-                    <h2>Pane&amp;Co</h2>
-                    <a class="card-phone" href="tel:0804054900" onclick="event.stopPropagation()">080-405.49.00</a>
-                </div>
-                <p class="published">04/09/2026</p>
-            </div>
+        <section class="card" data-title="Pane&amp;Co" onclick="openDetail(this)">
+            <h2>Pane&amp;Co</h2>
             
-                <img src="Pane_Co.jpg?v=1788504526" alt="Pane&amp;Co">
-                <pre>Menu 4 Settembre
-
-PRIMI PIATTI DEL GIORNO
-- Fusilli alla puttanesca - €6.50
-  Olive, capperi, acciughe, aglio e pomodorino
-- Foglie d&#x27;ulivo con funghi champignon e zucchine - €7.50
-- Capunti con fagiolini, pancetta e datterino giallo - €8.50
-- Risotto con cernia e vellutata di carciofi - €8.50
-- Zuppa di ceci - €6.00
-  Con o senza pasta
-
-SECONDI PIATTI DEL GIORNO
-- Filetto di merluzzo gratinato con zucchina - €8.50
-  Con pomodorino
-- Tocchetti di fesa di tacchino con curry e lamelle di mandorle - €7.50</pre>
+            <div class="card-detail-content">
+                <a href="tel:0804054900"><img src="Pane_Co_call.jpg?v=1788505611" alt="Pane&amp;Co"></a>
+            </div>
             
         </section>
         
-        <section class="card" data-title="Bollenti piatti" data-date="Data non disponibile" onclick="openDetail(this)">
-            <div class="card-header">
-                <div class="card-title-row">
-                    <h2>Bollenti piatti</h2>
-                    <a class="card-phone" href="tel:3343185844" onclick="event.stopPropagation()">334-318.58.44</a>
-                </div>
-                <p class="published">Data non disponibile</p>
-            </div>
+        <section class="card" data-title="Bollenti piatti" onclick="openDetail(this)">
+            <h2>Bollenti piatti</h2>
             
-                <img src="Bollenti_piatti.jpg?v=1788504526" alt="Bollenti piatti">
-                <pre>PRIMI PIATTI
-●RISO A INSALATA
-●INSALATA DI FARRO AL SALMONE E ZUCCHINA
-●CICORIA ALL&#x27;OLIO 5,0
-●TORTELLINI ALLA CARNE AL SUGO DI POMODORO 5,0
-●SEDANINI ALLA CRUDIAIOLA CON VELLUTATA DI DATTERINO GIALLO E ROSSO MELANZANA E CACIORICOTTA 5,0
-●FUSILLI AL SALMONE E PISELLI 5,5
-●GNOCCHI CON PESTO DI BASILICO STRACCIATELLA E POMODORINO 5,0
-SECONDI PIATTI
-●POLLI AL GIRARROSTO
-●ALETTE DI POLLO AL FORNELLO
-●SCALOPPINE DI VITELLO AI FUNGHI
-●COTOLETTE DI POLLO
-●ZAMPINA ARROSTO
-●MILLEFOGLIE DI VERDURE VEGETARIANO
-●FILETTO DI CERNIA CON SENAPE, MANDORLE E ZUCCHINA
-●INSALATA DI MARE CON VERDURINE
-●INSALATA DI POLLO
-●INSALATA DI POLLO ALLO YOGURT E MAIONESE
-</pre>
+            <div class="card-detail-content">
+                <a href="tel:3343185844"><img src="Bollenti_piatti_call.jpg?v=1788505611" alt="Bollenti piatti"></a>
+            </div>
             
         </section>
         

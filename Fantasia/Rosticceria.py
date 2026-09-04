@@ -1526,7 +1526,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     }}
     .card h2 {{
       margin: 0;
-      font-size: 26px;
+      font-size: clamp(15px, 5vw, 26px);
       color: #ffcc00; /* Colore giallo per i titoli come nell'originale */
     }}
     .published {{
@@ -1538,7 +1538,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
       pointer-events: auto;
       color: #00c853;
       font-weight: bold;
-      font-size: 26px;
+      font-size: clamp(15px, 5vw, 26px);
       text-decoration: none;
       white-space: nowrap;
       margin-left: auto;
@@ -1570,11 +1570,6 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     @media (max-width: 1200px) {{
       main {{
         grid-template-columns: repeat(2, minmax(0, 1fr));
-      }}
-    }}
-    @media (max-width: 760px) {{
-      main {{
-        grid-template-columns: 1fr;
       }}
     }}
 
@@ -1625,6 +1620,9 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     const COUNTER_KEY = 'menu-views';
     const counterGetUrl = ABACUS_BASE + '/get/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
     const counterHitUrl = ABACUS_BASE + '/hit/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
+    const OFFSET_KEY = 'menu-views-offset';
+    const offsetGetUrl = ABACUS_BASE + '/get/' + COUNTER_NAMESPACE + '/' + OFFSET_KEY;
+    const offsetHitUrl = ABACUS_BASE + '/hit/' + COUNTER_NAMESPACE + '/' + OFFSET_KEY;
     function fetchWithRetry(url, attempts) {{
         return fetch(url).catch(err => {{
             if (attempts > 1) {{
@@ -1640,16 +1638,36 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     
     function loadCounter() {{
         if (isAdmin) {{
-            // Recuperiamo l'offset dal dispositivo admin
-            offsetClicks = parseInt(localStorage.getItem('rosti_clicks_offset') || '0', 10);
-            
-            fetchWithRetry(counterGetUrl, 3)
-                .then(r => r.json())
-                .then(data => {{
-                    totalClicks = data.value || 0;
-                    updateAdminTitle();
-                }}).catch(e => console.error(e));
+            // L'offset di azzeramento e' condiviso (salvato su Abacus), non solo sul dispositivo
+            Promise.all([
+                fetchWithRetry(counterGetUrl, 3).then(r => r.json()),
+                fetchWithRetry(offsetGetUrl, 3).then(r => r.json())
+            ]).then(([totalData, offsetData]) => {{
+                totalClicks = totalData.value || 0;
+                offsetClicks = offsetData.value || 0;
+                updateAdminTitle();
+            }}).catch(e => console.error(e));
         }}
+    }}
+
+    async function resetCounterGlobally() {{
+        const mainTitle = document.getElementById('main-title');
+        mainTitle.innerText = 'Azzeramento in corso...';
+        try {{
+            const totalData = await fetchWithRetry(counterGetUrl, 3).then(r => r.json());
+            const target = totalData.value || 0;
+            let offsetData = await fetchWithRetry(offsetGetUrl, 3).then(r => r.json());
+            let current = offsetData.value || 0;
+            while (current < target) {{
+                await fetchWithRetry(offsetHitUrl, 3);
+                current++;
+            }}
+            totalClicks = target;
+            offsetClicks = current;
+        }} catch (e) {{
+            console.error(e);
+        }}
+        updateAdminTitle();
     }}
     
     function updateAdminTitle() {{
@@ -1709,10 +1727,8 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     
     function handleTitleClick() {{
         if (isAdmin && document.getElementById('grid-view').style.display !== 'none') {{
-            if (confirm("Vuoi davvero azzerare il contatore?")) {{
-                offsetClicks = totalClicks;
-                localStorage.setItem('rosti_clicks_offset', offsetClicks.toString());
-                updateAdminTitle();
+            if (confirm("Vuoi davvero azzerare il contatore? (Verra' azzerato per tutti i dispositivi)")) {{
+                resetCounterGlobally();
             }}
         }}
     }}

@@ -1443,9 +1443,11 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
         cards.append(f"""
         <section class="card" data-title="{title}" data-date="{card_date}" onclick="openDetail(this)">
             <div class="card-header">
-                <h2>{title}</h2>
+                <div class="card-title-row">
+                    <h2>{title}</h2>
+                    {phone_html}
+                </div>
                 <p class="published">{card_date}</p>
-                {phone_html}
             </div>
             {body}
         </section>
@@ -1457,6 +1459,10 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="refresh" content="300">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Rosticcerie">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <title>Rosticcerie</title>
   <style>
     body {{
@@ -1511,9 +1517,16 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
       pointer-events: none;
       margin-bottom: 8px;
     }}
+    .card-title-row {{
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+    }}
     .card h2 {{
       margin: 0;
-      font-size: 18px;
+      font-size: 26px;
       color: #ffcc00; /* Colore giallo per i titoli come nell'originale */
     }}
     .published {{
@@ -1523,12 +1536,12 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     }}
     .card-phone {{
       pointer-events: auto;
-      display: inline-block;
-      margin-top: 4px;
       color: #00c853;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 26px;
       text-decoration: none;
+      white-space: nowrap;
+      margin-left: auto;
     }}
     .card img {{
       width: 100%;

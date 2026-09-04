@@ -1405,6 +1405,42 @@ def write_publish_status(panels: List[Dict], output_dir: str) -> None:
         json.dump(status, status_file, ensure_ascii=False, indent=2)
 
 
+def _load_bold_font(size: int):
+    candidates = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+    ]
+    for path in candidates:
+        if os.path.exists(path):
+            try:
+                return ImageFont.truetype(path, size)
+            except Exception:
+                pass
+    return ImageFont.load_default()
+
+
+def add_phone_overlay(image_bytes: bytes, phone_number: str) -> bytes:
+    """Disegna il numero di telefono direttamente sull'immagine (fascia in
+    basso, verde brillante) cosi' l'informazione resta dentro l'immagine
+    invece che come testo HTML separato."""
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+    width, height = image.size
+    bar_height = max(56, height // 10)
+    overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    draw.rectangle([0, height - bar_height, width, height], fill=(0, 0, 0, 190))
+    font = _load_bold_font(int(bar_height * 0.5))
+    bbox = draw.textbbox((0, 0), phone_number, font=font)
+    text_w, text_h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    x = (width - text_w) / 2 - bbox[0]
+    y = height - bar_height + (bar_height - text_h) / 2 - bbox[1]
+    draw.text((x, y), phone_number, fill=(0, 200, 83, 255), font=font)
+    combined = Image.alpha_composite(image, overlay).convert("RGB")
+    output = io.BytesIO()
+    combined.save(output, format="JPEG", quality=90)
+    return output.getvalue()
+
+
 def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     updated_at = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
     phone_numbers = {
@@ -1421,34 +1457,39 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
 
     for panel in panels:
         title = html.escape(panel["name"])
-        if "error" in panel:
-            body = f"<p class=\"error\">{html.escape(panel['error'])}</p>"
-            published_at = ""
-        else:
-            image = html.escape(panel.get("publish_image", ""))
-            text = html.escape(panel.get("text", ""))
-            published_at = html.escape(panel_published_at(panel))
-            body = f"""
-                <img src="{image}?v={int(time.time())}" alt="{title}">
-                <pre>{text}</pre>
-            """
-        
-        card_date = published_at if "error" not in panel and published_at else "Data non disponibile"
         phone_number = phone_numbers.get(panel["name"], "")
-        phone_html = ""
-        if phone_number:
-            phone_tel = re.sub(r"[^0-9+]", "", phone_number)
-            phone_html = f'<a class="card-phone" href="tel:{phone_tel}" onclick="event.stopPropagation()">{phone_number}</a>'
-        
-        cards.append(f"""
-        <section class="card" data-title="{title}" data-date="{card_date}" onclick="openDetail(this)">
-            <div class="card-header">
-                <div class="card-title-row">
-                    <h2>{title}</h2>
-                    {phone_html}
-                </div>
-                <p class="published">{card_date}</p>
+        phone_tel = re.sub(r"[^0-9+]", "", phone_number) if phone_number else ""
+
+        if "error" in panel:
+            body = f'<div class="card-detail-content"><p class="error">{html.escape(panel["error"])}</p></div>'
+        else:
+            image_name = panel.get("publish_image", "")
+            display_image = image_name
+            if image_name and phone_number:
+                source_path = os.path.join(output_dir, image_name)
+                if os.path.exists(source_path):
+                    try:
+                        with open(source_path, "rb") as source_file:
+                            overlaid_bytes = add_phone_overlay(source_file.read(), phone_number)
+                        display_name = f"{safe_file_name(panel['name'])}_call.jpg"
+                        with open(os.path.join(output_dir, display_name), "wb") as display_file:
+                            display_file.write(overlaid_bytes)
+                        display_image = display_name
+                    except Exception:
+                        display_image = image_name
+            display_image_escaped = html.escape(display_image)
+            img_html = f'<img src="{display_image_escaped}?v={int(time.time())}" alt="{title}">'
+            if phone_tel:
+                img_html = f'<a href="tel:{phone_tel}">{img_html}</a>'
+            body = f"""
+            <div class="card-detail-content">
+                {img_html}
             </div>
+            """
+
+        cards.append(f"""
+        <section class="card" data-title="{title}" onclick="openDetail(this)">
+            <h2>{title}</h2>
             {body}
         </section>
         """)
@@ -1492,14 +1533,6 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
       color: #ccc;
       font-size: 14px;
     }}
-    .phone-link {{
-      display: none;
-      margin: 8px 0 0;
-      color: #00c853;
-      font-weight: bold;
-      font-size: 18px;
-      text-decoration: none;
-    }}
     /* Ripristinato il layout a più colonne */
     main {{
       display: grid;
@@ -1509,57 +1542,22 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     }}
     .card {{
       background: #111;
-      padding: 8px; /* Padding ridotto come nell'originale */
       box-sizing: border-box;
       cursor: pointer;
-    }}
-    .card-header {{
-      pointer-events: none;
-      margin-bottom: 8px;
-    }}
-    .card-title-row {{
+      min-height: 110px;
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+    }}
+    .card-detail-content {{
+      display: none; /* Nella griglia si vede solo il nome */
     }}
     .card h2 {{
       margin: 0;
-      font-size: clamp(15px, 5vw, 26px);
+      font-size: clamp(16px, 5vw, 26px);
       color: #ffcc00; /* Colore giallo per i titoli come nell'originale */
-    }}
-    .published {{
-      color: #ccc;
-      font-size: 12px;
-      margin: 2px 0 0;
-    }}
-    .card-phone {{
-      pointer-events: auto;
-      color: #00c853;
-      font-weight: bold;
-      font-size: clamp(15px, 5vw, 26px);
-      text-decoration: none;
-      white-space: nowrap;
-      margin-left: auto;
-    }}
-    .card img {{
-      width: 100%;
-      height: auto;
-      display: block;
-      background: #000;
-      pointer-events: none;
-    }}
-    .card pre, .card p.error {{
-      pointer-events: none;
-    }}
-    pre {{
-      display: none; /* Nascondiamo il testo lungo nella griglia compatta */
-      white-space: pre-wrap;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.35;
-      margin: 12px 0 0;
     }}
     .error {{
       color: #ffd0d0;
@@ -1579,15 +1577,18 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
       padding: 12px;
       padding-bottom: 85px; /* Spazio per la fascia Home */
     }}
-    #detail-view .card-header {{
-      display: none; /* Titolo e data sono spostati nella fascia superiore */
+    #detail-view h2 {{
+      display: none; /* Il nome e' gia' mostrato nella fascia superiore */
     }}
-    #detail-view pre {{
-      display: block; /* Mostra il testo nel dettaglio */
+    #detail-view .card-detail-content {{
+      display: block; /* Nel dettaglio si vede solo l'immagine (tutto e' dentro l'immagine) */
     }}
     #detail-view img {{
       max-width: 100%;
       height: auto;
+      display: block;
+    }}
+    #detail-view a {{
       display: block;
     }}
     
@@ -1683,21 +1684,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
         detailView.style.display = 'block';
         
         const title = element.getAttribute('data-title');
-        const date = element.getAttribute('data-date');
-        
-        const mainTitle = document.getElementById('main-title');
-        mainTitle.innerText = title;
-        document.getElementById('main-updated').innerText = date;
-        
-        const phoneEl = document.getElementById('main-phone');
-        const phoneNumber = PHONE_NUMBERS[title];
-        if (phoneNumber) {{
-            phoneEl.textContent = phoneNumber;
-            phoneEl.href = 'tel:' + phoneNumber.replace(/[^0-9+]/g, '');
-            phoneEl.style.display = 'inline-block';
-        }} else {{
-            phoneEl.style.display = 'none';
-        }}
+        document.getElementById('main-title').innerText = title;
         
         document.getElementById('main-footer').style.display = 'block';
         window.scrollTo(0, 0);
@@ -1719,8 +1706,6 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
             mainTitle.innerText = 'Rosticcerie';
         }}
         
-        document.getElementById('main-updated').innerText = 'Aggiornato: {html.escape(updated_at)}';
-        document.getElementById('main-phone').style.display = 'none';
         document.getElementById('main-footer').style.display = 'none';
         window.scrollTo(0, 0);
     }}
@@ -1740,7 +1725,6 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
   <header id="main-header">
     <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
     <p id="main-updated" class="updated">Aggiornato: {html.escape(updated_at)}</p>
-    <a id="main-phone" class="phone-link" href="tel:"></a>
   </header>
   
   <main id="grid-view">

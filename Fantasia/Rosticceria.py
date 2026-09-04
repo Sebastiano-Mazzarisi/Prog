@@ -1434,12 +1434,18 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
             """
         
         card_date = published_at if "error" not in panel and published_at else "Data non disponibile"
+        phone_number = phone_numbers.get(title, "")
+        phone_html = ""
+        if phone_number:
+            phone_tel = re.sub(r"[^0-9+]", "", phone_number)
+            phone_html = f'<a class="card-phone" href="tel:{phone_tel}" onclick="event.stopPropagation()">{phone_number}</a>'
         
         cards.append(f"""
         <section class="card" data-title="{title}" data-date="{card_date}" onclick="openDetail(this)">
             <div class="card-header">
                 <h2>{title}</h2>
                 <p class="published">{card_date}</p>
+                {phone_html}
             </div>
             {body}
         </section>
@@ -1514,6 +1520,15 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
       color: #ccc;
       font-size: 12px;
       margin: 2px 0 0;
+    }}
+    .card-phone {{
+      pointer-events: auto;
+      display: inline-block;
+      margin-top: 4px;
+      color: #00c853;
+      font-weight: bold;
+      font-size: 14px;
+      text-decoration: none;
     }}
     .card img {{
       width: 100%;
@@ -1597,6 +1612,14 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     const COUNTER_KEY = 'menu-views';
     const counterGetUrl = ABACUS_BASE + '/get/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
     const counterHitUrl = ABACUS_BASE + '/hit/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
+    function fetchWithRetry(url, attempts) {{
+        return fetch(url).catch(err => {{
+            if (attempts > 1) {{
+                return new Promise(resolve => setTimeout(resolve, 800)).then(() => fetchWithRetry(url, attempts - 1));
+            }}
+            throw err;
+        }});
+    }}
     const PHONE_NUMBERS = {phone_numbers_json};
     
     let totalClicks = 0;
@@ -1607,7 +1630,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
             // Recuperiamo l'offset dal dispositivo admin
             offsetClicks = parseInt(localStorage.getItem('rosti_clicks_offset') || '0', 10);
             
-            fetch(counterGetUrl)
+            fetchWithRetry(counterGetUrl, 3)
                 .then(r => r.json())
                 .then(data => {{
                     totalClicks = data.value || 0;
@@ -1649,7 +1672,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
         window.scrollTo(0, 0);
         
         if (!isAdmin) {{
-            fetch(counterHitUrl).catch(e => {{}});
+            fetchWithRetry(counterHitUrl, 3).catch(e => {{}});
         }}
     }}
 

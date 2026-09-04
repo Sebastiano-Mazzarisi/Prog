@@ -81,5 +81,13 @@ jobs:
             echo "Nessuna modifica da salvare"
           else
             git commit -m "Aggiorna foto rosticcerie"
-            git push
+            for i in 1 2 3 4 5; do
+              if git push; then
+                break
+              fi
+              echo "Push rifiutato (probabile collisione con un altro commit su main), riprovo dopo un rebase..."
+              git fetch origin main
+              git rebase origin/main
+              sleep 3
+            done
           fi

@@ -1434,7 +1434,7 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
             """
         
         card_date = published_at if "error" not in panel and published_at else "Data non disponibile"
-        phone_number = phone_numbers.get(title, "")
+        phone_number = phone_numbers.get(panel["name"], "")
         phone_html = ""
         if phone_number:
             phone_tel = re.sub(r"[^0-9+]", "", phone_number)

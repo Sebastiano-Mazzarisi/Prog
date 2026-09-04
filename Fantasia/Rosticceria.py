@@ -1743,6 +1743,13 @@ def write_publish_index(panels: List[Dict], output_dir: str) -> None:
     with open(index_path, "w", encoding="utf-8") as index_file:
         index_file.write(index_html)
 
+    # "index.html" e' la pagina che iOS/i browser aprono per default quando si
+    # salva l'URL della cartella (es. icona sulla schermata Home): la teniamo
+    # identica a Rosticcerie.html per evitare che resti una versione vecchia.
+    root_index_path = os.path.join(output_dir, "index.html")
+    with open(root_index_path, "w", encoding="utf-8") as root_index_file:
+        root_index_file.write(index_html)
+
 
 def git_publish_if_available(output_dir: str) -> None:
     repo_dir = find_git_repository(output_dir)

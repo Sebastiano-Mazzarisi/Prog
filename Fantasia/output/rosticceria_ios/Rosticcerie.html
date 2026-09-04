@@ -68,6 +68,15 @@
       font-size: 12px;
       margin: 2px 0 0;
     }
+    .card-phone {
+      pointer-events: auto;
+      display: inline-block;
+      margin-top: 4px;
+      color: #00c853;
+      font-weight: bold;
+      font-size: 14px;
+      text-decoration: none;
+    }
     .card img {
       width: 100%;
       height: auto;
@@ -150,6 +159,14 @@
     const COUNTER_KEY = 'menu-views';
     const counterGetUrl = ABACUS_BASE + '/get/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
     const counterHitUrl = ABACUS_BASE + '/hit/' + COUNTER_NAMESPACE + '/' + COUNTER_KEY;
+    function fetchWithRetry(url, attempts) {
+        return fetch(url).catch(err => {
+            if (attempts > 1) {
+                return new Promise(resolve => setTimeout(resolve, 800)).then(() => fetchWithRetry(url, attempts - 1));
+            }
+            throw err;
+        });
+    }
     const PHONE_NUMBERS = {"Fantasia": "080-405.41.39", "Cibarìa": "080-645.07.99", "Impastamò": "392-536.15.36", "Le delizie di Michela": "080-521.22.33", "Santoro (Castellana)": "080-859.83.13", "Pane&Co": "080-405.49.00", "Bollenti piatti": "334-318.58.44"};
     
     let totalClicks = 0;
@@ -160,7 +177,7 @@
             // Recuperiamo l'offset dal dispositivo admin
             offsetClicks = parseInt(localStorage.getItem('rosti_clicks_offset') || '0', 10);
             
-            fetch(counterGetUrl)
+            fetchWithRetry(counterGetUrl, 3)
                 .then(r => r.json())
                 .then(data => {
                     totalClicks = data.value || 0;
@@ -202,7 +219,7 @@
         window.scrollTo(0, 0);
         
         if (!isAdmin) {
-            fetch(counterHitUrl).catch(e => {});
+            fetchWithRetry(counterHitUrl, 3).catch(e => {});
         }
     }
 
@@ -218,7 +235,7 @@
             mainTitle.innerText = 'Rosticcerie';
         }
         
-        document.getElementById('main-updated').innerText = 'Aggiornato: 03/09/2026 22:58';
+        document.getElementById('main-updated').innerText = 'Aggiornato: 04/09/2026 05:58';
         document.getElementById('main-phone').style.display = 'none';
         document.getElementById('main-footer').style.display = 'none';
         window.scrollTo(0, 0);
@@ -240,7 +257,7 @@
 <body>
   <header id="main-header">
     <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
-    <p id="main-updated" class="updated">Aggiornato: 03/09/2026 22:58</p>
+    <p id="main-updated" class="updated">Aggiornato: 04/09/2026 05:58</p>
     <a id="main-phone" class="phone-link" href="tel:"></a>
   </header>
   
@@ -250,9 +267,10 @@
             <div class="card-header">
                 <h2>Fantasia</h2>
                 <p class="published">03/09/2026 10:57 circa</p>
+                <a class="card-phone" href="tel:0804054139" onclick="event.stopPropagation()">080-405.41.39</a>
             </div>
             
-                <img src="Fantasia.jpg?v=1788476327" alt="Fantasia">
+                <img src="Fantasia.jpg?v=1788501533" alt="Fantasia">
                 <pre>MENÙ DEL GIORNO 03/09/26</pre>
             
         </section>
@@ -261,9 +279,10 @@
             <div class="card-header">
                 <h2>Cibarìa</h2>
                 <p class="published">04/09/2026 00:54 circa</p>
+                <a class="card-phone" href="tel:0806450799" onclick="event.stopPropagation()">080-645.07.99</a>
             </div>
             
-                <img src="Cibaria.jpg?v=1788476327" alt="Cibarìa">
+                <img src="Cibaria.jpg?v=1788501533" alt="Cibarìa">
                 <pre>3 Settembre 2026.
 Menú del giorno.</pre>
             
@@ -273,9 +292,10 @@ Menú del giorno.</pre>
             <div class="card-header">
                 <h2>Impastamò</h2>
                 <p class="published">30/08/2026 circa</p>
+                <a class="card-phone" href="tel:3925361536" onclick="event.stopPropagation()">392-536.15.36</a>
             </div>
             
-                <img src="Impastamo.jpg?v=1788476327" alt="Impastamò">
+                <img src="Impastamo.jpg?v=1788501533" alt="Impastamò">
                 <pre>Ricarichiamo un po’ le energie!
 Ci vediamo presto con le bontà della nuova stagione in arrivo</pre>
             
@@ -285,9 +305,10 @@ Ci vediamo presto con le bontà della nuova stagione in arrivo</pre>
             <div class="card-header">
                 <h2>Le delizie di Michela</h2>
                 <p class="published">04/09/2026 00:37 circa</p>
+                <a class="card-phone" href="tel:0805212233" onclick="event.stopPropagation()">080-521.22.33</a>
             </div>
             
-                <img src="Le_delizie_di_Michela.jpg?v=1788476327" alt="Le delizie di Michela">
+                <img src="Le_delizie_di_Michela.jpg?v=1788501533" alt="Le delizie di Michela">
                 <pre>Like
 Comment</pre>
             
@@ -297,21 +318,23 @@ Comment</pre>
             <div class="card-header">
                 <h2>Santoro (Castellana)</h2>
                 <p class="published">04/09/2026 00:51 circa</p>
+                <a class="card-phone" href="tel:0808598313" onclick="event.stopPropagation()">080-859.83.13</a>
             </div>
             
-                <img src="Santoro__Castellana.jpg?v=1788476327" alt="Santoro (Castellana)">
+                <img src="Santoro__Castellana.jpg?v=1788501533" alt="Santoro (Castellana)">
                 <pre>menù del giorno 3 Settembre</pre>
             
         </section>
         
-        <section class="card" data-title="Pane&amp;Co" data-date="03/09/2026" onclick="openDetail(this)">
+        <section class="card" data-title="Pane&amp;Co" data-date="04/09/2026" onclick="openDetail(this)">
             <div class="card-header">
                 <h2>Pane&amp;Co</h2>
-                <p class="published">03/09/2026</p>
+                <p class="published">04/09/2026</p>
+                <a class="card-phone" href="tel:0804054900" onclick="event.stopPropagation()">080-405.49.00</a>
             </div>
             
-                <img src="Pane_Co.jpg?v=1788476327" alt="Pane&amp;Co">
-                <pre>Menu 3 Settembre
+                <img src="Pane_Co.jpg?v=1788501533" alt="Pane&amp;Co">
+                <pre>Menu 4 Settembre
 
 PRIMI PIATTI DEL GIORNO
 - Fusilli alla puttanesca - €6.50
@@ -333,9 +356,10 @@ SECONDI PIATTI DEL GIORNO
             <div class="card-header">
                 <h2>Bollenti piatti</h2>
                 <p class="published">Data non disponibile</p>
+                <a class="card-phone" href="tel:3343185844" onclick="event.stopPropagation()">334-318.58.44</a>
             </div>
             
-                <img src="Bollenti_piatti.jpg?v=1788476327" alt="Bollenti piatti">
+                <img src="Bollenti_piatti.jpg?v=1788501533" alt="Bollenti piatti">
                 <pre>PRIMI PIATTI
 ●RISO A INSALATA
 ●INSALATA DI FARRO AL SALMONE E ZUCCHINA

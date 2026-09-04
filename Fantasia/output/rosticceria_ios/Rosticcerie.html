@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="refresh" content="300">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Rosticcerie">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <title>Rosticcerie</title>
   <style>
     body {
@@ -58,9 +62,16 @@
       pointer-events: none;
       margin-bottom: 8px;
     }
+    .card-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
     .card h2 {
       margin: 0;
-      font-size: 18px;
+      font-size: 26px;
       color: #ffcc00; /* Colore giallo per i titoli come nell'originale */
     }
     .published {
@@ -70,12 +81,12 @@
     }
     .card-phone {
       pointer-events: auto;
-      display: inline-block;
-      margin-top: 4px;
       color: #00c853;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 26px;
       text-decoration: none;
+      white-space: nowrap;
+      margin-left: auto;
     }
     .card img {
       width: 100%;
@@ -235,7 +246,7 @@
             mainTitle.innerText = 'Rosticcerie';
         }
         
-        document.getElementById('main-updated').innerText = 'Aggiornato: 04/09/2026 05:58';
+        document.getElementById('main-updated').innerText = 'Aggiornato: 04/09/2026 06:22';
         document.getElementById('main-phone').style.display = 'none';
         document.getElementById('main-footer').style.display = 'none';
         window.scrollTo(0, 0);
@@ -257,32 +268,36 @@
 <body>
   <header id="main-header">
     <h1 id="main-title" onclick="handleTitleClick()">Rosticcerie</h1>
-    <p id="main-updated" class="updated">Aggiornato: 04/09/2026 05:58</p>
+    <p id="main-updated" class="updated">Aggiornato: 04/09/2026 06:22</p>
     <a id="main-phone" class="phone-link" href="tel:"></a>
   </header>
   
   <main id="grid-view">
     
-        <section class="card" data-title="Fantasia" data-date="03/09/2026 10:57 circa" onclick="openDetail(this)">
+        <section class="card" data-title="Fantasia" data-date="03/09/2026 11:21 circa" onclick="openDetail(this)">
             <div class="card-header">
-                <h2>Fantasia</h2>
-                <p class="published">03/09/2026 10:57 circa</p>
-                <a class="card-phone" href="tel:0804054139" onclick="event.stopPropagation()">080-405.41.39</a>
+                <div class="card-title-row">
+                    <h2>Fantasia</h2>
+                    <a class="card-phone" href="tel:0804054139" onclick="event.stopPropagation()">080-405.41.39</a>
+                </div>
+                <p class="published">03/09/2026 11:21 circa</p>
             </div>
             
-                <img src="Fantasia.jpg?v=1788501533" alt="Fantasia">
+                <img src="Fantasia.jpg?v=1788502939" alt="Fantasia">
                 <pre>MENÙ DEL GIORNO 03/09/26</pre>
             
         </section>
         
         <section class="card" data-title="Cibarìa" data-date="04/09/2026 00:54 circa" onclick="openDetail(this)">
             <div class="card-header">
-                <h2>Cibarìa</h2>
+                <div class="card-title-row">
+                    <h2>Cibarìa</h2>
+                    <a class="card-phone" href="tel:0806450799" onclick="event.stopPropagation()">080-645.07.99</a>
+                </div>
                 <p class="published">04/09/2026 00:54 circa</p>
-                <a class="card-phone" href="tel:0806450799" onclick="event.stopPropagation()">080-645.07.99</a>
             </div>
             
-                <img src="Cibaria.jpg?v=1788501533" alt="Cibarìa">
+                <img src="Cibaria.jpg?v=1788502939" alt="Cibarìa">
                 <pre>3 Settembre 2026.
 Menú del giorno.</pre>
             
@@ -290,12 +305,14 @@ Menú del giorno.</pre>
         
         <section class="card" data-title="Impastamò" data-date="30/08/2026 circa" onclick="openDetail(this)">
             <div class="card-header">
-                <h2>Impastamò</h2>
+                <div class="card-title-row">
+                    <h2>Impastamò</h2>
+                    <a class="card-phone" href="tel:3925361536" onclick="event.stopPropagation()">392-536.15.36</a>
+                </div>
                 <p class="published">30/08/2026 circa</p>
-                <a class="card-phone" href="tel:3925361536" onclick="event.stopPropagation()">392-536.15.36</a>
             </div>
             
-                <img src="Impastamo.jpg?v=1788501533" alt="Impastamò">
+                <img src="Impastamo.jpg?v=1788502939" alt="Impastamò">
                 <pre>Ricarichiamo un po’ le energie!
 Ci vediamo presto con le bontà della nuova stagione in arrivo</pre>
             
@@ -303,12 +320,14 @@ Ci vediamo presto con le bontà della nuova stagione in arrivo</pre>
         
         <section class="card" data-title="Le delizie di Michela" data-date="04/09/2026 00:37 circa" onclick="openDetail(this)">
             <div class="card-header">
-                <h2>Le delizie di Michela</h2>
+                <div class="card-title-row">
+                    <h2>Le delizie di Michela</h2>
+                    <a class="card-phone" href="tel:0805212233" onclick="event.stopPropagation()">080-521.22.33</a>
+                </div>
                 <p class="published">04/09/2026 00:37 circa</p>
-                <a class="card-phone" href="tel:0805212233" onclick="event.stopPropagation()">080-521.22.33</a>
             </div>
             
-                <img src="Le_delizie_di_Michela.jpg?v=1788501533" alt="Le delizie di Michela">
+                <img src="Le_delizie_di_Michela.jpg?v=1788502939" alt="Le delizie di Michela">
                 <pre>Like
 Comment</pre>
             
@@ -316,24 +335,28 @@ Comment</pre>
         
         <section class="card" data-title="Santoro (Castellana)" data-date="04/09/2026 00:51 circa" onclick="openDetail(this)">
             <div class="card-header">
-                <h2>Santoro (Castellana)</h2>
+                <div class="card-title-row">
+                    <h2>Santoro (Castellana)</h2>
+                    <a class="card-phone" href="tel:0808598313" onclick="event.stopPropagation()">080-859.83.13</a>
+                </div>
                 <p class="published">04/09/2026 00:51 circa</p>
-                <a class="card-phone" href="tel:0808598313" onclick="event.stopPropagation()">080-859.83.13</a>
             </div>
             
-                <img src="Santoro__Castellana.jpg?v=1788501533" alt="Santoro (Castellana)">
+                <img src="Santoro__Castellana.jpg?v=1788502939" alt="Santoro (Castellana)">
                 <pre>menù del giorno 3 Settembre</pre>
             
         </section>
         
         <section class="card" data-title="Pane&amp;Co" data-date="04/09/2026" onclick="openDetail(this)">
             <div class="card-header">
-                <h2>Pane&amp;Co</h2>
+                <div class="card-title-row">
+                    <h2>Pane&amp;Co</h2>
+                    <a class="card-phone" href="tel:0804054900" onclick="event.stopPropagation()">080-405.49.00</a>
+                </div>
                 <p class="published">04/09/2026</p>
-                <a class="card-phone" href="tel:0804054900" onclick="event.stopPropagation()">080-405.49.00</a>
             </div>
             
-                <img src="Pane_Co.jpg?v=1788501533" alt="Pane&amp;Co">
+                <img src="Pane_Co.jpg?v=1788502939" alt="Pane&amp;Co">
                 <pre>Menu 4 Settembre
 
 PRIMI PIATTI DEL GIORNO
@@ -354,12 +377,14 @@ SECONDI PIATTI DEL GIORNO
         
         <section class="card" data-title="Bollenti piatti" data-date="Data non disponibile" onclick="openDetail(this)">
             <div class="card-header">
-                <h2>Bollenti piatti</h2>
+                <div class="card-title-row">
+                    <h2>Bollenti piatti</h2>
+                    <a class="card-phone" href="tel:3343185844" onclick="event.stopPropagation()">334-318.58.44</a>
+                </div>
                 <p class="published">Data non disponibile</p>
-                <a class="card-phone" href="tel:3343185844" onclick="event.stopPropagation()">334-318.58.44</a>
             </div>
             
-                <img src="Bollenti_piatti.jpg?v=1788501533" alt="Bollenti piatti">
+                <img src="Bollenti_piatti.jpg?v=1788502939" alt="Bollenti piatti">
                 <pre>PRIMI PIATTI
 ●RISO A INSALATA
 ●INSALATA DI FARRO AL SALMONE E ZUCCHINA

@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Menu IMT</title>
+    
+    <!-- Icone per la schermata Home di iOS e Android -->
+    <link rel="apple-touch-icon" href="IMT.jpg">
+    <link rel="icon" href="IMT.jpg" type="image/jpeg">
+
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #f2f2f7;
             margin: 0;
-            padding: 10px;
+            padding: 6px; 
             color: #1c1c1e;
         }
         .app-container {
@@ -20,29 +25,44 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #007aff;
-            color: white;
-            padding: 12px 12px; 
+            padding: 8px 10px;
             position: sticky;
-            top: 10px;
+            top: 6px;
             z-index: 100;
             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
             border-radius: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+        .header-pranzo {
+            background-color: #d1b246 !important; 
+            color: #1c1c1e !important; 
+        }
+        .header-cena {
+            background-color: #007aff !important; 
+            color: white !important;
+        }
+        
         .header button {
-            background: rgba(255, 255, 255, 0.2);
             border: none;
-            color: white;
             font-size: 18px;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .header-pranzo button {
+            background: rgba(0, 0, 0, 0.1);
+            color: #1c1c1e;
+        }
+        .header-cena button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
         }
         .header button:disabled {
             opacity: 0.3;
@@ -52,36 +72,36 @@
             flex-direction: column;
             align-items: center;
             flex-grow: 1;
-            cursor: pointer; /* Mostra la manina al passaggio del mouse su PC */
+            cursor: pointer;
         }
         .header-top {
-            font-size: 1.5rem;
+            font-size: 1.3rem; 
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .header h1 {
             margin: 0;
-            font-size: 0.95rem; 
+            font-size: 0.85rem; 
             text-align: center;
             font-weight: 500;
         }
         .course-card {
             background: white;
-            border-radius: 12px;
-            padding: 10px 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            padding: 8px 12px; 
+            margin-bottom: 8px; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
         .course-title {
             color: #007aff;
             background-color: #e6f4ff;
-            font-size: 1.05rem;
+            font-size: 0.95rem; 
             margin-top: 0;
-            margin-bottom: 8px; 
-            padding: 8px 10px;
-            border-radius: 8px;
+            margin-bottom: 6px; 
+            padding: 6px 8px; 
+            border-radius: 6px;
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 0.5px;
@@ -93,16 +113,15 @@
             margin: 0;
         }
         li {
-            padding: 4px 0;
+            padding: 2px 0; 
             border-bottom: 1px solid #f2f2f7;
             position: relative;
-            padding-left: 14px;
-            line-height: 1.25;
-            font-size: 0.95rem;
+            padding-left: 12px;
+            line-height: 1.15; 
+            font-size: 0.9rem; 
         }
         li:last-child {
             border-bottom: none;
-            padding-bottom: 0;
         }
         li::before {
             content: "•";
@@ -110,8 +129,8 @@
             font-weight: bold;
             position: absolute;
             left: 0;
-            font-size: 1.2rem;
-            top: 2px;
+            font-size: 1.1rem;
+            top: 0px; 
         }
         .hidden {
             display: none !important;
@@ -121,7 +140,7 @@
 <body>
 
     <div class="app-container">
-        <div class="header">
+        <div class="header" id="main-header">
             <button id="btn-prev" onclick="navigate(-1)">&#9664;</button>
             <div class="header-center" onclick="goToToday()">
                 <div class="header-top">IMT - Menu</div>
@@ -166,6 +185,13 @@
             currentIndex = index;
             const meal = menuData[currentIndex];
             document.getElementById('meal-title').innerText = meal.displayTitle;
+            
+            const header = document.getElementById('main-header');
+            if (meal.type.toLowerCase() === 'pranzo') {
+                header.className = 'header header-pranzo';
+            } else {
+                header.className = 'header header-cena';
+            }
 
             const updateList = (id, items) => {
                 const card = document.getElementById('card-' + id);

@@ -8,6 +8,13 @@
     <!-- Icone per la schermata Home di iOS e Android -->
     <link rel="apple-touch-icon" href="IMT.jpg">
     <link rel="icon" href="IMT.jpg" type="image/jpeg">
+    
+    <!-- Meta tag Open Graph per l'anteprima su WhatsApp e Social -->
+    <meta property="og:title" content="IMT - Menu">
+    <meta property="og:description" content="Menu giornaliero Pranzo e Cena">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sebastiano-mazzarisi.github.io/Menu-IMT/IMT.jpg">
+    <meta property="og:image:secure_url" content="https://sebastiano-mazzarisi.github.io/Menu-IMT/IMT.jpg">
 
     <style>
         body {
@@ -34,13 +41,15 @@
             margin-bottom: 10px;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
+        
+        /* Colori scambiati: Azzurro per Pranzo, Giallo per Cena */
         .header-pranzo {
-            background-color: #d1b246 !important; 
-            color: #1c1c1e !important; 
+            background-color: #007aff !important; 
+            color: white !important; 
         }
         .header-cena {
-            background-color: #007aff !important; 
-            color: white !important;
+            background-color: #d1b246 !important; 
+            color: #1c1c1e !important;
         }
         
         .header button {
@@ -56,13 +65,15 @@
             flex-shrink: 0;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
+        
+        /* Bottoni adattati ai nuovi sfondi */
         .header-pranzo button {
-            background: rgba(0, 0, 0, 0.1);
-            color: #1c1c1e;
-        }
-        .header-cena button {
             background: rgba(255, 255, 255, 0.2);
             color: white;
+        }
+        .header-cena button {
+            background: rgba(0, 0, 0, 0.1);
+            color: #1c1c1e;
         }
         .header button:disabled {
             opacity: 0.3;

@@ -33,7 +33,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 8px; 
+            padding: 8px 10px; 
             position: sticky;
             top: 6px;
             z-index: 100;
@@ -54,16 +54,16 @@
         
         .header-side {
             display: flex;
-            gap: 4px; 
+            gap: 6px; 
             align-items: center;
         }
 
         .header button {
             border: none;
-            font-size: 14px; 
+            font-size: 16px; 
             font-weight: bold;
-            width: 30px; 
-            height: 30px;
+            width: 32px; 
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -74,8 +74,8 @@
         }
         
         .header button svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
         }
         
         .header-pranzo button {
@@ -99,7 +99,7 @@
             padding: 0 4px; 
         }
         .header-top {
-            font-size: 1.1rem; 
+            font-size: 1.2rem; 
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -107,7 +107,7 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 0.8rem; 
+            font-size: 0.85rem; 
             text-align: center;
             font-weight: 500;
         }
@@ -205,8 +205,7 @@
     <div class="app-container">
         <div class="header" id="main-header">
             <div class="header-side">
-                <button id="btn-prev" onclick="navigate(-1, true)">&#9664;</button>
-                <button id="btn-prev-fast" onclick="navigate(-1, false)">&lt;&lt;</button>
+                <button id="btn-prev" onclick="navigate(-1)">&#9664;</button>
                 <button id="btn-speak-left" onclick="speakMenu(event)" title="Ascolta Piatti in Grassetto">
                     <svg fill="currentColor" viewBox="0 0 16 16">
                         <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
@@ -229,8 +228,7 @@
                         <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
                     </svg>
                 </button>
-                <button id="btn-next-fast" onclick="navigate(1, false)">&gt;&gt;</button>
-                <button id="btn-next" onclick="navigate(1, true)">&#9654;</button>
+                <button id="btn-next" onclick="navigate(1)">&#9654;</button>
             </div>
         </div>
         
@@ -294,7 +292,6 @@
             
             let chunksToRead = [];
 
-            // 1. Blocco Intro (Saluto, Titolo e Data)
             const dateStr = isIt ? meal.date_it : meal.date_en;
             let mealNameIt = meal.type.toLowerCase() === 'pranzo' ? 'il pranzo' : 'la cena';
             let mealNameEn = meal.type.toLowerCase() === 'pranzo' ? 'lunch' : 'dinner';
@@ -305,7 +302,6 @@
                 
             chunksToRead.push({ text: introText, delay: 200 });
             
-            // 2. Funzione per creare i blocchi dei menu uniti con 'e'
             function extractCardBoldTexts(cardId, translatedTitle) {
                 const card = document.getElementById(cardId);
                 if (card.classList.contains('hidden')) return;
@@ -332,7 +328,6 @@
                 chunksToRead.push({ text: isIt ? "Nessun piatto in grassetto da leggere." : "No bold items to read.", delay: 200 });
             }
 
-            // 3. Saluto Finale
             let closingTextIt = meal.type.toLowerCase() === 'pranzo' ? "Buon pranzo!" : "Buona cena!";
             let closingTextEn = meal.type.toLowerCase() === 'pranzo' ? "Enjoy your lunch!" : "Enjoy your dinner!";
             chunksToRead.push({ text: isIt ? closingTextIt : closingTextEn, delay: 0 });
@@ -401,8 +396,6 @@
                 if (existingClone) existingClone.remove();
             }
             
-            if (isAnimating && animType) return;
-            
             if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel();
             if (typeof speakTimeout !== 'undefined') { clearTimeout(speakTimeout); isSpeakingTimeout = false; }
             
@@ -465,9 +458,7 @@
             updateList('frutta', meal.Frutta_it, meal.Frutta_en);
 
             document.getElementById('btn-prev').disabled = (currentIndex === 0);
-            document.getElementById('btn-prev-fast').disabled = (currentIndex === 0);
             document.getElementById('btn-next').disabled = (currentIndex === menuData.length - 1);
-            document.getElementById('btn-next-fast').disabled = (currentIndex === menuData.length - 1);
 
             contentDiv.classList.remove('anim-next', 'anim-prev', 'anim-lang');
             void contentDiv.offsetWidth; 
@@ -476,14 +467,11 @@
             }
         }
 
-        function navigate(direction, animated = true) {
-            if (isAnimating && animated) return;
+        function navigate(direction) {
             const newIndex = currentIndex + direction;
             if (newIndex >= 0 && newIndex < menuData.length) {
-                let animType = null;
-                if (animated) {
-                    animType = direction > 0 ? 'next' : 'prev';
-                }
+                // Se c'è già un'animazione in corso (utente che clicca veloce), salta l'animazione!
+                let animType = isAnimating ? null : (direction > 0 ? 'next' : 'prev');
                 renderMeal(newIndex, animType);
             }
         }
@@ -508,6 +496,7 @@
         let touchstartY = 0;
         let touchendX = 0;
         let touchendY = 0;
+        let startScrollY = 0;
 
         const thresholdX = 50; 
         const thresholdY = 60; 
@@ -515,6 +504,7 @@
         document.addEventListener('touchstart', e => {
             touchstartX = e.changedTouches[0].screenX;
             touchstartY = e.changedTouches[0].screenY;
+            startScrollY = window.scrollY; 
         }, { passive: true });
 
         document.addEventListener('touchend', e => {
@@ -524,6 +514,7 @@
             
             const diffX = touchendX - touchstartX;
             const diffY = Math.abs(touchendY - touchstartY);
+            const rawDiffY = touchendY - touchstartY; 
 
             if (diffY < thresholdY) {
                 if (diffX <= -thresholdX) {
@@ -535,6 +526,9 @@
                         document.getElementById('btn-prev').click();
                     }
                 }
+            } 
+            else if (rawDiffY > 100 && Math.abs(diffX) < thresholdX && startScrollY <= 0) {
+                window.location.reload();
             }
         }, { passive: true });
 

@@ -266,10 +266,29 @@
         let speakTimeout;
         let isSpeakingTimeout = false;
 
+        let availableVoices = [];
+        function loadVoices() {
+            availableVoices = window.speechSynthesis.getVoices();
+        }
+
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = function() {
-                window.speechSynthesis.getVoices();
-            };
+            loadVoices();
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = loadVoices;
+            }
+        }
+
+        function getBestVoice(langCode) {
+            if (availableVoices.length === 0) loadVoices();
+            const langPrefix = langCode.split('-')[0].toLowerCase();
+            const filteredVoices = availableVoices.filter(v => v.lang.toLowerCase().startsWith(langPrefix));
+            if (filteredVoices.length === 0) return null;
+            const premiumKeywords = ['siri', 'enhanced', 'premium', 'natural', 'network', 'online', 'alice', 'luca', 'eloquence'];
+            for (let keyword of premiumKeywords) {
+                const best = filteredVoices.find(v => v.name.toLowerCase().includes(keyword));
+                if (best) return best;
+            }
+            return filteredVoices.find(v => v.default) || filteredVoices[0];
         }
 
         function speakMenu(event) {
@@ -333,12 +352,7 @@
             chunksToRead.push({ text: isIt ? closingTextIt : closingTextEn, delay: 0 });
 
             const langCode = isIt ? 'it-IT' : 'en-US';
-            const voices = window.speechSynthesis.getVoices();
-            let bestVoice = voices.find(v => v.lang.replace('_', '-') === langCode && 
-                                       (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural') || v.name.includes('Alice')));
-            if (!bestVoice) {
-                bestVoice = voices.find(v => v.lang.replace('_', '-').startsWith(langCode.split('-')[0]));
-            }
+            const bestVoice = getBestVoice(langCode);
 
             let chunkIndex = 0;
             
@@ -351,8 +365,12 @@
                 let currentChunk = chunksToRead[chunkIndex];
                 const utterance = new SpeechSynthesisUtterance(currentChunk.text);
                 
-                if (bestVoice) utterance.voice = bestVoice;
-                else utterance.lang = langCode;
+                if (bestVoice) {
+                    utterance.voice = bestVoice;
+                } else {
+                    utterance.lang = langCode;
+                }
+                
                 utterance.rate = 0.9; 
                 
                 utterance.onend = function() {
@@ -378,7 +396,15 @@
         function toggleLanguage() {
             if (isAnimating) return; 
             currentLang = currentLang === 'it' ? 'en' : 'it';
-            renderMeal(currentIndex, 'lang');
+            
+            sessionStorage.setItem('savedLang', currentLang);
+            if (menuData[currentIndex]) {
+                sessionStorage.setItem('savedDate', menuData[currentIndex].date);
+                sessionStorage.setItem('savedType', menuData[currentIndex].type);
+            }
+            sessionStorage.setItem('justToggled', 'true');
+            
+            window.location.href = window.location.pathname + '?v=' + new Date().getTime();
         }
 
         function renderMeal(index, animType) {
@@ -395,6 +421,8 @@
                 const existingClone = document.getElementById('anim-clone');
                 if (existingClone) existingClone.remove();
             }
+            
+            if (isAnimating && animType) return;
             
             if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel();
             if (typeof speakTimeout !== 'undefined') { clearTimeout(speakTimeout); isSpeakingTimeout = false; }
@@ -470,7 +498,6 @@
         function navigate(direction) {
             const newIndex = currentIndex + direction;
             if (newIndex >= 0 && newIndex < menuData.length) {
-                // Se c'è già un'animazione in corso (utente che clicca veloce), salta l'animazione!
                 let animType = isAnimating ? null : (direction > 0 ? 'next' : 'prev');
                 renderMeal(newIndex, animType);
             }
@@ -528,7 +555,12 @@
                 }
             } 
             else if (rawDiffY > 100 && Math.abs(diffX) < thresholdX && startScrollY <= 0) {
-                window.location.reload();
+                sessionStorage.setItem('savedLang', currentLang);
+                if (menuData[currentIndex]) {
+                    sessionStorage.setItem('savedDate', menuData[currentIndex].date);
+                    sessionStorage.setItem('savedType', menuData[currentIndex].type);
+                }
+                window.location.href = window.location.pathname + '?v=' + new Date().getTime();
             }
         }, { passive: true });
 
@@ -564,8 +596,31 @@
         }
 
         window.onload = () => {
-            currentIndex = getInitialMealIndex();
-            renderMeal(currentIndex, null);
+            if (sessionStorage.getItem('savedLang')) {
+                currentLang = sessionStorage.getItem('savedLang');
+            }
+            
+            let animToPlay = null;
+            if (sessionStorage.getItem('justToggled')) {
+                animToPlay = 'lang';
+                sessionStorage.removeItem('justToggled');
+            }
+
+            let startIdx = getInitialMealIndex();
+            const savedDate = sessionStorage.getItem('savedDate');
+            const savedType = sessionStorage.getItem('savedType');
+
+            if (savedDate && savedType) {
+                let foundIndex = menuData.findIndex(m => m.date === savedDate && m.type === savedType);
+                if (foundIndex !== -1) {
+                    startIdx = foundIndex;
+                }
+                sessionStorage.removeItem('savedDate');
+                sessionStorage.removeItem('savedType');
+            }
+
+            currentIndex = startIdx;
+            renderMeal(currentIndex, animToPlay);
         };
     </script>
 </body>

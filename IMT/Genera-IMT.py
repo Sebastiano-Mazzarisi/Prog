@@ -1,8 +1,10 @@
-# Nome.py: Teresa.py
-# Data e ora ultima modifica: 07/09/2026 11:00
-# Descrizione: Legge menu-giornaliero-completo-estate-2026.xlsx e genera Menu-IMT.html. Implementa la selezione forzata delle voci TTS di alta qualità (Premium, Siri, Natural) su iOS e Android.
+# Nome.py: GeneraMenu.py
+# Data e ora ultima modifica: 07/09/2026 11:30
+# Descrizione: Legge menu-giornaliero-completo-estate-2026.xlsx e genera Menu-IMT.html.
+#              Aggiunta la generazione automatica di menu_siri.json per l'integrazione
+#              vocale nativa e hands-free con l'app Comandi Rapidi di iOS.
 # File di input: menu-giornaliero-completo-estate-2026.xlsx
-# File di output: Menu-IMT.html
+# File di output: Menu-IMT.html, menu_siri.json
 # Parametri: Nessuno
 
 import pandas as pd
@@ -17,6 +19,7 @@ def genera_html():
     file_input = 'menu-giornaliero-completo-estate-2026.xlsx'
     file_output = 'Menu-IMT.html'
     dizionario_file = 'dizionario_menu.json'
+    file_siri = 'menu_siri.json'
     
     try:
         df = pd.read_excel(file_input)
@@ -149,6 +152,37 @@ def genera_html():
     def sort_key(b):
         return (b['date'], 0 if b['type'].lower() == 'pranzo' else 1)
     blocks.sort(key=sort_key)
+
+    # === CREAZIONE DEL FILE JSON PER SIRI ===
+    siri_data = {}
+    for block in blocks:
+        is_pranzo = block['type'].lower() == 'pranzo'
+        meal_name = "il pranzo" if is_pranzo else "la cena"
+        
+        # Costruisce la frase naturale per Siri
+        testo_siri = f"Ciao, ecco {meal_name} della IMT di oggi, {block['date_it']}. "
+        
+        def estrai_testo(lista_html, nome_portata):
+            piatti = [item.replace("<strong>", "").replace("</strong>", "") for item in lista_html if "<strong>" in item]
+            if piatti:
+                return f"{nome_portata}. " + " e ".join(piatti) + ". "
+            return ""
+            
+        testo_siri += estrai_testo(block['Primi_it'], "Primi")
+        testo_siri += estrai_testo(block['Secondi_it'], "Secondi")
+        testo_siri += estrai_testo(block['Contorno_it'], "Contorni")
+        testo_siri += estrai_testo(block['Frutta_it'], "Frutta e dessert")
+        
+        testo_siri += "Buon pranzo!" if is_pranzo else "Buona cena!"
+        
+        # Chiave di ricerca univoca es: "2026-09-07_Pranzo"
+        chiave = f"{block['date']}_{block['type']}"
+        siri_data[chiave] = testo_siri
+
+    with open(file_siri, 'w', encoding='utf-8') as f:
+        json.dump(siri_data, f, indent=4, ensure_ascii=False)
+    
+    # === FINE CREAZIONE JSON SIRI ===
 
     html_template = """<!DOCTYPE html>
 <html lang="it">
@@ -418,7 +452,6 @@ def genera_html():
         let speakTimeout;
         let isSpeakingTimeout = false;
 
-        // Inizializza l'elenco delle voci in anticipo per i dispositivi mobili
         let availableVoices = [];
         function loadVoices() {
             availableVoices = window.speechSynthesis.getVoices();
@@ -431,24 +464,16 @@ def genera_html():
             }
         }
 
-        // --- FUNZIONE PER RICERCARE LA MIGLIORE VOCE PREMIUM ---
         function getBestVoice(langCode) {
             if (availableVoices.length === 0) loadVoices();
-            
             const langPrefix = langCode.split('-')[0].toLowerCase();
             const filteredVoices = availableVoices.filter(v => v.lang.toLowerCase().startsWith(langPrefix));
-
             if (filteredVoices.length === 0) return null;
-
-            // Cerca attivamente le voci di massima qualità (iOS e Android)
             const premiumKeywords = ['siri', 'enhanced', 'premium', 'natural', 'network', 'online', 'alice', 'luca', 'eloquence'];
-
             for (let keyword of premiumKeywords) {
                 const best = filteredVoices.find(v => v.name.toLowerCase().includes(keyword));
                 if (best) return best;
             }
-
-            // Fallback: utilizza la voce predefinita di sistema se non trova le varianti premium
             return filteredVoices.find(v => v.default) || filteredVoices[0];
         }
 
@@ -793,7 +818,7 @@ def genera_html():
     with open(file_output, 'w', encoding='utf-8') as f:
         f.write(html_code)
 
-    print(f"File {file_output} generato con successo!")
+    print(f"File {file_output} generato con successo! Aggiunto menu_siri.json.")
 
 if __name__ == "__main__":
     genera_html()

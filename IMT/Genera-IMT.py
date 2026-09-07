@@ -1,8 +1,8 @@
 # Nome.py: GeneraMenu.py
-# Data e ora ultima modifica: 06/09/2026 19:45
+# Data e ora ultima modifica: 07/09/2026 09:30
 # Descrizione: Legge menu-giornaliero-completo-estate-2026.xlsx e genera Menu-IMT.html.
-#              Implementa la traduzione automatica (con cache locale dizionario_menu.json) e un
-#              cambio lingua interattivo (IT/EN) al clic sulla schermata dei menu.
+#              Aggiunte le animazioni CSS per il cambio pagina (scorrimento orizzontale) e 
+#              per il cambio lingua (discesa dall'alto).
 # File di input: menu-giornaliero-completo-estate-2026.xlsx
 # File di output: Menu-IMT.html
 # Parametri: Nessuno
@@ -28,7 +28,6 @@ def genera_html():
         
     df = df.fillna('')
     
-    # --- FASE 1: RACCOLTA E TRADUZIONE DEI PIATTI ---
     unique_terms = set()
     for col in ['Primi', 'Secondi', 'Contorni', 'Frutta e Dessert']:
         for val in df[col]:
@@ -66,9 +65,9 @@ def genera_html():
                     
                 dizionario[term] = tradotto
             except Exception as e:
-                dizionario[term] = term # In caso di errore mantiene l'italiano
+                dizionario[term] = term 
                 
-            time.sleep(0.3) # Pausa necessaria per non farsi bloccare da Google
+            time.sleep(0.3) 
             if (i + 1) % 10 == 0:
                 print(f"Tradotti {i + 1} di {len(nuovi_termini)}...")
                 
@@ -76,7 +75,6 @@ def genera_html():
             json.dump(dizionario, f, indent=4, ensure_ascii=False)
         print("Dizionario salvato con successo!")
 
-    # --- FASE 2: CREAZIONE DEI DATI HTML ---
     blocks = []
     
     giorni_it = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"]
@@ -177,6 +175,7 @@ def genera_html():
             margin: 0;
             padding: 6px; 
             color: #1c1c1e;
+            overflow-x: hidden; 
         }
         .app-container {
             max-width: 500px;
@@ -250,7 +249,6 @@ def genera_html():
             text-align: center;
             font-weight: 500;
         }
-        /* Cliccabile per il cambio lingua */
         .content {
             cursor: pointer;
         }
@@ -302,6 +300,30 @@ def genera_html():
         .hidden {
             display: none !important;
         }
+
+        /* --- ANIMAZIONI CSS --- */
+        .anim-next {
+            animation: slideInRight 0.3s ease-out forwards;
+        }
+        .anim-prev {
+            animation: slideInLeft 0.3s ease-out forwards;
+        }
+        .anim-lang {
+            animation: dropDown 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes slideInRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes dropDown {
+            0% { transform: translateY(-30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -316,7 +338,6 @@ def genera_html():
             <button id="btn-next" onclick="navigate(1)">&#9654;</button>
         </div>
         
-        <!-- Il div è cliccabile e gestisce il cambio lingua -->
         <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua / Click to change language">
             <div class="course-card" id="card-primi">
                 <h2 class="course-title" id="title-primi">Primi</h2>
@@ -343,14 +364,15 @@ def genera_html():
     <script>
         const menuData = __JSON_DATA__;
         let currentIndex = 0;
-        let currentLang = 'it'; // Lingua iniziale
+        let currentLang = 'it'; 
 
         function toggleLanguage() {
             currentLang = currentLang === 'it' ? 'en' : 'it';
-            renderMeal(currentIndex);
+            renderMeal(currentIndex, 'lang');
         }
 
-        function renderMeal(index) {
+        // Aggiunto il parametro animType per gestire le animazioni ('next', 'prev', 'lang')
+        function renderMeal(index, animType) {
             if (!menuData || menuData.length === 0) {
                 document.getElementById('meal-title').innerText = currentLang === 'it' ? "Nessun menu disponibile" : "No menu available";
                 return;
@@ -360,9 +382,17 @@ def genera_html():
             const meal = menuData[currentIndex];
             const isIt = currentLang === 'it';
             
+            // Gestione animazione del contenitore
+            const contentDiv = document.getElementById('menu-content');
+            contentDiv.classList.remove('anim-next', 'anim-prev', 'anim-lang');
+            // Questo comando forza il browser a resettare l'animazione precedente
+            void contentDiv.offsetWidth; 
+            if (animType) {
+                contentDiv.classList.add('anim-' + animType);
+            }
+
             document.getElementById('meal-title').innerText = isIt ? meal.displayTitle_it : meal.displayTitle_en;
             
-            // Traduzione dinamica dei titoli delle portate
             document.getElementById('title-primi').innerText = isIt ? "Primi" : "First Courses";
             document.getElementById('title-secondi').innerText = isIt ? "Secondi" : "Main Courses";
             document.getElementById('title-contorno').innerText = isIt ? "Contorni" : "Side Dishes";
@@ -399,13 +429,15 @@ def genera_html():
         function navigate(direction) {
             const newIndex = currentIndex + direction;
             if (newIndex >= 0 && newIndex < menuData.length) {
-                renderMeal(newIndex);
+                // Passa 'next' o 'prev' a seconda della direzione per avviare l'animazione corretta
+                renderMeal(newIndex, direction > 0 ? 'next' : 'prev');
             }
         }
         
         function goToToday() {
             const index = getInitialMealIndex();
-            renderMeal(index);
+            // Per il ritorno a "Oggi", l'animazione a discesa è l'effetto visivo migliore
+            renderMeal(index, 'lang'); 
         }
 
         window.addEventListener('keydown', function(e) {
@@ -415,6 +447,39 @@ def genera_html():
                 document.getElementById('btn-next').click();
             }
         });
+
+        let touchstartX = 0;
+        let touchstartY = 0;
+        let touchendX = 0;
+        let touchendY = 0;
+
+        const thresholdX = 50; 
+        const thresholdY = 60; 
+
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+            touchstartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            touchendY = e.changedTouches[0].screenY;
+            
+            const diffX = touchendX - touchstartX;
+            const diffY = Math.abs(touchendY - touchstartY);
+
+            if (diffY < thresholdY) {
+                if (diffX <= -thresholdX) {
+                    if(!document.getElementById('btn-next').disabled) {
+                        document.getElementById('btn-next').click();
+                    }
+                } else if (diffX >= thresholdX) {
+                    if(!document.getElementById('btn-prev').disabled) {
+                        document.getElementById('btn-prev').click();
+                    }
+                }
+            }
+        }, { passive: true });
 
         function getInitialMealIndex() {
             if (!menuData || menuData.length === 0) return 0;
@@ -449,7 +514,8 @@ def genera_html():
 
         window.onload = () => {
             currentIndex = getInitialMealIndex();
-            renderMeal(currentIndex);
+            // Al primo caricamento nessuna animazione
+            renderMeal(currentIndex); 
         };
     </script>
 </body>
@@ -461,7 +527,7 @@ def genera_html():
     with open(file_output, 'w', encoding='utf-8') as f:
         f.write(html_code)
 
-    print(f"File {file_output} generato con successo! Funzione bilingue interattiva attivata.")
+    print(f"File {file_output} generato con successo! Animazioni di transizione (swipe e lingua) attivate.")
 
 if __name__ == "__main__":
     genera_html()

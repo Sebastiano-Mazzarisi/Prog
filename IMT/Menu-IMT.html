@@ -23,7 +23,7 @@
             margin: 0;
             padding: 6px; 
             color: #1c1c1e;
-            overflow-x: hidden; /* Evita lo scroll orizzontale della pagina */
+            overflow-x: hidden; 
         }
         .app-container {
             max-width: 500px;
@@ -148,6 +148,30 @@
         .hidden {
             display: none !important;
         }
+
+        /* --- ANIMAZIONI CSS --- */
+        .anim-next {
+            animation: slideInRight 0.3s ease-out forwards;
+        }
+        .anim-prev {
+            animation: slideInLeft 0.3s ease-out forwards;
+        }
+        .anim-lang {
+            animation: dropDown 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes slideInRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes dropDown {
+            0% { transform: translateY(-30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -192,10 +216,11 @@
 
         function toggleLanguage() {
             currentLang = currentLang === 'it' ? 'en' : 'it';
-            renderMeal(currentIndex);
+            renderMeal(currentIndex, 'lang');
         }
 
-        function renderMeal(index) {
+        // Aggiunto il parametro animType per gestire le animazioni ('next', 'prev', 'lang')
+        function renderMeal(index, animType) {
             if (!menuData || menuData.length === 0) {
                 document.getElementById('meal-title').innerText = currentLang === 'it' ? "Nessun menu disponibile" : "No menu available";
                 return;
@@ -205,6 +230,15 @@
             const meal = menuData[currentIndex];
             const isIt = currentLang === 'it';
             
+            // Gestione animazione del contenitore
+            const contentDiv = document.getElementById('menu-content');
+            contentDiv.classList.remove('anim-next', 'anim-prev', 'anim-lang');
+            // Questo comando forza il browser a resettare l'animazione precedente
+            void contentDiv.offsetWidth; 
+            if (animType) {
+                contentDiv.classList.add('anim-' + animType);
+            }
+
             document.getElementById('meal-title').innerText = isIt ? meal.displayTitle_it : meal.displayTitle_en;
             
             document.getElementById('title-primi').innerText = isIt ? "Primi" : "First Courses";
@@ -243,16 +277,17 @@
         function navigate(direction) {
             const newIndex = currentIndex + direction;
             if (newIndex >= 0 && newIndex < menuData.length) {
-                renderMeal(newIndex);
+                // Passa 'next' o 'prev' a seconda della direzione per avviare l'animazione corretta
+                renderMeal(newIndex, direction > 0 ? 'next' : 'prev');
             }
         }
         
         function goToToday() {
             const index = getInitialMealIndex();
-            renderMeal(index);
+            // Per il ritorno a "Oggi", l'animazione a discesa è l'effetto visivo migliore
+            renderMeal(index, 'lang'); 
         }
 
-        /* Navigazione tramite tastiera */
         window.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
                 document.getElementById('btn-prev').click();
@@ -261,14 +296,13 @@
             }
         });
 
-        /* Logica per lo SWIPE su schermi touch */
         let touchstartX = 0;
         let touchstartY = 0;
         let touchendX = 0;
         let touchendY = 0;
 
-        const thresholdX = 50; // Distanza minima per considerare valido lo scorrimento orizzontale
-        const thresholdY = 60; // Tolleranza massima per lo scorrimento verticale (se si muove troppo in su o in giù, non è uno swipe)
+        const thresholdX = 50; 
+        const thresholdY = 60; 
 
         document.addEventListener('touchstart', e => {
             touchstartX = e.changedTouches[0].screenX;
@@ -282,15 +316,12 @@
             const diffX = touchendX - touchstartX;
             const diffY = Math.abs(touchendY - touchstartY);
 
-            // Verifica che lo scorrimento sia stato prevalentemente orizzontale
             if (diffY < thresholdY) {
                 if (diffX <= -thresholdX) {
-                    // Scorrimento verso sinistra -> Prossimo pasto
                     if(!document.getElementById('btn-next').disabled) {
                         document.getElementById('btn-next').click();
                     }
                 } else if (diffX >= thresholdX) {
-                    // Scorrimento verso destra -> Pasto precedente
                     if(!document.getElementById('btn-prev').disabled) {
                         document.getElementById('btn-prev').click();
                     }
@@ -331,7 +362,8 @@
 
         window.onload = () => {
             currentIndex = getInitialMealIndex();
-            renderMeal(currentIndex);
+            // Al primo caricamento nessuna animazione
+            renderMeal(currentIndex); 
         };
     </script>
 </body>

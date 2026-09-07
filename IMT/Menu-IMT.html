@@ -113,10 +113,7 @@
             event.stopPropagation(); 
             if (!('speechSynthesis' in window)) return;
             if (window.speechSynthesis.speaking || isSpeakingTimeout) {
-                window.speechSynthesis.cancel();
-                clearTimeout(speakTimeout);
-                isSpeakingTimeout = false;
-                return;
+                window.speechSynthesis.cancel(); clearTimeout(speakTimeout); isSpeakingTimeout = false; return;
             }
 
             const meal = menuData[currentIndex];

@@ -1,7 +1,8 @@
 # Nome.py: GeneraMenu.py
-# Data e ora ultima modifica: 07/09/2026 11:45
+# Data e ora ultima modifica: 07/09/2026 12:00
 # Descrizione: Legge menu-giornaliero-completo-estate-2026.xlsx e genera Menu-IMT.html.
-#              Generazione del file menu_siri.json ultra-semplificato per iOS Shortcuts.
+#              Generazione del file menu_siri.json con date multi-formato per evitare 
+#              qualsiasi formattazione lato iOS Shortcuts.
 # File di input: menu-giornaliero-completo-estate-2026.xlsx
 # File di output: Menu-IMT.html, menu_siri.json
 # Parametri: Nessuno
@@ -142,7 +143,7 @@ def genera_html():
         return (b['date'], 0 if b['type'].lower() == 'pranzo' else 1)
     blocks.sort(key=sort_key)
 
-    # === NUOVA CREAZIONE FILE JSON PER SIRI (ULTRA SEMPLIFICATA) ===
+    # === NUOVA CREAZIONE FILE JSON PER SIRI (MULTIFORMATO A PROVA DI ERRORE) ===
     siri_data = {}
     pasti_per_data = {}
     
@@ -153,27 +154,49 @@ def genera_html():
         pasti_per_data[d].append(block)
         
     for data_iso, pasti in pasti_per_data.items():
-        data_it_str = pasti[0]['date_it']
-        testo_siri = f"Ciao! Ecco il menu della IMT di oggi, {data_it_str}. "
-        
-        for b in pasti:
-            is_pranzo = b['type'].lower() == 'pranzo'
-            testo_siri += "A pranzo abbiamo: " if is_pranzo else "Mentre a cena c'è: "
+        try:
+            d_obj = datetime.strptime(data_iso, "%Y-%m-%d")
             
-            def estrai_testo(lista_html):
-                piatti = [item.replace("<strong>", "").replace("</strong>", "") for item in lista_html if "<strong>" in item]
-                if piatti:
-                    return " e ".join(piatti) + ". "
-                return ""
+            data_it_str = pasti[0]['date_it']
+            testo_siri = f"Ciao! Ecco il menu della IMT di oggi, {data_it_str}. "
             
-            primi = estrai_testo(b['Primi_it'])
-            secondi = estrai_testo(b['Secondi_it'])
-            contorni = estrai_testo(b['Contorno_it'])
+            for b in pasti:
+                is_pranzo = b['type'].lower() == 'pranzo'
+                testo_siri += "A pranzo abbiamo: " if is_pranzo else "Mentre a cena c'è: "
+                
+                def estrai_testo(lista_html):
+                    piatti = [item.replace("<strong>", "").replace("</strong>", "") for item in lista_html if "<strong>" in item]
+                    if piatti:
+                        return " e ".join(piatti) + ". "
+                    return ""
+                
+                primi = estrai_testo(b['Primi_it'])
+                secondi = estrai_testo(b['Secondi_it'])
+                contorni = estrai_testo(b['Contorno_it'])
+                
+                testo_siri += primi + secondi + contorni
+                
+            testo_siri += "Buon appetito!"
             
-            testo_siri += primi + secondi + contorni
+            # Genera TUTTE le possibili stringhe di data che l'iPhone potrebbe inviare
+            formati_possibili = [
+                data_iso,
+                d_obj.strftime("%d/%m/%Y"),
+                d_obj.strftime("%d/%m/%y"),
+                f"{d_obj.day}/{d_obj.month}/{d_obj.year}",
+                f"{d_obj.day:02d}/{d_obj.month:02d}/{d_obj.year}",
+                f"{d_obj.day} {mesi_it[d_obj.month][:3]} {d_obj.year}",
+                f"{d_obj.day} {mesi_it[d_obj.month][:3]}. {d_obj.year}",
+                f"{d_obj.day} {mesi_it[d_obj.month]} {d_obj.year}",
+                f"{giorni_it[d_obj.weekday()]} {d_obj.day} {mesi_it[d_obj.month]} {d_obj.year}",
+                f"{giorni_it[d_obj.weekday()].lower()} {d_obj.day} {mesi_it[d_obj.month]} {d_obj.year}"
+            ]
             
-        testo_siri += "Buon appetito!"
-        siri_data[data_iso] = testo_siri
+            for fmt in set(formati_possibili):
+                siri_data[fmt] = testo_siri
+                
+        except Exception as e:
+            pass
 
     with open(file_siri, 'w', encoding='utf-8') as f:
         json.dump(siri_data, f, indent=4, ensure_ascii=False)
@@ -294,10 +317,7 @@ def genera_html():
             event.stopPropagation(); 
             if (!('speechSynthesis' in window)) return;
             if (window.speechSynthesis.speaking || isSpeakingTimeout) {
-                window.speechSynthesis.cancel();
-                clearTimeout(speakTimeout);
-                isSpeakingTimeout = false;
-                return;
+                window.speechSynthesis.cancel(); clearTimeout(speakTimeout); isSpeakingTimeout = false; return;
             }
 
             const meal = menuData[currentIndex];
@@ -510,7 +530,7 @@ def genera_html():
     with open(file_output, 'w', encoding='utf-8') as f:
         f.write(html_code)
 
-    print(f"File generati con successo! Ricordati di caricare su GitHub sia Menu-IMT.html che menu_siri.json")
+    print(f"File generati con successo. JSON per Siri ultra-semplificato generato.")
 
 if __name__ == "__main__":
     genera_html()

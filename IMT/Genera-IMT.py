@@ -1,8 +1,8 @@
 # Nome.py: GeneraMenu.py
-# Data e ora ultima modifica: 07/09/2026 09:30
+# Data e ora ultima modifica: 07/09/2026 10:35
 # Descrizione: Legge menu-giornaliero-completo-estate-2026.xlsx e genera Menu-IMT.html.
-#              Aggiunte le animazioni CSS per il cambio pagina (scorrimento orizzontale) e 
-#              per il cambio lingua (discesa dall'alto).
+#              Sintesi vocale ottimizzata: le alternative sono collegate con "e", i gruppi 
+#              sono separati da 0.2s e la lettura si conclude con "Buon pranzo" o "Buona cena".
 # File di input: menu-giornaliero-completo-estate-2026.xlsx
 # File di output: Menu-IMT.html
 # Parametri: Nessuno
@@ -127,14 +127,16 @@ def genera_html():
             formatted_date_it = str(data_val)
             formatted_date_en = str(data_val)
 
-        display_title_it = f"{pasto_val.upper()}: {formatted_date_it}"
-        display_title_en = f"{'LUNCH' if pasto_val.lower() == 'pranzo' else 'DINNER'}: {formatted_date_en}"
+        meal_type_it = pasto_val.upper()
+        meal_type_en = "LUNCH" if pasto_val.lower() == "pranzo" else "DINNER"
             
         block = {
             'type': pasto_val,
             'date': iso_date,
-            'displayTitle_it': display_title_it,
-            'displayTitle_en': display_title_en,
+            'meal_type_it': meal_type_it,
+            'meal_type_en': meal_type_en,
+            'date_it': formatted_date_it,
+            'date_en': formatted_date_en,
             'Primi_it': get_items(row.get('Primi', ''), 'it'),
             'Primi_en': get_items(row.get('Primi', ''), 'en'),
             'Secondi_it': get_items(row.get('Secondi', ''), 'it'),
@@ -185,7 +187,7 @@ def genera_html():
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 10px;
+            padding: 8px 8px; 
             position: sticky;
             top: 6px;
             z-index: 100;
@@ -204,11 +206,18 @@ def genera_html():
             color: #1c1c1e !important;
         }
         
+        .header-side {
+            display: flex;
+            gap: 4px; 
+            align-items: center;
+        }
+
         .header button {
             border: none;
-            font-size: 18px;
-            width: 32px;
-            height: 32px;
+            font-size: 14px; 
+            font-weight: bold;
+            width: 30px; 
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -216,6 +225,11 @@ def genera_html():
             justify-content: center;
             flex-shrink: 0;
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .header button svg {
+            width: 16px;
+            height: 16px;
         }
         
         .header-pranzo button {
@@ -229,15 +243,17 @@ def genera_html():
         .header button:disabled {
             opacity: 0.3;
         }
+        
         .header-center {
             display: flex;
             flex-direction: column;
             align-items: center;
             flex-grow: 1;
             cursor: pointer;
+            padding: 0 4px; 
         }
         .header-top {
-            font-size: 1.3rem; 
+            font-size: 1.1rem; 
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -245,13 +261,26 @@ def genera_html():
         }
         .header h1 {
             margin: 0;
-            font-size: 0.85rem; 
+            font-size: 0.8rem; 
             text-align: center;
             font-weight: 500;
         }
+        
+        .content-wrapper {
+            position: relative;
+            overflow: hidden; 
+            border-radius: 10px;
+        }
+        
         .content {
             cursor: pointer;
+            position: relative;
+            z-index: 2; 
+            background-color: #f2f2f7; 
+            width: 100%;
+            box-sizing: border-box;
         }
+        
         .course-card {
             background: white;
             border-radius: 10px;
@@ -301,28 +330,27 @@ def genera_html():
             display: none !important;
         }
 
-        /* --- ANIMAZIONI CSS --- */
         .anim-next {
-            animation: slideInRight 0.3s ease-out forwards;
+            animation: slideOverRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
         .anim-prev {
-            animation: slideInLeft 0.3s ease-out forwards;
+            animation: slideOverLeft 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
         .anim-lang {
-            animation: dropDown 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: dropDown 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        @keyframes slideInRight {
-            0% { transform: translateX(100%); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
+        @keyframes slideOverRight {
+            0% { transform: translateX(100%); box-shadow: -15px 0 20px rgba(0,0,0,0.1); }
+            100% { transform: translateX(0); box-shadow: 0 0 0 rgba(0,0,0,0); }
         }
-        @keyframes slideInLeft {
-            0% { transform: translateX(-100%); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
+        @keyframes slideOverLeft {
+            0% { transform: translateX(-100%); box-shadow: 15px 0 20px rgba(0,0,0,0.1); }
+            100% { transform: translateX(0); box-shadow: 0 0 0 rgba(0,0,0,0); }
         }
         @keyframes dropDown {
-            0% { transform: translateY(-30px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+            0% { transform: translateY(-100%); box-shadow: 0 15px 20px rgba(0,0,0,0.1); opacity: 1; }
+            100% { transform: translateY(0); box-shadow: 0 0 0 rgba(0,0,0,0); opacity: 1; }
         }
     </style>
 </head>
@@ -330,33 +358,57 @@ def genera_html():
 
     <div class="app-container">
         <div class="header" id="main-header">
-            <button id="btn-prev" onclick="navigate(-1)">&#9664;</button>
-            <div class="header-center" onclick="goToToday()" title="Torna a Oggi / Go to Today">
-                <div class="header-top">IMT - Menu</div>
-                <h1 id="meal-title">Caricamento...</h1>
+            <div class="header-side">
+                <button id="btn-prev" onclick="navigate(-1, true)">&#9664;</button>
+                <button id="btn-prev-fast" onclick="navigate(-1, false)">&lt;&lt;</button>
+                <button id="btn-speak-left" onclick="speakMenu(event)" title="Ascolta Piatti in Grassetto">
+                    <svg fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
+                        <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89l.706.706z"/>
+                        <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+                    </svg>
+                </button>
             </div>
-            <button id="btn-next" onclick="navigate(1)">&#9654;</button>
+            
+            <div class="header-center" onclick="goToToday()" title="Torna a Oggi / Go to Today">
+                <div class="header-top" id="meal-type">IMT - Menu</div>
+                <h1 id="meal-date">Caricamento...</h1>
+            </div>
+            
+            <div class="header-side">
+                <button id="btn-speak-right" onclick="speakMenu(event)" title="Ascolta Piatti in Grassetto">
+                    <svg fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
+                        <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89l.706.706z"/>
+                        <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+                    </svg>
+                </button>
+                <button id="btn-next-fast" onclick="navigate(1, false)">&gt;&gt;</button>
+                <button id="btn-next" onclick="navigate(1, true)">&#9654;</button>
+            </div>
         </div>
         
-        <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua / Click to change language">
-            <div class="course-card" id="card-primi">
-                <h2 class="course-title" id="title-primi">Primi</h2>
-                <ul id="list-primi"></ul>
-            </div>
-            
-            <div class="course-card" id="card-secondi">
-                <h2 class="course-title" id="title-secondi">Secondi</h2>
-                <ul id="list-secondi"></ul>
-            </div>
-            
-            <div class="course-card" id="card-contorno">
-                <h2 class="course-title" id="title-contorno">Contorni</h2>
-                <ul id="list-contorno"></ul>
-            </div>
-            
-            <div class="course-card" id="card-frutta">
-                <h2 class="course-title" id="title-frutta">Frutta / Dessert</h2>
-                <ul id="list-frutta"></ul>
+        <div class="content-wrapper" id="content-wrapper">
+            <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua / Click to change language">
+                <div class="course-card" id="card-primi">
+                    <h2 class="course-title" id="title-primi">Primi</h2>
+                    <ul id="list-primi"></ul>
+                </div>
+                
+                <div class="course-card" id="card-secondi">
+                    <h2 class="course-title" id="title-secondi">Secondi</h2>
+                    <ul id="list-secondi"></ul>
+                </div>
+                
+                <div class="course-card" id="card-contorno">
+                    <h2 class="course-title" id="title-contorno">Contorni</h2>
+                    <ul id="list-contorno"></ul>
+                </div>
+                
+                <div class="course-card" id="card-frutta">
+                    <h2 class="course-title" id="title-frutta">Frutta / Dessert</h2>
+                    <ul id="list-frutta"></ul>
+                </div>
             </div>
         </div>
     </div>
@@ -365,33 +417,177 @@ def genera_html():
         const menuData = __JSON_DATA__;
         let currentIndex = 0;
         let currentLang = 'it'; 
+        let isAnimating = false; 
+
+        let speakTimeout;
+        let isSpeakingTimeout = false;
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        function speakMenu(event) {
+            event.stopPropagation(); 
+            
+            if (!('speechSynthesis' in window)) {
+                alert(currentLang === 'it' ? "Sintesi vocale non supportata." : "Text-to-speech not supported.");
+                return;
+            }
+
+            if (window.speechSynthesis.speaking || isSpeakingTimeout) {
+                window.speechSynthesis.cancel();
+                clearTimeout(speakTimeout);
+                isSpeakingTimeout = false;
+                return;
+            }
+
+            const meal = menuData[currentIndex];
+            const isIt = currentLang === 'it';
+            
+            let chunksToRead = [];
+
+            // 1. Blocco Intro (Saluto, Titolo e Data)
+            const dateStr = isIt ? meal.date_it : meal.date_en;
+            let mealNameIt = meal.type.toLowerCase() === 'pranzo' ? 'il pranzo' : 'la cena';
+            let mealNameEn = meal.type.toLowerCase() === 'pranzo' ? 'lunch' : 'dinner';
+            
+            let introText = isIt ? 
+                `Ciao, ecco ${mealNameIt} della IMT di oggi, ${dateStr}.` : 
+                `Hello, here is the IMT ${mealNameEn} for today, ${dateStr}.`;
+                
+            chunksToRead.push({ text: introText, delay: 200 });
+            
+            // 2. Funzione per creare i blocchi dei menu uniti con 'e'
+            function extractCardBoldTexts(cardId, translatedTitle) {
+                const card = document.getElementById(cardId);
+                if (card.classList.contains('hidden')) return;
+                const boldElements = card.querySelectorAll('strong');
+                if (boldElements.length === 0) return;
+                
+                let itemsArray = [];
+                boldElements.forEach(el => {
+                    itemsArray.push(el.innerText);
+                });
+                
+                let conjunction = isIt ? " e " : " and ";
+                let joinedText = itemsArray.join(conjunction);
+                
+                chunksToRead.push({ text: translatedTitle + ". " + joinedText + ".", delay: 200 });
+            }
+            
+            extractCardBoldTexts('card-primi', isIt ? "Primi" : "First Courses");
+            extractCardBoldTexts('card-secondi', isIt ? "Secondi" : "Main Courses");
+            extractCardBoldTexts('card-contorno', isIt ? "Contorni" : "Side Dishes");
+            extractCardBoldTexts('card-frutta', isIt ? "Frutta e Dessert" : "Fruit and Dessert");
+            
+            if (chunksToRead.length === 1) { 
+                chunksToRead.push({ text: isIt ? "Nessun piatto in grassetto da leggere." : "No bold items to read.", delay: 200 });
+            }
+
+            // 3. Saluto Finale
+            let closingTextIt = meal.type.toLowerCase() === 'pranzo' ? "Buon pranzo!" : "Buona cena!";
+            let closingTextEn = meal.type.toLowerCase() === 'pranzo' ? "Enjoy your lunch!" : "Enjoy your dinner!";
+            chunksToRead.push({ text: isIt ? closingTextIt : closingTextEn, delay: 0 });
+
+            const langCode = isIt ? 'it-IT' : 'en-US';
+            const voices = window.speechSynthesis.getVoices();
+            let bestVoice = voices.find(v => v.lang.replace('_', '-') === langCode && 
+                                       (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural') || v.name.includes('Alice')));
+            if (!bestVoice) {
+                bestVoice = voices.find(v => v.lang.replace('_', '-').startsWith(langCode.split('-')[0]));
+            }
+
+            let chunkIndex = 0;
+            
+            function playNextChunk() {
+                if (chunkIndex >= chunksToRead.length) {
+                    isSpeakingTimeout = false;
+                    return;
+                }
+                
+                let currentChunk = chunksToRead[chunkIndex];
+                const utterance = new SpeechSynthesisUtterance(currentChunk.text);
+                
+                if (bestVoice) utterance.voice = bestVoice;
+                else utterance.lang = langCode;
+                utterance.rate = 0.9; 
+                
+                utterance.onend = function() {
+                    chunkIndex++;
+                    if (chunkIndex < chunksToRead.length) {
+                        isSpeakingTimeout = true;
+                        speakTimeout = setTimeout(playNextChunk, currentChunk.delay); 
+                    } else {
+                        isSpeakingTimeout = false;
+                    }
+                };
+                
+                utterance.onerror = function(e) {
+                    isSpeakingTimeout = false;
+                };
+                
+                window.speechSynthesis.speak(utterance);
+            }
+            
+            playNextChunk();
+        }
 
         function toggleLanguage() {
+            if (isAnimating) return; 
             currentLang = currentLang === 'it' ? 'en' : 'it';
             renderMeal(currentIndex, 'lang');
         }
 
-        // Aggiunto il parametro animType per gestire le animazioni ('next', 'prev', 'lang')
         function renderMeal(index, animType) {
             if (!menuData || menuData.length === 0) {
-                document.getElementById('meal-title').innerText = currentLang === 'it' ? "Nessun menu disponibile" : "No menu available";
+                document.getElementById('meal-date').innerText = currentLang === 'it' ? "Nessun menu" : "No menu";
                 return;
             }
             
+            const contentWrapper = document.getElementById('content-wrapper');
+            const contentDiv = document.getElementById('menu-content');
+            
+            if (!animType && isAnimating) {
+                isAnimating = false;
+                const existingClone = document.getElementById('anim-clone');
+                if (existingClone) existingClone.remove();
+            }
+            
+            if (isAnimating && animType) return;
+            
+            if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+            if (typeof speakTimeout !== 'undefined') { clearTimeout(speakTimeout); isSpeakingTimeout = false; }
+            
+            if (animType) {
+                isAnimating = true;
+                const clone = contentDiv.cloneNode(true);
+                clone.id = 'anim-clone';
+                clone.style.position = 'absolute';
+                clone.style.top = '0';
+                clone.style.left = '0';
+                clone.style.width = '100%';
+                clone.style.zIndex = '1'; 
+                clone.style.animation = 'none'; 
+                clone.style.transform = 'none';
+                clone.style.pointerEvents = 'none'; 
+                
+                contentWrapper.appendChild(clone);
+                
+                setTimeout(() => {
+                    if (clone.parentNode) clone.parentNode.removeChild(clone);
+                    isAnimating = false;
+                }, 1000); 
+            }
+
             currentIndex = index;
             const meal = menuData[currentIndex];
             const isIt = currentLang === 'it';
-            
-            // Gestione animazione del contenitore
-            const contentDiv = document.getElementById('menu-content');
-            contentDiv.classList.remove('anim-next', 'anim-prev', 'anim-lang');
-            // Questo comando forza il browser a resettare l'animazione precedente
-            void contentDiv.offsetWidth; 
-            if (animType) {
-                contentDiv.classList.add('anim-' + animType);
-            }
 
-            document.getElementById('meal-title').innerText = isIt ? meal.displayTitle_it : meal.displayTitle_en;
+            const titleType = isIt ? meal.meal_type_it : meal.meal_type_en;
+            document.getElementById('meal-type').innerText = `IMT - ${titleType}`;
+            document.getElementById('meal-date').innerText = isIt ? meal.date_it : meal.date_en;
             
             document.getElementById('title-primi').innerText = isIt ? "Primi" : "First Courses";
             document.getElementById('title-secondi').innerText = isIt ? "Secondi" : "Main Courses";
@@ -423,21 +619,35 @@ def genera_html():
             updateList('frutta', meal.Frutta_it, meal.Frutta_en);
 
             document.getElementById('btn-prev').disabled = (currentIndex === 0);
+            document.getElementById('btn-prev-fast').disabled = (currentIndex === 0);
             document.getElementById('btn-next').disabled = (currentIndex === menuData.length - 1);
+            document.getElementById('btn-next-fast').disabled = (currentIndex === menuData.length - 1);
+
+            contentDiv.classList.remove('anim-next', 'anim-prev', 'anim-lang');
+            void contentDiv.offsetWidth; 
+            if (animType) {
+                contentDiv.classList.add('anim-' + animType);
+            }
         }
 
-        function navigate(direction) {
+        function navigate(direction, animated = true) {
+            if (isAnimating && animated) return;
             const newIndex = currentIndex + direction;
             if (newIndex >= 0 && newIndex < menuData.length) {
-                // Passa 'next' o 'prev' a seconda della direzione per avviare l'animazione corretta
-                renderMeal(newIndex, direction > 0 ? 'next' : 'prev');
+                let animType = null;
+                if (animated) {
+                    animType = direction > 0 ? 'next' : 'prev';
+                }
+                renderMeal(newIndex, animType);
             }
         }
         
         function goToToday() {
+            if (isAnimating) return;
             const index = getInitialMealIndex();
-            // Per il ritorno a "Oggi", l'animazione a discesa è l'effetto visivo migliore
-            renderMeal(index, 'lang'); 
+            if (index !== currentIndex) {
+                renderMeal(index, 'lang');
+            }
         }
 
         window.addEventListener('keydown', function(e) {
@@ -462,6 +672,7 @@ def genera_html():
         }, { passive: true });
 
         document.addEventListener('touchend', e => {
+            if (isAnimating) return;
             touchendX = e.changedTouches[0].screenX;
             touchendY = e.changedTouches[0].screenY;
             
@@ -514,8 +725,7 @@ def genera_html():
 
         window.onload = () => {
             currentIndex = getInitialMealIndex();
-            // Al primo caricamento nessuna animazione
-            renderMeal(currentIndex); 
+            renderMeal(currentIndex, null);
         };
     </script>
 </body>
@@ -527,7 +737,7 @@ def genera_html():
     with open(file_output, 'w', encoding='utf-8') as f:
         f.write(html_code)
 
-    print(f"File {file_output} generato con successo! Animazioni di transizione (swipe e lingua) attivate.")
+    print(f"File {file_output} generato con successo! Sincronizzazione vocale raffinata applicata.")
 
 if __name__ == "__main__":
     genera_html()

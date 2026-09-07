@@ -1,8 +1,6 @@
-# Nome.py: GeneraMenu.py
-# Data e ora ultima modifica: 07/09/2026 10:35
-# Descrizione: Legge menu-giornaliero-completo-estate-2026.xlsx e genera Menu-IMT.html.
-#              Sintesi vocale ottimizzata: le alternative sono collegate con "e", i gruppi 
-#              sono separati da 0.2s e la lettura si conclude con "Buon pranzo" o "Buona cena".
+# Nome.py: Teresa.py
+# Data e ora ultima modifica: 07/09/2026 11:00
+# Descrizione: Legge menu-giornaliero-completo-estate-2026.xlsx e genera Menu-IMT.html. Implementa la selezione forzata delle voci TTS di alta qualità (Premium, Siri, Natural) su iOS e Android.
 # File di input: menu-giornaliero-completo-estate-2026.xlsx
 # File di output: Menu-IMT.html
 # Parametri: Nessuno
@@ -187,7 +185,7 @@ def genera_html():
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 8px; 
+            padding: 8px 10px; 
             position: sticky;
             top: 6px;
             z-index: 100;
@@ -208,16 +206,16 @@ def genera_html():
         
         .header-side {
             display: flex;
-            gap: 4px; 
+            gap: 6px; 
             align-items: center;
         }
 
         .header button {
             border: none;
-            font-size: 14px; 
+            font-size: 16px; 
             font-weight: bold;
-            width: 30px; 
-            height: 30px;
+            width: 32px; 
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -228,8 +226,8 @@ def genera_html():
         }
         
         .header button svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
         }
         
         .header-pranzo button {
@@ -253,7 +251,7 @@ def genera_html():
             padding: 0 4px; 
         }
         .header-top {
-            font-size: 1.1rem; 
+            font-size: 1.2rem; 
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -261,7 +259,7 @@ def genera_html():
         }
         .header h1 {
             margin: 0;
-            font-size: 0.8rem; 
+            font-size: 0.85rem; 
             text-align: center;
             font-weight: 500;
         }
@@ -359,8 +357,7 @@ def genera_html():
     <div class="app-container">
         <div class="header" id="main-header">
             <div class="header-side">
-                <button id="btn-prev" onclick="navigate(-1, true)">&#9664;</button>
-                <button id="btn-prev-fast" onclick="navigate(-1, false)">&lt;&lt;</button>
+                <button id="btn-prev" onclick="navigate(-1)">&#9664;</button>
                 <button id="btn-speak-left" onclick="speakMenu(event)" title="Ascolta Piatti in Grassetto">
                     <svg fill="currentColor" viewBox="0 0 16 16">
                         <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
@@ -383,8 +380,7 @@ def genera_html():
                         <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
                     </svg>
                 </button>
-                <button id="btn-next-fast" onclick="navigate(1, false)">&gt;&gt;</button>
-                <button id="btn-next" onclick="navigate(1, true)">&#9654;</button>
+                <button id="btn-next" onclick="navigate(1)">&#9654;</button>
             </div>
         </div>
         
@@ -422,10 +418,38 @@ def genera_html():
         let speakTimeout;
         let isSpeakingTimeout = false;
 
+        // Inizializza l'elenco delle voci in anticipo per i dispositivi mobili
+        let availableVoices = [];
+        function loadVoices() {
+            availableVoices = window.speechSynthesis.getVoices();
+        }
+
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = function() {
-                window.speechSynthesis.getVoices();
-            };
+            loadVoices();
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = loadVoices;
+            }
+        }
+
+        // --- FUNZIONE PER RICERCARE LA MIGLIORE VOCE PREMIUM ---
+        function getBestVoice(langCode) {
+            if (availableVoices.length === 0) loadVoices();
+            
+            const langPrefix = langCode.split('-')[0].toLowerCase();
+            const filteredVoices = availableVoices.filter(v => v.lang.toLowerCase().startsWith(langPrefix));
+
+            if (filteredVoices.length === 0) return null;
+
+            // Cerca attivamente le voci di massima qualità (iOS e Android)
+            const premiumKeywords = ['siri', 'enhanced', 'premium', 'natural', 'network', 'online', 'alice', 'luca', 'eloquence'];
+
+            for (let keyword of premiumKeywords) {
+                const best = filteredVoices.find(v => v.name.toLowerCase().includes(keyword));
+                if (best) return best;
+            }
+
+            // Fallback: utilizza la voce predefinita di sistema se non trova le varianti premium
+            return filteredVoices.find(v => v.default) || filteredVoices[0];
         }
 
         function speakMenu(event) {
@@ -448,7 +472,6 @@ def genera_html():
             
             let chunksToRead = [];
 
-            // 1. Blocco Intro (Saluto, Titolo e Data)
             const dateStr = isIt ? meal.date_it : meal.date_en;
             let mealNameIt = meal.type.toLowerCase() === 'pranzo' ? 'il pranzo' : 'la cena';
             let mealNameEn = meal.type.toLowerCase() === 'pranzo' ? 'lunch' : 'dinner';
@@ -459,7 +482,6 @@ def genera_html():
                 
             chunksToRead.push({ text: introText, delay: 200 });
             
-            // 2. Funzione per creare i blocchi dei menu uniti con 'e'
             function extractCardBoldTexts(cardId, translatedTitle) {
                 const card = document.getElementById(cardId);
                 if (card.classList.contains('hidden')) return;
@@ -486,18 +508,12 @@ def genera_html():
                 chunksToRead.push({ text: isIt ? "Nessun piatto in grassetto da leggere." : "No bold items to read.", delay: 200 });
             }
 
-            // 3. Saluto Finale
             let closingTextIt = meal.type.toLowerCase() === 'pranzo' ? "Buon pranzo!" : "Buona cena!";
             let closingTextEn = meal.type.toLowerCase() === 'pranzo' ? "Enjoy your lunch!" : "Enjoy your dinner!";
             chunksToRead.push({ text: isIt ? closingTextIt : closingTextEn, delay: 0 });
 
             const langCode = isIt ? 'it-IT' : 'en-US';
-            const voices = window.speechSynthesis.getVoices();
-            let bestVoice = voices.find(v => v.lang.replace('_', '-') === langCode && 
-                                       (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural') || v.name.includes('Alice')));
-            if (!bestVoice) {
-                bestVoice = voices.find(v => v.lang.replace('_', '-').startsWith(langCode.split('-')[0]));
-            }
+            const bestVoice = getBestVoice(langCode);
 
             let chunkIndex = 0;
             
@@ -510,8 +526,12 @@ def genera_html():
                 let currentChunk = chunksToRead[chunkIndex];
                 const utterance = new SpeechSynthesisUtterance(currentChunk.text);
                 
-                if (bestVoice) utterance.voice = bestVoice;
-                else utterance.lang = langCode;
+                if (bestVoice) {
+                    utterance.voice = bestVoice;
+                } else {
+                    utterance.lang = langCode;
+                }
+                
                 utterance.rate = 0.9; 
                 
                 utterance.onend = function() {
@@ -537,7 +557,15 @@ def genera_html():
         function toggleLanguage() {
             if (isAnimating) return; 
             currentLang = currentLang === 'it' ? 'en' : 'it';
-            renderMeal(currentIndex, 'lang');
+            
+            sessionStorage.setItem('savedLang', currentLang);
+            if (menuData[currentIndex]) {
+                sessionStorage.setItem('savedDate', menuData[currentIndex].date);
+                sessionStorage.setItem('savedType', menuData[currentIndex].type);
+            }
+            sessionStorage.setItem('justToggled', 'true');
+            
+            window.location.href = window.location.pathname + '?v=' + new Date().getTime();
         }
 
         function renderMeal(index, animType) {
@@ -619,9 +647,7 @@ def genera_html():
             updateList('frutta', meal.Frutta_it, meal.Frutta_en);
 
             document.getElementById('btn-prev').disabled = (currentIndex === 0);
-            document.getElementById('btn-prev-fast').disabled = (currentIndex === 0);
             document.getElementById('btn-next').disabled = (currentIndex === menuData.length - 1);
-            document.getElementById('btn-next-fast').disabled = (currentIndex === menuData.length - 1);
 
             contentDiv.classList.remove('anim-next', 'anim-prev', 'anim-lang');
             void contentDiv.offsetWidth; 
@@ -630,14 +656,10 @@ def genera_html():
             }
         }
 
-        function navigate(direction, animated = true) {
-            if (isAnimating && animated) return;
+        function navigate(direction) {
             const newIndex = currentIndex + direction;
             if (newIndex >= 0 && newIndex < menuData.length) {
-                let animType = null;
-                if (animated) {
-                    animType = direction > 0 ? 'next' : 'prev';
-                }
+                let animType = isAnimating ? null : (direction > 0 ? 'next' : 'prev');
                 renderMeal(newIndex, animType);
             }
         }
@@ -662,6 +684,7 @@ def genera_html():
         let touchstartY = 0;
         let touchendX = 0;
         let touchendY = 0;
+        let startScrollY = 0;
 
         const thresholdX = 50; 
         const thresholdY = 60; 
@@ -669,6 +692,7 @@ def genera_html():
         document.addEventListener('touchstart', e => {
             touchstartX = e.changedTouches[0].screenX;
             touchstartY = e.changedTouches[0].screenY;
+            startScrollY = window.scrollY; 
         }, { passive: true });
 
         document.addEventListener('touchend', e => {
@@ -678,6 +702,7 @@ def genera_html():
             
             const diffX = touchendX - touchstartX;
             const diffY = Math.abs(touchendY - touchstartY);
+            const rawDiffY = touchendY - touchstartY; 
 
             if (diffY < thresholdY) {
                 if (diffX <= -thresholdX) {
@@ -689,6 +714,14 @@ def genera_html():
                         document.getElementById('btn-prev').click();
                     }
                 }
+            } 
+            else if (rawDiffY > 100 && Math.abs(diffX) < thresholdX && startScrollY <= 0) {
+                sessionStorage.setItem('savedLang', currentLang);
+                if (menuData[currentIndex]) {
+                    sessionStorage.setItem('savedDate', menuData[currentIndex].date);
+                    sessionStorage.setItem('savedType', menuData[currentIndex].type);
+                }
+                window.location.href = window.location.pathname + '?v=' + new Date().getTime();
             }
         }, { passive: true });
 
@@ -724,8 +757,31 @@ def genera_html():
         }
 
         window.onload = () => {
-            currentIndex = getInitialMealIndex();
-            renderMeal(currentIndex, null);
+            if (sessionStorage.getItem('savedLang')) {
+                currentLang = sessionStorage.getItem('savedLang');
+            }
+            
+            let animToPlay = null;
+            if (sessionStorage.getItem('justToggled')) {
+                animToPlay = 'lang';
+                sessionStorage.removeItem('justToggled');
+            }
+
+            let startIdx = getInitialMealIndex();
+            const savedDate = sessionStorage.getItem('savedDate');
+            const savedType = sessionStorage.getItem('savedType');
+
+            if (savedDate && savedType) {
+                let foundIndex = menuData.findIndex(m => m.date === savedDate && m.type === savedType);
+                if (foundIndex !== -1) {
+                    startIdx = foundIndex;
+                }
+                sessionStorage.removeItem('savedDate');
+                sessionStorage.removeItem('savedType');
+            }
+
+            currentIndex = startIdx;
+            renderMeal(currentIndex, animToPlay);
         };
     </script>
 </body>
@@ -737,7 +793,7 @@ def genera_html():
     with open(file_output, 'w', encoding='utf-8') as f:
         f.write(html_code)
 
-    print(f"File {file_output} generato con successo! Sincronizzazione vocale raffinata applicata.")
+    print(f"File {file_output} generato con successo!")
 
 if __name__ == "__main__":
     genera_html()

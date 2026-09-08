@@ -1,58 +1,34 @@
 $ErrorActionPreference = "Stop"
-
 $localDir = "C:\Dropbox\Prog\Allenamento"
-$tempDir = Join-Path $env:TEMP "allenamento_auto_push"
-$repoUrl = "https://github.com/Sebastiano-Mazzarisi/Prog.git"
-$repoSubdir = "Allenamento"
+Set-Location -LiteralPath $localDir
 
 function Write-Info($message) {
     $time = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     Write-Host "[$time] $message"
 }
 
-if (-not (Test-Path -LiteralPath $localDir)) {
-    throw "Cartella locale non trovata: $localDir"
+if (-not (Test-Path -LiteralPath (Join-Path $localDir ".git"))) {
+    git init | Out-Host
+    git branch -M main | Out-Host
 }
 
-if (Test-Path -LiteralPath $tempDir) {
-    Remove-Item -LiteralPath $tempDir -Recurse -Force
+$remote = git remote get-url origin 2>$null
+if ($LASTEXITCODE -ne 0) {
+    git remote add origin "https://github.com/Sebastiano-Mazzarisi/Allenamento.git"
+} elseif ($remote -ne "https://github.com/Sebastiano-Mazzarisi/Allenamento.git") {
+    git remote set-url origin "https://github.com/Sebastiano-Mazzarisi/Allenamento.git"
 }
 
-Write-Info "Scarico il repository Prog..."
-git clone $repoUrl $tempDir | Out-Host
+git add index.html styles.css app.js assets Aggiorna_GitHub.ps1 Aggiorna_GitHub.bat README.md .gitignore 2>$null
 
-$targetDir = Join-Path $tempDir $repoSubdir
-if (Test-Path -LiteralPath $targetDir) {
-    Remove-Item -LiteralPath $targetDir -Recurse -Force
-}
-
-New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
-
-Write-Info "Copio i file di Allenamento..."
-Get-ChildItem -LiteralPath $localDir -Force | Where-Object {
-    $_.Name -notin @(".git", "Aggiorna_GitHub.log")
-} | ForEach-Object {
-    Copy-Item -LiteralPath $_.FullName -Destination $targetDir -Recurse -Force
-}
-
-git -C $tempDir add $repoSubdir
-
-$hasChanges = $true
-git -C $tempDir diff --cached --quiet
+git diff --cached --quiet
 if ($LASTEXITCODE -eq 0) {
-    $hasChanges = $false
-}
-
-if (-not $hasChanges) {
     Write-Info "Nessuna modifica da pubblicare."
-    Remove-Item -LiteralPath $tempDir -Recurse -Force
     exit 0
 }
 
 $stamp = Get-Date -Format "yyyy-MM-dd HH:mm"
-Write-Info "Pubblico su GitHub..."
-git -C $tempDir commit -m "Aggiorna Allenamento $stamp" | Out-Host
-git -C $tempDir push origin main | Out-Host
-
-Remove-Item -LiteralPath $tempDir -Recurse -Force
+Write-Info "Pubblico Allenamento su GitHub..."
+git commit -m "Aggiorna Allenamento $stamp" | Out-Host
+git push -u origin main | Out-Host
 Write-Info "Aggiornamento completato."

@@ -19,12 +19,11 @@
         .header-pranzo { background-color: #007aff !important; color: white !important; }
         .header-cena { background-color: #d1b246 !important; color: #1c1c1e !important; }
         .header-side { display: flex; gap: 6px; align-items: center; }
-        .header button { border: none; font-size: 16px; font-weight: bold; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color 0.3s ease, color 0.3s ease; }
-        .header button svg { width: 18px; height: 18px; }
+        .header button { border: none; font-size: 28px; font-weight: bold; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color 0.3s ease, color 0.3s ease; }
         .header-pranzo button { background: rgba(255, 255, 255, 0.2); color: white; }
         .header-cena button { background: rgba(0, 0, 0, 0.1); color: #1c1c1e; }
         .header button:disabled { opacity: 0.3; }
-        .header-center { display: flex; flex-direction: column; align-items: center; flex-grow: 1; cursor: pointer; padding: 0 4px; }
+        .header-center { display: flex; flex-direction: column; align-items: center; flex-grow: 1; min-width: 0; min-height: 48px; justify-content: center; cursor: pointer; padding: 0 4px; }
         .header-top { font-size: 1.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
         .header h1 { margin: 0; font-size: 0.85rem; text-align: center; font-weight: 500; }
         .content-wrapper { position: relative; overflow: hidden; border-radius: 10px; }
@@ -50,28 +49,14 @@
     <div class="app-container">
         <div class="header" id="main-header">
             <div class="header-side">
-                <button id="btn-prev" onclick="navigate(-1)">&#9664;</button>
-                <button id="btn-speak-left" onclick="speakMenu(event)" title="Ascolta Piatti in Grassetto">
-                    <svg fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
-                        <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89l.706.706z"/>
-                        <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
-                    </svg>
-                </button>
+                <button id="btn-prev" aria-label="Pasto precedente / Previous meal" onclick="navigate(-1)">&#9664;</button>
             </div>
-            <div class="header-center" onclick="goToToday()" title="Torna a Oggi / Go to Today">
+            <div class="header-center" onclick="speakMenu(event)" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();speakMenu(event);}" aria-label="Ascolta o interrompi il menu / Play or stop menu" title="Ascolta o interrompi / Play or stop">
                 <div class="header-top" id="meal-type">IMT - Menu</div>
                 <h1 id="meal-date">Caricamento...</h1>
             </div>
             <div class="header-side">
-                <button id="btn-speak-right" onclick="speakMenu(event)" title="Ascolta Piatti in Grassetto">
-                    <svg fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
-                        <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89l.706.706z"/>
-                        <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
-                    </svg>
-                </button>
-                <button id="btn-next" onclick="navigate(1)">&#9654;</button>
+                <button id="btn-next" aria-label="Pasto successivo / Next meal" onclick="navigate(1)">&#9654;</button>
             </div>
         </div>
         

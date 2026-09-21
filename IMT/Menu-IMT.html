@@ -36,10 +36,6 @@
         li:last-child { border-bottom: none; }
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
-        .menu-controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:10px 0; }
-        .menu-controls label { font-size:0.85rem; display:flex; flex-direction:column; gap:4px; flex:1; }
-        .menu-controls input, .menu-controls select, .menu-controls button { min-height:40px; box-sizing:border-box; border:1px solid #c7c7cc; border-radius:8px; padding:7px; font:inherit; background:white; color:#1c1c1e; }
-        .season-note { text-align:center; font-size:0.8rem; color:#52525b; margin:8px 0; }
         .source-note { font-size:0.8rem; line-height:1.5; color:#52525b; padding:10px; }
         .source-note a { color:#0056b3; }
         .anim-next { animation: slideOverRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
@@ -79,13 +75,6 @@
             </div>
         </div>
         
-        <p class="season-note">Autunno 2026 · 21 settembre - 20 dicembre</p>
-        <div class="menu-controls">
-            <label>Data / Date<input id="date-picker" type="date" aria-label="Scegli la data" onchange="selectMeal()"></label>
-            <label>Pasto / Meal<select id="meal-picker" aria-label="Scegli il pasto" onchange="selectMeal()"><option value="Pranzo">Pranzo / Lunch</option><option value="Cena">Cena / Dinner</option></select></label>
-            <button type="button" onclick="goToToday()">Oggi / Today</button>
-        </div>
-        <p id="date-status" class="season-note" role="status"></p>
         <div class="content-wrapper" id="content-wrapper">
             <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua">
                 <div class="course-card" id="card-primi"><h2 class="course-title" id="title-primi">Primi</h2><ul id="list-primi"></ul></div>
@@ -233,9 +222,6 @@
             currentIndex = index;
             const meal = menuData[currentIndex];
             const isIt = currentLang === 'it';
-            document.getElementById('date-picker').value = meal.date;
-            document.getElementById('meal-picker').value = meal.type;
-            document.getElementById('date-status').textContent = '';
 
             const titleType = isIt ? meal.meal_type_it : meal.meal_type_en;
             document.getElementById('meal-type').innerText = `IMT - ${titleType}`;
@@ -280,21 +266,11 @@
             }
         }
 
-        function selectMeal() {
-            const date = document.getElementById('date-picker').value;
-            const type = document.getElementById('meal-picker').value;
-            const index = menuData.findIndex(m => m.date === date && m.type === type);
-            if (index >= 0) renderMeal(index, null);
-            else document.getElementById('date-status').textContent = 'Nessun menu per questa data / No menu for this date';
-        }
         
         function goToToday() {
             if (isAnimating) return;
             const index = getInitialMealIndex();
             renderMeal(index, null);
-            const now = new Date();
-            const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-            if (!menuData.some(m => m.date === today)) document.getElementById('date-status').textContent = 'Oggi è fuori dal periodo disponibile / Today is outside the available period';
         }
 
         window.addEventListener('keydown', function(e) {
@@ -340,8 +316,6 @@
         }
 
         window.onload = () => {
-            document.getElementById('date-picker').min = menuData[0].date;
-            document.getElementById('date-picker').max = menuData[menuData.length-1].date;
             if (sessionStorage.getItem('savedLang')) currentLang = sessionStorage.getItem('savedLang');
             let animToPlay = null;
             if (sessionStorage.getItem('justToggled')) { animToPlay = 'lang'; sessionStorage.removeItem('justToggled'); }

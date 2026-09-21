@@ -1,11 +1,11 @@
 # Nome.py: GeneraMenu.py
-# Data e ora ultima modifica: 07/09/2026 12:00
-# Descrizione: Legge menu-giornaliero-completo-estate-2026.xlsx e genera Menu-IMT.html.
+# Ultimo aggiornamento: 21/09/2026
+# Descrizione: Legge menu-giornaliero-completo-autunno-2026.xlsx e genera Menu-IMT.html.
 #              Generazione del file menu_siri.json con date multi-formato per evitare 
 #              qualsiasi formattazione lato iOS Shortcuts.
-# File di input: menu-giornaliero-completo-estate-2026.xlsx
+# File di input: menu-giornaliero-completo-autunno-2026.xlsx
 # File di output: Menu-IMT.html, menu_siri.json
-# Parametri: Nessuno
+# Parametri: --input FILE.xlsx, --traduci (traduzione online facoltativa)
 
 import pandas as pd
 import json
@@ -14,20 +14,44 @@ import urllib.request
 import urllib.parse
 import os
 import time
+import argparse
+import html
+from pathlib import Path
 
-def genera_html():
-    file_input = 'menu-giornaliero-completo-estate-2026.xlsx'
-    file_output = 'Menu-IMT.html'
-    dizionario_file = 'dizionario_menu.json'
-    file_siri = 'menu_siri.json'
+def genera_html(file_input=None, traduci=False):
+    base = Path(__file__).resolve().parent
+    file_input = Path(file_input) if file_input else base / 'menu-giornaliero-completo-autunno-2026.xlsx'
+    file_output = base / 'Menu-IMT.html'
+    dizionario_file = base / 'dizionario_menu.json'
+    file_siri = base / 'menu_siri.json'
     
     try:
         df = pd.read_excel(file_input)
     except FileNotFoundError:
-        print(f"Errore: Il file {file_input} non è stato trovato.")
-        return
+        raise FileNotFoundError(f"Il file {file_input} non è stato trovato.") from None
         
     df = df.fillna('')
+    required = ['Data', 'Pranzo Cena', 'Primi', 'Secondi', 'Contorni', 'Frutta e Dessert']
+    missing = set(required) - set(df.columns)
+    if missing:
+        raise ValueError('Colonne obbligatorie mancanti: ' + ', '.join(sorted(missing)))
+    if df.empty:
+        raise ValueError('Il foglio Excel non contiene menu')
+    df['Data'] = pd.to_datetime(df['Data'], errors='coerce').dt.normalize()
+    if df['Data'].isna().any():
+        raise ValueError('Una o più date sono mancanti o non valide')
+    df['Pranzo Cena'] = df['Pranzo Cena'].astype(str).str.strip().str.capitalize()
+    if not df['Pranzo Cena'].isin(['Pranzo', 'Cena']).all():
+        raise ValueError('La colonna Pranzo Cena deve contenere solo Pranzo oppure Cena')
+    if df.duplicated(['Data', 'Pranzo Cena']).any():
+        raise ValueError('Menu duplicati per data e pasto')
+    incomplete = df.groupby('Data')['Pranzo Cena'].nunique()
+    if (incomplete != 2).any():
+        dates = ', '.join(d.strftime('%d/%m/%Y') for d in incomplete[incomplete != 2].index)
+        raise ValueError('Pranzo o cena mancante per: ' + dates)
+    for col in ['Primi', 'Secondi', 'Contorni']:
+        if df[col].astype(str).str.strip().eq('').any():
+            raise ValueError(f'Una o più celle della colonna {col} sono vuote')
     
     unique_terms = set()
     for col in ['Primi', 'Secondi', 'Contorni', 'Frutta e Dessert']:
@@ -49,13 +73,13 @@ def genera_html():
             
     nuovi_termini = [t for t in unique_terms if t not in dizionario]
     
-    if nuovi_termini:
+    if nuovi_termini and traduci:
         print(f"Trovati {len(nuovi_termini)} piatti da tradurre...")
         for i, term in enumerate(nuovi_termini):
             url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=it&tl=en&dt=t&q=" + urllib.parse.quote(term)
             try:
                 req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-                response = urllib.request.urlopen(req)
+                response = urllib.request.urlopen(req, timeout=15)
                 data = json.loads(response.read().decode('utf-8'))
                 tradotto = data[0][0][0]
                 if term.isupper():
@@ -84,7 +108,7 @@ def genera_html():
         for line in lines:
             line = line.strip().lstrip('•').strip()
             if line:
-                val = line if lang == 'it' else dizionario.get(line, line)
+                val = html.escape(line if lang == 'it' else dizionario.get(line, line))
                 if line.isupper():
                     val = f"<strong>{val}</strong>"
                 cleaned.append(val)
@@ -165,7 +189,7 @@ def genera_html():
                 testo_siri += "A pranzo abbiamo: " if is_pranzo else "Mentre a cena c'è: "
                 
                 def estrai_testo(lista_html):
-                    piatti = [item.replace("<strong>", "").replace("</strong>", "") for item in lista_html if "<strong>" in item]
+                    piatti = [html.unescape(item.replace("<strong>", "").replace("</strong>", "")) for item in lista_html if "<strong>" in item]
                     if piatti:
                         return " e ".join(piatti) + ". "
                     return ""
@@ -206,8 +230,8 @@ def genera_html():
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Menu IMT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu IMT - Autunno 2026</title>
     <link rel="apple-touch-icon" href="IMT.jpg">
     <link rel="icon" href="IMT.jpg" type="image/jpeg">
     <meta property="og:title" content="IMT - Menu">
@@ -240,6 +264,12 @@ def genera_html():
         li:last-child { border-bottom: none; }
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
+        .menu-controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:10px 0; }
+        .menu-controls label { font-size:0.85rem; display:flex; flex-direction:column; gap:4px; flex:1; }
+        .menu-controls input, .menu-controls select, .menu-controls button { min-height:40px; box-sizing:border-box; border:1px solid #c7c7cc; border-radius:8px; padding:7px; font:inherit; background:white; color:#1c1c1e; }
+        .season-note { text-align:center; font-size:0.8rem; color:#52525b; margin:8px 0; }
+        .source-note { font-size:0.8rem; line-height:1.5; color:#52525b; padding:10px; }
+        .source-note a { color:#0056b3; }
         .anim-next { animation: slideOverRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         .anim-prev { animation: slideOverLeft 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         .anim-lang { animation: dropDown 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
@@ -277,6 +307,13 @@ def genera_html():
             </div>
         </div>
         
+        <p class="season-note">Autunno 2026 · 21 settembre - 20 dicembre</p>
+        <div class="menu-controls">
+            <label>Data / Date<input id="date-picker" type="date" aria-label="Scegli la data" onchange="selectMeal()"></label>
+            <label>Pasto / Meal<select id="meal-picker" aria-label="Scegli il pasto" onchange="selectMeal()"><option value="Pranzo">Pranzo / Lunch</option><option value="Cena">Cena / Dinner</option></select></label>
+            <button type="button" onclick="goToToday()">Oggi / Today</button>
+        </div>
+        <p id="date-status" class="season-note" role="status"></p>
         <div class="content-wrapper" id="content-wrapper">
             <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua">
                 <div class="course-card" id="card-primi"><h2 class="course-title" id="title-primi">Primi</h2><ul id="list-primi"></ul></div>
@@ -285,6 +322,12 @@ def genera_html():
                 <div class="course-card" id="card-frutta"><h2 class="course-title" id="title-frutta">Frutta / Dessert</h2><ul id="list-frutta"></ul></div>
             </div>
         </div>
+        <details class="source-note"><summary>Fonti e note / Sources and notes</summary>
+            <p>Piatti del giorno in grassetto; alternative fisse in carattere normale. I codici tra parentesi e gli asterischi sono riportati come nei PDF originali.</p>
+            <p>Daily dishes in bold; fixed alternatives in regular type. Numbers in brackets and asterisks are copied from the original PDFs.</p>
+            <p><a href="Autunno/MENU_IMT_PRANZO_AUTUNNO_2026.pdf">PDF pranzo / Lunch</a> · <a href="Autunno/MENU_IMT_CENA_AUTUNNO_2026.pdf">PDF cena / Dinner</a> · <a href="menu-giornaliero-completo-autunno-2026.xlsx">Excel completo</a></p>
+            <p>Alternative: pagina 5 dei PDF autunnali. La sezione Frutta / Dessert riporta le alternative indicate. I refusi 2025 nelle date sono ricondotti alla decorrenza 2026.</p>
+        </details>
     </div>
 
     <script>
@@ -322,13 +365,14 @@ def genera_html():
 
             const meal = menuData[currentIndex];
             const isIt = currentLang === 'it';
+
             let chunksToRead = [];
 
             const dateStr = isIt ? meal.date_it : meal.date_en;
             let mealNameIt = meal.type.toLowerCase() === 'pranzo' ? 'il pranzo' : 'la cena';
             let mealNameEn = meal.type.toLowerCase() === 'pranzo' ? 'lunch' : 'dinner';
             
-            let introText = isIt ? `Ciao, ecco ${mealNameIt} della IMT di oggi, ${dateStr}.` : `Hello, here is the IMT ${mealNameEn} for today, ${dateStr}.`;
+            let introText = isIt ? `Ciao, ecco ${mealNameIt} della IMT per ${dateStr}.` : `Hello, here is the IMT ${mealNameEn} for ${dateStr}.`;
             chunksToRead.push({ text: introText, delay: 200 });
             
             function extractCardBoldTexts(cardId, translatedTitle) {
@@ -407,6 +451,7 @@ def genera_html():
                 isAnimating = true;
                 const clone = contentDiv.cloneNode(true);
                 clone.id = 'anim-clone';
+                clone.querySelectorAll('[id]').forEach(element => element.removeAttribute('id'));
                 clone.style.position = 'absolute'; clone.style.top = '0'; clone.style.left = '0'; clone.style.width = '100%';
                 clone.style.zIndex = '1'; clone.style.animation = 'none'; clone.style.transform = 'none'; clone.style.pointerEvents = 'none'; 
                 contentWrapper.appendChild(clone);
@@ -416,6 +461,9 @@ def genera_html():
             currentIndex = index;
             const meal = menuData[currentIndex];
             const isIt = currentLang === 'it';
+            document.getElementById('date-picker').value = meal.date;
+            document.getElementById('meal-picker').value = meal.type;
+            document.getElementById('date-status').textContent = '';
 
             const titleType = isIt ? meal.meal_type_it : meal.meal_type_en;
             document.getElementById('meal-type').innerText = `IMT - ${titleType}`;
@@ -459,14 +507,26 @@ def genera_html():
                 renderMeal(newIndex, animType);
             }
         }
+
+        function selectMeal() {
+            const date = document.getElementById('date-picker').value;
+            const type = document.getElementById('meal-picker').value;
+            const index = menuData.findIndex(m => m.date === date && m.type === type);
+            if (index >= 0) renderMeal(index, null);
+            else document.getElementById('date-status').textContent = 'Nessun menu per questa data / No menu for this date';
+        }
         
         function goToToday() {
             if (isAnimating) return;
             const index = getInitialMealIndex();
-            if (index !== currentIndex) renderMeal(index, 'lang');
+            renderMeal(index, null);
+            const now = new Date();
+            const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+            if (!menuData.some(m => m.date === today)) document.getElementById('date-status').textContent = 'Oggi è fuori dal periodo disponibile / Today is outside the available period';
         }
 
         window.addEventListener('keydown', function(e) {
+            if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
             if (e.key === 'ArrowLeft') document.getElementById('btn-prev').click();
             else if (e.key === 'ArrowRight') document.getElementById('btn-next').click();
         });
@@ -508,6 +568,8 @@ def genera_html():
         }
 
         window.onload = () => {
+            document.getElementById('date-picker').min = menuData[0].date;
+            document.getElementById('date-picker').max = menuData[menuData.length-1].date;
             if (sessionStorage.getItem('savedLang')) currentLang = sessionStorage.getItem('savedLang');
             let animToPlay = null;
             if (sessionStorage.getItem('justToggled')) { animToPlay = 'lang'; sessionStorage.removeItem('justToggled'); }
@@ -530,7 +592,11 @@ def genera_html():
     with open(file_output, 'w', encoding='utf-8') as f:
         f.write(html_code)
 
-    print(f"File generati con successo. JSON per Siri ultra-semplificato generato.")
+    print(f"Generati {len(blocks)} menu per {len(pasti_per_data)} giorni: {file_output.name}, {file_siri.name}.")
 
 if __name__ == "__main__":
-    genera_html()
+    parser = argparse.ArgumentParser(description='Genera HTML e JSON Siri dai menu Excel')
+    parser.add_argument('--input', help='File Excel da utilizzare')
+    parser.add_argument('--traduci', action='store_true', help='Traduci online i nuovi piatti mancanti dal dizionario')
+    args = parser.parse_args()
+    genera_html(args.input, args.traduci)

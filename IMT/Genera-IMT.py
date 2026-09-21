@@ -16,6 +16,7 @@ import os
 import time
 import argparse
 import html
+import re
 from pathlib import Path
 
 def genera_html(file_input=None, traduci=False):
@@ -108,7 +109,10 @@ def genera_html(file_input=None, traduci=False):
         for line in lines:
             line = line.strip().lstrip('•').strip()
             if line:
-                val = html.escape(line if lang == 'it' else dizionario.get(line, line))
+                val = line if lang == 'it' else dizionario.get(line, line)
+                val = re.sub(r'\(\s*[\d\s,;*/–-]+\)', '', val)
+                val = re.sub(r'\(\s*\*+\s*\)', '', val).replace('*', '')
+                val = html.escape(re.sub(r'\s+', ' ', val).strip())
                 if line.isupper():
                     val = f"<strong>{val}</strong>"
                 cleaned.append(val)
@@ -297,8 +301,8 @@ def genera_html(file_input=None, traduci=False):
             </div>
         </div>
         <details class="source-note"><summary>Fonti e note / Sources and notes</summary>
-            <p>Piatti del giorno in grassetto; alternative fisse in carattere normale. I codici tra parentesi e gli asterischi sono riportati come nei PDF originali.</p>
-            <p>Daily dishes in bold; fixed alternatives in regular type. Numbers in brackets and asterisks are copied from the original PDFs.</p>
+            <p>Piatti del giorno in grassetto; alternative fisse in carattere normale. I riferimenti agli allergeni sono disponibili nei PDF originali.</p>
+            <p>Daily dishes in bold; fixed alternatives in regular type. Allergen references are available in the original PDFs.</p>
             <p><a href="Autunno/MENU_IMT_PRANZO_AUTUNNO_2026.pdf">PDF pranzo / Lunch</a> · <a href="Autunno/MENU_IMT_CENA_AUTUNNO_2026.pdf">PDF cena / Dinner</a> · <a href="menu-giornaliero-completo-autunno-2026.xlsx">Excel completo</a></p>
             <p>Alternative: pagina 5 dei PDF autunnali. La sezione Frutta / Dessert riporta le alternative indicate. I refusi 2025 nelle date sono ricondotti alla decorrenza 2026.</p>
         </details>

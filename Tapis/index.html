@@ -102,11 +102,11 @@
 <body>
 
   <header>
-    <h1>PitPat Live</h1>
+    <h1>PitPat-T01 Live</h1>
     <button id="btnConnect" onclick="connectTreadmill()">Connetti Tapis Roulant</button>
   </header>
 
-  <div class="status" id="statusText">Stato: Verifica supporto Bluetooth...</div>
+  <div class="status" id="statusText">Pronto alla connessione</div>
 
   <div class="grid">
     <div class="card">
@@ -129,12 +129,6 @@
   <div class="raw-log" id="rawLog">Diagnostica avviata.</div>
 
   <script>
-    function getBluetoothAPI() {
-      if (typeof navigator !== 'undefined' && navigator.bluetooth) return navigator.bluetooth;
-      if (typeof window !== 'undefined' && window.bluetooth) return window.bluetooth;
-      return null;
-    }
-
     function log(msg) {
       console.log(msg);
       const logBox = document.getElementById('rawLog');
@@ -142,114 +136,134 @@
       logBox.scrollTop = logBox.scrollHeight;
     }
 
-    window.addEventListener('load', () => {
-      const bt = getBluetoothAPI();
-      const status = document.getElementById('statusText');
-      if (bt) {
-        status.textContent = "Bluetooth supportato dal browser. Pronto a connettere.";
-        status.style.color = "#4ade80";
-        log("API Bluetooth rilevata correttamente.");
-      } else {
-        status.textContent = "ATTENZIONE: Questo browser non espone le Web Bluetooth API.";
-        status.style.color = "#f87171";
-        log("ERRORE: navigator.bluetooth non trovato in questa app.");
-      }
-    });
+    // Servizi noti utilizzati dai chip BLE di PitPat / Superun / FitShow
+    const KNOWN_SERVICES = [
+      0x1826, 0xfff0, 0xfee7, 0xffe0, 0xae00, 0xae10, 0xae30, 0xfe00,
+      '00001826-0000-1000-8000-00805f9b34fb',
+      '0000fff0-0000-1000-8000-00805f9b34fb',
+      '0000ffe0-0000-1000-8000-00805f9b34fb',
+      '0000fee7-0000-1000-8000-00805f9b34fb',
+      '0000ae00-0000-1000-8000-00805f9b34fb',
+      '0000ae30-0000-1000-8000-00805f9b34fb',
+      '0000fe00-0000-1000-8000-00805f9b34fb',
+      '6e400001-b5a3-f393-e0a9-e50e24dcca9e' // Nordic UART Service
+    ];
 
     async function connectTreadmill() {
-      const bt = getBluetoothAPI();
       const btn = document.getElementById('btnConnect');
       const status = document.getElementById('statusText');
-
-      if (!bt) {
-        alert("Questo browser non supporta il Web Bluetooth. Assicurati di usare l'app Bluefy e di aver concesso il permesso Bluetooth.");
-        return;
-      }
-
       btn.disabled = true;
-      status.textContent = "Apertura finestra di scansione...";
-      log("Chiamata a requestDevice()...");
+      status.textContent = "Connessione in corso...";
 
       try {
-        const device = await bt.requestDevice({
-          acceptAllDevices: true,
-          optionalServices: [
-            0x1826,
-            0xfff0,
-            0xfee7,
-            0xffe0
-          ]
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [
+            { namePrefix: 'PitPat' },
+            { namePrefix: 'pitpat' }
+          ],
+          optionalServices: KNOWN_SERVICES
         });
 
-        status.textContent = `Connessione a ${device.name || 'Dispositivo'}...`;
-        log(`Selezionato: ${device.name} (id: ${device.id})`);
+        log(`Dispositivo agganciato: ${device.name}`);
+        status.textContent = `Connessione a ${device.name}...`;
 
         device.addEventListener('gattserverdisconnected', () => {
-          status.textContent = "Stato: Tapis disconnesso.";
-          log("Disconnesso.");
+          status.textContent = "Disconnesso.";
+          log("Dispositivo scollegato.");
           btn.disabled = false;
         });
 
         const server = await device.gatt.connect();
-        status.textContent = "GATT Connesso. Analisi servizi...";
         log("Server GATT connesso.");
+        status.textContent = "Ricerca canali telemetria...";
 
-        const services = await server.getPrimaryServices();
-        log(`Servizi trovati: ${services.length}`);
+        let subscribedCount = 0;
 
-        for (let s of services) {
-          log(`Servizio: ${s.uuid}`);
+        for (const sId of KNOWN_SERVICES) {
           try {
-            const chars = await s.getCharacteristics();
-            for (let c of chars) {
-              if (c.properties.notify) {
-                await c.startNotifications();
-                c.addEventListener('characteristicvaluechanged', (e) => {
-                  let d = e.target.value;
-                  let h = [];
-                  for(let i=0; i<d.byteLength; i++) h.push(d.getUint8(i).toString(16).padStart(2,'0'));
-                  log(`Dati [${c.uuid.substring(0,8)}]: ${h.join(' ')}`);
+            const service = await server.getPrimaryService(sId);
+            log(`Trovato servizio: ${sId}`);
+            const chars = await service.getCharacteristics();
 
-                  // Se è FTMS (0x2acd) decodifica standard
-                  if (c.uuid.includes('2acd')) {
-                    const flags = d.getUint16(0, true);
-                    let off = 2;
-                    if ((flags & 0x0001) === 0) {
-                      document.getElementById('valSpeed').textContent = (d.getUint16(off, true) / 100.0).toFixed(1);
-                      off += 2;
-                    }
-                    if (flags & 0x0002) off += 2;
-                    if (flags & 0x0004) {
-                      const dist = d.getUint8(off) | (d.getUint8(off+1) << 8) | (d.getUint8(off+2) << 16);
-                      document.getElementById('valDistance').textContent = (dist / 1000.0).toFixed(2);
-                      off += 3;
-                    }
-                    if (flags & 0x0008) off += 4;
-                    if (flags & 0x0010) off += 4;
-                    if (flags & 0x0020) off += 2;
-                    if (flags & 0x0100) {
-                      const sec = d.getUint16(off, true);
-                      const m = Math.floor(sec / 60).toString().padStart(2, '0');
-                      const s = (sec % 60).toString().padStart(2, '0');
-                      document.getElementById('valTime').textContent = `${m}:${s}`;
-                    }
-                  }
-                });
-                log(`Ascolto attivo su: ${c.uuid}`);
+            for (const c of chars) {
+              if (c.properties.notify || c.properties.indicate) {
+                await c.startNotifications();
+                c.addEventListener('characteristicvaluechanged', (e) => handleDataPacket(e, c.uuid));
+                log(`-> Notifiche attive su char: ${c.uuid.substring(0,8)}`);
+                subscribedCount++;
+              }
+              // Se la caratteristica permette la scrittura, mandiamo il ping di richiesta dati
+              if (c.properties.write || c.properties.writeWithoutResponse) {
+                try {
+                  // Tipico handshake di start/sync per schede PitPat
+                  await c.writeValue(new Uint8Array([0x02, 0x53, 0x01, 0x00, 0x56]));
+                } catch(eWrite) {}
               }
             }
-          } catch (eChar) {
-            log(`Impossibile leggere caratteristiche di ${s.uuid}: ${eChar.message}`);
-          }
+          } catch (eServ) {}
         }
 
-        status.textContent = `Ricezione attiva da ${device.name}`;
+        if (subscribedCount > 0) {
+          status.textContent = "Ricezione telemetria attiva!";
+        } else {
+          status.textContent = "Nessun canale compatibile trovato tra i noti.";
+          log("ATTENZIONE: Nessuna caratteristica trovata.");
+        }
 
       } catch (err) {
-        console.error(err);
-        status.textContent = `Errore: ${err.message}`;
         log(`ERRORE: ${err.message}`);
+        status.textContent = `Errore: ${err.message}`;
         btn.disabled = false;
+      }
+    }
+
+    function handleDataPacket(event, charUuid) {
+      const data = event.target.value;
+      let hex = [];
+      for (let i = 0; i < data.byteLength; i++) {
+        hex.push(data.getUint8(i).toString(16).padStart(2, '0'));
+      }
+      log(`[${charUuid.substring(0,8)}] ${hex.join(' ')}`);
+
+      // Decodifica Standard FTMS (0x2acd)
+      if (charUuid.includes('2acd')) {
+        const flags = data.getUint16(0, true);
+        let off = 2;
+        if ((flags & 0x0001) === 0) {
+          document.getElementById('valSpeed').textContent = (data.getUint16(off, true) / 100.0).toFixed(1);
+          off += 2;
+        }
+        if (flags & 0x0002) off += 2;
+        if (flags & 0x0004) {
+          const meters = data.getUint8(off) | (data.getUint8(off+1) << 8) | (data.getUint8(off+2) << 16);
+          document.getElementById('valDistance').textContent = (meters / 1000.0).toFixed(2);
+          off += 3;
+        }
+        if (flags & 0x0008) off += 4;
+        if (flags & 0x0010) off += 4;
+        if (flags & 0x0020) off += 2;
+        if (flags & 0x0100) {
+          const sec = data.getUint16(off, true);
+          const m = Math.floor(sec / 60).toString().padStart(2, '0');
+          const s = (sec % 60).toString().padStart(2, '0');
+          document.getElementById('valTime').textContent = `${m}:${s}`;
+        }
+        return;
+      }
+
+      // Decodifica Protocolli Seriali Proprietari PitPat / FitShow (header tipico 0x02 o 0x53)
+      if (data.byteLength >= 6) {
+        // Frame PitPat custom: cerca byte di velocità (spesso byte 3 o 4 moltiplicato per 10)
+        const b = [];
+        for(let i=0; i<data.byteLength; i++) b.push(data.getUint8(i));
+
+        // Formato compatto standard proprietario: b[2] = velocità * 10
+        if (b[0] === 0x02 || b[0] === 0x53 || b[0] === 0xA1) {
+          const speedCandidate = b[2] / 10.0;
+          if (speedCandidate >= 0 && speedCandidate <= 20) {
+            document.getElementById('valSpeed').textContent = speedCandidate.toFixed(1);
+          }
+        }
       }
     }
   </script>

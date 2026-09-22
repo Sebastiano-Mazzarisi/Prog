@@ -8,7 +8,7 @@
     body {
       background-color: #0f172a;
       color: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: sans-serif;
       margin: 0;
       padding: 16px;
       display: flex;
@@ -19,13 +19,12 @@
     }
     header {
       width: 100%;
-      max-width: 600px;
+      max-width: 650px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
-    h1 { font-size: 1.3rem; margin: 0; }
     button {
       background-color: #2563eb;
       color: white;
@@ -36,54 +35,20 @@
       border-radius: 8px;
       cursor: pointer;
     }
-    button:disabled { background-color: #475569; }
-    .status {
-      font-size: 0.95rem;
-      color: #38bdf8;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    .grid {
+    #status { font-size: 1rem; color: #38bdf8; margin-bottom: 12px; }
+    #log {
       width: 100%;
-      max-width: 600px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-    .card {
-      background-color: #1e293b;
-      padding: 24px;
-      border-radius: 12px;
-      text-align: center;
-      border: 1px solid #334155;
-    }
-    .label {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #94a3b8;
-      margin-bottom: 6px;
-    }
-    .value {
-      font-size: 4rem;
-      font-weight: 700;
-      color: #38bdf8;
-      line-height: 1;
-    }
-    .unit { font-size: 1rem; color: #64748b; margin-top: 6px; }
-    .raw-log {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 16px;
-      font-family: monospace;
-      font-size: 0.75rem;
-      color: #38bdf8;
-      word-break: break-all;
+      max-width: 650px;
       background: #090d16;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #1e293b;
-      max-height: 150px;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: #a5f3fc;
+      white-space: pre-wrap;
+      word-break: break-all;
+      height: 350px;
       overflow-y: auto;
     }
   </style>
@@ -91,165 +56,90 @@
 <body>
 
   <header>
-    <h1>PitPat Live</h1>
-    <button id="btnConnect" onclick="connectTreadmill()">Connetti Tapis Roulant</button>
+    <h2>Scanner Canali PitPat-T01</h2>
+    <button id="btn" onclick="startScan()">Connetti e Ispeziona</button>
   </header>
 
-  <div class="status" id="statusText">Premi "Connetti Tapis Roulant"</div>
-
-  <div class="grid">
-    <div class="card">
-      <div class="label">Velocità</div>
-      <div class="value" id="valSpeed">0.0</div>
-      <div class="unit">km/h</div>
-    </div>
-    <div class="card">
-      <div class="label">Distanza</div>
-      <div class="value" id="valDistance">0.00</div>
-      <div class="unit">km</div>
-    </div>
-    <div class="card">
-      <div class="label">Tempo</div>
-      <div class="value" id="valTime">00:00</div>
-      <div class="unit">mm:ss</div>
-    </div>
-  </div>
-
-  <div class="raw-log" id="rawLog">In attesa di connessione...</div>
+  <div id="status">Premi "Connetti e Ispeziona"</div>
+  <div id="log">In attesa...</div>
 
   <script>
-    function log(msg) {
-      const b = document.getElementById('rawLog');
-      b.innerHTML += "<br>" + msg;
-      b.scrollTop = b.scrollHeight;
+    function print(msg) {
+      const el = document.getElementById('log');
+      el.textContent += "\n" + msg;
+      el.scrollTop = el.scrollHeight;
     }
 
-    const TARGET_SERVICES = [
-      '0000fff0-0000-1000-8000-00805f9b34fb',
-      '0000ba30-0000-1000-8000-00805f9b34fb',
-      '0000ffe0-0000-1000-8000-00805f9b34fb',
-      '00001826-0000-1000-8000-00805f9b34fb',
-      '0000ae00-0000-1000-8000-00805f9b34fb',
-      '0000fee7-0000-1000-8000-00805f9b34fb',
-      0xfff0, 0xba30, 0xffe0, 0x1826, 0xae00, 0xfee7
-    ];
-
-    async function connectTreadmill() {
-      const btn = document.getElementById('btnConnect');
-      const status = document.getElementById('statusText');
+    async function startScan() {
+      const btn = document.getElementById('btn');
+      const status = document.getElementById('status');
       btn.disabled = true;
 
       try {
-        status.textContent = "Seleziona PitPat-T01...";
+        status.textContent = "Apertura selezione...";
         const device = await navigator.bluetooth.requestDevice({
-          filters: [{ namePrefix: 'PitPat' }, { namePrefix: 'pitpat' }],
-          optionalServices: TARGET_SERVICES
+          acceptAllDevices: true,
+          optionalServices: [
+            // Standard
+            0x1800, 0x1801, 0x180a, 0x1826, 0x180d,
+            // Chip Tuya / Realtek / Telink / Beken / PHY
+            0xfff0, 0xffe0, 0xfee7, 0xba30, 0xae00, 0xae30, 0xfe00, 0xfd00, 0xfe59,
+            '00001826-0000-1000-8000-00805f9b34fb',
+            '0000fff0-0000-1000-8000-00805f9b34fb',
+            '0000ffe0-0000-1000-8000-00805f9b34fb',
+            '0000fee7-0000-1000-8000-00805f9b34fb',
+            '0000ba30-0000-1000-8000-00805f9b34fb',
+            '6e400001-b5a3-f393-e0a9-e50e24dcca9e',
+            '0000fd00-0000-1000-8000-00805f9b34fb'
+          ]
         });
 
         status.textContent = "Connessione a " + device.name + "...";
-        log("Aggancio a " + device.name);
-
-        device.addEventListener('gattserverdisconnected', () => {
-          status.textContent = "Tapis disconnesso.";
-          log("Disconnesso.");
-          btn.disabled = false;
-        });
+        print("Dispositivo: " + device.name + " (ID: " + device.id + ")");
 
         const server = await device.gatt.connect();
-        status.textContent = "Ricerca canali in corso...";
-        log("Server GATT connesso.");
+        status.textContent = "Analisi servizi in corso...";
+        print("Server GATT connesso.");
 
-        let activeChannels = 0;
+        const services = await server.getPrimaryServices();
+        print("Trovati " + services.length + " servizi:");
 
-        for (const sUuid of TARGET_SERVICES) {
+        for (const s of services) {
+          print("\n[SERVIZIO] " + s.uuid);
           try {
-            const service = await server.getPrimaryService(sUuid);
-            log("Trovato servizio: " + sUuid);
-            const chars = await service.getCharacteristics();
-
+            const chars = await s.getCharacteristics();
             for (const c of chars) {
+              const props = [];
+              if (c.properties.read) props.push("READ");
+              if (c.properties.write) props.push("WRITE");
+              if (c.properties.writeWithoutResponse) props.push("WRITE_NO_RESP");
+              if (c.properties.notify) props.push("NOTIFY");
+              if (c.properties.indicate) props.push("INDICATE");
+
+              print("  -> Caratteristica: " + c.uuid + " [" + props.join(", ") + "]");
+
               if (c.properties.notify || c.properties.indicate) {
                 await c.startNotifications();
-                c.addEventListener('characteristicvaluechanged', (e) => parseData(e, c.uuid));
-                activeChannels++;
-                log("Attivato canale: " + c.uuid.substring(0, 8));
-              }
-
-              // Invio impulso di attivazione streaming dati se il canale lo consente
-              if (c.properties.write || c.properties.writeWithoutResponse) {
-                try {
-                  await c.writeValue(new Uint8Array([0x02, 0x53, 0x01, 0x00, 0x56]));
-                  await c.writeValue(new Uint8Array([0x53, 0x00, 0x00, 0x00, 0x00]));
-                } catch(errW) {}
+                c.addEventListener('characteristicvaluechanged', (e) => {
+                  let d = e.target.value;
+                  let bytes = [];
+                  for(let i=0; i<d.byteLength; i++) bytes.push(d.getUint8(i).toString(16).padStart(2,'0'));
+                  print(">>> RICEVUTI DA " + c.uuid.substring(0,8) + ": " + bytes.join(' '));
+                });
+                print("     (In ascolto notifiche attivo)");
               }
             }
-          } catch(e) {}
+          } catch(eChar) {
+            print("  Errore lettura caratteristiche: " + eChar.message);
+          }
         }
 
-        if (activeChannels > 0) {
-          status.textContent = "Collegato! Dati in ricezione.";
-        } else {
-          status.textContent = "Dispositivo connesso ma canali protetti.";
-          log("Attenzione: nessun canale ha risposto.");
-        }
+        status.textContent = "Ispezione completata!";
 
       } catch (err) {
         status.textContent = "Errore: " + err.message;
-        log("ERRORE: " + err.message);
+        print("\nERRORE: " + err.message);
         btn.disabled = false;
-      }
-    }
-
-    function parseData(event, uuid) {
-      const v = event.target.value;
-      const b = [];
-      for (let i = 0; i < v.byteLength; i++) b.push(v.getUint8(i));
-
-      // Mostra byte grezzi in tempo reale
-      log("[" + uuid.substring(0, 4) + "] " + b.map(x => x.toString(16).padStart(2, '0')).join(' '));
-
-      // Decodifica Standard FTMS
-      if (uuid.includes('2acd')) {
-        const flags = v.getUint16(0, true);
-        let off = 2;
-        if ((flags & 0x0001) === 0) {
-          document.getElementById('valSpeed').textContent = (v.getUint16(off, true) / 100.0).toFixed(1);
-          off += 2;
-        }
-        if (flags & 0x0002) off += 2;
-        if (flags & 0x0004) {
-          const m = b[off] | (b[off+1] << 8) | (b[off+2] << 16);
-          document.getElementById('valDistance').textContent = (m / 1000.0).toFixed(2);
-          off += 3;
-        }
-        if (flags & 0x0100) {
-          const sec = v.getUint16(off, true);
-          document.getElementById('valTime').textContent = 
-            String(Math.floor(sec / 60)).padStart(2, '0') + ":" + String(sec % 60).padStart(2, '0');
-        }
-        return;
-      }
-
-      // Decodifica Pacchetti Seriali PitPat / Superun
-      // Formato a 12 o 16 byte tipico: [Header, Status, Speed*10, Dist_L, Dist_H, Time_L, Time_H, ...]
-      if (b.length >= 6) {
-        // Cerca velocità (valore realistico 0.8 - 12.0 km/h memorizzato come moltiplicato per 10)
-        for (let i = 0; i < b.length - 2; i++) {
-          const candidate = b[i] / 10.0;
-          if (candidate >= 0.8 && candidate <= 12.0) {
-            document.getElementById('valSpeed').textContent = candidate.toFixed(1);
-            break;
-          }
-        }
-
-        // Tempo trascorso in secondi (2 byte Little Endian o Big Endian)
-        if (b.length >= 8) {
-          const sec = (b[5] << 8) | b[6] || b[4];
-          if (sec > 0 && sec < 7200) {
-            document.getElementById('valTime').textContent = 
-              String(Math.floor(sec / 60)).padStart(2, '0') + ":" + String(sec % 60).padStart(2, '0');
-          }
-        }
       }
     }
   </script>

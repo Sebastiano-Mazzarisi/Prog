@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard Tapis Roulant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       background-color: #0f172a;
       color: #f8fafc;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
-      padding: 24px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -18,14 +19,14 @@
     }
     header {
       width: 100%;
-      max-width: 900px;
+      max-width: 600px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       margin: 0;
       font-weight: 600;
     }
@@ -33,76 +34,79 @@
       background-color: #2563eb;
       color: white;
       border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
+      padding: 12px 18px;
+      font-size: 0.95rem;
       font-weight: 600;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.2s;
     }
-    button:hover { background-color: #1d4ed8; }
-    button:disabled { background-color: #475569; cursor: not-allowed; }
+    button:disabled { background-color: #475569; }
     
     .status {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #94a3b8;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      text-align: center;
+      word-break: break-word;
     }
 
     .grid {
       width: 100%;
-      max-width: 900px;
+      max-width: 600px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
     .card {
       background-color: #1e293b;
-      padding: 32px 24px;
+      padding: 20px;
       border-radius: 12px;
       text-align: center;
       border: 1px solid #334155;
     }
     .label {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: #94a3b8;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .value {
-      font-size: 4rem;
+      font-size: 3.5rem;
       font-weight: 700;
       color: #38bdf8;
       line-height: 1;
     }
     .unit {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #64748b;
-      margin-top: 8px;
+      margin-top: 6px;
     }
     .raw-log {
       width: 100%;
-      max-width: 900px;
-      margin-top: 24px;
+      max-width: 600px;
+      margin-top: 16px;
       font-family: monospace;
-      font-size: 0.8rem;
-      color: #64748b;
+      font-size: 0.75rem;
+      color: #38bdf8;
       word-break: break-all;
       background: #090d16;
-      padding: 12px;
+      padding: 10px;
       border-radius: 6px;
+      border: 1px solid #1e293b;
+      max-height: 180px;
+      overflow-y: auto;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Superun / PitPat Live</h1>
+    <h1>PitPat Live</h1>
     <button id="btnConnect" onclick="connectTreadmill()">Connetti Tapis Roulant</button>
   </header>
 
-  <div class="status" id="statusText">Stato: Disconnesso</div>
+  <div class="status" id="statusText">Stato: Verifica supporto Bluetooth...</div>
 
   <div class="grid">
     <div class="card">
@@ -122,108 +126,130 @@
     </div>
   </div>
 
-  <div class="raw-log" id="rawLog">In attesa di pacchetti BLE...</div>
+  <div class="raw-log" id="rawLog">Diagnostica avviata.</div>
 
   <script>
-    const FTMS_SERVICE_UUID = 0x1826;
-    const TREADMILL_DATA_CHAR_UUID = 0x2ACD;
+    function getBluetoothAPI() {
+      if (typeof navigator !== 'undefined' && navigator.bluetooth) return navigator.bluetooth;
+      if (typeof window !== 'undefined' && window.bluetooth) return window.bluetooth;
+      return null;
+    }
+
+    function log(msg) {
+      console.log(msg);
+      const logBox = document.getElementById('rawLog');
+      logBox.innerHTML += "<br>" + msg;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    window.addEventListener('load', () => {
+      const bt = getBluetoothAPI();
+      const status = document.getElementById('statusText');
+      if (bt) {
+        status.textContent = "Bluetooth supportato dal browser. Pronto a connettere.";
+        status.style.color = "#4ade80";
+        log("API Bluetooth rilevata correttamente.");
+      } else {
+        status.textContent = "ATTENZIONE: Questo browser non espone le Web Bluetooth API.";
+        status.style.color = "#f87171";
+        log("ERRORE: navigator.bluetooth non trovato in questa app.");
+      }
+    });
 
     async function connectTreadmill() {
+      const bt = getBluetoothAPI();
       const btn = document.getElementById('btnConnect');
       const status = document.getElementById('statusText');
 
+      if (!bt) {
+        alert("Questo browser non supporta il Web Bluetooth. Assicurati di usare l'app Bluefy e di aver concesso il permesso Bluetooth.");
+        return;
+      }
+
+      btn.disabled = true;
+      status.textContent = "Apertura finestra di scansione...";
+      log("Chiamata a requestDevice()...");
+
       try {
-        status.textContent = "Scansione dispositivi BLE...";
-        
-        const device = await navigator.bluetooth.requestDevice({
-          filters: [
-            { namePrefix: 'PitPat' }
-          ],
-          optionalServices: [FTMS_SERVICE_UUID, 'generic_access']
+        const device = await bt.requestDevice({
+          acceptAllDevices: true,
+          optionalServices: [
+            0x1826,
+            0xfff0,
+            0xfee7,
+            0xffe0
+          ]
         });
 
-        status.textContent = `Connessione a ${device.name}...`;
-        btn.disabled = true;
+        status.textContent = `Connessione a ${device.name || 'Dispositivo'}...`;
+        log(`Selezionato: ${device.name} (id: ${device.id})`);
 
         device.addEventListener('gattserverdisconnected', () => {
-          status.textContent = "Stato: Dispositivo disconnesso.";
+          status.textContent = "Stato: Tapis disconnesso.";
+          log("Disconnesso.");
           btn.disabled = false;
         });
 
         const server = await device.gatt.connect();
-        status.textContent = "Connesso. Ricerca servizio FTMS...";
+        status.textContent = "GATT Connesso. Analisi servizi...";
+        log("Server GATT connesso.");
 
-        const service = await server.getPrimaryService(FTMS_SERVICE_UUID);
-        const characteristic = await service.getCharacteristic(TREADMILL_DATA_CHAR_UUID);
+        const services = await server.getPrimaryServices();
+        log(`Servizi trovati: ${services.length}`);
 
-        await characteristic.startNotifications();
-        characteristic.addEventListener('characteristicvaluechanged', handleTreadmillData);
+        for (let s of services) {
+          log(`Servizio: ${s.uuid}`);
+          try {
+            const chars = await s.getCharacteristics();
+            for (let c of chars) {
+              if (c.properties.notify) {
+                await c.startNotifications();
+                c.addEventListener('characteristicvaluechanged', (e) => {
+                  let d = e.target.value;
+                  let h = [];
+                  for(let i=0; i<d.byteLength; i++) h.push(d.getUint8(i).toString(16).padStart(2,'0'));
+                  log(`Dati [${c.uuid.substring(0,8)}]: ${h.join(' ')}`);
 
-        status.textContent = `Connesso e in ricezione da: ${device.name}`;
+                  // Se è FTMS (0x2acd) decodifica standard
+                  if (c.uuid.includes('2acd')) {
+                    const flags = d.getUint16(0, true);
+                    let off = 2;
+                    if ((flags & 0x0001) === 0) {
+                      document.getElementById('valSpeed').textContent = (d.getUint16(off, true) / 100.0).toFixed(1);
+                      off += 2;
+                    }
+                    if (flags & 0x0002) off += 2;
+                    if (flags & 0x0004) {
+                      const dist = d.getUint8(off) | (d.getUint8(off+1) << 8) | (d.getUint8(off+2) << 16);
+                      document.getElementById('valDistance').textContent = (dist / 1000.0).toFixed(2);
+                      off += 3;
+                    }
+                    if (flags & 0x0008) off += 4;
+                    if (flags & 0x0010) off += 4;
+                    if (flags & 0x0020) off += 2;
+                    if (flags & 0x0100) {
+                      const sec = d.getUint16(off, true);
+                      const m = Math.floor(sec / 60).toString().padStart(2, '0');
+                      const s = (sec % 60).toString().padStart(2, '0');
+                      document.getElementById('valTime').textContent = `${m}:${s}`;
+                    }
+                  }
+                });
+                log(`Ascolto attivo su: ${c.uuid}`);
+              }
+            }
+          } catch (eChar) {
+            log(`Impossibile leggere caratteristiche di ${s.uuid}: ${eChar.message}`);
+          }
+        }
+
+        status.textContent = `Ricezione attiva da ${device.name}`;
 
       } catch (err) {
         console.error(err);
         status.textContent = `Errore: ${err.message}`;
+        log(`ERRORE: ${err.message}`);
         btn.disabled = false;
-      }
-    }
-
-    function handleTreadmillData(event) {
-      const data = event.target.value;
-      
-      let hex = [];
-      for (let i = 0; i < data.byteLength; i++) {
-        hex.push(data.getUint8(i).toString(16).padStart(2, '0'));
-      }
-      document.getElementById('rawLog').textContent = `Pacchetto raw (${data.byteLength} byte): ` + hex.join(' ');
-
-      const flags = data.getUint16(0, true);
-      let offset = 2;
-
-      // Bit 0: Velocità istantanea
-      if ((flags & 0x0001) === 0) {
-        const speedKmh = data.getUint16(offset, true) / 100.0;
-        document.getElementById('valSpeed').textContent = speedKmh.toFixed(1);
-        offset += 2;
-      }
-
-      // Bit 1: Velocità media
-      if (flags & 0x0002) {
-        offset += 2;
-      }
-
-      // Bit 2: Distanza totale
-      if (flags & 0x0004) {
-        const d0 = data.getUint8(offset);
-        const d1 = data.getUint8(offset + 1);
-        const d2 = data.getUint8(offset + 2);
-        const totalMeters = (d2 << 16) | (d1 << 8) | d0;
-        document.getElementById('valDistance').textContent = (totalMeters / 1000.0).toFixed(2);
-        offset += 3;
-      }
-
-      // Bit 3: Inclinazione
-      if (flags & 0x0008) {
-        offset += 4;
-      }
-
-      // Bit 4: Dislivello
-      if (flags & 0x0010) {
-        offset += 4;
-      }
-
-      // Bit 5: Passo
-      if (flags & 0x0020) {
-        offset += 2;
-      }
-
-      // Bit 8: Tempo trascorso
-      if (flags & 0x0100) {
-        const seconds = data.getUint16(offset, true);
-        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const s = (seconds % 60).toString().padStart(2, '0');
-        document.getElementById('valTime').textContent = `${m}:${s}`;
-        offset += 2;
       }
     }
   </script>

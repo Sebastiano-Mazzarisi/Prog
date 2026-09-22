@@ -77,7 +77,7 @@
       margin-top: 16px;
       font-family: monospace;
       font-size: 0.75rem;
-      color: #94a3b8;
+      color: #38bdf8;
       word-break: break-all;
       background: #090d16;
       padding: 10px;
@@ -124,67 +124,73 @@
       b.scrollTop = b.scrollHeight;
     }
 
+    const TARGET_SERVICES = [
+      '0000fff0-0000-1000-8000-00805f9b34fb',
+      '0000ba30-0000-1000-8000-00805f9b34fb',
+      '0000ffe0-0000-1000-8000-00805f9b34fb',
+      '00001826-0000-1000-8000-00805f9b34fb',
+      '0000ae00-0000-1000-8000-00805f9b34fb',
+      '0000fee7-0000-1000-8000-00805f9b34fb',
+      0xfff0, 0xba30, 0xffe0, 0x1826, 0xae00, 0xfee7
+    ];
+
     async function connectTreadmill() {
       const btn = document.getElementById('btnConnect');
       const status = document.getElementById('statusText');
       btn.disabled = true;
 
       try {
-        status.textContent = "Seleziona PitPat dalla lista...";
-        
-        // Elenco esaustivo di tutti i servizi seriali, proprietari e fitness
+        status.textContent = "Seleziona PitPat-T01...";
         const device = await navigator.bluetooth.requestDevice({
           filters: [{ namePrefix: 'PitPat' }, { namePrefix: 'pitpat' }],
-          optionalServices: [
-            0x1826, 0x1800, 0x1801, 0x180a, 0xfff0, 0xfee7, 0xffe0, 0xfe00, 0xae00, 0xae30,
-            '00001826-0000-1000-8000-00805f9b34fb',
-            '0000fff0-0000-1000-8000-00805f9b34fb',
-            '0000ffe0-0000-1000-8000-00805f9b34fb',
-            '0000fee7-0000-1000-8000-00805f9b34fb',
-            '0000ae00-0000-1000-8000-00805f9b34fb',
-            '0000ae30-0000-1000-8000-00805f9b34fb',
-            '0000fe00-0000-1000-8000-00805f9b34fb',
-            '0000ffe1-0000-1000-8000-00805f9b34fb',
-            '6e400001-b5a3-f393-e0a9-e50e24dcca9e', // Nordic UART
-            '49535343-fe7d-4ae5-8fa9-9fafd205e455', // ISSC
-            '0000fff1-0000-1000-8000-00805f9b34fb'
-          ]
+          optionalServices: TARGET_SERVICES
         });
 
-        status.textContent = "Connessione in corso...";
+        status.textContent = "Connessione a " + device.name + "...";
         log("Aggancio a " + device.name);
 
+        device.addEventListener('gattserverdisconnected', () => {
+          status.textContent = "Tapis disconnesso.";
+          log("Disconnesso.");
+          btn.disabled = false;
+        });
+
         const server = await device.gatt.connect();
-        status.textContent = "Ricerca automatica canali dati...";
+        status.textContent = "Ricerca canali in corso...";
+        log("Server GATT connesso.");
 
-        // Ottiene tutti i servizi primari disponibili
-        const services = await server.getPrimaryServices();
-        let connectedStreams = 0;
+        let activeChannels = 0;
 
-        for (const s of services) {
+        for (const sUuid of TARGET_SERVICES) {
           try {
-            const chars = await s.getCharacteristics();
+            const service = await server.getPrimaryService(sUuid);
+            log("Trovato servizio: " + sUuid);
+            const chars = await service.getCharacteristics();
+
             for (const c of chars) {
               if (c.properties.notify || c.properties.indicate) {
                 await c.startNotifications();
                 c.addEventListener('characteristicvaluechanged', (e) => parseData(e, c.uuid));
-                connectedStreams++;
-                log("Attivato flusso su " + c.uuid.substring(0, 8));
+                activeChannels++;
+                log("Attivato canale: " + c.uuid.substring(0, 8));
               }
-              // Invia handshake di risveglio se scrivibile
+
+              // Invio impulso di attivazione streaming dati se il canale lo consente
               if (c.properties.write || c.properties.writeWithoutResponse) {
                 try {
                   await c.writeValue(new Uint8Array([0x02, 0x53, 0x01, 0x00, 0x56]));
+                  await c.writeValue(new Uint8Array([0x53, 0x00, 0x00, 0x00, 0x00]));
                 } catch(errW) {}
               }
             }
-          } catch(errC) {}
+          } catch(e) {}
         }
 
-        if (connectedStreams > 0) {
-          status.textContent = "Collegato! Ricezione dati attiva.";
+        if (activeChannels > 0) {
+          status.textContent = "Collegato! Dati in ricezione.";
         } else {
-          status.textContent = "Nessun canale dati leggibile.";
+          status.textContent = "Dispositivo connesso ma canali protetti.";
+          log("Attenzione: nessun canale ha risposto.");
         }
 
       } catch (err) {
@@ -198,9 +204,11 @@
       const v = event.target.value;
       const b = [];
       for (let i = 0; i < v.byteLength; i++) b.push(v.getUint8(i));
-      log(uuid.substring(0, 8) + ": " + b.map(x => x.toString(16).padStart(2, '0')).join(' '));
 
-      // Caso 1: Decodifica standard FTMS
+      // Mostra byte grezzi in tempo reale
+      log("[" + uuid.substring(0, 4) + "] " + b.map(x => x.toString(16).padStart(2, '0')).join(' '));
+
+      // Decodifica Standard FTMS
       if (uuid.includes('2acd')) {
         const flags = v.getUint16(0, true);
         let off = 2;
@@ -222,14 +230,24 @@
         return;
       }
 
-      // Caso 2: Flusso seriale proprietario PitPat
+      // Decodifica Pacchetti Seriali PitPat / Superun
+      // Formato a 12 o 16 byte tipico: [Header, Status, Speed*10, Dist_L, Dist_H, Time_L, Time_H, ...]
       if (b.length >= 6) {
-        // Tipica struttura pacchetto seriale: velocita' in km/h moltiplicata per 10
-        for (let i = 1; i < b.length - 2; i++) {
-          const val = b[i] / 10.0;
-          if (val >= 0.8 && val <= 12.0) {
-            document.getElementById('valSpeed').textContent = val.toFixed(1);
+        // Cerca velocità (valore realistico 0.8 - 12.0 km/h memorizzato come moltiplicato per 10)
+        for (let i = 0; i < b.length - 2; i++) {
+          const candidate = b[i] / 10.0;
+          if (candidate >= 0.8 && candidate <= 12.0) {
+            document.getElementById('valSpeed').textContent = candidate.toFixed(1);
             break;
+          }
+        }
+
+        // Tempo trascorso in secondi (2 byte Little Endian o Big Endian)
+        if (b.length >= 8) {
+          const sec = (b[5] << 8) | b[6] || b[4];
+          if (sec > 0 && sec < 7200) {
+            document.getElementById('valTime').textContent = 
+              String(Math.floor(sec / 60)).padStart(2, '0') + ":" + String(sec % 60).padStart(2, '0');
           }
         }
       }

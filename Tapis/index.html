@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Tapis Roulant</title>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    header {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0;
+      font-weight: 600;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover { background-color: #1d4ed8; }
+    button:disabled { background-color: #475569; cursor: not-allowed; }
+    
+    .status {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background-color: #1e293b;
+      padding: 32px 24px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid #334155;
+    }
+    .label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .value {
+      font-size: 4rem;
+      font-weight: 700;
+      color: #38bdf8;
+      line-height: 1;
+    }
+    .unit {
+      font-size: 1rem;
+      color: #64748b;
+      margin-top: 8px;
+    }
+    .raw-log {
+      width: 100%;
+      max-width: 900px;
+      margin-top: 24px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #64748b;
+      word-break: break-all;
+      background: #090d16;
+      padding: 12px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Superun / PitPat Live</h1>
+    <button id="btnConnect" onclick="connectTreadmill()">Connetti Tapis Roulant</button>
+  </header>
+
+  <div class="status" id="statusText">Stato: Disconnesso</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">Velocità</div>
+      <div class="value" id="valSpeed">0.0</div>
+      <div class="unit">km/h</div>
+    </div>
+    <div class="card">
+      <div class="label">Distanza</div>
+      <div class="value" id="valDistance">0.00</div>
+      <div class="unit">km</div>
+    </div>
+    <div class="card">
+      <div class="label">Tempo</div>
+      <div class="value" id="valTime">00:00</div>
+      <div class="unit">mm:ss</div>
+    </div>
+  </div>
+
+  <div class="raw-log" id="rawLog">In attesa di pacchetti BLE...</div>
+
+  <script>
+    const FTMS_SERVICE_UUID = 0x1826;
+    const TREADMILL_DATA_CHAR_UUID = 0x2ACD;
+
+    async function connectTreadmill() {
+      const btn = document.getElementById('btnConnect');
+      const status = document.getElementById('statusText');
+
+      try {
+        status.textContent = "Scansione dispositivi BLE...";
+        
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [
+            { namePrefix: 'PitPat' }
+          ],
+          optionalServices: [FTMS_SERVICE_UUID, 'generic_access']
+        });
+
+        status.textContent = `Connessione a ${device.name}...`;
+        btn.disabled = true;
+
+        device.addEventListener('gattserverdisconnected', () => {
+          status.textContent = "Stato: Dispositivo disconnesso.";
+          btn.disabled = false;
+        });
+
+        const server = await device.gatt.connect();
+        status.textContent = "Connesso. Ricerca servizio FTMS...";
+
+        const service = await server.getPrimaryService(FTMS_SERVICE_UUID);
+        const characteristic = await service.getCharacteristic(TREADMILL_DATA_CHAR_UUID);
+
+        await characteristic.startNotifications();
+        characteristic.addEventListener('characteristicvaluechanged', handleTreadmillData);
+
+        status.textContent = `Connesso e in ricezione da: ${device.name}`;
+
+      } catch (err) {
+        console.error(err);
+        status.textContent = `Errore: ${err.message}`;
+        btn.disabled = false;
+      }
+    }
+
+    function handleTreadmillData(event) {
+      const data = event.target.value;
+      
+      let hex = [];
+      for (let i = 0; i < data.byteLength; i++) {
+        hex.push(data.getUint8(i).toString(16).padStart(2, '0'));
+      }
+      document.getElementById('rawLog').textContent = `Pacchetto raw (${data.byteLength} byte): ` + hex.join(' ');
+
+      const flags = data.getUint16(0, true);
+      let offset = 2;
+
+      // Bit 0: Velocità istantanea
+      if ((flags & 0x0001) === 0) {
+        const speedKmh = data.getUint16(offset, true) / 100.0;
+        document.getElementById('valSpeed').textContent = speedKmh.toFixed(1);
+        offset += 2;
+      }
+
+      // Bit 1: Velocità media
+      if (flags & 0x0002) {
+        offset += 2;
+      }
+
+      // Bit 2: Distanza totale
+      if (flags & 0x0004) {
+        const d0 = data.getUint8(offset);
+        const d1 = data.getUint8(offset + 1);
+        const d2 = data.getUint8(offset + 2);
+        const totalMeters = (d2 << 16) | (d1 << 8) | d0;
+        document.getElementById('valDistance').textContent = (totalMeters / 1000.0).toFixed(2);
+        offset += 3;
+      }
+
+      // Bit 3: Inclinazione
+      if (flags & 0x0008) {
+        offset += 4;
+      }
+
+      // Bit 4: Dislivello
+      if (flags & 0x0010) {
+        offset += 4;
+      }
+
+      // Bit 5: Passo
+      if (flags & 0x0020) {
+        offset += 2;
+      }
+
+      // Bit 8: Tempo trascorso
+      if (flags & 0x0100) {
+        const seconds = data.getUint16(offset, true);
+        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        document.getElementById('valTime').textContent = `${m}:${s}`;
+        offset += 2;
+      }
+    }
+  </script>
+</body>
+</html>

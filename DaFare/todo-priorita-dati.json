@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932718226,
+  "updatedAt": 1794932742194,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -89,6 +89,16 @@
       "parentId": "1794932558835-fa5b48f676aa58",
       "order": 0,
       "text": "Lavori esterni: Dario Perta e Antonio Sgobba",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794932742194-bb05b1a1917d08",
+      "type": "folder",
+      "parentId": null,
+      "order": 3,
+      "text": "Socim",
       "done": false,
       "star": false,
       "color": ""

@@ -1,6 +1,12 @@
 {
   "version": 1,
-  "updatedAt": 1794928058802,
+  "updatedAt": 1794928084148,
   "updatedBy": "1794913027631-04b37f163de258",
-  "notes": []
+  "notes": [
+    {
+      "id": "1794928084148-06b6e76dd072c8",
+      "text": "Cesare elettricista a casa",
+      "state": "normal"
+    }
+  ]
 }

@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Cose da fare!">
   <meta name="theme-color" content="#f6f7f9">
   <meta name="description" content="Cose da fare!">
@@ -26,33 +28,25 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <title>Cose da fare! (v. 1.6)</title>
+  <title>Cose da fare! (v. 2.0)</title>
   <style>
     :root {
-      --urgent: #ffd6d6;
-      --normal: #dff3ff;
-      --low: #fff0a8;
-      --done: #c9f7d2;
       --ink: #1d1d1f;
       --muted: #62626a;
       --line: #d8d8de;
       --surface: #f6f7f9;
       --button: #1f6feb;
       --button-ink: #ffffff;
+      --folder: #eef1f6;
+      --star: #d99a00;
+      --danger: #b00020;
+      --indent: 20px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
 
-    [hidden] {
-      display: none !important;
-    }
-
-    html {
-      min-height: 100%;
-      background: var(--surface);
-    }
+    html { min-height: 100%; background: var(--surface); }
 
     body {
       min-height: 100%;
@@ -62,292 +56,281 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
+    body.dragging { user-select: none; -webkit-user-select: none; cursor: grabbing; }
+
     .app {
-      width: min(780px, 100%);
+      width: min(820px, 100%);
       margin: 0 auto;
-      padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(90px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
     }
 
-    .app-header {
-      margin-bottom: 20px;
-    }
-
-    .title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    h1 {
-      font-size: 26px;
-      line-height: 1.15;
-      margin: 0;
-      font-weight: 650;
-    }
-
-    .print-button {
-      min-width: 46px;
-      min-height: 34px;
-      display: grid;
-      place-items: center;
-      color: var(--button-ink);
-      background: var(--button);
-      border: 1px solid var(--button);
-      font-size: 14px;
-      font-weight: 800;
-      line-height: 1;
-      padding: 0 10px;
-    }
-
-    .priority-legend {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .priority-chip {
-      min-height: 34px;
-      display: flex;
-      flex-direction: row;
-      gap: 0;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(0, 0, 0, 0.16);
-      border-radius: 8px;
-      padding: 4px 8px;
-      font-size: 13px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .priority-count,
-    .title-version {
-      font-size: 11px;
-      line-height: 1;
-      font-weight: 600;
-    }
-
-    button.priority-chip {
-      width: 100%;
-      cursor: pointer;
-      color: var(--ink);
-    }
-
-    .priority-chip.is-selected {
-      border-color: var(--button);
-      box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.22);
-    }
-
-    .sync-panel {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin: 14px 0;
-      padding: 10px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.55);
-    }
-
-    .sync-panel input {
-      min-height: 40px;
-      font-size: 15px;
-    }
-
-    .sync-panel .sync-wide {
-      grid-column: 1 / -1;
-    }
-
-    .sync-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .sync-button {
-      min-height: 38px;
-      padding: 0 12px;
-      color: var(--button-ink);
-      background: var(--button);
-      font-weight: 650;
-    }
-
-    .sync-status {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .composer {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .composer.is-adding {
-      border: 1px solid rgba(0, 0, 0, 0.16);
-      border-radius: 8px;
-      padding: 14px;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      min-height: 46px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 17px;
-      font: inherit;
-      color: var(--ink);
-      background: #ffffff;
-      resize: vertical;
-      overflow: hidden;
-    }
+    .title-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    h1 { font-size: 26px; line-height: 1.15; margin: 0; font-weight: 650; }
+    .title-version { font-size: 12px; font-weight: 600; color: var(--muted); }
+    .title-buttons { display: flex; gap: 8px; }
 
     button {
       border: 0;
       border-radius: 8px;
       min-height: 44px;
       font: inherit;
+      color: var(--ink);
       cursor: pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .notes {
-      display: grid;
-      gap: 10px;
+    .head-button {
+      min-width: 46px;
+      min-height: 38px;
+      padding: 0 12px;
+      color: var(--button-ink);
+      background: var(--button);
+      font-size: 15px;
+      font-weight: 800;
     }
 
-    .note-card {
-      position: relative;
-      color: var(--ink);
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-top: 14px;
+      padding: 2px 2px 6px;
+      scrollbar-width: thin;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      min-height: 40px;
+      padding: 0 14px;
+      white-space: nowrap;
+      background: var(--chip, #ffffff);
       border: 1px solid rgba(0, 0, 0, 0.16);
-      border-radius: 8px;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-      transition: transform 120ms ease, border-color 120ms ease;
+      font-size: 15px;
+      font-weight: 700;
     }
 
-    .note-card.priority-break {
-      margin-top: 15px;
-    }
+    .chip .chip-count { font-size: 12px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+    .chip.is-selected { border-color: var(--button); box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.25); }
+    .chip.drop-inside { outline: 3px solid var(--button); }
 
-    .note-content {
+    .toolbar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+
+    .search {
+      grid-column: 1 / -1;
       width: 100%;
-      display: block;
-      text-align: left;
-      color: inherit;
-      background: transparent;
-      padding: 16px 58px 16px 14px;
-      min-height: 58px;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font: inherit;
+      font-size: 17px;
+      background: #ffffff;
+      color: var(--ink);
     }
+
+    .tool-btn {
+      min-height: 44px;
+      padding: 0 8px;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .tool-btn.primary { background: var(--button); color: var(--button-ink); border-color: var(--button); }
+    .tool-btn.is-on { background: #e8f0fe; border-color: var(--button); }
+
+    .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 12px 0 0; font-size: 15px; color: var(--muted); }
+    .crumbs button { min-height: 32px; padding: 0 8px; background: transparent; color: var(--button); font-weight: 650; }
+    .crumbs .current { color: var(--ink); font-weight: 700; padding: 0 8px; }
+
+    .tree { margin-top: 12px; }
+
+    .row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 50px;
+      margin: 0 0 6px calc(var(--depth, 0) * var(--indent));
+      padding: 3px 6px 3px 0;
+      border: 1px solid rgba(0, 0, 0, 0.14);
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+
+    .row.folder { background: var(--fc, var(--folder)); }
+    .row.note { border-left: 5px solid var(--fc, var(--line)); }
+    .row.is-dragging { opacity: 0.35; }
+    .row.drop-inside { outline: 3px solid var(--button); outline-offset: 1px; }
+    .row.drop-before::before,
+    .row.drop-after::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--button);
+    }
+    .row.drop-before::before { top: -6px; }
+    .row.drop-after::after { bottom: -6px; }
+
+    .drag-ghost {
+      position: fixed;
+      z-index: 1000;
+      margin: 0 !important;
+      pointer-events: none;
+      opacity: 0.92;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+    }
+
+    .handle {
+      flex: 0 0 34px;
+      align-self: stretch;
+      display: grid;
+      place-items: center;
+      color: #9a9aa2;
+      font-size: 22px;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    .toggle {
+      flex: 0 0 30px;
+      min-height: 40px;
+      padding: 0;
+      background: transparent;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .folder-name {
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 42px;
+      padding: 6px 4px;
+      text-align: left;
+      background: transparent;
+      font-size: 17px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.08);
+      white-space: nowrap;
+    }
+
+    .badge .badge-star { color: var(--star); }
+
+    .icon-btn {
+      flex: 0 0 38px;
+      width: 38px;
+      min-height: 38px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .check {
+      flex: 0 0 40px;
+      width: 40px;
+      min-height: 40px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      background: transparent;
+    }
+
+    .check span {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border: 2px solid #8a8a92;
+      border-radius: 6px;
+      background: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .row.is-done .check span { background: #2e9e4f; border-color: #2e9e4f; }
 
     .note-text {
-      display: block;
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 8px 4px;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       font-size: 17px;
       line-height: 1.35;
-      padding-right: 4px;
+      cursor: pointer;
     }
 
-    .note-card.is-open .note-content {
-      padding-right: 14px;
-    }
+    .row.is-done .note-text { text-decoration: line-through; color: var(--muted); }
+    .row.is-star .note-text::before { content: "\2605  "; color: var(--star); }
 
-    .note-actions {
+    .copied {
       position: absolute;
-      top: 8px;
-      right: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .note-action {
-      width: 34px;
-      min-height: 34px;
-      display: grid;
-      place-items: center;
-      background: #ffffff;
-      color: var(--ink);
-      border: 1px solid rgba(0, 0, 0, 0.16);
-      font-size: 21px;
-      line-height: 1;
-      padding: 0;
-      font-weight: 650;
-    }
-
-    .copy-feedback {
-      position: absolute;
-      top: 8px;
-      right: 50px;
-      min-height: 34px;
-      padding: 0 10px;
-      background: rgba(255, 255, 255, 0.88);
-      color: var(--ink);
-      border: 1px solid rgba(0, 0, 0, 0.16);
+      top: 6px;
+      right: 52px;
+      padding: 6px 10px;
       border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.16);
       font-size: 13px;
       font-weight: 700;
       pointer-events: none;
     }
 
-    .edit-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
+    .editor { flex: 1 1 auto; min-width: 0; padding: 8px 0 6px; }
+
+    textarea, .modal input[type="text"] {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 17px;
+      line-height: 1.35;
+      color: var(--ink);
+      background: #ffffff;
+      resize: vertical;
     }
 
-    .new-note-actions {
-      display: none;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .composer.is-adding .new-note-actions {
-      display: flex;
-    }
+    .edit-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 
     .edit-action {
-      flex: 1 1 120px;
-      min-height: 40px;
-      padding: 0 12px;
-      background: rgba(255, 255, 255, 0.68);
-      color: var(--ink);
+      flex: 1 1 100px;
+      min-height: 42px;
+      padding: 0 10px;
+      background: #ffffff;
       border: 1px solid rgba(0, 0, 0, 0.16);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 650;
     }
 
-    .note-edit-input {
-      min-height: 74px;
-      font-size: 17px;
-      line-height: 1.35;
-      background: rgba(255, 255, 255, 0.72);
-    }
-
-    .urgent {
-      background: var(--urgent);
-    }
-
-    .normal {
-      background: var(--normal);
-    }
-
-    .low {
-      background: var(--low);
-    }
-
-    .done {
-      background: var(--done);
-    }
+    .edit-action.primary { background: var(--button); color: var(--button-ink); border-color: var(--button); }
+    .edit-action.danger { color: var(--danger); }
+    .edit-action.is-on { background: #fff4cc; border-color: var(--star); }
 
     .empty {
       border: 1px dashed var(--line);
@@ -358,241 +341,219 @@
       background: rgba(255, 255, 255, 0.55);
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+    .root-drop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 900;
+      padding: max(12px, env(safe-area-inset-top)) 12px 12px;
+      text-align: center;
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(31, 111, 235, 0.88);
+    }
+
+    .root-drop.drop-inside { background: #0b4fc0; }
+
+    .status { margin-top: 18px; text-align: center; font-size: 12px; color: var(--muted); }
+    .status .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: #9a9aa2; }
+    .status.ok .dot { background: #2e9e4f; }
+    .status.busy .dot { background: #e0a000; }
+    .status.err .dot { background: var(--danger); }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.38);
+    }
+
+    .modal-box {
+      width: min(540px, 100%);
+      max-height: 88vh;
+      overflow: auto;
+      padding: 16px 16px max(16px, env(safe-area-inset-bottom));
+      border-radius: 14px 14px 0 0;
+      background: #ffffff;
+    }
+
+    .modal-box h2 { margin: 0 0 12px; font-size: 19px; overflow-wrap: anywhere; }
+    .modal-box p { margin: 0 0 12px; line-height: 1.4; }
+    .modal-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+    .menu-item {
+      display: block;
+      width: 100%;
+      margin-bottom: 6px;
+      padding: 0 14px;
+      min-height: 48px;
+      text-align: left;
+      background: #f2f3f6;
+      font-size: 17px;
+    }
+
+    .menu-item.danger { color: var(--danger); }
+    .menu-item.is-current { opacity: 0.45; }
+
+    .swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .swatch { min-height: 48px; border: 1px solid rgba(0, 0, 0, 0.2); font-size: 13px; font-weight: 700; }
+    .swatch.is-selected { box-shadow: 0 0 0 3px var(--button); }
+
+    .check-line { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 15px; }
+    .check-line input { width: 22px; height: 22px; }
+
+    .help { line-height: 1.45; font-size: 15px; }
+    .help ul { padding-left: 20px; margin: 6px 0 10px; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      z-index: 3000;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      max-width: calc(100% - 24px);
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #222226;
+      color: #ffffff;
+      font-size: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .toast button { min-height: 34px; padding: 0 10px; background: #ffffff; color: #222226; font-weight: 800; }
+
+    @media (min-width: 640px) {
+      .modal { align-items: center; }
+      .modal-box { border-radius: 14px; }
     }
 
     @media (max-width: 520px) {
-      .app {
-        padding: max(14px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
-      }
-
-      h1 {
-        font-size: 30px;
-      }
-
-      .priority-chip {
-        min-height: 44px;
-        font-size: 16px;
-      }
-
-      .priority-count,
-      .title-version {
-        font-size: 13px;
-      }
-
-      input,
-      textarea,
-      .note-text,
-      .note-edit-input {
-        font-size: 20px;
-      }
-
-      .edit-action {
-        min-height: 46px;
-        font-size: 18px;
-      }
-
-      .note-action {
-        width: 42px;
-        min-height: 42px;
-        font-size: 24px;
-      }
-
-      .print-button {
-        min-height: 44px;
-        font-size: 16px;
-      }
-
-      .priority-legend {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .sync-panel {
-        grid-template-columns: 1fr;
-      }
-
-      .sync-panel .sync-wide {
-        grid-column: auto;
-      }
-
-      .note-content {
-        padding-right: 58px;
-      }
-
-      .note-card.is-open .note-content {
-        padding-right: 14px;
-      }
+      :root { --indent: 14px; }
+      .app { padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
+      h1 { font-size: 28px; }
+      .folder-name, .note-text, textarea, .search { font-size: 19px; }
+      .tool-btn { font-size: 14px; padding: 0 4px; }
+      .handle { flex-basis: 30px; }
     }
   </style>
 </head>
 <body>
+  <div class="root-drop" id="rootDrop" hidden>⤒ Rilascia qui per portarlo al livello principale</div>
+
   <div class="app">
-    <header class="app-header">
+    <header>
       <div class="title-row">
-        <h1>Cose da fare! <span class="title-version">(v. 1.6)</span></h1>
-        <button class="print-button" id="printNotes" type="button" aria-label="Prepara PDF">PDF</button>
+        <h1>Cose da fare! <span class="title-version">(v. 2.0)</span></h1>
+        <div class="title-buttons">
+          <button class="head-button" id="installButton" type="button" hidden>Installa</button>
+          <button class="head-button" id="helpButton" type="button" aria-label="Guida">?</button>
+          <button class="head-button" id="pdfButton" type="button" aria-label="Prepara PDF">PDF</button>
+        </div>
       </div>
-      <div class="priority-legend" aria-label="Priorita">
-        <button class="priority-chip urgent is-selected" type="button" data-add-state="urgent"><span>URGENTE</span><span class="priority-count" data-count-state="urgent">: 0</span></button>
-        <button class="priority-chip normal" type="button" data-add-state="normal"><span>NORMALE</span><span class="priority-count" data-count-state="normal">: 0</span></button>
-        <button class="priority-chip low" type="button" data-add-state="low"><span>BASSA</span><span class="priority-count" data-count-state="low">: 0</span></button>
-        <button class="priority-chip done" type="button" data-add-state="done"><span>COMPLETATA</span><span class="priority-count" data-count-state="done">: 0</span></button>
+      <nav class="chips" id="chips" aria-label="Cartelle principali"></nav>
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Cerca..." aria-label="Cerca" autocomplete="off">
+        <button class="tool-btn primary" id="addNoteButton" type="button">+ Nota</button>
+        <button class="tool-btn primary" id="addFolderButton" type="button">+ Cartella</button>
+        <button class="tool-btn" id="expandButton" type="button">Chiudi tutto</button>
+        <button class="tool-btn" id="doneButton" type="button">Nascondi fatte</button>
       </div>
+      <div class="crumbs" id="crumbs" hidden></div>
     </header>
 
-    <form class="sync-panel" id="syncForm" autocomplete="off" hidden>
-      <label class="sr-only" for="githubOwner">Utente GitHub</label>
-      <input id="githubOwner" name="githubOwner" type="text" placeholder="Utente GitHub" aria-label="Utente GitHub">
-      <label class="sr-only" for="githubRepo">Repository</label>
-      <input id="githubRepo" name="githubRepo" type="text" placeholder="Repository" aria-label="Repository">
-      <label class="sr-only" for="githubBranch">Branch</label>
-      <input id="githubBranch" name="githubBranch" type="text" placeholder="Branch" aria-label="Branch">
-      <label class="sr-only" for="githubPath">File dati</label>
-      <input id="githubPath" name="githubPath" type="text" placeholder="todo-priorita-dati.json" aria-label="File dati">
-      <label class="sr-only" for="githubToken">Token GitHub</label>
-      <input class="sync-wide" id="githubToken" name="githubToken" type="password" placeholder="Token GitHub" aria-label="Token GitHub">
-      <div class="sync-actions sync-wide">
-        <button class="sync-button" type="submit">Salva GitHub</button>
-        <button class="sync-button" id="syncNow" type="button">Sincronizza</button>
-        <span class="sync-status" id="syncStatus">GitHub non configurato</span>
-      </div>
-    </form>
-
-    <form class="composer" id="todoForm" autocomplete="off">
-      <label class="sr-only" for="todoInput">Nuova nota</label>
-      <textarea id="todoInput" name="todoInput" rows="2" placeholder="Scrivi una cosa da fare..." aria-label="Nuova nota"></textarea>
-      <div class="new-note-actions">
-        <button class="edit-action" type="submit">Salva</button>
-        <button class="edit-action" id="clearNewNote" type="button">Cancella</button>
-        <button class="edit-action" id="cancelNewNote" type="button">Esci</button>
-      </div>
-    </form>
-
-    <main class="notes" id="notes" aria-live="polite"></main>
+    <main class="tree" id="tree" aria-live="polite"></main>
+    <div class="status" id="status"><span class="dot"></span><span id="statusText">Avvio...</span></div>
   </div>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box" id="modalBox" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <div class="toast" id="toast" hidden><span id="toastText"></span><button id="toastUndo" type="button">Annulla</button></div>
 
   <script>
     (function () {
-      const form = document.getElementById("todoForm");
-      const input = document.getElementById("todoInput");
-      const notesEl = document.getElementById("notes");
-      const printNotesButton = document.getElementById("printNotes");
-      const addPriorityButtons = Array.from(document.querySelectorAll(".priority-legend [data-add-state]"));
-      const priorityCountEls = Array.from(document.querySelectorAll("[data-count-state]"));
-      const syncForm = document.getElementById("syncForm");
-      const syncNowButton = document.getElementById("syncNow");
-      const syncStatus = document.getElementById("syncStatus");
-      const cancelNewNoteButton = document.getElementById("cancelNewNote");
-      const githubOwner = document.getElementById("githubOwner");
-      const githubRepo = document.getElementById("githubRepo");
-      const githubBranch = document.getElementById("githubBranch");
-      const githubPath = document.getElementById("githubPath");
-      const githubToken = document.getElementById("githubToken");
-      const storageKey = "todo-priorita-notes-v1";
-      const updatedKey = "todo-priorita-updated-v1";
-      const syncKey = "todo-priorita-github-v1";
+      "use strict";
+
+      // ---------- Costanti e stato ----------
+      const params = new URLSearchParams(location.search);
+      const testMode = params.has("prova");
+      const prefix = testMode ? "prova-" : "";
+      const itemsKey = prefix + "dafare-albero-v2";
+      const legacyKey = "todo-priorita-notes-v1";
+      const updatedKey = prefix + "todo-priorita-updated-v1";
+      const uiKey = prefix + "dafare-ui-v2";
       const clientKey = "todo-priorita-client-v1";
-      const builtInSyncConfig = {
-        owner: "Sebastiano-Mazzarisi",
-        repo: "Prog",
-        branch: "main",
-        path: "DaFare/todo-priorita-dati.json",
-        token: "",
-        apiUrl: "https://da-fare-sync.s-mazzarisi.workers.dev"
-      };
-      const states = ["urgent", "normal", "low", "done"];
+      const SYNC_URL = "https://da-fare-sync.s-mazzarisi.workers.dev";
+      const INBOX_ID = "da-smistare";
+      const COLORS = [
+        { value: "", label: "Nessuno" },
+        { value: "#ffd6d6", label: "" },
+        { value: "#ffe3c2", label: "" },
+        { value: "#fff0a8", label: "" },
+        { value: "#d9f5c5", label: "" },
+        { value: "#dff3ff", label: "" },
+        { value: "#e6dcff", label: "" },
+        { value: "#f6d6ec", label: "" },
+        { value: "#e2e2e6", label: "" },
+        { value: "#c9f7d2", label: "" }
+      ];
 
-      let notes = loadNotes();
-      let openNoteId = null;
-      let savedUpdatedAt = Number(localStorage.getItem(updatedKey));
-      let notesUpdatedAt = savedUpdatedAt || (notes.length ? Date.now() : 0);
-      let syncConfig = loadSyncConfig();
-      let remoteSha = null;
-      let syncTimer = null;
-      let pollTimer = null;
-      let syncing = false;
-      let applyingRemote = false;
-      let pendingAddState = "urgent";
-      let addingNote = false;
-      let skipNextRefresh = false;
-      let activeEditInput = null;
+      const treeEl = document.getElementById("tree");
+      const chipsEl = document.getElementById("chips");
+      const crumbsEl = document.getElementById("crumbs");
+      const searchEl = document.getElementById("search");
+      const rootDrop = document.getElementById("rootDrop");
+      const modalEl = document.getElementById("modal");
+      const modalBox = document.getElementById("modalBox");
+      const toastEl = document.getElementById("toast");
+      const toastText = document.getElementById("toastText");
+      const toastUndo = document.getElementById("toastUndo");
+      const statusEl = document.getElementById("status");
+      const statusText = document.getElementById("statusText");
+      const expandButton = document.getElementById("expandButton");
+      const doneButton = document.getElementById("doneButton");
+
       let clientId = localStorage.getItem(clientKey);
-      let copyAudioContext = null;
-
       if (!clientId) {
         clientId = createId();
         localStorage.setItem(clientKey, clientId);
       }
-      sessionStorage.removeItem("todo-priorita-ui-v1");
 
-      function loadNotes() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
-          if (Array.isArray(saved)) {
-            return saved
-              .filter((note) => note && typeof note.text === "string")
-              .map(normalizeNote);
-          }
-        } catch (error) {
-          return [];
-        }
-        return [];
-      }
+      let items = loadItems();
+      let updatedAt = Number(localStorage.getItem(updatedKey)) || (items.length ? Date.now() : 0);
+      let ui = loadUi();
+      let editingId = null;
+      let editStar = false;
+      let search = "";
+      let syncing = false;
+      let pendingPush = false;
+      let syncTimer = null;
+      let pollTimer = null;
+      let undoSnapshot = null;
+      let toastTimer = null;
+      let drag = null;
+      let modalClose = null;
+      let audioContext = null;
 
-      function saveNotes(options) {
-        const settings = options || {};
-        if (!settings.keepTimestamp) {
-          notesUpdatedAt = Date.now();
-          localStorage.setItem(updatedKey, String(notesUpdatedAt));
-        }
-        localStorage.setItem(storageKey, JSON.stringify(notes));
-        if (!applyingRemote && !settings.skipSync) {
-          scheduleSync();
-        }
-      }
-
+      // ---------- Utilità ----------
       function createId() {
         return String(Date.now()) + "-" + Math.random().toString(16).slice(2);
       }
 
-      function normalizeNote(note) {
-        return {
-          id: note.id || createId(),
-          text: note.text,
-          state: states.includes(note.state) ? note.state : "urgent"
-        };
-      }
-
-      function sortNotes() {
-        notes.sort(function (first, second) {
-          const firstPriority = states.indexOf(first.state);
-          const secondPriority = states.indexOf(second.state);
-
-          if (firstPriority !== secondPriority) {
-            return firstPriority - secondPriority;
-          }
-
-          return first.text.localeCompare(second.text, "it", { sensitivity: "base" });
-        });
-      }
-
-      function nextState(current) {
-        const index = states.indexOf(current);
-        return states[(index + 1) % states.length];
-      }
-
-      function autoGrow(field) {
-        field.style.height = "auto";
-        field.style.height = field.scrollHeight + "px";
+      function make(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        if (tag === "button") node.type = "button";
+        return node;
       }
 
       function escapeHtml(value) {
@@ -604,252 +565,1085 @@
           .replace(/'/g, "&#039;");
       }
 
-      function appendFormattedNoteText(container, value) {
+      function appendFormattedText(container, value) {
         const pattern = /\*([^*\n]+?)\*/g;
         const text = String(value);
         let cursor = 0;
         let match;
-
         while ((match = pattern.exec(text)) !== null) {
-          if (match.index > cursor) {
-            container.appendChild(document.createTextNode(text.slice(cursor, match.index)));
-          }
-
+          if (match.index > cursor) container.appendChild(document.createTextNode(text.slice(cursor, match.index)));
           const strong = document.createElement("strong");
           strong.textContent = match[1];
           container.appendChild(strong);
           cursor = pattern.lastIndex;
         }
+        if (cursor < text.length) container.appendChild(document.createTextNode(text.slice(cursor)));
+      }
 
-        if (cursor < text.length) {
-          container.appendChild(document.createTextNode(text.slice(cursor)));
+      function formatHtml(value) {
+        return String(value).split("\n").map(function (line) {
+          return escapeHtml(line).replace(/\*([^*\n]+?)\*/g, "<strong>$1</strong>");
+        }).join("<br>");
+      }
+
+      function autoGrow(field) {
+        field.style.height = "auto";
+        field.style.height = field.scrollHeight + 2 + "px";
+      }
+
+      function startsWithEmoji(text) {
+        try {
+          return /^\p{Extended_Pictographic}/u.test(text);
+        } catch (error) {
+          return false;
         }
       }
 
-      function formatNoteTextHtml(value) {
-        const pattern = /\*([^*\n]+?)\*/g;
-        return String(value)
-          .split("\n")
-          .map(function (line) {
-            return escapeHtml(line).replace(pattern, function (_match, boldText) {
-              return "<strong>" + boldText + "</strong>";
-            });
-          })
-          .join("<br>");
+      function folderLabel(item) {
+        return (startsWithEmoji(item.text) ? "" : "📁 ") + item.text;
       }
 
-      function priorityLabel(state) {
-        const labels = {
-          urgent: "URGENTE",
-          normal: "NORMALE",
-          low: "BASSA",
-          done: "COMPLETATA"
+      // ---------- Dati ----------
+      function normalizeItem(item) {
+        return {
+          id: String(item.id || createId()),
+          type: item.type === "folder" ? "folder" : "note",
+          parentId: item.parentId ? String(item.parentId) : null,
+          order: Number(item.order) || 0,
+          text: String(item.text || ""),
+          done: Boolean(item.done),
+          star: Boolean(item.star),
+          color: typeof item.color === "string" ? item.color : ""
         };
-        return labels[state] || "URGENTE";
       }
 
-      function printPriorityLabel(state) {
-        const labels = {
-          urgent: "Urgente",
-          normal: "Normale",
-          low: "Bassa",
-          done: "Completata"
-        };
-        return labels[state] || "Urgente";
-      }
-
-      function updatePriorityCounts() {
-        const counts = countByState();
-
-        priorityCountEls.forEach(function (element) {
-          element.textContent = ": " + String(counts[element.dataset.countState] || 0);
+      function cleanItems(list) {
+        const seen = new Set();
+        const result = [];
+        list.forEach(function (raw) {
+          if (!raw || typeof raw.text !== "string") return;
+          const item = normalizeItem(raw);
+          if (seen.has(item.id)) return;
+          seen.add(item.id);
+          result.push(item);
         });
-      }
-
-      function countByState() {
-        const counts = {
-          urgent: 0,
-          normal: 0,
-          low: 0,
-          done: 0
-        };
-
-        notes.forEach(function (note) {
-          if (Object.prototype.hasOwnProperty.call(counts, note.state)) {
-            counts[note.state] += 1;
+        const map = new Map(result.map(function (item) { return [item.id, item]; }));
+        result.forEach(function (item) {
+          const parent = item.parentId ? map.get(item.parentId) : null;
+          if (item.parentId && (!parent || parent.type !== "folder")) item.parentId = null;
+        });
+        result.forEach(function (item) {
+          const chain = new Set([item.id]);
+          let parentId = item.parentId;
+          while (parentId) {
+            if (chain.has(parentId)) {
+              item.parentId = null;
+              break;
+            }
+            chain.add(parentId);
+            const parent = map.get(parentId);
+            parentId = parent ? parent.parentId : null;
           }
         });
-
-        return counts;
+        return result;
       }
 
-      function preparePdf() {
-        sortNotes();
-        const printStates = ["urgent", "normal", "low", "done"];
+      function legacyState(item) {
+        if (item.done) return "done";
+        return item.star ? "urgent" : "normal";
+      }
 
-        const rows = printStates.map(function (state) {
-          const groupNotes = notes.filter(function (note) {
-            return note.state === state;
+      function inboxFolder(order) {
+        return { id: INBOX_ID, type: "folder", parentId: null, order: order, text: "Da smistare", done: false, star: false, color: "#fff0a8" };
+      }
+
+      // Converte le note della v1 (con priorita') nella struttura ad albero.
+      function migrateLegacy(notes) {
+        const rank = { urgent: 0, normal: 1, low: 2, done: 3 };
+        const valid = notes.filter(function (note) { return note && typeof note.text === "string"; });
+        if (!valid.length) return [];
+        valid.sort(function (a, b) {
+          const diff = (rank[a.state] !== undefined ? rank[a.state] : 0) - (rank[b.state] !== undefined ? rank[b.state] : 0);
+          return diff || a.text.localeCompare(b.text, "it", { sensitivity: "base" });
+        });
+        const result = [inboxFolder(0)];
+        valid.forEach(function (note, index) {
+          result.push({
+            id: String(note.id || createId()),
+            type: "note",
+            parentId: INBOX_ID,
+            order: index,
+            text: note.text,
+            done: note.state === "done",
+            star: note.state === "urgent",
+            color: ""
           });
+        });
+        return cleanItems(result);
+      }
 
-          if (!groupNotes.length) {
-            return "";
+      // Se una vecchia v1.6 ancora aperta su un dispositivo salva i dati, li fonde con l'albero locale.
+      function mergeLegacy(notes) {
+        const valid = notes.filter(function (note) { return note && typeof note.text === "string"; });
+        if (!items.length) return migrateLegacy(valid);
+        const localNotes = new Map(items.filter(function (item) { return item.type === "note"; }).map(function (item) { return [item.id, item]; }));
+        const result = items.filter(function (item) { return item.type === "folder"; }).map(function (item) { return Object.assign({}, item); });
+        let needInbox = false;
+        let order = 100000;
+        valid.forEach(function (note) {
+          const local = localNotes.get(String(note.id));
+          if (local) {
+            result.push(Object.assign({}, local, {
+              text: note.text,
+              done: note.state === "done",
+              star: note.state === "urgent" ? true : (note.state === "done" ? local.star : false)
+            }));
+          } else {
+            needInbox = true;
+            result.push({
+              id: String(note.id || createId()),
+              type: "note",
+              parentId: INBOX_ID,
+              order: order++,
+              text: note.text,
+              done: note.state === "done",
+              star: note.state === "urgent",
+              color: ""
+            });
+          }
+        });
+        if (needInbox && !result.some(function (item) { return item.id === INBOX_ID; })) result.push(inboxFolder(-1));
+        return cleanItems(result);
+      }
+
+      function loadItems() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(itemsKey) || "null");
+          if (Array.isArray(saved)) return cleanItems(saved);
+        } catch (error) {}
+        if (testMode) {
+          try {
+            const real = JSON.parse(localStorage.getItem("dafare-albero-v2") || "null");
+            if (Array.isArray(real)) return cleanItems(real);
+          } catch (error) {}
+        }
+        try {
+          const legacy = JSON.parse(localStorage.getItem(legacyKey) || "[]");
+          if (Array.isArray(legacy) && legacy.length) return migrateLegacy(legacy);
+        } catch (error) {}
+        return [];
+      }
+
+      function persist(options) {
+        const settings = options || {};
+        if (!settings.keepTimestamp) {
+          updatedAt = Math.max(Date.now(), updatedAt + 1);
+          localStorage.setItem(updatedKey, String(updatedAt));
+        }
+        localStorage.setItem(itemsKey, JSON.stringify(items));
+        if (!settings.skipSync) scheduleSync();
+      }
+
+      function commit() {
+        persist();
+        render();
+      }
+
+      function loadUi() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(uiKey) || "{}");
+          return {
+            collapsed: saved.collapsed && typeof saved.collapsed === "object" ? saved.collapsed : {},
+            focusId: saved.focusId || null,
+            hideDone: Boolean(saved.hideDone)
+          };
+        } catch (error) {
+          return { collapsed: {}, focusId: null, hideDone: false };
+        }
+      }
+
+      function saveUi() {
+        localStorage.setItem(uiKey, JSON.stringify(ui));
+      }
+
+      // ---------- Albero ----------
+      function byId(id) {
+        if (!id) return null;
+        for (let i = 0; i < items.length; i += 1) {
+          if (items[i].id === id) return items[i];
+        }
+        return null;
+      }
+
+      function sorter(a, b) {
+        if (a.type !== b.type) return a.type === "folder" ? -1 : 1;
+        return a.order - b.order || a.text.localeCompare(b.text, "it", { sensitivity: "base" });
+      }
+
+      function children(parentId) {
+        return items.filter(function (item) { return item.parentId === parentId; }).sort(sorter);
+      }
+
+      function descendants(id) {
+        const out = [];
+        const stack = [id];
+        while (stack.length) {
+          const parentId = stack.pop();
+          items.forEach(function (item) {
+            if (item.parentId === parentId) {
+              out.push(item);
+              if (item.type === "folder") stack.push(item.id);
+            }
+          });
+        }
+        return out;
+      }
+
+      function isDescendant(id, ancestorId) {
+        let current = byId(id);
+        let guard = 0;
+        while (current && current.parentId && guard < 500) {
+          if (current.parentId === ancestorId) return true;
+          current = byId(current.parentId);
+          guard += 1;
+        }
+        return false;
+      }
+
+      function pathOf(id) {
+        const out = [];
+        let current = byId(id);
+        let guard = 0;
+        while (current && guard < 500) {
+          out.unshift(current);
+          current = current.parentId ? byId(current.parentId) : null;
+          guard += 1;
+        }
+        return out;
+      }
+
+      function countsOf(folderId) {
+        const list = folderId ? descendants(folderId) : items;
+        let open = 0;
+        let star = 0;
+        list.forEach(function (item) {
+          if (item.type === "note" && !item.done) {
+            open += 1;
+            if (item.star) star += 1;
+          }
+        });
+        return { open: open, star: star };
+      }
+
+      function colorOf(item) {
+        let current = item.type === "folder" ? item : byId(item.parentId);
+        while (current) {
+          if (current.color) return current.color;
+          current = byId(current.parentId);
+        }
+        return "";
+      }
+
+      function edgeOrder(parentId, type, first) {
+        const siblings = items.filter(function (item) { return item.parentId === parentId && item.type === type; });
+        if (!siblings.length) return 0;
+        const orders = siblings.map(function (item) { return item.order; });
+        return first ? Math.min.apply(null, orders) - 1 : Math.max.apply(null, orders) + 1;
+      }
+
+      function isExpanded(id) {
+        return !ui.collapsed[id];
+      }
+
+      function setExpanded(id, value) {
+        if (value) delete ui.collapsed[id];
+        else ui.collapsed[id] = true;
+        saveUi();
+      }
+
+      // ---------- Disegno ----------
+      function render() {
+        if (ui.focusId && !byId(ui.focusId)) ui.focusId = null;
+        if (editingId && !byId(editingId)) editingId = null;
+        renderChips();
+        renderCrumbs();
+        expandButton.textContent = items.some(function (item) { return item.type === "folder" && isExpanded(item.id); }) ? "Chiudi tutto" : "Apri tutto";
+        doneButton.textContent = ui.hideDone ? "Mostra fatte" : "Nascondi fatte";
+        doneButton.classList.toggle("is-on", ui.hideDone);
+
+        treeEl.textContent = "";
+        const query = search.trim().toLowerCase();
+        let visible = null;
+        if (query) {
+          visible = new Set();
+          items.forEach(function (item) {
+            if (item.text.toLowerCase().indexOf(query) === -1) return;
+            pathOf(item.id).forEach(function (node) { visible.add(node.id); });
+            if (item.type === "folder") descendants(item.id).forEach(function (node) { visible.add(node.id); });
+          });
+        }
+
+        const shown = renderLevel(ui.focusId, 0, visible, Boolean(query));
+        if (!shown) {
+          const empty = make("div", "empty");
+          if (query) empty.textContent = "Nessun risultato per «" + search.trim() + "».";
+          else if (ui.focusId) empty.textContent = "Questa cartella è vuota. Usa «+ Nota» o «+ Cartella».";
+          else empty.textContent = "Ancora niente. Crea una cartella (es. Casa) con «+ Cartella» oppure una nota con «+ Nota».";
+          treeEl.appendChild(empty);
+        }
+      }
+
+      function renderLevel(parentId, depth, visible, searching) {
+        let count = 0;
+        children(parentId).forEach(function (item) {
+          if (visible && !visible.has(item.id)) return;
+          if (item.type === "note" && ui.hideDone && item.done && editingId !== item.id) return;
+          treeEl.appendChild(item.type === "folder" ? folderRow(item, depth) : noteRow(item, depth));
+          count += 1;
+          if (item.type === "folder" && (searching || isExpanded(item.id))) {
+            count += renderLevel(item.id, depth + 1, visible, searching);
+          }
+        });
+        return count;
+      }
+
+      function renderChips() {
+        chipsEl.textContent = "";
+        const focusRoot = ui.focusId ? pathOf(ui.focusId)[0] : null;
+        const all = make("button", "chip" + (ui.focusId ? "" : " is-selected"));
+        all.dataset.chip = "";
+        all.appendChild(document.createTextNode("Tutto"));
+        all.appendChild(make("span", "chip-count", String(countsOf(null).open)));
+        all.addEventListener("click", function () { setFocus(null); });
+        chipsEl.appendChild(all);
+
+        children(null).filter(function (item) { return item.type === "folder"; }).forEach(function (folder) {
+          const chip = make("button", "chip" + (focusRoot && focusRoot.id === folder.id ? " is-selected" : ""));
+          chip.dataset.chip = folder.id;
+          if (folder.color) chip.style.setProperty("--chip", folder.color);
+          chip.appendChild(document.createTextNode(folder.text));
+          chip.appendChild(make("span", "chip-count", String(countsOf(folder.id).open)));
+          chip.addEventListener("click", function () { setFocus(folder.id); });
+          chipsEl.appendChild(chip);
+        });
+      }
+
+      function renderCrumbs() {
+        crumbsEl.textContent = "";
+        crumbsEl.hidden = !ui.focusId;
+        if (!ui.focusId) return;
+        const home = make("button", "", "Tutto");
+        home.addEventListener("click", function () { setFocus(null); });
+        crumbsEl.appendChild(home);
+        const path = pathOf(ui.focusId);
+        path.forEach(function (node, index) {
+          crumbsEl.appendChild(document.createTextNode("›"));
+          if (index === path.length - 1) {
+            crumbsEl.appendChild(make("span", "current", node.text));
+          } else {
+            const link = make("button", "", node.text);
+            link.addEventListener("click", function () { setFocus(node.id); });
+            crumbsEl.appendChild(link);
+          }
+        });
+      }
+
+      function setFocus(id) {
+        ui.focusId = id;
+        editingId = null;
+        if (id) setExpanded(id, true);
+        saveUi();
+        render();
+        window.scrollTo({ top: 0 });
+      }
+
+      function makeHandle(item, row) {
+        const handle = make("span", "handle", "⠿");
+        handle.setAttribute("aria-label", "Trascina per spostare");
+        handle.title = "Trascina per spostare";
+        handle.addEventListener("pointerdown", function (event) { startDrag(event, item, row); });
+        return handle;
+      }
+
+      function folderRow(item, depth) {
+        const row = make("div", "row folder");
+        row.dataset.id = item.id;
+        row.style.setProperty("--depth", depth);
+        const color = colorOf(item);
+        if (color) row.style.setProperty("--fc", color);
+
+        row.appendChild(makeHandle(item, row));
+
+        const toggle = make("button", "toggle", isExpanded(item.id) ? "▾" : "▸");
+        toggle.setAttribute("aria-label", isExpanded(item.id) ? "Chiudi cartella" : "Apri cartella");
+        const name = make("button", "folder-name", folderLabel(item));
+        function flip() {
+          setExpanded(item.id, !isExpanded(item.id));
+          render();
+        }
+        toggle.addEventListener("click", flip);
+        name.addEventListener("click", flip);
+
+        const counts = countsOf(item.id);
+        const badge = make("span", "badge", String(counts.open));
+        badge.title = counts.open + " cose da fare";
+        if (counts.star) {
+          const star = make("span", "badge-star", " ★" + counts.star);
+          badge.appendChild(star);
+        }
+
+        const add = make("button", "icon-btn", "+");
+        add.setAttribute("aria-label", "Nuova nota in " + item.text);
+        add.addEventListener("click", function () { addNote(item.id); });
+
+        const menu = make("button", "icon-btn", "⋯");
+        menu.setAttribute("aria-label", "Altre azioni");
+        menu.addEventListener("click", function () { folderMenu(item); });
+
+        row.appendChild(toggle);
+        row.appendChild(name);
+        row.appendChild(badge);
+        row.appendChild(add);
+        row.appendChild(menu);
+        return row;
+      }
+
+      function noteRow(item, depth) {
+        const row = make("div", "row note" + (item.done ? " is-done" : "") + (item.star ? " is-star" : ""));
+        row.dataset.id = item.id;
+        row.style.setProperty("--depth", depth);
+        const color = colorOf(item);
+        if (color) row.style.setProperty("--fc", color);
+
+        if (editingId === item.id) {
+          row.appendChild(make("span", "handle", ""));
+          row.appendChild(noteEditor(item));
+          return row;
+        }
+
+        row.appendChild(makeHandle(item, row));
+
+        const check = make("button", "check");
+        check.setAttribute("aria-label", item.done ? "Segna come da fare" : "Segna come fatta");
+        check.appendChild(make("span", "", item.done ? "✓" : ""));
+        check.addEventListener("click", function () {
+          item.done = !item.done;
+          commit();
+        });
+
+        const text = make("span", "note-text");
+        appendFormattedText(text, item.text);
+        text.title = "Tocca per copiare";
+        const copied = make("span", "copied", "Copiato!");
+        copied.hidden = true;
+        text.addEventListener("click", function () {
+          copyText(item.text).then(function () {
+            copied.hidden = false;
+            clearTimeout(copied.timer);
+            copied.timer = setTimeout(function () { copied.hidden = true; }, 1800);
+            playClick();
+          }).catch(function () {
+            showToast("Impossibile copiare la nota", false);
+          });
+        });
+
+        const edit = make("button", "icon-btn", "✏️");
+        edit.setAttribute("aria-label", "Modifica nota");
+        edit.addEventListener("click", function () {
+          editingId = item.id;
+          editStar = item.star;
+          render();
+        });
+
+        row.appendChild(check);
+        row.appendChild(text);
+        row.appendChild(copied);
+        row.appendChild(edit);
+        return row;
+      }
+
+      function noteEditor(item) {
+        const box = make("div", "editor");
+        const area = document.createElement("textarea");
+        area.rows = 2;
+        area.value = item.text;
+        area.setAttribute("aria-label", "Testo della nota");
+        area.addEventListener("input", function () { autoGrow(area); });
+        area.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+            event.preventDefault();
+            save.click();
+          }
+        });
+
+        const actions = make("div", "edit-actions");
+        const save = make("button", "edit-action primary", "Salva");
+        const star = make("button", "edit-action" + (editStar ? " is-on" : ""), editStar ? "★ Importante" : "☆ Importante");
+        const move = make("button", "edit-action", "Sposta in…");
+        const remove = make("button", "edit-action danger", "Elimina");
+        const exit = make("button", "edit-action", "Esci");
+
+        save.addEventListener("click", function () {
+          const clean = area.value.trim();
+          if (!clean) {
+            area.focus();
+            return;
+          }
+          item.text = clean;
+          item.star = editStar;
+          editingId = null;
+          commit();
+        });
+        star.addEventListener("click", function () {
+          editStar = !editStar;
+          star.classList.toggle("is-on", editStar);
+          star.textContent = editStar ? "★ Importante" : "☆ Importante";
+        });
+        move.addEventListener("click", function () {
+          if (area.value.trim()) item.text = area.value.trim();
+          item.star = editStar;
+          editingId = null;
+          moveWithPicker(item);
+        });
+        remove.addEventListener("click", function () {
+          editingId = null;
+          deleteItem(item);
+        });
+        exit.addEventListener("click", function () {
+          cancelEdit(area, item);
+        });
+
+        actions.appendChild(save);
+        actions.appendChild(star);
+        actions.appendChild(move);
+        actions.appendChild(remove);
+        actions.appendChild(exit);
+        box.appendChild(area);
+        box.appendChild(actions);
+        setTimeout(function () {
+          autoGrow(area);
+          area.focus();
+          area.setSelectionRange(area.value.length, area.value.length);
+        }, 0);
+        box.cancel = function () { cancelEdit(area, item); };
+        return box;
+      }
+
+      function cancelEdit(area, item) {
+        const changed = area.value.trim() !== item.text || editStar !== item.star;
+        if (changed && !window.confirm("Uscire senza salvare le modifiche?")) {
+          area.focus();
+          return;
+        }
+        editingId = null;
+        render();
+      }
+
+      // ---------- Azioni ----------
+      function snapshot() {
+        undoSnapshot = JSON.stringify(items);
+      }
+
+      function addFolder(parentId) {
+        const where = parentId ? " in «" + byId(parentId).text + "»" : "";
+        askText({ title: "Nuova cartella" + where, placeholder: "Es. Casa, Idraulico, Elettricista...", okLabel: "Crea" }).then(function (result) {
+          if (!result || !result.text) return;
+          items.push(normalizeItem({ id: createId(), type: "folder", parentId: parentId, order: edgeOrder(parentId, "folder", false), text: result.text }));
+          if (parentId) setExpanded(parentId, true);
+          commit();
+        });
+      }
+
+      function addNote(parentId) {
+        const where = parentId ? " in «" + byId(parentId).text + "»" : "";
+        askText({ title: "Nuova cosa da fare" + where, multiline: true, placeholder: "Scrivi una cosa da fare... (*testo* = grassetto)", okLabel: "Salva", withStar: true, withSplit: true }).then(function (result) {
+          if (!result || !result.text) return;
+          const texts = result.split
+            ? result.text.split("\n").map(function (line) { return line.trim(); }).filter(Boolean)
+            : [result.text];
+          let order = edgeOrder(parentId, "note", true) - texts.length + 1;
+          texts.forEach(function (text) {
+            items.push(normalizeItem({ id: createId(), type: "note", parentId: parentId, order: order, text: text, star: result.star }));
+            order += 1;
+          });
+          if (parentId) setExpanded(parentId, true);
+          commit();
+        });
+      }
+
+      function renameFolder(item) {
+        askText({ title: "Rinomina cartella", value: item.text, okLabel: "Salva" }).then(function (result) {
+          if (!result || !result.text) return;
+          item.text = result.text;
+          commit();
+        });
+      }
+
+      function deleteItem(item) {
+        const inner = item.type === "folder" ? descendants(item.id) : [];
+        function doDelete() {
+          snapshot();
+          const removed = new Set(inner.map(function (node) { return node.id; }));
+          removed.add(item.id);
+          items = items.filter(function (node) { return !removed.has(node.id); });
+          commit();
+          showToast(item.type === "folder" ? "Cartella eliminata" : "Nota eliminata", true);
+        }
+        if (item.type === "folder" && inner.length) {
+          confirmBox("Eliminare «" + item.text + "»?", "Verranno eliminati anche " + inner.length + " elementi contenuti. Potrai annullare subito dopo.", "Elimina").then(function (ok) {
+            if (ok) doDelete();
+          });
+        } else {
+          doDelete();
+        }
+      }
+
+      function removeDoneIn(folderId) {
+        const done = (folderId ? descendants(folderId) : items).filter(function (item) { return item.type === "note" && item.done; });
+        if (!done.length) {
+          showToast("Nessuna nota fatta da togliere", false);
+          return;
+        }
+        snapshot();
+        const ids = new Set(done.map(function (item) { return item.id; }));
+        items = items.filter(function (item) { return !ids.has(item.id); });
+        commit();
+        showToast("Tolte " + done.length + " note fatte", true);
+      }
+
+      function chooseColor(item) {
+        openModal(function (box, close) {
+          box.appendChild(make("h2", "", "Colore di «" + item.text + "»"));
+          box.appendChild(make("p", "", "Il colore vale anche per le sottocartelle e le note che non hanno un colore proprio."));
+          const grid = make("div", "swatches");
+          COLORS.forEach(function (color) {
+            const swatch = make("button", "swatch" + (item.color === color.value ? " is-selected" : ""), color.label);
+            swatch.style.background = color.value || "#ffffff";
+            swatch.setAttribute("aria-label", color.value ? "Colore " + color.value : "Nessun colore");
+            swatch.addEventListener("click", function () {
+              item.color = color.value;
+              close();
+              commit();
+            });
+            grid.appendChild(swatch);
+          });
+          box.appendChild(grid);
+          const buttons = make("div", "modal-buttons");
+          const cancel = make("button", "edit-action", "Annulla");
+          cancel.addEventListener("click", close);
+          buttons.appendChild(cancel);
+          box.appendChild(buttons);
+        });
+      }
+
+      function folderMenu(item) {
+        showMenu(folderLabel(item), [
+          { label: "+ Nuova nota qui", action: function () { addNote(item.id); } },
+          { label: "📁 Nuova sottocartella", action: function () { addFolder(item.id); } },
+          { label: "✏️ Rinomina", action: function () { renameFolder(item); } },
+          { label: "🎨 Colore", action: function () { chooseColor(item); } },
+          { label: "↪️ Sposta in…", action: function () { moveWithPicker(item); } },
+          { label: "🔍 Mostra solo questa", action: function () { setFocus(item.id); } },
+          { label: "✓ Togli le note fatte", action: function () { removeDoneIn(item.id); } },
+          { label: "🗑️ Elimina", danger: true, action: function () { deleteItem(item); } }
+        ]);
+      }
+
+      // Sposta un elemento. target: {mode: "root"|"inside"|"before"|"after", targetId}
+      function moveItem(id, target, quiet) {
+        const moving = byId(id);
+        if (!moving || !target) return;
+        let parentId;
+        let index;
+        if (target.mode === "root") {
+          parentId = null;
+          index = moving.type === "note" ? 0 : Infinity;
+        } else if (target.mode === "inside") {
+          parentId = target.targetId || null;
+          index = moving.type === "note" ? 0 : Infinity;
+        } else {
+          const ref = byId(target.targetId);
+          if (!ref) return;
+          parentId = ref.parentId;
+          const others = items.filter(function (item) { return item.parentId === parentId && item.type === moving.type && item.id !== moving.id; }).sort(sorter);
+          if (ref.type === moving.type) {
+            index = others.findIndex(function (item) { return item.id === ref.id; }) + (target.mode === "after" ? 1 : 0);
+          } else {
+            index = moving.type === "note" ? 0 : others.length;
+          }
+        }
+        if (moving.type === "folder" && parentId && (parentId === moving.id || isDescendant(parentId, moving.id))) return;
+
+        snapshot();
+        const siblings = items.filter(function (item) { return item.parentId === parentId && item.type === moving.type && item.id !== moving.id; }).sort(sorter);
+        index = Math.max(0, Math.min(index, siblings.length));
+        siblings.splice(index, 0, moving);
+        moving.parentId = parentId;
+        siblings.forEach(function (item, position) { item.order = position; });
+        if (parentId) setExpanded(parentId, true);
+        commit();
+        if (!quiet) {
+          const parent = byId(parentId);
+          showToast("Spostato in «" + (parent ? parent.text : "livello principale") + "»", true);
+        }
+      }
+
+      function moveWithPicker(item) {
+        openModal(function (box, close) {
+          box.appendChild(make("h2", "", "Sposta «" + item.text.split("\n")[0] + "» in…"));
+          const blocked = new Set([item.id]);
+          if (item.type === "folder") descendants(item.id).forEach(function (node) { blocked.add(node.id); });
+
+          function option(label, parentId, depth) {
+            const current = item.parentId === parentId;
+            const button = make("button", "menu-item" + (current ? " is-current" : ""), label + (current ? "  (qui ora)" : ""));
+            button.style.paddingLeft = 14 + depth * 18 + "px";
+            button.addEventListener("click", function () {
+              close();
+              if (current) {
+                render();
+                return;
+              }
+              moveItem(item.id, parentId ? { mode: "inside", targetId: parentId } : { mode: "root" });
+            });
+            box.appendChild(button);
           }
 
-          const items = groupNotes.map(function (note) {
-            return "<li>" + formatNoteTextHtml(note.text) + "</li>";
-          }).join("");
+          option("⤒ Livello principale", null, 0);
+          (function walk(parentId, depth) {
+            children(parentId).forEach(function (node) {
+              if (node.type !== "folder" || blocked.has(node.id)) return;
+              option(folderLabel(node), node.id, depth);
+              walk(node.id, depth + 1);
+            });
+          })(null, 1);
 
-          return [
-            "<section class=\"priority-section " + state + "\">",
-            "<div class=\"priority-heading\"><span>" + printPriorityLabel(state) + " (" + groupNotes.length + ")</span></div>",
-            "<ul class=\"priority-notes\">",
-            items,
+          const buttons = make("div", "modal-buttons");
+          const cancel = make("button", "edit-action", "Annulla");
+          cancel.addEventListener("click", function () { close(); render(); });
+          buttons.appendChild(cancel);
+          box.appendChild(buttons);
+        });
+      }
+
+      // ---------- Trascinamento (mouse e dito) ----------
+      function startDrag(event, item, row) {
+        if (event.button !== undefined && event.button !== 0) return;
+        if (search.trim()) {
+          showToast("Svuota la ricerca per trascinare", false);
+          return;
+        }
+        event.preventDefault();
+        const rect = row.getBoundingClientRect();
+        const ghost = row.cloneNode(true);
+        ghost.classList.add("drag-ghost");
+        ghost.style.width = rect.width + "px";
+        ghost.style.left = rect.left + "px";
+        ghost.style.top = rect.top + "px";
+        document.body.appendChild(ghost);
+
+        drag = {
+          id: item.id,
+          row: row,
+          ghost: ghost,
+          offsetX: event.clientX - rect.left,
+          offsetY: event.clientY - rect.top,
+          x: event.clientX,
+          y: event.clientY,
+          target: null,
+          marked: null,
+          frame: 0
+        };
+        row.classList.add("is-dragging");
+        document.body.classList.add("dragging");
+        rootDrop.hidden = false;
+        window.addEventListener("pointermove", onDragMove, { passive: false });
+        window.addEventListener("pointerup", endDrag);
+        window.addEventListener("pointercancel", endDrag);
+        drag.frame = requestAnimationFrame(autoScroll);
+      }
+
+      function onDragMove(event) {
+        if (!drag) return;
+        event.preventDefault();
+        drag.x = event.clientX;
+        drag.y = event.clientY;
+        drag.ghost.style.left = drag.x - drag.offsetX + "px";
+        drag.ghost.style.top = drag.y - drag.offsetY + "px";
+        updateDropTarget();
+      }
+
+      function clearMarks() {
+        if (drag && drag.marked) {
+          drag.marked.classList.remove("drop-before", "drop-after", "drop-inside");
+          drag.marked = null;
+        }
+      }
+
+      function updateDropTarget() {
+        clearMarks();
+        const target = computeDrop(drag.x, drag.y);
+        drag.target = target;
+        if (target && target.el) {
+          target.el.classList.add(target.mode === "before" ? "drop-before" : target.mode === "after" ? "drop-after" : "drop-inside");
+          drag.marked = target.el;
+        }
+      }
+
+      function computeDrop(x, y) {
+        const moving = byId(drag.id);
+        const under = document.elementFromPoint(x, y);
+        if (!moving || !under) return null;
+
+        if (under.closest("#rootDrop")) return { mode: "root", el: rootDrop };
+
+        const chip = under.closest("[data-chip]");
+        if (chip) {
+          if (!chip.dataset.chip) return { mode: "root", el: chip };
+          return validDrop({ mode: "inside", targetId: chip.dataset.chip, el: chip }, moving);
+        }
+
+        const row = under.closest(".row[data-id]");
+        if (!row || row === drag.row) return null;
+        const ref = byId(row.dataset.id);
+        if (!ref) return null;
+        const rect = row.getBoundingClientRect();
+        const rel = (y - rect.top) / rect.height;
+        let mode;
+        if (ref.type === "folder") {
+          if (moving.type === "note") mode = "inside";
+          else mode = rel < 0.3 ? "before" : rel > 0.7 ? "after" : "inside";
+        } else {
+          mode = rel < 0.5 ? "before" : "after";
+        }
+        return validDrop({ mode: mode, targetId: ref.id, el: row }, moving);
+      }
+
+      function validDrop(target, moving) {
+        if (target.targetId === moving.id) return null;
+        const ref = byId(target.targetId);
+        const parentId = target.mode === "inside" ? target.targetId : ref ? ref.parentId : null;
+        if (moving.type === "folder" && parentId && (parentId === moving.id || isDescendant(parentId, moving.id))) return null;
+        return target;
+      }
+
+      function autoScroll() {
+        if (!drag) return;
+        const top = rootDrop.getBoundingClientRect().bottom;
+        let step = 0;
+        if (drag.y > top && drag.y < top + 60) step = -14;
+        else if (drag.y > window.innerHeight - 70) step = 14;
+        if (step) {
+          window.scrollBy(0, step);
+          updateDropTarget();
+        }
+        drag.frame = requestAnimationFrame(autoScroll);
+      }
+
+      function endDrag(event) {
+        if (!drag) return;
+        const current = drag;
+        window.removeEventListener("pointermove", onDragMove);
+        window.removeEventListener("pointerup", endDrag);
+        window.removeEventListener("pointercancel", endDrag);
+        cancelAnimationFrame(current.frame);
+        clearMarks();
+        current.ghost.remove();
+        current.row.classList.remove("is-dragging");
+        document.body.classList.remove("dragging");
+        rootDrop.hidden = true;
+        drag = null;
+        if (event.type === "pointerup" && current.target) {
+          moveItem(current.id, current.target);
+        } else {
+          render();
+        }
+      }
+
+      // ---------- Finestre (modali, menu, avvisi) ----------
+      function openModal(build) {
+        closeModal();
+        modalBox.textContent = "";
+        modalEl.hidden = false;
+        function close() {
+          modalEl.hidden = true;
+          modalBox.textContent = "";
+          modalClose = null;
+        }
+        modalClose = close;
+        build(modalBox, close);
+      }
+
+      function closeModal() {
+        if (modalClose) modalClose();
+      }
+
+      modalEl.addEventListener("click", function (event) {
+        if (event.target === modalEl) closeModal();
+      });
+
+      function showMenu(title, entries) {
+        openModal(function (box, close) {
+          box.appendChild(make("h2", "", title));
+          entries.forEach(function (entry) {
+            const button = make("button", "menu-item" + (entry.danger ? " danger" : ""), entry.label);
+            button.addEventListener("click", function () {
+              close();
+              entry.action();
+            });
+            box.appendChild(button);
+          });
+          const cancel = make("button", "menu-item", "Annulla");
+          cancel.addEventListener("click", close);
+          box.appendChild(cancel);
+        });
+      }
+
+      function askText(options) {
+        return new Promise(function (resolve) {
+          openModal(function (box, close) {
+            box.appendChild(make("h2", "", options.title));
+            let field;
+            if (options.multiline) {
+              field = document.createElement("textarea");
+              field.rows = 3;
+              field.addEventListener("input", function () { autoGrow(field); });
+            } else {
+              field = document.createElement("input");
+              field.type = "text";
+            }
+            field.value = options.value || "";
+            field.placeholder = options.placeholder || "";
+            box.appendChild(field);
+
+            let starBox = null;
+            let splitBox = null;
+            if (options.withStar) {
+              const line = make("label", "check-line");
+              starBox = document.createElement("input");
+              starBox.type = "checkbox";
+              line.appendChild(starBox);
+              line.appendChild(document.createTextNode("★ Importante"));
+              box.appendChild(line);
+            }
+            if (options.withSplit) {
+              const line = make("label", "check-line");
+              splitBox = document.createElement("input");
+              splitBox.type = "checkbox";
+              line.appendChild(splitBox);
+              line.appendChild(document.createTextNode("Ogni riga è una nota separata"));
+              box.appendChild(line);
+            }
+
+            const buttons = make("div", "modal-buttons");
+            const ok = make("button", "edit-action primary", options.okLabel || "OK");
+            const cancel = make("button", "edit-action", "Annulla");
+            function finish(value) {
+              close();
+              resolve(value);
+            }
+            ok.addEventListener("click", function () {
+              const text = field.value.trim();
+              if (!text) {
+                field.focus();
+                return;
+              }
+              finish({ text: text, star: starBox ? starBox.checked : false, split: splitBox ? splitBox.checked : false });
+            });
+            cancel.addEventListener("click", function () {
+              if (options.multiline && field.value.trim() && !window.confirm("Uscire senza salvare?")) return;
+              finish(null);
+            });
+            field.addEventListener("keydown", function (event) {
+              if (event.key === "Enter" && (!options.multiline || event.ctrlKey || event.metaKey)) {
+                event.preventDefault();
+                ok.click();
+              }
+            });
+            buttons.appendChild(ok);
+            buttons.appendChild(cancel);
+            box.appendChild(buttons);
+            modalClose = function () {
+              modalEl.hidden = true;
+              modalBox.textContent = "";
+              modalClose = null;
+              resolve(null);
+            };
+            setTimeout(function () {
+              field.focus();
+              if (options.multiline) autoGrow(field);
+            }, 30);
+          });
+        });
+      }
+
+      function confirmBox(title, message, okLabel) {
+        return new Promise(function (resolve) {
+          openModal(function (box, close) {
+            box.appendChild(make("h2", "", title));
+            box.appendChild(make("p", "", message));
+            const buttons = make("div", "modal-buttons");
+            const ok = make("button", "edit-action primary", okLabel || "OK");
+            const cancel = make("button", "edit-action", "Annulla");
+            ok.addEventListener("click", function () { close(); resolve(true); });
+            cancel.addEventListener("click", function () { close(); resolve(false); });
+            buttons.appendChild(ok);
+            buttons.appendChild(cancel);
+            box.appendChild(buttons);
+          });
+        });
+      }
+
+      function showHelp() {
+        openModal(function (box, close) {
+          box.appendChild(make("h2", "", "Come si usa"));
+          const help = make("div", "help");
+          help.innerHTML = [
+            "<ul>",
+            "<li><b>+ Cartella</b> crea un «pulsante» (es. Casa). Dentro puoi creare sottocartelle (Idraulico, Elettricista...) a quanti livelli vuoi: tasto <b>⋯</b> → Nuova sottocartella.</li>",
+            "<li><b>+</b> sulla riga di una cartella aggiunge una nota dentro quella cartella.</li>",
+            "<li><b>Trascina</b> con la maniglia <b>⠿</b>: al centro di una cartella ci entra dentro, sul bordo alto/basso si mette prima/dopo. Rilascia sulla barra blu in alto per portarlo al livello principale, o su un pulsante in alto per metterlo in quella cartella.</li>",
+            "<li>In alternativa: <b>⋯ → Sposta in…</b> (cartelle) o <b>✏️ → Sposta in…</b> (note).</li>",
+            "<li>Tocca il <b>nome</b> di una cartella per aprirla/chiuderla; i pulsanti in alto mostrano solo quella cartella.</li>",
+            "<li>Il <b>quadratino</b> segna la nota come fatta; <b>★ Importante</b> la evidenzia. Il numero sulla cartella conta le cose ancora da fare.</li>",
+            "<li>Tocca il <b>testo</b> di una nota per copiarlo. <b>*testo*</b> diventa grassetto.</li>",
+            "<li>Dopo uno spostamento o un'eliminazione compare <b>Annulla</b> per qualche secondo.</li>",
+            "<li><b>PDF</b> stampa la vista corrente (tutto o la cartella aperta).</li>",
             "</ul>",
-            "</section>"
+            "<p>Le note della versione precedente sono nella cartella <b>Da smistare</b>: trascinale dove vuoi.</p>"
           ].join("");
-        }).join("");
-
-        const html = [
-          "<!doctype html>",
-          "<html lang=\"it\">",
-          "<head>",
-          "<meta charset=\"utf-8\">",
-          "<title>Cose da fare!</title>",
-          "<style>",
-          "@page{size:A4 portrait;margin:10mm;}",
-          "body{font-family:Arial,sans-serif;color:#111;margin:0;font-size:11pt;}",
-          "h1{font-size:16pt;margin:0 0 4mm;}",
-          ".priority-section{break-inside:avoid;margin:0 0 5mm;}",
-          ".priority-heading{display:flex;align-items:center;gap:3mm;margin:0 0 1.5mm;font-size:9pt;font-weight:700;}",
-          ".priority-heading::after{content:\"\";flex:1;border-top:1px solid #999;}",
-          ".priority-notes{list-style:none;margin:0 0 0 8mm;padding:0;font-size:10.5pt;line-height:1.25;}",
-          ".priority-notes li{break-inside:avoid;margin:0 0 1mm;padding:0;}",
-          "@media print{button{display:none;}}",
-          "</style>",
-          "</head>",
-          "<body>",
-          "<h1>Cose da fare!</h1>",
-          rows || "<p>Nessuna nota.</p>",
-          "<script>",
-          "function closePrintPage(){setTimeout(function(){window.close();},100);}",
-          "window.addEventListener('afterprint',closePrintPage);",
-          "window.addEventListener('focus',function(){setTimeout(closePrintPage,500);});",
-          "window.addEventListener('load',function(){setTimeout(function(){window.print();},150);});",
-          "<\/script>",
-          "</body>",
-          "</html>"
-        ].join("");
-
-        const printWindow = window.open("", "_blank");
-        if (!printWindow) {
-          window.alert("Consenti le finestre popup per preparare il PDF.");
-          return;
-        }
-
-        printWindow.document.open();
-        printWindow.document.write(html);
-        printWindow.document.close();
-      }
-
-      function clearAppCache() {
-        if (window.caches) {
-          caches.keys()
-            .then(function (keys) {
-              return Promise.all(keys.map(function (key) {
-                return caches.delete(key);
-              }));
-            })
-            .catch(function () {});
-        }
-      }
-
-      function refreshAfterDataChange() {
-        clearAppCache();
-        syncWithGitHub({ pushLocal: true });
-      }
-
-      function selectAddState(state) {
-        pendingAddState = states.includes(state) ? state : "urgent";
-        addPriorityButtons.forEach(function (button) {
-          button.classList.toggle("is-selected", button.dataset.addState === pendingAddState);
+          box.appendChild(help);
+          const buttons = make("div", "modal-buttons");
+          const ok = make("button", "edit-action primary", "Chiudi");
+          ok.addEventListener("click", close);
+          buttons.appendChild(ok);
+          box.appendChild(buttons);
         });
-        form.classList.remove("urgent", "normal", "low", "done");
-        if (addingNote) {
-          form.classList.add(pendingAddState);
-        }
       }
 
-      function setOpenNoteState(state) {
-        const note = notes.find(function (item) {
-          return item.id === openNoteId;
-        });
-
-        if (!note || !states.includes(state)) {
-          return;
-        }
-
-        if (activeEditInput) {
-          note.text = activeEditInput.value;
-        }
-        note.state = state;
-        selectAddState(state);
-        const card = activeEditInput ? activeEditInput.closest(".note-card") : null;
-        if (card) {
-          card.classList.remove("urgent", "normal", "low", "done");
-          card.classList.add(state);
-        }
-        updatePriorityCounts();
-        saveNotes();
-        refreshAfterDataChange();
+      function showToast(message, withUndo) {
+        toastText.textContent = message;
+        toastUndo.hidden = !withUndo || !undoSnapshot;
+        toastEl.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toastEl.hidden = true;
+        }, withUndo ? 7000 : 2500);
       }
 
-      function startAddingNote(state) {
-        openNoteId = null;
-        addingNote = true;
-        selectAddState(state);
-        render();
-        autoGrow(input);
-        input.focus();
-      }
+      toastUndo.addEventListener("click", function () {
+        if (!undoSnapshot) return;
+        items = cleanItems(JSON.parse(undoSnapshot));
+        undoSnapshot = null;
+        toastEl.hidden = true;
+        commit();
+      });
 
-      function stopAddingNote() {
-        addingNote = false;
-        input.value = "";
-        form.classList.remove("urgent", "normal", "low", "done");
-        autoGrow(input);
-        render();
-      }
-
-      function exitAddingNote() {
-        if (input.value.trim() && !window.confirm("Uscire senza salvare la nuova nota?")) {
-          skipNextRefresh = true;
-          input.focus();
-          return false;
-        }
-
-        stopAddingNote();
-        return true;
-      }
-
-      function exitEditingNote(editInput, note) {
-        if (editInput.value !== note.text && !window.confirm("Uscire senza salvare le modifiche?")) {
-          skipNextRefresh = true;
-          editInput.focus();
-          return false;
-        }
-
-        openNoteId = null;
-        addingNote = false;
-        render();
-        return true;
-      }
-
-      function copyTextToClipboard(text) {
+      // ---------- Copia ----------
+      function copyText(text) {
         if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
           return navigator.clipboard.writeText(text);
         }
-
         const helper = document.createElement("textarea");
         helper.value = text;
         helper.setAttribute("readonly", "");
@@ -857,7 +1651,6 @@
         helper.style.left = "-9999px";
         document.body.appendChild(helper);
         helper.select();
-
         try {
           document.execCommand("copy");
           return Promise.resolve();
@@ -868,615 +1661,336 @@
         }
       }
 
-      function showCopiedFeedback(button) {
-        if (!button) {
-          return;
-        }
-
-        button.hidden = false;
-        clearTimeout(button.hideTimer);
-        button.hideTimer = setTimeout(function () {
-          button.hidden = true;
-        }, 2000);
-      }
-
-      function playCopySound() {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) {
-          return;
-        }
-
+      function playClick() {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
         try {
-          copyAudioContext = copyAudioContext || new AudioContext();
-          const now = copyAudioContext.currentTime;
-          const oscillator = copyAudioContext.createOscillator();
-          const gain = copyAudioContext.createGain();
-
-          oscillator.type = "sine";
-          oscillator.frequency.setValueAtTime(160, now);
+          audioContext = audioContext || new Ctx();
+          const now = audioContext.currentTime;
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(160, now);
           gain.gain.setValueAtTime(0.045, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
-
-          oscillator.connect(gain);
-          gain.connect(copyAudioContext.destination);
-          oscillator.start(now);
-          oscillator.stop(now + 0.11);
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          osc.start(now);
+          osc.stop(now + 0.11);
         } catch (error) {}
       }
 
-      function loadSyncConfig() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(syncKey) || "{}");
-          return {
-            owner: String(saved.owner || builtInSyncConfig.owner),
-            repo: String(saved.repo || builtInSyncConfig.repo),
-            branch: String(saved.branch || builtInSyncConfig.branch || "main"),
-            path: String(saved.path || builtInSyncConfig.path || "todo-priorita-dati.json"),
-            token: String(saved.token || builtInSyncConfig.token),
-            apiUrl: String(saved.apiUrl || builtInSyncConfig.apiUrl)
-          };
-        } catch (error) {
-          return {
-            owner: builtInSyncConfig.owner,
-            repo: builtInSyncConfig.repo,
-            branch: builtInSyncConfig.branch || "main",
-            path: builtInSyncConfig.path || "todo-priorita-dati.json",
-            token: builtInSyncConfig.token,
-            apiUrl: builtInSyncConfig.apiUrl
-          };
-        }
-      }
-
-      function saveSyncConfig() {
-        syncConfig = {
-          owner: githubOwner.value.trim(),
-          repo: githubRepo.value.trim(),
-          branch: githubBranch.value.trim() || "main",
-          path: githubPath.value.trim() || "todo-priorita-dati.json",
-          token: githubToken.value.trim(),
-          apiUrl: builtInSyncConfig.apiUrl
-        };
-        localStorage.setItem(syncKey, JSON.stringify(syncConfig));
-        fillSyncForm();
-        updateSyncStatus(isSyncConfigured() ? "GitHub configurato" : "GitHub non configurato");
-        restartPolling();
-      }
-
-      function fillSyncForm() {
-        githubOwner.value = syncConfig.owner;
-        githubRepo.value = syncConfig.repo;
-        githubBranch.value = syncConfig.branch || "main";
-        githubPath.value = syncConfig.path || "todo-priorita-dati.json";
-        githubToken.value = syncConfig.token;
-      }
-
-      function isSyncConfigured() {
-        return Boolean(syncConfig.apiUrl || (syncConfig.owner && syncConfig.repo && syncConfig.branch && syncConfig.path && syncConfig.token));
-      }
-
-      function updateSyncStatus(message) {
-        syncStatus.textContent = message;
-      }
-
-      function githubApiUrl() {
-        const path = syncConfig.path.split("/").map(encodeURIComponent).join("/");
-        const params = new URLSearchParams({ ref: syncConfig.branch });
-        return "https://api.github.com/repos/" + encodeURIComponent(syncConfig.owner) + "/" + encodeURIComponent(syncConfig.repo) + "/contents/" + path + "?" + params.toString();
-      }
-
-      function githubWriteUrl() {
-        const path = syncConfig.path.split("/").map(encodeURIComponent).join("/");
-        return "https://api.github.com/repos/" + encodeURIComponent(syncConfig.owner) + "/" + encodeURIComponent(syncConfig.repo) + "/contents/" + path;
-      }
-
-      function encodeBase64(text) {
-        return btoa(unescape(encodeURIComponent(text)));
-      }
-
-      function decodeBase64(text) {
-        return decodeURIComponent(escape(atob(text.replace(/\s/g, ""))));
-      }
-
-      async function fetchRemoteData() {
-        if (syncConfig.apiUrl) {
-          const response = await fetch(syncConfig.apiUrl, {
-            cache: "no-store",
-            headers: {
-              "Accept": "application/json"
+      // ---------- PDF ----------
+      function preparePdf() {
+        function level(parentId, depth) {
+          return children(parentId).map(function (item) {
+            if (item.type === "note") {
+              if (ui.hideDone && item.done) return "";
+              return "<div class=\"n" + (item.done ? " d" : "") + "\" style=\"margin-left:" + depth * 6 + "mm\">" +
+                (item.done ? "☑ " : "☐ ") + (item.star ? "★ " : "") + formatHtml(item.text) + "</div>";
             }
-          });
-
-          if (response.status === 404) {
-            return { sha: null, data: null };
-          }
-
-          if (!response.ok) {
-            throw new Error("Sync: " + response.status);
-          }
-
-          return {
-            sha: null,
-            data: await response.json()
-          };
+            const counts = countsOf(item.id);
+            return "<section style=\"margin-left:" + depth * 6 + "mm\"><div class=\"f\" style=\"background:" + (colorOf(item) || "#eef1f6") + "\">" +
+              escapeHtml(item.text) + " <span>(" + counts.open + ")</span></div>" + level(item.id, depth + 1) + "</section>";
+          }).join("");
         }
 
-        const response = await fetch(githubApiUrl(), {
-          cache: "no-store",
-          headers: {
-            "Accept": "application/vnd.github+json",
-            "Authorization": "Bearer " + syncConfig.token,
-            "X-GitHub-Api-Version": "2022-11-28"
-          }
-        });
+        const title = ui.focusId ? "Cose da fare! — " + pathOf(ui.focusId).map(function (node) { return node.text; }).join(" › ") : "Cose da fare!";
+        const body = level(ui.focusId, 0) || "<p>Nessuna nota.</p>";
+        const today = new Date().toLocaleDateString("it-IT");
+        const html = [
+          "<!doctype html><html lang=\"it\"><head><meta charset=\"utf-8\"><title>" + escapeHtml(title) + "</title><style>",
+          "@page{size:A4 portrait;margin:10mm;}",
+          "body{font-family:Arial,sans-serif;color:#111;margin:0;font-size:10.5pt;}",
+          "h1{font-size:15pt;margin:0 0 1mm;}",
+          ".date{font-size:9pt;color:#555;margin:0 0 4mm;}",
+          "section{margin-top:2.5mm;}",
+          ".f{font-weight:700;font-size:10.5pt;padding:1mm 2mm;border-radius:1.5mm;break-after:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact;}",
+          ".f span{font-weight:400;color:#444;}",
+          ".n{margin-top:1mm;line-height:1.3;break-inside:avoid;}",
+          ".n.d{color:#777;text-decoration:line-through;}",
+          "</style></head><body>",
+          "<h1>" + escapeHtml(title) + "</h1><div class=\"date\">" + today + "</div>",
+          body,
+          "<script>",
+          "function c(){setTimeout(function(){window.close();},100);}",
+          "window.addEventListener('afterprint',c);",
+          "window.addEventListener('load',function(){setTimeout(function(){window.print();},150);});",
+          "<\/script></body></html>"
+        ].join("");
 
-        if (response.status === 404) {
-          return { sha: null, data: null };
-        }
-
-        if (!response.ok) {
-          throw new Error("GitHub: " + response.status);
-        }
-
-        const file = await response.json();
-        return {
-          sha: file.sha,
-          data: JSON.parse(decodeBase64(file.content || ""))
-        };
-      }
-
-      async function writeRemoteData(sha) {
-        const payload = {
-          version: 1,
-          updatedAt: notesUpdatedAt,
-          updatedBy: clientId,
-          notes: notes.map(normalizeNote)
-        };
-
-        if (syncConfig.apiUrl) {
-          const response = await fetch(syncConfig.apiUrl, {
-            method: "PUT",
-            cache: "no-store",
-            headers: {
-              "Accept": "application/json",
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-          });
-
-          if (!response.ok) {
-            throw new Error("Sync: " + response.status);
-          }
-
-          remoteSha = null;
+        const win = window.open("", "_blank");
+        if (!win) {
+          window.alert("Consenti le finestre popup per preparare il PDF.");
           return;
         }
+        win.document.open();
+        win.document.write(html);
+        win.document.close();
+      }
 
-        const body = {
-          message: "Aggiorna cose da fare",
-          content: encodeBase64(JSON.stringify(payload, null, 2)),
-          branch: syncConfig.branch
+      // ---------- Sincronizzazione (Worker Cloudflare -> GitHub) ----------
+      function setStatus(kind, message) {
+        statusEl.className = "status " + kind;
+        const time = new Date().toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
+        statusText.textContent = message + (kind === "ok" ? " · " + time : "");
+      }
+
+      function isBusy() {
+        return Boolean(editingId || modalClose || drag);
+      }
+
+      function payload() {
+        return {
+          version: 2,
+          updatedAt: updatedAt,
+          updatedBy: clientId,
+          items: items,
+          // Copia "piatta" per compatibilita' con la v1.6 eventualmente ancora aperta altrove.
+          notes: items.filter(function (item) { return item.type === "note"; }).map(function (item) {
+            return { id: item.id, text: item.text, state: legacyState(item) };
+          })
         };
+      }
 
-        if (sha) {
-          body.sha = sha;
-        }
+      async function fetchRemote() {
+        const response = await fetch(SYNC_URL, { cache: "no-store", headers: { "Accept": "application/json" } });
+        if (response.status === 404) return null;
+        if (!response.ok) throw new Error(String(response.status));
+        return response.json();
+      }
 
-        const response = await fetch(githubWriteUrl(), {
+      async function writeRemote() {
+        const response = await fetch(SYNC_URL, {
           method: "PUT",
           cache: "no-store",
-          headers: {
-            "Accept": "application/vnd.github+json",
-            "Authorization": "Bearer " + syncConfig.token,
-            "Content-Type": "application/json",
-            "X-GitHub-Api-Version": "2022-11-28"
-          },
-          body: JSON.stringify(body)
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify(payload())
         });
-
-        if (!response.ok) {
-          throw new Error("GitHub: " + response.status);
-        }
-
-        const result = await response.json();
-        remoteSha = result.content && result.content.sha ? result.content.sha : sha;
+        if (!response.ok) throw new Error(String(response.status));
       }
 
-      function applyRemoteData(data) {
-        if (!data || !Array.isArray(data.notes)) {
-          return false;
+      function applyRemote(data) {
+        let next = null;
+        let legacy = false;
+        if (Number(data.version) >= 2 && Array.isArray(data.items)) {
+          next = cleanItems(data.items);
+        } else if (Array.isArray(data.notes)) {
+          next = mergeLegacy(data.notes);
+          legacy = true;
         }
-
-        const remoteUpdatedAt = Number(data.updatedAt) || 0;
-        if (remoteUpdatedAt <= notesUpdatedAt) {
-          return false;
-        }
-
-        applyingRemote = true;
-        notes = data.notes
-          .filter((note) => note && typeof note.text === "string")
-          .map(normalizeNote);
-        notesUpdatedAt = remoteUpdatedAt;
-        localStorage.setItem(updatedKey, String(notesUpdatedAt));
-        saveNotes({ keepTimestamp: true, skipSync: true });
-        applyingRemote = false;
-
-        if (openNoteId && !notes.some((note) => note.id === openNoteId)) {
-          openNoteId = null;
-        }
-
+        if (!next) return;
+        items = next;
+        updatedAt = Number(data.updatedAt) || Date.now();
+        localStorage.setItem(updatedKey, String(updatedAt));
+        persist({ keepTimestamp: true, skipSync: true });
+        if (legacy) persist(); // riscrive subito il file in formato ad albero
         render();
-        return true;
       }
 
-      async function syncWithGitHub(options) {
-        const settings = options || {};
-        if (!isSyncConfigured() || syncing) {
+      async function sync(push) {
+        if (testMode) return;
+        if (syncing) {
+          if (push) pendingPush = true;
           return;
         }
-
         syncing = true;
-        updateSyncStatus("Sincronizzazione...");
-
+        setStatus("busy", "Sincronizzazione...");
         try {
-          const remote = await fetchRemoteData();
-          remoteSha = remote.sha;
-
-          if (!remote.data) {
-            await writeRemoteData(remoteSha);
-            updateSyncStatus("Creato file dati GitHub");
+          const remote = await fetchRemote();
+          if (!remote) {
+            await writeRemote();
+            setStatus("ok", "Creato file dati");
             return;
           }
-
-          const remoteUpdatedAt = Number(remote.data.updatedAt) || 0;
-          if (remoteUpdatedAt > notesUpdatedAt) {
-            applyRemoteData(remote.data);
-            updateSyncStatus("Aggiornato da GitHub");
+          const remoteUpdated = Number(remote.updatedAt) || 0;
+          if (remoteUpdated > updatedAt) {
+            if (isBusy()) {
+              setStatus("busy", "Aggiornamento in attesa");
+              return;
+            }
+            applyRemote(remote);
+            setStatus("ok", "Aggiornato da un altro dispositivo");
             return;
           }
-
-          if (settings.pushLocal || notesUpdatedAt > remoteUpdatedAt) {
-            await writeRemoteData(remoteSha);
-            updateSyncStatus("Salvato su GitHub");
+          if (push || updatedAt > remoteUpdated || Number(remote.version) < 2) {
+            if (!items.length && remoteUpdated === updatedAt) {
+              setStatus("ok", "Sincronizzato");
+              return;
+            }
+            await writeRemote();
+            setStatus("ok", "Salvato");
             return;
           }
-
-          updateSyncStatus("Sincronizzato");
+          setStatus("ok", "Sincronizzato");
         } catch (error) {
-          updateSyncStatus("Errore sync: " + error.message);
+          setStatus("err", "Errore di sincronizzazione (" + error.message + ")");
         } finally {
           syncing = false;
+          if (pendingPush) {
+            pendingPush = false;
+            setTimeout(function () { sync(true); }, 50);
+          }
         }
       }
 
       function scheduleSync() {
-        if (!isSyncConfigured()) {
-          return;
-        }
+        if (testMode) return;
+        setStatus("busy", "Da salvare...");
         clearTimeout(syncTimer);
-        syncTimer = setTimeout(function () {
-          syncWithGitHub({ pushLocal: true });
-        }, 700);
+        syncTimer = setTimeout(function () { sync(true); }, 700);
       }
 
-      function restartPolling() {
+      function startPolling() {
+        if (testMode) {
+          setStatus("busy", "Modalità prova: i dati restano su questo dispositivo e non vengono sincronizzati");
+          return;
+        }
+        sync(false);
         clearInterval(pollTimer);
-        if (!isSyncConfigured()) {
-          return;
-        }
-        syncWithGitHub();
-        pollTimer = setInterval(function () {
-          syncWithGitHub();
-        }, 3000);
+        pollTimer = setInterval(function () { sync(false); }, 4000);
       }
 
-      function render() {
-        sortNotes();
-        updatePriorityCounts();
-        notesEl.textContent = "";
-        activeEditInput = null;
-        if (openNoteId && !notes.some(function (note) { return note.id === openNoteId; })) {
-          openNoteId = null;
-        }
-        form.hidden = openNoteId !== null || !addingNote;
-        form.classList.toggle("is-adding", addingNote);
-        syncForm.hidden = true;
-
-        if (addingNote) {
-          return;
-        }
-
-        if (!notes.length) {
-          const empty = document.createElement("div");
-          empty.className = "empty";
-          empty.textContent = "Nessuna nota. Aggiungine una sopra.";
-          notesEl.appendChild(empty);
-          return;
-        }
-
-        const visibleNotes = openNoteId === null
-          ? notes
-          : notes.filter((note) => note.id === openNoteId);
-
-        visibleNotes.forEach((note, index) => {
-          const isOpen = openNoteId === note.id;
-          const previousNote = visibleNotes[index - 1];
-          const card = document.createElement("article");
-          card.className = "note-card " + note.state + (isOpen ? " is-open" : "");
-          if (previousNote && previousNote.state !== note.state) {
-            card.classList.add("priority-break");
-          }
-
-          const content = document.createElement("div");
-          content.className = "note-content";
-
-          let editInput = null;
-          let copyFeedback = null;
-
-          if (isOpen) {
-            editInput = document.createElement("textarea");
-            editInput.className = "note-edit-input";
-            editInput.rows = 2;
-            editInput.value = note.text;
-            editInput.setAttribute("aria-label", "Descrizione nota");
-            editInput.addEventListener("input", function () {
-              autoGrow(editInput);
-            });
-            content.appendChild(editInput);
-          } else {
-            const text = document.createElement("span");
-            text.className = "note-text";
-            appendFormattedNoteText(text, note.text);
-            content.appendChild(text);
-            copyFeedback = document.createElement("button");
-            copyFeedback.type = "button";
-            copyFeedback.className = "copy-feedback";
-            copyFeedback.textContent = "Copiato!";
-            copyFeedback.tabIndex = -1;
-            copyFeedback.hidden = true;
-            content.addEventListener("click", function () {
-              copyTextToClipboard(note.text)
-                .then(function () {
-                  showCopiedFeedback(copyFeedback);
-                  playCopySound();
-                  updateSyncStatus("Nota copiata negli appunti");
-                })
-                .catch(function () {
-                  updateSyncStatus("Impossibile copiare la nota");
-                });
-            });
-          }
-
-          const actions = document.createElement("div");
-          actions.className = "note-actions";
-
-          const edit = document.createElement("button");
-          edit.type = "button";
-          edit.className = "note-action";
-          edit.setAttribute("aria-label", "Modifica nota");
-          edit.textContent = "\u270f\ufe0f";
-
-          const priority = document.createElement("button");
-          priority.type = "button";
-          priority.className = isOpen ? "edit-action" : "note-action";
-          priority.setAttribute("aria-label", "Cambia priorita");
-          priority.textContent = isOpen ? "Priorità" : "P";
-
-          const save = document.createElement("button");
-          save.type = "button";
-          save.className = "edit-action";
-          save.setAttribute("aria-label", "Salva nota");
-          save.textContent = "Salva";
-
-          const exit = document.createElement("button");
-          exit.type = "button";
-          exit.className = "edit-action";
-          exit.setAttribute("aria-label", "Esci dalla modifica");
-          exit.textContent = "Esci";
-
-          const remove = document.createElement("button");
-          remove.type = "button";
-          remove.className = "edit-action";
-          remove.setAttribute("aria-label", "Cancella nota");
-          remove.textContent = "Cancella";
-
-          if (isOpen) {
-            const editActions = document.createElement("div");
-            editActions.className = "edit-actions";
-            editActions.appendChild(save);
-            editActions.appendChild(remove);
-            editActions.appendChild(exit);
-            content.appendChild(editActions);
-          } else {
-            actions.appendChild(edit);
-          }
-
-          card.appendChild(content);
-          if (!isOpen) {
-            card.appendChild(copyFeedback);
-            card.appendChild(actions);
-          }
-
-          edit.addEventListener("click", function () {
-            addingNote = false;
-            openNoteId = note.id;
-            render();
-          });
-
-          save.addEventListener("click", function () {
-            const cleanText = editInput.value.trim();
-            if (!cleanText) {
-              skipNextRefresh = true;
-              editInput.focus();
-              return;
-            }
-
-            note.text = cleanText;
-            openNoteId = null;
-            addingNote = false;
-            saveNotes();
-            render();
-            refreshAfterDataChange();
-          });
-
-          exit.addEventListener("click", function () {
-            exitEditingNote(editInput, note);
-          });
-
-          priority.addEventListener("click", function () {
-            note.state = nextState(note.state);
-            saveNotes();
-            render();
-            refreshAfterDataChange();
-          });
-
-          remove.addEventListener("click", function () {
-            if (!window.confirm("Cancellare questa nota?")) {
-              skipNextRefresh = true;
-              if (editInput) {
-                editInput.focus();
-              }
-              return;
-            }
-
-            notes = notes.filter((item) => item.id !== note.id);
-            if (openNoteId === note.id) {
-              openNoteId = null;
-            }
-            addingNote = false;
-            saveNotes();
-            render();
-            notesEl.scrollIntoView({ block: "start" });
-            refreshAfterDataChange();
-          });
-
-          notesEl.appendChild(card);
-
-          if (editInput) {
-            activeEditInput = editInput;
-            autoGrow(editInput);
-            editInput.focus();
-            editInput.setSelectionRange(editInput.value.length, editInput.value.length);
-          }
-        });
-      }
-
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const text = input.value.trim();
-        if (!text) {
-          skipNextRefresh = true;
-          input.focus();
-          return;
-        }
-        const newNote = {
-          id: createId(),
-          text,
-          state: pendingAddState
-        };
-        notes.unshift(newNote);
-        openNoteId = null;
-        addingNote = false;
-        form.classList.remove("urgent", "normal", "low", "done");
-        input.value = "";
-        saveNotes();
-        render();
-        refreshAfterDataChange();
-      });
-
-      addPriorityButtons.forEach(function (button) {
-        button.addEventListener("click", function () {
-          if (openNoteId) {
-            setOpenNoteState(button.dataset.addState);
-            return;
-          }
-
-          if (addingNote) {
-            selectAddState(button.dataset.addState);
-            input.focus();
-            return;
-          }
-
-          startAddingNote(button.dataset.addState);
-        });
-      });
-
-      cancelNewNoteButton.addEventListener("click", function () {
-        exitAddingNote();
-      });
-
-      document.getElementById("clearNewNote").addEventListener("click", function () {
-        input.value = "";
-        autoGrow(input);
-        input.focus();
-      });
-
-      form.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
-          event.preventDefault();
-          form.requestSubmit();
-        }
-      });
-
-      document.addEventListener("keydown", function (event) {
-        if (event.key !== "Escape") {
-          return;
-        }
-
-        if (openNoteId && activeEditInput) {
-          const note = notes.find(function (item) {
-            return item.id === openNoteId;
-          });
-
-          if (note) {
-            event.preventDefault();
-            exitEditingNote(activeEditInput, note);
-          }
-          return;
-        }
-
-        if (addingNote) {
-          event.preventDefault();
-          exitAddingNote();
-        }
-      });
-
-      form.addEventListener("click", function (event) {
-        const addButton = event.target.closest("[data-add-state]");
-        if (addButton && states.includes(addButton.dataset.addState)) {
-          pendingAddState = addButton.dataset.addState;
-        }
-      });
-
-      input.addEventListener("input", function () {
-        autoGrow(input);
-      });
-      autoGrow(input);
-
-      printNotesButton.addEventListener("click", function () {
-        skipNextRefresh = true;
-        openNoteId = null;
-        addingNote = false;
+      // ---------- Pulsanti e tastiera ----------
+      document.getElementById("addNoteButton").addEventListener("click", function () { addNote(ui.focusId); });
+      document.getElementById("addFolderButton").addEventListener("click", function () { addFolder(ui.focusId); });
+      document.getElementById("helpButton").addEventListener("click", showHelp);
+      document.getElementById("pdfButton").addEventListener("click", function () {
+        editingId = null;
         preparePdf();
         render();
       });
 
-      syncForm.addEventListener("submit", function (event) {
+      expandButton.addEventListener("click", function () {
+        const anyOpen = items.some(function (item) { return item.type === "folder" && isExpanded(item.id); });
+        ui.collapsed = {};
+        if (anyOpen) {
+          items.forEach(function (item) {
+            if (item.type === "folder") ui.collapsed[item.id] = true;
+          });
+          if (ui.focusId) delete ui.collapsed[ui.focusId];
+        }
+        saveUi();
+        render();
+      });
+
+      doneButton.addEventListener("click", function () {
+        ui.hideDone = !ui.hideDone;
+        saveUi();
+        render();
+      });
+
+      searchEl.addEventListener("input", function () {
+        search = searchEl.value;
+        editingId = null;
+        render();
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key !== "Escape") return;
+        if (modalClose) {
+          event.preventDefault();
+          closeModal();
+          return;
+        }
+        if (editingId) {
+          const editor = treeEl.querySelector(".editor");
+          if (editor && editor.cancel) {
+            event.preventDefault();
+            editor.cancel();
+          }
+        }
+      });
+
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) sync(false);
+      });
+
+      // ---------- Installazione come app (iPhone / Android / PC) ----------
+      const installButton = document.getElementById("installButton");
+      let installPrompt = null;
+
+      function isInstalled() {
+        return window.navigator.standalone === true ||
+          (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+      }
+
+      function isIos() {
+        return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+          (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      }
+
+      function updateInstallButton() {
+        installButton.hidden = isInstalled() || location.protocol === "file:";
+      }
+
+      function showInstallHelp() {
+        openModal(function (box, close) {
+          box.appendChild(make("h2", "", "Installa «Cose da fare!»"));
+          const help = make("div", "help");
+          if (isIos()) {
+            const inSafari = /safari/i.test(navigator.userAgent) && !/crios|fxios|edgios/i.test(navigator.userAgent);
+            help.innerHTML = [
+              inSafari ? "" : "<p><b>Apri prima questa pagina con Safari</b> (su iPhone l'installazione funziona da Safari).</p>",
+              "<ul>",
+              "<li>Tocca il pulsante <b>Condividi</b> (il quadrato con la freccia in su) in basso.</li>",
+              "<li>Scorri e scegli <b>Aggiungi alla schermata Home</b>.</li>",
+              "<li>Lascia acceso <b>Apri come app web</b> (se compare) e tocca <b>Aggiungi</b>.</li>",
+              "</ul>",
+              "<p>L'icona «Cose da fare!» comparirà sulla schermata Home e si aprirà a tutto schermo, come un'app.</p>"
+            ].join("");
+          } else {
+            help.innerHTML = [
+              "<ul>",
+              "<li><b>Android (Chrome):</b> menù <b>⋮</b> in alto a destra → <b>Installa app</b> (o <b>Aggiungi a schermata Home</b> → <b>Installa</b>).</li>",
+              "<li><b>PC (Chrome o Edge):</b> icona di installazione a destra nella barra degli indirizzi, oppure menù → <b>Installa «Cose da fare!»</b>.</li>",
+              "</ul>"
+            ].join("");
+          }
+          box.appendChild(help);
+          const buttons = make("div", "modal-buttons");
+          const ok = make("button", "edit-action primary", "Ho capito");
+          ok.addEventListener("click", close);
+          buttons.appendChild(ok);
+          box.appendChild(buttons);
+        });
+      }
+
+      window.addEventListener("beforeinstallprompt", function (event) {
         event.preventDefault();
-        saveSyncConfig();
-        syncWithGitHub({ pushLocal: notes.length > 0 });
+        installPrompt = event;
+        updateInstallButton();
       });
 
-      syncNowButton.addEventListener("click", function () {
-        saveSyncConfig();
-        syncWithGitHub({ pushLocal: notes.length > 0 });
+      window.addEventListener("appinstalled", function () {
+        installPrompt = null;
+        updateInstallButton();
+        showToast("App installata", false);
       });
 
-      fillSyncForm();
-      updateSyncStatus(isSyncConfigured() ? "GitHub configurato" : "GitHub non configurato");
-      restartPolling();
-      selectAddState(pendingAddState);
+      installButton.addEventListener("click", function () {
+        if (installPrompt) {
+          const promptEvent = installPrompt;
+          installPrompt = null;
+          promptEvent.prompt();
+          promptEvent.userChoice.then(updateInstallButton).catch(updateInstallButton);
+          return;
+        }
+        showInstallHelp();
+      });
 
+      if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+        navigator.serviceWorker.register("./sw.js").catch(function () {});
+      }
+      updateInstallButton();
+
+      // ---------- Avvio ----------
+      persist({ keepTimestamp: true, skipSync: true });
       render();
+      startPolling();
+
+      // Accesso per test automatici.
+      window.__dafare = { get items() { return items; }, moveItem: moveItem, render: render };
     })();
   </script>
 </body>

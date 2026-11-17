@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794933939678,
+  "updatedAt": 1794934436781,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -199,6 +199,16 @@
       "parentId": "1794932911986-567867ffeea2b",
       "order": -2,
       "text": "Prenotare ombrellone 2027",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794934436781-bfa218d018ba1",
+      "type": "folder",
+      "parentId": null,
+      "order": 5,
+      "text": "Successione",
       "done": false,
       "star": false,
       "color": ""

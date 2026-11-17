@@ -1,14 +1,14 @@
 {
   "version": 2,
-  "updatedAt": 1794933839430,
-  "updatedBy": "1794932378318-853d3e1577b928",
+  "updatedAt": 1794933868198,
+  "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
       "id": "1794928367617-9b9f713c4bb0c",
       "type": "note",
       "parentId": "1794932132324-732cb74e79ac08",
       "order": 0,
-      "text": "Angelo Casulli - Zanzariere vano caldaie a casa",
+      "text": "Angelo - Zanzariere vano caldaie",
       "done": false,
       "star": false,
       "color": ""
@@ -207,7 +207,7 @@
   "notes": [
     {
       "id": "1794928367617-9b9f713c4bb0c",
-      "text": "Angelo Casulli - Zanzariere vano caldaie a casa",
+      "text": "Angelo - Zanzariere vano caldaie",
       "state": "normal"
     },
     {

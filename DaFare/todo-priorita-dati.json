@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794933821377,
+  "updatedAt": 1794933824524,
   "updatedBy": "1794932378318-853d3e1577b928",
   "items": [
     {
@@ -159,7 +159,7 @@
       "parentId": "1794932132324-732cb74e79ac08",
       "order": 3,
       "text": "Preventivo cambio doccia",
-      "done": true,
+      "done": false,
       "star": false,
       "color": ""
     },
@@ -263,7 +263,7 @@
     {
       "id": "1794933091697-4d35b86a2df698",
       "text": "Preventivo cambio doccia",
-      "state": "done"
+      "state": "normal"
     },
     {
       "id": "1794933369840-239bfd049b37d",

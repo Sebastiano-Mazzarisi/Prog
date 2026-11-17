@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932893049,
+  "updatedAt": 1794932911986,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -119,6 +119,16 @@
       "parentId": "1794932742194-bb05b1a1917d08",
       "order": 0,
       "text": "Chiudere società",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794932911986-567867ffeea2b",
+      "type": "folder",
+      "parentId": null,
+      "order": 4,
+      "text": "Villapiana",
       "done": false,
       "star": false,
       "color": ""

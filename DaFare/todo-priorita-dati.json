@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932671979,
+  "updatedAt": 1794932718226,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -88,7 +88,7 @@
       "type": "note",
       "parentId": "1794932558835-fa5b48f676aa58",
       "order": 0,
-      "text": "Lavori esterni",
+      "text": "Lavori esterni: Dario Perta e Antonio Sgobba",
       "done": false,
       "star": false,
       "color": ""
@@ -127,7 +127,7 @@
     },
     {
       "id": "1794932671979-e4ee53928b5508",
-      "text": "Lavori esterni",
+      "text": "Lavori esterni: Dario Perta e Antonio Sgobba",
       "state": "normal"
     }
   ]

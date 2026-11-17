@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932812490,
+  "updatedAt": 1794932813970,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -19,7 +19,7 @@
       "parentId": "1794932132324-732cb74e79ac08",
       "order": 1,
       "text": "Cesare elettricista a casa",
-      "done": true,
+      "done": false,
       "star": false,
       "color": ""
     },
@@ -133,7 +133,7 @@
     {
       "id": "1794928084148-06b6e76dd072c8",
       "text": "Cesare elettricista a casa",
-      "state": "done"
+      "state": "normal"
     },
     {
       "id": "1794928193457-1d4b14264cef4",

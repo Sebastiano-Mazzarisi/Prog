@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932928113,
+  "updatedAt": 1794933040633,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -132,6 +132,26 @@
       "done": false,
       "star": false,
       "color": "#dff3ff"
+    },
+    {
+      "id": "1794933040633-c22fd668752c38",
+      "type": "note",
+      "parentId": "1794932911986-567867ffeea2b",
+      "order": -1,
+      "text": "Seguire causa contro Ventimiglia",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794933040633-6b60119c25f178",
+      "type": "note",
+      "parentId": "1794932911986-567867ffeea2b",
+      "order": 0,
+      "text": "Seguire causa contro la Bellizzi",
+      "done": false,
+      "star": false,
+      "color": ""
     }
   ],
   "notes": [
@@ -178,6 +198,16 @@
     {
       "id": "1794932776154-338f833f8da898",
       "text": "Chiudere società",
+      "state": "normal"
+    },
+    {
+      "id": "1794933040633-c22fd668752c38",
+      "text": "Seguire causa contro Ventimiglia",
+      "state": "normal"
+    },
+    {
+      "id": "1794933040633-6b60119c25f178",
+      "text": "Seguire causa contro la Bellizzi",
       "state": "normal"
     }
   ]

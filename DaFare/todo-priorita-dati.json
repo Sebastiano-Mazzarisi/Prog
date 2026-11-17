@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932573227,
+  "updatedAt": 1794932586179,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -51,7 +51,7 @@
       "text": "Mary",
       "done": false,
       "star": false,
-      "color": "#fff0a8"
+      "color": "#ffd6d6"
     }
   ],
   "notes": [

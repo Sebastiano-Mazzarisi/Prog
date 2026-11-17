@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794933705007,
+  "updatedAt": 1794933718815,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -189,16 +189,6 @@
       "parentId": "1794933158400-2bc6ee46b1a7e8",
       "order": 0,
       "text": "Cambio T-Roc",
-      "done": false,
-      "star": false,
-      "color": ""
-    },
-    {
-      "id": "1794933705007-ca91ad5ed0a2e8",
-      "type": "folder",
-      "parentId": "1794932911986-567867ffeea2b",
-      "order": 0,
-      "text": "Prenotare ombrellone 2027",
       "done": false,
       "star": false,
       "color": ""

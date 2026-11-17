@@ -1,28 +1,8 @@
 {
   "version": 2,
-  "updatedAt": 1794932524107,
+  "updatedAt": 1794932533811,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
-    {
-      "id": "da-smistare",
-      "type": "folder",
-      "parentId": null,
-      "order": 0,
-      "text": "Da smistare",
-      "done": false,
-      "star": false,
-      "color": "#fff0a8"
-    },
-    {
-      "id": "1794928151314-de49d6b7c6e5f8",
-      "type": "note",
-      "parentId": "1794932501203-2a61b13a98076",
-      "order": 0,
-      "text": "Dario Perta, Antonio Sgobba e Vito Nitti da Mary",
-      "done": false,
-      "star": false,
-      "color": ""
-    },
     {
       "id": "1794928367617-9b9f713c4bb0c",
       "type": "note",
@@ -62,24 +42,9 @@
       "done": false,
       "star": false,
       "color": "#dff3ff"
-    },
-    {
-      "id": "1794932501203-2a61b13a98076",
-      "type": "folder",
-      "parentId": "da-smistare",
-      "order": 0,
-      "text": "Mary",
-      "done": false,
-      "star": false,
-      "color": ""
     }
   ],
   "notes": [
-    {
-      "id": "1794928151314-de49d6b7c6e5f8",
-      "text": "Dario Perta, Antonio Sgobba e Vito Nitti da Mary",
-      "state": "normal"
-    },
     {
       "id": "1794928367617-9b9f713c4bb0c",
       "text": "Angelo Casulli - Zanzariere vano caldaie a casa",

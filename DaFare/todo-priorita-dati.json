@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794934611564,
+  "updatedAt": 1794934716363,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -242,6 +242,16 @@
       "done": false,
       "star": false,
       "color": ""
+    },
+    {
+      "id": "1794934716363-a5782816a59cc",
+      "type": "note",
+      "parentId": "1794932911986-567867ffeea2b",
+      "order": -3,
+      "text": "Seguire richieste di Francesco Laguardia",
+      "done": false,
+      "star": false,
+      "color": ""
     }
   ],
   "notes": [
@@ -333,6 +343,11 @@
     {
       "id": "1794934611564-dbc187d9a0db38",
       "text": "Avviare sanatoria su Castiglione",
+      "state": "normal"
+    },
+    {
+      "id": "1794934716363-a5782816a59cc",
+      "text": "Seguire richieste di Francesco Laguardia",
       "state": "normal"
     }
   ]

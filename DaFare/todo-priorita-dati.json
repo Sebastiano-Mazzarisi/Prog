@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1794928151314,
+  "updatedAt": 1794928193457,
   "updatedBy": "1794913027631-04b37f163de258",
   "notes": [
     {
@@ -11,6 +11,11 @@
     {
       "id": "1794928084148-06b6e76dd072c8",
       "text": "Cesare elettricista a casa",
+      "state": "normal"
+    },
+    {
+      "id": "1794928193457-1d4b14264cef4",
+      "text": "Idraulico Marco Laterza a casa",
       "state": "normal"
     }
   ]

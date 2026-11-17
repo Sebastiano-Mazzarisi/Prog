@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932513819,
+  "updatedAt": 1794932524107,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -16,8 +16,8 @@
     {
       "id": "1794928151314-de49d6b7c6e5f8",
       "type": "note",
-      "parentId": "da-smistare",
-      "order": 100000,
+      "parentId": "1794932501203-2a61b13a98076",
+      "order": 0,
       "text": "Dario Perta, Antonio Sgobba e Vito Nitti da Mary",
       "done": false,
       "star": false,

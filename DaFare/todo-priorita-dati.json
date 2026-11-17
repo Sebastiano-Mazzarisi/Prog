@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "updatedAt": 1794932177828,
-  "updatedBy": "1794932108647-fe791f52172ce8",
+  "updatedAt": 1794932392879,
+  "updatedBy": "1794932378318-853d3e1577b928",
   "items": [
     {
       "id": "da-smistare",
@@ -61,7 +61,7 @@
       "text": "Casa",
       "done": false,
       "star": false,
-      "color": ""
+      "color": "#d9f5c5"
     }
   ],
   "notes": [

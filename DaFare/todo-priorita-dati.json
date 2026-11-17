@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794933158400,
+  "updatedAt": 1794933369840,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -172,6 +172,26 @@
       "done": false,
       "star": false,
       "color": ""
+    },
+    {
+      "id": "1794933369840-239bfd049b37d",
+      "type": "note",
+      "parentId": "1794933158400-2bc6ee46b1a7e8",
+      "order": -1,
+      "text": "Seguire passaggio di proprietà di Onofrio",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794933369840-7b7cb6d1da1a8",
+      "type": "note",
+      "parentId": "1794933158400-2bc6ee46b1a7e8",
+      "order": 0,
+      "text": "Cambio T-Roc",
+      "done": false,
+      "star": false,
+      "color": ""
     }
   ],
   "notes": [
@@ -233,6 +253,16 @@
     {
       "id": "1794933091697-4d35b86a2df698",
       "text": "Preventivo cambio doccia",
+      "state": "normal"
+    },
+    {
+      "id": "1794933369840-239bfd049b37d",
+      "text": "Seguire passaggio di proprietà di Onofrio",
+      "state": "normal"
+    },
+    {
+      "id": "1794933369840-7b7cb6d1da1a8",
+      "text": "Cambio T-Roc",
       "state": "normal"
     }
   ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932160812,
+  "updatedAt": 1794932166316,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -27,7 +27,7 @@
       "id": "1794928367617-9b9f713c4bb0c",
       "type": "note",
       "parentId": "1794932132324-732cb74e79ac08",
-      "order": 1,
+      "order": 2,
       "text": "Angelo Casulli - Zanzariere vano caldaie a casa",
       "done": false,
       "star": false,
@@ -36,8 +36,8 @@
     {
       "id": "1794928084148-06b6e76dd072c8",
       "type": "note",
-      "parentId": "da-smistare",
-      "order": 100002,
+      "parentId": "1794932132324-732cb74e79ac08",
+      "order": 0,
       "text": "Cesare elettricista a casa",
       "done": false,
       "star": false,
@@ -47,7 +47,7 @@
       "id": "1794928193457-1d4b14264cef4",
       "type": "note",
       "parentId": "1794932132324-732cb74e79ac08",
-      "order": 0,
+      "order": 1,
       "text": "Idraulico Marco Laterza a casa",
       "done": false,
       "star": false,

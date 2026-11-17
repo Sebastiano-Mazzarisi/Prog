@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932883417,
+  "updatedAt": 1794932893049,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -101,7 +101,7 @@
       "text": "Socim",
       "done": false,
       "star": false,
-      "color": ""
+      "color": "#e6dcff"
     },
     {
       "id": "1794932776154-9edca07c333fb",

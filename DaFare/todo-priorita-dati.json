@@ -1,12 +1,17 @@
 {
   "version": 1,
-  "updatedAt": 1794928193457,
+  "updatedAt": 1794928367617,
   "updatedBy": "1794913027631-04b37f163de258",
   "notes": [
     {
       "id": "1794928151314-de49d6b7c6e5f8",
       "text": "Dario Perta, Antonio Sgobba e Vito Nitti da Mary",
       "state": "urgent"
+    },
+    {
+      "id": "1794928367617-9b9f713c4bb0c",
+      "text": "Angelo Casulli - Zanzariere vano caldaie a casa",
+      "state": "normal"
     },
     {
       "id": "1794928084148-06b6e76dd072c8",

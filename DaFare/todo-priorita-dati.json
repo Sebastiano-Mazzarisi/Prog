@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932533811,
+  "updatedAt": 1794932558835,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -42,6 +42,16 @@
       "done": false,
       "star": false,
       "color": "#dff3ff"
+    },
+    {
+      "id": "1794932558835-fa5b48f676aa58",
+      "type": "folder",
+      "parentId": null,
+      "order": 2,
+      "text": "Mary",
+      "done": false,
+      "star": false,
+      "color": ""
     }
   ],
   "notes": [

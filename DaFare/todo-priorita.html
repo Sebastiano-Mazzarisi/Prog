@@ -1530,6 +1530,7 @@
               const line = make("label", "check-line");
               splitBox = document.createElement("input");
               splitBox.type = "checkbox";
+              splitBox.checked = true;
               line.appendChild(splitBox);
               line.appendChild(document.createTextNode("Ogni riga è una nota separata"));
               box.appendChild(line);
@@ -1730,10 +1731,55 @@
       }
 
       // ---------- Sincronizzazione (Worker Cloudflare -> GitHub) ----------
+      // Stato della sincronizzazione: mostra "Sincronizzato · HH:MM" in modo stabile.
+      // Gli stati intermedi (in corso, da salvare, errori) compaiono solo se la
+      // sincronizzazione non riesce per almeno 5 secondi di fila.
+      const STATUS_DELAY = 5000;
+      let lastOkAt = 0;
+      let problemSince = 0;
+      let problemKind = "";
+      let problemMessage = "";
+      let problemTimer = null;
+
+      function showStatus(kind, text) {
+        const className = "status " + kind;
+        if (statusEl.className !== className) statusEl.className = className;
+        if (statusText.textContent !== text) statusText.textContent = text;
+      }
+
+      function okText() {
+        return lastOkAt
+          ? "Sincronizzato · " + new Date(lastOkAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })
+          : "Avvio...";
+      }
+
+      function showProblemIfLasting() {
+        clearTimeout(problemTimer);
+        if (!problemSince) return;
+        const elapsed = Date.now() - problemSince;
+        if (elapsed >= STATUS_DELAY) {
+          showStatus(problemKind, problemMessage);
+        } else {
+          showStatus(lastOkAt ? "ok" : "busy", okText());
+          problemTimer = setTimeout(showProblemIfLasting, STATUS_DELAY - elapsed + 50);
+        }
+      }
+
       function setStatus(kind, message) {
-        statusEl.className = "status " + kind;
-        const time = new Date().toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
-        statusText.textContent = message + (kind === "ok" ? " · " + time : "");
+        if (kind === "ok") {
+          lastOkAt = Date.now();
+          problemSince = 0;
+          problemKind = "";
+          clearTimeout(problemTimer);
+          showStatus("ok", okText());
+          return;
+        }
+        if (!problemSince) problemSince = Date.now();
+        if (kind === "err" || problemKind !== "err") {
+          problemKind = kind;
+          problemMessage = message;
+        }
+        showProblemIfLasting();
       }
 
       function isBusy() {
@@ -1843,7 +1889,7 @@
 
       function startPolling() {
         if (testMode) {
-          setStatus("busy", "Modalità prova: i dati restano su questo dispositivo e non vengono sincronizzati");
+          showStatus("busy", "Modalità prova: i dati restano su questo dispositivo e non vengono sincronizzati");
           return;
         }
         sync(false);

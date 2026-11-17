@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932835714,
+  "updatedAt": 1794932883417,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -41,7 +41,7 @@
       "text": "Casa",
       "done": false,
       "star": false,
-      "color": "#dff3ff"
+      "color": "#fff0a8"
     },
     {
       "id": "1794932558835-fa5b48f676aa58",

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932742194,
+  "updatedAt": 1794932776154,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -102,6 +102,26 @@
       "done": false,
       "star": false,
       "color": ""
+    },
+    {
+      "id": "1794932776154-9edca07c333fb",
+      "type": "note",
+      "parentId": "1794932742194-bb05b1a1917d08",
+      "order": -1,
+      "text": "Vendere garage (Pino Gentile)",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794932776154-338f833f8da898",
+      "type": "note",
+      "parentId": "1794932742194-bb05b1a1917d08",
+      "order": 0,
+      "text": "Chiudere società",
+      "done": false,
+      "star": false,
+      "color": ""
     }
   ],
   "notes": [
@@ -138,6 +158,16 @@
     {
       "id": "1794932671979-e4ee53928b5508",
       "text": "Lavori esterni: Dario Perta e Antonio Sgobba",
+      "state": "normal"
+    },
+    {
+      "id": "1794932776154-9edca07c333fb",
+      "text": "Vendere garage (Pino Gentile)",
+      "state": "normal"
+    },
+    {
+      "id": "1794932776154-338f833f8da898",
+      "text": "Chiudere società",
       "state": "normal"
     }
   ]

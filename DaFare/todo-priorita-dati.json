@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794933040633,
+  "updatedAt": 1794933091697,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -152,6 +152,16 @@
       "done": false,
       "star": false,
       "color": ""
+    },
+    {
+      "id": "1794933091697-4d35b86a2df698",
+      "type": "note",
+      "parentId": "1794932132324-732cb74e79ac08",
+      "order": -1,
+      "text": "Preventivo cambio doccia",
+      "done": false,
+      "star": false,
+      "color": ""
     }
   ],
   "notes": [
@@ -208,6 +218,11 @@
     {
       "id": "1794933040633-6b60119c25f178",
       "text": "Seguire causa contro la Bellizzi",
+      "state": "normal"
+    },
+    {
+      "id": "1794933091697-4d35b86a2df698",
+      "text": "Preventivo cambio doccia",
       "state": "normal"
     }
   ]

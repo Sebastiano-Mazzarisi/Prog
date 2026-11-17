@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932911986,
+  "updatedAt": 1794932928113,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -131,7 +131,7 @@
       "text": "Villapiana",
       "done": false,
       "star": false,
-      "color": ""
+      "color": "#dff3ff"
     }
   ],
   "notes": [

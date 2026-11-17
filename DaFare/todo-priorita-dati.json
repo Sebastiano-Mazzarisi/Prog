@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "updatedAt": 1794930674985,
-  "updatedBy": "1783929881094-a6da40c9360db8",
+  "updatedAt": 1794932132324,
+  "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
       "id": "da-smistare",
@@ -49,6 +49,16 @@
       "parentId": "da-smistare",
       "order": 100003,
       "text": "Idraulico Marco Laterza a casa",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794932132324-732cb74e79ac08",
+      "type": "folder",
+      "parentId": null,
+      "order": 1,
+      "text": "Casa",
       "done": false,
       "star": false,
       "color": ""

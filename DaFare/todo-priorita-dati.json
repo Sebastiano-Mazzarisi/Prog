@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794932586179,
+  "updatedAt": 1794932671979,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -52,6 +52,46 @@
       "done": false,
       "star": false,
       "color": "#ffd6d6"
+    },
+    {
+      "id": "1794932671978-3785689db23948",
+      "type": "note",
+      "parentId": "1794932558835-fa5b48f676aa58",
+      "order": -3,
+      "text": "Sabatelli: preventivo condizionatori",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794932671979-b7f5b8128ea378",
+      "type": "note",
+      "parentId": "1794932558835-fa5b48f676aa58",
+      "order": -2,
+      "text": "Uscita dalla Cooperativa",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794932671979-919b42d0557378",
+      "type": "note",
+      "parentId": "1794932558835-fa5b48f676aa58",
+      "order": -1,
+      "text": "Opere di urbanizzazione",
+      "done": false,
+      "star": false,
+      "color": ""
+    },
+    {
+      "id": "1794932671979-e4ee53928b5508",
+      "type": "note",
+      "parentId": "1794932558835-fa5b48f676aa58",
+      "order": 0,
+      "text": "Lavori esterni",
+      "done": false,
+      "star": false,
+      "color": ""
     }
   ],
   "notes": [
@@ -68,6 +108,26 @@
     {
       "id": "1794928193457-1d4b14264cef4",
       "text": "Idraulico Marco Laterza a casa",
+      "state": "normal"
+    },
+    {
+      "id": "1794932671978-3785689db23948",
+      "text": "Sabatelli: preventivo condizionatori",
+      "state": "normal"
+    },
+    {
+      "id": "1794932671979-b7f5b8128ea378",
+      "text": "Uscita dalla Cooperativa",
+      "state": "normal"
+    },
+    {
+      "id": "1794932671979-919b42d0557378",
+      "text": "Opere di urbanizzazione",
+      "state": "normal"
+    },
+    {
+      "id": "1794932671979-e4ee53928b5508",
+      "text": "Lavori esterni",
       "state": "normal"
     }
   ]

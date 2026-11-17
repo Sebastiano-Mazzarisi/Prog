@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794933718815,
+  "updatedAt": 1794933735407,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -192,6 +192,16 @@
       "done": false,
       "star": false,
       "color": ""
+    },
+    {
+      "id": "1794933735407-3a03ab88432cb8",
+      "type": "note",
+      "parentId": "1794932911986-567867ffeea2b",
+      "order": -2,
+      "text": "Prenotare ombrellone 2027",
+      "done": false,
+      "star": false,
+      "color": ""
     }
   ],
   "notes": [
@@ -263,6 +273,11 @@
     {
       "id": "1794933369840-7b7cb6d1da1a8",
       "text": "Cambio T-Roc",
+      "state": "normal"
+    },
+    {
+      "id": "1794933735407-3a03ab88432cb8",
+      "text": "Prenotare ombrellone 2027",
       "state": "normal"
     }
   ]

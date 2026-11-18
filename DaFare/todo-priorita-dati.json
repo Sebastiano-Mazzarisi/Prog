@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1794934760243,
+  "updatedAt": 1794991224027,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -188,7 +188,7 @@
       "type": "note",
       "parentId": "1794933158400-2bc6ee46b1a7e8",
       "order": 0,
-      "text": "Cambio T-Roc",
+      "text": "Cambio T-Roc con ID. Cross",
       "done": false,
       "star": false,
       "color": ""
@@ -322,7 +322,7 @@
     },
     {
       "id": "1794933369840-7b7cb6d1da1a8",
-      "text": "Cambio T-Roc",
+      "text": "Cambio T-Roc con ID. Cross",
       "state": "normal"
     },
     {

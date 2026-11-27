@@ -896,13 +896,11 @@ def genera_html(file_input=None, traduci=False):
                     .map(([codice, t]) => ({ codice, t, on: collegato(codice) || codice === contatoreId }))
                     .sort((a, b) => (b.on - a.on) || (b.t - a.t));
                 document.getElementById('utenti-title').textContent = (it ? 'Dispositivi registrati: ' : 'Registered devices: ') + righe.length.toLocaleString(it ? 'it-IT' : 'en-GB');
-                const formato = new Intl.DateTimeFormat(it ? 'it-IT' : 'en-GB', {
-                    day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
-                });
-                const giornoSett = new Intl.DateTimeFormat(it ? 'it-IT' : 'en-GB', { weekday: 'long' });
-                const quando = t => {
-                    const d = new Date(t), g = giornoSett.format(d);
-                    return g.charAt(0).toUpperCase() + g.slice(1) + ' ' + formato.format(d).replace(',', '');
+                const GS = it ? ['Do', 'Lu', 'Ma', 'Me', 'Gi', 'Ve', 'Sa'] : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+                const due = x => String(x).padStart(2, '0');
+                const quando = t => {   // GS GG/MM/AAAA HH:MM
+                    const d = new Date(t);
+                    return GS[d.getDay()] + ' ' + due(d.getDate()) + '/' + due(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + due(d.getHours()) + ':' + due(d.getMinutes());
                 };
                 let n = 0;
                 const corpo = righe.map(r => {

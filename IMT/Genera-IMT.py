@@ -9,7 +9,7 @@
 #              Un clic su quella riga mostra la tabella dei dispositivi registrati
 #              (prima i collegati in rosso, poi gli altri in blu; ognuno dal più recente).
 #              Toccando la propria riga si può scrivere il nome del dispositivo.
-#              A destra, per i soli collegati, la lingua in uso (IT / EN), comunicata
+#              A destra la lingua (IT / EN) di ogni dispositivo, in uso o l'ultima usata, comunicata
 #              da ogni dispositivo ogni 5 secondi. Ai lati della riga del contatore
 #              due bandierine (IT a sinistra, EN a destra) per scegliere la lingua.
 #              All'avvio la pagina si apre nella lingua usata l'ultima volta.
@@ -1084,10 +1084,10 @@ def genera_html(file_input=None, traduci=False, audio=True):
                     const d = new Date(t);
                     return GS[d.getDay()] + ' ' + due(d.getDate()) + '/' + due(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + due(d.getHours()) + ':' + due(d.getMinutes());
                 };
-                // lingua (IT / EN) solo per i dispositivi collegati adesso
+                // lingua (IT / EN) di ogni dispositivo: quella in uso o l'ultima usata
                 const cellaLingua = r => {
                     let l = r.codice === contatoreId ? currentLang : (lingue || {})[r.codice];
-                    l = (l === 'it' || l === 'en') && r.on ? l.toUpperCase() : '';
+                    l = (l === 'it' || l === 'en') ? l.toUpperCase() : '';
                     return '<td class="lingua">' + (l ? '<span>' + l + '</span>' : '') + '</td>';
                 };
                 let n = 0;

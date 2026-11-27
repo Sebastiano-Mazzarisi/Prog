@@ -56,6 +56,8 @@
         .utenti-tab td:first-child, .utenti-tab th:first-child { white-space: nowrap; width: 1%; }
         .utenti-tab td.nome { word-break: break-word; width: 99%; }
         .utenti-tab tr.mio { cursor: pointer; background: #fff5f5; }
+        .utenti-tab .lingua { width: 1%; white-space: nowrap; text-align: right; }
+        .utenti-tab td.lingua span { font-size: 0.75rem; font-weight: 700; border: 1px solid currentColor; border-radius: 4px; padding: 0 4px; }
         .nome-modifica { display: flex; gap: 4px; align-items: center; }
         .nome-input { flex: 1 1 auto; width: 0; min-width: 0; font-size: 0.9rem; padding: 4px 6px; border: 1px solid #c7c7cc; border-radius: 6px; box-sizing: border-box; }
         .nome-ok { flex-shrink: 0; padding: 4px 8px; border: none; border-radius: 6px; background: #007aff; color: white; font-weight: 600; cursor: pointer; }
@@ -379,6 +381,7 @@
         const CONTATORE_ATTIVO_MS = 15000;     // "collegato adesso" = segnale negli ultimi 15 secondi
         const CONTATORE_PULIZIA_MS = 600000;   // segnali più vecchi di 10 minuti vengono cancellati
         let contatoreId = null, contatoreRegistrato = false, contatoreInCorso = false;
+        let contatoreLingua = null;   // lingua già comunicata al database
         let contatoreScarto = 0;   // differenza tra orologio del server e del dispositivo
 
         function contatoreCodice() {
@@ -429,6 +432,10 @@
                 }
                 const adesso = await contatoreFb('online/' + contatoreId, 'PUT', { '.sv': 'timestamp' });
                 contatoreScarto = adesso - Date.now();
+                if (contatoreLingua !== currentLang) {
+                    const lingua = currentLang;
+                    contatoreFb('lingua/' + contatoreId, 'PUT', lingua).then(() => { contatoreLingua = lingua; }).catch(() => {});
+                }
                 const [online, totale] = await Promise.all([contatoreFb('online'), contatoreFb('totale')]);
                 let n = 0; const vecchi = {};
                 for (const [codice, t] of Object.entries(online || {})) {
@@ -552,7 +559,7 @@
             const legenda = document.getElementById('utenti-legenda');
             const tabella = document.getElementById('utenti-tabella');
             try {
-                const [utenti, online, nomi] = await Promise.all([contatoreFb('utenti'), contatoreFb('online'), contatoreFb('nomi')]);
+                const [utenti, online, nomi, lingue] = await Promise.all([contatoreFb('utenti'), contatoreFb('online'), contatoreFb('nomi'), contatoreFb('lingua')]);
                 if (utentiInModifica) return;
                 const adesso = Date.now() + contatoreScarto;
                 const collegato = codice => {
@@ -571,6 +578,12 @@
                     const d = new Date(t);
                     return GS[d.getDay()] + ' ' + due(d.getDate()) + '/' + due(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + due(d.getHours()) + ':' + due(d.getMinutes());
                 };
+                // lingua (IT / EN) solo per i dispositivi collegati adesso
+                const cellaLingua = r => {
+                    let l = r.codice === contatoreId ? currentLang : (lingue || {})[r.codice];
+                    l = (l === 'it' || l === 'en') && r.on ? l.toUpperCase() : '';
+                    return '<td class="lingua">' + (l ? '<span>' + l + '</span>' : '') + '</td>';
+                };
                 let n = 0;
                 const corpo = righe.map(r => {
                     if (r.on) n++;
@@ -579,11 +592,11 @@
                     if (r.codice === contatoreId) {
                         const testo = nome ? escHtml(nome) : '<i>' + (it ? 'tocca per dare un nome' : 'tap to set a name') + '</i>';
                         return '<tr class="' + classe + ' mio" onclick="modificaNome()" title="' + (it ? 'Questo dispositivo: tocca per cambiare il nome' : 'This device: tap to change the name') + '">'
-                            + '<td>' + quando(r.t) + '</td><td class="nome" id="nome-mio" data-nome="' + escHtml(nome || '') + '">' + testo + ' ✎</td></tr>';
+                            + '<td>' + quando(r.t) + '</td><td class="nome" id="nome-mio" data-nome="' + escHtml(nome || '') + '">' + testo + ' ✎</td>' + cellaLingua(r) + '</tr>';
                     }
-                    return '<tr class="' + classe + '"><td>' + quando(r.t) + '</td><td class="nome">' + (nome ? escHtml(nome) : '') + '</td></tr>';
+                    return '<tr class="' + classe + '"><td>' + quando(r.t) + '</td><td class="nome">' + (nome ? escHtml(nome) : '') + '</td>' + cellaLingua(r) + '</tr>';
                 }).join('');
-                tabella.innerHTML = '<thead><tr><th>' + (it ? 'Data e ora' : 'Date and time') + '</th><th>' + (it ? 'Nome' : 'Name') + '</th></tr></thead><tbody>' + corpo + '</tbody>';
+                tabella.innerHTML = '<thead><tr><th>' + (it ? 'Data e ora' : 'Date and time') + '</th><th>' + (it ? 'Nome' : 'Name') + '</th><th class="lingua"></th></tr></thead><tbody>' + corpo + '</tbody>';
                 legenda.innerHTML = it
                     ? '<span class="online">● collegati adesso: ' + n + '</span> &nbsp; <span class="offline">● non collegati: ' + (righe.length - n) + '</span>'
                     : '<span class="online">● online now: ' + n + '</span> &nbsp; <span class="offline">● offline: ' + (righe.length - n) + '</span>';

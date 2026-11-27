@@ -17,8 +17,12 @@
 #              e in inglese (voce Cori) con Piper, gratuito e senza Internet; la pagina
 #              li riproduce e, se mancano, usa la voce del dispositivo. Dopo ogni riga
 #              (introduzione, portata, piatto, saluto) c'è una pausa di mezzo secondo;
-#              tra le alternative di una portata si dice "oppure" ("or" in inglese),
-#              staccato con una pausa di 15 centesimi prima e dopo.
+#              le alternative di una portata sono lette di seguito in un'unica frase,
+#              senza pause: "Minestrone oppure spaghetti." ("or" in inglese).
+#              Alla partenza cancella tutti i vecchi MP3 non più usati; crea solo
+#              quelli nuovi. Ogni frase diversa è letta una volta sola (molte si
+#              ripetono tra un giorno e l'altro), dividendo il lavoro tra più
+#              processi in parallelo; poi i file si compongono unendo i pezzi.
 #              Pulsante Condividi (in basso a destra): condivide/copia il link e
 #              spiega come salvare la pagina sulla Home (PC, Mac, iPhone, Android).
 #              Genera anche manifest.webmanifest, sw.js e le icone (IMT-anteprima.jpg,
@@ -153,12 +157,11 @@ def _piatto_leggibile(testo):
     return t[:1].upper() + t[1:]
 
 PAUSA_RIGA_S = 0.5      # pausa dopo ogni riga letta
-PAUSA_OPPURE_S = 0.15   # pausa prima e dopo "oppure" tra due alternative
 
 def righe_lettura(block, lingua):
     """Frasi della lettura vocale, come coppie (testo, pausa dopo in secondi):
-    introduzione, titolo di ogni portata, ogni piatto del giorno (in grassetto)
-    separato dal successivo da "oppure", saluto finale."""
+    introduzione, titolo di ogni portata, i piatti del giorno (in grassetto) di
+    ogni portata in un'unica frase unita da "oppure", saluto finale."""
     it = lingua == 'it'
     pranzo = block['type'].lower() == 'pranzo'
     if it:
@@ -173,14 +176,11 @@ def righe_lettura(block, lingua):
         if piatti:
             trovati = True
             righe.append(((titolo_it if it else titolo_en) + '.', PAUSA_RIGA_S))
-            # tra due o più alternative: "Pasta e ceci" - pausa - "oppure" - pausa - "Minestrone."
-            congiunzione = 'oppure' if it else 'or'
-            for i, p in enumerate(piatti):
-                if i < len(piatti) - 1:
-                    righe.append((p.rstrip('.').rstrip(' ,'), PAUSA_OPPURE_S))
-                    righe.append((congiunzione, PAUSA_OPPURE_S))
-                else:
-                    righe.append((p.rstrip('.') + '.', PAUSA_RIGA_S))
+            # alternative lette di seguito, senza pause: "Minestrone oppure spaghetti."
+            congiunzione = ' oppure ' if it else ' or '
+            frase = congiunzione.join((p if i == 0 else p[:1].lower() + p[1:]).rstrip('.').rstrip(' ,')
+                                      for i, p in enumerate(piatti))
+            righe.append((frase + '.', PAUSA_RIGA_S))
     if not trovati:
         righe.append(('Nessun piatto in grassetto.' if it else 'No bold items.', PAUSA_RIGA_S))
     righe.append((('Buon pranzo!' if pranzo else 'Buona cena!') if it else
@@ -206,25 +206,72 @@ def togli_silenzi(pcm, frequenza, canali, larghezza, soglia=300, margine_s=0.03)
     fine = min(n - 1, fine + margine)
     return campioni[inizio * canali:(fine + 1) * canali].tobytes()
 
+_VOCI_PROCESSO = {}
+
+def _avvia_processo(thread):
+    """Inizializza un processo di lavoro: carica le voci una volta sola,
+    ognuna con un numero limitato di thread così i processi non si intralciano."""
+    import onnxruntime
+    from piper import PiperVoice
+    for nome_voce in VOCI_AUDIO.values():
+        modello = CARTELLA_VOCI / f'{nome_voce}.onnx'
+        voce = PiperVoice.load(modello)
+        opzioni = onnxruntime.SessionOptions()
+        opzioni.intra_op_num_threads = thread
+        opzioni.inter_op_num_threads = 1
+        voce.session = onnxruntime.InferenceSession(str(modello), sess_options=opzioni,
+                                                    providers=['CPUExecutionProvider'])
+        _VOCI_PROCESSO[nome_voce] = voce
+
+def _sintetizza_frase(lavoro):
+    """Legge una frase con la voce indicata e restituisce l'audio grezzo senza i
+    silenzi iniziali e finali (eseguita nei processi di lavoro)."""
+    nome_voce, testo = lavoro
+    buf = io.BytesIO()
+    with wave.open(buf, 'wb') as wf:
+        _VOCI_PROCESSO[nome_voce].synthesize_wav(testo, wf)
+    buf.seek(0)
+    with wave.open(buf, 'rb') as wf:
+        formato = (wf.getframerate(), wf.getnchannels(), wf.getsampwidth())
+        pcm = togli_silenzi(wf.readframes(wf.getnframes()), *formato)
+    return lavoro, pcm, formato
+
+def _scrivi_mp3(percorso, pezzi_pcm, formato):
+    """Unisce le frasi già lette (con le loro pause) e salva l'MP3."""
+    import lameenc
+    frequenza, canali, larghezza = formato
+    enc = lameenc.Encoder()
+    enc.set_bit_rate(AUDIO_KBPS)
+    enc.set_in_sample_rate(frequenza)
+    enc.set_channels(canali)
+    enc.set_quality(2)
+    temporaneo = Path(str(percorso) + '.tmp')
+    temporaneo.write_bytes(enc.encode(b''.join(pezzi_pcm)) + enc.flush())
+    temporaneo.replace(percorso)   # il file compare solo quando è completo
+
 def genera_audio(base, blocks, prova=False):
     """Crea/aggiorna gli MP3 dei pasti e aggiunge a ogni blocco block['audio'] = {'it': ..., 'en': ...}.
-    Rigenera solo i file il cui testo o voce è cambiato; elimina gli MP3 non più usati."""
+    Rigenera solo i file il cui testo o voce è cambiato; elimina gli MP3 non più usati.
+    Ogni frase diversa è letta una volta sola (le frasi sono divise tra più processi,
+    uno ogni due core del processore), poi i file si compongono unendo i pezzi."""
     try:
-        from piper import PiperVoice
         from piper.download_voices import download_voice
-        import lameenc
+        import lameenc  # noqa: F401
+        import onnxruntime  # noqa: F401
     except ImportError:
         print('Audio non generato: installare con  pip install piper-tts lameenc')
         return
+    import time
+    from concurrent.futures import ProcessPoolExecutor, as_completed
     cartella = base / CARTELLA_AUDIO
     cartella.mkdir(exist_ok=True)
-    voci_dir = CARTELLA_VOCI
-    voci_dir.mkdir(parents=True, exist_ok=True)
-    caricate = {}
+    CARTELLA_VOCI.mkdir(parents=True, exist_ok=True)
+    for p in cartella.glob('*.mp3.tmp'):   # resti di un'esecuzione interrotta
+        p.unlink()
     usati = set()
-    nuovi = 0
+    lavori = []
     totale = len(blocks) * len(VOCI_AUDIO)
-    for n, block in enumerate(blocks, 1):
+    for block in blocks:
         block['audio'] = {}
         for lingua, nome_voce in VOCI_AUDIO.items():
             righe = righe_lettura(block, lingua)
@@ -235,33 +282,54 @@ def genera_audio(base, blocks, prova=False):
             percorso = cartella / nome_file
             usati.add(nome_file)
             if not percorso.exists():
-                if nome_voce not in caricate:
-                    modello = voci_dir / f'{nome_voce}.onnx'
-                    if not modello.exists() or not (voci_dir / f'{nome_voce}.onnx.json').exists():
-                        print(f'Scarico la voce {nome_voce}...')
-                        download_voice(nome_voce, voci_dir)
-                    caricate[nome_voce] = PiperVoice.load(modello)
-                voce = caricate[nome_voce]
-                pezzi = []
-                for testo, pausa in righe:
-                    buf = io.BytesIO()
-                    with wave.open(buf, 'wb') as wf:
-                        voce.synthesize_wav(testo, wf)
-                    buf.seek(0)
-                    with wave.open(buf, 'rb') as wf:
-                        frequenza, canali, larghezza = wf.getframerate(), wf.getnchannels(), wf.getsampwidth()
-                        pezzi.append(togli_silenzi(wf.readframes(wf.getnframes()), frequenza, canali, larghezza))
-                    pezzi.append(b'\x00' * int(frequenza * pausa) * canali * larghezza)
-                pcm = b''.join(pezzi)
-                enc = lameenc.Encoder()
-                enc.set_bit_rate(AUDIO_KBPS)
-                enc.set_in_sample_rate(frequenza)
-                enc.set_channels(canali)
-                enc.set_quality(2)
-                percorso.write_bytes(enc.encode(pcm) + enc.flush())
-                nuovi += 1
-                print(f'  audio {nuovi}: {nome_file}  ({n}/{len(blocks)})', flush=True)
+                lavori.append((nome_voce, righe, str(percorso)))
             block['audio'][lingua] = f'{CARTELLA_AUDIO}/{nome_file}'
+    # alla partenza: cancella tutti i vecchi MP3 (quelli non più usati dal menu attuale);
+    # nella prova non si tocca niente oltre ai due file creati
+    vecchi = [] if prova else [p for p in cartella.glob('*.mp3') if p.name not in usati]
+    for p in vecchi:
+        p.unlink()
+    if vecchi:
+        print(f'Cancellati {len(vecchi)} vecchi file audio.', flush=True)
+    nuovi = 0
+    if lavori:
+        for nome_voce in VOCI_AUDIO.values():
+            if not (CARTELLA_VOCI / f'{nome_voce}.onnx').exists() or \
+               not (CARTELLA_VOCI / f'{nome_voce}.onnx.json').exists():
+                print(f'Scarico la voce {nome_voce}...')
+                download_voice(nome_voce, CARTELLA_VOCI)
+        # Molte frasi si ripetono ("Primi.", "Buon pranzo!", gli stessi piatti in giorni
+        # diversi): ogni frase diversa viene letta una volta sola, poi i file si
+        # compongono unendo i pezzi già pronti.
+        frasi = sorted({(nome_voce, testo) for nome_voce, righe, _ in lavori for testo, _ in righe})
+        totale_frasi = sum(len(righe) for _, righe, _ in lavori)
+        core = os.cpu_count() or 2
+        processi = max(1, min(len(frasi), core // 2))
+        thread = max(1, core // processi)
+        print(f'Da leggere {len(frasi)} frasi diverse (su {totale_frasi}) per {len(lavori)} file audio, '
+              f'con {processi} processi in parallelo...', flush=True)
+        inizio = time.time()
+        letto = {}
+        formato = None
+        with ProcessPoolExecutor(max_workers=processi, initializer=_avvia_processo,
+                                 initargs=(thread,)) as pool:
+            futuri = [pool.submit(_sintetizza_frase, f) for f in frasi]
+            for n, futuro in enumerate(as_completed(futuri), 1):
+                chiave, pcm, formato = futuro.result()
+                letto[chiave] = pcm
+                if n % 20 == 0 or n == len(frasi):
+                    trascorsi = time.time() - inizio
+                    mancanti = (len(frasi) - n) * trascorsi / n
+                    print(f'  frasi lette {n}/{len(frasi)}  (mancano circa {mancanti / 60:.1f} min)', flush=True)
+        frequenza, canali, larghezza = formato
+        for nome_voce, righe, percorso in lavori:
+            pezzi = []
+            for testo, pausa in righe:
+                pezzi.append(letto[(nome_voce, testo)])
+                pezzi.append(b'\x00' * int(frequenza * pausa) * canali * larghezza)
+            _scrivi_mp3(percorso, pezzi, formato)
+            nuovi += 1
+        print(f'Tempo per gli audio: {(time.time() - inizio) / 60:.1f} min.')
     if prova:
         print(f'Prova: {len(usati)} file in {cartella} ({nuovi} nuovi). Li apro per l’ascolto.')
         for nome in sorted(usati):
@@ -269,10 +337,7 @@ def genera_audio(base, blocks, prova=False):
             if hasattr(os, 'startfile'):
                 os.startfile(str(cartella / nome))
         return
-    vecchi = [p for p in cartella.glob('*.mp3') if p.name not in usati]
-    for p in vecchi:
-        p.unlink()
-    print(f'Audio: {totale} file, {nuovi} nuovi, {len(vecchi)} eliminati perché non più usati.')
+    print(f'Audio: {totale} file, {nuovi} nuovi, {len(vecchi)} vecchi cancellati alla partenza.')
 
 def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
     base = Path(__file__).resolve().parent
@@ -718,14 +783,9 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
                 if (boldElements.length === 0) return;
                 chunksToRead.push({ text: translatedTitle + ".", delay: 500 });
                 const piatti = [...boldElements];
-                piatti.forEach((el, i) => {
-                    if (i < piatti.length - 1) {
-                        chunksToRead.push({ text: el.innerText.trim().toLowerCase(), delay: 150 });
-                        chunksToRead.push({ text: isIt ? "oppure" : "or", delay: 150 });
-                    } else {
-                        chunksToRead.push({ text: el.innerText.trim().toLowerCase() + ".", delay: 500 });
-                    }
-                });
+                // alternative lette di seguito, senza pause: "minestrone oppure spaghetti."
+                const frase = piatti.map(el => el.innerText.trim().toLowerCase()).join(isIt ? " oppure " : " or ");
+                if (frase) chunksToRead.push({ text: frase + ".", delay: 500 });
             }
             
             extractCardBoldTexts('card-primi', isIt ? "Primi" : "First Courses");

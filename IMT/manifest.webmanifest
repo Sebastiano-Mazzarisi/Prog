@@ -1,0 +1,25 @@
+{
+  "name": "IMT - Menu",
+  "short_name": "IMT Menu",
+  "description": "Menu giornaliero Pranzo e Cena",
+  "lang": "it",
+  "start_url": "Menu-IMT.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f2f7",
+  "theme_color": "#007aff",
+  "icons": [
+    {
+      "src": "IMT-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "IMT-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -9,7 +9,7 @@
 #              Un clic su quella riga mostra la tabella dei dispositivi registrati
 #              (prima i collegati in rosso, poi gli altri in blu; ognuno dal più recente).
 #              Toccando la propria riga si può scrivere il nome del dispositivo.
-#              A destra la lingua (IT / EN) di ogni dispositivo, in uso o l'ultima usata, comunicata
+#              A destra la lingua di ogni dispositivo (IT blu, predefinita; EN verde), comunicata
 #              da ogni dispositivo ogni 5 secondi. Ai lati della riga del contatore
 #              due bandierine (IT a sinistra, EN a destra) per scegliere la lingua.
 #              All'avvio la pagina si apre nella lingua usata l'ultima volta.
@@ -508,6 +508,8 @@ def genera_html(file_input=None, traduci=False, audio=True):
         .utenti-tab tr.mio { cursor: pointer; background: #fff5f5; }
         .utenti-tab .lingua { width: 1%; white-space: nowrap; text-align: right; }
         .utenti-tab td.lingua span { font-size: 0.75rem; font-weight: 700; border: 1px solid currentColor; border-radius: 4px; padding: 0 4px; }
+        .utenti-tab td.lingua span.l-it { color: #007aff; }
+        .utenti-tab td.lingua span.l-en { color: #1a9e3a; }
         .nome-modifica { display: flex; gap: 4px; align-items: center; }
         .nome-input { flex: 1 1 auto; width: 0; min-width: 0; font-size: 0.9rem; padding: 4px 6px; border: 1px solid #c7c7cc; border-radius: 6px; box-sizing: border-box; }
         .nome-ok { flex-shrink: 0; padding: 4px 8px; border: none; border-radius: 6px; background: #007aff; color: white; font-weight: 600; cursor: pointer; }
@@ -1084,11 +1086,11 @@ def genera_html(file_input=None, traduci=False, audio=True):
                     const d = new Date(t);
                     return GS[d.getDay()] + ' ' + due(d.getDate()) + '/' + due(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + due(d.getHours()) + ':' + due(d.getMinutes());
                 };
-                // lingua (IT / EN) di ogni dispositivo: quella in uso o l'ultima usata
+                // lingua di ogni dispositivo (in uso o l'ultima usata); senza indicazioni vale IT.
+                // IT sempre in blu, EN sempre in verde, collegato o no.
                 const cellaLingua = r => {
-                    let l = r.codice === contatoreId ? currentLang : (lingue || {})[r.codice];
-                    l = (l === 'it' || l === 'en') ? l.toUpperCase() : '';
-                    return '<td class="lingua">' + (l ? '<span>' + l + '</span>' : '') + '</td>';
+                    const l = (r.codice === contatoreId ? currentLang : (lingue || {})[r.codice]) === 'en' ? 'en' : 'it';
+                    return '<td class="lingua"><span class="l-' + l + '">' + l.toUpperCase() + '</span></td>';
                 };
                 let n = 0;
                 const corpo = righe.map(r => {

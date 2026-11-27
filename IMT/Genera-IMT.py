@@ -16,7 +16,9 @@
 #              Lettura vocale: per ogni pasto registra un MP3 in italiano (voce Serena)
 #              e in inglese (voce Cori) con Piper, gratuito e senza Internet; la pagina
 #              li riproduce e, se mancano, usa la voce del dispositivo. Dopo ogni riga
-#              (introduzione, portata, piatto, saluto) c'è una pausa di mezzo secondo.
+#              (introduzione, portata, piatto, saluto) c'è una pausa di mezzo secondo;
+#              tra le alternative di una portata si dice "oppure" ("or" in inglese),
+#              staccato con una pausa di 15 centesimi prima e dopo.
 #              Pulsante Condividi (in basso a destra): condivide/copia il link e
 #              spiega come salvare la pagina sulla Home (PC, Mac, iPhone, Android).
 #              Genera anche manifest.webmanifest, sw.js e le icone (IMT-anteprima.jpg,
@@ -25,6 +27,10 @@
 # File di output: Menu-IMT.html, menu_siri.json, manifest.webmanifest, sw.js, icone IMT-*
 # Parametri: --input FILE.xlsx, --traduci (traduzione online facoltativa),
 #            --senza-audio (non genera/aggiorna i file audio)
+#            --prova-audio (genera solo l'audio italiano e inglese del primo pasto
+#            da oggi in poi, lo apre per l'ascolto e si ferma senza toccare
+#            pagina e altri audio; con Genera-Audio.bat poi si riparte e quei due
+#            file già pronti vengono riutilizzati)
 
 import pandas as pd
 import json
@@ -146,17 +152,19 @@ def _piatto_leggibile(testo):
     t = re.sub(r"([aeiou])[’'`](?=$|[\s,.;:)])", lambda m: accenti[m.group(1)], t)
     return t[:1].upper() + t[1:]
 
-PAUSA_RIGA_S = 0.5   # pausa dopo ogni riga letta
+PAUSA_RIGA_S = 0.5      # pausa dopo ogni riga letta
+PAUSA_OPPURE_S = 0.15   # pausa prima e dopo "oppure" tra due alternative
 
 def righe_lettura(block, lingua):
-    """Righe della lettura vocale (dopo ognuna c'è una pausa): introduzione,
-    titolo di ogni portata, ogni piatto del giorno (in grassetto), saluto finale."""
+    """Frasi della lettura vocale, come coppie (testo, pausa dopo in secondi):
+    introduzione, titolo di ogni portata, ogni piatto del giorno (in grassetto)
+    separato dal successivo da "oppure", saluto finale."""
     it = lingua == 'it'
     pranzo = block['type'].lower() == 'pranzo'
     if it:
-        righe = [f"Ciao, ecco {'il pranzo' if pranzo else 'la cena'} della I M T per {block['date_it']}."]
+        righe = [(f"Ciao, ecco {'il pranzo' if pranzo else 'la cena'} della I M T per {block['date_it']}.", PAUSA_RIGA_S)]
     else:
-        righe = [f"Hello, here is the I M T {'lunch' if pranzo else 'dinner'} for {block['date_en']}."]
+        righe = [(f"Hello, here is the I M T {'lunch' if pranzo else 'dinner'} for {block['date_en']}.", PAUSA_RIGA_S)]
     portate = [('Primi', 'Primi', 'First courses'), ('Secondi', 'Secondi', 'Main courses'),
                ('Contorno', 'Contorni', 'Side dishes'), ('Frutta', 'Frutta e dessert', 'Fruit and dessert')]
     trovati = False
@@ -164,15 +172,41 @@ def righe_lettura(block, lingua):
         piatti = [_piatto_leggibile(x) for x in block.get(f'{chiave}_{lingua}', []) if '<strong>' in x]
         if piatti:
             trovati = True
-            righe.append((titolo_it if it else titolo_en) + '.')
-            righe.extend(p.rstrip('.') + '.' for p in piatti)
+            righe.append(((titolo_it if it else titolo_en) + '.', PAUSA_RIGA_S))
+            # tra due o più alternative: "Pasta e ceci" - pausa - "oppure" - pausa - "Minestrone."
+            congiunzione = 'oppure' if it else 'or'
+            for i, p in enumerate(piatti):
+                if i < len(piatti) - 1:
+                    righe.append((p.rstrip('.').rstrip(' ,'), PAUSA_OPPURE_S))
+                    righe.append((congiunzione, PAUSA_OPPURE_S))
+                else:
+                    righe.append((p.rstrip('.') + '.', PAUSA_RIGA_S))
     if not trovati:
-        righe.append('Nessun piatto in grassetto.' if it else 'No bold items.')
-    righe.append(('Buon pranzo!' if pranzo else 'Buona cena!') if it else
-                 ('Enjoy your lunch!' if pranzo else 'Enjoy your dinner!'))
+        righe.append(('Nessun piatto in grassetto.' if it else 'No bold items.', PAUSA_RIGA_S))
+    righe.append((('Buon pranzo!' if pranzo else 'Buona cena!') if it else
+                  ('Enjoy your lunch!' if pranzo else 'Enjoy your dinner!'), PAUSA_RIGA_S))
     return righe
 
-def genera_audio(base, blocks):
+def togli_silenzi(pcm, frequenza, canali, larghezza, soglia=300, margine_s=0.03):
+    """Toglie il silenzio che Piper aggiunge all'inizio e alla fine di ogni frase,
+    così le pause sono esattamente quelle impostate."""
+    if larghezza != 2 or not pcm:
+        return pcm
+    import array
+    campioni = array.array('h', pcm)
+    n = len(campioni) // canali
+    inizio = 0
+    while inizio < n and abs(campioni[inizio * canali]) < soglia:
+        inizio += 1
+    fine = n - 1
+    while fine > inizio and abs(campioni[fine * canali]) < soglia:
+        fine -= 1
+    margine = int(frequenza * margine_s)
+    inizio = max(0, inizio - margine)
+    fine = min(n - 1, fine + margine)
+    return campioni[inizio * canali:(fine + 1) * canali].tobytes()
+
+def genera_audio(base, blocks, prova=False):
     """Crea/aggiorna gli MP3 dei pasti e aggiunge a ogni blocco block['audio'] = {'it': ..., 'en': ...}.
     Rigenera solo i file il cui testo o voce è cambiato; elimina gli MP3 non più usati."""
     try:
@@ -194,7 +228,8 @@ def genera_audio(base, blocks):
         block['audio'] = {}
         for lingua, nome_voce in VOCI_AUDIO.items():
             righe = righe_lettura(block, lingua)
-            chiave = '|'.join([nome_voce, str(AUDIO_KBPS), str(PAUSA_RIGA_S)] + righe)
+            chiave = '|'.join([nome_voce, str(AUDIO_KBPS), 'senza-silenzi'] +
+                              [f'{testo}#{pausa}' for testo, pausa in righe])
             impronta = hashlib.sha1(chiave.encode('utf-8')).hexdigest()[:10]
             nome_file = f"{block['date']}-{block['type'].lower()}-{lingua}-{impronta}.mp3"
             percorso = cartella / nome_file
@@ -208,15 +243,15 @@ def genera_audio(base, blocks):
                     caricate[nome_voce] = PiperVoice.load(modello)
                 voce = caricate[nome_voce]
                 pezzi = []
-                for riga in righe:
+                for testo, pausa in righe:
                     buf = io.BytesIO()
                     with wave.open(buf, 'wb') as wf:
-                        voce.synthesize_wav(riga, wf)
+                        voce.synthesize_wav(testo, wf)
                     buf.seek(0)
                     with wave.open(buf, 'rb') as wf:
                         frequenza, canali, larghezza = wf.getframerate(), wf.getnchannels(), wf.getsampwidth()
-                        pezzi.append(wf.readframes(wf.getnframes()))
-                    pezzi.append(b'\x00' * int(frequenza * PAUSA_RIGA_S) * canali * larghezza)
+                        pezzi.append(togli_silenzi(wf.readframes(wf.getnframes()), frequenza, canali, larghezza))
+                    pezzi.append(b'\x00' * int(frequenza * pausa) * canali * larghezza)
                 pcm = b''.join(pezzi)
                 enc = lameenc.Encoder()
                 enc.set_bit_rate(AUDIO_KBPS)
@@ -227,12 +262,19 @@ def genera_audio(base, blocks):
                 nuovi += 1
                 print(f'  audio {nuovi}: {nome_file}  ({n}/{len(blocks)})', flush=True)
             block['audio'][lingua] = f'{CARTELLA_AUDIO}/{nome_file}'
+    if prova:
+        print(f'Prova: {len(usati)} file in {cartella} ({nuovi} nuovi). Li apro per l’ascolto.')
+        for nome in sorted(usati):
+            print(f'  {nome}')
+            if hasattr(os, 'startfile'):
+                os.startfile(str(cartella / nome))
+        return
     vecchi = [p for p in cartella.glob('*.mp3') if p.name not in usati]
     for p in vecchi:
         p.unlink()
     print(f'Audio: {totale} file, {nuovi} nuovi, {len(vecchi)} eliminati perché non più usati.')
 
-def genera_html(file_input=None, traduci=False, audio=True):
+def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
     base = Path(__file__).resolve().parent
     file_input = Path(file_input) if file_input else base / 'menu-giornaliero-completo-autunno-2026.xlsx'
     file_output = base / 'Menu-IMT.html'
@@ -675,7 +717,15 @@ def genera_html(file_input=None, traduci=False, audio=True):
                 const boldElements = card.querySelectorAll('strong');
                 if (boldElements.length === 0) return;
                 chunksToRead.push({ text: translatedTitle + ".", delay: 500 });
-                boldElements.forEach(el => chunksToRead.push({ text: el.innerText.trim().toLowerCase() + ".", delay: 500 }));
+                const piatti = [...boldElements];
+                piatti.forEach((el, i) => {
+                    if (i < piatti.length - 1) {
+                        chunksToRead.push({ text: el.innerText.trim().toLowerCase(), delay: 150 });
+                        chunksToRead.push({ text: isIt ? "oppure" : "or", delay: 150 });
+                    } else {
+                        chunksToRead.push({ text: el.innerText.trim().toLowerCase() + ".", delay: 500 });
+                    }
+                });
             }
             
             extractCardBoldTexts('card-primi', isIt ? "Primi" : "First Courses");
@@ -1212,6 +1262,13 @@ def genera_html(file_input=None, traduci=False, audio=True):
 </html>
 """
 
+    if prova_audio:
+        oggi = datetime.now().strftime('%Y-%m-%d')
+        primo = next((b for b in blocks if b['date'] >= oggi), blocks[0])
+        genera_audio(base, [primo], prova=True)
+        print('Prova finita: pagina e altri audio non toccati. Se va bene, doppio clic su Genera-Audio.bat.')
+        return
+
     if audio:
         genera_audio(base, blocks)
 
@@ -1234,5 +1291,7 @@ if __name__ == "__main__":
     parser.add_argument('--input', help='File Excel da utilizzare')
     parser.add_argument('--traduci', action='store_true', help='Traduci online i nuovi piatti mancanti dal dizionario')
     parser.add_argument('--senza-audio', action='store_true', help='Non genera né aggiorna i file audio della lettura')
+    parser.add_argument('--prova-audio', action='store_true',
+                        help='Genera solo l’audio italiano e inglese del primo pasto da oggi, per controllo')
     args = parser.parse_args()
-    genera_html(args.input, args.traduci, audio=not args.senza_audio)
+    genera_html(args.input, args.traduci, audio=not args.senza_audio, prova_audio=args.prova_audio)

@@ -1,8 +1,11 @@
 # Nome.py: GeneraMenu.py
-# Ultimo aggiornamento: 21/09/2026
+# Ultimo aggiornamento: 27/11/2026
 # Descrizione: Legge menu-giornaliero-completo-autunno-2026.xlsx e genera Menu-IMT.html.
-#              Generazione del file menu_siri.json con date multi-formato per evitare 
+#              Generazione del file menu_siri.json con date multi-formato per evitare
 #              qualsiasi formattazione lato iOS Shortcuts.
+#              Contatore utenti: ogni dispositivo riceve un codice univoco nascosto;
+#              ogni 5 secondi la pagina mostra "<n> utenti collegati adesso su <t>"
+#              usando il database Firebase indicato in CONTATORE_URL.
 # File di input: menu-giornaliero-completo-autunno-2026.xlsx
 # File di output: Menu-IMT.html, menu_siri.json
 # Parametri: --input FILE.xlsx, --traduci (traduzione online facoltativa)
@@ -18,6 +21,11 @@ import argparse
 import html
 import re
 from pathlib import Path
+
+# Indirizzo del Firebase Realtime Database usato dal contatore utenti
+# (es. https://imt-menu-xxxxx-default-rtdb.europe-west1.firebasedatabase.app).
+# Se resta vuoto, la riga del contatore non viene mostrata.
+CONTATORE_URL = "https://imt-menu-default-rtdb.europe-west1.firebasedatabase.app"
 
 def genera_html(file_input=None, traduci=False):
     base = Path(__file__).resolve().parent
@@ -267,6 +275,7 @@ def genera_html(file_input=None, traduci=False):
         li:last-child { border-bottom: none; }
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
+        .contatore { text-align: center; font-size: 0.8rem; color: #6b6b70; min-height: 1.1em; margin: -4px 0 6px; }
         .source-note { font-size:0.8rem; line-height:1.5; color:#52525b; padding:10px; }
         .source-note a { color:#0056b3; }
         .anim-next { animation: slideOverRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
@@ -291,7 +300,7 @@ def genera_html(file_input=None, traduci=False):
                 <button id="btn-next" aria-label="Pasto successivo / Next meal" onclick="navigate(1)">&#9654;</button>
             </div>
         </div>
-        
+        <div class="contatore hidden" id="contatore-utenti" aria-live="polite"></div>
         <div class="content-wrapper" id="content-wrapper">
             <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua">
                 <div class="course-card" id="card-primi"><h2 class="course-title" id="title-primi">Primi</h2><ul id="list-primi"></ul></div>
@@ -300,7 +309,7 @@ def genera_html(file_input=None, traduci=False):
                 <div class="course-card" id="card-frutta"><h2 class="course-title" id="title-frutta">Frutta / Dessert</h2><ul id="list-frutta"></ul></div>
             </div>
         </div>
-        <details class="source-note"><summary>Fonti e note / Sources and notes</summary>
+        <details class="source-note"><summary>by Teresa Mazzarisi</summary>
             <p>Piatti del giorno in grassetto; alternative fisse in carattere normale. I riferimenti agli allergeni sono disponibili nei PDF originali.</p>
             <p>Daily dishes in bold; fixed alternatives in regular type. Allergen references are available in the original PDFs.</p>
             <p><a href="Autunno/MENU_IMT_PRANZO_AUTUNNO_2026.pdf">PDF pranzo / Lunch</a> · <a href="Autunno/MENU_IMT_CENA_AUTUNNO_2026.pdf">PDF cena / Dinner</a> · <a href="menu-giornaliero-completo-autunno-2026.xlsx">Excel completo</a></p>
@@ -532,6 +541,92 @@ def genera_html(file_input=None, traduci=False):
             return Math.max(0, foundIndex);
         }
 
+        // ---- Contatore utenti (Firebase Realtime Database via REST) ----
+        // Ogni dispositivo riceve un codice univoco nascosto, salvato nel browser.
+        // utenti/<codice> = primo accesso; totale = numero di dispositivi registrati;
+        // online/<codice> = ultimo segnale (ogni 5 s, solo con la pagina visibile).
+        const CONTATORE_URL = "__CONTATORE_URL__";
+        const CONTATORE_INTERVALLO = 5000;     // controllo ogni 5 secondi
+        const CONTATORE_ATTIVO_MS = 15000;     // "collegato adesso" = segnale negli ultimi 15 secondi
+        const CONTATORE_PULIZIA_MS = 600000;   // segnali più vecchi di 10 minuti vengono cancellati
+        let contatoreId = null, contatoreRegistrato = false, contatoreInCorso = false;
+
+        function contatoreCodice() {
+            try {
+                let id = localStorage.getItem('imt-id-dispositivo');
+                if (!id) {
+                    id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+                        : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12) + Math.random().toString(36).slice(2, 12);
+                    localStorage.setItem('imt-id-dispositivo', id);
+                }
+                contatoreRegistrato = localStorage.getItem('imt-id-registrato') === id;
+                return id;
+            } catch (e) { return null; }
+        }
+
+        async function contatoreFb(percorso, metodo, dati) {
+            const opzioni = { method: metodo || 'GET', cache: 'no-store' };
+            if (dati !== undefined) opzioni.body = JSON.stringify(dati);
+            const r = await fetch(CONTATORE_URL + '/' + percorso + '.json', opzioni);
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+        }
+
+        function contatoreMostra(n, t) {
+            const el = document.getElementById('contatore-utenti');
+            const f = x => x.toLocaleString(currentLang === 'it' ? 'it-IT' : 'en-GB');
+            el.textContent = currentLang === 'it'
+                ? `${f(n)} ${n === 1 ? 'utente collegato' : 'utenti collegati'} adesso su ${f(t)}`
+                : `${f(n)} ${n === 1 ? 'user' : 'users'} online now out of ${f(t)}`;
+            el.classList.remove('hidden');
+        }
+
+        async function contatoreCiclo() {
+            if (contatoreInCorso || document.visibilityState === 'hidden') return;
+            contatoreInCorso = true;
+            try {
+                if (!contatoreRegistrato) {
+                    const esiste = await contatoreFb('utenti/' + contatoreId);
+                    if (esiste === null) {
+                        // registrazione e incremento del totale in un'unica operazione atomica
+                        await contatoreFb('', 'PATCH', {
+                            ['utenti/' + contatoreId]: { '.sv': 'timestamp' },
+                            'totale': { '.sv': { 'increment': 1 } }
+                        });
+                    }
+                    contatoreRegistrato = true;
+                    try { localStorage.setItem('imt-id-registrato', contatoreId); } catch (e) {}
+                }
+                const adesso = await contatoreFb('online/' + contatoreId, 'PUT', { '.sv': 'timestamp' });
+                const [online, totale] = await Promise.all([contatoreFb('online'), contatoreFb('totale')]);
+                let n = 0; const vecchi = {};
+                for (const [codice, t] of Object.entries(online || {})) {
+                    if (typeof t !== 'number') continue;
+                    if (t >= adesso - CONTATORE_ATTIVO_MS) n++;
+                    else if (t < adesso - CONTATORE_PULIZIA_MS) vecchi[codice] = null;
+                }
+                if (Object.keys(vecchi).length) contatoreFb('online', 'PATCH', vecchi).catch(() => {});
+                n = Math.max(n, 1);
+                contatoreMostra(n, Math.max(Number(totale) || 0, n));
+            } catch (e) {
+                document.getElementById('contatore-utenti').classList.add('hidden');
+            } finally {
+                contatoreInCorso = false;
+            }
+        }
+
+        function contatoreAvvia() {
+            if (!CONTATORE_URL || !window.fetch) return;
+            contatoreId = contatoreCodice();
+            if (!contatoreId) return;
+            contatoreCiclo();
+            setInterval(contatoreCiclo, CONTATORE_INTERVALLO);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') contatoreCiclo();
+                else fetch(CONTATORE_URL + '/online/' + contatoreId + '.json', { method: 'DELETE', keepalive: true }).catch(() => {});
+            });
+        }
+
         window.onload = () => {
             if (sessionStorage.getItem('savedLang')) currentLang = sessionStorage.getItem('savedLang');
             let animToPlay = null;
@@ -544,13 +639,15 @@ def genera_html(file_input=None, traduci=False):
                 sessionStorage.removeItem('savedDate'); sessionStorage.removeItem('savedType');
             }
             currentIndex = startIdx; renderMeal(currentIndex, animToPlay);
+            contatoreAvvia();
         };
     </script>
 </body>
 </html>
 """
 
-    html_code = html_template.replace('__JSON_DATA__', json.dumps(blocks))
+    contatore_url = CONTATORE_URL.strip().rstrip('/')
+    html_code = html_template.replace('__CONTATORE_URL__', contatore_url).replace('__JSON_DATA__', json.dumps(blocks))
 
     with open(file_output, 'w', encoding='utf-8') as f:
         f.write(html_code)

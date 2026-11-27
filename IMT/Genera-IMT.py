@@ -9,6 +9,10 @@
 #              Un clic su quella riga mostra la tabella dei dispositivi registrati
 #              (prima i collegati in rosso, poi gli altri in blu; ognuno dal più recente).
 #              Toccando la propria riga si può scrivere il nome del dispositivo.
+#              A destra, per i soli collegati, la lingua in uso (IT / EN), comunicata
+#              da ogni dispositivo ogni 5 secondi. Ai lati della riga del contatore
+#              due bandierine (IT a sinistra, EN a destra) per scegliere la lingua.
+#              All'avvio la pagina si apre nella lingua usata l'ultima volta.
 #              Pulsante Condividi (in basso a destra): condivide/copia il link e
 #              spiega come salvare la pagina sulla Home (PC, Mac, iPhone, Android).
 #              Genera anche manifest.webmanifest, sw.js e le icone (IMT-anteprima.jpg,
@@ -377,7 +381,11 @@ def genera_html(file_input=None, traduci=False):
         li:last-child { border-bottom: none; }
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
-        .contatore { display: table; margin: 4px auto 12px; padding: 5px 16px; background: #e6f4ff; color: #3a3a3c; border: 1px solid #b3d7ff; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); text-align: center; font-size: 0.95rem; min-height: 1.2em; cursor: pointer; }
+        .contatore-riga { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 4px 0 12px; }
+        .bandiera { border: none; background: none; padding: 0; cursor: pointer; line-height: 0; opacity: 0.35; transition: opacity 0.2s; flex-shrink: 0; }
+        .bandiera.attiva { opacity: 1; }
+        .bandiera svg { width: 26px; height: 17px; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,0.15); display: block; }
+        .contatore { display: inline-block; margin: 0; padding: 5px 16px; background: #e6f4ff; color: #3a3a3c; border: 1px solid #b3d7ff; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); text-align: center; font-size: 0.95rem; min-height: 1.2em; cursor: pointer; }
         .contatore:hover { text-decoration: underline; }
         .utenti-legenda { text-align: center; font-size: 0.85rem; color: #52525b; margin-bottom: 8px; }
         .utenti-tab { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
@@ -388,6 +396,8 @@ def genera_html(file_input=None, traduci=False):
         .utenti-tab td:first-child, .utenti-tab th:first-child { white-space: nowrap; width: 1%; }
         .utenti-tab td.nome { word-break: break-word; width: 99%; }
         .utenti-tab tr.mio { cursor: pointer; background: #fff5f5; }
+        .utenti-tab .lingua { width: 1%; white-space: nowrap; text-align: right; }
+        .utenti-tab td.lingua span { font-size: 0.75rem; font-weight: 700; border: 1px solid currentColor; border-radius: 4px; padding: 0 4px; }
         .nome-modifica { display: flex; gap: 4px; align-items: center; }
         .nome-input { flex: 1 1 auto; width: 0; min-width: 0; font-size: 0.9rem; padding: 4px 6px; border: 1px solid #c7c7cc; border-radius: 6px; box-sizing: border-box; }
         .nome-ok { flex-shrink: 0; padding: 4px 8px; border: none; border-radius: 6px; background: #007aff; color: white; font-weight: 600; cursor: pointer; }
@@ -432,7 +442,11 @@ def genera_html(file_input=None, traduci=False):
                 <button id="btn-next" aria-label="Pasto successivo / Next meal" onclick="navigate(1)">&#9654;</button>
             </div>
         </div>
-        <div class="contatore hidden" id="contatore-utenti" aria-live="polite" role="button" tabindex="0" onclick="apriUtenti()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();apriUtenti();}" title="Mostra i dispositivi / Show devices"></div>
+        <div class="contatore-riga">
+            <button class="bandiera" id="bandiera-it" onclick="scegliLingua('it')" aria-label="Italiano" title="Italiano"><svg viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#ffffff"/><rect x="2" width="1" height="2" fill="#ce2b37"/></svg></button>
+            <div class="contatore hidden" id="contatore-utenti" aria-live="polite" role="button" tabindex="0" onclick="apriUtenti()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();apriUtenti();}" title="Mostra i dispositivi / Show devices"></div>
+            <button class="bandiera" id="bandiera-en" onclick="scegliLingua('en')" aria-label="English" title="English"><svg viewBox="0 0 60 30" aria-hidden="true"><clipPath id="uk-s"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="uk-t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#uk-s)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#ffffff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#uk-t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#ffffff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg></button>
+        </div>
         <div class="content-wrapper" id="content-wrapper">
             <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua">
                 <div class="course-card" id="card-primi"><h2 class="course-title" id="title-primi">Primi</h2><ul id="list-primi"></ul></div>
@@ -570,6 +584,7 @@ def genera_html(file_input=None, traduci=False):
             if (isAnimating) return; 
             currentLang = currentLang === 'it' ? 'en' : 'it';
             sessionStorage.setItem('savedLang', currentLang);
+            salvaLingua(currentLang);
             if (menuData[currentIndex]) {
                 sessionStorage.setItem('savedDate', menuData[currentIndex].date);
                 sessionStorage.setItem('savedType', menuData[currentIndex].type);
@@ -761,6 +776,9 @@ def genera_html(file_input=None, traduci=False):
                 }
                 const adesso = await contatoreFb('online/' + contatoreId, 'PUT', { '.sv': 'timestamp' });
                 contatoreScarto = adesso - Date.now();
+                // ogni 5 secondi comunica la lingua in uso su questo dispositivo
+                contatoreFb('lingua/' + contatoreId, 'PUT', currentLang).catch(() => {});
+                salvaLingua(currentLang);
                 const [online, totale] = await Promise.all([contatoreFb('online'), contatoreFb('totale')]);
                 let n = 0; const vecchi = {};
                 for (const [codice, t] of Object.entries(online || {})) {
@@ -783,7 +801,7 @@ def genera_html(file_input=None, traduci=False):
             if (!CONTATORE_URL || !window.fetch) return;
             contatoreId = contatoreCodice();
             if (!contatoreId) return;
-            contatoreCiclo();
+            recuperaLinguaArchivio().then(contatoreCiclo);
             setInterval(contatoreCiclo, CONTATORE_INTERVALLO);
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') contatoreCiclo();
@@ -862,6 +880,37 @@ def genera_html(file_input=None, traduci=False):
             document.getElementById('share-overlay').classList.remove('hidden');
         }
 
+        // ---- Lingua ricordata tra un avvio e l'altro ----
+        function leggiLingua() {
+            try { return localStorage.getItem('imt-lingua'); } catch (e) { return null; }
+        }
+
+        function salvaLingua(lingua) {
+            try { localStorage.setItem('imt-lingua', lingua); } catch (e) {}
+        }
+
+        // Se il dispositivo non ha la lingua salvata (es. prima di questo aggiornamento),
+        // la recupera dall'archivio online e passa subito a quella lingua.
+        async function recuperaLinguaArchivio() {
+            if (leggiLingua() || sessionStorage.getItem('savedLang')) return;
+            try {
+                const l = await contatoreFb('lingua/' + contatoreId);
+                if ((l === 'it' || l === 'en') && !leggiLingua()) {
+                    salvaLingua(l);
+                    if (l !== currentLang) { currentLang = l; renderMeal(currentIndex); aggiornaBandiere(); }
+                }
+            } catch (e) {}
+        }
+
+        // ---- Bandierine della lingua ----
+        function scegliLingua(lingua) {
+            if (lingua !== currentLang) toggleLanguage();
+        }
+
+        function aggiornaBandiere() {
+            ['it', 'en'].forEach(l => document.getElementById('bandiera-' + l).classList.toggle('attiva', l === currentLang));
+        }
+
         // ---- Tabella dei dispositivi registrati ----
         function apriUtenti() {
             if (!contatoreId) return;
@@ -884,7 +933,7 @@ def genera_html(file_input=None, traduci=False):
             const legenda = document.getElementById('utenti-legenda');
             const tabella = document.getElementById('utenti-tabella');
             try {
-                const [utenti, online, nomi] = await Promise.all([contatoreFb('utenti'), contatoreFb('online'), contatoreFb('nomi')]);
+                const [utenti, online, nomi, lingue] = await Promise.all([contatoreFb('utenti'), contatoreFb('online'), contatoreFb('nomi'), contatoreFb('lingua')]);
                 if (utentiInModifica) return;
                 const adesso = Date.now() + contatoreScarto;
                 const collegato = codice => {
@@ -903,6 +952,12 @@ def genera_html(file_input=None, traduci=False):
                     const d = new Date(t);
                     return GS[d.getDay()] + ' ' + due(d.getDate()) + '/' + due(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + due(d.getHours()) + ':' + due(d.getMinutes());
                 };
+                // lingua (IT / EN) solo per i dispositivi collegati adesso
+                const cellaLingua = r => {
+                    let l = r.codice === contatoreId ? currentLang : (lingue || {})[r.codice];
+                    l = (l === 'it' || l === 'en') && r.on ? l.toUpperCase() : '';
+                    return '<td class="lingua">' + (l ? '<span>' + l + '</span>' : '') + '</td>';
+                };
                 let n = 0;
                 const corpo = righe.map(r => {
                     if (r.on) n++;
@@ -911,11 +966,11 @@ def genera_html(file_input=None, traduci=False):
                     if (r.codice === contatoreId) {
                         const testo = nome ? escHtml(nome) : '<i>' + (it ? 'tocca per dare un nome' : 'tap to set a name') + '</i>';
                         return '<tr class="' + classe + ' mio" onclick="modificaNome()" title="' + (it ? 'Questo dispositivo: tocca per cambiare il nome' : 'This device: tap to change the name') + '">'
-                            + '<td>' + quando(r.t) + '</td><td class="nome" id="nome-mio" data-nome="' + escHtml(nome || '') + '">' + testo + ' ✎</td></tr>';
+                            + '<td>' + quando(r.t) + '</td><td class="nome" id="nome-mio" data-nome="' + escHtml(nome || '') + '">' + testo + ' ✎</td>' + cellaLingua(r) + '</tr>';
                     }
-                    return '<tr class="' + classe + '"><td>' + quando(r.t) + '</td><td class="nome">' + (nome ? escHtml(nome) : '') + '</td></tr>';
+                    return '<tr class="' + classe + '"><td>' + quando(r.t) + '</td><td class="nome">' + (nome ? escHtml(nome) : '') + '</td>' + cellaLingua(r) + '</tr>';
                 }).join('');
-                tabella.innerHTML = '<thead><tr><th>' + (it ? 'Data e ora' : 'Date and time') + '</th><th>' + (it ? 'Nome' : 'Name') + '</th></tr></thead><tbody>' + corpo + '</tbody>';
+                tabella.innerHTML = '<thead><tr><th>' + (it ? 'Data e ora' : 'Date and time') + '</th><th>' + (it ? 'Nome' : 'Name') + '</th><th class="lingua"></th></tr></thead><tbody>' + corpo + '</tbody>';
                 legenda.innerHTML = it
                     ? '<span class="online">● collegati adesso: ' + n + '</span> &nbsp; <span class="offline">● non collegati: ' + (righe.length - n) + '</span>'
                     : '<span class="online">● online now: ' + n + '</span> &nbsp; <span class="offline">● offline: ' + (righe.length - n) + '</span>';
@@ -999,7 +1054,9 @@ def genera_html(file_input=None, traduci=False):
         }
 
         window.onload = () => {
-            if (sessionStorage.getItem('savedLang')) currentLang = sessionStorage.getItem('savedLang');
+            // lingua: quella della sessione, altrimenti quella usata l'ultima volta su questo dispositivo
+            const linguaIniziale = sessionStorage.getItem('savedLang') || leggiLingua();
+            if (linguaIniziale === 'it' || linguaIniziale === 'en') currentLang = linguaIniziale;
             let animToPlay = null;
             if (sessionStorage.getItem('justToggled')) { animToPlay = 'lang'; sessionStorage.removeItem('justToggled'); }
             let startIdx = getInitialMealIndex();
@@ -1010,6 +1067,7 @@ def genera_html(file_input=None, traduci=False):
                 sessionStorage.removeItem('savedDate'); sessionStorage.removeItem('savedType');
             }
             currentIndex = startIdx; renderMeal(currentIndex, animToPlay);
+            aggiornaBandiere();
             contatoreAvvia();
             if ('serviceWorker' in navigator && location.protocol === 'https:') {
                 navigator.serviceWorker.register('sw.js').catch(() => {});

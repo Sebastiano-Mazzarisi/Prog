@@ -6,6 +6,8 @@
 #              Contatore utenti: ogni dispositivo riceve un codice univoco nascosto;
 #              ogni 5 secondi la pagina mostra "<n> utenti collegati adesso su <t>"
 #              usando il database Firebase indicato in CONTATORE_URL.
+#              Un clic su quella riga mostra la tabella dei dispositivi registrati
+#              (data e ora, dal più recente): rosso = collegato adesso, blu = no.
 #              Pulsante Condividi (in basso a destra): condivide/copia il link e
 #              spiega come salvare la pagina sulla Home (PC, Mac, iPhone, Android).
 #              Genera anche manifest.webmanifest, sw.js e le icone (IMT-anteprima.jpg,
@@ -374,7 +376,14 @@ def genera_html(file_input=None, traduci=False):
         li:last-child { border-bottom: none; }
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
-        .contatore { text-align: center; font-size: 0.8rem; color: #6b6b70; min-height: 1.1em; margin: -4px 0 6px; }
+        .contatore { text-align: center; font-size: 0.8rem; color: #6b6b70; min-height: 1.1em; margin: -4px 0 6px; cursor: pointer; }
+        .contatore:hover { text-decoration: underline; }
+        .utenti-legenda { text-align: center; font-size: 0.85rem; color: #52525b; margin-bottom: 8px; }
+        .utenti-tab { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+        .utenti-tab th { text-align: left; padding: 6px 8px; border-bottom: 2px solid #e5e5ea; color: #52525b; font-weight: 600; }
+        .utenti-tab td { padding: 6px 8px; border-bottom: 1px solid #f2f2f7; }
+        .utenti-tab .online, .utenti-legenda .online { color: #d70015; font-weight: 600; }
+        .utenti-tab .offline, .utenti-legenda .offline { color: #007aff; }
         .footer-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
         .footer-row .source-note { flex: 1; min-width: 0; }
         .share-btn { flex-shrink: 0; border: none; background: none; color: #007aff; width: 40px; height: 40px; margin-top: 1px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -416,7 +425,7 @@ def genera_html(file_input=None, traduci=False):
                 <button id="btn-next" aria-label="Pasto successivo / Next meal" onclick="navigate(1)">&#9654;</button>
             </div>
         </div>
-        <div class="contatore hidden" id="contatore-utenti" aria-live="polite"></div>
+        <div class="contatore hidden" id="contatore-utenti" aria-live="polite" role="button" tabindex="0" onclick="apriUtenti()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();apriUtenti();}" title="Mostra i dispositivi / Show devices"></div>
         <div class="content-wrapper" id="content-wrapper">
             <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua">
                 <div class="course-card" id="card-primi"><h2 class="course-title" id="title-primi">Primi</h2><ul id="list-primi"></ul></div>
@@ -448,6 +457,15 @@ def genera_html(file_input=None, traduci=False):
             <div class="share-msg" id="share-msg" aria-live="polite"></div>
             <div class="share-help" id="share-help"></div>
             <details class="share-all"><summary id="share-all-title"></summary><div id="share-all"></div></details>
+        </div>
+    </div>
+
+    <div class="share-overlay hidden" id="utenti-overlay" onclick="if (event.target === this) chiudiUtenti()">
+        <div class="share-panel" role="dialog" aria-modal="true" aria-labelledby="utenti-title">
+            <button class="share-close" onclick="chiudiUtenti()" aria-label="Chiudi / Close">&times;</button>
+            <h3 id="utenti-title"></h3>
+            <div class="utenti-legenda" id="utenti-legenda"></div>
+            <table class="utenti-tab" id="utenti-tabella"></table>
         </div>
     </div>
 
@@ -635,7 +653,7 @@ def genera_html(file_input=None, traduci=False):
 
         window.addEventListener('keydown', function(e) {
             if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
-            if (!document.getElementById('share-overlay').classList.contains('hidden')) { if (e.key === 'Escape') chiudiCondivisione(); return; }
+            if (document.querySelector('.share-overlay:not(.hidden)')) { if (e.key === 'Escape') { chiudiCondivisione(); chiudiUtenti(); } return; }
             if (e.key === 'ArrowLeft') document.getElementById('btn-prev').click();
             else if (e.key === 'ArrowRight') document.getElementById('btn-next').click();
         });
@@ -649,7 +667,7 @@ def genera_html(file_input=None, traduci=False):
 
         document.addEventListener('touchend', e => {
             if (isAnimating) return;
-            if (!document.getElementById('share-overlay').classList.contains('hidden')) return;
+            if (document.querySelector('.share-overlay:not(.hidden)')) return;
             touchendX = e.changedTouches[0].screenX; touchendY = e.changedTouches[0].screenY;
             const diffX = touchendX - touchstartX; const diffY = Math.abs(touchendY - touchstartY); const rawDiffY = touchendY - touchstartY; 
             if (diffY < thresholdY) {
@@ -686,6 +704,7 @@ def genera_html(file_input=None, traduci=False):
         const CONTATORE_ATTIVO_MS = 15000;     // "collegato adesso" = segnale negli ultimi 15 secondi
         const CONTATORE_PULIZIA_MS = 600000;   // segnali più vecchi di 10 minuti vengono cancellati
         let contatoreId = null, contatoreRegistrato = false, contatoreInCorso = false;
+        let contatoreScarto = 0;   // differenza tra orologio del server e del dispositivo
 
         function contatoreCodice() {
             try {
@@ -711,9 +730,9 @@ def genera_html(file_input=None, traduci=False):
         function contatoreMostra(n, t) {
             const el = document.getElementById('contatore-utenti');
             const f = x => x.toLocaleString(currentLang === 'it' ? 'it-IT' : 'en-GB');
-            el.textContent = currentLang === 'it'
-                ? `${f(n)} ${n === 1 ? 'utente collegato' : 'utenti collegati'} adesso su ${f(t)}`
-                : `${f(n)} ${n === 1 ? 'user' : 'users'} online now out of ${f(t)}`;
+            el.innerHTML = currentLang === 'it'
+                ? `<b>${f(n)}</b> ${n === 1 ? 'utente collegato' : 'utenti collegati'} adesso su <b>${f(t)}</b>`
+                : `<b>${f(n)}</b> ${n === 1 ? 'user' : 'users'} online now out of <b>${f(t)}</b>`;
             el.classList.remove('hidden');
         }
 
@@ -734,6 +753,7 @@ def genera_html(file_input=None, traduci=False):
                     try { localStorage.setItem('imt-id-registrato', contatoreId); } catch (e) {}
                 }
                 const adesso = await contatoreFb('online/' + contatoreId, 'PUT', { '.sv': 'timestamp' });
+                contatoreScarto = adesso - Date.now();
                 const [online, totale] = await Promise.all([contatoreFb('online'), contatoreFb('totale')]);
                 let n = 0; const vecchi = {};
                 for (const [codice, t] of Object.entries(online || {})) {
@@ -744,6 +764,7 @@ def genera_html(file_input=None, traduci=False):
                 if (Object.keys(vecchi).length) contatoreFb('online', 'PATCH', vecchi).catch(() => {});
                 n = Math.max(n, 1);
                 contatoreMostra(n, Math.max(Number(totale) || 0, n));
+                if (!document.getElementById('utenti-overlay').classList.contains('hidden')) aggiornaUtenti();
             } catch (e) {
                 document.getElementById('contatore-utenti').classList.add('hidden');
             } finally {
@@ -832,6 +853,50 @@ def genera_html(file_input=None, traduci=False):
             document.getElementById('share-all').innerHTML = ['ios', 'android', 'mac', 'pc'].map(p => '<p>' + ist[p] + '</p>').join('');
             if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel();
             document.getElementById('share-overlay').classList.remove('hidden');
+        }
+
+        // ---- Tabella dei dispositivi registrati ----
+        function apriUtenti() {
+            if (!contatoreId) return;
+            document.getElementById('utenti-title').textContent = currentLang === 'it' ? 'Dispositivi registrati' : 'Registered devices';
+            document.getElementById('utenti-overlay').classList.remove('hidden');
+            aggiornaUtenti();
+        }
+
+        function chiudiUtenti() {
+            document.getElementById('utenti-overlay').classList.add('hidden');
+        }
+
+        async function aggiornaUtenti() {
+            const it = currentLang === 'it';
+            const legenda = document.getElementById('utenti-legenda');
+            const tabella = document.getElementById('utenti-tabella');
+            try {
+                const [utenti, online] = await Promise.all([contatoreFb('utenti'), contatoreFb('online')]);
+                const adesso = Date.now() + contatoreScarto;
+                const collegato = codice => {
+                    const t = (online || {})[codice];
+                    return typeof t === 'number' && t >= adesso - CONTATORE_ATTIVO_MS;
+                };
+                const righe = Object.entries(utenti || {})
+                    .filter(([codice, t]) => typeof t === 'number')
+                    .sort((a, b) => b[1] - a[1]);
+                const formato = new Intl.DateTimeFormat(it ? 'it-IT' : 'en-GB', {
+                    day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+                });
+                let n = 0;
+                const corpo = righe.map(([codice, t]) => {
+                    const on = collegato(codice);
+                    if (on) n++;
+                    return '<tr class="' + (on ? 'online' : 'offline') + '"><td>' + formato.format(new Date(t)).replace(',', '') + '</td></tr>';
+                }).join('');
+                tabella.innerHTML = '<thead><tr><th>' + (it ? 'Data e ora' : 'Date and time') + '</th></tr></thead><tbody>' + corpo + '</tbody>';
+                legenda.innerHTML = it
+                    ? '<span class="online">● collegati adesso: ' + n + '</span> &nbsp; <span class="offline">● non collegati: ' + (righe.length - n) + '</span>'
+                    : '<span class="online">● online now: ' + n + '</span> &nbsp; <span class="offline">● offline: ' + (righe.length - n) + '</span>';
+            } catch (e) {
+                legenda.textContent = it ? 'Elenco non disponibile in questo momento.' : 'List not available right now.';
+            }
         }
 
         function chiudiCondivisione() {

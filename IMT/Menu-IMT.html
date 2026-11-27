@@ -53,11 +53,12 @@
         .utenti-tab td { padding: 6px 8px; border-bottom: 1px solid #f2f2f7; }
         .utenti-tab .online, .utenti-legenda .online { color: #d70015; font-weight: 600; }
         .utenti-tab .offline, .utenti-legenda .offline { color: #007aff; }
-        .utenti-tab td:first-child { white-space: nowrap; }
-        .utenti-tab td.nome { word-break: break-word; }
+        .utenti-tab td:first-child, .utenti-tab th:first-child { white-space: nowrap; width: 1%; }
+        .utenti-tab td.nome { word-break: break-word; width: 99%; }
         .utenti-tab tr.mio { cursor: pointer; background: #fff5f5; }
-        .nome-input { width: 100%; max-width: 150px; font-size: 0.9rem; padding: 4px 6px; border: 1px solid #c7c7cc; border-radius: 6px; box-sizing: border-box; }
-        .nome-ok { margin-left: 4px; padding: 4px 8px; border: none; border-radius: 6px; background: #007aff; color: white; font-weight: 600; cursor: pointer; }
+        .nome-modifica { display: flex; gap: 4px; align-items: center; }
+        .nome-input { flex: 1 1 auto; width: 0; min-width: 0; font-size: 0.9rem; padding: 4px 6px; border: 1px solid #c7c7cc; border-radius: 6px; box-sizing: border-box; }
+        .nome-ok { flex-shrink: 0; padding: 4px 8px; border: none; border-radius: 6px; background: #007aff; color: white; font-weight: 600; cursor: pointer; }
         .footer-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
         .footer-row .source-note { flex: 1; min-width: 0; }
         .share-btn { flex-shrink: 0; border: none; background: none; color: #007aff; width: 40px; height: 40px; margin-top: 1px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -597,8 +598,8 @@
             if (!cella) return;
             utentiInModifica = true;
             const it = currentLang === 'it';
-            cella.innerHTML = '<input id="nome-input" class="nome-input" maxlength="30" placeholder="' + (it ? 'Il tuo nome' : 'Your name') + '">'
-                + '<button class="nome-ok" onclick="event.stopPropagation(); salvaNome()">OK</button>';
+            cella.innerHTML = '<div class="nome-modifica"><input id="nome-input" class="nome-input" maxlength="30" placeholder="' + (it ? 'Il tuo nome' : 'Your name') + '">'
+                + '<button class="nome-ok" onclick="event.stopPropagation(); salvaNome()">OK</button></div>';
             const campo = document.getElementById('nome-input');
             campo.value = cella.dataset.nome || '';
             campo.addEventListener('click', e => e.stopPropagation());

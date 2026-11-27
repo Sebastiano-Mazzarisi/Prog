@@ -1,13 +1,17 @@
 # Nome.py: GeneraMenu.py
-# Ultimo aggiornamento: 27/11/2026
+# Ultimo aggiornamento: 27/11/2026 (contatore utenti, condivisione, salvataggio sulla Home)
 # Descrizione: Legge menu-giornaliero-completo-autunno-2026.xlsx e genera Menu-IMT.html.
 #              Generazione del file menu_siri.json con date multi-formato per evitare
 #              qualsiasi formattazione lato iOS Shortcuts.
 #              Contatore utenti: ogni dispositivo riceve un codice univoco nascosto;
 #              ogni 5 secondi la pagina mostra "<n> utenti collegati adesso su <t>"
 #              usando il database Firebase indicato in CONTATORE_URL.
+#              Pulsante Condividi (in basso a destra): condivide/copia il link e
+#              spiega come salvare la pagina sulla Home (PC, Mac, iPhone, Android).
+#              Genera anche manifest.webmanifest, sw.js e le icone (IMT-anteprima.jpg,
+#              IMT-180.png, IMT-192.png, IMT-512.png) a partire da IMT.jpg.
 # File di input: menu-giornaliero-completo-autunno-2026.xlsx
-# File di output: Menu-IMT.html, menu_siri.json
+# File di output: Menu-IMT.html, menu_siri.json, manifest.webmanifest, sw.js, icone IMT-*
 # Parametri: --input FILE.xlsx, --traduci (traduzione online facoltativa)
 
 import pandas as pd
@@ -26,6 +30,91 @@ from pathlib import Path
 # (es. https://imt-menu-xxxxx-default-rtdb.europe-west1.firebasedatabase.app).
 # Se resta vuoto, la riga del contatore non viene mostrata.
 CONTATORE_URL = "https://imt-menu-default-rtdb.europe-west1.firebasedatabase.app"
+
+PAGINA_URL = "https://sebastiano-mazzarisi.github.io/Prog/IMT/Menu-IMT.html"
+CARTELLA_URL = PAGINA_URL.rsplit('/', 1)[0] + '/'
+
+# Icone ricavate da IMT.jpg: nome file -> (lato in pixel, frazione occupata dal logo).
+# L'anteprima ha ampi margini bianchi per non essere tagliata da WhatsApp e dai social.
+ICONE = {
+    'IMT-anteprima.jpg': (800, 0.62),
+    'IMT-180.png': (180, 0.86),
+    'IMT-192.png': (192, 0.80),
+    'IMT-512.png': (512, 0.80),
+}
+
+def prepara_icone(base):
+    """Crea (o ricrea se IMT.jpg è più recente) le icone quadrate con margini bianchi."""
+    sorgente = base / 'IMT.jpg'
+    if not sorgente.exists():
+        print('Attenzione: IMT.jpg non trovato, icone non generate.')
+        return
+    da_fare = [n for n in ICONE if not (base / n).exists()
+               or (base / n).stat().st_mtime < sorgente.stat().st_mtime]
+    if not da_fare:
+        return
+    try:
+        from PIL import Image, ImageChops
+    except ImportError:
+        print('Attenzione: Pillow non installato (pip install pillow), icone non generate: ' + ', '.join(da_fare))
+        return
+    im = Image.open(sorgente).convert('RGB')
+    bianco = Image.new('RGB', im.size, (255, 255, 255))
+    maschera = ImageChops.difference(im, bianco).convert('L').point(lambda p: 255 if p > 12 else 0)
+    logo = im.crop(maschera.getbbox() or (0, 0, im.width, im.height))
+    for nome in da_fare:
+        lato, frazione = ICONE[nome]
+        tela = Image.new('RGB', (lato, lato), (255, 255, 255))
+        k = lato * frazione / max(logo.size)
+        ridotto = logo.resize((round(logo.width * k), round(logo.height * k)), Image.LANCZOS)
+        tela.paste(ridotto, ((lato - ridotto.width) // 2, (lato - ridotto.height) // 2))
+        if nome.endswith('.jpg'):
+            tela.save(base / nome, 'JPEG', quality=92)
+        else:
+            # 256 colori: aspetto invariato, file grandi la metà
+            tela.quantize(256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG).save(base / nome, 'PNG', optimize=True)
+    print('Icone generate: ' + ', '.join(da_fare))
+
+def scrivi_file_app(base, versione):
+    """Scrive manifest.webmanifest e sw.js per poter installare la pagina come app."""
+    manifest = {
+        "name": "IMT - Menu",
+        "short_name": "IMT Menu",
+        "description": "Menu giornaliero Pranzo e Cena",
+        "lang": "it",
+        "start_url": "Menu-IMT.html",
+        "scope": "./",
+        "display": "standalone",
+        "background_color": "#f2f2f7",
+        "theme_color": "#007aff",
+        "icons": [
+            {"src": "IMT-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+            {"src": "IMT-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+        ]
+    }
+    with open(base / 'manifest.webmanifest', 'w', encoding='utf-8', newline='\n') as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+        f.write('\n')
+    sw = """// sw.js - generato da Genera-IMT.py: permette l'installazione come app.
+// Strategia "prima la rete": la pagina è sempre aggiornata; la copia salvata
+// serve solo quando manca la connessione.
+const CACHE = 'imt-menu-__VERSIONE__';
+self.addEventListener('install', e => self.skipWaiting());
+self.addEventListener('activate', e => e.waitUntil(
+    caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n))))
+        .then(() => self.clients.claim())));
+self.addEventListener('fetch', e => {
+    const r = e.request;
+    if (r.method !== 'GET' || new URL(r.url).origin !== self.location.origin) return;
+    const chiave = r.url.split('?')[0].split('#')[0];
+    e.respondWith(fetch(r).then(risposta => {
+        if (risposta.ok) { const copia = risposta.clone(); caches.open(CACHE).then(c => c.put(chiave, copia)); }
+        return risposta;
+    }).catch(() => caches.match(chiave)));
+});
+""".replace('__VERSIONE__', versione)
+    with open(base / 'sw.js', 'w', encoding='utf-8', newline='\n') as f:
+        f.write(sw)
 
 def genera_html(file_input=None, traduci=False):
     base = Path(__file__).resolve().parent
@@ -244,14 +333,24 @@ def genera_html(file_input=None, traduci=False):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu IMT - Autunno 2026</title>
-    <link rel="apple-touch-icon" href="IMT.jpg">
+    <link rel="apple-touch-icon" href="IMT-180.png">
     <link rel="icon" href="IMT.jpg" type="image/jpeg">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#007aff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="IMT Menu">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta property="og:title" content="IMT - Menu">
     <meta property="og:description" content="Menu giornaliero Pranzo e Cena">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://sebastiano-mazzarisi.github.io/Prog/IMT/IMT.jpg">
-    <meta property="og:image:secure_url" content="https://sebastiano-mazzarisi.github.io/Prog/IMT/IMT.jpg">
+    <meta property="og:url" content="__PAGINA_URL__">
+    <meta property="og:image" content="__CARTELLA_URL__IMT-anteprima.jpg">
+    <meta property="og:image:secure_url" content="__CARTELLA_URL__IMT-anteprima.jpg">
     <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="800">
+    <meta name="twitter:card" content="summary">
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f2f2f7; margin: 0; padding: 6px; color: #1c1c1e; overflow-x: hidden; }
         .app-container { max-width: 500px; margin: 0 auto; }
@@ -276,6 +375,23 @@ def genera_html(file_input=None, traduci=False):
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
         .contatore { text-align: center; font-size: 0.8rem; color: #6b6b70; min-height: 1.1em; margin: -4px 0 6px; }
+        .footer-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+        .footer-row .source-note { flex: 1; min-width: 0; }
+        .share-btn { flex-shrink: 0; border: none; background: none; color: #007aff; width: 40px; height: 40px; margin-top: 1px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .share-btn:hover, .share-btn:active { background: #e6f4ff; }
+        .share-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; padding: 10px; box-sizing: border-box; }
+        .share-panel { background: white; border-radius: 14px; width: 100%; max-width: 480px; padding: 16px; box-sizing: border-box; position: relative; max-height: 90vh; overflow: auto; font-size: 0.9rem; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+        .share-panel h3 { margin: 0 0 12px; font-size: 1rem; text-align: center; }
+        .share-close { position: absolute; top: 4px; right: 8px; border: none; background: none; font-size: 26px; line-height: 1; padding: 6px; cursor: pointer; color: #6b6b70; }
+        .share-action { display: block; width: 100%; padding: 12px; margin-bottom: 8px; border: none; border-radius: 10px; background: #007aff; color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+        .share-action.secondario { background: #e6f4ff; color: #007aff; }
+        .share-msg { text-align: center; color: #1a7f37; min-height: 1.2em; margin: 2px 0 6px; }
+        .share-msg:empty { min-height: 0; margin: 0; }
+        .share-help { line-height: 1.45; background: #f2f2f7; border-radius: 10px; padding: 10px; }
+        .share-help:empty { display: none; }
+        .share-all { margin-top: 10px; color: #52525b; line-height: 1.45; }
+        .share-all summary { cursor: pointer; }
+        .share-all p { margin: 8px 0; }
         .source-note { font-size:0.8rem; line-height:1.5; color:#52525b; padding:10px; }
         .source-note a { color:#0056b3; }
         .anim-next { animation: slideOverRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
@@ -309,12 +425,30 @@ def genera_html(file_input=None, traduci=False):
                 <div class="course-card" id="card-frutta"><h2 class="course-title" id="title-frutta">Frutta / Dessert</h2><ul id="list-frutta"></ul></div>
             </div>
         </div>
+        <div class="footer-row">
         <details class="source-note"><summary>by Teresa Mazzarisi</summary>
             <p>Piatti del giorno in grassetto; alternative fisse in carattere normale. I riferimenti agli allergeni sono disponibili nei PDF originali.</p>
             <p>Daily dishes in bold; fixed alternatives in regular type. Allergen references are available in the original PDFs.</p>
             <p><a href="Autunno/MENU_IMT_PRANZO_AUTUNNO_2026.pdf">PDF pranzo / Lunch</a> · <a href="Autunno/MENU_IMT_CENA_AUTUNNO_2026.pdf">PDF cena / Dinner</a> · <a href="menu-giornaliero-completo-autunno-2026.xlsx">Excel completo</a></p>
             <p>Alternative: pagina 5 dei PDF autunnali. La sezione Frutta / Dessert riporta le alternative indicate. I refusi 2025 nelle date sono ricondotti alla decorrenza 2026.</p>
         </details>
+        <button class="share-btn" id="btn-condividi" onclick="apriCondivisione()" aria-label="Condividi o salva sulla Home / Share or save to Home screen" title="Condividi / Salva sulla Home">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+        </button>
+        </div>
+    </div>
+
+    <div class="share-overlay hidden" id="share-overlay" onclick="if (event.target === this) chiudiCondivisione()">
+        <div class="share-panel" role="dialog" aria-modal="true" aria-labelledby="share-title">
+            <button class="share-close" onclick="chiudiCondivisione()" aria-label="Chiudi / Close">&times;</button>
+            <h3 id="share-title"></h3>
+            <button class="share-action" id="share-link" onclick="condividiLink()"></button>
+            <button class="share-action secondario" id="share-copy" onclick="copiaLink()"></button>
+            <button class="share-action secondario" id="share-install" onclick="aggiungiHome()"></button>
+            <div class="share-msg" id="share-msg" aria-live="polite"></div>
+            <div class="share-help" id="share-help"></div>
+            <details class="share-all"><summary id="share-all-title"></summary><div id="share-all"></div></details>
+        </div>
     </div>
 
     <script>
@@ -501,6 +635,7 @@ def genera_html(file_input=None, traduci=False):
 
         window.addEventListener('keydown', function(e) {
             if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+            if (!document.getElementById('share-overlay').classList.contains('hidden')) { if (e.key === 'Escape') chiudiCondivisione(); return; }
             if (e.key === 'ArrowLeft') document.getElementById('btn-prev').click();
             else if (e.key === 'ArrowRight') document.getElementById('btn-next').click();
         });
@@ -514,6 +649,7 @@ def genera_html(file_input=None, traduci=False):
 
         document.addEventListener('touchend', e => {
             if (isAnimating) return;
+            if (!document.getElementById('share-overlay').classList.contains('hidden')) return;
             touchendX = e.changedTouches[0].screenX; touchendY = e.changedTouches[0].screenY;
             const diffX = touchendX - touchstartX; const diffY = Math.abs(touchendY - touchstartY); const rawDiffY = touchendY - touchstartY; 
             if (diffY < thresholdY) {
@@ -627,6 +763,118 @@ def genera_html(file_input=None, traduci=False):
             });
         }
 
+        // ---- Condivisione e salvataggio sulla Home ----
+        const PAGINA_URL = "__PAGINA_URL__";
+        let promptInstallazione = null;
+        window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); promptInstallazione = e; });
+        window.addEventListener('appinstalled', () => { promptInstallazione = null; mostraMsgCondivisione(testiCondivisione().installata); });
+
+        const ISTRUZIONI_HOME = {
+            it: {
+                ios: '<b>iPhone / iPad</b>: apri la pagina in <b>Safari</b>, tocca il pulsante <b>Condividi</b> (il quadrato con la freccia in su) e scegli <b>Aggiungi alla schermata Home</b>, poi <b>Aggiungi</b>. Se non vedi la voce, scorri l’elenco verso il basso.',
+                android: '<b>Android</b>: in <b>Chrome</b> tocca il menu <b>⋮</b> in alto a destra e scegli <b>Aggiungi a schermata Home</b> (o <b>Installa app</b>), poi conferma. In <b>Samsung Internet</b>: menu <b>≡</b> → <b>Aggiungi pagina a</b> → <b>Schermata Home</b>.',
+                mac: '<b>Mac</b>: in <b>Safari</b> menu <b>File</b> → <b>Aggiungi al Dock</b>. In <b>Chrome</b> menu <b>⋮</b> → <b>Trasmetti, salva e condividi</b> → <b>Installa pagina come app</b>.',
+                pc: '<b>PC Windows</b>: in <b>Edge</b> menu <b>…</b> → <b>App</b> → <b>Installa questo sito come app</b>. In <b>Chrome</b> menu <b>⋮</b> → <b>Trasmetti, salva e condividi</b> → <b>Installa pagina come app</b> (oppure <b>Crea scorciatoia</b>). L’app si può poi aggiungere alla barra delle applicazioni o al menu Start.'
+            },
+            en: {
+                ios: '<b>iPhone / iPad</b>: open the page in <b>Safari</b>, tap the <b>Share</b> button (the square with the up arrow) and choose <b>Add to Home Screen</b>, then <b>Add</b>. If you don’t see it, scroll down the list.',
+                android: '<b>Android</b>: in <b>Chrome</b> tap the <b>⋮</b> menu at the top right and choose <b>Add to Home screen</b> (or <b>Install app</b>), then confirm. In <b>Samsung Internet</b>: menu <b>≡</b> → <b>Add page to</b> → <b>Home screen</b>.',
+                mac: '<b>Mac</b>: in <b>Safari</b> choose <b>File</b> → <b>Add to Dock</b>. In <b>Chrome</b> menu <b>⋮</b> → <b>Cast, save and share</b> → <b>Install page as app</b>.',
+                pc: '<b>Windows PC</b>: in <b>Edge</b> menu <b>…</b> → <b>Apps</b> → <b>Install this site as an app</b>. In <b>Chrome</b> menu <b>⋮</b> → <b>Cast, save and share</b> → <b>Install page as app</b> (or <b>Create shortcut</b>). You can then pin it to the taskbar or Start menu.'
+            }
+        };
+
+        function testiCondivisione() {
+            return currentLang === 'it' ? {
+                titolo: 'Condividi o salva sulla Home', condividi: 'Condividi il link', copia: 'Copia il link',
+                home: 'Aggiungi alla schermata Home', copiato: 'Link copiato', nonCopiato: 'Copia non riuscita: ',
+                tutti: 'Istruzioni per tutti i dispositivi', giaApp: 'Il menu è già aperto come app.',
+                installata: 'Menu installato', testo: 'Menu della mensa IMT - Pranzo e Cena'
+            } : {
+                titolo: 'Share or save to Home screen', condividi: 'Share the link', copia: 'Copy the link',
+                home: 'Add to Home screen', copiato: 'Link copied', nonCopiato: 'Copy failed: ',
+                tutti: 'Instructions for all devices', giaApp: 'The menu is already open as an app.',
+                installata: 'Menu installed', testo: 'IMT canteen menu - Lunch and Dinner'
+            };
+        }
+
+        function piattaforma() {
+            const ua = navigator.userAgent;
+            if (/iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) return 'ios';
+            if (/Android/.test(ua)) return 'android';
+            if (/Macintosh|Mac OS X/.test(ua)) return 'mac';
+            return 'pc';
+        }
+
+        function isApp() {
+            return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        }
+
+        function mostraMsgCondivisione(testo) {
+            const el = document.getElementById('share-msg');
+            el.textContent = testo;
+            clearTimeout(mostraMsgCondivisione.t);
+            mostraMsgCondivisione.t = setTimeout(() => { el.textContent = ''; }, 4000);
+        }
+
+        function apriCondivisione() {
+            const t = testiCondivisione();
+            document.getElementById('share-title').textContent = t.titolo;
+            const btnLink = document.getElementById('share-link');
+            btnLink.textContent = t.condividi;
+            btnLink.classList.toggle('hidden', !navigator.share);
+            document.getElementById('share-copy').textContent = t.copia;
+            document.getElementById('share-install').textContent = t.home;
+            document.getElementById('share-msg').textContent = '';
+            document.getElementById('share-help').innerHTML = '';
+            document.getElementById('share-all-title').textContent = t.tutti;
+            const ist = ISTRUZIONI_HOME[currentLang];
+            document.getElementById('share-all').innerHTML = ['ios', 'android', 'mac', 'pc'].map(p => '<p>' + ist[p] + '</p>').join('');
+            if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+            document.getElementById('share-overlay').classList.remove('hidden');
+        }
+
+        function chiudiCondivisione() {
+            document.getElementById('share-overlay').classList.add('hidden');
+        }
+
+        async function condividiLink() {
+            try {
+                await navigator.share({ title: 'IMT - Menu', text: testiCondivisione().testo, url: PAGINA_URL });
+            } catch (e) {
+                if (e && e.name !== 'AbortError') copiaLink();
+            }
+        }
+
+        async function copiaLink() {
+            const t = testiCondivisione();
+            try {
+                await navigator.clipboard.writeText(PAGINA_URL);
+                mostraMsgCondivisione(t.copiato);
+            } catch (e) {
+                const campo = document.createElement('textarea');
+                campo.value = PAGINA_URL; campo.setAttribute('readonly', ''); campo.style.position = 'fixed'; campo.style.opacity = '0';
+                document.body.appendChild(campo); campo.select();
+                let ok = false;
+                try { ok = document.execCommand('copy'); } catch (e2) {}
+                campo.remove();
+                mostraMsgCondivisione(ok ? t.copiato : t.nonCopiato + PAGINA_URL);
+            }
+        }
+
+        async function aggiungiHome() {
+            const t = testiCondivisione();
+            if (isApp()) { document.getElementById('share-help').textContent = t.giaApp; return; }
+            if (promptInstallazione) {
+                const p = promptInstallazione;
+                promptInstallazione = null;
+                p.prompt();
+                try { const scelta = await p.userChoice; if (scelta.outcome === 'accepted') mostraMsgCondivisione(t.installata); } catch (e) {}
+                return;
+            }
+            document.getElementById('share-help').innerHTML = ISTRUZIONI_HOME[currentLang][piattaforma()];
+        }
+
         window.onload = () => {
             if (sessionStorage.getItem('savedLang')) currentLang = sessionStorage.getItem('savedLang');
             let animToPlay = null;
@@ -640,6 +888,9 @@ def genera_html(file_input=None, traduci=False):
             }
             currentIndex = startIdx; renderMeal(currentIndex, animToPlay);
             contatoreAvvia();
+            if ('serviceWorker' in navigator && location.protocol === 'https:') {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            }
         };
     </script>
 </body>
@@ -647,12 +898,18 @@ def genera_html(file_input=None, traduci=False):
 """
 
     contatore_url = CONTATORE_URL.strip().rstrip('/')
-    html_code = html_template.replace('__CONTATORE_URL__', contatore_url).replace('__JSON_DATA__', json.dumps(blocks))
+    html_code = (html_template.replace('__CONTATORE_URL__', contatore_url)
+                 .replace('__PAGINA_URL__', PAGINA_URL)
+                 .replace('__CARTELLA_URL__', CARTELLA_URL)
+                 .replace('__JSON_DATA__', json.dumps(blocks)))
 
     with open(file_output, 'w', encoding='utf-8') as f:
         f.write(html_code)
 
-    print(f"Generati {len(blocks)} menu per {len(pasti_per_data)} giorni: {file_output.name}, {file_siri.name}.")
+    prepara_icone(base)
+    scrivi_file_app(base, datetime.now().strftime('%Y%m%d%H%M%S'))
+
+    print(f"Generati {len(blocks)} menu per {len(pasti_per_data)} giorni: {file_output.name}, {file_siri.name}, manifest.webmanifest, sw.js.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Genera HTML e JSON Siri dai menu Excel')

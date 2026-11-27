@@ -376,7 +376,7 @@ def genera_html(file_input=None, traduci=False):
         li:last-child { border-bottom: none; }
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
-        .contatore { text-align: center; font-size: 0.8rem; color: #6b6b70; min-height: 1.1em; margin: -4px 0 6px; cursor: pointer; }
+        .contatore { display: table; margin: 4px auto 12px; padding: 5px 16px; background: #e6f4ff; color: #3a3a3c; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); text-align: center; font-size: 0.95rem; min-height: 1.2em; cursor: pointer; }
         .contatore:hover { text-decoration: underline; }
         .utenti-legenda { text-align: center; font-size: 0.85rem; color: #52525b; margin-bottom: 8px; }
         .utenti-tab { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-variant-numeric: tabular-nums; }

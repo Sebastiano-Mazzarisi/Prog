@@ -13,13 +13,18 @@
 #              da ogni dispositivo ogni 5 secondi. Ai lati della riga del contatore
 #              due bandierine (IT a sinistra, EN a destra) per scegliere la lingua.
 #              All'avvio la pagina si apre nella lingua usata l'ultima volta.
+#              Lettura vocale: per ogni pasto registra un MP3 in italiano (voce Serena)
+#              e in inglese (voce Cori) con Piper, gratuito e senza Internet; la pagina
+#              li riproduce e, se mancano, usa la voce del dispositivo. Dopo ogni riga
+#              (introduzione, portata, piatto, saluto) c'è una pausa di mezzo secondo.
 #              Pulsante Condividi (in basso a destra): condivide/copia il link e
 #              spiega come salvare la pagina sulla Home (PC, Mac, iPhone, Android).
 #              Genera anche manifest.webmanifest, sw.js e le icone (IMT-anteprima.jpg,
 #              IMT-180.png, IMT-192.png, IMT-512.png) a partire da IMT.jpg.
 # File di input: menu-giornaliero-completo-autunno-2026.xlsx
 # File di output: Menu-IMT.html, menu_siri.json, manifest.webmanifest, sw.js, icone IMT-*
-# Parametri: --input FILE.xlsx, --traduci (traduzione online facoltativa)
+# Parametri: --input FILE.xlsx, --traduci (traduzione online facoltativa),
+#            --senza-audio (non genera/aggiorna i file audio)
 
 import pandas as pd
 import json
@@ -31,6 +36,9 @@ import time
 import argparse
 import html
 import re
+import io
+import wave
+import hashlib
 from pathlib import Path
 
 # Indirizzo del Firebase Realtime Database usato dal contatore utenti
@@ -123,7 +131,108 @@ self.addEventListener('fetch', e => {
     with open(base / 'sw.js', 'w', encoding='utf-8', newline='\n') as f:
         f.write(sw)
 
-def genera_html(file_input=None, traduci=False):
+# ---- Lettura vocale con Piper (gratuito, locale) ----
+# Voci: it_IT-serena-high (licenza CC BY 4.0) e en_GB-cori-high (pubblico dominio).
+VOCI_AUDIO = {'it': 'it_IT-serena-high', 'en': 'en_GB-cori-high'}
+CARTELLA_AUDIO = 'audio'          # file MP3 dei pasti, accanto all'HTML
+# modelli Piper scaricati: fuori da Dropbox (sono grandi e non vanno pubblicati)
+CARTELLA_VOCI = Path(os.environ.get('LOCALAPPDATA') or Path.home()) / 'IMT-Menu' / 'voci'
+AUDIO_KBPS = 48
+
+def _piatto_leggibile(testo):
+    """PASTA AL POMODORO -> Pasta al pomodoro; PURE’ -> Purè."""
+    t = html.unescape(re.sub(r'<[^>]+>', '', testo)).strip().lower()
+    accenti = {'a': 'à', 'e': 'è', 'i': 'ì', 'o': 'ò', 'u': 'ù'}
+    t = re.sub(r"([aeiou])[’'`](?=$|[\s,.;:)])", lambda m: accenti[m.group(1)], t)
+    return t[:1].upper() + t[1:]
+
+PAUSA_RIGA_S = 0.5   # pausa dopo ogni riga letta
+
+def righe_lettura(block, lingua):
+    """Righe della lettura vocale (dopo ognuna c'è una pausa): introduzione,
+    titolo di ogni portata, ogni piatto del giorno (in grassetto), saluto finale."""
+    it = lingua == 'it'
+    pranzo = block['type'].lower() == 'pranzo'
+    if it:
+        righe = [f"Ciao, ecco {'il pranzo' if pranzo else 'la cena'} della I M T per {block['date_it']}."]
+    else:
+        righe = [f"Hello, here is the I M T {'lunch' if pranzo else 'dinner'} for {block['date_en']}."]
+    portate = [('Primi', 'Primi', 'First courses'), ('Secondi', 'Secondi', 'Main courses'),
+               ('Contorno', 'Contorni', 'Side dishes'), ('Frutta', 'Frutta e dessert', 'Fruit and dessert')]
+    trovati = False
+    for chiave, titolo_it, titolo_en in portate:
+        piatti = [_piatto_leggibile(x) for x in block.get(f'{chiave}_{lingua}', []) if '<strong>' in x]
+        if piatti:
+            trovati = True
+            righe.append((titolo_it if it else titolo_en) + '.')
+            righe.extend(p.rstrip('.') + '.' for p in piatti)
+    if not trovati:
+        righe.append('Nessun piatto in grassetto.' if it else 'No bold items.')
+    righe.append(('Buon pranzo!' if pranzo else 'Buona cena!') if it else
+                 ('Enjoy your lunch!' if pranzo else 'Enjoy your dinner!'))
+    return righe
+
+def genera_audio(base, blocks):
+    """Crea/aggiorna gli MP3 dei pasti e aggiunge a ogni blocco block['audio'] = {'it': ..., 'en': ...}.
+    Rigenera solo i file il cui testo o voce è cambiato; elimina gli MP3 non più usati."""
+    try:
+        from piper import PiperVoice
+        from piper.download_voices import download_voice
+        import lameenc
+    except ImportError:
+        print('Audio non generato: installare con  pip install piper-tts lameenc')
+        return
+    cartella = base / CARTELLA_AUDIO
+    cartella.mkdir(exist_ok=True)
+    voci_dir = CARTELLA_VOCI
+    voci_dir.mkdir(parents=True, exist_ok=True)
+    caricate = {}
+    usati = set()
+    nuovi = 0
+    totale = len(blocks) * len(VOCI_AUDIO)
+    for n, block in enumerate(blocks, 1):
+        block['audio'] = {}
+        for lingua, nome_voce in VOCI_AUDIO.items():
+            righe = righe_lettura(block, lingua)
+            chiave = '|'.join([nome_voce, str(AUDIO_KBPS), str(PAUSA_RIGA_S)] + righe)
+            impronta = hashlib.sha1(chiave.encode('utf-8')).hexdigest()[:10]
+            nome_file = f"{block['date']}-{block['type'].lower()}-{lingua}-{impronta}.mp3"
+            percorso = cartella / nome_file
+            usati.add(nome_file)
+            if not percorso.exists():
+                if nome_voce not in caricate:
+                    modello = voci_dir / f'{nome_voce}.onnx'
+                    if not modello.exists() or not (voci_dir / f'{nome_voce}.onnx.json').exists():
+                        print(f'Scarico la voce {nome_voce}...')
+                        download_voice(nome_voce, voci_dir)
+                    caricate[nome_voce] = PiperVoice.load(modello)
+                voce = caricate[nome_voce]
+                pezzi = []
+                for riga in righe:
+                    buf = io.BytesIO()
+                    with wave.open(buf, 'wb') as wf:
+                        voce.synthesize_wav(riga, wf)
+                    buf.seek(0)
+                    with wave.open(buf, 'rb') as wf:
+                        frequenza, canali, larghezza = wf.getframerate(), wf.getnchannels(), wf.getsampwidth()
+                        pezzi.append(wf.readframes(wf.getnframes()))
+                    pezzi.append(b'\x00' * int(frequenza * PAUSA_RIGA_S) * canali * larghezza)
+                pcm = b''.join(pezzi)
+                enc = lameenc.Encoder()
+                enc.set_bit_rate(AUDIO_KBPS)
+                enc.set_in_sample_rate(frequenza)
+                enc.set_channels(canali)
+                enc.set_quality(2)
+                percorso.write_bytes(enc.encode(pcm) + enc.flush())
+                nuovi += 1
+                print(f'  audio {nuovi}: {nome_file}  ({n}/{len(blocks)})', flush=True)
+            block['audio'][lingua] = f'{CARTELLA_AUDIO}/{nome_file}'
+    vecchi = [p for p in cartella.glob('*.mp3') if p.name not in usati]
+    for p in vecchi:
+        p.unlink()
+    print(f'Audio: {totale} file, {nuovi} nuovi, {len(vecchi)} eliminati perché non più usati.')
+
+def genera_html(file_input=None, traduci=False, audio=True):
     base = Path(__file__).resolve().parent
     file_input = Path(file_input) if file_input else base / 'menu-giornaliero-completo-autunno-2026.xlsx'
     file_output = base / 'Menu-IMT.html'
@@ -371,6 +480,7 @@ def genera_html(file_input=None, traduci=False):
         .header button:disabled { opacity: 0.3; }
         .header-center { display: flex; flex-direction: column; align-items: center; flex-grow: 1; min-width: 0; min-height: 48px; justify-content: center; cursor: pointer; padding: 0 4px; }
         .header-top { font-size: 1.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .altoparlante { font-size: 0.95em; margin-left: 4px; letter-spacing: 0; }
         .header h1 { margin: 0; font-size: 0.85rem; text-align: center; font-weight: 500; }
         .content-wrapper { position: relative; overflow: hidden; border-radius: 10px; }
         .content { cursor: pointer; position: relative; z-index: 2; background-color: #f2f2f7; width: 100%; box-sizing: border-box; }
@@ -461,6 +571,7 @@ def genera_html(file_input=None, traduci=False):
             <p>Daily dishes in bold; fixed alternatives in regular type. Allergen references are available in the original PDFs.</p>
             <p><a href="Autunno/MENU_IMT_PRANZO_AUTUNNO_2026.pdf">PDF pranzo / Lunch</a> · <a href="Autunno/MENU_IMT_CENA_AUTUNNO_2026.pdf">PDF cena / Dinner</a> · <a href="menu-giornaliero-completo-autunno-2026.xlsx">Excel completo</a></p>
             <p>Alternative: pagina 5 dei PDF autunnali. La sezione Frutta / Dessert riporta le alternative indicate. I refusi 2025 nelle date sono ricondotti alla decorrenza 2026.</p>
+            <p>Voci della lettura / Reading voices: <a href="https://github.com/OHF-Voice/piper1-gpl">Piper</a> · Serena (<a href="https://huggingface.co/datasets/committa/serena-synthetic-it-27h">dataset serena-synthetic-it-27h</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) · Cori (registrazioni <a href="https://librivox.org">LibriVox</a>, pubblico dominio / public domain).</p>
         </details>
         <button class="share-btn" id="btn-condividi" onclick="apriCondivisione()" aria-label="Condividi o salva sulla Home / Share or save to Home screen" title="Condividi / Salva sulla Home">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
@@ -516,8 +627,29 @@ def genera_html(file_input=None, traduci=False):
             return filteredVoices.find(v => v.default) || filteredVoices[0];
         }
 
+        // Lettura con i file MP3 registrati (voci Serena / Cori); se mancano, voce del dispositivo
+        let audioLettura = null;
+        function fermaAudio() {
+            if (audioLettura) { audioLettura.pause(); audioLettura = null; return true; }
+            return false;
+        }
+
         function speakMenu(event) {
-            event.stopPropagation(); 
+            event.stopPropagation();
+            if (fermaAudio()) return;
+            const pasto = menuData[currentIndex];
+            const file = pasto && pasto.audio && pasto.audio[currentLang];
+            if (file && !(window.speechSynthesis && (window.speechSynthesis.speaking || isSpeakingTimeout))) {
+                const a = new Audio(file);
+                audioLettura = a;
+                a.onended = () => { if (audioLettura === a) audioLettura = null; };
+                a.play().catch(() => { if (audioLettura === a) { audioLettura = null; leggiConVoceDispositivo(); } });
+                return;
+            }
+            leggiConVoceDispositivo();
+        }
+
+        function leggiConVoceDispositivo() {
             if (!('speechSynthesis' in window)) return;
             if (window.speechSynthesis.speaking || isSpeakingTimeout) {
                 window.speechSynthesis.cancel(); clearTimeout(speakTimeout); isSpeakingTimeout = false; return;
@@ -533,17 +665,15 @@ def genera_html(file_input=None, traduci=False):
             let mealNameEn = meal.type.toLowerCase() === 'pranzo' ? 'lunch' : 'dinner';
             
             let introText = isIt ? `Ciao, ecco ${mealNameIt} della IMT per ${dateStr}.` : `Hello, here is the IMT ${mealNameEn} for ${dateStr}.`;
-            chunksToRead.push({ text: introText, delay: 200 });
+            chunksToRead.push({ text: introText, delay: 500 });
             
             function extractCardBoldTexts(cardId, translatedTitle) {
                 const card = document.getElementById(cardId);
                 if (card.classList.contains('hidden')) return;
                 const boldElements = card.querySelectorAll('strong');
                 if (boldElements.length === 0) return;
-                let itemsArray = [];
-                boldElements.forEach(el => itemsArray.push(el.innerText));
-                let conjunction = isIt ? " e " : " and ";
-                chunksToRead.push({ text: translatedTitle + ". " + itemsArray.join(conjunction) + ".", delay: 200 });
+                chunksToRead.push({ text: translatedTitle + ".", delay: 500 });
+                boldElements.forEach(el => chunksToRead.push({ text: el.innerText.trim().toLowerCase() + ".", delay: 500 }));
             }
             
             extractCardBoldTexts('card-primi', isIt ? "Primi" : "First Courses");
@@ -551,7 +681,7 @@ def genera_html(file_input=None, traduci=False):
             extractCardBoldTexts('card-contorno', isIt ? "Contorni" : "Side Dishes");
             extractCardBoldTexts('card-frutta', isIt ? "Frutta e Dessert" : "Fruit and Dessert");
             
-            if (chunksToRead.length === 1) chunksToRead.push({ text: isIt ? "Nessun piatto in grassetto." : "No bold items.", delay: 200 });
+            if (chunksToRead.length === 1) chunksToRead.push({ text: isIt ? "Nessun piatto in grassetto." : "No bold items.", delay: 500 });
 
             let closingTextIt = meal.type.toLowerCase() === 'pranzo' ? "Buon pranzo!" : "Buona cena!";
             let closingTextEn = meal.type.toLowerCase() === 'pranzo' ? "Enjoy your lunch!" : "Enjoy your dinner!";
@@ -606,6 +736,7 @@ def genera_html(file_input=None, traduci=False):
             if (isAnimating && animType) return;
             
             if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+            fermaAudio();
             if (typeof speakTimeout !== 'undefined') { clearTimeout(speakTimeout); isSpeakingTimeout = false; }
             
             if (animType) {
@@ -624,7 +755,7 @@ def genera_html(file_input=None, traduci=False):
             const isIt = currentLang === 'it';
 
             const titleType = isIt ? meal.meal_type_it : meal.meal_type_en;
-            document.getElementById('meal-type').innerText = `IMT - ${titleType}`;
+            document.getElementById('meal-type').innerHTML = `IMT - ${titleType} <span class="altoparlante" aria-hidden="true">🔊</span>`;
             document.getElementById('meal-date').innerText = isIt ? meal.date_it : meal.date_en;
             document.getElementById('title-primi').innerText = isIt ? "Primi" : "First Courses";
             document.getElementById('title-secondi').innerText = isIt ? "Secondi" : "Main Courses";
@@ -877,6 +1008,7 @@ def genera_html(file_input=None, traduci=False):
             const ist = ISTRUZIONI_HOME[currentLang];
             document.getElementById('share-all').innerHTML = ['ios', 'android', 'mac', 'pc'].map(p => '<p>' + ist[p] + '</p>').join('');
             if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+            fermaAudio();
             document.getElementById('share-overlay').classList.remove('hidden');
         }
 
@@ -1078,6 +1210,9 @@ def genera_html(file_input=None, traduci=False):
 </html>
 """
 
+    if audio:
+        genera_audio(base, blocks)
+
     contatore_url = CONTATORE_URL.strip().rstrip('/')
     html_code = (html_template.replace('__CONTATORE_URL__', contatore_url)
                  .replace('__PAGINA_URL__', PAGINA_URL)
@@ -1096,5 +1231,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Genera HTML e JSON Siri dai menu Excel')
     parser.add_argument('--input', help='File Excel da utilizzare')
     parser.add_argument('--traduci', action='store_true', help='Traduci online i nuovi piatti mancanti dal dizionario')
+    parser.add_argument('--senza-audio', action='store_true', help='Non genera né aggiorna i file audio della lettura')
     args = parser.parse_args()
-    genera_html(args.input, args.traduci)
+    genera_html(args.input, args.traduci, audio=not args.senza_audio)

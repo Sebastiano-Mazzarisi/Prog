@@ -7,7 +7,8 @@
 #              ogni 5 secondi la pagina mostra "<n> utenti collegati adesso su <t>"
 #              usando il database Firebase indicato in CONTATORE_URL.
 #              Un clic su quella riga mostra la tabella dei dispositivi registrati
-#              (data e ora, dal più recente): rosso = collegato adesso, blu = no.
+#              (prima i collegati in rosso, poi gli altri in blu; ognuno dal più recente).
+#              Toccando la propria riga si può scrivere il nome del dispositivo.
 #              Pulsante Condividi (in basso a destra): condivide/copia il link e
 #              spiega come salvare la pagina sulla Home (PC, Mac, iPhone, Android).
 #              Genera anche manifest.webmanifest, sw.js e le icone (IMT-anteprima.jpg,
@@ -376,7 +377,7 @@ def genera_html(file_input=None, traduci=False):
         li:last-child { border-bottom: none; }
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
-        .contatore { display: table; margin: 4px auto 12px; padding: 5px 16px; background: #e6f4ff; color: #3a3a3c; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); text-align: center; font-size: 0.95rem; min-height: 1.2em; cursor: pointer; }
+        .contatore { display: table; margin: 4px auto 12px; padding: 5px 16px; background: #e6f4ff; color: #3a3a3c; border: 1px solid #b3d7ff; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); text-align: center; font-size: 0.95rem; min-height: 1.2em; cursor: pointer; }
         .contatore:hover { text-decoration: underline; }
         .utenti-legenda { text-align: center; font-size: 0.85rem; color: #52525b; margin-bottom: 8px; }
         .utenti-tab { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
@@ -384,6 +385,11 @@ def genera_html(file_input=None, traduci=False):
         .utenti-tab td { padding: 6px 8px; border-bottom: 1px solid #f2f2f7; }
         .utenti-tab .online, .utenti-legenda .online { color: #d70015; font-weight: 600; }
         .utenti-tab .offline, .utenti-legenda .offline { color: #007aff; }
+        .utenti-tab td:first-child { white-space: nowrap; }
+        .utenti-tab td.nome { word-break: break-word; }
+        .utenti-tab tr.mio { cursor: pointer; background: #fff5f5; }
+        .nome-input { width: 100%; max-width: 150px; font-size: 0.9rem; padding: 4px 6px; border: 1px solid #c7c7cc; border-radius: 6px; box-sizing: border-box; }
+        .nome-ok { margin-left: 4px; padding: 4px 8px; border: none; border-radius: 6px; background: #007aff; color: white; font-weight: 600; cursor: pointer; }
         .footer-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
         .footer-row .source-note { flex: 1; min-width: 0; }
         .share-btn { flex-shrink: 0; border: none; background: none; color: #007aff; width: 40px; height: 40px; margin-top: 1px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -864,23 +870,31 @@ def genera_html(file_input=None, traduci=False):
         }
 
         function chiudiUtenti() {
+            utentiInModifica = false;
             document.getElementById('utenti-overlay').classList.add('hidden');
         }
 
+        let utentiInModifica = false;   // true mentre si scrive il nome: la tabella non si ridisegna
+        const escHtml = x => String(x).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
         async function aggiornaUtenti() {
+            if (utentiInModifica) return;
             const it = currentLang === 'it';
             const legenda = document.getElementById('utenti-legenda');
             const tabella = document.getElementById('utenti-tabella');
             try {
-                const [utenti, online] = await Promise.all([contatoreFb('utenti'), contatoreFb('online')]);
+                const [utenti, online, nomi] = await Promise.all([contatoreFb('utenti'), contatoreFb('online'), contatoreFb('nomi')]);
+                if (utentiInModifica) return;
                 const adesso = Date.now() + contatoreScarto;
                 const collegato = codice => {
                     const t = (online || {})[codice];
                     return typeof t === 'number' && t >= adesso - CONTATORE_ATTIVO_MS;
                 };
+                // prima i collegati, poi gli altri; in ogni gruppo dal più recente
                 const righe = Object.entries(utenti || {})
                     .filter(([codice, t]) => typeof t === 'number')
-                    .sort((a, b) => b[1] - a[1]);
+                    .map(([codice, t]) => ({ codice, t, on: collegato(codice) || codice === contatoreId }))
+                    .sort((a, b) => (b.on - a.on) || (b.t - a.t));
                 document.getElementById('utenti-title').textContent = (it ? 'Dispositivi registrati: ' : 'Registered devices: ') + righe.length.toLocaleString(it ? 'it-IT' : 'en-GB');
                 const formato = new Intl.DateTimeFormat(it ? 'it-IT' : 'en-GB', {
                     day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
@@ -891,18 +905,57 @@ def genera_html(file_input=None, traduci=False):
                     return g.charAt(0).toUpperCase() + g.slice(1) + ' ' + formato.format(d).replace(',', '');
                 };
                 let n = 0;
-                const corpo = righe.map(([codice, t]) => {
-                    const on = collegato(codice);
-                    if (on) n++;
-                    return '<tr class="' + (on ? 'online' : 'offline') + '"><td>' + quando(t) + '</td></tr>';
+                const corpo = righe.map(r => {
+                    if (r.on) n++;
+                    const nome = (nomi || {})[r.codice];
+                    const classe = r.on ? 'online' : 'offline';
+                    if (r.codice === contatoreId) {
+                        const testo = nome ? escHtml(nome) : '<i>' + (it ? 'tocca per dare un nome' : 'tap to set a name') + '</i>';
+                        return '<tr class="' + classe + ' mio" onclick="modificaNome()" title="' + (it ? 'Questo dispositivo: tocca per cambiare il nome' : 'This device: tap to change the name') + '">'
+                            + '<td>' + quando(r.t) + '</td><td class="nome" id="nome-mio" data-nome="' + escHtml(nome || '') + '">' + testo + ' ✎</td></tr>';
+                    }
+                    return '<tr class="' + classe + '"><td>' + quando(r.t) + '</td><td class="nome">' + (nome ? escHtml(nome) : '') + '</td></tr>';
                 }).join('');
-                tabella.innerHTML = '<thead><tr><th>' + (it ? 'Data e ora' : 'Date and time') + '</th></tr></thead><tbody>' + corpo + '</tbody>';
+                tabella.innerHTML = '<thead><tr><th>' + (it ? 'Data e ora' : 'Date and time') + '</th><th>' + (it ? 'Nome' : 'Name') + '</th></tr></thead><tbody>' + corpo + '</tbody>';
                 legenda.innerHTML = it
                     ? '<span class="online">● collegati adesso: ' + n + '</span> &nbsp; <span class="offline">● non collegati: ' + (righe.length - n) + '</span>'
                     : '<span class="online">● online now: ' + n + '</span> &nbsp; <span class="offline">● offline: ' + (righe.length - n) + '</span>';
             } catch (e) {
                 legenda.textContent = it ? 'Elenco non disponibile in questo momento.' : 'List not available right now.';
             }
+        }
+
+        function modificaNome() {
+            if (utentiInModifica) return;
+            const cella = document.getElementById('nome-mio');
+            if (!cella) return;
+            utentiInModifica = true;
+            const it = currentLang === 'it';
+            cella.innerHTML = '<input id="nome-input" class="nome-input" maxlength="30" placeholder="' + (it ? 'Il tuo nome' : 'Your name') + '">'
+                + '<button class="nome-ok" onclick="event.stopPropagation(); salvaNome()">OK</button>';
+            const campo = document.getElementById('nome-input');
+            campo.value = cella.dataset.nome || '';
+            campo.addEventListener('click', e => e.stopPropagation());
+            campo.addEventListener('keydown', e => {
+                e.stopPropagation();
+                if (e.key === 'Enter') { e.preventDefault(); salvaNome(); }
+                else if (e.key === 'Escape') { utentiInModifica = false; aggiornaUtenti(); }
+            });
+            campo.focus();
+        }
+
+        async function salvaNome() {
+            const campo = document.getElementById('nome-input');
+            if (!campo) return;
+            const nome = campo.value.trim().slice(0, 30);
+            try {
+                if (nome) await contatoreFb('nomi/' + contatoreId, 'PUT', nome);
+                else await contatoreFb('nomi/' + contatoreId, 'DELETE');
+            } catch (e) {
+                document.getElementById('utenti-legenda').textContent = currentLang === 'it' ? 'Salvataggio del nome non riuscito.' : 'Could not save the name.';
+            }
+            utentiInModifica = false;
+            aggiornaUtenti();
         }
 
         function chiudiCondivisione() {

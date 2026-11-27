@@ -45,7 +45,11 @@
         li:last-child { border-bottom: none; }
         li::before { content: "•"; color: #007aff; font-weight: bold; position: absolute; left: 0; font-size: 1.1rem; top: 0px; }
         .hidden { display: none !important; }
-        .contatore { display: table; margin: 4px auto 12px; padding: 5px 16px; background: #e6f4ff; color: #3a3a3c; border: 1px solid #b3d7ff; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); text-align: center; font-size: 0.95rem; min-height: 1.2em; cursor: pointer; }
+        .contatore-riga { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 4px 0 12px; }
+        .bandiera { border: none; background: none; padding: 0; cursor: pointer; line-height: 0; opacity: 0.35; transition: opacity 0.2s; flex-shrink: 0; }
+        .bandiera.attiva { opacity: 1; }
+        .bandiera svg { width: 26px; height: 17px; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,0.15); display: block; }
+        .contatore { display: inline-block; margin: 0; padding: 5px 16px; background: #e6f4ff; color: #3a3a3c; border: 1px solid #b3d7ff; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); text-align: center; font-size: 0.95rem; min-height: 1.2em; cursor: pointer; }
         .contatore:hover { text-decoration: underline; }
         .utenti-legenda { text-align: center; font-size: 0.85rem; color: #52525b; margin-bottom: 8px; }
         .utenti-tab { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
@@ -102,7 +106,11 @@
                 <button id="btn-next" aria-label="Pasto successivo / Next meal" onclick="navigate(1)">&#9654;</button>
             </div>
         </div>
-        <div class="contatore hidden" id="contatore-utenti" aria-live="polite" role="button" tabindex="0" onclick="apriUtenti()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();apriUtenti();}" title="Mostra i dispositivi / Show devices"></div>
+        <div class="contatore-riga">
+            <button class="bandiera" id="bandiera-it" onclick="scegliLingua('it')" aria-label="Italiano" title="Italiano"><svg viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#ffffff"/><rect x="2" width="1" height="2" fill="#ce2b37"/></svg></button>
+            <div class="contatore hidden" id="contatore-utenti" aria-live="polite" role="button" tabindex="0" onclick="apriUtenti()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();apriUtenti();}" title="Mostra i dispositivi / Show devices"></div>
+            <button class="bandiera" id="bandiera-en" onclick="scegliLingua('en')" aria-label="English" title="English"><svg viewBox="0 0 60 30" aria-hidden="true"><clipPath id="uk-s"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="uk-t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#uk-s)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#ffffff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#uk-t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#ffffff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg></button>
+        </div>
         <div class="content-wrapper" id="content-wrapper">
             <div class="content" id="menu-content" onclick="toggleLanguage()" title="Clicca per cambiare lingua">
                 <div class="course-card" id="card-primi"><h2 class="course-title" id="title-primi">Primi</h2><ul id="list-primi"></ul></div>
@@ -240,6 +248,7 @@
             if (isAnimating) return; 
             currentLang = currentLang === 'it' ? 'en' : 'it';
             sessionStorage.setItem('savedLang', currentLang);
+            salvaLingua(currentLang);
             if (menuData[currentIndex]) {
                 sessionStorage.setItem('savedDate', menuData[currentIndex].date);
                 sessionStorage.setItem('savedType', menuData[currentIndex].type);
@@ -381,7 +390,6 @@
         const CONTATORE_ATTIVO_MS = 15000;     // "collegato adesso" = segnale negli ultimi 15 secondi
         const CONTATORE_PULIZIA_MS = 600000;   // segnali più vecchi di 10 minuti vengono cancellati
         let contatoreId = null, contatoreRegistrato = false, contatoreInCorso = false;
-        let contatoreLingua = null;   // lingua già comunicata al database
         let contatoreScarto = 0;   // differenza tra orologio del server e del dispositivo
 
         function contatoreCodice() {
@@ -432,10 +440,9 @@
                 }
                 const adesso = await contatoreFb('online/' + contatoreId, 'PUT', { '.sv': 'timestamp' });
                 contatoreScarto = adesso - Date.now();
-                if (contatoreLingua !== currentLang) {
-                    const lingua = currentLang;
-                    contatoreFb('lingua/' + contatoreId, 'PUT', lingua).then(() => { contatoreLingua = lingua; }).catch(() => {});
-                }
+                // ogni 5 secondi comunica la lingua in uso su questo dispositivo
+                contatoreFb('lingua/' + contatoreId, 'PUT', currentLang).catch(() => {});
+                salvaLingua(currentLang);
                 const [online, totale] = await Promise.all([contatoreFb('online'), contatoreFb('totale')]);
                 let n = 0; const vecchi = {};
                 for (const [codice, t] of Object.entries(online || {})) {
@@ -458,7 +465,7 @@
             if (!CONTATORE_URL || !window.fetch) return;
             contatoreId = contatoreCodice();
             if (!contatoreId) return;
-            contatoreCiclo();
+            recuperaLinguaArchivio().then(contatoreCiclo);
             setInterval(contatoreCiclo, CONTATORE_INTERVALLO);
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') contatoreCiclo();
@@ -535,6 +542,37 @@
             document.getElementById('share-all').innerHTML = ['ios', 'android', 'mac', 'pc'].map(p => '<p>' + ist[p] + '</p>').join('');
             if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel();
             document.getElementById('share-overlay').classList.remove('hidden');
+        }
+
+        // ---- Lingua ricordata tra un avvio e l'altro ----
+        function leggiLingua() {
+            try { return localStorage.getItem('imt-lingua'); } catch (e) { return null; }
+        }
+
+        function salvaLingua(lingua) {
+            try { localStorage.setItem('imt-lingua', lingua); } catch (e) {}
+        }
+
+        // Se il dispositivo non ha la lingua salvata (es. prima di questo aggiornamento),
+        // la recupera dall'archivio online e passa subito a quella lingua.
+        async function recuperaLinguaArchivio() {
+            if (leggiLingua() || sessionStorage.getItem('savedLang')) return;
+            try {
+                const l = await contatoreFb('lingua/' + contatoreId);
+                if ((l === 'it' || l === 'en') && !leggiLingua()) {
+                    salvaLingua(l);
+                    if (l !== currentLang) { currentLang = l; renderMeal(currentIndex); aggiornaBandiere(); }
+                }
+            } catch (e) {}
+        }
+
+        // ---- Bandierine della lingua ----
+        function scegliLingua(lingua) {
+            if (lingua !== currentLang) toggleLanguage();
+        }
+
+        function aggiornaBandiere() {
+            ['it', 'en'].forEach(l => document.getElementById('bandiera-' + l).classList.toggle('attiva', l === currentLang));
         }
 
         // ---- Tabella dei dispositivi registrati ----
@@ -680,7 +718,9 @@
         }
 
         window.onload = () => {
-            if (sessionStorage.getItem('savedLang')) currentLang = sessionStorage.getItem('savedLang');
+            // lingua: quella della sessione, altrimenti quella usata l'ultima volta su questo dispositivo
+            const linguaIniziale = sessionStorage.getItem('savedLang') || leggiLingua();
+            if (linguaIniziale === 'it' || linguaIniziale === 'en') currentLang = linguaIniziale;
             let animToPlay = null;
             if (sessionStorage.getItem('justToggled')) { animToPlay = 'lang'; sessionStorage.removeItem('justToggled'); }
             let startIdx = getInitialMealIndex();
@@ -691,6 +731,7 @@
                 sessionStorage.removeItem('savedDate'); sessionStorage.removeItem('savedType');
             }
             currentIndex = startIdx; renderMeal(currentIndex, animToPlay);
+            aggiornaBandiere();
             contatoreAvvia();
             if ('serviceWorker' in navigator && location.protocol === 'https:') {
                 navigator.serviceWorker.register('sw.js').catch(() => {});

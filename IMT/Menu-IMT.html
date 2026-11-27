@@ -550,6 +550,7 @@
                 const righe = Object.entries(utenti || {})
                     .filter(([codice, t]) => typeof t === 'number')
                     .sort((a, b) => b[1] - a[1]);
+                document.getElementById('utenti-title').textContent = (it ? 'Dispositivi registrati: ' : 'Registered devices: ') + righe.length.toLocaleString(it ? 'it-IT' : 'en-GB');
                 const formato = new Intl.DateTimeFormat(it ? 'it-IT' : 'en-GB', {
                     day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
                 });

@@ -19,6 +19,10 @@
 #              (introduzione, portata, piatto, saluto) c'è una pausa di mezzo secondo;
 #              le alternative di una portata sono lette di seguito in un'unica frase,
 #              senza pause: "Minestrone oppure spaghetti." ("or" in inglese).
+#              Altoparlante a destra del confetto PDF: legge il manuale utente
+#              (Manuale-IT.mp3 / Manuale-EN.mp3 secondo la lingua); un altro tocco
+#              mette in pausa. I due MP3 si creano dai file Manuale-utente.txt e
+#              Manuale-utente-EN.txt, solo quando il testo cambia.
 #              Confetto PDF in basso a destra: mostra il pasto su un foglio A4
 #              verticale con i tasti "Stampa / Salva PDF" ed "Esci"; in fondo al foglio
 #              un QR code di 3 cm che porta alla pagina (serve  pip install qrcode).
@@ -360,6 +364,117 @@ def genera_audio(base, blocks, prova=False):
         return
     print(f'Audio: {totale} file, {nuovi} nuovi, {len(vecchi)} vecchi cancellati alla partenza.')
 
+MANUALI_AUDIO = {'it': ('Manuale-utente.txt', 'Manuale-IT.mp3'),
+                 'en': ('Manuale-utente-EN.txt', 'Manuale-EN.mp3')}
+PAUSA_TITOLO_S = 0.9    # pausa dopo i titoli dei capitoli del manuale
+
+SIGLE_LETTE = {'IMT': 'I M T', 'PDF': 'P D F', 'QR': 'QR', 'OK': 'OK', 'IT': 'IT', 'EN': 'EN', 'PC': 'PC'}
+
+def frasi_manuale(testo):
+    """Trasforma il manuale (testo a righe) in frasi da leggere, come coppie (testo, pausa dopo).
+    Salta gli indirizzi web e unisce le righe spezzate. Le parole tutte in maiuscolo vanno in
+    minuscolo (altrimenti la voce le compita), tranne le sigle di SIGLE_LETTE; nei titoli tutto
+    in minuscolo tranne IMT, PDF e QR."""
+    def pulisci(t, titolo):
+        def parola(m):
+            w = m.group(0)
+            if w in SIGLE_LETTE and not (titolo and w in ('IT', 'EN', 'OK')):
+                return SIGLE_LETTE[w]
+            return w.lower() if w.isupper() and (titolo or len(w) > 1) else w
+        t = re.sub(r"[A-Za-zÀ-ÿ]+", parola, t)
+        t = re.sub(r'\s*\.\.\.', '', t).replace('"', '').replace(' | ', ', ')
+        t = re.sub(r'\s+([,;:.])', r'\1', t)
+        t = re.sub(r'\s+', ' ', t).strip()
+        if t[:1].islower() and not t[1:2].isupper():
+            t = t[:1].upper() + t[1:]
+        return t
+    blocchi, corrente = [], None
+    for riga in testo.splitlines():
+        r = riga.rstrip()
+        x = r.strip()
+        if not x or 'http' in r:
+            corrente = None
+            continue
+        titolo = not r.startswith(' ') and bool(re.match(r'^(\d+\. )?[^a-zà-ÿ]{4,}$', x))
+        domanda = corrente is not None and corrente[0].endswith('?')
+        if titolo or x.startswith('- ') or domanda or (x.endswith('?') and not r.startswith(' ')):
+            corrente = [x[2:] if x.startswith('- ') else x, titolo]
+            blocchi.append(corrente)
+        elif corrente is None or (not r.startswith(' ') and corrente[1]):
+            corrente = [x, False]
+            blocchi.append(corrente)
+        else:
+            corrente[0] += ' ' + x
+    frasi = []
+    for t, titolo in blocchi:
+        t = pulisci(t, titolo)
+        if not t:
+            continue
+        t = re.sub(r'[;,]$', '.', t)
+        if t[-1] not in '.:!?':
+            t += '.'
+        frasi.append((t, PAUSA_TITOLO_S if titolo else PAUSA_RIGA_S))
+    return frasi
+
+def genera_audio_manuale(base):
+    """Crea Manuale-IT.mp3 (Serena) e Manuale-EN.mp3 (Cori) dai manuali utente; li rifà solo se
+    il testo è cambiato. Un MP3 già presente e non creato da qui (messo a mano) resta com'è. Restituisce {lingua: impronta} da usare per aggiornare la cache del browser."""
+    impronte = {}
+    registro_file = base / CARTELLA_AUDIO / 'manuale.json'
+    try:
+        registro = json.loads(registro_file.read_text(encoding='utf-8'))
+    except Exception:
+        registro = {}
+    lavori = []
+    for lingua, (nome_txt, nome_mp3) in MANUALI_AUDIO.items():
+        sorgente = base / nome_txt
+        if not sorgente.exists():
+            print(f'Manuale audio {lingua}: manca {nome_txt}, salto.')
+            continue
+        frasi = frasi_manuale(sorgente.read_text(encoding='utf-8'))
+        voce = VOCI_AUDIO[lingua]
+        impronta = hashlib.sha1('|'.join([voce, str(AUDIO_KBPS)] + [f'{t}#{p}' for t, p in frasi]).encode('utf-8')).hexdigest()[:10]
+        mp3 = base / nome_mp3
+        if mp3.exists() and lingua not in registro:
+            # MP3 messo a mano (non creato da questo script): non si tocca
+            impronte[lingua] = str(int(mp3.stat().st_mtime))
+            continue
+        impronte[lingua] = impronta
+        if registro.get(lingua) != impronta or not mp3.exists():
+            lavori.append((lingua, voce, frasi, mp3))
+    if lavori:
+        try:
+            from piper.download_voices import download_voice  # noqa: F401
+            import lameenc  # noqa: F401
+        except ImportError:
+            print('Manuale audio non generato: installare con  pip install piper-tts lameenc')
+            return impronte
+        from concurrent.futures import ProcessPoolExecutor
+        import time
+        inizio = time.time()
+        frasi_uniche = sorted({(voce, t) for _, voce, frasi, _ in lavori for t, _ in frasi})
+        core = os.cpu_count() or 2
+        processi = max(1, min(len(frasi_uniche), core // 2))
+        print(f'Manuale audio: leggo {len(frasi_uniche)} frasi con {processi} processi...', flush=True)
+        with ProcessPoolExecutor(max_workers=processi, initializer=_avvia_processo,
+                                 initargs=(max(1, core // processi),)) as pool:
+            letto, formato = {}, None
+            for chiave, pcm, formato in pool.map(_sintetizza_frase, frasi_uniche):
+                letto[chiave] = pcm
+        frequenza, canali, larghezza = formato
+        for lingua, voce, frasi, percorso in lavori:
+            pezzi = []
+            for t, pausa in frasi:
+                pezzi.append(letto[(voce, t)])
+                pezzi.append(b'\x00' * int(frequenza * pausa) * canali * larghezza)
+            _scrivi_mp3(str(percorso), pezzi, formato)
+            registro[lingua] = impronte[lingua]
+            print(f'  creato {percorso.name}', flush=True)
+        (base / CARTELLA_AUDIO).mkdir(exist_ok=True)
+        registro_file.write_text(json.dumps(registro), encoding='utf-8')
+        print(f'Manuale audio pronto in {(time.time() - inizio) / 60:.1f} min.')
+    return impronte
+
 def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
     base = Path(__file__).resolve().parent
     file_input = Path(file_input) if file_input else base / 'menu-giornaliero-completo-autunno-2026.xlsx'
@@ -647,6 +762,9 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         .share-btn:hover, .share-btn:active { background: #e6f4ff; }
         .pdf-btn { flex-shrink: 0; align-self: center; margin-top: 1px; padding: 5px 14px; background: #e6f4ff; color: #007aff; border: 1px solid #b3d7ff; border-radius: 999px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; }
         .pdf-btn:hover, .pdf-btn:active { background: #cce6ff; }
+        .manuale-btn { flex-shrink: 0; align-self: center; border: none; background: none; width: 40px; height: 40px; border-radius: 50%; font-size: 22px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .manuale-btn:hover { background: #e6f4ff; }
+        .manuale-btn.attivo { background: #007aff; box-shadow: 0 0 0 3px #b3d7ff; }
         .share-overlay.pdf-overlay { display: block; padding: 0; background: #8e8e93; overflow: auto; -webkit-overflow-scrolling: touch; }
         .share-overlay.pdf-overlay.hidden { display: none !important; }
         .pdf-barra { position: sticky; top: 0; z-index: 2; display: flex; justify-content: center; gap: 10px; padding: 10px; background: #3a3a3c; }
@@ -742,6 +860,7 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
             <p>Voci della lettura / Reading voices: <a href="https://github.com/OHF-Voice/piper1-gpl">Piper</a> · Serena (<a href="https://huggingface.co/datasets/committa/serena-synthetic-it-27h">dataset serena-synthetic-it-27h</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) · Cori (registrazioni <a href="https://librivox.org">LibriVox</a>, pubblico dominio / public domain).</p>
         </details>
         <button class="pdf-btn" id="btn-pdf" onclick="apriPdf()" aria-label="Menu in PDF A4 da leggere o stampare / Menu as A4 PDF to read or print" title="PDF A4">PDF</button>
+        <button class="manuale-btn" id="btn-manuale" onclick="manualeVoce(event)" aria-label="Ascolta il manuale / Listen to the user guide" title="Ascolta il manuale / Listen to the guide"><span aria-hidden="true">🔊</span></button>
         <button class="share-btn" id="btn-condividi" onclick="apriCondivisione()" aria-label="Condividi o salva sulla Home / Share or save to Home screen" title="Condividi / Salva sulla Home">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
         </button>
@@ -812,8 +931,35 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
             return false;
         }
 
+        // Manuale letto ad alta voce: un tocco avvia (o riprende), un altro mette in pausa
+        const FILE_MANUALE = { it: '__MANUALE_IT__', en: '__MANUALE_EN__' };
+        let audioManuale = null, linguaManuale = null;
+        function pausaManuale() {
+            if (audioManuale && !audioManuale.paused) audioManuale.pause();
+            document.getElementById('btn-manuale').classList.remove('attivo');
+        }
+        function manualeVoce(event) {
+            event.stopPropagation();
+            const btn = document.getElementById('btn-manuale');
+            if (audioManuale && !audioManuale.paused) { pausaManuale(); return; }
+            if (!audioManuale || linguaManuale !== currentLang) {
+                if (audioManuale) audioManuale.pause();
+                audioManuale = new Audio(FILE_MANUALE[currentLang]);
+                linguaManuale = currentLang;
+                const a = audioManuale;
+                a.onended = () => { if (audioManuale === a) { audioManuale = null; btn.classList.remove('attivo'); } };
+            }
+            fermaAudio();
+            if (window.speechSynthesis && (window.speechSynthesis.speaking || isSpeakingTimeout)) {
+                window.speechSynthesis.cancel(); clearTimeout(speakTimeout); isSpeakingTimeout = false;
+            }
+            btn.classList.add('attivo');
+            audioManuale.play().catch(() => { btn.classList.remove('attivo'); audioManuale = null; });
+        }
+
         function speakMenu(event) {
             event.stopPropagation();
+            pausaManuale();
             if (fermaAudio()) return;
             const pasto = menuData[currentIndex];
             const file = pasto && pasto.audio && pasto.audio[currentLang];
@@ -1454,12 +1600,16 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         print('Prova finita: pagina e altri audio non toccati. Se va bene, doppio clic su Genera-Audio.bat.')
         return
 
+    impronte_manuale = {}
     if audio:
         genera_audio(base, blocks)
+        impronte_manuale = genera_audio_manuale(base)
 
     contatore_url = CONTATORE_URL.strip().rstrip('/')
     html_code = (html_template.replace('__CONTATORE_URL__', contatore_url)
                  .replace('__QR_SVG__', qr_svg(PAGINA_URL))
+                 .replace('__MANUALE_IT__', 'Manuale-IT.mp3?v=' + impronte_manuale.get('it', '0'))
+                 .replace('__MANUALE_EN__', 'Manuale-EN.mp3?v=' + impronte_manuale.get('en', '0'))
                  .replace('__PAGINA_URL__', PAGINA_URL)
                  .replace('__CARTELLA_URL__', CARTELLA_URL)
                  .replace('__JSON_DATA__', json.dumps(blocks)))

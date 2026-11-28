@@ -1,0 +1,171 @@
+MENU IMT - USER GUIDE
+The IMT Lucca canteen menu on your phone and computer
+
+Address: https://sebastiano-mazzarisi.github.io/Prog/IMT/Menu-IMT.html
+Period covered: autumn menu, from September 21 to December 20, 2026,
+lunch and dinner every day.
+
+
+1. WHAT IT IS
+
+Menu IMT shows what is served today at the IMT canteen, lunch and dinner,
+in Italian or English. It opens in any browser, there is nothing to sign
+up for and it is free. You can save it to your phone's Home screen and
+use it like an app.
+
+
+2. HOW TO OPEN IT
+
+- Tap the link you received, or scan the QR code on the poster in the
+  canteen with your phone camera.
+- The right meal is shown straight away: until 3 pm today's lunch, after
+  3 pm today's dinner. If there is no menu today, the next available day
+  is shown.
+
+
+3. WHAT YOU SEE
+
+At the top is the title box, blue for lunch and yellow for dinner:
+- "IMT - LUNCH" or "IMT - DINNER", with a speaker next to it;
+- the date, for example "Saturday November 28, 2026";
+- on the sides, the arrows to go to the previous or next meal.
+
+Below the title is the counter row:
+- the Italian flag on the left, the British flag on the right;
+- in the middle, in a light blue oval, "2 users online now out of 12".
+
+Then the four courses: First Courses, Main Courses, Side Dishes, Fruit &
+Dessert.
+- IN BOLD CAPITALS are the dishes of the day, which change every day.
+- In regular type are the fixed alternatives, always available (for
+  example plain pasta, mixed salad).
+
+At the bottom of the page:
+- on the left, "by Mazzarisi": tap it to open the notes, with allergen
+  information in the canteen's original PDFs, links to those PDFs and
+  to the full Excel file, and the credits for the voices;
+- on the right, the PDF oval, the speaker for this guide and the share
+  icon.
+
+
+4. CHANGING MEAL
+
+- Tap the right arrow for the next meal and the left arrow for the
+  previous one. The order is lunch, dinner, next day's lunch, and so on.
+- On a phone you can also swipe: from right to left to go forward, from
+  left to right to go back.
+- On a computer you can use the left and right arrow keys.
+- To refresh the page, pull down when you are at the top. You stay on
+  the same meal and in the same language.
+
+
+5. LANGUAGE: ITALIAN OR ENGLISH
+
+- Tap the Italian or the British flag. The one in use is full, the other
+  is faded.
+- You can also switch language by tapping anywhere on the menu.
+- The page remembers your choice and opens in the same language next
+  time.
+
+
+6. LISTENING TO THE MENU
+
+- Tap the title (or the speaker next to it) to hear the menu read aloud.
+  Tap it again to stop.
+- In Italian the reader is Serena, in English Cori: natural, free voices.
+- The reading gives a greeting with the date, the name of each course and
+  the dishes of the day, joined by "or", then a closing greeting. For
+  example: "First courses. Pea soup or pasta with meat sauce."
+- The fixed alternatives are not read, to keep it short.
+- If the audio is not available, the phone's or computer's own voice is
+  used.
+
+
+7. HOW MANY PEOPLE USE THE MENU
+
+- The oval below the title shows how many people have the page open
+  right now and how many devices have used it in total. It updates every
+  5 seconds.
+- Each device is recognised by an anonymous code: no names, numbers or
+  other personal data are collected.
+- Tap the oval to open the list of devices:
+  - at the top the total, "Registered devices: 12";
+  - for each one, the day and time of first use;
+  - in red the devices online now, in blue the others; in each group the
+    most recent is at the top;
+  - on the right, the language used: IT in blue, EN in green.
+- Your own device is one of the red ones: tap its row to give it a name
+  (up to 30 characters), for example "Anna's phone". Confirm with OK or
+  Enter.
+- Close the list with the X or by tapping outside it.
+
+
+8. MENU AS A PDF: READ AND PRINT
+
+- At the bottom of the page, tap the PDF oval. The meal you are looking
+  at appears as a portrait A4 sheet.
+- The sheet is always in Italian and English:
+  - at the top, title and date in both languages, for example
+    "IMT - PRANZO | LUNCH";
+  - for each course a table with Italian on the left and English on the
+    right, line by line;
+  - at the bottom, the QR code of the page, handy for anyone who finds
+    the printed sheet.
+- At the top there are two buttons:
+  - "Print / Save PDF" opens your device's print dialog; from there
+    choose a printer or "Save as PDF" (on iPhone: Print, then Share and
+    Save to Files);
+  - "Exit" goes back to the menu; on a computer the Esc key works too.
+- The menu always fits on a single A4 page.
+
+
+9. LISTENING TO THIS GUIDE
+
+- At the bottom of the page, just to the right of the PDF oval, there is
+  a speaker. Tap it to hear this guide read aloud: in Italian by Serena
+  if the page is in Italian, in English by Cori if it is in English.
+- While it plays, the speaker is highlighted. Tap it again to pause; tap
+  it once more to resume from where it stopped.
+
+
+10. SHARING AND SAVING TO THE HOME SCREEN
+
+Tap the share icon (the small square with an arrow pointing up), at the
+bottom right. A panel opens with:
+- Share the link: send it by WhatsApp, email, messages...
+- Copy the link: paste it wherever you like.
+- Add to Home screen: instructions for your device.
+
+In short, to have it on the Home screen like an app:
+- iPhone (Safari): Share, then "Add to Home Screen".
+- Android (Chrome): the three-dot menu, then "Add to Home screen" or
+  "Install app".
+- Windows PC: in Edge, menu "...", then Apps, then "Install this site as
+  an app"; in Chrome, the three-dot menu, then "Cast, save and share",
+  then "Install page as app".
+- Mac: in Safari, File menu, then "Add to Dock".
+
+Installed this way, the menu opens with one tap from its icon and also
+works on a weak connection.
+
+
+11. FREQUENTLY ASKED QUESTIONS
+
+The menu does not update, I still see the old one?
+  Pull the page down when you are at the top, or close it and open it
+  again.
+
+I can't hear the voice.
+  Check that the volume is up and the phone is not in silent mode. On
+  iPhone the side silent switch also mutes the sound of web pages.
+
+Where can I find allergen information?
+  Tap "by Mazzarisi" at the bottom of the page: it has links to the
+  canteen's original menu PDFs, with the allergen information.
+
+Am I counted more than once?
+  No: each device is counted only once, however many times it opens the
+  page. A person's phone and computer, though, count as two devices.
+
+Do I need to sign up or pay?
+  No. The menu is open and free.

@@ -1,0 +1,178 @@
+MENU IMT - MANUALE UTENTE
+Il menu della mensa IMT di Lucca sul telefono e sul computer
+
+Indirizzo: https://sebastiano-mazzarisi.github.io/Prog/IMT/Menu-IMT.html
+Periodo coperto: menu d'autunno, dal 21 settembre al 20 dicembre 2026,
+pranzo e cena di ogni giorno.
+
+
+1. CHE COS'È
+
+Menu IMT mostra cosa si mangia oggi alla mensa IMT, pranzo e cena, in
+italiano o in inglese. Si apre con un browser qualsiasi, non serve
+registrarsi e non si paga niente. Si può salvare sulla Home del telefono
+e usare come un'app.
+
+
+2. COME APRIRLO
+
+- Toccare il link ricevuto oppure inquadrare il QR code del cartello in
+  mensa con la fotocamera del telefono.
+- All'apertura compare già il pasto giusto: fino alle 15 il pranzo di
+  oggi, dopo le 15 la cena di oggi. Se oggi non c'è menu, compare il
+  primo giorno successivo.
+
+
+3. COSA SI VEDE
+
+In alto c'è il riquadro del titolo, blu per il pranzo e giallo per la
+cena:
+- "IMT - PRANZO" o "IMT - CENA", con l'altoparlante accanto;
+- la data, per esempio "Sabato 28 novembre 2026";
+- ai lati le frecce per passare al pasto precedente o successivo.
+
+Sotto il titolo c'è la riga del contatore:
+- bandierina italiana a sinistra, inglese a destra;
+- al centro, in un ovale azzurro, "2 utenti collegati adesso su 12".
+
+Poi le quattro portate: Primi, Secondi, Contorni, Frutta / Dessert.
+- IN GRASSETTO MAIUSCOLO ci sono i piatti del giorno, che cambiano ogni
+  giorno.
+- In carattere normale ci sono le alternative fisse, sempre disponibili
+  (per esempio pasta in bianco, insalata mista).
+
+In fondo alla pagina:
+- a sinistra "by Mazzarisi": toccandolo si aprono le note, cioè gli
+  allergeni nei PDF originali della mensa, i link ai PDF e all'Excel
+  completo e i crediti delle voci;
+- a destra l'ovale PDF, l'altoparlante del manuale e il segno di
+  condivisione.
+
+
+4. CAMBIARE PASTO
+
+- Toccare la freccia a destra per il pasto successivo e quella a
+  sinistra per il precedente. Si passa nell'ordine pranzo, cena, pranzo
+  del giorno dopo e così via.
+- Sul telefono si può anche far scorrere il dito: da destra verso
+  sinistra per andare avanti, da sinistra verso destra per tornare
+  indietro.
+- Sul computer si possono usare i tasti freccia sinistra e destra.
+- Per aggiornare la pagina, quando si è in cima, trascinare il dito
+  verso il basso. Si resta sullo stesso pasto e nella stessa lingua.
+
+
+5. LINGUA: ITALIANO O INGLESE
+
+- Toccare la bandierina italiana o quella inglese. Quella in uso è
+  piena, l'altra sbiadita.
+- Si cambia lingua anche toccando un punto qualsiasi del menu.
+- La pagina ricorda la scelta: alla prossima apertura riparte nella
+  stessa lingua.
+
+
+6. ASCOLTARE IL MENU
+
+- Toccare il titolo (o l'altoparlante accanto) per sentire il menu ad
+  alta voce. Ritoccarlo per fermare.
+- In italiano legge Serena, in inglese Cori: voci naturali e gratuite.
+- La lettura dice il saluto con la data, il nome di ogni portata e i
+  piatti del giorno, uniti da "oppure", poi il saluto finale. Per
+  esempio: "Primi. Crema di piselli oppure pasta al ragù."
+- Le alternative fisse non vengono lette, per non allungare troppo.
+- Se l'audio non è disponibile, legge la voce del telefono o del
+  computer.
+
+
+7. QUANTI USANO IL MENU
+
+- L'ovale sotto il titolo dice quante persone hanno la pagina aperta in
+  quel momento e quanti dispositivi l'hanno usata in tutto. Si aggiorna
+  ogni 5 secondi.
+- Ogni dispositivo è riconosciuto da un codice anonimo: non si
+  raccolgono nomi, numeri o altri dati personali.
+- Toccando l'ovale si apre l'elenco dei dispositivi:
+  - in alto il totale, "Dispositivi registrati: 12";
+  - per ognuno il giorno e l'ora del primo utilizzo;
+  - in rosso quelli collegati adesso, in blu gli altri; in ogni gruppo
+    il più recente sta in alto;
+  - a destra la lingua usata: IT in blu, EN in verde.
+- Il proprio dispositivo è tra quelli rossi: toccando la sua riga gli si
+  può dare un nome (massimo 30 caratteri), per esempio "Telefono di
+  Anna". Confermare con OK o con Invio.
+- Si chiude con la X o toccando fuori dall'elenco.
+
+
+8. MENU IN PDF: LEGGERE E STAMPARE
+
+- In fondo alla pagina toccare l'ovale PDF. Il pasto che si sta
+  guardando compare come foglio A4 verticale.
+- Il foglio è sempre in italiano e in inglese:
+  - in alto titolo e data in tutte e due le lingue, per esempio
+    "IMT - PRANZO | LUNCH";
+  - per ogni portata una tabella con l'italiano a sinistra e l'inglese
+    a destra, riga per riga;
+  - in fondo il QR code della pagina, comodo per chi trova il foglio
+    stampato.
+- In alto ci sono due tasti:
+  - "Stampa / Salva PDF" apre la stampa del dispositivo; da lì si
+    sceglie la stampante oppure "Salva come PDF" (sull'iPhone: Stampa,
+    poi Condividi e Salva su File);
+  - "Esci" torna al menu; sul computer va bene anche il tasto Esc.
+- Il menu esce sempre su una sola pagina A4.
+
+
+9. ASCOLTARE QUESTO MANUALE
+
+- In fondo alla pagina, subito a destra dell'ovale PDF, c'è un
+  altoparlante. Toccandolo si ascolta questo manuale letto ad alta
+  voce: in italiano da Serena se la pagina è in italiano, in inglese da
+  Cori se è in inglese.
+- Mentre la lettura va, l'altoparlante è evidenziato. Toccandolo di
+  nuovo la lettura va in pausa; toccandolo ancora riprende da dove si
+  era fermata.
+
+
+10. CONDIVIDERE E SALVARE SULLA HOME
+
+Toccare il segno di condivisione (il quadratino con la freccia in su), in
+fondo a destra. Si apre un pannello con:
+- Condividi il link: lo invia con WhatsApp, la posta, i messaggi...
+- Copia il link: per incollarlo dove si vuole.
+- Aggiungi alla Home: le istruzioni adatte al proprio dispositivo.
+
+In breve, per averlo sulla Home come un'app:
+- iPhone (Safari): Condividi, poi "Aggiungi alla schermata Home".
+- Android (Chrome): menu con i tre puntini, poi "Aggiungi a schermata
+  Home" oppure "Installa app".
+- PC Windows: in Edge menu "...", poi App, poi "Installa questo sito
+  come app"; in Chrome menu con i tre puntini, poi "Trasmetti, salva e
+  condividi", poi "Installa pagina come app".
+- Mac: in Safari menu File, poi "Aggiungi al Dock".
+
+Installato così, il menu si apre con un tocco dall'icona e funziona
+anche con una connessione debole.
+
+
+11. DOMANDE FREQUENTI
+
+Il menu non si aggiorna, vedo ancora quello vecchio?
+  Trascinare la pagina verso il basso quando si è in cima, oppure
+  chiuderla e riaprirla.
+
+Non sento la voce.
+  Controllare che il volume sia alto e che il telefono non sia in
+  modalità silenziosa. Sull'iPhone l'interruttore laterale del
+  silenzioso blocca l'audio delle pagine web.
+
+Dove trovo gli allergeni?
+  Toccare "by Mazzarisi" in fondo alla pagina: ci sono i link ai PDF
+  originali del menu della mensa, con le indicazioni degli allergeni.
+
+Il contatore mi conta più volte?
+  No: ogni dispositivo è contato una volta sola, anche se apre la pagina
+  tante volte. Telefono e computer della stessa persona però contano
+  come due dispositivi.
+
+Devo registrarmi o pagare?
+  No. Il menu è libero e gratuito.

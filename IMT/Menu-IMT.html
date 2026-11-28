@@ -74,6 +74,9 @@
         .share-btn:hover, .share-btn:active { background: #e6f4ff; }
         .pdf-btn { flex-shrink: 0; align-self: center; margin-top: 1px; padding: 5px 14px; background: #e6f4ff; color: #007aff; border: 1px solid #b3d7ff; border-radius: 999px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; }
         .pdf-btn:hover, .pdf-btn:active { background: #cce6ff; }
+        .manuale-btn { flex-shrink: 0; align-self: center; border: none; background: none; width: 40px; height: 40px; border-radius: 50%; font-size: 22px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .manuale-btn:hover { background: #e6f4ff; }
+        .manuale-btn.attivo { background: #007aff; box-shadow: 0 0 0 3px #b3d7ff; }
         .share-overlay.pdf-overlay { display: block; padding: 0; background: #8e8e93; overflow: auto; -webkit-overflow-scrolling: touch; }
         .share-overlay.pdf-overlay.hidden { display: none !important; }
         .pdf-barra { position: sticky; top: 0; z-index: 2; display: flex; justify-content: center; gap: 10px; padding: 10px; background: #3a3a3c; }
@@ -169,6 +172,7 @@
             <p>Voci della lettura / Reading voices: <a href="https://github.com/OHF-Voice/piper1-gpl">Piper</a> · Serena (<a href="https://huggingface.co/datasets/committa/serena-synthetic-it-27h">dataset serena-synthetic-it-27h</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) · Cori (registrazioni <a href="https://librivox.org">LibriVox</a>, pubblico dominio / public domain).</p>
         </details>
         <button class="pdf-btn" id="btn-pdf" onclick="apriPdf()" aria-label="Menu in PDF A4 da leggere o stampare / Menu as A4 PDF to read or print" title="PDF A4">PDF</button>
+        <button class="manuale-btn" id="btn-manuale" onclick="manualeVoce(event)" aria-label="Ascolta il manuale / Listen to the user guide" title="Ascolta il manuale / Listen to the guide"><span aria-hidden="true">🔊</span></button>
         <button class="share-btn" id="btn-condividi" onclick="apriCondivisione()" aria-label="Condividi o salva sulla Home / Share or save to Home screen" title="Condividi / Salva sulla Home">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
         </button>
@@ -239,8 +243,35 @@
             return false;
         }
 
+        // Manuale letto ad alta voce: un tocco avvia (o riprende), un altro mette in pausa
+        const FILE_MANUALE = { it: 'Manuale-IT.mp3?v=1795857467', en: 'Manuale-EN.mp3?v=1795857477' };
+        let audioManuale = null, linguaManuale = null;
+        function pausaManuale() {
+            if (audioManuale && !audioManuale.paused) audioManuale.pause();
+            document.getElementById('btn-manuale').classList.remove('attivo');
+        }
+        function manualeVoce(event) {
+            event.stopPropagation();
+            const btn = document.getElementById('btn-manuale');
+            if (audioManuale && !audioManuale.paused) { pausaManuale(); return; }
+            if (!audioManuale || linguaManuale !== currentLang) {
+                if (audioManuale) audioManuale.pause();
+                audioManuale = new Audio(FILE_MANUALE[currentLang]);
+                linguaManuale = currentLang;
+                const a = audioManuale;
+                a.onended = () => { if (audioManuale === a) { audioManuale = null; btn.classList.remove('attivo'); } };
+            }
+            fermaAudio();
+            if (window.speechSynthesis && (window.speechSynthesis.speaking || isSpeakingTimeout)) {
+                window.speechSynthesis.cancel(); clearTimeout(speakTimeout); isSpeakingTimeout = false;
+            }
+            btn.classList.add('attivo');
+            audioManuale.play().catch(() => { btn.classList.remove('attivo'); audioManuale = null; });
+        }
+
         function speakMenu(event) {
             event.stopPropagation();
+            pausaManuale();
             if (fermaAudio()) return;
             const pasto = menuData[currentIndex];
             const file = pasto && pasto.audio && pasto.audio[currentLang];

@@ -1,18 +1,8 @@
 {
   "version": 2,
-  "updatedAt": 1795886090366,
+  "updatedAt": 1795886096350,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
-    {
-      "id": "1794928367617-9b9f713c4bb0c",
-      "type": "note",
-      "parentId": "1794932132324-732cb74e79ac08",
-      "order": 0,
-      "text": "Angelo - Zanzariere vano caldaie",
-      "done": false,
-      "star": false,
-      "color": ""
-    },
     {
       "id": "1794932132324-732cb74e79ac08",
       "type": "folder",
@@ -235,11 +225,6 @@
     }
   ],
   "notes": [
-    {
-      "id": "1794928367617-9b9f713c4bb0c",
-      "text": "Angelo - Zanzariere vano caldaie",
-      "state": "normal"
-    },
     {
       "id": "1794932671978-3785689db23948",
       "text": "Sabatelli: preventivo condizionatori",

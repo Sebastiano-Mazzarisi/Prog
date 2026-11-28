@@ -1,5 +1,5 @@
 # Nome.py: GeneraMenu.py
-# Ultimo aggiornamento: 27/11/2026 (contatore utenti, condivisione, salvataggio sulla Home)
+# Ultimo aggiornamento: 28/11/2026 (PDF veri dei pasti, cartella pdf: funzionano anche su iPhone/iPad)
 # Descrizione: Legge menu-giornaliero-completo-autunno-2026.xlsx e genera Menu-IMT.html.
 #              Generazione del file menu_siri.json con date multi-formato per evitare
 #              qualsiasi formattazione lato iOS Shortcuts.
@@ -26,6 +26,10 @@
 #              Confetto PDF in basso a destra: mostra il pasto su un foglio A4
 #              verticale con i tasti "Stampa / Salva PDF" ed "Esci"; in fondo al foglio
 #              un QR code di 3 cm che porta alla pagina (serve  pip install qrcode).
+#              Crea anche i veri file PDF dei pasti (cartella pdf, uno per pasto) con
+#              Playwright/Chromium: il confetto PDF apre il file del pasto, che funziona
+#              anche su iPhone/iPad (lì la stampa dalla pagina non va). Senza connessione
+#              o senza Playwright il confetto mostra il foglio dentro la pagina.
 #              Alla partenza cancella tutti i vecchi MP3 non più usati; crea solo
 #              quelli nuovi. Ogni frase diversa è letta una volta sola (molte si
 #              ripetono tra un giorno e l'altro), dividendo il lavoro tra più
@@ -35,7 +39,7 @@
 #              Genera anche manifest.webmanifest, sw.js e le icone (IMT-anteprima.jpg,
 #              IMT-180.png, IMT-192.png, IMT-512.png) a partire da IMT.jpg.
 # File di input: menu-giornaliero-completo-autunno-2026.xlsx
-# File di output: Menu-IMT.html, menu_siri.json, manifest.webmanifest, sw.js, icone IMT-*
+# File di output: Menu-IMT.html, cartella pdf, menu_siri.json, manifest.webmanifest, sw.js, icone IMT-*
 # Parametri: --input FILE.xlsx, --traduci (traduzione online facoltativa),
 #            --senza-audio (non genera/aggiorna i file audio)
 #            --prova-audio (genera solo l'audio italiano e inglese del primo pasto
@@ -474,6 +478,75 @@ def genera_audio_manuale(base):
         registro_file.write_text(json.dumps(registro), encoding='utf-8')
         print(f'Manuale audio pronto in {(time.time() - inizio) / 60:.1f} min.')
     return impronte
+CARTELLA_PDF = 'pdf'              # un file PDF A4 per pasto, accanto all'HTML
+
+
+def assegna_pdf(blocks, impronta_modello):
+    """Aggiunge a ogni blocco block['pdf'] = 'pdf/<data>-<pasto>-<impronta>.pdf'.
+    L'impronta cambia se cambiano i piatti o l'aspetto del foglio: così il telefono
+    non mostra mai una copia vecchia rimasta in memoria."""
+    campi = ['date_it', 'date_en', 'meal_type_it', 'meal_type_en', 'Primi_it', 'Primi_en',
+             'Secondi_it', 'Secondi_en', 'Contorno_it', 'Contorno_en', 'Frutta_it', 'Frutta_en']
+    for block in blocks:
+        chiave = json.dumps([block.get(c) for c in campi], ensure_ascii=False) + impronta_modello
+        impronta = hashlib.sha1(chiave.encode('utf-8')).hexdigest()[:10]
+        block['pdf'] = f"{CARTELLA_PDF}/{block['date']}-{block['type'].lower()}-{impronta}.pdf"
+
+
+def genera_pdf(base, file_html, blocks):
+    """Crea i veri file PDF dei pasti (uno per pasto) con lo stesso foglio A4 della
+    pagina, stampato da Chromium tramite Playwright. Serve perché su iPhone/iPad la
+    stampa dalla pagina (window.print) non funziona, soprattutto con l'app sulla Home;
+    un file PDF vero invece si apre, si condivide, si salva e si stampa ovunque.
+    Crea solo i PDF nuovi o cambiati e cancella quelli non più usati.
+    Restituisce True se tutti i PDF sono pronti."""
+    cartella = base / CARTELLA_PDF
+    cartella.mkdir(exist_ok=True)
+    for p in cartella.glob('*.pdf.tmp'):   # resti di un'esecuzione interrotta
+        p.unlink()
+    usati = {Path(b['pdf']).name for b in blocks if b.get('pdf')}
+    vecchi = [p for p in cartella.glob('*.pdf') if p.name not in usati]
+    for p in vecchi:
+        p.unlink()
+    da_fare = [b for b in blocks if b.get('pdf') and not (base / b['pdf']).exists()]
+    if not da_fare:
+        print(f'PDF: {len(usati)} file già pronti, {len(vecchi)} vecchi cancellati.')
+        return True
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print('PDF non generati: installare con  pip install playwright  e poi  python -m playwright install chromium')
+        return False
+    print(f'PDF: creo {len(da_fare)} file...', flush=True)
+    inizio = time.time()
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch()
+            pagina = browser.new_page()
+            # nessun collegamento esterno: il contatore utenti non deve contare questo programma
+            pagina.route('**/*', lambda r: r.continue_() if r.request.url.startswith('file:') else r.abort())
+            pagina.goto(Path(file_html).resolve().as_uri())
+            pagina.wait_for_function('typeof menuData !== "undefined" && typeof apriPdf === "function"')
+            for n, block in enumerate(da_fare, 1):
+                pagina.evaluate("""([d, t]) => {
+                    currentIndex = menuData.findIndex(m => m.date === d && m.type === t);
+                    apriPdf();
+                }""", [block['date'], block['type']])
+                finale = base / block['pdf']
+                provvisorio = finale.with_name(finale.name + '.tmp')
+                pagina.pdf(path=str(provvisorio), format='A4', print_background=True, prefer_css_page_size=True,
+                           margin={'top': '0', 'right': '0', 'bottom': '0', 'left': '0'})
+                provvisorio.replace(finale)
+                if n % 20 == 0:
+                    print(f'  PDF creati {n}/{len(da_fare)}', flush=True)
+            browser.close()
+    except Exception as e:
+        print(f'PDF non generati: {e}')
+        print('Se manca il browser di Playwright:  python -m playwright install chromium')
+        return False
+    print(f'PDF: {len(da_fare)} creati, {len(vecchi)} vecchi cancellati, in {time.time() - inizio:.0f} s.')
+    return True
+
 
 def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
     base = Path(__file__).resolve().parent
@@ -859,7 +932,7 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
             <p>Alternative: pagina 5 dei PDF autunnali. La sezione Frutta / Dessert riporta le alternative indicate. I refusi 2025 nelle date sono ricondotti alla decorrenza 2026.</p>
             <p>Voci della lettura / Reading voices: <a href="https://github.com/OHF-Voice/piper1-gpl">Piper</a> · Serena (<a href="https://huggingface.co/datasets/committa/serena-synthetic-it-27h">dataset serena-synthetic-it-27h</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) · Cori (registrazioni <a href="https://librivox.org">LibriVox</a>, pubblico dominio / public domain).</p>
         </details>
-        <button class="pdf-btn" id="btn-pdf" onclick="apriPdf()" aria-label="Menu in PDF A4 da leggere o stampare / Menu as A4 PDF to read or print" title="PDF A4">PDF</button>
+        <button class="pdf-btn" id="btn-pdf" onclick="menuPdf()" aria-label="Menu in PDF A4 da leggere o stampare / Menu as A4 PDF to read or print" title="PDF A4">PDF</button>
         <button class="manuale-btn" id="btn-manuale" onclick="manualeVoce(event)" aria-label="Ascolta il manuale / Listen to the user guide" title="Ascolta il manuale / Listen to the guide"><span aria-hidden="true">🔊</span></button>
         <button class="share-btn" id="btn-condividi" onclick="apriCondivisione()" aria-label="Condividi o salva sulla Home / Share or save to Home screen" title="Condividi / Salva sulla Home">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
@@ -1472,7 +1545,23 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         }
 
         // --- Menu in PDF: foglio A4 verticale da leggere, stampare o salvare in PDF ---
+        // Con la connessione il tasto PDF apre il vero file PDF del pasto (cartella pdf):
+        // funziona anche su iPhone/iPad, pure con l'app sulla Home, dove la stampa
+        // dalla pagina non va. Senza connessione (o senza PDF) mostra il foglio nella pagina.
+        const PDF_DISPONIBILI = __PDF_DISPONIBILI__;
+        function menuPdf() {
+            const meal = menuData[currentIndex];
+            if (PDF_DISPONIBILI && meal && meal.pdf && navigator.onLine !== false && location.protocol.startsWith('http')) {
+                const a = document.createElement('a');
+                a.href = meal.pdf; a.target = '_blank'; a.rel = 'noopener';
+                document.body.appendChild(a); a.click(); a.remove();
+                return;
+            }
+            apriPdf();
+        }
+
         function apriPdf() {
+
             const meal = menuData[currentIndex];
             if (!meal) return;
             const isIt = currentLang === 'it';   // il foglio è bilingue; la lingua vale solo per i tasti
@@ -1605,6 +1694,9 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         genera_audio(base, blocks)
         impronte_manuale = genera_audio_manuale(base)
 
+    # PDF veri dei pasti: il nome contiene un'impronta di piatti e aspetto del foglio
+    assegna_pdf(blocks, hashlib.sha1((html_template + PAGINA_URL).encode('utf-8')).hexdigest())
+
     contatore_url = CONTATORE_URL.strip().rstrip('/')
     html_code = (html_template.replace('__CONTATORE_URL__', contatore_url)
                  .replace('__QR_SVG__', qr_svg(PAGINA_URL))
@@ -1614,8 +1706,13 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
                  .replace('__CARTELLA_URL__', CARTELLA_URL)
                  .replace('__JSON_DATA__', json.dumps(blocks)))
 
+    # prima scrittura (serve a Playwright per stampare i fogli), poi la versione
+    # definitiva che dice alla pagina se i PDF sono pronti
     with open(file_output, 'w', encoding='utf-8') as f:
-        f.write(html_code)
+        f.write(html_code.replace('__PDF_DISPONIBILI__', 'false'))
+    pdf_pronti = genera_pdf(base, file_output, blocks)
+    with open(file_output, 'w', encoding='utf-8') as f:
+        f.write(html_code.replace('__PDF_DISPONIBILI__', 'true' if pdf_pronti else 'false'))
 
     prepara_icone(base)
     scrivi_file_app(base, datetime.now().strftime('%Y%m%d%H%M%S'))

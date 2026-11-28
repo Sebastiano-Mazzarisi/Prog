@@ -105,8 +105,10 @@ In fondo alla pagina:
 
 8. MENU IN PDF: LEGGERE E STAMPARE
 
-- In fondo alla pagina toccare l'ovale PDF. Il pasto che si sta
-  guardando compare come foglio A4 verticale.
+- In fondo alla pagina toccare l'ovale PDF. Si apre il file PDF del
+  pasto che si sta guardando, un foglio A4 verticale. Da lì, con il
+  tasto Condividi del telefono o del browser, lo si può inviare,
+  salvare (sull'iPhone: Salva su File) o stampare.
 - Il foglio è sempre in italiano e in inglese:
   - in alto titolo e data in tutte e due le lingue, per esempio
     "IMT - PRANZO | LUNCH";
@@ -114,7 +116,8 @@ In fondo alla pagina:
     a destra, riga per riga;
   - in fondo il QR code della pagina, comodo per chi trova il foglio
     stampato.
-- In alto ci sono due tasti:
+- Senza connessione il foglio compare dentro la pagina, con due tasti
+  in alto:
   - "Stampa / Salva PDF" apre la stampa del dispositivo; da lì si
     sceglie la stampante oppure "Salva come PDF" (sull'iPhone: Stampa,
     poi Condividi e Salva su File);

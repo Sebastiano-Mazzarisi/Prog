@@ -102,8 +102,10 @@ At the bottom of the page:
 
 8. MENU AS A PDF: READ AND PRINT
 
-- At the bottom of the page, tap the PDF oval. The meal you are looking
-  at appears as a portrait A4 sheet.
+- At the bottom of the page, tap the PDF oval. The PDF file of the meal
+  you are looking at opens, a portrait A4 sheet. From there, with the
+  Share button of your phone or browser, you can send it, save it (on
+  iPhone: Save to Files) or print it.
 - The sheet is always in Italian and English:
   - at the top, title and date in both languages, for example
     "IMT - PRANZO | LUNCH";
@@ -111,7 +113,8 @@ At the bottom of the page:
     right, line by line;
   - at the bottom, the QR code of the page, handy for anyone who finds
     the printed sheet.
-- At the top there are two buttons:
+- Without a connection the sheet appears inside the page, with two
+  buttons at the top:
   - "Print / Save PDF" opens your device's print dialog; from there
     choose a printer or "Save as PDF" (on iPhone: Print, then Share and
     Save to Files);

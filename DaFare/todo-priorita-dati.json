@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1795886096350,
+  "updatedAt": 1795886110662,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -184,16 +184,6 @@
       "color": ""
     },
     {
-      "id": "1794934611564-d6fb3f96c1d0e",
-      "type": "note",
-      "parentId": "1794934436781-bfa218d018ba1",
-      "order": -2,
-      "text": "Atto per vendita locali a Vito e Mariella",
-      "done": false,
-      "star": false,
-      "color": ""
-    },
-    {
       "id": "1794934611564-7f5d558e28dd18",
       "type": "note",
       "parentId": "1794934436781-bfa218d018ba1",
@@ -283,11 +273,6 @@
     {
       "id": "1794933735407-3a03ab88432cb8",
       "text": "Prenotare ombrellone 2027",
-      "state": "normal"
-    },
-    {
-      "id": "1794934611564-d6fb3f96c1d0e",
-      "text": "Atto per vendita locali a Vito e Mariella",
       "state": "normal"
     },
     {

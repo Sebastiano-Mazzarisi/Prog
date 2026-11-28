@@ -1,7 +1,7 @@
 // sw.js - generato da Genera-IMT.py: permette l'installazione come app.
 // Strategia "prima la rete": la pagina è sempre aggiornata; la copia salvata
 // serve solo quando manca la connessione.
-const CACHE = 'imt-menu-20261128093449';
+const CACHE = 'imt-menu-20261128093823';
 self.addEventListener('install', e => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(
     caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n))))

@@ -656,7 +656,7 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         .pdf-area { padding: 16px 0 24px; }
         .pdf-cornice { margin: 0 auto; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.35); background: white; }
         .pdf-foglio { width: 794px; height: 1123px; box-sizing: border-box; padding: 64px 72px 56px; background: white; color: #1c1c1e; transform-origin: top left; display: flex; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        .pdf-testa { border-radius: 14px; padding: 22px 28px; text-align: center; background: #007aff; color: white; }
+        .pdf-testa { border-radius: 14px; padding: 22px 28px; text-align: center; background: #007aff; color: white; border: 1px solid rgba(0,0,0,0.55); }
         .pdf-testa.cena { background: #d1b246; color: #1c1c1e; }
         .pdf-testa .pdf-tipo { font-size: 38px; font-weight: 800; letter-spacing: 0.03em; }
         .pdf-testa .pdf-data { font-size: 19px; font-weight: 600; margin-top: 6px; }
@@ -665,11 +665,10 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         .pdf-corpo { flex: 1; display: flex; flex-direction: column; gap: 16px; margin-top: 22px; }
         .pdf-portata { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 16px; line-height: 1.35; }
         .pdf-portata th { padding: 6px 10px; font-size: 16px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0056b3; background: #e6f4ff; text-align: left; }
-        .pdf-portata th:first-child { border-radius: 6px 0 0 6px; }
-        .pdf-portata th:last-child { border-radius: 0 6px 6px 0; }
+        .pdf-portata th { border: 1px solid rgba(0,0,0,0.55); }
         .pdf-portata td { padding: 3px 10px 3px 24px; border-bottom: 1px solid #e5e5ea; vertical-align: top; position: relative; }
         .pdf-portata td:not(:empty)::before { content: ''; position: absolute; left: 10px; top: 0.85em; width: 6px; height: 6px; border-radius: 50%; background: #007aff; }
-        .pdf-portata td + td, .pdf-portata th + th { border-left: 1px solid #d1d1d6; }
+        .pdf-portata td + td { border-left: 1px solid #d1d1d6; }
         .pdf-portata td strong { font-weight: 800; }
         .pdf-piede { border-top: 1px solid #d1d1d6; padding-top: 10px; font-size: 13px; color: #52525b; display: flex; justify-content: space-between; gap: 16px; }
         .pdf-qr { display: flex; justify-content: center; margin-bottom: 10px; }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1795886079134,
+  "updatedAt": 1795886090366,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -10,16 +10,6 @@
       "order": 0,
       "text": "Angelo - Zanzariere vano caldaie",
       "done": false,
-      "star": false,
-      "color": ""
-    },
-    {
-      "id": "1794928084148-06b6e76dd072c8",
-      "type": "note",
-      "parentId": "1794932132324-732cb74e79ac08",
-      "order": 1,
-      "text": "Cesare elettricista a casa",
-      "done": true,
       "star": false,
       "color": ""
     },
@@ -249,11 +239,6 @@
       "id": "1794928367617-9b9f713c4bb0c",
       "text": "Angelo - Zanzariere vano caldaie",
       "state": "normal"
-    },
-    {
-      "id": "1794928084148-06b6e76dd072c8",
-      "text": "Cesare elettricista a casa",
-      "state": "done"
     },
     {
       "id": "1794932671978-3785689db23948",

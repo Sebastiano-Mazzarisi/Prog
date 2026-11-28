@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": 1795886110662,
+  "updatedAt": 1795886117742,
   "updatedBy": "1794932108647-fe791f52172ce8",
   "items": [
     {
@@ -184,16 +184,6 @@
       "color": ""
     },
     {
-      "id": "1794934611564-7f5d558e28dd18",
-      "type": "note",
-      "parentId": "1794934436781-bfa218d018ba1",
-      "order": -1,
-      "text": "Attendere risposta definitiva da Antonio Andriola",
-      "done": false,
-      "star": false,
-      "color": ""
-    },
-    {
       "id": "1794934611564-dbc187d9a0db38",
       "type": "note",
       "parentId": "1794934436781-bfa218d018ba1",
@@ -273,11 +263,6 @@
     {
       "id": "1794933735407-3a03ab88432cb8",
       "text": "Prenotare ombrellone 2027",
-      "state": "normal"
-    },
-    {
-      "id": "1794934611564-7f5d558e28dd18",
-      "text": "Attendere risposta definitiva da Antonio Andriola",
       "state": "normal"
     },
     {

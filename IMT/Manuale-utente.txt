@@ -109,6 +109,10 @@ In fondo alla pagina:
   pasto che si sta guardando, un foglio A4 verticale. Da lì, con il
   tasto Condividi del telefono o del browser, lo si può inviare,
   salvare (sull'iPhone: Salva su File) o stampare.
+- Sull'iPhone, se il menu è salvato sulla Home, il foglio compare
+  invece dentro la pagina, con due tasti in alto: "Condividi / Stampa"
+  apre il pannello Condividi dell'iPhone (da lì Stampa, Salva su File,
+  WhatsApp...), "Esci" torna al menu.
 - Il foglio è sempre in italiano e in inglese:
   - in alto titolo e data in tutte e due le lingue, per esempio
     "IMT - PRANZO | LUNCH";

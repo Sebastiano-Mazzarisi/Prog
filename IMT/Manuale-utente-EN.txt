@@ -106,6 +106,10 @@ At the bottom of the page:
   you are looking at opens, a portrait A4 sheet. From there, with the
   Share button of your phone or browser, you can send it, save it (on
   iPhone: Save to Files) or print it.
+- On iPhone, if the menu is saved to the Home screen, the sheet appears
+  inside the page instead, with two buttons at the top: "Share / Print"
+  opens the iPhone Share panel (from there Print, Save to Files,
+  WhatsApp...), "Exit" goes back to the menu.
 - The sheet is always in Italian and English:
   - at the top, title and date in both languages, for example
     "IMT - PRANZO | LUNCH";

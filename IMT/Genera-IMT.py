@@ -1,5 +1,5 @@
 # Nome.py: GeneraMenu.py
-# Ultimo aggiornamento: 28/11/2026 (PDF veri dei pasti, cartella pdf: funzionano anche su iPhone/iPad)
+# Ultimo aggiornamento: 28/11/2026 (PDF su iPhone con l'app sulla Home: foglio nella pagina + Condividi)
 # Descrizione: Legge menu-giornaliero-completo-autunno-2026.xlsx e genera Menu-IMT.html.
 #              Generazione del file menu_siri.json con date multi-formato per evitare
 #              qualsiasi formattazione lato iOS Shortcuts.
@@ -1549,8 +1549,28 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         // funziona anche su iPhone/iPad, pure con l'app sulla Home, dove la stampa
         // dalla pagina non va. Senza connessione (o senza PDF) mostra il foglio nella pagina.
         const PDF_DISPONIBILI = __PDF_DISPONIBILI__;
+        // iPhone/iPad con il menu salvato sulla Home: lì un PDF aperto riempie lo schermo
+        // senza alcun tasto per tornare indietro, e la stampa dalla pagina non funziona.
+        // Quindi il foglio si mostra dentro la pagina (con "Esci") e il tasto di stampa
+        // passa il vero file PDF al pannello Condividi dell'iPhone (Stampa, Salva su File...).
+        function appIos() {
+            const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            const app = navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+            return ios && app;
+        }
+        let filePdf = null;
+        function preparaFilePdf(meal) {
+            filePdf = null;
+            if (!(PDF_DISPONIBILI && meal && meal.pdf && navigator.onLine !== false)) return;
+            const nome = `Menu-IMT-${meal.date}-${meal.type.toLowerCase()}.pdf`;
+            fetch(meal.pdf).then(r => r.ok ? r.blob() : null).then(b => {
+                if (b && menuData[currentIndex] === meal) filePdf = new File([b], nome, { type: 'application/pdf' });
+            }).catch(() => {});
+        }
+
         function menuPdf() {
             const meal = menuData[currentIndex];
+            if (appIos()) { apriPdf(); preparaFilePdf(meal); return; }
             if (PDF_DISPONIBILI && meal && meal.pdf && navigator.onLine !== false && location.protocol.startsWith('http')) {
                 const a = document.createElement('a');
                 a.href = meal.pdf; a.target = '_blank'; a.rel = 'noopener';
@@ -1589,7 +1609,9 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
                 `<div class="pdf-corpo">${corpo}</div>` +
                 (qr ? `<div class="pdf-qr">${qr}</div>` : '') +
                 `<div class="pdf-piede"><span>${PAGINA_URL.replace('https://', '')}</span><span>by Mazzarisi</span></div>`;
-            document.getElementById('pdf-stampa').textContent = isIt ? 'Stampa / Salva PDF' : 'Print / Save PDF';
+            document.getElementById('pdf-stampa').textContent = appIos()
+                ? (isIt ? 'Condividi / Stampa' : 'Share / Print')
+                : (isIt ? 'Stampa / Salva PDF' : 'Print / Save PDF');
             document.getElementById('pdf-esci').textContent = isIt ? 'Esci' : 'Exit';
             document.getElementById('pdf-overlay').classList.remove('hidden');
             document.body.classList.add('stampa-pdf');
@@ -1608,7 +1630,19 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         }
         window.addEventListener('resize', scalaPdf);
 
-        function stampaPdf() { window.print(); }
+        function stampaPdf() {
+            if (appIos()) {
+                if (filePdf && navigator.canShare && navigator.canShare({ files: [filePdf] })) {
+                    navigator.share({ files: [filePdf], title: 'Menu IMT' }).catch(() => {});
+                    return;
+                }
+                const isIt = currentLang === 'it';
+                alert(isIt ? 'Il file PDF non è ancora pronto: riprova tra un attimo (serve la connessione).'
+                           : 'The PDF file is not ready yet: try again in a moment (a connection is needed).');
+                return;
+            }
+            window.print();
+        }
 
         function chiudiPdf() {
             document.getElementById('pdf-overlay').classList.add('hidden');
@@ -1695,7 +1729,10 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         impronte_manuale = genera_audio_manuale(base)
 
     # PDF veri dei pasti: il nome contiene un'impronta di piatti e aspetto del foglio
-    assegna_pdf(blocks, hashlib.sha1((html_template + PAGINA_URL).encode('utf-8')).hexdigest())
+    # (contano solo le righe del modello che riguardano il foglio PDF: le modifiche al
+    # resto della pagina non costringono a rifare e ricaricare tutti i 182 PDF)
+    righe_foglio = [r for r in html_template.splitlines() if 'pdf' in r.lower() or 'qr' in r.lower()]
+    assegna_pdf(blocks, hashlib.sha1(('\n'.join(righe_foglio) + PAGINA_URL).encode('utf-8')).hexdigest())
 
     contatore_url = CONTATORE_URL.strip().rstrip('/')
     html_code = (html_template.replace('__CONTATORE_URL__', contatore_url)

@@ -19,6 +19,9 @@
 #              (introduzione, portata, piatto, saluto) c'è una pausa di mezzo secondo;
 #              le alternative di una portata sono lette di seguito in un'unica frase,
 #              senza pause: "Minestrone oppure spaghetti." ("or" in inglese).
+#              Confetto PDF in basso a destra: mostra il pasto su un foglio A4
+#              verticale con i tasti "Stampa / Salva PDF" ed "Esci"; in fondo al foglio
+#              un QR code di 2 cm che porta alla pagina (serve  pip install qrcode).
 #              Alla partenza cancella tutti i vecchi MP3 non più usati; crea solo
 #              quelli nuovi. Ogni frase diversa è letta una volta sola (molte si
 #              ripetono tra un giorno e l'altro), dividendo il lavoro tra più
@@ -186,6 +189,24 @@ def righe_lettura(block, lingua):
     righe.append((('Buon pranzo!' if pranzo else 'Buona cena!') if it else
                   ('Enjoy your lunch!' if pranzo else 'Enjoy your dinner!'), PAUSA_RIGA_S))
     return righe
+
+def qr_svg(testo):
+    """QR code del testo come SVG (moduli neri su bianco, scalabile). Serve il pacchetto qrcode;
+    se manca restituisce una stringa vuota e la pagina funziona lo stesso, senza QR."""
+    try:
+        import qrcode
+    except ImportError:
+        print('QR code non inserito nel foglio PDF: installare con  pip install qrcode')
+        return ''
+    q = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, border=0)
+    q.add_data(testo)
+    q.make(fit=True)
+    m = q.get_matrix()
+    n = len(m)
+    d = ''.join(f'M{x},{y}h1v1h-1z' for y, riga in enumerate(m) for x, scuro in enumerate(riga) if scuro)
+    return (f'<svg viewBox="-2 -2 {n + 4} {n + 4}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" '
+            f'role="img" aria-label="QR code"><rect x="-2" y="-2" width="{n + 4}" height="{n + 4}" fill="#fff"/>'
+            f'<path d="{d}" fill="#000"/></svg>')
 
 def togli_silenzi(pcm, frequenza, canali, larghezza, soglia=300, margine_s=0.03):
     """Toglie il silenzio che Piper aggiunge all'inizio e alla fine di ogni frase,
@@ -624,6 +645,39 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
         .footer-row .source-note { flex: 1; min-width: 0; }
         .share-btn { flex-shrink: 0; border: none; background: none; color: #007aff; width: 40px; height: 40px; margin-top: 1px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .share-btn:hover, .share-btn:active { background: #e6f4ff; }
+        .pdf-btn { flex-shrink: 0; align-self: center; margin-top: 1px; padding: 5px 14px; background: #e6f4ff; color: #007aff; border: 1px solid #b3d7ff; border-radius: 999px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; }
+        .pdf-btn:hover, .pdf-btn:active { background: #cce6ff; }
+        .share-overlay.pdf-overlay { display: block; padding: 0; background: #8e8e93; overflow: auto; -webkit-overflow-scrolling: touch; }
+        .share-overlay.pdf-overlay.hidden { display: none !important; }
+        .pdf-barra { position: sticky; top: 0; z-index: 2; display: flex; justify-content: center; gap: 10px; padding: 10px; background: #3a3a3c; }
+        .pdf-barra button { border: none; border-radius: 999px; padding: 9px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+        .pdf-stampa { background: #007aff; color: white; }
+        .pdf-esci { background: #ffffff; color: #1c1c1e; }
+        .pdf-area { padding: 16px 0 24px; }
+        .pdf-cornice { margin: 0 auto; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.35); background: white; }
+        .pdf-foglio { width: 794px; height: 1123px; box-sizing: border-box; padding: 64px 72px 56px; background: white; color: #1c1c1e; transform-origin: top left; display: flex; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .pdf-testa { border-radius: 14px; padding: 22px 28px; text-align: center; background: #007aff; color: white; }
+        .pdf-testa.cena { background: #d1b246; color: #1c1c1e; }
+        .pdf-testa .pdf-tipo { font-size: 40px; font-weight: 800; letter-spacing: 0.03em; }
+        .pdf-testa .pdf-data { font-size: 23px; font-weight: 600; margin-top: 4px; }
+        .pdf-corpo { flex: 1; display: flex; flex-direction: column; gap: 22px; margin-top: 30px; }
+        .pdf-portata h2 { margin: 0 0 8px; padding: 7px 10px; font-size: 19px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0056b3; background: #e6f4ff; border-radius: 6px; text-align: center; }
+        .pdf-portata ul { margin: 0; padding: 0 0 0 26px; font-size: 21px; line-height: 1.5; }
+        .pdf-portata li strong { font-weight: 800; }
+        .pdf-piede { border-top: 1px solid #d1d1d6; padding-top: 12px; font-size: 13px; color: #52525b; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
+        .pdf-piede-testi { display: flex; flex-direction: column; gap: 4px; line-height: 1.4; }
+        .pdf-qr { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; font-size: 12px; }
+        .pdf-qr svg { width: 2cm; height: 2cm; display: block; }
+        @media print {
+            @page { size: A4 portrait; margin: 0; }
+            html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
+            body.stampa-pdf > *:not(#pdf-overlay) { display: none !important; }
+            body.stampa-pdf #pdf-overlay { position: static; display: block; background: white; overflow: visible; padding: 0; }
+            body.stampa-pdf .pdf-barra { display: none !important; }
+            body.stampa-pdf .pdf-area { padding: 0; }
+            body.stampa-pdf .pdf-cornice { width: auto !important; height: auto !important; box-shadow: none; margin: 0; overflow: visible; }
+            body.stampa-pdf .pdf-foglio { transform: none !important; width: 210mm; height: 296mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
         .share-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; padding: 10px; box-sizing: border-box; }
         .share-panel { background: white; border-radius: 14px; width: 100%; max-width: 480px; padding: 16px; box-sizing: border-box; position: relative; max-height: 90vh; overflow: auto; font-size: 0.9rem; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
         .share-panel h3 { margin: 0 0 12px; font-size: 1rem; text-align: center; }
@@ -682,10 +736,20 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
             <p>Alternative: pagina 5 dei PDF autunnali. La sezione Frutta / Dessert riporta le alternative indicate. I refusi 2025 nelle date sono ricondotti alla decorrenza 2026.</p>
             <p>Voci della lettura / Reading voices: <a href="https://github.com/OHF-Voice/piper1-gpl">Piper</a> · Serena (<a href="https://huggingface.co/datasets/committa/serena-synthetic-it-27h">dataset serena-synthetic-it-27h</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) · Cori (registrazioni <a href="https://librivox.org">LibriVox</a>, pubblico dominio / public domain).</p>
         </details>
+        <button class="pdf-btn" id="btn-pdf" onclick="apriPdf()" aria-label="Menu in PDF A4 da leggere o stampare / Menu as A4 PDF to read or print" title="PDF A4">PDF</button>
         <button class="share-btn" id="btn-condividi" onclick="apriCondivisione()" aria-label="Condividi o salva sulla Home / Share or save to Home screen" title="Condividi / Salva sulla Home">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
         </button>
         </div>
+    </div>
+
+    <div class="share-overlay pdf-overlay hidden" id="pdf-overlay" role="dialog" aria-modal="true" aria-label="Menu PDF A4">
+        <div class="pdf-barra">
+            <button class="pdf-stampa" id="pdf-stampa" onclick="stampaPdf()">Stampa / Salva PDF</button>
+            <button class="pdf-esci" id="pdf-esci" onclick="chiudiPdf()">Esci</button>
+        </div>
+        <template id="pdf-qr">__QR_SVG__</template>
+        <div class="pdf-area"><div class="pdf-cornice" id="pdf-cornice"><div class="pdf-foglio" id="pdf-foglio"></div></div></div>
     </div>
 
     <div class="share-overlay hidden" id="share-overlay" onclick="if (event.target === this) chiudiCondivisione()">
@@ -918,7 +982,7 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
 
         window.addEventListener('keydown', function(e) {
             if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
-            if (document.querySelector('.share-overlay:not(.hidden)')) { if (e.key === 'Escape') { chiudiCondivisione(); chiudiUtenti(); } return; }
+            if (document.querySelector('.share-overlay:not(.hidden)')) { if (e.key === 'Escape') { chiudiCondivisione(); chiudiUtenti(); chiudiPdf(); } return; }
             if (e.key === 'ArrowLeft') document.getElementById('btn-prev').click();
             else if (e.key === 'ArrowRight') document.getElementById('btn-next').click();
         });
@@ -1256,6 +1320,56 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
             aggiornaUtenti();
         }
 
+        // --- Menu in PDF: foglio A4 verticale da leggere, stampare o salvare in PDF ---
+        function apriPdf() {
+            const meal = menuData[currentIndex];
+            if (!meal) return;
+            const isIt = currentLang === 'it';
+            const portate = [
+                ['Primi', 'First Courses', meal.Primi_it, meal.Primi_en],
+                ['Secondi', 'Main Courses', meal.Secondi_it, meal.Secondi_en],
+                ['Contorni', 'Side Dishes', meal.Contorno_it, meal.Contorno_en],
+                ['Frutta / Dessert', 'Fruit & Dessert', meal.Frutta_it, meal.Frutta_en]
+            ];
+            let corpo = '';
+            portate.forEach(p => {
+                const voci = isIt ? p[2] : p[3];
+                if (voci && voci.length) corpo += `<div class="pdf-portata"><h2>${isIt ? p[0] : p[1]}</h2><ul>${voci.map(v => `<li>${v}</li>`).join('')}</ul></div>`;
+            });
+            const cena = meal.type.toLowerCase() !== 'pranzo';
+            const qr = document.getElementById('pdf-qr').innerHTML.trim();
+            document.getElementById('pdf-foglio').innerHTML =
+                `<div class="pdf-testa${cena ? ' cena' : ''}"><div class="pdf-tipo">IMT - ${isIt ? meal.meal_type_it : meal.meal_type_en}</div><div class="pdf-data">${isIt ? meal.date_it : meal.date_en}</div></div>` +
+                `<div class="pdf-corpo">${corpo}</div>` +
+                `<div class="pdf-piede"><div class="pdf-piede-testi"><span>${isIt ? 'Piatti del giorno in grassetto' : 'Daily dishes in bold'}</span><span>${PAGINA_URL.replace('https://', '')}</span><span>by Mazzarisi</span></div>` +
+                (qr ? `<div class="pdf-qr">${qr}</div>` : '') + `</div>`;
+            document.getElementById('pdf-stampa').textContent = isIt ? 'Stampa / Salva PDF' : 'Print / Save PDF';
+            document.getElementById('pdf-esci').textContent = isIt ? 'Esci' : 'Exit';
+            document.getElementById('pdf-overlay').classList.remove('hidden');
+            document.body.classList.add('stampa-pdf');
+            document.body.style.overflow = 'hidden';
+            scalaPdf();
+        }
+
+        function scalaPdf() {
+            const ov = document.getElementById('pdf-overlay');
+            if (ov.classList.contains('hidden')) return;
+            const scala = Math.min(1, (ov.clientWidth - 24) / 794);
+            document.getElementById('pdf-foglio').style.transform = `scale(${scala})`;
+            const cornice = document.getElementById('pdf-cornice');
+            cornice.style.width = Math.round(794 * scala) + 'px';
+            cornice.style.height = Math.round(1123 * scala) + 'px';
+        }
+        window.addEventListener('resize', scalaPdf);
+
+        function stampaPdf() { window.print(); }
+
+        function chiudiPdf() {
+            document.getElementById('pdf-overlay').classList.add('hidden');
+            document.body.classList.remove('stampa-pdf');
+            document.body.style.overflow = '';
+        }
+
         function chiudiCondivisione() {
             document.getElementById('share-overlay').classList.add('hidden');
         }
@@ -1334,6 +1448,7 @@ def genera_html(file_input=None, traduci=False, audio=True, prova_audio=False):
 
     contatore_url = CONTATORE_URL.strip().rstrip('/')
     html_code = (html_template.replace('__CONTATORE_URL__', contatore_url)
+                 .replace('__QR_SVG__', qr_svg(PAGINA_URL))
                  .replace('__PAGINA_URL__', PAGINA_URL)
                  .replace('__CARTELLA_URL__', CARTELLA_URL)
                  .replace('__JSON_DATA__', json.dumps(blocks)))

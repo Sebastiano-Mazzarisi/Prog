@@ -72,6 +72,39 @@
         .footer-row .source-note { flex: 1; min-width: 0; }
         .share-btn { flex-shrink: 0; border: none; background: none; color: #007aff; width: 40px; height: 40px; margin-top: 1px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .share-btn:hover, .share-btn:active { background: #e6f4ff; }
+        .pdf-btn { flex-shrink: 0; align-self: center; margin-top: 1px; padding: 5px 14px; background: #e6f4ff; color: #007aff; border: 1px solid #b3d7ff; border-radius: 999px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; }
+        .pdf-btn:hover, .pdf-btn:active { background: #cce6ff; }
+        .share-overlay.pdf-overlay { display: block; padding: 0; background: #8e8e93; overflow: auto; -webkit-overflow-scrolling: touch; }
+        .share-overlay.pdf-overlay.hidden { display: none !important; }
+        .pdf-barra { position: sticky; top: 0; z-index: 2; display: flex; justify-content: center; gap: 10px; padding: 10px; background: #3a3a3c; }
+        .pdf-barra button { border: none; border-radius: 999px; padding: 9px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+        .pdf-stampa { background: #007aff; color: white; }
+        .pdf-esci { background: #ffffff; color: #1c1c1e; }
+        .pdf-area { padding: 16px 0 24px; }
+        .pdf-cornice { margin: 0 auto; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.35); background: white; }
+        .pdf-foglio { width: 794px; height: 1123px; box-sizing: border-box; padding: 64px 72px 56px; background: white; color: #1c1c1e; transform-origin: top left; display: flex; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .pdf-testa { border-radius: 14px; padding: 22px 28px; text-align: center; background: #007aff; color: white; }
+        .pdf-testa.cena { background: #d1b246; color: #1c1c1e; }
+        .pdf-testa .pdf-tipo { font-size: 40px; font-weight: 800; letter-spacing: 0.03em; }
+        .pdf-testa .pdf-data { font-size: 23px; font-weight: 600; margin-top: 4px; }
+        .pdf-corpo { flex: 1; display: flex; flex-direction: column; gap: 22px; margin-top: 30px; }
+        .pdf-portata h2 { margin: 0 0 8px; padding: 7px 10px; font-size: 19px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0056b3; background: #e6f4ff; border-radius: 6px; text-align: center; }
+        .pdf-portata ul { margin: 0; padding: 0 0 0 26px; font-size: 21px; line-height: 1.5; }
+        .pdf-portata li strong { font-weight: 800; }
+        .pdf-piede { border-top: 1px solid #d1d1d6; padding-top: 12px; font-size: 13px; color: #52525b; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
+        .pdf-piede-testi { display: flex; flex-direction: column; gap: 4px; line-height: 1.4; }
+        .pdf-qr { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; font-size: 12px; }
+        .pdf-qr svg { width: 2cm; height: 2cm; display: block; }
+        @media print {
+            @page { size: A4 portrait; margin: 0; }
+            html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
+            body.stampa-pdf > *:not(#pdf-overlay) { display: none !important; }
+            body.stampa-pdf #pdf-overlay { position: static; display: block; background: white; overflow: visible; padding: 0; }
+            body.stampa-pdf .pdf-barra { display: none !important; }
+            body.stampa-pdf .pdf-area { padding: 0; }
+            body.stampa-pdf .pdf-cornice { width: auto !important; height: auto !important; box-shadow: none; margin: 0; overflow: visible; }
+            body.stampa-pdf .pdf-foglio { transform: none !important; width: 210mm; height: 296mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
         .share-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; padding: 10px; box-sizing: border-box; }
         .share-panel { background: white; border-radius: 14px; width: 100%; max-width: 480px; padding: 16px; box-sizing: border-box; position: relative; max-height: 90vh; overflow: auto; font-size: 0.9rem; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
         .share-panel h3 { margin: 0 0 12px; font-size: 1rem; text-align: center; }
@@ -130,10 +163,20 @@
             <p>Alternative: pagina 5 dei PDF autunnali. La sezione Frutta / Dessert riporta le alternative indicate. I refusi 2025 nelle date sono ricondotti alla decorrenza 2026.</p>
             <p>Voci della lettura / Reading voices: <a href="https://github.com/OHF-Voice/piper1-gpl">Piper</a> · Serena (<a href="https://huggingface.co/datasets/committa/serena-synthetic-it-27h">dataset serena-synthetic-it-27h</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) · Cori (registrazioni <a href="https://librivox.org">LibriVox</a>, pubblico dominio / public domain).</p>
         </details>
+        <button class="pdf-btn" id="btn-pdf" onclick="apriPdf()" aria-label="Menu in PDF A4 da leggere o stampare / Menu as A4 PDF to read or print" title="PDF A4">PDF</button>
         <button class="share-btn" id="btn-condividi" onclick="apriCondivisione()" aria-label="Condividi o salva sulla Home / Share or save to Home screen" title="Condividi / Salva sulla Home">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
         </button>
         </div>
+    </div>
+
+    <div class="share-overlay pdf-overlay hidden" id="pdf-overlay" role="dialog" aria-modal="true" aria-label="Menu PDF A4">
+        <div class="pdf-barra">
+            <button class="pdf-stampa" id="pdf-stampa" onclick="stampaPdf()">Stampa / Salva PDF</button>
+            <button class="pdf-esci" id="pdf-esci" onclick="chiudiPdf()">Esci</button>
+        </div>
+        <template id="pdf-qr"><svg viewBox="-2 -2 37 37" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" role="img" aria-label="QR code"><rect x="-2" y="-2" width="37" height="37" fill="#fff"/><path d="M0,0h1v1h-1zM1,0h1v1h-1zM2,0h1v1h-1zM3,0h1v1h-1zM4,0h1v1h-1zM5,0h1v1h-1zM6,0h1v1h-1zM8,0h1v1h-1zM10,0h1v1h-1zM13,0h1v1h-1zM16,0h1v1h-1zM17,0h1v1h-1zM19,0h1v1h-1zM20,0h1v1h-1zM22,0h1v1h-1zM23,0h1v1h-1zM26,0h1v1h-1zM27,0h1v1h-1zM28,0h1v1h-1zM29,0h1v1h-1zM30,0h1v1h-1zM31,0h1v1h-1zM32,0h1v1h-1zM0,1h1v1h-1zM6,1h1v1h-1zM8,1h1v1h-1zM9,1h1v1h-1zM10,1h1v1h-1zM12,1h1v1h-1zM17,1h1v1h-1zM18,1h1v1h-1zM23,1h1v1h-1zM24,1h1v1h-1zM26,1h1v1h-1zM32,1h1v1h-1zM0,2h1v1h-1zM2,2h1v1h-1zM3,2h1v1h-1zM4,2h1v1h-1zM6,2h1v1h-1zM9,2h1v1h-1zM13,2h1v1h-1zM15,2h1v1h-1zM18,2h1v1h-1zM19,2h1v1h-1zM23,2h1v1h-1zM26,2h1v1h-1zM28,2h1v1h-1zM29,2h1v1h-1zM30,2h1v1h-1zM32,2h1v1h-1zM0,3h1v1h-1zM2,3h1v1h-1zM3,3h1v1h-1zM4,3h1v1h-1zM6,3h1v1h-1zM8,3h1v1h-1zM9,3h1v1h-1zM10,3h1v1h-1zM21,3h1v1h-1zM22,3h1v1h-1zM24,3h1v1h-1zM26,3h1v1h-1zM28,3h1v1h-1zM29,3h1v1h-1zM30,3h1v1h-1zM32,3h1v1h-1zM0,4h1v1h-1zM2,4h1v1h-1zM3,4h1v1h-1zM4,4h1v1h-1zM6,4h1v1h-1zM10,4h1v1h-1zM14,4h1v1h-1zM15,4h1v1h-1zM16,4h1v1h-1zM19,4h1v1h-1zM20,4h1v1h-1zM23,4h1v1h-1zM24,4h1v1h-1zM26,4h1v1h-1zM28,4h1v1h-1zM29,4h1v1h-1zM30,4h1v1h-1zM32,4h1v1h-1zM0,5h1v1h-1zM6,5h1v1h-1zM10,5h1v1h-1zM11,5h1v1h-1zM12,5h1v1h-1zM14,5h1v1h-1zM17,5h1v1h-1zM19,5h1v1h-1zM20,5h1v1h-1zM24,5h1v1h-1zM26,5h1v1h-1zM32,5h1v1h-1zM0,6h1v1h-1zM1,6h1v1h-1zM2,6h1v1h-1zM3,6h1v1h-1zM4,6h1v1h-1zM5,6h1v1h-1zM6,6h1v1h-1zM8,6h1v1h-1zM10,6h1v1h-1zM12,6h1v1h-1zM14,6h1v1h-1zM16,6h1v1h-1zM18,6h1v1h-1zM20,6h1v1h-1zM22,6h1v1h-1zM24,6h1v1h-1zM26,6h1v1h-1zM27,6h1v1h-1zM28,6h1v1h-1zM29,6h1v1h-1zM30,6h1v1h-1zM31,6h1v1h-1zM32,6h1v1h-1zM8,7h1v1h-1zM10,7h1v1h-1zM16,7h1v1h-1zM17,7h1v1h-1zM24,7h1v1h-1zM0,8h1v1h-1zM2,8h1v1h-1zM3,8h1v1h-1zM5,8h1v1h-1zM6,8h1v1h-1zM7,8h1v1h-1zM11,8h1v1h-1zM12,8h1v1h-1zM14,8h1v1h-1zM15,8h1v1h-1zM16,8h1v1h-1zM17,8h1v1h-1zM18,8h1v1h-1zM19,8h1v1h-1zM21,8h1v1h-1zM23,8h1v1h-1zM24,8h1v1h-1zM26,8h1v1h-1zM29,8h1v1h-1zM31,8h1v1h-1zM32,8h1v1h-1zM2,9h1v1h-1zM4,9h1v1h-1zM5,9h1v1h-1zM10,9h1v1h-1zM11,9h1v1h-1zM13,9h1v1h-1zM17,9h1v1h-1zM19,9h1v1h-1zM20,9h1v1h-1zM23,9h1v1h-1zM26,9h1v1h-1zM27,9h1v1h-1zM29,9h1v1h-1zM30,9h1v1h-1zM31,9h1v1h-1zM32,9h1v1h-1zM0,10h1v1h-1zM1,10h1v1h-1zM2,10h1v1h-1zM3,10h1v1h-1zM4,10h1v1h-1zM5,10h1v1h-1zM6,10h1v1h-1zM8,10h1v1h-1zM9,10h1v1h-1zM11,10h1v1h-1zM12,10h1v1h-1zM13,10h1v1h-1zM16,10h1v1h-1zM17,10h1v1h-1zM22,10h1v1h-1zM23,10h1v1h-1zM24,10h1v1h-1zM25,10h1v1h-1zM27,10h1v1h-1zM28,10h1v1h-1zM29,10h1v1h-1zM31,10h1v1h-1zM32,10h1v1h-1zM0,11h1v1h-1zM2,11h1v1h-1zM5,11h1v1h-1zM8,11h1v1h-1zM9,11h1v1h-1zM16,11h1v1h-1zM18,11h1v1h-1zM19,11h1v1h-1zM20,11h1v1h-1zM26,11h1v1h-1zM27,11h1v1h-1zM29,11h1v1h-1zM31,11h1v1h-1zM0,12h1v1h-1zM2,12h1v1h-1zM3,12h1v1h-1zM4,12h1v1h-1zM5,12h1v1h-1zM6,12h1v1h-1zM8,12h1v1h-1zM14,12h1v1h-1zM19,12h1v1h-1zM20,12h1v1h-1zM21,12h1v1h-1zM22,12h1v1h-1zM24,12h1v1h-1zM25,12h1v1h-1zM27,12h1v1h-1zM28,12h1v1h-1zM29,12h1v1h-1zM32,12h1v1h-1zM1,13h1v1h-1zM2,13h1v1h-1zM3,13h1v1h-1zM9,13h1v1h-1zM10,13h1v1h-1zM11,13h1v1h-1zM14,13h1v1h-1zM15,13h1v1h-1zM16,13h1v1h-1zM19,13h1v1h-1zM21,13h1v1h-1zM22,13h1v1h-1zM25,13h1v1h-1zM26,13h1v1h-1zM31,13h1v1h-1zM0,14h1v1h-1zM1,14h1v1h-1zM3,14h1v1h-1zM4,14h1v1h-1zM6,14h1v1h-1zM9,14h1v1h-1zM10,14h1v1h-1zM11,14h1v1h-1zM12,14h1v1h-1zM16,14h1v1h-1zM17,14h1v1h-1zM19,14h1v1h-1zM22,14h1v1h-1zM24,14h1v1h-1zM26,14h1v1h-1zM27,14h1v1h-1zM29,14h1v1h-1zM3,15h1v1h-1zM4,15h1v1h-1zM8,15h1v1h-1zM10,15h1v1h-1zM12,15h1v1h-1zM15,15h1v1h-1zM16,15h1v1h-1zM18,15h1v1h-1zM19,15h1v1h-1zM20,15h1v1h-1zM21,15h1v1h-1zM22,15h1v1h-1zM23,15h1v1h-1zM25,15h1v1h-1zM26,15h1v1h-1zM28,15h1v1h-1zM29,15h1v1h-1zM30,15h1v1h-1zM2,16h1v1h-1zM4,16h1v1h-1zM5,16h1v1h-1zM6,16h1v1h-1zM9,16h1v1h-1zM12,16h1v1h-1zM14,16h1v1h-1zM18,16h1v1h-1zM19,16h1v1h-1zM20,16h1v1h-1zM21,16h1v1h-1zM22,16h1v1h-1zM23,16h1v1h-1zM25,16h1v1h-1zM26,16h1v1h-1zM28,16h1v1h-1zM29,16h1v1h-1zM30,16h1v1h-1zM1,17h1v1h-1zM2,17h1v1h-1zM3,17h1v1h-1zM7,17h1v1h-1zM9,17h1v1h-1zM11,17h1v1h-1zM14,17h1v1h-1zM15,17h1v1h-1zM17,17h1v1h-1zM20,17h1v1h-1zM22,17h1v1h-1zM23,17h1v1h-1zM24,17h1v1h-1zM26,17h1v1h-1zM28,17h1v1h-1zM29,17h1v1h-1zM31,17h1v1h-1zM32,17h1v1h-1zM2,18h1v1h-1zM3,18h1v1h-1zM4,18h1v1h-1zM5,18h1v1h-1zM6,18h1v1h-1zM10,18h1v1h-1zM12,18h1v1h-1zM15,18h1v1h-1zM16,18h1v1h-1zM20,18h1v1h-1zM21,18h1v1h-1zM22,18h1v1h-1zM24,18h1v1h-1zM27,18h1v1h-1zM28,18h1v1h-1zM30,18h1v1h-1zM31,18h1v1h-1zM0,19h1v1h-1zM2,19h1v1h-1zM5,19h1v1h-1zM7,19h1v1h-1zM8,19h1v1h-1zM10,19h1v1h-1zM11,19h1v1h-1zM12,19h1v1h-1zM15,19h1v1h-1zM17,19h1v1h-1zM18,19h1v1h-1zM26,19h1v1h-1zM28,19h1v1h-1zM32,19h1v1h-1zM0,20h1v1h-1zM1,20h1v1h-1zM2,20h1v1h-1zM4,20h1v1h-1zM5,20h1v1h-1zM6,20h1v1h-1zM7,20h1v1h-1zM9,20h1v1h-1zM10,20h1v1h-1zM11,20h1v1h-1zM12,20h1v1h-1zM14,20h1v1h-1zM18,20h1v1h-1zM21,20h1v1h-1zM22,20h1v1h-1zM29,20h1v1h-1zM30,20h1v1h-1zM0,21h1v1h-1zM8,21h1v1h-1zM9,21h1v1h-1zM10,21h1v1h-1zM11,21h1v1h-1zM14,21h1v1h-1zM16,21h1v1h-1zM19,21h1v1h-1zM20,21h1v1h-1zM21,21h1v1h-1zM23,21h1v1h-1zM25,21h1v1h-1zM26,21h1v1h-1zM30,21h1v1h-1zM32,21h1v1h-1zM3,22h1v1h-1zM6,22h1v1h-1zM13,22h1v1h-1zM17,22h1v1h-1zM23,22h1v1h-1zM24,22h1v1h-1zM26,22h1v1h-1zM27,22h1v1h-1zM29,22h1v1h-1zM30,22h1v1h-1zM31,22h1v1h-1zM32,22h1v1h-1zM1,23h1v1h-1zM3,23h1v1h-1zM5,23h1v1h-1zM7,23h1v1h-1zM8,23h1v1h-1zM10,23h1v1h-1zM11,23h1v1h-1zM13,23h1v1h-1zM16,23h1v1h-1zM18,23h1v1h-1zM19,23h1v1h-1zM20,23h1v1h-1zM23,23h1v1h-1zM24,23h1v1h-1zM26,23h1v1h-1zM0,24h1v1h-1zM2,24h1v1h-1zM3,24h1v1h-1zM4,24h1v1h-1zM5,24h1v1h-1zM6,24h1v1h-1zM7,24h1v1h-1zM8,24h1v1h-1zM9,24h1v1h-1zM10,24h1v1h-1zM11,24h1v1h-1zM12,24h1v1h-1zM16,24h1v1h-1zM17,24h1v1h-1zM22,24h1v1h-1zM23,24h1v1h-1zM24,24h1v1h-1zM25,24h1v1h-1zM26,24h1v1h-1zM27,24h1v1h-1zM28,24h1v1h-1zM31,24h1v1h-1zM32,24h1v1h-1zM8,25h1v1h-1zM9,25h1v1h-1zM13,25h1v1h-1zM15,25h1v1h-1zM16,25h1v1h-1zM17,25h1v1h-1zM18,25h1v1h-1zM19,25h1v1h-1zM20,25h1v1h-1zM21,25h1v1h-1zM23,25h1v1h-1zM24,25h1v1h-1zM28,25h1v1h-1zM29,25h1v1h-1zM31,25h1v1h-1zM0,26h1v1h-1zM1,26h1v1h-1zM2,26h1v1h-1zM3,26h1v1h-1zM4,26h1v1h-1zM5,26h1v1h-1zM6,26h1v1h-1zM8,26h1v1h-1zM10,26h1v1h-1zM12,26h1v1h-1zM18,26h1v1h-1zM19,26h1v1h-1zM20,26h1v1h-1zM21,26h1v1h-1zM23,26h1v1h-1zM24,26h1v1h-1zM26,26h1v1h-1zM28,26h1v1h-1zM0,27h1v1h-1zM6,27h1v1h-1zM8,27h1v1h-1zM9,27h1v1h-1zM10,27h1v1h-1zM14,27h1v1h-1zM15,27h1v1h-1zM18,27h1v1h-1zM19,27h1v1h-1zM20,27h1v1h-1zM21,27h1v1h-1zM22,27h1v1h-1zM23,27h1v1h-1zM24,27h1v1h-1zM28,27h1v1h-1zM29,27h1v1h-1zM30,27h1v1h-1zM31,27h1v1h-1zM0,28h1v1h-1zM2,28h1v1h-1zM3,28h1v1h-1zM4,28h1v1h-1zM6,28h1v1h-1zM9,28h1v1h-1zM10,28h1v1h-1zM12,28h1v1h-1zM14,28h1v1h-1zM15,28h1v1h-1zM19,28h1v1h-1zM20,28h1v1h-1zM22,28h1v1h-1zM23,28h1v1h-1zM24,28h1v1h-1zM25,28h1v1h-1zM26,28h1v1h-1zM27,28h1v1h-1zM28,28h1v1h-1zM30,28h1v1h-1zM0,29h1v1h-1zM2,29h1v1h-1zM3,29h1v1h-1zM4,29h1v1h-1zM6,29h1v1h-1zM8,29h1v1h-1zM12,29h1v1h-1zM13,29h1v1h-1zM15,29h1v1h-1zM20,29h1v1h-1zM21,29h1v1h-1zM22,29h1v1h-1zM23,29h1v1h-1zM27,29h1v1h-1zM29,29h1v1h-1zM30,29h1v1h-1zM32,29h1v1h-1zM0,30h1v1h-1zM2,30h1v1h-1zM3,30h1v1h-1zM4,30h1v1h-1zM6,30h1v1h-1zM8,30h1v1h-1zM11,30h1v1h-1zM13,30h1v1h-1zM14,30h1v1h-1zM15,30h1v1h-1zM17,30h1v1h-1zM18,30h1v1h-1zM20,30h1v1h-1zM22,30h1v1h-1zM23,30h1v1h-1zM24,30h1v1h-1zM26,30h1v1h-1zM27,30h1v1h-1zM0,31h1v1h-1zM6,31h1v1h-1zM11,31h1v1h-1zM14,31h1v1h-1zM15,31h1v1h-1zM16,31h1v1h-1zM17,31h1v1h-1zM23,31h1v1h-1zM24,31h1v1h-1zM26,31h1v1h-1zM27,31h1v1h-1zM28,31h1v1h-1zM32,31h1v1h-1zM0,32h1v1h-1zM1,32h1v1h-1zM2,32h1v1h-1zM3,32h1v1h-1zM4,32h1v1h-1zM5,32h1v1h-1zM6,32h1v1h-1zM8,32h1v1h-1zM9,32h1v1h-1zM11,32h1v1h-1zM12,32h1v1h-1zM15,32h1v1h-1zM16,32h1v1h-1zM17,32h1v1h-1zM18,32h1v1h-1zM21,32h1v1h-1zM23,32h1v1h-1zM25,32h1v1h-1zM26,32h1v1h-1zM28,32h1v1h-1zM30,32h1v1h-1z" fill="#000"/></svg></template>
+        <div class="pdf-area"><div class="pdf-cornice" id="pdf-cornice"><div class="pdf-foglio" id="pdf-foglio"></div></div></div>
     </div>
 
     <div class="share-overlay hidden" id="share-overlay" onclick="if (event.target === this) chiudiCondivisione()">
@@ -366,7 +409,7 @@
 
         window.addEventListener('keydown', function(e) {
             if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
-            if (document.querySelector('.share-overlay:not(.hidden)')) { if (e.key === 'Escape') { chiudiCondivisione(); chiudiUtenti(); } return; }
+            if (document.querySelector('.share-overlay:not(.hidden)')) { if (e.key === 'Escape') { chiudiCondivisione(); chiudiUtenti(); chiudiPdf(); } return; }
             if (e.key === 'ArrowLeft') document.getElementById('btn-prev').click();
             else if (e.key === 'ArrowRight') document.getElementById('btn-next').click();
         });
@@ -702,6 +745,56 @@
             }
             utentiInModifica = false;
             aggiornaUtenti();
+        }
+
+        // --- Menu in PDF: foglio A4 verticale da leggere, stampare o salvare in PDF ---
+        function apriPdf() {
+            const meal = menuData[currentIndex];
+            if (!meal) return;
+            const isIt = currentLang === 'it';
+            const portate = [
+                ['Primi', 'First Courses', meal.Primi_it, meal.Primi_en],
+                ['Secondi', 'Main Courses', meal.Secondi_it, meal.Secondi_en],
+                ['Contorni', 'Side Dishes', meal.Contorno_it, meal.Contorno_en],
+                ['Frutta / Dessert', 'Fruit & Dessert', meal.Frutta_it, meal.Frutta_en]
+            ];
+            let corpo = '';
+            portate.forEach(p => {
+                const voci = isIt ? p[2] : p[3];
+                if (voci && voci.length) corpo += `<div class="pdf-portata"><h2>${isIt ? p[0] : p[1]}</h2><ul>${voci.map(v => `<li>${v}</li>`).join('')}</ul></div>`;
+            });
+            const cena = meal.type.toLowerCase() !== 'pranzo';
+            const qr = document.getElementById('pdf-qr').innerHTML.trim();
+            document.getElementById('pdf-foglio').innerHTML =
+                `<div class="pdf-testa${cena ? ' cena' : ''}"><div class="pdf-tipo">IMT - ${isIt ? meal.meal_type_it : meal.meal_type_en}</div><div class="pdf-data">${isIt ? meal.date_it : meal.date_en}</div></div>` +
+                `<div class="pdf-corpo">${corpo}</div>` +
+                `<div class="pdf-piede"><div class="pdf-piede-testi"><span>${isIt ? 'Piatti del giorno in grassetto' : 'Daily dishes in bold'}</span><span>${PAGINA_URL.replace('https://', '')}</span><span>by Mazzarisi</span></div>` +
+                (qr ? `<div class="pdf-qr">${qr}</div>` : '') + `</div>`;
+            document.getElementById('pdf-stampa').textContent = isIt ? 'Stampa / Salva PDF' : 'Print / Save PDF';
+            document.getElementById('pdf-esci').textContent = isIt ? 'Esci' : 'Exit';
+            document.getElementById('pdf-overlay').classList.remove('hidden');
+            document.body.classList.add('stampa-pdf');
+            document.body.style.overflow = 'hidden';
+            scalaPdf();
+        }
+
+        function scalaPdf() {
+            const ov = document.getElementById('pdf-overlay');
+            if (ov.classList.contains('hidden')) return;
+            const scala = Math.min(1, (ov.clientWidth - 24) / 794);
+            document.getElementById('pdf-foglio').style.transform = `scale(${scala})`;
+            const cornice = document.getElementById('pdf-cornice');
+            cornice.style.width = Math.round(794 * scala) + 'px';
+            cornice.style.height = Math.round(1123 * scala) + 'px';
+        }
+        window.addEventListener('resize', scalaPdf);
+
+        function stampaPdf() { window.print(); }
+
+        function chiudiPdf() {
+            document.getElementById('pdf-overlay').classList.add('hidden');
+            document.body.classList.remove('stampa-pdf');
+            document.body.style.overflow = '';
         }
 
         function chiudiCondivisione() {

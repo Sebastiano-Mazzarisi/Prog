@@ -85,16 +85,22 @@
         .pdf-foglio { width: 794px; height: 1123px; box-sizing: border-box; padding: 64px 72px 56px; background: white; color: #1c1c1e; transform-origin: top left; display: flex; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         .pdf-testa { border-radius: 14px; padding: 22px 28px; text-align: center; background: #007aff; color: white; }
         .pdf-testa.cena { background: #d1b246; color: #1c1c1e; }
-        .pdf-testa .pdf-tipo { font-size: 40px; font-weight: 800; letter-spacing: 0.03em; }
-        .pdf-testa .pdf-data { font-size: 23px; font-weight: 600; margin-top: 4px; }
-        .pdf-corpo { flex: 1; display: flex; flex-direction: column; gap: 22px; margin-top: 30px; }
-        .pdf-portata h2 { margin: 0 0 8px; padding: 7px 10px; font-size: 19px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0056b3; background: #e6f4ff; border-radius: 6px; text-align: center; }
-        .pdf-portata ul { margin: 0; padding: 0 0 0 26px; font-size: 21px; line-height: 1.5; }
-        .pdf-portata li strong { font-weight: 800; }
-        .pdf-piede { border-top: 1px solid #d1d1d6; padding-top: 12px; font-size: 13px; color: #52525b; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
-        .pdf-piede-testi { display: flex; flex-direction: column; gap: 4px; line-height: 1.4; }
-        .pdf-qr { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; font-size: 12px; }
-        .pdf-qr svg { width: 2cm; height: 2cm; display: block; }
+        .pdf-testa .pdf-tipo { font-size: 38px; font-weight: 800; letter-spacing: 0.03em; }
+        .pdf-testa .pdf-data { font-size: 19px; font-weight: 600; margin-top: 6px; }
+        .pdf-testa .pdf-sep { opacity: 0.6; padding: 0 0.35em; font-weight: 400; }
+        .pdf-testa .pdf-en { font-weight: 500; opacity: 0.9; }
+        .pdf-corpo { flex: 1; display: flex; flex-direction: column; gap: 16px; margin-top: 22px; }
+        .pdf-portata { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 16px; line-height: 1.35; }
+        .pdf-portata th { padding: 6px 10px; font-size: 16px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0056b3; background: #e6f4ff; text-align: left; }
+        .pdf-portata th:first-child { border-radius: 6px 0 0 6px; }
+        .pdf-portata th:last-child { border-radius: 0 6px 6px 0; }
+        .pdf-portata td { padding: 3px 10px 3px 24px; border-bottom: 1px solid #e5e5ea; vertical-align: top; position: relative; }
+        .pdf-portata td:not(:empty)::before { content: ''; position: absolute; left: 10px; top: 0.85em; width: 6px; height: 6px; border-radius: 50%; background: #007aff; }
+        .pdf-portata td + td, .pdf-portata th + th { border-left: 1px solid #d1d1d6; }
+        .pdf-portata td strong { font-weight: 800; }
+        .pdf-piede { border-top: 1px solid #d1d1d6; padding-top: 10px; font-size: 13px; color: #52525b; display: flex; justify-content: space-between; gap: 16px; }
+        .pdf-qr { display: flex; justify-content: center; margin-bottom: 10px; }
+        .pdf-qr svg { width: 3cm; height: 3cm; display: block; }
         @media print {
             @page { size: A4 portrait; margin: 0; }
             html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
@@ -751,7 +757,7 @@
         function apriPdf() {
             const meal = menuData[currentIndex];
             if (!meal) return;
-            const isIt = currentLang === 'it';
+            const isIt = currentLang === 'it';   // il foglio è bilingue; la lingua vale solo per i tasti
             const portate = [
                 ['Primi', 'First Courses', meal.Primi_it, meal.Primi_en],
                 ['Secondi', 'Main Courses', meal.Secondi_it, meal.Secondi_en],
@@ -759,17 +765,23 @@
                 ['Frutta / Dessert', 'Fruit & Dessert', meal.Frutta_it, meal.Frutta_en]
             ];
             let corpo = '';
+            // ogni portata: italiano a sinistra, inglese a destra, riga per riga
             portate.forEach(p => {
-                const voci = isIt ? p[2] : p[3];
-                if (voci && voci.length) corpo += `<div class="pdf-portata"><h2>${isIt ? p[0] : p[1]}</h2><ul>${voci.map(v => `<li>${v}</li>`).join('')}</ul></div>`;
+                const it = p[2] || [], en = p[3] || [];
+                const righe = Math.max(it.length, en.length);
+                if (!righe) return;
+                let tr = '';
+                for (let i = 0; i < righe; i++) tr += `<tr><td>${it[i] || ''}</td><td>${en[i] || ''}</td></tr>`;
+                corpo += `<table class="pdf-portata"><thead><tr><th>${p[0]}</th><th>${p[1]}</th></tr></thead><tbody>${tr}</tbody></table>`;
             });
             const cena = meal.type.toLowerCase() !== 'pranzo';
             const qr = document.getElementById('pdf-qr').innerHTML.trim();
             document.getElementById('pdf-foglio').innerHTML =
-                `<div class="pdf-testa${cena ? ' cena' : ''}"><div class="pdf-tipo">IMT - ${isIt ? meal.meal_type_it : meal.meal_type_en}</div><div class="pdf-data">${isIt ? meal.date_it : meal.date_en}</div></div>` +
+                `<div class="pdf-testa${cena ? ' cena' : ''}"><div class="pdf-tipo">IMT - ${meal.meal_type_it}<span class="pdf-sep">|</span><span class="pdf-en">${meal.meal_type_en}</span></div>` +
+                `<div class="pdf-data">${meal.date_it}<span class="pdf-sep">|</span><span class="pdf-en">${meal.date_en}</span></div></div>` +
                 `<div class="pdf-corpo">${corpo}</div>` +
-                `<div class="pdf-piede"><div class="pdf-piede-testi"><span>${isIt ? 'Piatti del giorno in grassetto' : 'Daily dishes in bold'}</span><span>${PAGINA_URL.replace('https://', '')}</span><span>by Mazzarisi</span></div>` +
-                (qr ? `<div class="pdf-qr">${qr}</div>` : '') + `</div>`;
+                (qr ? `<div class="pdf-qr">${qr}</div>` : '') +
+                `<div class="pdf-piede"><span>${PAGINA_URL.replace('https://', '')}</span><span>by Mazzarisi</span></div>`;
             document.getElementById('pdf-stampa').textContent = isIt ? 'Stampa / Salva PDF' : 'Print / Save PDF';
             document.getElementById('pdf-esci').textContent = isIt ? 'Esci' : 'Exit';
             document.getElementById('pdf-overlay').classList.remove('hidden');
